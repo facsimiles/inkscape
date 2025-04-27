@@ -8971,8 +8971,8 @@ msgstr "Angi attributt"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -8981,8 +8981,8 @@ msgstr "Angi egenskap"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -11453,9 +11453,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  Dette skyldes at utvidelsen har en feil i .inx-filen. En feil i .inx-filen "
 "kan komme fra en feil under installasjonen av Inkscape."
@@ -16093,8 +16092,8 @@ msgstr "List ut alle tilgjengelige handlinger"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -22303,8 +22302,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "Objektet du prøver å velge er <b>ikke synlig</b> (det er i &lt;defs&gt;)"
 
@@ -32495,10 +32494,9 @@ msgstr "E- og F-enheter"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -42524,16 +42522,16 @@ msgstr ""
 # File: ../share/extensions/inkex/deprecated.py, line: 114
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 120
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #
@@ -42559,14 +42557,14 @@ msgstr "{} er fjernet."
 # File: ../share/extensions/inkex/deprecated.py, line: 136
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #
@@ -42579,16 +42577,16 @@ msgstr ""
 # File: ../share/extensions/inkex/deprecated.py, line: 152
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 157
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -42611,8 +42609,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -42635,20 +42633,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -46139,8 +46137,8 @@ msgstr "Oppsummering"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "Denne utvidelsen lar deg få informasjon om JessyInk-skriptet, effekter og "
 "overganger i denne SVG-fila. Se http://code.google.com/p/jessyink for flere "
@@ -46205,11 +46203,11 @@ msgstr "Fjern visninger"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
-"Denne utvidelsen lar deg avinstallere JessyInk-skriptet. Se http://"
-"code.google.com/p/jessyink for flere detaljer."
+"Denne utvidelsen lar deg avinstallere JessyInk-skriptet. Se http://code."
+"google.com/p/jessyink for flere detaljer."
 
 #: ../share/extensions/jessyink_video.inx:3
 msgid "Video"
@@ -47684,8 +47682,8 @@ msgstr ""
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -47767,8 +47765,8 @@ msgstr ""
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -48336,9 +48334,9 @@ msgid ""
 "\"linearGradient5621\" will become \"a\" if it is the most used element."
 msgstr ""
 "Minimer ID-lengder ved å endre deres navn til små bokstaver, og gi de mest "
-"refererte elementene kortest navn. For eksempel blir "
-"&laquo;linearGradient5621&raquo; til &laquo;a&raquo; dersom det er det mest "
-"brukte elementet."
+"refererte elementene kortest navn. For eksempel blir &laquo;"
+"linearGradient5621&raquo; til &laquo;a&raquo; dersom det er det mest brukte "
+"elementet."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
@@ -48397,9 +48395,8 @@ msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
-"Bevar alle ID-er som starter med angitt prefiks (angi f.eks. "
-"&laquo;flag&raquo; for å bevare &laquo;flag-mx&raquo;, &laquo;flag-"
-"pt&raquo;, osv.)."
+"Bevar alle ID-er som starter med angitt prefiks (angi f.eks. &laquo;"
+"flag&raquo; for å bevare &laquo;flag-mx&raquo;, &laquo;flag-pt&raquo;, osv.)."
 
 #: ../share/extensions/output_scour.inx:101
 msgid "Optimized SVG Output is provided by"
@@ -54748,11 +54745,11 @@ msgstr ""
 #~ "The constants pi and e are also available."
 #~ msgstr ""
 #~ "Følgende funksjoner er tilgjengelige: (funksjonene er Pythons standard "
-#~ "mattefunksjoner) ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); "
-#~ "ldexp(x,i); modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); "
-#~ "sqrt(x); acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); cos(x); "
-#~ "sin(x); tan(x); degrees(x); radians(x); cosh(x); sinh(x); tanh(x). "
-#~ "Konstantene  pi og e er også tilgjengelig."
+#~ "mattefunksjoner) ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,"
+#~ "i); modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); "
+#~ "acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); cos(x); sin(x); "
+#~ "tan(x); degrees(x); radians(x); cosh(x); sinh(x); tanh(x). Konstantene  "
+#~ "pi og e er også tilgjengelig."
 
 #
 # File: ../share/extensions/hershey.inx, line: 25
@@ -54902,8 +54899,8 @@ msgstr ""
 #~ "background-color <hexadezimal>: the color of the background that should "
 #~ "be ignored, for example FFFFFF; default is no background color."
 #~ msgstr ""
-#~ "background-color <heksadesimal>: Se bort fra denne bakgrunnsfargen, "
-#~ "f.eks. FFFFFF. Standardverdien er ingen bakgrunnsfarge. "
+#~ "background-color <heksadesimal>: Se bort fra denne bakgrunnsfargen, f."
+#~ "eks. FFFFFF. Standardverdien er ingen bakgrunnsfarge. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 120
@@ -55317,8 +55314,8 @@ msgstr ""
 #~ "the Inkscape website or ask on the mailing lists if you have questions "
 #~ "regarding this extension."
 #~ msgstr ""
-#~ "Denne utvidelsen har for øyeblikket ikke hjelpedokumentasjon. Se på "
-#~ "www.inkscape.org eller spør på e-postlista hvis du trenger hjelp."
+#~ "Denne utvidelsen har for øyeblikket ikke hjelpedokumentasjon. Se på www."
+#~ "inkscape.org eller spør på e-postlista hvis du trenger hjelp."
 
 #~ msgid "Text size unit type:"
 #~ msgstr "Enhet for tekststørrelse:"
@@ -55530,8 +55527,8 @@ msgstr ""
 #~ "2. Kopier «serial»-mappen (som finnes like inni den utpakkede mappa)"
 
 #~ msgid ""
-#~ "   into the following Inkscape folder: C:\\[Program files]"
-#~ "\\inkscape\\python\\Lib\\"
+#~ "   into the following Inkscape folder: C:\\[Program "
+#~ "files]\\inkscape\\python\\Lib\\"
 #~ msgstr ""
 #~ " til følgende Inkscape-mappe: C:\\[Program files]\\inkscape\\python\\Lib\\"
 
@@ -59566,11 +59563,11 @@ msgstr ""
 #~ msgstr "Lagre dokument med nytt navn"
 
 #~ msgid ""
-#~ "dxf2svg may come with Inkscape, but is also at http://dxf-svg-"
-#~ "convert.sourceforge.net/"
+#~ "dxf2svg may come with Inkscape, but is also at http://dxf-svg-convert."
+#~ "sourceforge.net/"
 #~ msgstr ""
-#~ "dxf2svg kan komme med Inkscape, men finnes også på http://dxf-svg-"
-#~ "convert.sourceforge.net/"
+#~ "dxf2svg kan komme med Inkscape, men finnes også på http://dxf-svg-convert."
+#~ "sourceforge.net/"
 
 #, fuzzy
 #~ msgid "Report Normal Vector Information"

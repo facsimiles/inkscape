@@ -9733,8 +9733,8 @@ msgstr "Постави особине"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9744,8 +9744,8 @@ msgstr "Одабери особинu"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12471,9 +12471,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  Ово је проузроковано неприкладном .inx датотеком за ову екстензију.  "
 "Неприкладна .inx датотека може да буде резултат грешке при инсталацији "
@@ -17386,8 +17385,8 @@ msgstr "Листа свих фонтова"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -24222,8 +24221,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "Оригинал овог клона <b>није видљиви</b> објекат (налази се у &lt;defs&gt; "
 "атрибуту)"
@@ -35148,10 +35147,9 @@ msgstr "Јединица мере мреже"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -44251,8 +44249,8 @@ msgid ""
 "Toggle vanishing point in x-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Мења статус нестајуће тачке у X правцу између „бесконачно“ и „ограничено“ "
-"(=паралелно)"
+"Мења статус нестајуће тачке у X правцу између „бесконачно“ и "
+"„ограничено“ (=паралелно)"
 
 #: ../share/ui/toolbar-box3d.ui:77
 #, fuzzy
@@ -44269,8 +44267,8 @@ msgid ""
 "Toggle vanishing point in y-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Мења статус нестајуће тачке у X правцу између „бесконачно“ и „ограничено“ "
-"(=паралелно)"
+"Мења статус нестајуће тачке у X правцу између „бесконачно“ и "
+"„ограничено“ (=паралелно)"
 
 #: ../share/ui/toolbar-box3d.ui:124
 #, fuzzy
@@ -44283,8 +44281,8 @@ msgid ""
 "Toggle vanishing point in z-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Мења статус нестајуће тачке у X правцу између „бесконачно“ и „ограничено“ "
-"(=паралелно)"
+"Мења статус нестајуће тачке у X правцу између „бесконачно“ и "
+"„ограничено“ (=паралелно)"
 
 #: ../share/ui/toolbar-calligraphy.ui:88
 msgid "Choose a preset"
@@ -45998,14 +45996,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -46027,14 +46025,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -46043,14 +46041,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -46069,8 +46067,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -46093,20 +46091,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49869,8 +49867,8 @@ msgstr "_Симетрија"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 
 #: ../share/extensions/jessyink_transitions.inx:3
@@ -49939,8 +49937,8 @@ msgstr "Уклони филтере"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 
 #: ../share/extensions/jessyink_video.inx:3
@@ -51543,8 +51541,8 @@ msgstr "Дубина"
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -51634,8 +51632,8 @@ msgstr "Оријентација"
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -54307,8 +54305,8 @@ msgid ""
 "Select your system encoding. More information at http://docs.python.org/"
 "library/codecs.html#standard-encodings."
 msgstr ""
-"(Изаберите кôдни распоред система. више информација на http://"
-"docs.python.org/library/codecs.html#standard-encodings)"
+"(Изаберите кôдни распоред система. више информација на http://docs.python."
+"org/library/codecs.html#standard-encodings)"
 
 #: ../share/extensions/svgfont2layers.inx:3
 #, fuzzy
@@ -56164,8 +56162,8 @@ msgstr ""
 
 #~ msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 #~ msgstr ""
-#~ "Мења статус нестајуће тачке у Y правцу између „бесконачно“ и „ограничено“ "
-#~ "(=паралелно)"
+#~ "Мења статус нестајуће тачке у Y правцу између „бесконачно“ и "
+#~ "„ограничено“ (=паралелно)"
 
 #~ msgid "Angle of PLs in Z direction"
 #~ msgstr "Угао линија перспективе у Z правцу"
@@ -56175,8 +56173,8 @@ msgstr ""
 
 #~ msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 #~ msgstr ""
-#~ "Мења статус нестајуће тачке у Z правцу између „бесконачно“ и „ограничено“ "
-#~ "(=паралелно)"
+#~ "Мења статус нестајуће тачке у Z правцу између „бесконачно“ и "
+#~ "„ограничено“ (=паралелно)"
 
 #~ msgid "Add/Edit Profile"
 #~ msgstr "Додај/уреди профил"
@@ -61040,8 +61038,8 @@ msgstr ""
 #~ msgid ""
 #~ "pstoedit must be installed to run; see http://www.pstoedit.net/pstoedit"
 #~ msgstr ""
-#~ "pstoedit мора да буде инсталиран да би се користио, погледајте http://"
-#~ "www.pstoedit.net/pstoedit"
+#~ "pstoedit мора да буде инсталиран да би се користио, погледајте http://www."
+#~ "pstoedit.net/pstoedit"
 
 #, fuzzy
 #~ msgid "AutoCAD DXF R12 (*.dxf)"
@@ -62049,8 +62047,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "Неуспело преузимање РСС извора Слободне галерије сличица. Проверите да ли "
 #~ "је исправан назив сервера у „Поставке програма“ -> „Увоз/Извоз“ (нпр. "
@@ -63788,8 +63786,8 @@ msgstr ""
 #~ msgstr "Чување документа под новим именом"
 
 #~ msgid ""
-#~ "dxf2svg may come with Inkscape, but is also at http://dxf-svg-"
-#~ "convert.sourceforge.net/"
+#~ "dxf2svg may come with Inkscape, but is also at http://dxf-svg-convert."
+#~ "sourceforge.net/"
 #~ msgstr ""
 #~ "dxf2svg може да буде саставни део Inkscape-а, али га можете пронаћи и на "
 #~ "http://dxf-svg-convert.sourceforge.net/"

@@ -9872,8 +9872,8 @@ msgstr "خصوصیات کٔریو سیٹ"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9883,8 +9883,8 @@ msgstr "گائڈک۪ی خصوصیات کٔریو سیٹ"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12587,9 +12587,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "یہٕ چھُ نامُنٲسِب .inx فائلِ ست۪ی گسان۔ نامُنٲسِب .inx ہیکیہِ ٲستھ۪ی اِنکسپیس کہِ غلط "
 "انسٹالیسن ست۪ی"
@@ -17516,8 +17515,8 @@ msgstr "سٲری فانٹ کٔریو لِسٹ"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -24227,8 +24226,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr "چیز یُس توہۍ ژارُن چھو یژھان چھُہ نہٕ بوزنہٕ یوان ( یہٕ چھُہ <defs> منز)"
 
 #: ../src/selection-chemistry.cpp:3029
@@ -35091,10 +35090,9 @@ msgstr "اندرٕ تہٕ نیبرٕ"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -45851,14 +45849,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45880,14 +45878,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -45896,14 +45894,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -45922,8 +45920,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -45946,20 +45944,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49617,8 +49615,8 @@ msgstr "خُلاصہٕ"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "یہٕ ایکسٹینشن چھُہ دِیوان خٲصِل کرنہٕ اطلاع  JessyInk سکرِپٹ، اثرات تہٕ ترانزِشنَن "
 "متعلق یِم SVG فائلہِ منز آسد۪ ن۔ وُچھُو code.google.com/p/jessyink تصیل خٲطرٕ"
@@ -49682,11 +49680,11 @@ msgstr "منظر کٔڑیو ند۪ بر"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
-"یہٕ ایکسٹینشن چھُہ دِیوان کرنہٕ ان اِنسٹال JessyInk سکرِپٹ خٲطرٕ۔ وُچھُو "
-"code.google.com/p/jessyink تصیل خٲطرٕ"
+"یہٕ ایکسٹینشن چھُہ دِیوان کرنہٕ ان اِنسٹال JessyInk سکرِپٹ خٲطرٕ۔ وُچھُو code.google."
+"com/p/jessyink تصیل خٲطرٕ"
 
 #: ../share/extensions/jessyink_video.inx:3
 msgid "Video"
@@ -49715,8 +49713,8 @@ msgid ""
 "This extension allows you to set, update and remove views for a JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
-"یہٕ ایکسٹینشن چھُہ دِیوان سیٹ اپڈیٹ تہٕ ند۪ بر کڑنہٕ منظر پرٚزنٹیسن خٲطرٕ۔ وُچھُو "
-"code.google.com/p/jessyink تصیل خٲطرٕ"
+"یہٕ ایکسٹینشن چھُہ دِیوان سیٹ اپڈیٹ تہٕ ند۪ بر کڑنہٕ منظر پرٚزنٹیسن خٲطرٕ۔ وُچھُو code."
+"google.com/p/jessyink تصیل خٲطرٕ"
 
 #: ../share/extensions/jitternodes.inx:3
 #, fuzzy
@@ -51160,9 +51158,9 @@ msgid ""
 msgstr ""
 "یہٕ فنکشن چھہ بناوان وَتھ تیٖز زٲوِیہٕ کھنٕنہٕ خٲطرٕ۔ کَٹر شیپ فنکشن چھہ یوان بیان "
 "کرنہٕ اَمہِ ٹولہٕ ست۪ی۔ کینٛہ سادٕ شکلہٕ: cone....(45 degrees)...........: w cone...."
-"(height/diameter=10/3).: 10/3 w sphere..(\"r\" diameter).........: "
-"math.sqrt(max(0,r**2-w**2)) ellipse.(R1=r and R2=r*4r).....: "
-"math.sqrt(max(0,r**2-w**2))*4"
+"(height/diameter=10/3).: 10/3 w sphere..(\"r\" diameter).........: math."
+"sqrt(max(0,r**2-w**2)) ellipse.(R1=r and R2=r*4r).....: math.sqrt(max(0,r**2-"
+"w**2))*4"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:8
@@ -51240,8 +51238,8 @@ msgstr "Z سَند۪ ر:"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -51328,8 +51326,8 @@ msgstr "آرینٹیشن نۄختہٕ"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -60079,8 +60077,8 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "یہٕ ایکسٹینشنس چُھہ صرف وتن تہٕ ڈایٔنامِک آفسیٹن تہٕ گروپن پیٹھ کٲم کران۔ باقی "
 #~ "سٲری اشیاء یین بظرانداز کرنہٕ! \n"
@@ -62076,8 +62074,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "اوپن کلِپ آرٹ RSS فیڈ رَٹنَس منز ناکام۔ کنفِگُریشن<- برامد/درامد منز وٕچھِو سٔرور "
 #~ "ناو چھا ٹھیک (مثالے: openclipart.org)"

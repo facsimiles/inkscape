@@ -9055,8 +9055,8 @@ msgstr "Attributen instellen"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 "Een attribuut instellen of bijwerken voor geselecteerde objecten. Gebruik: "
 "object-set-attribute:attributuutnaam, attribuutwaarde;"
@@ -9067,8 +9067,8 @@ msgstr "Eigenschap instellen"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 "Een eigenschap instellen of bijwerken voor geselecteerde objecten. Gebruik: "
 "object-set-eigenschap:eigenschapnaam, eigenschapwaarde;"
@@ -11575,9 +11575,8 @@ msgstr "'%s' voltooid, resultaat laden…"
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  Dit wordt veroorzaakt door een incorrect .inx-bestand voor deze "
 "uitbreiding.  Een incorrect .inx-bestand kan worden veroorzaakt door een "
@@ -16229,11 +16228,11 @@ msgstr "Alle beschikbare extensies voor invoerbestanden weergeven"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
-"Maak een uniek exemplaar van Inkscape met de applicatie-ID "
-"'org.inkscape.Inkscape.LABEL'"
+"Maak een uniek exemplaar van Inkscape met de applicatie-ID 'org.inkscape."
+"Inkscape.LABEL'"
 
 #: ../src/inkscape-application.cpp:727
 msgid "File import"
@@ -22701,8 +22700,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "Het object dat je probeert te selecteren is <b>niet zichtbaar</b> (het staat "
 "in &lt;defs&gt;)"
@@ -33178,15 +33177,13 @@ msgstr "Binnen en buiten"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D-transformatiematrix</a> die "
-"translatie (E,F), schaling (A,D), rotatie (A-D) en afschuiving (B,C) "
-"combineert.</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D-transformatiematrix</a> die translatie (E,"
+"F), schaling (A,D), rotatie (A-D) en afschuiving (B,C) combineert.</small>"
 
 #: ../src/ui/dialog/transformation.cpp:844
 #: ../src/ui/dialog/transformation.cpp:855
@@ -43337,8 +43334,8 @@ msgid ""
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
-"{} of `optparse` is verouderd en vervangen door `argparser`. Je moet "
-"`self.OptionParser.add_option` veranderen in `self.arg_parser.add_argument` "
+"{} of `optparse` is verouderd en vervangen door `argparser`. Je moet `self."
+"OptionParser.add_option` veranderen in `self.arg_parser.add_argument` "
 "(argumenten zijn gelijk)."
 
 #
@@ -43355,8 +43352,8 @@ msgstr ""
 # File: ../share/extensions/inkex/deprecated.py, line: 120
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.get_center_position()`."
@@ -43365,8 +43362,8 @@ msgstr ""
 # File: ../share/extensions/inkex/deprecated.py, line: 120
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.get_center_position()`."
@@ -43377,8 +43374,8 @@ msgstr ""
 msgid ""
 "{} is now a dict in the SvgDocumentElement class. Use `self.svg.selected`."
 msgstr ""
-"{} is nu een dict in de klasse SvgDocumentElement. Gebruik "
-"`self.svg.selected`."
+"{} is nu een dict in de klasse SvgDocumentElement. Gebruik `self.svg."
+"selected`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 120
@@ -43400,16 +43397,16 @@ msgstr "{} is verwijderd"
 # File: ../share/extensions/inkex/deprecated.py, line: 120
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.getElementById(eid)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.getElement(path)`."
@@ -43419,26 +43416,26 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
 msgid "{} is no longer in use. Use the lxml `.getparent()` method instead."
 msgstr ""
-"{} is niet meer in gebruik. Gebruik in plaats daarvan de lxml-methode "
-"`.getparent()`."
+"{} is niet meer in gebruik. Gebruik in plaats daarvan de lxml-methode `."
+"getparent()`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 152
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
-"{} is nu een eigenschap van de klasse SvgDocumentElement. Gebruik "
-"`self.svg.namedview` om dit element te benaderen."
+"{} is nu een eigenschap van de klasse SvgDocumentElement. Gebruik `self.svg."
+"namedview` om dit element te benaderen."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
-"{} is nu een methode van het namedview object. Gebruik in de plaats "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))`."
+"{} is nu een methode van het namedview object. Gebruik in de plaats `self."
+"svg.namedview.add(Guide().move_to(x, y, a))`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 178
@@ -43460,8 +43457,8 @@ msgstr "self.svg_file is nu self.options.input_file."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.get_unique_id(old_id)`."
@@ -43492,24 +43489,24 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.unittouu(str)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.uutounit(value, unit)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 "{} is nu een methode in de klasse SvgDocumentElement. Gebruik in de plaats "
 "`self.svg.add_unit(value)`."
@@ -46790,8 +46787,8 @@ msgid ""
 "details."
 msgstr ""
 "Deze uitbreiding laat je toe om autoteksten te installeren, updaten en "
-"verwijderen voor een JessyInk presentatie. Zie ook de code op "
-"code.google.com/p/jessyink voor details."
+"verwijderen voor een JessyInk presentatie. Zie ook de code op code.google."
+"com/p/jessyink voor details."
 
 #: ../share/extensions/jessyink_autotexts.inx:21
 #: ../share/extensions/jessyink_effects.inx:33
@@ -46887,8 +46884,8 @@ msgid ""
 "more details."
 msgstr ""
 "Deze uitbreiding laat je toe om een JessyInk presentatie te exporteren zodra "
-"je een exportlaag in je browser hebt gemaakt. Zie ook de code op "
-"code.google.com/p/jessyink voor details."
+"je een exportlaag in je browser hebt gemaakt. Zie ook de code op code.google."
+"com/p/jessyink voor details."
 
 #: ../share/extensions/jessyink_export.inx:21
 msgid "JessyInk zipped pdf or png output (*.zip)"
@@ -47152,8 +47149,8 @@ msgstr "Samenvatting"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "Deze uitbreiding laat je toe informatie te verkrijgen over het JessyInk-"
 "script, effecten en transities in dit SVG bestand. Zie code.google.com/p/"
@@ -47218,11 +47215,11 @@ msgstr "Zichten verwijderen"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
-"Deze uitbreiding laat je toe om het JessyInk-script te verwijderen. Zie "
-"code.google.com/p/jessyink voor details."
+"Deze uitbreiding laat je toe om het JessyInk-script te verwijderen. Zie code."
+"google.com/p/jessyink voor details."
 
 #: ../share/extensions/jessyink_video.inx:3
 msgid "Video"
@@ -47235,8 +47232,8 @@ msgid ""
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
 "Deze uitbreiding plaatst een JessyInk video op de huidige dia (laag). Dit "
-"laat je toe om een video te integreren in je JessyInk presentatie. Zie "
-"code.google.com/p/jessyink voor details."
+"laat je toe om een video te integreren in je JessyInk presentatie. Zie code."
+"google.com/p/jessyink voor details."
 
 #: ../share/extensions/jessyink_view.inx:9
 msgid "Remove view"
@@ -48730,8 +48727,8 @@ msgstr "Z-diepte:"
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -48827,8 +48824,8 @@ msgstr "Oriëntatiepunten"
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -53595,8 +53592,8 @@ msgstr "Halve lettertypehoogte"
 
 #~ msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 #~ msgstr ""
-#~ "Verdwijnpunt in Y-richting omschakelen tussen 'eindig' en 'oneindig' "
-#~ "(=parallel)"
+#~ "Verdwijnpunt in Y-richting omschakelen tussen 'eindig' en "
+#~ "'oneindig' (=parallel)"
 
 #~ msgid "Angle of PLs in Z direction"
 #~ msgstr "Hoek van perspectieflijn in Z-richting"
@@ -53606,8 +53603,8 @@ msgstr "Halve lettertypehoogte"
 
 #~ msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 #~ msgstr ""
-#~ "Verdwijnpunt in Z-richting omschakelen tussen 'eindig ' en 'oneindig' "
-#~ "(=parallel)"
+#~ "Verdwijnpunt in Z-richting omschakelen tussen 'eindig ' en "
+#~ "'oneindig' (=parallel)"
 
 #~ msgid "Add/Edit Profile"
 #~ msgstr "Profiel toevoegen/bewerken"
@@ -56238,8 +56235,8 @@ msgstr "Halve lettertypehoogte"
 #~ "For Path: custom set the path in relative coordinates (0,0)=(left,up) "
 #~ "square size 1.0 "
 #~ msgstr ""
-#~ "Voor Pad: definieer het pad door relatieve coördinaten "
-#~ "(0,0)=(links,omhoog) grootte vierkant 1.0 "
+#~ "Voor Pad: definieer het pad door relatieve coördinaten (0,0)=(links,"
+#~ "omhoog) grootte vierkant 1.0 "
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 48
@@ -56942,24 +56939,24 @@ msgstr "Halve lettertypehoogte"
 #~ msgid ""
 #~ "{} is now a method in the svg. Use `self.svg.get_current_layer()` instead."
 #~ msgstr ""
-#~ "{} is nu een methode in het svg-bestand. Gebruik in de plaats "
-#~ "`self.svg.get_current_layer()`."
+#~ "{} is nu een methode in het svg-bestand. Gebruik in de plaats `self.svg."
+#~ "get_current_layer()`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 114
 #~ msgid ""
 #~ "{} is now a method in the svg. Use `self.svg.namedview.center` instead."
 #~ msgstr ""
-#~ "{} is nu een methode in het svg-bestand. Gebruik in de plaats "
-#~ "`self.svg.namedview.center`."
+#~ "{} is nu een methode in het svg-bestand. Gebruik in de plaats `self.svg."
+#~ "namedview.center`."
 
 #~| msgid ""
 #~| "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 #~ msgid ""
 #~ "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 #~ msgstr ""
-#~ "{} is nu een methode in het svg bestand. Gebruik in de plaats "
-#~ "`self.svg.get_ids()`."
+#~ "{} is nu een methode in het svg bestand. Gebruik in de plaats `self.svg."
+#~ "get_ids()`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 136
@@ -56969,8 +56966,8 @@ msgstr "Halve lettertypehoogte"
 #~ msgid ""
 #~ "{} is now a method in the svg. Use `self.svg.getElementById(eid)` instead."
 #~ msgstr ""
-#~ "{} is nu een methode in het svg document. Gebruik in de plaats "
-#~ "`self.svg.getElementById(eid)`."
+#~ "{} is nu een methode in het svg document. Gebruik in de plaats `self.svg."
+#~ "getElementById(eid)`."
 
 #
 # File: ../share/extensions/web_interactive_mockup.inx, line: 22
@@ -57483,8 +57480,8 @@ msgstr "Halve lettertypehoogte"
 #~ msgstr "Kopiëer de map \"serial\" (in de zonet uitgepakte map)"
 
 #~ msgid ""
-#~ "   into the following Inkscape folder: C:\\[Program files]"
-#~ "\\inkscape\\python\\Lib\\"
+#~ "   into the following Inkscape folder: C:\\[Program "
+#~ "files]\\inkscape\\python\\Lib\\"
 #~ msgstr ""
 #~ "   in de volgende Inkscape map: C:\\[Program files]\\inkscape\\python"
 
@@ -57692,8 +57689,8 @@ msgstr "Halve lettertypehoogte"
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "Deze uitbreiding werkt slechts met paden, dynamische offsets en groepen "
 #~ "daarvan! Alle andere objecten worden genegeerd!\n"

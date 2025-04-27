@@ -9714,8 +9714,8 @@ msgstr "பண்புகளை அமை"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9725,8 +9725,8 @@ msgstr "வழிகாட்டும் பண்புகளை அமை"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -10035,8 +10035,8 @@ msgstr "கோப்புபெயர்"
 #, fuzzy
 msgid "Export without filters to avoid rasterization for PDF, PS, EPS"
 msgstr ""
-"வடிக்கப்பட்ட பொருட்களை வடிப்பிகள் இல்லாமல், இதற்கு பதிலாக பரவுவதை கொடுக்கிறது (PS, "
-"EPS,PDF)"
+"வடிக்கப்பட்ட பொருட்களை வடிப்பிகள் இல்லாமல், இதற்கு பதிலாக பரவுவதை கொடுக்கிறது (PS, EPS,"
+"PDF)"
 
 #: ../src/actions/actions-output.cpp:268
 #, fuzzy
@@ -12456,9 +12456,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  இது ஒரு சரியில்லாத .inx கோப்பினால் இந்த விரிவாக்கத்திற்கு ஏற்பட்டது.  ஒரு "
 "சரியில்லாத .inx கோப்பு ஒரு தவறான Inkscape நிறுவலும் காரணியாகலாம்."
@@ -17378,8 +17377,8 @@ msgstr "அனைத்து எழுத்துருக்களின் �
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -17613,8 +17612,8 @@ msgstr "உரைப் பொருளை ஏற்றுமதியில் 
 #, fuzzy
 msgid "Render objects without filters instead of rasterizing (PS/EPS/PDF)"
 msgstr ""
-"வடிக்கப்பட்ட பொருட்களை வடிப்பிகள் இல்லாமல், இதற்கு பதிலாக பரவுவதை கொடுக்கிறது (PS, "
-"EPS,PDF)"
+"வடிக்கப்பட்ட பொருட்களை வடிப்பிகள் இல்லாமல், இதற்கு பதிலாக பரவுவதை கொடுக்கிறது (PS, EPS,"
+"PDF)"
 
 #: ../src/inkscape-application.cpp:764
 #, fuzzy
@@ -24122,8 +24121,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "நீங்கள் தேர்ந்தெடுக்க முயற்சிக்கும் பொருள் <b>காணப்படவில்லை</b> (அது&lt;defs&gt; உள்ளது)"
 
@@ -31366,8 +31365,8 @@ msgid ""
 "If set, write the CSS name of the color when available (e.g. 'red' or "
 "'magenta') instead of the numeric value"
 msgstr ""
-"அமைக்கப்பட்டால், எண் மதிப்பிற்கு பதிலாக CSS பெயரின் வண்ணம் கிடைக்கும் போது "
-"(எ.கா.'சிவப்பு' அல்லது 'மஜன்தா') எழுதவும்"
+"அமைக்கப்பட்டால், எண் மதிப்பிற்கு பதிலாக CSS பெயரின் வண்ணம் கிடைக்கும் போது (எ."
+"கா.'சிவப்பு' அல்லது 'மஜன்தா') எழுதவும்"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2304
 msgid "XML formatting"
@@ -35047,10 +35046,9 @@ msgstr "உள்ளே மற்றும் வெளியே"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -45823,14 +45821,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45852,14 +45850,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -45868,14 +45866,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -45894,8 +45892,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -45918,20 +45916,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -46262,9 +46260,8 @@ msgid ""
 "this can be done with the command, sudo apt-get install python-numpy."
 msgstr ""
 "numpy அல்லது numpy.linalg தொகுதிகளை இறக்குமதி செய்ய முடியவில்லை. இந்த தொகுதிகள் "
-"இந்த விரிவாக்கத்தின் படி தேவைப்படுகிறது. அவற்றை நிறுவி மீண்டும் முயற்சிக்கவும்.  டீபியன் "
-"-சிஸ்டம் போல் இதை கட்டளையின் படி செய்யலாம், sudo apt-get ஆனது python-numpy ஐ "
-"நிறுவும்."
+"இந்த விரிவாக்கத்தின் படி தேவைப்படுகிறது. அவற்றை நிறுவி மீண்டும் முயற்சிக்கவும்.  டீபியன் -"
+"சிஸ்டம் போல் இதை கட்டளையின் படி செய்யலாம், sudo apt-get ஆனது python-numpy ஐ நிறுவும்."
 
 #: ../share/extensions/perspective.py:52
 #, fuzzy
@@ -49321,8 +49318,8 @@ msgid ""
 "more details."
 msgstr ""
 "இந்த விரிவாக்கமானது ஒரு ஜெஸ்ஸிஇங்க் வழங்கலில் உங்கள் உலாவியின் ஏற்றுமதி அடுக்கை "
-"உருவாக்கியதும் உங்களை ஏற்றுமதி செய்ய அனுமதிக்கிறது. மேலும் விவரங்களுக்கு "
-"code.google.com/p/jessyink பார்க்கவும்."
+"உருவாக்கியதும் உங்களை ஏற்றுமதி செய்ய அனுமதிக்கிறது. மேலும் விவரங்களுக்கு code.google."
+"com/p/jessyink பார்க்கவும்."
 
 #: ../share/extensions/jessyink_export.inx:21
 msgid "JessyInk zipped pdf or png output (*.zip)"
@@ -49589,8 +49586,8 @@ msgstr "சுருக்கம்"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "இந்த விரிவாக்கமானது  ஜெஸ்ஸிஇங்கை ஸ்கிரிப்படை பற்றிய தகவல்,விளைவுகள் மற்றும்  பெற உங்களை "
 "SVG கோப்பில் கொண்டுள்ள மாறுதல்கள் போன்றவற்றை பெறுவதற்கு அனுமதிக்கிறது. மேலும் "
@@ -49656,8 +49653,8 @@ msgstr "பார்வைகளை நீக்கு"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "இந்த விரிவாக்கமானது ஜெஸ்ஸிஇங்க் ஸ்கிரிப்ட்டை நிறுவல்நீக்க உங்களை அனுமதிக்கிறது. மேலும் "
 "விவரங்களுக்கு code.google.com/p/jessyink ஐ பார்க்கவும்."
@@ -51224,8 +51221,8 @@ msgstr "Z ஆழம்:"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -51314,8 +51311,8 @@ msgstr "திசையமைப்பு புள்ளிகள்"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -60030,8 +60027,8 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "இந்த விரிவாக்கமானது பாதைகள் மற்றும் டைனமிக் ஆஃப்செட்ஸ் மற்றும் குழுக்களில் ஒன்றிற்கு "
 #~ "பணிபுரிகிறது! மற்ற அனைத்து பொருட்களும் புறக்கணிக்கப்படும்!\n"
@@ -60193,8 +60190,8 @@ msgstr ""
 #~ "In order to import Dia files, Dia itself must be installed.  You can get "
 #~ "Dia at http://live.gnome.org/Dia"
 #~ msgstr ""
-#~ "டையா கோப்புகளை இறக்கும் பொருட்டு, டையாவும் நிறுவப்பட வேண்டும்.  http://"
-#~ "live.gnome.org/Dia இல் நீங்கள் டையாவை பெறலாம்"
+#~ "டையா கோப்புகளை இறக்கும் பொருட்டு, டையாவும் நிறுவப்பட வேண்டும்.  http://live.gnome."
+#~ "org/Dia இல் நீங்கள் டையாவை பெறலாம்"
 
 #~ msgid "Dia Diagram (*.dia)"
 #~ msgstr "டையா வரைபடம் (*.dia)"
@@ -61864,8 +61861,8 @@ msgstr ""
 #~ "Two-letter language tag with optional subtags for the language of this "
 #~ "document (e.g. 'en-GB')"
 #~ msgstr ""
-#~ "இந்த ஆவணத்தின் மொழிக்கு விருப்பமான துணை ஒட்டுகளுடன் இரண்டு-எழுத்து மொழி ஒட்டு "
-#~ "(எ.கா. 'en-GB')"
+#~ "இந்த ஆவணத்தின் மொழிக்கு விருப்பமான துணை ஒட்டுகளுடன் இரண்டு-எழுத்து மொழி ஒட்டு (எ."
+#~ "கா. 'en-GB')"
 
 #~ msgid ""
 #~ "The topic of this document as comma-separated key words, phrases, or "
@@ -62079,8 +62076,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "ஓபன் கிளிப் ஆர்ட் நூலக RSS ஃபீட்டை பெற முடியவில்லை. சர்வர் பெயரானது சரியாக "
 #~ "கட்டமைப்பு->இறக்குமதி/ஏற்றுமதியில் சரியாக இருந்தால் சரிபார்கவும் (எ.கா.: "

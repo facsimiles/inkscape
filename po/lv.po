@@ -9509,8 +9509,8 @@ msgstr "Iestatīt atribūtus"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9520,8 +9520,8 @@ msgstr "Izvēlieties īpašību"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12219,9 +12219,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  Tā cēlonis ir nederīga datne ar paplašinājumu .inx.  Nederīga .inx datne "
 "varētu būt kļūdainais Inkscape uzstādīšanas rezultāts."
@@ -16901,8 +16900,8 @@ msgstr "Parādīt visas pieejamās darbības"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -23193,8 +23192,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "Objekts, ko mēģināt atlasīt, <b>nav redzams</b> (tas atrodas &lt;defs&gt;)"
 
@@ -30297,8 +30296,8 @@ msgid ""
 "If set, write the CSS name of the color when available (e.g. 'red' or "
 "'magenta') instead of the numeric value"
 msgstr ""
-"Ja iestatīts, raksta krāsas CSS nosaukumu, ja tāds pastāv (piem. 'red' "
-"(sarkans) vai 'magenta' (madženta)), nevis tās skaitlisko vērtību"
+"Ja iestatīts, raksta krāsas CSS nosaukumu, ja tāds pastāv (piem. "
+"'red' (sarkans) vai 'magenta' (madženta)), nevis tās skaitlisko vērtību"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2304
 msgid "XML formatting"
@@ -30365,8 +30364,8 @@ msgid ""
 "Force repeating of the same path command (for example, 'L 1,2 L 3,4' instead "
 "of 'L 1,2 3,4')"
 msgstr ""
-"Piespiedu kārtā atkārtot to pašu ceļa komandu (piemēram,, 'L 1,2 L "
-"3,4' ,nevis 'L 1,2 3,4')"
+"Piespiedu kārtā atkārtot to pašu ceļa komandu (piemēram,, 'L 1,2 L 3,4' ,"
+"nevis 'L 1,2 3,4')"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2322
 msgid "Numbers"
@@ -33865,10 +33864,9 @@ msgstr "Tuvināšana un tālināšana"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -44426,15 +44424,15 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -44457,15 +44455,15 @@ msgstr "{} ir aizvākts"
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 #, fuzzy
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -44476,14 +44474,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:208
@@ -44500,8 +44498,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -44528,22 +44526,22 @@ msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr "{} tagad ir svg vārdnīca. Izmantojiet `self.svg.selected`."
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -47693,8 +47691,8 @@ msgid ""
 "details."
 msgstr ""
 "Šis paplašinājums ļauj uzstādīt, atsvaidzināt un aizvākt JessyInk "
-"prezentācijas automātiskos tekstus. Plašākai informācijai skat.: "
-"code.google.com/p/jessyink."
+"prezentācijas automātiskos tekstus. Plašākai informācijai skat.: code.google."
+"com/p/jessyink."
 
 #: ../share/extensions/jessyink_autotexts.inx:21
 #: ../share/extensions/jessyink_effects.inx:33
@@ -47790,8 +47788,8 @@ msgid ""
 "more details."
 msgstr ""
 "Šis paplašinājums ļauj eksportēt JessyInk prezentāciju pēc tam, kad pārlūkā "
-"esat izveidojuši eksporta slāni. Plašākai informācijai skat.: "
-"code.google.com/p/jessyink."
+"esat izveidojuši eksporta slāni. Plašākai informācijai skat.: code.google."
+"com/p/jessyink."
 
 #: ../share/extensions/jessyink_export.inx:21
 msgid "JessyInk zipped pdf or png output (*.zip)"
@@ -47815,8 +47813,8 @@ msgid ""
 "jessyink for more details."
 msgstr ""
 "Šis paplašinājums ļauj uzstādīt un atsvaidzināt  JessyInk skriptu, kas ļauj "
-"pārvērst SVG datni par prezentāciju. Plašākai informācijai skat.: "
-"code.google.com/p/jessyink."
+"pārvērst SVG datni par prezentāciju. Plašākai informācijai skat.: code."
+"google.com/p/jessyink."
 
 #: ../share/extensions/jessyink_key_bindings.inx:3
 msgid "Key bindings"
@@ -48051,8 +48049,8 @@ msgstr "Kopsavilkums"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "Šis paplašinājums ļauj iegūt informāciju par  JessyInk skriptu, efektiem un "
 "pārejām šajā SVG datnē. Plašākai informācijai skat.: code.google.com/p/"
@@ -48117,8 +48115,8 @@ msgstr "Aizvākt skatus"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "Šis paplašinājums ļauj aizvākt JessyInk skriptu. Plašākai informācijai "
 "skat.: code.google.com/p/jessyink."
@@ -49524,8 +49522,8 @@ msgstr "Z dziļums:"
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -49600,8 +49598,8 @@ msgstr "Orientācijas punkti"
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -56392,9 +56390,9 @@ msgstr "Puse no fonta augstuma"
 #~ "sure you have UniConverter installed and open them again."
 #~ msgstr ""
 #~ "Lūdzu, ņemiet vērā, ka ir iespējams atvērt tikai ar Inkscape izveidotās "
-#~ "HPGL datness. Lai atvērtu citas HPGL formāta datnes, pārdēvējiet tās "
-#~ "par .plt, pārliecinieties, ka ir uzstādīts UniConverter un tad mēģiniet "
-#~ "atvērt vēlreiz."
+#~ "HPGL datness. Lai atvērtu citas HPGL formāta datnes, pārdēvējiet tās par ."
+#~ "plt, pārliecinieties, ka ir uzstādīts UniConverter un tad mēģiniet atvērt "
+#~ "vēlreiz."
 
 #~ msgid "Show movements between paths"
 #~ msgstr "Rādīt pārvietojumus starp ceļiem"
@@ -56463,8 +56461,8 @@ msgstr "Puse no fonta augstuma"
 
 #~ msgid "See http://www.denso-wave.com/qrcode/index-e.html for details"
 #~ msgstr ""
-#~ "Plašākai informācijai skat.  http://www.denso-wave.com/qrcode/index-"
-#~ "e.html "
+#~ "Plašākai informācijai skat.  http://www.denso-wave.com/qrcode/index-e."
+#~ "html "
 
 #~ msgid "Path: simple"
 #~ msgstr "Ceļš: vienkāršs"
@@ -57795,8 +57793,8 @@ msgstr "Puse no fonta augstuma"
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "Šis paplašinājums darbojas tikai ar ceļiem, dinamiskajām nobīdēm un to "
 #~ "grupām! Citi objekti netiek ņemti vērā!\n"
@@ -57988,8 +57986,8 @@ msgstr "Puse no fonta augstuma"
 #~ msgstr "2. Nokopējiet mapi \"serial\" (atrodama tikko atpakotajā mapē)"
 
 #~ msgid ""
-#~ "   into the following Inkscape folder: C:\\[Program files]"
-#~ "\\inkscape\\python\\Lib\\"
+#~ "   into the following Inkscape folder: C:\\[Program "
+#~ "files]\\inkscape\\python\\Lib\\"
 #~ msgstr ""
 #~ "   uz sekojošo Inkscape mapi: C:\\[Program files]\\inkscape\\python\\Lib\\"
 
@@ -58457,8 +58455,8 @@ msgstr "Puse no fonta augstuma"
 #~ "Aizvākt neizmantotās definīcijas no dokumenta definīciju sadaļas (-ām)"
 
 #~ msgid ""
-#~ "Specify the D-Bus bus name to listen for messages on (default is "
-#~ "org.inkscape)"
+#~ "Specify the D-Bus bus name to listen for messages on (default is org."
+#~ "inkscape)"
 #~ msgstr ""
 #~ "Norādiet D-Bus kopnes nosaukumu, kuru jāklausās paziņojumu saņemšanai "
 #~ "(noklusētā - org.inkscape)"
@@ -59252,9 +59250,9 @@ msgstr "Puse no fonta augstuma"
 #~ "koniskās frēzes. Šis spraudnis aprēķina ceļu G-code komandas, izmantojot "
 #~ "loka interpolāciju vai arī lineāro kustību, ja nepieciešams. Pamācības, "
 #~ "rokasgrāmatas un atbalsts ir atrodams atbalsta forumā - angļu valodā: "
-#~ "http://www.cnc-club.ru/gcodetools un krievu valodā: http://www.cnc-"
-#~ "club.ru/gcodetoolsru Autori: Nick Drobchenko, Vladimir Kalyaev, John "
-#~ "Brooker, Henry Nicolas, Chris Lusby Taylor. Gcodetools ver. 1.7"
+#~ "http://www.cnc-club.ru/gcodetools un krievu valodā: http://www.cnc-club."
+#~ "ru/gcodetoolsru Autori: Nick Drobchenko, Vladimir Kalyaev, John Brooker, "
+#~ "Henry Nicolas, Chris Lusby Taylor. Gcodetools ver. 1.7"
 
 #~ msgid ""
 #~ "\"Create area offset\": creates several Inkscape path offsets to fill "
@@ -59312,9 +59310,9 @@ msgstr "Puse no fonta augstuma"
 #~ "This function creates path to engrave letters or any shape with sharp "
 #~ "angles. Cutter's depth as a function of radius is defined by the tool. "
 #~ "Depth may be any Python expression. For instance: cone....(45 "
-#~ "degrees)......................: w cone....(height/diameter=10/3)..: 10*w/"
-#~ "3 sphere..(radius r)...........................: math.sqrt(max(0,r**2-"
-#~ "w**2)) ellipse.(minor axis r, major 4r).....: math.sqrt(max(0,r**2-"
+#~ "degrees)......................: w cone....(height/diameter=10/3)..: "
+#~ "10*w/3 sphere..(radius r)...........................: math.sqrt(max(0,"
+#~ "r**2-w**2)) ellipse.(minor axis r, major 4r).....: math.sqrt(max(0,r**2-"
 #~ "w**2))*4"
 #~ msgstr ""
 #~ "Šī funkcija izveido ceļu burtu vai objektu ar asiem leņķiem gravēšanai. "
@@ -59326,15 +59324,14 @@ msgstr "Puse no fonta augstuma"
 #~ "w**2))*4"
 
 #~ msgid ""
-#~ "Orientation points are used to calculate transformation "
-#~ "(offset,scale,mirror,rotation in XY plane) of the path. 3-points mode "
-#~ "only: do not put all three into one line (use 2-points mode instead). You "
-#~ "can modify Z surface, Z depth values later using text tool (3rd "
-#~ "coordinates). If there are no orientation points inside current layer "
-#~ "they are taken from the upper layer. Do not ungroup orientation points! "
-#~ "You can select them using double click to enter the group or by "
-#~ "Ctrl+Click. Now press apply to create control points (independent set for "
-#~ "each layer)."
+#~ "Orientation points are used to calculate transformation (offset,scale,"
+#~ "mirror,rotation in XY plane) of the path. 3-points mode only: do not put "
+#~ "all three into one line (use 2-points mode instead). You can modify Z "
+#~ "surface, Z depth values later using text tool (3rd coordinates). If there "
+#~ "are no orientation points inside current layer they are taken from the "
+#~ "upper layer. Do not ungroup orientation points! You can select them using "
+#~ "double click to enter the group or by Ctrl+Click. Now press apply to "
+#~ "create control points (independent set for each layer)."
 #~ msgstr ""
 #~ "Orientācijas punkti tiek izmantoti ceļa pārveidojumu aprēķināšanai "
 #~ "(nobīde, mērogs, spoguļattēls, pagrieziens XY plaknē). Tikai 3 punktu "
@@ -59788,10 +59785,10 @@ msgstr "Puse no fonta augstuma"
 #~ msgstr ""
 #~ "pySerial nav uzstādīts.\n"
 #~ "\n"
-#~ "1. Lejupielādējiet pySerial no šejienes (ne \".exe\"!): http://"
-#~ "pypi.python.org/pypi/pyserial\n"
-#~ "2. Atarhivējiet \"serial\" apakšmapi no zip arhīva sekojošā mapē: C:\\"
-#~ "[Program files]\\inkscape\\python\\Lib\\\n"
+#~ "1. Lejupielādējiet pySerial no šejienes (ne \".exe\"!): http://pypi."
+#~ "python.org/pypi/pyserial\n"
+#~ "2. Atarhivējiet \"serial\" apakšmapi no zip arhīva sekojošā mapē: C:"
+#~ "\\[Program files]\\inkscape\\python\\Lib\\\n"
 #~ "3. Pārstartējiet Inkscape."
 
 #~ msgid "http://inkscape.org/doc/keys091.html"

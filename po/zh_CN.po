@@ -8928,8 +8928,8 @@ msgstr "设置特性"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 "设置或更新选定对象的一个属性；用法：object-set-attribute: 属性名，属性值;"
 
@@ -8939,8 +8939,8 @@ msgstr "设置属性"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 "在选中对象上设置或更新一个属性；用法：object-set-property: 属性名，属性值;"
 
@@ -11359,9 +11359,8 @@ msgstr "完成'%s', 载入结果..."
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  是由于此扩展的.inx文件不正确造成的。Inkscape安装错误可能导致.inx文件不正"
 "确。"
@@ -15937,8 +15936,8 @@ msgstr "列出全部可用动作"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr "使用应用程序ID 'org.inkscape.Inkscape.TAG' 创建Inkscape的唯一实例"
 
 #: ../src/inkscape-application.cpp:727
@@ -22065,8 +22064,8 @@ msgstr "<b>找不到</b>要选择的目标(孤立克隆、偏移、文字路径�
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr "试图图选择的对象<b>不可见</b>(位于 &lt;defs&gt; 内)"
 
 #: ../src/selection-chemistry.cpp:3029
@@ -32087,14 +32086,13 @@ msgstr "E和F单位"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">二维变换矩阵</a> 结合了平移(E,F), 缩放"
-"(A,D), 旋转(A-D)和剪切(B,C)功能.</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">二维变换矩阵</a> 结合了平移(E,F), 缩放(A,D), 旋"
+"转(A-D)和剪切(B,C)功能.</small>"
 
 #: ../src/ui/dialog/transformation.cpp:844
 #: ../src/ui/dialog/transformation.cpp:855
@@ -41845,9 +41843,8 @@ msgid ""
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
-"{}或 `optparse` 已被弃用，被 `argparser` 取代。你必须将 "
-"`self.OptionParser.add_option` 改为 `self.arg_parser.add_argument`；参数相"
-"似。"
+"{}或 `optparse` 已被弃用，被 `argparser` 取代。你必须将 `self.OptionParser."
+"add_option` 改为 `self.arg_parser.add_argument`；参数相似。"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 108
@@ -41859,19 +41856,19 @@ msgstr "{} 方法现在是必需的方法。它应该在 {cls} 上创建，即�
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.get_current_layer()`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"get_current_layer()`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.get_center_position()`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"get_center_position()`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
 msgid ""
@@ -41894,19 +41891,19 @@ msgstr "{} 已被删除"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.getElementById(eid)`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"getElementById(eid)`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的新方法。请改用 "
-"`self.svg.getElement(path)`。"
+"{} 现在是 SvgDocumentElement 类中的新方法。请改用 `self.svg."
+"getElement(path)`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
 msgid "{} is no longer in use. Use the lxml `.getparent()` method instead."
@@ -41914,19 +41911,19 @@ msgstr "{} 不再使用。请改用 lxml `.getparent()` 方法。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 "{} 现在是 SvgDocumentElement 类的属性。请使用 `self.svg.namedview` 来访问这个"
 "元素。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
-"{} 现在是 namedview 元素对象的方法。请改用 "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))`。"
+"{} 现在是 namedview 元素对象的方法。请改用 `self.svg.namedview.add(Guide()."
+"move_to(x, y, a))`。"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 178
@@ -41944,11 +41941,11 @@ msgstr "self.svg_file 现在是 self.options.input_file."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.get_unique_id(old_id)`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"get_unique_id(old_id)`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
 msgid ""
@@ -41971,27 +41968,27 @@ msgstr "{} 现在是 SvgDocumentElement 类的属性。请改用 `self.svg.unit`
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.unittouu(str)`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"unittouu(str)`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.uutounit(value, unit)`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"uutounit(value, unit)`。"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
-"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 "
-"`self.svg.add_unit(value)`。"
+"{} 现在是 SvgDocumentElement 类中的一个方法。请改用 `self.svg."
+"add_unit(value)`。"
 
 #: ../share/extensions/inkex/elements/_parser.py:111
 msgid ""
@@ -42055,8 +42052,8 @@ msgid ""
 "update the JessyInk script.\n"
 "\n"
 msgstr ""
-"这个SVG文件中没有安装JessyInk脚本，或者它的版本与JessyInk扩展不同。请从“扩展”"
-"菜单的“JessyInk”子菜单中选择“安装/更新…”来安装或更新JessyInk脚本。\n"
+"这个SVG文件中没有安装JessyInk脚本，或者它的版本与JessyInk扩展不同。请从“扩"
+"展”菜单的“JessyInk”子菜单中选择“安装/更新…”来安装或更新JessyInk脚本。\n"
 "\n"
 
 #: ../share/extensions/jessyink_master_slide.py:48
@@ -42409,8 +42406,8 @@ msgid ""
 "compression level options. Please try to disable \"Interlaced\" or set "
 "\"Level\" to 1 or higher."
 msgstr ""
-"opting命令失败，可能是由于隔行扫描和压缩级别选项不匹配。请尝试禁用“隔行扫描”"
-"或将“级别”设置为1或更高。"
+"opting命令失败，可能是由于隔行扫描和压缩级别选项不匹配。请尝试禁用“隔行扫"
+"描”或将“级别”设置为1或更高。"
 
 #: ../share/extensions/raster_output_png.py:51
 msgid "The optipng command failed with the following message:"
@@ -45161,8 +45158,8 @@ msgid ""
 "JessyInk presentation. Please see code.google.com/p/jessyink for more "
 "details."
 msgstr ""
-"这个扩展允许你为JessyInk演示文稿安装、更新和删除自动文本。详情请见 "
-"code.google.com/p/jessyink。"
+"这个扩展允许你为JessyInk演示文稿安装、更新和删除自动文本。详情请见 code."
+"google.com/p/jessyink。"
 
 #: ../share/extensions/jessyink_autotexts.inx:21
 #: ../share/extensions/jessyink_effects.inx:33
@@ -45231,8 +45228,8 @@ msgid ""
 "JessyInk presentation. Please see code.google.com/p/jessyink for more "
 "details."
 msgstr ""
-"这个扩展允许你为JessyInk演示文稿安装、更新和删除对象效果。详情请见 "
-"code.google.com/p/jessyink。"
+"这个扩展允许你为JessyInk演示文稿安装、更新和删除对象效果。详情请见 code."
+"google.com/p/jessyink。"
 
 #: ../share/extensions/jessyink_export.inx:3
 msgid "JessyInk zipped pdf or png output"
@@ -45518,8 +45515,8 @@ msgstr "概要"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "这个扩展允许你获得关于这个SVG文件中包含的JessyInk脚本、效果和过渡的信息。详情"
 "请见 code.google.com/p/jessyink。"
@@ -45583,8 +45580,8 @@ msgstr "移除视图"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr "这个扩展允许你卸载JessyInk脚本。详情请见 code.google.com/p/jessyink。"
 
 #: ../share/extensions/jessyink_video.inx:3
@@ -45613,8 +45610,8 @@ msgid ""
 "This extension allows you to set, update and remove views for a JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
-"这个扩展允许你为JessyInk演示文稿设置、更新和删除视图。详情请见 "
-"code.google.com/p/jessyink。"
+"这个扩展允许你为JessyInk演示文稿设置、更新和删除视图。详情请见 code.google."
+"com/p/jessyink。"
 
 #: ../share/extensions/jitternodes.inx:3
 msgid "Jitter Nodes"
@@ -47068,8 +47065,8 @@ msgstr "Z深度:"
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -47158,8 +47155,8 @@ msgstr "定向点"
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -49684,8 +49681,8 @@ msgid ""
 "Select your system encoding. More information at http://docs.python.org/"
 "library/codecs.html#standard-encodings."
 msgstr ""
-"选择你的系统编码。更多信息请访问 http://docs.python.org/library/"
-"codecs.html#standard-encodings。"
+"选择你的系统编码。更多信息请访问 http://docs.python.org/library/codecs."
+"html#standard-encodings。"
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"
@@ -55198,8 +55195,8 @@ msgstr "字体高度的一半"
 #~ "Occidental Type Fonts and Graphic Symbols.\" These are not traditional "
 #~ "\"outline\" fonts, but are instead \"single-stroke\" fonts, or "
 #~ "\"engraving\" fonts where the character is formed by the stroke (and not "
-#~ "the fill). For additional information, please visit: "
-#~ "www.evilmadscientist.com/go/hershey"
+#~ "the fill). For additional information, please visit: www.evilmadscientist."
+#~ "com/go/hershey"
 #~ msgstr ""
 #~ "\n"
 #~ "此扩展功能会用绘图机的“Hershey”字体\n"
@@ -55746,8 +55743,8 @@ msgstr "字体高度的一半"
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "此扩展功能只对路径、动态偏移以及前两者的群组有作用！其他对象都会被忽略！\n"
 #~ "方案 1：按“路径->对象转成路径”或 Shift+Ctrl+C。\n"
@@ -56300,8 +56297,8 @@ msgstr "字体高度的一半"
 #~ "Failed to import the subprocess module. Please report this as a bug at: "
 #~ "https://bugs.launchpad.net/inkscape."
 #~ msgstr ""
-#~ "无法导入子进程(subprocess)模块。请在这个地址报告错误：https://"
-#~ "bugs.launchpad.net/inkscape."
+#~ "无法导入子进程(subprocess)模块。请在这个地址报告错误：https://bugs."
+#~ "launchpad.net/inkscape."
 
 #~ msgid "Python version is: "
 #~ msgstr "Python 版本为："

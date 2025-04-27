@@ -9662,8 +9662,8 @@ msgstr "एट्रिब्युट मांडात"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9673,8 +9673,8 @@ msgstr "मार्गदर्शक वैशिष्ट्यां था�
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12369,9 +12369,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "हे ह्या विस्ताराच्या चुकीच्या .inx फायलीक लागून जाला. चुकीची .inx फायल दोश आशिल्ल्या "
 "इंकस्केपाच्या प्रतिष्ठापनाक लागून जाव येता."
@@ -17261,8 +17260,8 @@ msgstr "SVG अक्षरसंच संपादित करात"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -23949,8 +23948,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr "तुमी निवडपाक सोदता ती वस्त <b>दिसना</b> (ती &lt;defs&gt; न आसा)"
 
 #: ../src/selection-chemistry.cpp:3029
@@ -27121,8 +27120,8 @@ msgstr ""
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
-"<b>feBlend</b> फिल्टर प्रिमिटिव्ह 4 प्रतिमा ब्लेंडिंग स्थिती पुरयता: "
-"पड्डो,गुणाकार,गडद,आणि हलको."
+"<b>feBlend</b> फिल्टर प्रिमिटिव्ह 4 प्रतिमा ब्लेंडिंग स्थिती पुरयता: पड्डो,गुणाकार,गडद,"
+"आणि हलको."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2610
 #, fuzzy
@@ -34760,10 +34759,9 @@ msgstr "भितर आनी भायर"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -45426,14 +45424,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45455,14 +45453,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -45471,14 +45469,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -45497,8 +45495,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -45521,20 +45519,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49197,8 +49195,8 @@ msgstr "सार"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "हो विस्तार तुमका ह्या फायलींत आशिल्ली JessyInk लिपी, परिणाम आणि रूपांतर हांची माहिती "
 "मेळोवपाक दिता, अदिक माहितीखातीर code.google.com/p/jessyink पळयात "
@@ -49262,8 +49260,8 @@ msgstr "दृश्या काडात"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "हो विस्तार तुमका JessyInk लिपीचे प्रतिष्ठापन काडपाक दिता. अदिक तपशीलाखातीर मात्शे "
 "code.google.com/p/jessyink पळयात."
@@ -49295,8 +49293,8 @@ msgid ""
 "This extension allows you to set, update and remove views for a JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
-"हो विस्तार तुमका JessyInk सादरीकरणाखातीर दृश्यां थारावपक,सुदारपाक आणि काडपाक "
-"दिता.अदिक तपशीलाखातीर मात्शे code.google.com/p/jessyink पळयात."
+"हो विस्तार तुमका JessyInk सादरीकरणाखातीर दृश्यां थारावपक,सुदारपाक आणि काडपाक दिता."
+"अदिक तपशीलाखातीर मात्शे code.google.com/p/jessyink पळयात."
 
 #: ../share/extensions/jitternodes.inx:3
 #, fuzzy
@@ -50839,8 +50837,8 @@ msgstr "Z खोलाय:"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -50926,8 +50924,8 @@ msgstr "निर्धारण बिंदू"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -57394,8 +57392,8 @@ msgstr ""
 #~ "<b>Alt</b>: click to select under; scroll mouse-wheel to cycle-select; "
 #~ "drag to move selected or select by touch"
 #~ msgstr ""
-#~ "<b>Alt</b>: सकयल निवडपाक क्लीक करात; निवडमालिकेखातीर माऊसाचे चक्र स्क्रोल "
-#~ "करात;निवडिल्ले हालोवपाक ओडात वो स्पर्श करून निवडात"
+#~ "<b>Alt</b>: सकयल निवडपाक क्लीक करात; निवडमालिकेखातीर माऊसाचे चक्र स्क्रोल करात;"
+#~ "निवडिल्ले हालोवपाक ओडात वो स्पर्श करून निवडात"
 
 #~ msgid "(root)"
 #~ msgstr "(मूळ)"
@@ -59647,8 +59645,8 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "हो विस्तार वाट आणि डायनॅमिक भरपाई आणि फकत तांच्याच गटांसंयत काम करता! सगळ्यो हेर "
 #~ "वस्तीं दुर्लक्ष केल्यो वतल्यो!\n"
@@ -59764,8 +59762,8 @@ msgstr ""
 #~ "this can be done with the command, sudo apt-get install python-numpy."
 #~ msgstr ""
 #~ "नम्पी वा numpy.linalg मॉड्युल इम्पॉर्ट  करपाक  अपेस आयलां. हे एक्स्टेन्शनाक हें "
-#~ "मॉड्युल्सची गरज आसा. उपकार करुन ते इन्स्टॉल करात आनी परतुन यत्न करात. डेबियन "
-#~ "-सारखिल्ले सिस्टमचेर हें आदेश, सुडो एप्ट-गॅट इन्स्टॉल पायथॉन-नम्पी- वरवीं करुं येता."
+#~ "मॉड्युल्सची गरज आसा. उपकार करुन ते इन्स्टॉल करात आनी परतुन यत्न करात. डेबियन -"
+#~ "सारखिल्ले सिस्टमचेर हें आदेश, सुडो एप्ट-गॅट इन्स्टॉल पायथॉन-नम्पी- वरवीं करुं येता."
 
 #~ msgid "Could not locate file: %s"
 #~ msgstr "फायल दाखोंवक शकले नात: %s"
@@ -59790,8 +59788,8 @@ msgstr ""
 #~ "In order to import Dia files, Dia itself must be installed.  You can get "
 #~ "Dia at http://live.gnome.org/Dia"
 #~ msgstr ""
-#~ "Dia फायली आयात करपाक, स्वतः Dia प्रतिष्ठापित आसपाक जाय. तुमका http://"
-#~ "live.gnome.org/Dia हांगा डाय मेळटले."
+#~ "Dia फायली आयात करपाक, स्वतः Dia प्रतिष्ठापित आसपाक जाय. तुमका http://live."
+#~ "gnome.org/Dia हांगा डाय मेळटले."
 
 #~ msgid "Dia Diagram (*.dia)"
 #~ msgstr "डाय आकृती (*.dia)"
@@ -61597,8 +61595,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "ओपन क्लिप आर्ट लायब्ररी RSS फिड स्विकारपाक असफळ. संरचनाय->आयात/निर्यातान सर्वर "
 #~ "नाव बरोबर आसा जाल्यार तपासात (देखिक.: openclipart.org)"

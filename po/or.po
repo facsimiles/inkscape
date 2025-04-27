@@ -9677,8 +9677,8 @@ msgstr "ଗୁଣଗୁଡିକ ସେଟ କର"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9688,8 +9688,8 @@ msgstr "ଗାଇଡ ବିଶେଷତାଗୁଡିକ ସେଟ କର"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12391,9 +12391,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "ଏହା ବିସ୍ତାର ପାଇଁ ଥିବା ଏକ ଅଠିକ .inx ଫାଇଲ ଦ୍ବାରା ଘଟିଛି ୤ ଅଠିକ୍୍ .inx ଫାଇଲ ଇଙ୍କସ୍କେପର ଏକ "
 "ତ୍ରୁଟିପୂର୍ଣ୍ଣ ପ୍ରତିଷ୍ଠାପନ ଦ୍ବାରା ହୋଇଥାଇ ପାରେ ୤ "
@@ -12456,8 +12455,8 @@ msgid ""
 "did not return an error, but this may indicate the results will not be as "
 "expected."
 msgstr ""
-"କାର୍ଯ୍ୟକାରୀ ହୋଇଥିବା ସ୍କର୍ିପଟ ଠାରୁ ଇଙ୍କସ୍କେପ ଅତିରିକ୍ତ ଡାଟା ପାଇଛି ୤ ସ୍କର୍ିପଟ କୌଣସି ତ୍ରୁଟି ଦେଇ "
-"ନାହିଁ,କିନ୍ତୁ ଏହା ସୂଚନା ଦେଇପାରେ ଯେ ଫଳ ଆଶା ଅନୁରୂପ ହେବ ନାହିଁ ୤"
+"କାର୍ଯ୍ୟକାରୀ ହୋଇଥିବା ସ୍କର୍ିପଟ ଠାରୁ ଇଙ୍କସ୍କେପ ଅତିରିକ୍ତ ଡାଟା ପାଇଛି ୤ ସ୍କର୍ିପଟ କୌଣସି ତ୍ରୁଟି ଦେଇ ନାହିଁ,"
+"କିନ୍ତୁ ଏହା ସୂଚନା ଦେଇପାରେ ଯେ ଫଳ ଆଶା ଅନୁରୂପ ହେବ ନାହିଁ ୤"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:41
 msgid "Adaptive Threshold"
@@ -17293,8 +17292,8 @@ msgstr "ସମସ୍ତ ଫଣ୍ଟ ତାଲିକାଭୁକ୍ତ କର"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -24009,8 +24008,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "ଆପଣ ମନୋନୟନ କରିବାକୁ ଚେଷ୍ଟା କରୁଥିବା ବସ୍ତୁ ହେଉଛି <b>ଦୃଶ୍ୟମାନ ନୁହଁେ</b> (ଏହା &lt;defs&gt ରେ "
 "ଅଛି;)"
@@ -29581,8 +29580,8 @@ msgid ""
 "milliseconds); specify 0 to have the outline shown until mouse leaves the "
 "path"
 msgstr ""
-"ମାଉସ- ଓଭର ପରେ କେତେ ସମୟଧରିକରି ପଥ ବାହ୍ୟରେଖା ଦିଶିବ ତାହା ନିର୍ଦ୍ଦିଷ୍ଟ କରେ(ମିଲି "
-"ସେକେଣ୍ଡରେ );ବାହ୍ୟରେଖା ଦେଖାଯିବା ପାଇଁ O କୁ ନିର୍ଦ୍ଦିଷ୍ଟ କର ଯେ ପର୍ଯ୍ୟନ୍ତ ମାଉସ ପଥକୁ ଛାଡି ନାହିଁ"
+"ମାଉସ- ଓଭର ପରେ କେତେ ସମୟଧରିକରି ପଥ ବାହ୍ୟରେଖା ଦିଶିବ ତାହା ନିର୍ଦ୍ଦିଷ୍ଟ କରେ(ମିଲି ସେକେଣ୍ଡରେ );"
+"ବାହ୍ୟରେଖା ଦେଖାଯିବା ପାଇଁ O କୁ ନିର୍ଦ୍ଦିଷ୍ଟ କର ଯେ ପର୍ଯ୍ୟନ୍ତ ମାଉସ ପଥକୁ ଛାଡି ନାହିଁ"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:996
 msgid "Editing preferences"
@@ -34854,10 +34853,9 @@ msgstr "ଭିତର ଏବଂ ବାହାର"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -35484,8 +35482,8 @@ msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
 msgstr ""
-"ସ୍ପାଇରେଲକୁ ରୋଲ/ଅନରୋଲ କରନ୍ତୁ <b>ଭିତରେ</b>; ସହିତ <b>କଣ୍ଟ୍ରୋଲ</b> କୋଣକୁ ସ୍ନାପ କରିବା "
-"ପାଇଁ;ସହିତ <b>Alt</b> କନଭର୍ଜ/ଡାଇଭର୍ଜ କରିବାପାଇଁ"
+"ସ୍ପାଇରେଲକୁ ରୋଲ/ଅନରୋଲ କରନ୍ତୁ <b>ଭିତରେ</b>; ସହିତ <b>କଣ୍ଟ୍ରୋଲ</b> କୋଣକୁ ସ୍ନାପ କରିବା ପାଇଁ;"
+"ସହିତ <b>Alt</b> କନଭର୍ଜ/ଡାଇଭର୍ଜ କରିବାପାଇଁ"
 
 #: ../src/ui/shape-editor-knotholders.cpp:2106
 #, fuzzy
@@ -35493,8 +35491,8 @@ msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
 msgstr ""
-"ସ୍ପାଇରେଲକୁ ରୋଲ/ଅନରୋଲ କରନ୍ତୁ <b>ବାହାରେ</b>; ସହିତ <b>କଣ୍ଟ୍ରୋଲ</b> କୋଣକୁ ସ୍ନାପ କରିବା "
-"ପାଇଁ;ସହିତ <b>ଶିଫ୍ଟ</b> ସ୍କେଲ/ଘୂର୍ଣ୍ଣନ କରିବାପାଇଁ"
+"ସ୍ପାଇରେଲକୁ ରୋଲ/ଅନରୋଲ କରନ୍ତୁ <b>ବାହାରେ</b>; ସହିତ <b>କଣ୍ଟ୍ରୋଲ</b> କୋଣକୁ ସ୍ନାପ କରିବା ପାଇଁ;"
+"ସହିତ <b>ଶିଫ୍ଟ</b> ସ୍କେଲ/ଘୂର୍ଣ୍ଣନ କରିବାପାଇଁ"
 
 #: ../src/ui/shape-editor-knotholders.cpp:2158
 msgid "Adjust the <b>offset distance</b>"
@@ -45556,14 +45554,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45585,14 +45583,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -45601,14 +45599,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -45627,8 +45625,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -45651,20 +45649,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49080,8 +49078,8 @@ msgid ""
 "jessyink for more details."
 msgstr ""
 "ଏହି ବିସ୍ତାର  ଆପଣଙ୍କ SVG ଫାଇଲକୁ ଏକ ଉପସ୍ଥାପନାରେ ପରିବର୍ତ୍ତନ କରିବା ପାଇଁ ଜେସି ଇଙ୍କ ସ୍କ୍ରିପ୍ଟକୁ "
-"ପ୍ରତିଷ୍ଠାପନ କିମ୍ବା ଅପଡେଟ କରିବା ପାଇଁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ ୤ ଅଧିକ ବିସ୍ତୃତବିବରଣୀ ପାଇଁ "
-"code.google.com/p/jessyinkକୁ ଦୟାକରି ଦେଖନ୍ତୁ ୤"
+"ପ୍ରତିଷ୍ଠାପନ କିମ୍ବା ଅପଡେଟ କରିବା ପାଇଁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ ୤ ଅଧିକ ବିସ୍ତୃତବିବରଣୀ ପାଇଁ code.google."
+"com/p/jessyinkକୁ ଦୟାକରି ଦେଖନ୍ତୁ ୤"
 
 #: ../share/extensions/jessyink_key_bindings.inx:3
 msgid "Key bindings"
@@ -49322,8 +49320,8 @@ msgstr "ସାରାଂଶ"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "ଏହି ବିସ୍ତାର ଏହି SVG ଫାଇଲରେ ଥିବା ଜେସି ଇଙ୍କ ସ୍କ୍ରିପ୍ଟ, ପ୍ରଭାବ ଏବଂ ପରିବର୍ତ୍ତନ ସମ୍ବନ୍ଧରେ ସୂଚନା "
 "ପାଇବା  ପାଇଁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ ୤ ଅଧିକ ବିସ୍ତୃତବିବରଣୀ ପାଇଁ code.google.com/p/jessyinkକୁ "
@@ -49389,8 +49387,8 @@ msgstr "ଦୃଶ୍ୟସବୁ ହଟାଅ"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "ଏହି ବିସ୍ତାର ଜେସି ଇଙ୍କ ସ୍କ୍ରିପ୍ଟକୁ ଅପ୍ରତିଷ୍ଠାପନ କରିବା ପାଇଁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ ୤ ଅଧିକ ବିସ୍ତୃତବିବରଣୀ ପାଇଁ "
 "code.google.com/p/jessyinkକୁ ଦୟାକରି ଦେଖନ୍ତୁ ୤"
@@ -49406,8 +49404,8 @@ msgid ""
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
 "ଏହି ବିସ୍ତାର ଚଳିତ ସ୍ଲାଇଡ (ସ୍ତର)ରେ ଜେସି ଇଙ୍କ ଭିଡିଓ ଉପାଦାନ ରଖେ ୤ ଏହି ଉପାଦାନ ଆପଣଙ୍କ ଜେସି ଇଙ୍କ "
-"ଉପସ୍ଥାପନାରେ ଏକ ଭିଡିଓ ସମ୍ମିଳିତ କରିବା ପାଇଁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ ୤ ଅଧିକ ବିସ୍ତୃତବିବରଣୀ ପାଇଁ "
-"code.google.com/p/jessyinkକୁ ଦୟାକରି ଦେଖନ୍ତୁ ୤"
+"ଉପସ୍ଥାପନାରେ ଏକ ଭିଡିଓ ସମ୍ମିଳିତ କରିବା ପାଇଁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ ୤ ଅଧିକ ବିସ୍ତୃତବିବରଣୀ ପାଇଁ code."
+"google.com/p/jessyinkକୁ ଦୟାକରି ଦେଖନ୍ତୁ ୤"
 
 #: ../share/extensions/jessyink_view.inx:9
 msgid "Remove view"
@@ -50948,8 +50946,8 @@ msgstr "Z ଗଭୀର :"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -51036,8 +51034,8 @@ msgstr "ଅନୁକୂଳନ ବିନ୍ଦୁଗୁଡିକ"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -59696,8 +59694,8 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "ଏହି ପ୍ରସାରଣ କେବଳ ପଥଗୁଡିକ ଏବଂ ଗତିଶୀଳ ଅଫସେଟ୍ ତଥା ସେମାନଙ୍କ ସମୂହ ସହିତ କାର୍ଯ୍ୟ କରେ ା ଅନ୍ୟ "
 #~ "ସମସ୍ତ ବିଷୟସବକୁ ଅବହେଳା କରାଯିବ !\n"
@@ -60086,8 +60084,8 @@ msgstr ""
 #~ "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 #~ "corner)"
 #~ msgstr ""
-#~ "SVG ବ୍ୟବହାରକାରୀ ୟୁନିଟଗୁଡିକରେ ରପ୍ତାନୀ କରାହୋଇଥିବା କ୍ଷେତ୍ର ( ପୃଷ୍ଠାଟି ଡିଫଲ୍ଟ ଅଛି;O,O ନିମ୍ନ "
-#~ "-ବାମ କୋଣ ଅଟେ )"
+#~ "SVG ବ୍ୟବହାରକାରୀ ୟୁନିଟଗୁଡିକରେ ରପ୍ତାନୀ କରାହୋଇଥିବା କ୍ଷେତ୍ର ( ପୃଷ୍ଠାଟି ଡିଫଲ୍ଟ ଅଛି;O,O ନିମ୍ନ -"
+#~ "ବାମ କୋଣ ଅଟେ )"
 
 #~ msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 #~ msgstr "ରପ୍ତାନୀ ହୋଇଥିବା ବିଟମ୍ୟାପର ଉଚ୍ଚତା ପିକ୍ସେଲ୍ସରେ ( ରପ୍ତାନୀ-dpi କୁ ଓଭରରାଇଡ କରେ)"
@@ -60123,8 +60121,8 @@ msgstr ""
 #~ "result in LaTeX like: \\input{latexfile.tex}"
 #~ msgstr ""
 #~ "ଟେକ୍ସଟ ବିନା PDF/PS/EPS କୁ  ରପ୍ତାନୀ କରନ୍ତୁ ୤ PDF/PS/EPS ବ୍ୟତୀତ, PDF/PS/EPS ଫାଇଲ "
-#~ "ଉପରେ ଟେକ୍ସଟକୁ ରଖି , ଲାଟେକ୍ସ ଫାଇଲ କୁ ରପ୍ତାନୀ କରାଯାଏ ୤ ପରିିଣାମକୁ "
-#~ "\\ଇନ୍ପୁଟ{ଲାଟେକ୍ସଫାଇଲ.tex} ଭଳି ଲାଟେକ୍ସରେ ଅନ୍ତର୍ଭୁକ୍ତ କରନ୍ତୁ"
+#~ "ଉପରେ ଟେକ୍ସଟକୁ ରଖି , ଲାଟେକ୍ସ ଫାଇଲ କୁ ରପ୍ତାନୀ କରାଯାଏ ୤ ପରିିଣାମକୁ \\ଇନ୍ପୁଟ{ଲାଟେକ୍ସଫାଇଲ."
+#~ "tex} ଭଳି ଲାଟେକ୍ସରେ ଅନ୍ତର୍ଭୁକ୍ତ କରନ୍ତୁ"
 
 #~ msgid "Export document to an Enhanced Metafile (EMF) File"
 #~ msgstr "ଦଲିଲକୁ ଏକ ବର୍ଦ୍ଧିତ ମେଟାଫାଇଲ (EMF)ଫାଇଲକୁ  ରପ୍ତାନୀ କରନ୍ତୁ "
@@ -60273,8 +60271,8 @@ msgstr ""
 #~ "The export_gpl.py module requires PyXML.  Please download the latest "
 #~ "version from http://pyxml.sourceforge.net/."
 #~ msgstr ""
-#~ "ଏକ୍ସପୋରଟ - Gpl.py ମଡ୍ୟୁଲ pXyml ଆବଶ୍ୟକ କରେ ା ଦୟାକରି http ://"
-#~ "pxyMl.SourcEForge.net/.ରୁ ଅତ୍ୟାଧୁନିକ ସଂସ୍କରଣକୁ ୁ ଡାଉନଲୋଡ କରନ୍ତୁ ା"
+#~ "ଏକ୍ସପୋରଟ - Gpl.py ମଡ୍ୟୁଲ pXyml ଆବଶ୍ୟକ କରେ ା ଦୟାକରି http ://pxyMl.SourcEForge."
+#~ "net/.ରୁ ଅତ୍ୟାଧୁନିକ ସଂସ୍କରଣକୁ ୁ ଡାଉନଲୋଡ କରନ୍ତୁ ା"
 
 #, fuzzy
 #~ msgid "Python version is: "
@@ -61697,11 +61695,11 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
-#~ "ଓପନ କ୍ଲିପ ଆର୍ଟ ଲାଇବ୍ରେରୀ RSS ଫିଡ ଗ୍ରହଣ କରିବା ବିଫଳ ହେଲା ୤ ଯାଞ୍ଚ କର କି କନଫିଗୁରେଶନ "
-#~ "->ଆମଦାନୀ/ରପ୍ତାନୀ (e.g.: ଓପନକ୍ଲିପଆର୍ଟ.org)ରେ ସର୍ଭର ନାମ ଠିକ ଅଛି କି ନାହିଁ"
+#~ "ଓପନ କ୍ଲିପ ଆର୍ଟ ଲାଇବ୍ରେରୀ RSS ଫିଡ ଗ୍ରହଣ କରିବା ବିଫଳ ହେଲା ୤ ଯାଞ୍ଚ କର କି କନଫିଗୁରେଶନ -"
+#~ ">ଆମଦାନୀ/ରପ୍ତାନୀ (e.g.: ଓପନକ୍ଲିପଆର୍ଟ.org)ରେ ସର୍ଭର ନାମ ଠିକ ଅଛି କି ନାହିଁ"
 
 #~ msgid "Server supplied malformed Clip Art feed"
 #~ msgstr "ଖରାପଗଠିତ କ୍ଲିପ ଆର୍ଟ ଫିଡ ସର୍ଭର ପ୍ରଦାନ କଲା "

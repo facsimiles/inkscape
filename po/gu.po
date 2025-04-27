@@ -9845,8 +9845,8 @@ msgstr "ગુણધર્મો સેટ કરો"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9856,8 +9856,8 @@ msgstr "માર્ગદર્શિકા ગુણો સેટ કરો"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12559,9 +12559,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "આ વિસ્તારણ માટેની એક અનુચિત .inx ફાઇલનાં કારણે આ થયું છે. કોઈ અનુચિત .inx ફાઇલ થવાનું "
 "કારણ Inkscapeની ખામીયુક્ત પ્રસ્થાપના હોઈ શકે છે."
@@ -17463,8 +17462,8 @@ msgstr "બધાં ફૉન્ટ્સને સૂચીબદ્ધ કર
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -24171,11 +24170,11 @@ msgstr "(એકલ ક્લોન, ઑફસેટ, પાઠપથ, પ્ર�
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
-"જે ઑબ્જેક્ટને તમે પસંદ કરવાનો પ્રયત્ન કરી રહ્યાં છો તે <b>દૃશ્યમાન નથી</b> (એ "
-"&lt;defs&gt;માં છે)"
+"જે ઑબ્જેક્ટને તમે પસંદ કરવાનો પ્રયત્ન કરી રહ્યાં છો તે <b>દૃશ્યમાન નથી</b> (એ &lt;defs&gt;"
+"માં છે)"
 
 #: ../src/selection-chemistry.cpp:3029
 msgid "Fill between many"
@@ -35021,10 +35020,9 @@ msgstr "અંદર અને બહાર"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -45734,14 +45732,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45763,14 +45761,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -45779,14 +45777,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -45805,8 +45803,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -45829,20 +45827,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49501,8 +49499,8 @@ msgstr "સારાંશ"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "આ વિસ્તારણ તમને આ SVG ફાઇલમાં સમાવિષ્ટ JessyInk સ્ક્રિપ્ટ, પ્રભાવો અને સંક્રમણ વિશે "
 "જાણકારી મેળવવાં દે છે. વધુ વિગતો માટે કૃપયા code.google.com/p/jessyink જુઓ."
@@ -49566,11 +49564,11 @@ msgstr "દૃશ્યો કાઢી નાખો"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
-"આ વિસ્તારણ તમને JessyInk લિપિ વિસ્થાપિત કરવાં દે છે. વધુ વિગતો માટે કૃપયા "
-"code.google.com/p/jessyink જુઓ."
+"આ વિસ્તારણ તમને JessyInk લિપિ વિસ્થાપિત કરવાં દે છે. વધુ વિગતો માટે કૃપયા code.google."
+"com/p/jessyink જુઓ."
 
 #: ../share/extensions/jessyink_video.inx:3
 msgid "Video"
@@ -50594,8 +50592,8 @@ msgstr ""
 "જીકોડટૂલ્સ પ્લગ-ઇન: પથોને જીકોડમાં રૂપાંતરિત કરે છે (ગોળાકાર ઉમેરાનો ઉપયોગ કરીને), ઑફસેટ "
 "પથો બનાવે છે અને શંકું કટર્સનો ઉપયોગ કરીને તીક્ષ્ણ ખૂણાઓ કોતરે છે. આ પ્લગ-ઇન જરૂર હોય ત્યારે "
 "ગોળાકાર ઉમેરા અથવા રેખામય ગતિનો ઉપયોગ કરીને પથો માટે જીકોડની ગણતરી કરે છે. "
-"ટ્યૂટોરિયલ્સ, મૅન્યુઅલ્સ અને સમર્થન ઇંગ્લિશ સમર્થન ફોરમ પર મળી શકે છે: http://www.cnc-"
-"club.ru/gcodetools અને રશિયન સમર્થન ફોરમ: http://www.cnc-club.ru/gcodetoolsru "
+"ટ્યૂટોરિયલ્સ, મૅન્યુઅલ્સ અને સમર્થન ઇંગ્લિશ સમર્થન ફોરમ પર મળી શકે છે: http://www.cnc-club."
+"ru/gcodetools અને રશિયન સમર્થન ફોરમ: http://www.cnc-club.ru/gcodetoolsru "
 "ક્રેડિટ્સ: નિક ડ્રોબચેન્કો, લૅડિમિર કાલયેવ, જૉન બ્રૂકર, હેન્રી નિકોલસ. જીકોડટૂલ્સ આવૃત્તી. "
 "1.6.01"
 
@@ -51126,8 +51124,8 @@ msgstr "Z ઊંડાણ:"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -51214,8 +51212,8 @@ msgstr "ઓરિએન્ટેશન બિંદુઓ"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -51257,8 +51255,8 @@ msgstr ""
 "જીકોડટૂલ્સ પ્લગ-ઇન: પથોને જીકોડમાં રૂપાંતરિત કરે છે (ગોળાકાર ઉમેરાનો ઉપયોગ કરીને), ઑફસેટ "
 "પથો બનાવે છે અને શંકું કટર્સનો ઉપયોગ કરીને તીક્ષ્ણ ખૂણાઓ કોતરે છે. આ પ્લગ-ઇન જરૂર હોય ત્યારે "
 "ગોળાકાર ઉમેરા અથવા રેખામય ગતિનો ઉપયોગ કરીને પથો માટે જીકોડની ગણતરી કરે છે. "
-"ટ્યૂટોરિયલ્સ, મૅન્યુઅલ્સ અને સમર્થન ઇંગ્લિશ સમર્થન ફોરમ પર મળી શકે છે: http://www.cnc-"
-"club.ru/gcodetools અને રશિયન સમર્થન ફોરમ: http://www.cnc-club.ru/gcodetoolsru "
+"ટ્યૂટોરિયલ્સ, મૅન્યુઅલ્સ અને સમર્થન ઇંગ્લિશ સમર્થન ફોરમ પર મળી શકે છે: http://www.cnc-club."
+"ru/gcodetools અને રશિયન સમર્થન ફોરમ: http://www.cnc-club.ru/gcodetoolsru "
 "ક્રેડિટ્સ: નિક ડ્રોબચેન્કો, લૅડિમિર કાલયેવ, જૉન બ્રૂકર, હેન્રી નિકોલસ. જીકોડટૂલ્સ આવૃત્તી. "
 "1.6.01"
 
@@ -51425,8 +51423,8 @@ msgstr ""
 "જીકોડટૂલ્સ પ્લગ-ઇન: પથોને જીકોડમાં રૂપાંતરિત કરે છે (ગોળાકાર ઉમેરાનો ઉપયોગ કરીને), ઑફસેટ "
 "પથો બનાવે છે અને શંકું કટર્સનો ઉપયોગ કરીને તીક્ષ્ણ ખૂણાઓ કોતરે છે. આ પ્લગ-ઇન જરૂર હોય ત્યારે "
 "ગોળાકાર ઉમેરા અથવા રેખામય ગતિનો ઉપયોગ કરીને પથો માટે જીકોડની ગણતરી કરે છે. "
-"ટ્યૂટોરિયલ્સ, મૅન્યુઅલ્સ અને સમર્થન ઇંગ્લિશ સમર્થન ફોરમ પર મળી શકે છે: http://www.cnc-"
-"club.ru/gcodetools અને રશિયન સમર્થન ફોરમ: http://www.cnc-club.ru/gcodetoolsru "
+"ટ્યૂટોરિયલ્સ, મૅન્યુઅલ્સ અને સમર્થન ઇંગ્લિશ સમર્થન ફોરમ પર મળી શકે છે: http://www.cnc-club."
+"ru/gcodetools અને રશિયન સમર્થન ફોરમ: http://www.cnc-club.ru/gcodetoolsru "
 "ક્રેડિટ્સ: નિક ડ્રોબચેન્કો, લૅડિમિર કાલયેવ, જૉન બ્રૂકર, હેન્રી નિકોલસ. જીકોડટૂલ્સ આવૃત્તી. "
 "1.6.01"
 
@@ -59861,15 +59859,15 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "આ વિસ્તારણ પથો અને ગતિશીલ ઑફસેટ્સ અને તેમનાં જૂથો સાથે જ કામ કરે છે! બાકી બધાં "
 #~ "ઑબ્જેક્ટ્સની અવગણના કરવામાં આવેશ!\n"
 #~ "ઉકેલ 1: પથ->પથ માટે ઑબ્જેક્ટ અથવા શિફ્ટ+Ctrl+C દબાવો.\n"
 #~ "ઉકેલ 2: પથ->ગતિશીલ ઑફસેટ અથવા Ctrl+J.\n"
-#~ "ઉકેલ 3: બધાં કૉન્ટોર્સ પોસ્ટસ્ક્રિપ્ટ સ્તર 2 ને નિર્યાત કરો (ફાઇલ->આનાં રૂપમાં સાચવો-"
-#~ ">.ps) અને ફાઇલ->આ ફાઇલ આયાત કરો."
+#~ "ઉકેલ 3: બધાં કૉન્ટોર્સ પોસ્ટસ્ક્રિપ્ટ સ્તર 2 ને નિર્યાત કરો (ફાઇલ->આનાં રૂપમાં સાચવો->."
+#~ "ps) અને ફાઇલ->આ ફાઇલ આયાત કરો."
 
 #~ msgid ""
 #~ "Warning! Tool's and default tool's parameter's (%s) types are not the "
@@ -61821,8 +61819,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "ખુલ્લી ક્લિપ આર્ટ લાયબ્રેરી RSS ફીડ પ્રાપ્ત કરવામાં અસફળ. કૉન્ફિગરેશન->આયાત/નિર્યાતમાં "
 #~ "આપેલું સર્વર નામ બરાબર છે કે નહીં એની ચકાસણી કરી લો (દા.ત.: openclipart.org)"

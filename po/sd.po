@@ -9877,8 +9877,8 @@ msgstr "لاڳاپو رکندڙ سيٽ ڪريو "
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9888,8 +9888,8 @@ msgstr "رهنما جون خاصيتون سيٽ ڪريو "
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12606,9 +12606,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "هن وستار لاءِ نامناسب inx فائل سبب ائين ٿيو۔ نامناسب inx فائل انڪسڪيپ جي غلط "
 "اِسٿاپن سبب ائين ٿيو هوندو۔ "
@@ -17549,8 +17548,8 @@ msgstr "سڀني فانٽن جي فهرست ٺاهيو "
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -24317,8 +24316,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "توهين جيڪا شئه چونڊڻ جي ڪوشش ڪري رهيا آهيو اُها نظر نٿي اَچي۔ (اُها defs ۾ آهي)"
 
@@ -35213,10 +35212,9 @@ msgstr "اندر ۽ ٻاهر "
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -45961,14 +45959,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45990,14 +45988,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -46006,14 +46004,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -46032,8 +46030,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -46056,20 +46054,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49735,8 +49733,8 @@ msgstr "اِختصارُ "
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "هي وستار توهان جي جيسي اِنڪ اِسڪرپٽ، اَثر ۽ SVG فائل ۾ شامل بدلاون جي معلومات "
 "حاصل ڪرڻ ۾ مدد ڪري ٿو۔ وڌيڪ تفصيلن لاءِ مهرباني ڪري ڏسو: code.google.com/p/"
@@ -49803,8 +49801,8 @@ msgstr "منظر ڪڍي ڇڏيو "
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "هي وستار توهان کي جيسي اِنڪ جو اِسٿاپن رد ڪرڻ جي اِجازت ڏئي ٿو۔ وڌيڪ تفصيلن لاءِ "
 "مهرباني ڪري ڏسو:  code.google.com/p/jessyink "
@@ -50825,8 +50823,8 @@ msgstr ""
 "اِستعمال ڪري) آفسيٽ راهون ٺاهي ٿو ۽ ڪون ڪٽرن جو اِستعمال ڪندي تيز ڪنڊون اُڪيري "
 "ٿو۔ هن پلنگ اِن ضرورت پوڻ تي سرڪيولر اِنٽرپوليشن يا لينئر موشن جو اِستعمال ڪري "
 "راهن لاءِ جي ڪوڊ جي ڳڻپ ڪري ٿو۔ ٽيوٽورئلس، مينئل ۽ اَنگريزي سمرٿن فورم:  "
-"http://www.cnc-club.ru/gcodetools ۾ ۽ روسي سمرٿن فورم: http://www.cnc-"
-"club.ru/gcodetoolsru ۾ ملي سگهن ٿا۔ ڪريڊٽس: ڊرو بچينڪو، ولادمير ڪالرئيو، جان "
+"http://www.cnc-club.ru/gcodetools ۾ ۽ روسي سمرٿن فورم: http://www.cnc-club."
+"ru/gcodetoolsru ۾ ملي سگهن ٿا۔ ڪريڊٽس: ڊرو بچينڪو، ولادمير ڪالرئيو، جان "
 "بروڪر، هينري نڪولس۔ جي ڪوڊ اُپڪرڻن جو سنسڪرڻ  1.6.01"
 
 #: ../share/extensions/other/gcodetools/gcodetools_about.inx:46
@@ -51358,8 +51356,8 @@ msgstr "Z اونهائي"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -51446,8 +51444,8 @@ msgstr "اورئينٽيشن نقطا "
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -51490,8 +51488,8 @@ msgstr ""
 "اِستعمال ڪري) آفسيٽ راهون ٺاهي ٿو ۽ ڪون ڪٽرن جو اِستعمال ڪندي تيز ڪنڊون اُڪيري "
 "ٿو۔ هن پلنگ اِن ضرورت پوڻ تي سرڪيولر اِنٽرپوليشن يا لينئر موشن جو اِستعمال ڪري "
 "راهن لاءِ جي ڪوڊ جي ڳڻپ ڪري ٿو۔ ٽيوٽورئلس، مينئل ۽ اَنگريزي سمرٿن فورم:  "
-"http://www.cnc-club.ru/gcodetools ۾ ۽ روسي سمرٿن فورم: http://www.cnc-"
-"club.ru/gcodetoolsru ۾ ملي سگهن ٿا۔ ڪريڊٽس: ڊرو بچينڪو، ولادمير ڪالرئيو، جان "
+"http://www.cnc-club.ru/gcodetools ۾ ۽ روسي سمرٿن فورم: http://www.cnc-club."
+"ru/gcodetoolsru ۾ ملي سگهن ٿا۔ ڪريڊٽس: ڊرو بچينڪو، ولادمير ڪالرئيو، جان "
 "بروڪر، هينري نڪولس۔ جي ڪوڊ اُپڪرڻن جو سنسڪرڻ  1.6.01"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:4
@@ -51658,8 +51656,8 @@ msgstr ""
 "اِستعمال ڪري) آفسيٽ راهون ٺاهي ٿو ۽ ڪون ڪٽرن جو اِستعمال ڪندي تيز ڪنڊون اُڪيري "
 "ٿو۔ هن پلنگ اِن ضرورت پوڻ تي سرڪيولر اِنٽرپوليشن يا لينئر موشن جو اِستعمال ڪري "
 "راهن لاءِ جي ڪوڊ جي ڳڻپ ڪري ٿو۔ ٽيوٽورئلس، مينئل ۽ اَنگريزي سمرٿن فورم:  "
-"http://www.cnc-club.ru/gcodetools ۾ ۽ روسي سمرٿن فورم: http://www.cnc-"
-"club.ru/gcodetoolsru ۾ ملي سگهن ٿا۔ ڪريڊٽس: ڊرو بچينڪو، ولادمير ڪالرئيو، جان "
+"http://www.cnc-club.ru/gcodetools ۾ ۽ روسي سمرٿن فورم: http://www.cnc-club."
+"ru/gcodetoolsru ۾ ملي سگهن ٿا۔ ڪريڊٽس: ڊرو بچينڪو، ولادمير ڪالرئيو، جان "
 "بروڪر، هينري نڪولس۔ جي ڪوڊ اُپڪرڻن جو سنسڪرڻ  1.6.01"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:3
@@ -60152,8 +60150,8 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "هي وستارُ فقط راهن ۽ سڪريە آفسيٽس ۽ اُنهن جي گروپن سان ڪاريە ڪري ٿو؟ ٻين "
 #~ "سڀني شين ڌيان نە ڏنو ويندو؟ \n"
@@ -60307,8 +60305,8 @@ msgstr ""
 #~ "In order to import Dia files, Dia itself must be installed.  You can get "
 #~ "Dia at http://live.gnome.org/Dia"
 #~ msgstr ""
-#~ "Dia فائلن جي آمد ڪرڻ لاءِ Dia کي ضرور اِسٿاپن ڪرڻ گهرجي۔ توهين http://"
-#~ "live.gnome.org/Dia تي Dia حاصل ڪري سگهو ٿا "
+#~ "Dia فائلن جي آمد ڪرڻ لاءِ Dia کي ضرور اِسٿاپن ڪرڻ گهرجي۔ توهين http://live."
+#~ "gnome.org/Dia تي Dia حاصل ڪري سگهو ٿا "
 
 #~ msgid "Dia Diagram (*.dia)"
 #~ msgstr "(*.dia) نقشو "
@@ -60566,8 +60564,8 @@ msgstr ""
 #~ "Export just the object with export-id, hide all others (only with export-"
 #~ "id)"
 #~ msgstr ""
-#~ "فقط روانگيءَ جي ID سان شئە جي روانگي ڪريو، بيو سڀ لڪايو (فقط روانگيءَ جي "
-#~ "-id سان) "
+#~ "فقط روانگيءَ جي ID سان شئە جي روانگي ڪريو، بيو سڀ لڪايو (فقط روانگيءَ جي -"
+#~ "id سان) "
 
 #, fuzzy
 #~ msgid "Export document to an inkscape SVG file (similar to save as.)"
@@ -60743,8 +60741,8 @@ msgstr ""
 #~ "The export_gpl.py module requires PyXML.  Please download the latest "
 #~ "version from http://pyxml.sourceforge.net/."
 #~ msgstr ""
-#~ "export_gpl.py کي PyXML جي ضرورت آهي مهرباني ڪري http://"
-#~ "pyxml.sourceforge.net/ سڀني کان نئون سنسڪرڻ ڊائون لوڊ ڪريو۔"
+#~ "export_gpl.py کي PyXML جي ضرورت آهي مهرباني ڪري http://pyxml.sourceforge."
+#~ "net/ سڀني کان نئون سنسڪرڻ ڊائون لوڊ ڪريو۔"
 
 #, fuzzy
 #~ msgid "Python version is: "
@@ -62149,8 +62147,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "اوپن ڪلپ آرٺ لائبرري RSS ڀرتي حاصل ڪرڻ ۾ ناڪام۔ ان ڳالهە جي جاچ ڪريو تە "
 #~ "ڇا رچنا -> آمد/روانگيءَ ۾ سرور جو نالو صحيح آهي (جئن: openclipart.org)"

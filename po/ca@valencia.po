@@ -9570,8 +9570,8 @@ msgstr "Estableix els atributs"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9581,8 +9581,8 @@ msgstr "Selecciona una propietat"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12306,9 +12306,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 " Açò s'ha produït a causa d'un fitxer .inx inadequat per a aquests extensió. "
 "Un fitxer .inx inadequat pot ser degut a una instaŀlació incorrecta "
@@ -17049,8 +17048,8 @@ msgstr "Accions: llista les accions disponibles."
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -23574,11 +23573,11 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
-"L'objecte que esteu intentant seleccionar <b>no és visible</b> (està a "
-"&lt;defs&gt;)"
+"L'objecte que esteu intentant seleccionar <b>no és visible</b> (està a &lt;"
+"defs&gt;)"
 
 #: ../src/selection-chemistry.cpp:3029
 msgid "Fill between many"
@@ -34405,10 +34404,9 @@ msgstr "Dins i fora"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -43383,8 +43381,8 @@ msgid ""
 "Toggle vanishing point in x-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Commuta el punt de fuga en la direcció X entre «finit» i «infinit» "
-"(=paral·lel)"
+"Commuta el punt de fuga en la direcció X entre «finit» i "
+"«infinit» (=paral·lel)"
 
 #: ../share/ui/toolbar-box3d.ui:77
 #, fuzzy
@@ -43401,8 +43399,8 @@ msgid ""
 "Toggle vanishing point in y-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Commuta el punt de fuga en la direcció X entre «finit» i «infinit» "
-"(=paral·lel)"
+"Commuta el punt de fuga en la direcció X entre «finit» i "
+"«infinit» (=paral·lel)"
 
 #: ../share/ui/toolbar-box3d.ui:124
 #, fuzzy
@@ -43415,8 +43413,8 @@ msgid ""
 "Toggle vanishing point in z-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Commuta el punt de fuga en la direcció X entre «finit» i «infinit» "
-"(=paral·lel)"
+"Commuta el punt de fuga en la direcció X entre «finit» i "
+"«infinit» (=paral·lel)"
 
 #: ../share/ui/toolbar-calligraphy.ui:88
 msgid "Choose a preset"
@@ -45082,9 +45080,9 @@ msgid ""
 "arguments are similar."
 msgstr ""
 "{} o «optparse» és molt antic, va quedar obsolet quan es va publicar python "
-"2.7 el 2009 i ara s'ha substituït per «argparser». Heu de canviar "
-"«self.OptionParser.add_option» a «self.arg_parser.add_argument» els "
-"arguments són similars"
+"2.7 el 2009 i ara s'ha substituït per «argparser». Heu de canviar «self."
+"OptionParser.add_option» a «self.arg_parser.add_argument» els arguments són "
+"similars"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:102
 #, fuzzy
@@ -45098,20 +45096,20 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
-"{} ara és un mètode en el document svg. Utilitzeu "
-"«self.svg.get_current_layer()» en el seu lloc."
+"{} ara és un mètode en el document svg. Utilitzeu «self.svg."
+"get_current_layer()» en el seu lloc."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
-"{} ara és un mètode en el document svg. Utilitzeu "
-"«self.svg.get_center_position()» en el seu lloc."
+"{} ara és un mètode en el document svg. Utilitzeu «self.svg."
+"get_center_position()» en el seu lloc."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
 #, fuzzy
@@ -45137,20 +45135,20 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
-"{} ara és un mètode en el document svg. Utilitzeu "
-"«self.svg.getElementById(eid)» en el seu lloc."
+"{} ara és un mètode en el document svg. Utilitzeu «self.svg."
+"getElementById(eid)» en el seu lloc."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 #, fuzzy
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
-"{} ara és un mètode en el document svg. Utilitzeu "
-"«self.svg.getElement(path)» en el seu lloc."
+"{} ara és un mètode en el document svg. Utilitzeu «self.svg."
+"getElement(path)» en el seu lloc."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
 #, fuzzy
@@ -45162,8 +45160,8 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 #, fuzzy
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 "{} ara és una propietat en el document svg. Utilitzeu «self.svg.namedview» "
 "per a accedir a aquest element"
@@ -45171,11 +45169,11 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 #, fuzzy
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
-"{} ara és un mètode de l'objecte namedview. Utilitzeu "
-"«self.svg.namedview.create_guide(x, y, a)» en el seu lloc"
+"{} ara és un mètode de l'objecte namedview. Utilitzeu «self.svg.namedview."
+"create_guide(x, y, a)» en el seu lloc"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:208
 #, fuzzy
@@ -45193,11 +45191,11 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
-"{} ara és un mètode en el document svg. Utilitzeu "
-"«self.svg.get_unique_id(old_id)» en el seu lloc."
+"{} ara és un mètode en el document svg. Utilitzeu «self.svg."
+"get_unique_id(old_id)» en el seu lloc."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
 #, fuzzy
@@ -45229,8 +45227,8 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 "{} ara és un mètode en el document svg. Utilitzeu «self.svg.unittouu(str)» "
 "en el seu lloc."
@@ -45238,17 +45236,17 @@ msgstr ""
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
-"{} ara és un mètode en el document svg. Utilitzeu "
-"«self.svg.uutounit(value,unit)» en el seu lloc."
+"{} ara és un mètode en el document svg. Utilitzeu «self.svg.uutounit(value,"
+"unit)» en el seu lloc."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 #, fuzzy
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 "{} ara és un mètode en el document svg. Utilitzeu «self.svg.add_unit(value)» "
 "en el seu lloc."
@@ -48826,8 +48824,8 @@ msgstr "Resum"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "Aquesta extensió us permet obtindre informació sobre l'script, els efectes i "
 "les transicions que estan incloses en el fitxer SVG. Per a més informació, "
@@ -48892,8 +48890,8 @@ msgstr "Suprimeix les visualitzacions"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "Aquesta extensió us permet desinstal·lar l'script JessyInk. Per a més "
 "informació, consulteu code.google.com/p/jessyink."
@@ -50394,8 +50392,8 @@ msgstr "Profunditat Z:"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -50493,8 +50491,8 @@ msgstr "Punts d'orientació"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -51108,10 +51106,10 @@ msgid ""
 "including Inkscape) will be removed/shortened."
 msgstr ""
 "Es mantindran els identificadors descriptius que van ser creats manualment "
-"per a referenciar o etiquetar elements o grups específics (p. "
-"ex.#arrowStart, #arrowEnd o #textLabels) mentre que s'eliminaran o "
-"s'acurtaran els identificadors numerats (com els que generen Inkscape i la "
-"majoria d'editors SVG)"
+"per a referenciar o etiquetar elements o grups específics (p. ex."
+"#arrowStart, #arrowEnd o #textLabels) mentre que s'eliminaran o s'acurtaran "
+"els identificadors numerats (com els que generen Inkscape i la majoria "
+"d'editors SVG)"
 
 #: ../share/extensions/output_scour.inx:90
 msgid "Preserve the following IDs:"
@@ -53155,8 +53153,8 @@ msgid ""
 "Select your system encoding. More information at http://docs.python.org/"
 "library/codecs.html#standard-encodings."
 msgstr ""
-"Seleccioneu la codificació del sistema. Més informació en http://"
-"docs.python.org/library/codecs.html#standard-encodings."
+"Seleccioneu la codificació del sistema. Més informació en http://docs.python."
+"org/library/codecs.html#standard-encodings."
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"
@@ -54960,8 +54958,8 @@ msgstr ""
 
 #~ msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 #~ msgstr ""
-#~ "Commuta el punt de fuga en la direcció Y entre «finit» i «infinit» "
-#~ "(=paral·lel)"
+#~ "Commuta el punt de fuga en la direcció Y entre «finit» i "
+#~ "«infinit» (=paral·lel)"
 
 #~ msgid "Angle of PLs in Z direction"
 #~ msgstr "Angle de les LP en la direcció Z"
@@ -54971,8 +54969,8 @@ msgstr ""
 
 #~ msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 #~ msgstr ""
-#~ "Commuta el punt de fuga en la direcció Z entre «finit» i «infinit» "
-#~ "(=paral·lel)"
+#~ "Commuta el punt de fuga en la direcció Z entre «finit» i "
+#~ "«infinit» (=paral·lel)"
 
 #~ msgid "Add/Edit Profile"
 #~ msgstr "Afig/edita el perfil"
@@ -58123,8 +58121,8 @@ msgstr ""
 
 #~ msgid "See http://www.denso-wave.com/qrcode/index-e.html for details"
 #~ msgstr ""
-#~ "Per a més informació, visiteu: http://www.denso-wave.com/qrcode/index-"
-#~ "e.html"
+#~ "Per a més informació, visiteu: http://www.denso-wave.com/qrcode/index-e."
+#~ "html"
 
 #, fuzzy
 #~ msgid "Smooth: neutral"
@@ -58979,8 +58977,8 @@ msgstr ""
 #~ "No xlink:href or sodipodi:absref attributes found, or they do not point "
 #~ "to an existing file! Unable to embed image."
 #~ msgstr ""
-#~ "No s'ha pogut incrustar la imatge. No s'han trobat els atributs "
-#~ "xlink:href o sodipodi:absref, o bé el fitxer on apunten no existeix."
+#~ "No s'ha pogut incrustar la imatge. No s'han trobat els atributs xlink:"
+#~ "href o sodipodi:absref, o bé el fitxer on apunten no existeix."
 
 #~ msgid "Sorry we could not locate %s"
 #~ msgstr "No s'ha pogut trobar %s"
@@ -59051,8 +59049,8 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "Aquesta extensió només treballa amb camins i desplaçaments dinàmics i els "
 #~ "seus grups. Tots els altres objectes s'ignoraran.\n"
@@ -59257,11 +59255,11 @@ msgstr ""
 #~ "2. Copieu la carpeta «en sèrie» (Es pot trobar dins de la carpeta extreta)"
 
 #~ msgid ""
-#~ "   into the following Inkscape folder: C:\\[Program files]"
-#~ "\\inkscape\\python\\Lib\\"
+#~ "   into the following Inkscape folder: C:\\[Program "
+#~ "files]\\inkscape\\python\\Lib\\"
 #~ msgstr ""
-#~ "en la següent carpeta d'Inkscape: C:\\[Program files]"
-#~ "\\inkscape\\python\\Lib\\"
+#~ "en la següent carpeta d'Inkscape: C:\\[Program "
+#~ "files]\\inkscape\\python\\Lib\\"
 
 #~ msgid "3. Close and restart Inkscape."
 #~ msgstr "3. Tanqueu i reinicieu Inkscape."
@@ -59654,8 +59652,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "No s'ha pogut obtindre el canal RSS de la biblioteca Open Clip Art. "
 #~ "Verifiqueu que el nom del servidor en Configuració->Importa/exporta (p. "

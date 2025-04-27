@@ -9047,8 +9047,8 @@ msgstr "Imposta attributo"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 "Imposta o aggiorna un attributo degli oggetti selezionati; utilizzo: object-"
 "set-attribute: nome attributo, valore attributo;"
@@ -9059,8 +9059,8 @@ msgstr "Imposta Proprietà"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 "Imposta o aggiorna una proprietà degli oggetti selezionati; utilizzo: object-"
 "set-property: nome proprietà, valore proprietà;"
@@ -10087,9 +10087,9 @@ msgid ""
 "layers), 'no-groups' (all objects other than groups and layers, default)"
 msgstr ""
 "Seleziona tutto; opzioni: 'all' (tutti gli oggetti inclusi gruppi), "
-"'layers', 'no-layers' (oggetti al livello superiore nei livelli), 'groups' "
-"(tutti i gruppi inclusi i livelli), 'no-groups' (tutti gli oggetti ad "
-"eccezione di gruppi e livelli, predefinito)"
+"'layers', 'no-layers' (oggetti al livello superiore nei livelli), "
+"'groups' (tutti i gruppi inclusi i livelli), 'no-groups' (tutti gli oggetti "
+"ad eccezione di gruppi e livelli, predefinito)"
 
 #: ../src/actions/actions-selection.cpp:283
 msgid "List Selection"
@@ -11587,9 +11587,8 @@ msgstr "'%s' completato, caricamento risultato..."
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  Questo può essere causato da un file .inx scorretto per l'estensione. Un "
 "file .inx scorretto potrebbe essere causato da un'installazione problematica "
@@ -16244,11 +16243,11 @@ msgstr "Elenca tutte le estensioni di file disponibili"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
-"Crea un processo univoco di Inkscape con l'ID di applicazione "
-"org.inkscape.Inkscape.TAG"
+"Crea un processo univoco di Inkscape con l'ID di applicazione org.inkscape."
+"Inkscape.TAG"
 
 #: ../src/inkscape-application.cpp:727
 msgid "File import"
@@ -22706,8 +22705,8 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
 "L'oggetto che si vuole selezionare <b>non è visibile</b> (è in &lt;defs&gt;)"
 
@@ -23043,8 +23042,8 @@ msgid ""
 "This text object is <b>already put on a path</b>. Remove it from the path "
 "first. Use <b>Shift+D</b> to look up its path."
 msgstr ""
-"Questo testo <b>è già su un tracciato</b>. Rimuoverlo prima dal "
-"tracciato.Usa <b>Maiusc+D</b> per trovare il suo tracciato."
+"Questo testo <b>è già su un tracciato</b>. Rimuoverlo prima dal tracciato."
+"Usa <b>Maiusc+D</b> per trovare il suo tracciato."
 
 #: ../src/text-chemistry.cpp:91
 msgid ""
@@ -33235,15 +33234,14 @@ msgstr "Unità E e F"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">Matrice di trasformazione 2D</a> che "
-"combina traslazione (E,F), ridimensionamento (A,D), rotazione (A-D) e "
-"distorsione (B,C).</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">Matrice di trasformazione 2D</a> che combina "
+"traslazione (E,F), ridimensionamento (A,D), rotazione (A-D) e distorsione (B,"
+"C).</small>"
 
 #: ../src/ui/dialog/transformation.cpp:844
 #: ../src/ui/dialog/transformation.cpp:855
@@ -41785,8 +41783,8 @@ msgid ""
 "Toggle vanishing point in x-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Imposta il punto di fuga sulla direzione X come 'finito' o 'infinito' "
-"(=parallelo)"
+"Imposta il punto di fuga sulla direzione X come 'finito' o "
+"'infinito' (=parallelo)"
 
 #: ../share/ui/toolbar-box3d.ui:77
 msgid "Angle of perspective lines in y-direction"
@@ -41801,8 +41799,8 @@ msgid ""
 "Toggle vanishing point in y-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Imposta il punto di fuga sulla direzione X come 'finito' o 'infinito' "
-"(=parallelo)"
+"Imposta il punto di fuga sulla direzione X come 'finito' o "
+"'infinito' (=parallelo)"
 
 #: ../share/ui/toolbar-box3d.ui:124
 msgid "Angle of perspective lines in z-direction"
@@ -41813,8 +41811,8 @@ msgid ""
 "Toggle vanishing point in z-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Imposta il punto di fuga sulla direzione X come 'finito' o 'infinito' "
-"(=parallelo)"
+"Imposta il punto di fuga sulla direzione X come 'finito' o "
+"'infinito' (=parallelo)"
 
 #: ../share/ui/toolbar-calligraphy.ui:88
 msgid "Choose a preset"
@@ -43422,9 +43420,9 @@ msgid ""
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
-"{} o `optparse` sono deprecati e sostituiti da `argparser`. Sostituire "
-"`self.OptionParser.add_option` con `self.arg_parser.add_argument`; gli "
-"argomenti sono simili."
+"{} o `optparse` sono deprecati e sostituiti da `argparser`. Sostituire `self."
+"OptionParser.add_option` con `self.arg_parser.add_argument`; gli argomenti "
+"sono simili."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 108
@@ -43440,21 +43438,21 @@ msgstr ""
 # File: ../share/extensions/inkex/deprecated.py, line: 114
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.get_current_layer()`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"get_current_layer()`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 120
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.get_center_position()`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"get_center_position()`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
 msgid ""
@@ -43467,8 +43465,8 @@ msgid ""
 "{} is now a method in the SvgDocumentElement class. Use `self.svg.get_ids()` "
 "instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.get_ids()`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"get_ids()`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 148
@@ -43480,19 +43478,19 @@ msgstr "{} è stato rimosso"
 # File: ../share/extensions/inkex/deprecated.py, line: 136
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.getElementById(eid)`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"getElementById(eid)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
-"{} è ora un nuovo metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.getElement(path)`."
+"{} è ora un nuovo metodo della classe SvgDocumentElement. Usa invece `self."
+"svg.getElement(path)`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 162
@@ -43504,19 +43502,19 @@ msgstr "{} non è più usato. Usa invece il metodo lxml `.getparent()`."
 # File: ../share/extensions/inkex/deprecated.py, line: 152
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
-"{} è ora una proprietà della classe SvgDocumentElement. Usa "
-"`self.svg.namedview` per accedere a questo elemento."
+"{} è ora una proprietà della classe SvgDocumentElement. Usa `self.svg."
+"namedview` per accedere a questo elemento."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
-"{} è ora un metodo dell'oggetto namedview element. Usa invece "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))`."
+"{} è ora un metodo dell'oggetto namedview element. Usa invece `self.svg."
+"namedview.add(Guide().move_to(x, y, a))`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 178
@@ -43538,59 +43536,59 @@ msgstr "self.svg_file ora è self.options.input_file"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.get_unique_id(old_id)`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"get_unique_id(old_id)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
 msgid ""
 "{} is now a property of the SvgDocumentElement class. Use `self.svg.width` "
 "instead."
 msgstr ""
-"{} è ora una proprietà della classe SvgDocumentElement. Usa invece "
-"`self.svg.width`."
+"{} è ora una proprietà della classe SvgDocumentElement. Usa invece `self.svg."
+"width`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:256
 msgid ""
 "{} is now a property of the SvgDocumentElement class. Use `self.svg.height` "
 "instead."
 msgstr ""
-"{} è ora una proprietà della classe SvgDocumentElement. Usa invece "
-"`self.svg.height`."
+"{} è ora una proprietà della classe SvgDocumentElement. Usa invece `self.svg."
+"height`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:266
 msgid ""
 "{} is now a property of the SvgDocumentElement class. Use `self.svg.unit` "
 "instead."
 msgstr ""
-"{} è ora una proprietà della classe SvgDocumentElement. Usa invece "
-"`self.svg.unit`."
+"{} è ora una proprietà della classe SvgDocumentElement. Usa invece `self.svg."
+"unit`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.unittouu(str)`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"unittouu(str)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.uutounit(value, unit)`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"uutounit(value, unit)`."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
-"{} è ora un metodo della classe SvgDocumentElement. Usa invece "
-"`self.svg.add_unit(value)`."
+"{} è ora un metodo della classe SvgDocumentElement. Usa invece `self.svg."
+"add_unit(value)`."
 
 #: ../share/extensions/inkex/elements/_parser.py:111
 msgid ""
@@ -47323,12 +47321,12 @@ msgstr "Sommario"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "Questa estensione permette di ottenere informazioni sullo script JessyInk, "
-"gli effetti e le transizioni contenute in questo file SVG. Visita "
-"code.google.com/p/jessyink per ulteriori dettagli."
+"gli effetti e le transizioni contenute in questo file SVG. Visita code."
+"google.com/p/jessyink per ulteriori dettagli."
 
 #: ../share/extensions/jessyink_transitions.inx:3
 msgid "Transitions"
@@ -47390,8 +47388,8 @@ msgstr "Rimuovi viste (Visualizza)"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "Questa estensione permette di disinstallare lo script JessyInks. Visita "
 "google.com/p/jessyink per ulteriori dettagli."
@@ -48987,8 +48985,8 @@ msgstr "Profondità Z:"
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -49092,8 +49090,8 @@ msgstr "Punti di orientamento"
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -51797,9 +51795,8 @@ msgid ""
 "Select your system encoding. More information at http://docs.python.org/"
 "library/codecs.html#standard-encodings."
 msgstr ""
-"Seleziona la codifica usata dal proprio sistema. Consulta http://"
-"docs.python.org/library/codecs.html#standard-encodings per maggiori "
-"informazioni."
+"Seleziona la codifica usata dal proprio sistema. Consulta http://docs.python."
+"org/library/codecs.html#standard-encodings per maggiori informazioni."
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"

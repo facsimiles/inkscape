@@ -9065,8 +9065,8 @@ msgstr "Atribuie atributul"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 "Atribuie sau actualizează o proprietate al selecției; folosire: atribuie-"
 "atribut-obiectului:numele atributului, valoarea atributului;"
@@ -9077,8 +9077,8 @@ msgstr "Atribuie o proprietate"
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 "Atribuie sau actualizează o proprietate a selecției; folosire: object-set-"
 "property:"
@@ -10102,9 +10102,9 @@ msgid ""
 "layers), 'no-groups' (all objects other than groups and layers, default)"
 msgstr ""
 "Selectează tot; opțiuni: 'all' (toate obiectele, inclusiv grupurile), "
-"'layers', 'no-layers' (obiectele cel mai de sus în straturi), 'groups' "
-"(toate grupurile, inclusiv straturile), 'no-groups' (toate obiectele în "
-"afară de grupuri și straturi, implicit)"
+"'layers', 'no-layers' (obiectele cel mai de sus în straturi), "
+"'groups' (toate grupurile, inclusiv straturile), 'no-groups' (toate "
+"obiectele în afară de grupuri și straturi, implicit)"
 
 #: ../src/actions/actions-selection.cpp:283
 msgid "List Selection"
@@ -11615,9 +11615,8 @@ msgstr "„%s” finalizat, se încarcă rezultatul..."
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  Acest lucru este cauzat de un fișier .inx necorespunzător pentru această "
 "extensie.  Un fișier .inx necorespunzător ar fi putut fi cauzat de o "
@@ -12400,8 +12399,8 @@ msgid ""
 "When exporting from the Export dialog, you can choose objects to export. "
 "'Save a copy' / 'Save as' will export all pages."
 msgstr ""
-"Când exporți din fereastra de Export, poți alege ce obiecte să "
-"exporți.Salvează o copie' / 'Salvează ca' vor exporta toate paginile"
+"Când exporți din fereastra de Export, poți alege ce obiecte să exporți."
+"Salvează o copie' / 'Salvează ca' vor exporta toate paginile"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:301
 #: ../src/extension/internal/cairo-ps-out.cpp:345
@@ -16279,11 +16278,11 @@ msgstr "Listează toate acțiunile disponibile"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
-"Creează o instanță unică a Inkscape cu ID-ul de aplicație "
-"'org.inkscape.Inkscape.TAG'"
+"Creează o instanță unică a Inkscape cu ID-ul de aplicație 'org.inkscape."
+"Inkscape.TAG'"
 
 #: ../src/inkscape-application.cpp:727
 msgid "File import"
@@ -16878,9 +16877,9 @@ msgid ""
 "This effect can also be used directly on the canvas with a pressure "
 "sensitive stylus and the Pencil tool."
 msgstr ""
-"Creează contururi caligrafice și controlează-le lățimea și curbura "
-"variabile.Acest efect poate fi folosit și direct pe canava cu un stilou "
-"sensibil la presiune și unealta creion."
+"Creează contururi caligrafice și controlează-le lățimea și curbura variabile."
+"Acest efect poate fi folosit și direct pe canava cu un stilou sensibil la "
+"presiune și unealta creion."
 
 #: ../src/live_effects/effect.cpp:301
 msgctxt "path effect"
@@ -22636,11 +22635,11 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr ""
-"Obiectul pe care încerci să-l selectezi <b>nu este vizibil</b>  (este în "
-"&lt;defs&gt;)"
+"Obiectul pe care încerci să-l selectezi <b>nu este vizibil</b>  (este în &lt;"
+"defs&gt;)"
 
 #: ../src/selection-chemistry.cpp:3029
 msgid "Fill between many"
@@ -33216,15 +33215,14 @@ msgstr "Unitățile E și F"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">matricea de transformare 2D</a> care "
-"combină translația (E,F), dimensionarea (A,D), rotația (A-D) and forfecarea "
-"(B,C).</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">matricea de transformare 2D</a> care combină "
+"translația (E,F), dimensionarea (A,D), rotația (A-D) and forfecarea (B,C).</"
+"small>"
 
 #: ../src/ui/dialog/transformation.cpp:844
 #: ../src/ui/dialog/transformation.cpp:855
@@ -43374,14 +43372,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -43401,14 +43399,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -43417,14 +43415,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:208
@@ -43441,8 +43439,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -43465,20 +43463,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -46827,8 +46825,8 @@ msgstr "Rezumat"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 
 #: ../share/extensions/jessyink_transitions.inx:3
@@ -46892,8 +46890,8 @@ msgstr "Elimină vizualizările"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
 "Această extensie vă permite să dezinstalați scriptul JessyInk. Consultați "
 "code.google.com/p/jessyink pentru mai multe detalii."
@@ -48253,8 +48251,8 @@ msgstr "Adâncime Z:"
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:40
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -48328,8 +48326,8 @@ msgstr ""
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:24
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "

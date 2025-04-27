@@ -9700,8 +9700,8 @@ msgstr "កំណត់​គុណលក្ខណ"
 
 #: ../src/actions/actions-object.cpp:377
 msgid ""
-"Set or update an attribute of selected objects; usage: object-set-"
-"attribute:attribute name, attribute value;"
+"Set or update an attribute of selected objects; usage: object-set-attribute:"
+"attribute name, attribute value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:378
@@ -9711,8 +9711,8 @@ msgstr "កំណត់​លក្ខណសម្បត្តិ​របស់
 
 #: ../src/actions/actions-object.cpp:378
 msgid ""
-"Set or update a property on selected objects; usage: object-set-"
-"property:property name, property value;"
+"Set or update a property on selected objects; usage: object-set-property:"
+"property name, property value;"
 msgstr ""
 
 #: ../src/actions/actions-object.cpp:380
@@ -12411,9 +12411,8 @@ msgstr ""
 
 #: ../src/extension/extension.cpp:259
 msgid ""
-"  This is caused by an improper .inx file for this extension.  An "
-"improper .inx file could have been caused by a faulty installation of "
-"Inkscape."
+"  This is caused by an improper .inx file for this extension.  An improper ."
+"inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 "  វា​បណ្ដាល​មក​ពី​ឯកសារ​ .inx មាន​លក្ខណៈ​មិន​ត្រឹម​ត្រូវ​សម្រាប់​ផ្នែក​បន្ថែម​​នេះ ។  ឯកសារ​ .inx មាន​ភាព​​​​"
 "មិន​ត្រឹម​ត្រូវ គឺ​បណ្ដាល​មក​ពី​កំហុស​ក្នុង​ការ​ដំឡើង​ Inkscape ។"
@@ -17227,9 +17226,9 @@ msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle, with <b>Ctrl+Shift</b> to scale around center"
 msgstr ""
-"%s សម្រាប់ ៖ %s%s; អូស​ដោយ​ប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​ខ្ទាស់​មុំ ប្រើ <b>បញ្ជា(Ctrl)"
-"+ជំនួស(Alt)</b>ដើម្បី​រក្សា​​ទុក​មុំ ​ប្រើ <b>បញ្ជា(Ctrl)+ប្ដូរ(Shift)</b> ដើម្បី​ធ្វើ​មាត្រដ្ឋាន​ជុំវិញ​"
-"ចំណុច​កណ្ដាល"
+"%s សម្រាប់ ៖ %s%s; អូស​ដោយ​ប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​ខ្ទាស់​មុំ ប្រើ "
+"<b>បញ្ជា(Ctrl)+ជំនួស(Alt)</b>ដើម្បី​រក្សា​​ទុក​មុំ ​ប្រើ <b>បញ្ជា(Ctrl)+ប្ដូរ(Shift)</b> ដើម្បី​"
+"ធ្វើ​មាត្រដ្ឋាន​ជុំវិញ​ចំណុច​កណ្ដាល"
 
 #: ../src/gradient-drag.cpp:1538
 msgid ""
@@ -17351,8 +17350,8 @@ msgstr "រាយ​ពុម្ព​អក្សរ​ទាំង​អស់
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
-"Create a unique instance of Inkscape with the application ID "
-"'org.inkscape.Inkscape.TAG'"
+"Create a unique instance of Inkscape with the application ID 'org.inkscape."
+"Inkscape.TAG'"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:727
@@ -24051,8 +24050,8 @@ msgstr "<b>មិន​អាច​រក​ឃើញ​</b> វត្ថុ​�
 
 #: ../src/selection-chemistry.cpp:2909
 msgid ""
-"The object you're trying to select is <b>not visible</b> (it is in "
-"&lt;defs&gt;)"
+"The object you're trying to select is <b>not visible</b> (it is in &lt;"
+"defs&gt;)"
 msgstr "វត្ថុ​ដែល​អ្នក​កំពុង​ព្យាយាម​ជ្រើស​គឺ <b>មើល​មិន​ឃើញ​ទេ​</b> (វា​នៅ​ក្នុង &lt;defs&gt;)"
 
 #: ../src/selection-chemistry.cpp:3029
@@ -34854,10 +34853,9 @@ msgstr "ក្នុង និង​ក្រៅ"
 
 #: ../src/ui/dialog/transformation.cpp:464
 msgid ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/"
-"coords.html#TransformMatrixDefined\">2D transformation matrix</a> that "
-"combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C)."
-"</small>"
+"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
+"html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
+"translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:844
@@ -45503,14 +45501,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_current_layer()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_current_layer()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:123
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.get_center_position()` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"get_center_position()` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:134
@@ -45532,14 +45530,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.getElementById(eid)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"getElementById(eid)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:170
 msgid ""
-"{} is now a new method in the SvgDocumentElement class. Use "
-"`self.svg.getElement(path)` instead."
+"{} is now a new method in the SvgDocumentElement class. Use `self.svg."
+"getElement(path)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
@@ -45548,14 +45546,14 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:187
 msgid ""
-"{} is now a property of the SvgDocumentElement class. Use "
-"`self.svg.namedview` to access this element."
+"{} is now a property of the SvgDocumentElement class. Use `self.svg."
+"namedview` to access this element."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
-"{} is now a method of the namedview element object. Use "
-"`self.svg.namedview.add(Guide().move_to(x, y, a))` instead."
+"{} is now a method of the namedview element object. Use `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` instead."
 msgstr ""
 
 #
@@ -45574,8 +45572,8 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
-"{} is now a method in the SvgDocumentElement class.  Use "
-"`self.svg.get_unique_id(old_id)` instead."
+"{} is now a method in the SvgDocumentElement class.  Use `self.svg."
+"get_unique_id(old_id)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:246
@@ -45598,20 +45596,20 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:276
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.unittouu(str)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"unittouu(str)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:286
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.uutounit(value, unit)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"uutounit(value, unit)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:296
 msgid ""
-"{} is now a method in the SvgDocumentElement class. Use "
-"`self.svg.add_unit(value)` instead."
+"{} is now a method in the SvgDocumentElement class. Use `self.svg."
+"add_unit(value)` instead."
 msgstr ""
 
 #: ../share/extensions/inkex/elements/_parser.py:111
@@ -49255,8 +49253,8 @@ msgstr "សង្ខេប"
 #: ../share/extensions/jessyink_summary.inx:7
 msgid ""
 "This extension allows you to obtain information about the JessyInk script, "
-"effects and transitions contained in this SVG file. Please see "
-"code.google.com/p/jessyink for more details."
+"effects and transitions contained in this SVG file. Please see code.google."
+"com/p/jessyink for more details."
 msgstr ""
 "ផ្នែក​បន្ថែម​នេះ អនុញ្ញាត​ឲ្យ​អ្នកទទួល​យក​ព័ត៌មាន​អំពី​ស្គ្រីប​  JessyInk បែប​ផែន និង​ដំណើរ​ផ្លាស់​ប្ដូរ​ដែល​"
 "មាននៅ​ក្នុង​ឯកសារ SVG នេះ ។ ចំពោះ​ព័ត៌មាន​លម្អិត សូម​មើល​ code.google.com/p/jessyink ។"
@@ -49320,11 +49318,11 @@ msgstr "យក​ទិដ្ឋភាព​ចេញ"
 
 #: ../share/extensions/jessyink_uninstall.inx:16
 msgid ""
-"This extension allows you to uninstall the JessyInk script. Please see "
-"code.google.com/p/jessyink for more details."
+"This extension allows you to uninstall the JessyInk script. Please see code."
+"google.com/p/jessyink for more details."
 msgstr ""
-"ផ្នែក​បន្ថែម​នេះ អនុញ្ញាត​ឲ្យ​អ្នក​លុប​ស្គ្រីប​ JessyInk ។ ចំពោះ​ព័ត៌មាន​បន្ថែម សូម​មើល​ "
-"code.google.com/p/jessyink ។"
+"ផ្នែក​បន្ថែម​នេះ អនុញ្ញាត​ឲ្យ​អ្នក​លុប​ស្គ្រីប​ JessyInk ។ ចំពោះ​ព័ត៌មាន​បន្ថែម សូម​មើល​ code.google."
+"com/p/jessyink ។"
 
 #: ../share/extensions/jessyink_video.inx:3
 msgid "Video"
@@ -49337,8 +49335,8 @@ msgid ""
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
 "ផ្នែក​បន្ថែម​នេះ ដាក់​ធាតុ​វីដេអូ​ JessyInk នៅ​លើ​ (ស្រទាប់​) ស្លាយ​បច្ចុប្បន្ន ។ ធាតុ​នេះ​ អនុញ្ញាត​ឲ្យ​"
-"អ្នក​រួម​បញ្ចូល​វីដេអូ​ទៅ​ក្នុង​បទ​បង្ហាញ​ JessyInk របស់​អ្នក​ ។ ចំពោះ​សេចក្ដី​លម្អិត​បន្ថែម សូម​មើល​ "
-"code.google.com/p/jessyink ។"
+"អ្នក​រួម​បញ្ចូល​វីដេអូ​ទៅ​ក្នុង​បទ​បង្ហាញ​ JessyInk របស់​អ្នក​ ។ ចំពោះ​សេចក្ដី​លម្អិត​បន្ថែម សូម​មើល​ code."
+"google.com/p/jessyink ។"
 
 #: ../share/extensions/jessyink_view.inx:9
 msgid "Remove view"
@@ -50807,9 +50805,8 @@ msgid ""
 msgstr ""
 "អនុគមន៍​នេះ​បង្កើត​ផ្លូវ សម្រាប់​ឆ្លាក់​មុំ​ស្រួច ។ អនុគមន៍​រាង​របស់​ឧបករណ៍​កាត់​ត្រូវ​បាន​កំណត់​ដោយ​ឧបករណ៍​ ។ រាង​"
 "ធម្មតា​មួយ​ចំនួន​គឺ ៖ cone....(45 degrees)...........: w cone....(height/"
-"diameter=10/3).: 10/3 w sphere..(\"r\" diameter).........: "
-"math.sqrt(max(0,r**2-w**2)) ellipse.(R1=r and R2=r*4r).....: "
-"math.sqrt(max(0,r**2-w**2))*4"
+"diameter=10/3).: 10/3 w sphere..(\"r\" diameter).........: math.sqrt(max(0,"
+"r**2-w**2)) ellipse.(R1=r and R2=r*4r).....: math.sqrt(max(0,r**2-w**2))*4"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:8
@@ -50887,8 +50884,8 @@ msgstr "ជម្រៅ Z ៖"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "\n"
@@ -50974,8 +50971,8 @@ msgstr "ទិស"
 #, fuzzy
 msgid ""
 "\n"
-"Orientation points are used to calculate transformation "
-"(offset,scale,mirror,rotation in XY plane) of the path.\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
 "3-points mode only: do not put all three into one line (use 2-points mode "
 "instead).\n"
 "You can modify Z surface, Z depth values later using text tool (3rd "
@@ -59663,15 +59660,15 @@ msgstr ""
 #~ "only! All other objects will be ignored!\n"
 #~ "Solution 1: press Path->Object to path or Shift+Ctrl+C.\n"
 #~ "Solution 2: Path->Dynamic offset or Ctrl+J.\n"
-#~ "Solution 3: export all contours to PostScript level 2 (File->Save As-"
-#~ ">.ps) and File->Import this file."
+#~ "Solution 3: export all contours to PostScript level 2 (File->Save As->."
+#~ "ps) and File->Import this file."
 #~ msgstr ""
 #~ "ផ្នែក​បន្ថែម​នេះ​ដំណើរការ​ជា​មួយ​អុហ្វសិត​ ផ្លូវ និង​ថាមវន្ត​​ និង​ជា​មួយ​តែ​​ក្រុម​របស់​ពួក​វា​ប៉ុណ្ណោះ​​ ! វត្ថុ​"
 #~ "ផ្សេង​ទៀត​នឹង​ត្រូវ​មិន​អើពើ​ !\n"
 #~ "ដំណោះ​ស្រាយ​ទី ១ ៖ ចុច​ ផ្លូវ​->វត្ថុ​ទៅ​កាន់​ផ្លូវ​ ឬ​ ប្ដូរ(Shift)+បញ្ជា (Ctrl)+C ។\n"
 #~ "ដំណោះ​ស្រាយ​ទី​ ២ ៖ អុហ្វសិត ផ្លូវ​->ថាមវន្ត​ ឬ​បញ្ជា (Ctrl)+J ។\n"
-#~ "ដំណោះ​ស្រាយ​ទី ៣​៖ នាំ​ចេញ​វណ្ឌវង្ក​ទៅ​កាន់​កម្រិត​ទី​ ២ របស់​ PostScript (ឯកសារ​->រក្សា​ទុក​ជា​"
-#~ "->.ps) និង​ ឯកសារ​->នាំ​ចូល​ឯកសារ​នេះ ។"
+#~ "ដំណោះ​ស្រាយ​ទី ៣​៖ នាំ​ចេញ​វណ្ឌវង្ក​ទៅ​កាន់​កម្រិត​ទី​ ២ របស់​ PostScript (ឯកសារ​->រក្សា​ទុក​ជា​->."
+#~ "ps) និង​ ឯកសារ​->នាំ​ចូល​ឯកសារ​នេះ ។"
 
 #~ msgid ""
 #~ "Warning! Tool's and default tool's parameter's (%s) types are not the "
@@ -59697,8 +59694,8 @@ msgstr ""
 #~ "Warning: One or more paths do not have 'd' parameter, try to Ungroup "
 #~ "(Ctrl+Shift+G) and Object to Path (Ctrl+Shift+C)!"
 #~ msgstr ""
-#~ "ការ​ព្រមាន​ ៖ ផ្លូវ​មួយ​ ឬ​ច្រើន​មិន​មាន​ប៉ារ៉ាម៉ែត្រ​ 'd' ទេ សូម​ព្យាយាម​ បំបែក​ក្រុម​ (បញ្ជា (Ctrl)"
-#~ "+ប្ដូរ(Shift)+G) និង​វត្ថុ​ទៅ​កាន់​ផ្លូវ (បញ្ជា(Ctrl)+ប្ដូរ(Shift)+C) !"
+#~ "ការ​ព្រមាន​ ៖ ផ្លូវ​មួយ​ ឬ​ច្រើន​មិន​មាន​ប៉ារ៉ាម៉ែត្រ​ 'd' ទេ សូម​ព្យាយាម​ បំបែក​ក្រុម​ (បញ្ជា "
+#~ "(Ctrl)+ប្ដូរ(Shift)+G) និង​វត្ថុ​ទៅ​កាន់​ផ្លូវ (បញ្ជា(Ctrl)+ប្ដូរ(Shift)+C) !"
 
 #, fuzzy
 #~ msgid ""
@@ -60239,8 +60236,8 @@ msgstr ""
 #~ "The export_gpl.py module requires PyXML.  Please download the latest "
 #~ "version from http://pyxml.sourceforge.net/."
 #~ msgstr ""
-#~ "ម៉ូឌុល export_gpl.py ទាមទារ PyXML ។  សូម​ទាញ​យក​កំណែ​ចុង​ក្រោយ​បំផុត​ពី http://"
-#~ "pyxml.sourceforge.net/ ។"
+#~ "ម៉ូឌុល export_gpl.py ទាមទារ PyXML ។  សូម​ទាញ​យក​កំណែ​ចុង​ក្រោយ​បំផុត​ពី http://pyxml."
+#~ "sourceforge.net/ ។"
 
 #, fuzzy
 #~ msgid "Python version is: "
@@ -61657,8 +61654,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Failed to receive the Open Clip Art Library RSS feed. Verify if the "
-#~ "server name is correct in Configuration->Import/Export (e.g.: "
-#~ "openclipart.org)"
+#~ "server name is correct in Configuration->Import/Export (e.g.: openclipart."
+#~ "org)"
 #~ msgstr ""
 #~ "បាន​បរាជ័យ​ក្នុង​ការ​ទទួល​មតិ​ព័ត៌មាន RSS អំពី​បន្ទប់​រូបភាព​បើកចំហ ។ ផ្ទៀង​ផ្ទាត់​មើល​ថា​តើ​ឈ្មោះ​ម៉ាស៊ីន​"
 #~ "បម្រើ​ត្រឹម​ត្រូវ​ដែរ​ឬ​ទេ​នៅ​ក្នុង កំណត់​រចនាសម្ព័ន្ធ​->នាំ​ចូល​/នាំ​ចេញ​ (ឧ.៖ openclipart.org)"
