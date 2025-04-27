@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2025-04-27 02:14+0000\n"
+"PO-Revision-Date: 2025-04-27 18:30+0000\n"
 "Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape.org>"
 "\n"
 "Language-Team: German <https://translate.inkscape.org/projects/inkscape/"
@@ -26814,7 +26814,7 @@ msgstr "IPA Erweiterungen"
 
 #: ../src/ui/dialog/glyphs.cpp:223
 msgid "Spacing Modifier Letters"
-msgstr "Spacing Modifier Letters"
+msgstr "Zeichenabstände modifizierende Zeichen"
 
 #: ../src/ui/dialog/glyphs.cpp:224
 msgid "Combining Diacritical Marks"
@@ -27100,7 +27100,7 @@ msgstr "Hangeul-Jamo, erweitert-B"
 
 #: ../src/ui/dialog/glyphs.cpp:353
 msgid "High Surrogates"
-msgstr "High Surrogates"
+msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:354
 msgid "High Private Use Surrogates"
@@ -27108,7 +27108,7 @@ msgstr "High Surrogates (privater Bereich)"
 
 #: ../src/ui/dialog/glyphs.cpp:355
 msgid "Low Surrogates"
-msgstr "Low Surrogates"
+msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:356
 msgid "Private Use Area"
@@ -34728,15 +34728,15 @@ msgstr "Pentagram"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:89
 msgid "hexagram"
-msgstr "hexagram"
+msgstr "Hexagramm"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:90
 msgid "heptagram"
-msgstr "heptagram"
+msgstr "Heptagramm"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:91
 msgid "octagram"
-msgstr "octagram"
+msgstr "Octagramm"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:92
 msgid "regular polygon"
@@ -38583,9 +38583,10 @@ msgid ""
 "If you can reproduce this crash, please <a href=\"https://inkscape.org/"
 "report\">file a bug</a> and include the backtrace from the area below."
 msgstr ""
-"Wenn dieser Absturz reproduzierbar auftritt, <a href=\"https://inkscape.org/"
-"report>melde bitte einen Programmfehler</a> und füge die untenstehenden "
-"technischen Informationen über den Fehler in Deine Meldung mit ein."
+"Wenn dieser Absturz reproduzierbar auftritt, <a href="
+"\"https://inkscape.org/report\">melde bitte einen Programmfehler</a> und "
+"füge die untenstehenden technischen Informationen über den Fehler in Deine "
+"Meldung mit ein."
 
 #: ../share/ui/dialog-css.glade:28
 msgid "Selector"
@@ -39306,7 +39307,7 @@ msgstr "Der Radius des Bildausschnitts welcher analysiert wird"
 
 #: ../share/ui/dialog-trace.glade:989
 msgid " Heuristics:"
-msgstr "Heuristik:"
+msgstr " Heuristik:"
 
 #: ../share/ui/dialog-trace.glade:1056
 msgid "B-splines"
@@ -39326,7 +39327,7 @@ msgstr "Ausgabe bestehend aus geraden Linien"
 
 #: ../share/ui/dialog-trace.glade:1090
 msgid " Output:"
-msgstr "Ausgabe:"
+msgstr " Ausgabe:"
 
 #: ../share/ui/dialog-trace.glade:1121
 msgid "Multiplier"
@@ -42699,7 +42700,7 @@ msgstr "Prüfsummenberechnung fehlgeschlagen, auslassen für neue Summe"
 
 #: ../share/extensions/barcode/Code25i.py:47
 msgid "CODE25 can only encode numbers."
-msgstr "CODE25 kann nur Zahlen kodieren"
+msgstr "CODE25 kann nur Zahlen kodieren."
 
 #: ../share/extensions/barcode/Upce.py:70
 #: ../share/extensions/barcode/Upce.py:96
@@ -42956,8 +42957,8 @@ msgstr ""
 #: ../share/extensions/image_extract.py:124
 msgid "{} error occurred"
 msgid_plural "{} errors occurred."
-msgstr[0] "{} Fehler ist aufgetreten"
-msgstr[1] "{} Fehler sind aufgetreten"
+msgstr[0] "{} Fehler ist aufgetreten."
+msgstr[1] "{} Fehler sind aufgetreten."
 
 #: ../share/extensions/image_extract.py:146
 msgid "Unable to create directory {}."
@@ -42973,7 +42974,7 @@ msgstr "Ungültiges Bildformat gefunden."
 
 #: ../share/extensions/image_extract.py:182
 msgid "Unable to decode encoding {}."
-msgstr "Kann Encoding {} nicht dekodieren"
+msgstr "Kann Encoding {} nicht dekodieren."
 
 #: ../share/extensions/image_extract.py:195
 msgid "Unable to extract image, file {} already exists."
@@ -43335,7 +43336,7 @@ msgstr ""
 #: ../share/extensions/jessyink_summary.py:126
 #, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
-msgstr "{0}\tView wird gemäß Objekt „{1}“ gesetzt werden."
+msgstr "{0} View wird gemäß Objekt „{1}“ gesetzt werden."
 
 #: ../share/extensions/jessyink_summary.py:130
 #, python-brace-format
@@ -43548,7 +43549,7 @@ msgid ""
 "required by this extension. Please install them.  On a Debian-like system "
 "this can be done with the command, sudo apt-get install python-numpy."
 msgstr ""
-"Der Import der numpy oder numpy.linalg-Module ist fehlgeschlagen. Diese "
+"Der Import der numpy- oder numpy.linalg-Module ist fehlgeschlagen. Diese "
 "Module werden von der Erweiterung benötigt. Bitte installieren Sie diese und "
 "versuchen es erneut. Auf einem Debian-Betriebssystem können Sie dafür "
 "folgenden Befehl nutzen: sudo apt-get install python-numpy"
@@ -43599,7 +43600,7 @@ msgstr "Diese Erweiterung benötigt die Programmbibliothek 'numpy'."
 
 #: ../share/extensions/polyhedron_3d.py:420
 msgid "Face data not found."
-msgstr "Daten für die Fläche nicht gefunden"
+msgstr "Daten für die Fläche nicht gefunden."
 
 # CairoRenderContext ist Eigenname?
 #: ../share/extensions/print_win32_vector.py:275
@@ -43844,7 +43845,7 @@ msgstr "Knoten hinzufügen"
 
 #: ../share/extensions/addnodes.inx:5
 msgid "Division method:"
-msgstr "Divisionsmethode"
+msgstr "Divisionsmethode:"
 
 #: ../share/extensions/addnodes.inx:6
 msgid "By max. segment length"
@@ -43865,7 +43866,7 @@ msgstr "Einheit der maximalen Segmentlänge:"
 
 #: ../share/extensions/addnodes.inx:17
 msgid "Number of segments:"
-msgstr "Anzahl der Segmente"
+msgstr "Anzahl der Segmente:"
 
 #: ../share/extensions/addnodes.inx:22 ../share/extensions/convert2dashes.inx:8
 #: ../share/extensions/flatten.inx:9 ../share/extensions/fractalize.inx:10
@@ -44165,7 +44166,7 @@ msgstr "Ankreismittelpunkte"
 
 #: ../share/extensions/construct_from_triangle.inx:14
 msgid "Extouch Triangle"
-msgstr "Extouch Triangle"
+msgstr "Ankreis-Berührungspunkte-Dreieck"
 
 #: ../share/extensions/construct_from_triangle.inx:15
 msgid "Excentral Triangle"
@@ -44177,7 +44178,7 @@ msgstr "Höhenschnittpunkt"
 
 #: ../share/extensions/construct_from_triangle.inx:17
 msgid "Orthic Triangle"
-msgstr "Orthic Triangle"
+msgstr "Höhenfußpunktdreieck"
 
 #: ../share/extensions/construct_from_triangle.inx:18
 msgid "Altitudes"
@@ -44586,7 +44587,7 @@ msgstr "Zeichenkodierung:"
 
 #: ../share/extensions/dxf_input.inx:25
 msgid "Text Font:"
-msgstr "Text-Schriftart"
+msgstr "Text-Schriftart:"
 
 #: ../share/extensions/dxf_input.inx:28
 msgid ""
@@ -44719,7 +44720,7 @@ msgstr "Zeichenkodierung:"
 
 #: ../share/extensions/dxf_outlines.inx:29
 msgid "Layer export selection:"
-msgstr "Ebenen-Export-Auswahl"
+msgstr "Ebenen-Export-Auswahl:"
 
 #: ../share/extensions/dxf_outlines.inx:30
 msgid "All (default)"
@@ -44735,7 +44736,7 @@ msgstr "Nach Namensübereinstimmung"
 
 #: ../share/extensions/dxf_outlines.inx:34
 msgid "Layer match name:"
-msgstr "Übereinstimmender Ebenenname"
+msgstr "Übereinstimmender Ebenenname:"
 
 #: ../share/extensions/dxf_outlines.inx:37
 msgid ""
@@ -44870,6 +44871,7 @@ msgstr ""
 "Diese Erweiterung zeichnet Linien zwischen korrespondierenden Knoten aller "
 "gewählten Pfade. Sie funktioniert daher am besten, wenn alle Pfade die "
 "gleiche Anzahl Knoten haben.\n"
+"\n"
 "Es gibt drei wesentliche Optionen:\n"
 "- Linien: Zwischen den einander entsprechenden Knoten werden\n"
 "  gerade Linien gezeichnet.\n"
@@ -44903,7 +44905,7 @@ msgstr "Kurven mit geraden Linien nachzeichnen"
 # !!!
 #: ../share/extensions/flatten.inx:5
 msgid "Flatness:"
-msgstr "Flachheit"
+msgstr "Flachheit:"
 
 #: ../share/extensions/foldablebox.inx:3
 msgid "Foldable Box"
@@ -44911,7 +44913,7 @@ msgstr "Faltschachtel"
 
 #: ../share/extensions/foldablebox.inx:7
 msgid "Depth:"
-msgstr "Tiefe"
+msgstr "Tiefe:"
 
 #: ../share/extensions/foldablebox.inx:8
 msgid "Tab Proportion:"
@@ -44927,7 +44929,7 @@ msgstr "Fraktalisieren"
 
 #: ../share/extensions/fractalize.inx:5
 msgid "Subdivisions:"
-msgstr "Unterteilungen"
+msgstr "Unterteilungen:"
 
 #: ../share/extensions/frame.inx:3
 msgid "Frame"
@@ -45068,10 +45070,10 @@ msgid ""
 "   Isotropic scaling is disabled.\n"
 "   First derivative is always determined numerically."
 msgstr ""
-"Vor Aufruf der Erweiterung muss ein Rechteck ausgewählt werden. Dieses "
-"bestimmt den Maßstab der x- und y-Achse. Soll die Fläche unter der Funktion "
-"gefüllt werden, bitte die Funktion „Endpunkte auf der x-Achse hinzufügen“ "
-"aktivieren.\n"
+"Vor Aufruf der Erweiterung muss ein Rechteck ausgewählt werden. \n"
+"Dieses bestimmt den Maßstab der x- und y-Achse. Soll die Fläche unter der "
+"Funktion gefüllt werden, bitte die Funktion „Endpunkte auf der x-Achse "
+"hinzufügen“ aktivieren.\n"
 "\n"
 "Mit Polarkoordinaten:\n"
 "  „Startwert x“ und „Endwert x“ bestimmen den Winkelbereich in Radiant.\n"
@@ -45428,7 +45430,7 @@ msgstr "Winkel-Nebenteilung endet n Teilstriche vor dem Zentrum:"
 
 #: ../share/extensions/grid_polar.inx:27
 msgid "Major Angular Division Thickness (px):"
-msgstr "Konturbreite Winkelteilung (px)"
+msgstr "Konturbreite Winkelteilung (px):"
 
 #: ../share/extensions/grid_polar.inx:28
 msgid "Minor Angular Division Thickness (px):"
@@ -45887,8 +45889,8 @@ msgid ""
 "The number of the pen (tool) to use (Standard: '1')Can be defined in the "
 "layer name. eg. (Pen 1)"
 msgstr ""
-"Die Nummer des zu verwendenden Stiftes (Werkzeugs) (Standard: '1'). Kann im "
-"Ebenennamen definiert werden, z.B. 'Pen1'."
+"Die Nummer des zu verwendenden Stiftes bzw. Werkzeugs (Standard: '1'). Kann "
+"im Ebenennamen definiert werden, z.B. 'Pen1'."
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:69
 msgid "Pen force (g):"
@@ -45913,7 +45915,7 @@ msgid ""
 "ignore this command (Default: 0)Can be defined in the layer name together "
 "with the pen number. eg. (Pen3 Speed10)"
 msgstr ""
-"Die Geschwindigkeit mit welcher der Stift zeichnet, in Zentimeter oder "
+"Die Geschwindigkeit, mit welcher der Stift zeichnet, in Zentimeter oder "
 "Millimeter pro Sekunde (abhängig vom Plottermodell). Auf 0 setzen um den "
 "Befehl zu ignorieren (Standard). Kann auch gemeinsam mit der Stiftnummer im "
 "Ebenennamen definiert werden, z.B. 'Pen3 Speed10'."
@@ -46005,7 +46007,7 @@ msgid ""
 "align the tool orientation. (Default: Checked)"
 msgstr ""
 "Aktivieren, um eine kurzen Schnitt vor dem Beginn der Zeichnung zu setzen, "
-"um das Werkzeug richtig auszurichten."
+"um das Werkzeug richtig auszurichten (standardmäßig aktiviert)."
 
 #: ../share/extensions/hpgl_output.inx:31 ../share/extensions/plotter.inx:87
 msgid "Curve flatness:"
@@ -46224,15 +46226,15 @@ msgstr "Nur Schwarz-Weiß:"
 
 #: ../share/extensions/inset_shadow.inx:9
 msgid "Blur stdDeviation:"
-msgstr "Standardabweichung der Weichzeichnung"
+msgstr "Standardabweichung der Weichzeichnung:"
 
 #: ../share/extensions/inset_shadow.inx:10
 msgid "Blur width:"
-msgstr "Breite der Weichzeichnung"
+msgstr "Breite der Weichzeichnung:"
 
 #: ../share/extensions/inset_shadow.inx:11
 msgid "Blur height:"
-msgstr "Höhe der Weichzeichnung"
+msgstr "Höhe der Weichzeichnung:"
 
 #: ../share/extensions/interp.inx:3
 msgid "Interpolate Between Paths"
@@ -46365,8 +46367,8 @@ msgid ""
 "elements inside the selected group or for all elements in a multiple "
 "selection."
 msgstr ""
-"Dieser Effekt setzt ein beliebiges interpolierbares Attribut für jedes "
-"Element innerhalb einer Gruppe oder einer Mehrfachauswahl"
+"Diese Erweiterung setzt ein beliebiges interpolierbares Attribut für jedes "
+"Element innerhalb einer Gruppe oder einer Mehrfachauswahl."
 
 #: ../share/extensions/jessyink_autotexts.inx:3
 msgid "Auto-texts"
@@ -47200,6 +47202,9 @@ msgstr ""
 "\n"
 "]: zu gemerktem Punkt zurückkehren\n"
 "\n"
+"Mehrere Regeln können\n"
+"\n"
+"mittels Semikolon getrennt werden (;).\n"
 
 #: ../share/extensions/long_shadow.inx:3
 msgid "Long Shadow"
@@ -48262,10 +48267,11 @@ msgstr ""
 "Die Schnitttiefe als eine Funktion des Radius wird durch das Werkzeug "
 "definiert.\n"
 "Die Tiefe kann jeder Python-Ausdruck sein. Zum Beispiel:\n"
+"\n"
 "Kegel....(45 Grad) ..................................: w\n"
 "Kegel....(Höhe / Durchmesser=10/3) ..: 10*w/3\n"
-"Kugel....(Radius r) ..................................: math.sqrt(max(0,r**2-"
-"w**2))\n"
+"Kugel....(Radius r) ..................................: "
+"math.sqrt(max(0,r**2-w**2))\n"
 "Ellipse...(Nebenachse r, Hauptachse 4r).....: math.sqrt(max (0,r-w**2**2))*4"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
@@ -48519,7 +48525,7 @@ msgstr "Innen-Außen-Pfadlänge:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:11
 msgid "In-out path max distance to reference point:"
-msgstr "max. Distanz des Innen-Außen-Pfades zum Referenzpunkt"
+msgstr "max. Distanz des Innen-Außen-Pfades zum Referenzpunkt:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:12
 msgid "In-out path type:"
@@ -49144,7 +49150,6 @@ msgid ""
 msgstr ""
 "Wählen Sie ein Rechteck vor Aufruf der Erweiterung aus. Aus diesem bestimmen "
 "sich X- und Y-Skala.\n"
-"\n"
 "Erste Ableitungen werden immer nummerisch bestimmt."
 
 #: ../share/extensions/param_curves.inx:43
@@ -49464,7 +49469,7 @@ msgstr "Beschnitt (in):"
 
 #: ../share/extensions/perfectboundcover.inx:29
 msgid "Note: Bond Weight # calculations are a best-guess estimate."
-msgstr "Achtung: Bond Weight #-Berechnungen sind nur fundiert geraten!"
+msgstr "Achtung: 'Bond Weight #'-Berechnungen sind nur fundiert geraten!"
 
 #: ../share/extensions/pixelsnap.inx:3
 msgid "PixelSnap"
@@ -49540,7 +49545,7 @@ msgstr "Anschlusstyp:"
 
 #: ../share/extensions/plotter.inx:9
 msgid "Serial"
-msgstr "Serieller Anschluss:"
+msgstr "Seriell"
 
 #: ../share/extensions/plotter.inx:12
 msgid "Parallel port:"
@@ -49696,7 +49701,7 @@ msgid ""
 "The number of the pen (tool) to use (standard: '1'). Can also be defined in "
 "the layer name (e.g. 'Pen 1')"
 msgstr ""
-"Die Nummer des zu verwendenden Stiftes (Werkzeugs) (Standard: '1'). Kann "
+"Die Nummer des zu verwendenden Stiftes bzw. Werkzeugs (Standard: '1'). Kann "
 "auch über den Ebenennamen definiert werden, z.B. 'Pen 1'."
 
 #: ../share/extensions/plotter.inx:69
@@ -49868,7 +49873,7 @@ msgstr "Kleines Triambisches Ikosaeder"
 
 #: ../share/extensions/polyhedron_3d.inx:19
 msgid "Dodecahedron"
-msgstr "Dodecahedron"
+msgstr "Dodekaeder"
 
 #: ../share/extensions/polyhedron_3d.inx:20
 msgid "Truncated Dodecahedron"
@@ -49966,19 +49971,19 @@ msgstr "Skalierungsfaktor:"
 
 #: ../share/extensions/polyhedron_3d.inx:66
 msgid "Fill color, Red:"
-msgstr "Füllfarbe (Rotwert)"
+msgstr "Füllfarbe (Rotwert):"
 
 #: ../share/extensions/polyhedron_3d.inx:67
 msgid "Fill color, Green:"
-msgstr "Füllfarbe (Grünwert)"
+msgstr "Füllfarbe (Grünwert):"
 
 #: ../share/extensions/polyhedron_3d.inx:68
 msgid "Fill color, Blue:"
-msgstr "Füllfarbe (Blauwert)"
+msgstr "Füllfarbe (Blauwert):"
 
 #: ../share/extensions/polyhedron_3d.inx:69
 msgid "Fill opacity (%):"
-msgstr "Deckkraft der Füllung, %"
+msgstr "Deckkraft der Füllung, %:"
 
 #: ../share/extensions/polyhedron_3d.inx:70
 msgid "Stroke opacity (%):"
@@ -49986,7 +49991,7 @@ msgstr "Deckkraft der Kontur (%):"
 
 #: ../share/extensions/polyhedron_3d.inx:71
 msgid "Stroke width (px):"
-msgstr "Breite der Kontur, px"
+msgstr "Breite der Kontur, px:"
 
 #: ../share/extensions/polyhedron_3d.inx:72
 msgid "Shading"
@@ -49994,15 +49999,15 @@ msgstr "Schattierung"
 
 #: ../share/extensions/polyhedron_3d.inx:73
 msgid "Light X:"
-msgstr "Erhellen X"
+msgstr "Lichtquelle x:"
 
 #: ../share/extensions/polyhedron_3d.inx:74
 msgid "Light Y:"
-msgstr "Erhellen Y"
+msgstr "Lichtquelle y:"
 
 #: ../share/extensions/polyhedron_3d.inx:75
 msgid "Light Z:"
-msgstr "Erhellen Z"
+msgstr "Lichtquelle z:"
 
 #: ../share/extensions/polyhedron_3d.inx:79
 msgid "Vertices"
@@ -50334,7 +50339,7 @@ msgstr "Datenmatrix"
 #: ../share/extensions/render_barcode_datamatrix.inx:6
 #: ../share/extensions/render_barcode_qrcode.inx:6
 msgid "Size, in unit squares:"
-msgstr "Größe in der Einheit Quadrate:"
+msgstr "Größe (Anzahl Quadrate):"
 
 #: ../share/extensions/render_barcode_datamatrix.inx:38
 msgid "Square Size (px):"
@@ -50342,7 +50347,7 @@ msgstr "Quadratgröße (px):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:3
 msgid "QR Code"
-msgstr "QR Code"
+msgstr "QR-Code"
 
 #: ../share/extensions/render_barcode_qrcode.inx:5
 msgid "The content of the QR code, most commonly a web link."
@@ -50411,7 +50416,7 @@ msgstr "Nur Zahlen"
 
 #: ../share/extensions/render_barcode_qrcode.inx:66
 msgid "Invert QR code:"
-msgstr "QR-Code invertieren:"
+msgstr "QR-Code invertieren"
 
 #: ../share/extensions/render_barcode_qrcode.inx:66
 msgid "Invert the colors, may fail for symbols option"
@@ -50448,7 +50453,7 @@ msgstr "Vordefinierte Form:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:85
 msgid "The first selected object will be cloned."
-msgstr "Das zuerst gewählte Objekt wird geklont"
+msgstr "Das zuerst gewählte Objekt wird geklont."
 
 #: ../share/extensions/render_barcode_qrcode.inx:88
 msgid ""
@@ -50674,8 +50679,8 @@ msgstr ""
 "Diese Erweiterung verändert die Stapelordnung von Objekten in Abhängigkeit\n"
 "ihrer Position auf der Arbeitsfläche oder ihrer aktuellen Stapelordnung.\n"
 "Alle gewählten Objekte werden umgeschichtet.\n"
-"Gruppen werden als Objekte behandelt.Wenn Elemente, die sich innerhalb einer "
-"Gruppe befinden, gemeinsam mit\n"
+"Gruppen werden als Objekte behandelt. \n"
+"Wenn Elemente, die sich innerhalb einer Gruppe befinden, gemeinsam mit\n"
 "Elementen außerhalb dieser Gruppe ausgewählt werden, so werden die\n"
 "Elemente aus der Gruppe herausgelöst und in die Hierarchieebene der\n"
 "anderen Objekte übernommen.\n"
@@ -51064,8 +51069,8 @@ msgid ""
 "Select your system encoding. More information at http://docs.python.org/"
 "library/codecs.html#standard-encodings."
 msgstr ""
-"(Wählen Sie die Systemkodierung. Mehr Informationen dazu unter http://docs."
-"python.org/library/codecs.html#standard-encodings)"
+"Wählen Sie die Systemkodierung. Mehr Informationen dazu unter http://"
+"docs.python.org/library/codecs.html#standard-encodings"
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"
@@ -51432,7 +51437,7 @@ msgstr "Hebt alle Gruppen im ausgewählten Objekt auf."
 # Tiefe is maybe not the best term here...
 #: ../share/extensions/ungroup_deep.inx:6
 msgid "Starting Depth"
-msgstr "Starttiefe:"
+msgstr "Starttiefe"
 
 #: ../share/extensions/ungroup_deep.inx:7
 msgid "Stopping Depth (from top)"
@@ -51517,11 +51522,11 @@ msgstr "Voronoi-Muster-Füllung"
 
 #: ../share/extensions/voronoi_fill.inx:8
 msgid "Average size of cell (px):"
-msgstr "Durchschnittliche Zellengröße (px)"
+msgstr "Durchschnittliche Zellengröße (px):"
 
 #: ../share/extensions/voronoi_fill.inx:9
 msgid "Size of Border (px):"
-msgstr "Größe des Randes (px)"
+msgstr "Größe des Randes (px):"
 
 #: ../share/extensions/voronoi_fill.inx:12
 msgid ""
@@ -51694,7 +51699,7 @@ msgstr "wenn Element geladen"
 
 #: ../share/extensions/web_set_att.inx:20
 msgid "The list of values must have the same size as the attributes list."
-msgstr "Die Werteliste muss die gleiche Länge wie die Attributenliste haben!"
+msgstr "Die Werteliste muss die gleiche Länge wie die Attributliste haben!"
 
 #: ../share/extensions/web_set_att.inx:21
 msgid "Value to set:"
@@ -51703,7 +51708,7 @@ msgstr "Festzulegender Wert:"
 #: ../share/extensions/web_set_att.inx:22
 #: ../share/extensions/web_transmit_att.inx:20
 msgid "Compatibility with previews code to this event:"
-msgstr "Kompatibilität des Vorschaufunktion mit diesem Ereignis"
+msgstr "Kompatibilität der Vorschaufunktion mit diesem Ereignis:"
 
 #: ../share/extensions/web_set_att.inx:23
 #: ../share/extensions/web_transmit_att.inx:21
@@ -51723,7 +51728,7 @@ msgstr ""
 
 #: ../share/extensions/web_set_att.inx:28
 msgid "Source and destination of setting:"
-msgstr "Quelle und Ziel setzen"
+msgstr "Quelle und Ziel setzen:"
 
 #: ../share/extensions/web_set_att.inx:29
 msgid "All selected ones set an attribute in the last one"
@@ -51769,15 +51774,15 @@ msgstr "Sende Attribute"
 
 #: ../share/extensions/web_transmit_att.inx:7
 msgid "Attribute to transmit:"
-msgstr "Attribute zum Senden"
+msgstr "Attribut zum Übergeben:"
 
 #: ../share/extensions/web_transmit_att.inx:8
 msgid "When to transmit:"
-msgstr "Wann wollen Sie senden"
+msgstr "Auslöser für Attributübergabe:"
 
 #: ../share/extensions/web_transmit_att.inx:26
 msgid "Source and destination of transmitting:"
-msgstr "Quelle und Ziel für die Übertragung"
+msgstr "Quelle und Ziel für die Übertragung:"
 
 #: ../share/extensions/web_transmit_att.inx:27
 msgid "All selected ones transmit to the last one"
