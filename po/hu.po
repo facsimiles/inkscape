@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-20 19:06+0000\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
-"Language-Team: Hungarian <https://translate.inkscape.org/projects/"
-"inkscape/1-4-x/hu/>\n"
+"Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10781,30 +10781,24 @@ msgstr ""
 "Kijelölt objektumok növelése/zsugorítása a nagyítási szinthez viszonyítottan"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Kijelölt objektumok exportálása"
+msgstr "Kijelölt objektumok forgatása"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Elforgatásos manipulálás"
+msgstr "Elforgatási lépés"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
-msgstr "Kijelölt objektumok növelése/zsugorítása a lépés érték többszörösével"
+msgstr "Kijelölt objektumok elforgatása a lépésérték többszörösével"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Színátmenet forgatása"
+msgstr "Képernyő forgatása"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr ""
-"Kijelölt objektumok növelése/zsugorítása a nagyítási szinthez viszonyítottan"
+msgstr "Kijelölt objektumok forgatása a nagyítási szinthez relatíven"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -14118,7 +14112,7 @@ msgstr "Törlés"
 
 #: ../src/extension/internal/filter/paint.h:354
 msgid "Melt"
-msgstr "Melt"
+msgstr "Olvadás"
 
 #: ../src/extension/internal/filter/paint.h:360
 #: ../src/extension/internal/filter/paint.h:734
@@ -15475,7 +15469,7 @@ msgstr "VSD bemenet"
 
 #: ../src/extension/internal/vsd-input.cpp:323
 msgid "Microsoft Visio Diagram (*.vsd)"
-msgstr "Microsoft Visio Diagram (*.vsd)"
+msgstr "Microsoft Visio ábra (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:324
 msgid "File format used by Microsoft Visio 6 and later"
@@ -15487,7 +15481,7 @@ msgstr "VDX bemenet"
 
 #: ../src/extension/internal/vsd-input.cpp:335
 msgid "Microsoft Visio XML Diagram (*.vdx)"
-msgstr "Microsoft Visio XML Diagram (*.vdx)"
+msgstr "Microsoft Visio XML ábra (*.vdx)"
 
 #: ../src/extension/internal/vsd-input.cpp:336
 msgid "File format used by Microsoft Visio 2010 and later"
@@ -15499,7 +15493,7 @@ msgstr "VSDM bemenet"
 
 #: ../src/extension/internal/vsd-input.cpp:347
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
-msgstr "Microsoft Visio 2013 drawing (*.vsdm)"
+msgstr "Microsoft Visio 2013 rajz (*.vsdm)"
 
 #: ../src/extension/internal/vsd-input.cpp:348
 #: ../src/extension/internal/vsd-input.cpp:360
@@ -15512,7 +15506,7 @@ msgstr "VSDX bemenet"
 
 #: ../src/extension/internal/vsd-input.cpp:359
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
-msgstr "Microsoft Visio 2013 drawing (*.vsdx)"
+msgstr "Microsoft Visio 2013 rajz (*.vsdx)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3213
 msgid "WMF Input"
@@ -15536,7 +15530,7 @@ msgstr "Minden kitöltési minta leképezése szabványos WMF-vonalkákká"
 
 #: ../src/extension/internal/wmf-inout.cpp:3240
 msgid "Windows Metafile (*.wmf)"
-msgstr "Windows Metafile (*.wmf)"
+msgstr "Windows metafájl (*.wmf)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3241
 msgid "Windows Metafile"
@@ -15751,13 +15745,14 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Nincs felhasználatlan &lt;defs&gt;-definíció."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Nem található a dokumentum (%s) mentésére használható Inkscape-kiterjesztés. "
-"Elképzelhető, hogy a fájlkiterjesztés ismeretlen."
+"Nem található a dokumentum (%s) mentésére használható Inkscape-"
+"kiterjesztés.  Elképzelhető, hogy a fájlkiterjesztés ismeretlen vagy "
+"hiányzik."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -19883,8 +19878,8 @@ msgid ""
 "Draw square surrounding the circle in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
-"Bekerítő négyzet rajzolása a kör köré perspektivikus nézetben (csak "
-"„Perspektivikus kör” módban)"
+"Bekerítő négyzet rajzolása a kör köré perspektivikus nézetben\n"
+"(csak „Perspektivikus kör” módban)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:65
 msgid "_Arc"
@@ -19932,8 +19927,8 @@ msgid ""
 "Draw the axes in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
-"Tengelyek rajzolása perspektivikus nézetben (csak „Perspektivikus kör” "
-"módban)"
+"Tengelyek rajzolása perspektivikus nézetben\n"
+"(csak „Perspektivikus kör” módban)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
 msgid "Axes rotation"
@@ -21618,13 +21613,13 @@ msgid "Deleted"
 msgstr "Törölve"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "elforgatás: <b>Shift+húzással</b>, origó áthelyezése: <b>Ctrl+húzással</b>, "
-"törlés: <b>Del</b>"
+"törlés: <b>Del</b>, segédvonal tulajdonságainak szerkesztése: <b>dupla "
+"kattintás</b>"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -21966,17 +21961,19 @@ msgid "Select <b>at least 1 path</b> to perform a boolean union."
 msgstr "Logikai unióképzéshez jelöljön ki <b>legalább 1 útvonalat</b>."
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
-msgstr "Logikai műveletekhez <b>legalább 2 útvonalat</b> ki kell jelölni."
+msgstr ""
+"Metszet vagy szimmetrikus különbség végrehajtásához <b>legalább 2 útvonalat</"
+"b> ki kell jelölni."
 
 #: ../src/path/path-boolop.cpp:378
-#, fuzzy
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
-msgstr "Logikai műveletekhez <b>legalább 2 útvonalat</b> ki kell jelölni."
+msgstr ""
+"Különbség, felosztás vagy útvonal elvágása művelet végrehajtásához "
+"<b>legalább 2 útvonalat</b> ki kell jelölni."
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -22147,7 +22144,7 @@ msgstr "FreeArt"
 
 #: ../src/rdf.cpp:220
 msgid "Open Font License"
-msgstr "Open Font License"
+msgstr "Open Font Licenc"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkTitleAttribute
 #: ../src/rdf.cpp:242 ../src/ui/dialog/filedialogimpl-win32.cpp:1874
@@ -28937,34 +28934,31 @@ msgid "GTK open/save dialogs"
 msgstr "GTK megnyitás/mentés párbeszédablakok"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Simítás"
+msgstr "Semmi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "Csak indítóképernyő"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Széles képernyő"
+msgstr "Üdvözlő képernyő"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Rejtett metszések megjelenítése"
+msgstr "Megjelenítés indításkor:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
-msgstr ""
+msgstr "Beállítja, hogy mi jelenjen meg a program normál betöltésekor."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
-msgstr "Párbeszédablakok ne jelenjenek meg a feladatlistában"
+msgstr "Párbeszédpanelek el vannak rejtve a tálcán"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1970
 msgid "Save and restore documents viewport"
@@ -33522,36 +33516,31 @@ msgstr "Alakképző"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[SOHA]"
 
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
-msgstr "Ctrl, Alt"
+msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "_Eltolás"
+msgstr "Shift"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Mind"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Szupermarket"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Metaadatok"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -41960,9 +41949,8 @@ msgstr ""
 "beállításához)"
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Szerkesztés a rajzvásznon"
+msgstr "Jelölő szerkesztése a rajzvásznon."
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -42025,9 +42013,8 @@ msgid "Phantom measure"
 msgstr "Szellemkép létrehozása a mérésből"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Rajz"
+msgstr "Rajzolás"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -42201,9 +42188,8 @@ msgstr ""
 "A kijelölt objektumok vágóútvonalának, illetve vágóútvonalainak megjelenítése"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Csak a kijelölt objektumok"
+msgstr "Objektumok kijelölése a rajzvásznon"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -43030,6 +43016,8 @@ msgid ""
 "DXF12 supports a maximum of 249 distinct colors. Please simplify color "
 "choices first."
 msgstr ""
+"A DXF12 maximum 249 különböző színt támogat. Kérjük, előbb egyszerűsítse a "
+"színválasztást."
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -44121,16 +44109,15 @@ msgstr "CGM bemenet"
 
 #: ../share/extensions/cgm_input.inx:11
 msgid "Computer Graphics Metafile (*.cgm)"
-msgstr "Computer Graphics Metafile (*.cgm)"
+msgstr "Computer Graphics metafájl (*.cgm)"
 
 #: ../share/extensions/cgm_input.inx:12
 msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Computer Graphics Metafile (CGM) importálása"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Tisztítás"
+msgstr "Útvonal tisztítása"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44140,57 +44127,63 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Az útvonal tisztítása a duplikált csomópontok eltávolításával és a kijelölt "
+"útvonalak közeli csomópontjainak összekapcsolásával.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
 msgstr ""
+"A megadott hosszúságnál kisebb teljes hosszúságú szegmensek csomópontjainak "
+"interpolálása"
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Maximális szakaszhossz:"
+msgstr "Minimális szakaszhossz"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
 msgstr ""
+"A megadott hosszúságnál kisebb teljes hosszúságú alútvonalak eltávolítása"
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Minimális öltéshossz [%]"
+msgstr "Minimális alútvonal hossza"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
+"Alútvonalak bezárása, ha a kezdő- és a végcsomópont távolsága kisebb, mint"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Határérték"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
+"Külön alútvonalak végcsomópontjainak összekapcsolása, ha a távolság kisebb, "
+"mint"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Alútvonalak irányfordításának engedélyezése"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Al-útvonalak összekapcsolása"
+msgstr "Al-útvonalak összekapcsolása eszerint"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Interpolációs lépések:"
+msgstr "csomópontok Interpolálása"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Szakaszok egyenesítése"
+msgstr "egyenes vonalszakaszok hozzáadása"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44198,9 +44191,11 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"A dokumentumban meghatározott egység (Fájl->Dokumentumbeállítások).\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Információ"
 
@@ -44217,6 +44212,17 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Eredetileg a vágógépek/plotterek útvonalainak tisztítására készült a túlzott "
+"csomópontok vagy kis hézagok eltávolításával.\n"
+"\n"
+"A valódi duplikált csomópontok (pontosan azonos koordináták) és a nulla "
+"hosszúságú alútvonalak mindig eltávolításra kerülnek.\n"
+"Az útvonalak egyesítéséhez győződjön meg róla, hogy a figyelembe veendő "
+"útvonalak már egyesítettek (ugyanazon útvonal alútvonalai).\n"
+"Az útvonalak egyesítéséhez jelölje ki őket, és nyomja le a Ctrl+K "
+"billentyűkombinációt. \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -45919,7 +45925,7 @@ msgstr "Hershey írott közepes"
 #: ../share/extensions/hershey.inx:45
 msgctxt "Font name"
 msgid "EMS Readability Italic"
-msgstr "EMS Readability Italic"
+msgstr "EMS Readability dőlt"
 
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:49
@@ -47921,26 +47927,24 @@ msgstr "Affinity Designer fájl importálása"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "CGM bemenet"
+msgstr "Görbe bemenet"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr ""
+msgstr "Linearity Curve fájl (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
-#, fuzzy
 msgid "Import a Linearity Curve file"
-msgstr "Affinity Designer fájl importálása"
+msgstr "Linearity Curve-fájl importálása"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr ""
+msgstr "Vectornator fájl (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr ""
+msgstr "Vectornator fájl importálása"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -50468,11 +50472,11 @@ msgstr "CCITT"
 
 #: ../share/extensions/raster_output_tiff.inx:11
 msgid "Group 3"
-msgstr "Group 3"
+msgstr "3-as csoport"
 
 #: ../share/extensions/raster_output_tiff.inx:12
 msgid "Group 4"
-msgstr "Group 4"
+msgstr "4-es csoport"
 
 #: ../share/extensions/raster_output_tiff.inx:13
 msgid "JPEG"
@@ -52331,41 +52335,35 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Flatpak logó szerkesztése"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Több színátmenet"
+msgstr "Többoldalas szerkesztés"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Bevezetés az Inkscape-be"
+msgstr "Szerkesztés Inkscape-pel"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Színátmenet-szerkesztés engedélyezése"
+msgstr "Színátmenet szerkesztés"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "És sok más hibajavítás!"
+msgstr "Sok hibajavítás!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Számos fejlesztés az affinitásfájl-importálással kapcsolatban"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Betöltendő szkript kiválasztása"
+msgstr "Indítóképernyő betöltéskor"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52590,7 +52588,6 @@ msgid "Much improved text line-height settings"
 msgstr "A szöveg sormagasságának továbbfejlesztett beállításai"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:153
-#, fuzzy
 msgid ""
 "Variable fonts support (only if compiled with pango library version >= "
 "1.41.1)"
