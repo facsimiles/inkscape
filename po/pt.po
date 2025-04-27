@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-23 17:49+0000\n"
+"PO-Revision-Date: 2025-04-27 21:53+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
-msgstr "Recorte rápido"
+msgstr "Recorte Rápido"
 
 #: ../build/share/filters/filters.svg.h:3
 #: ../build/share/filters/filters.svg.h:527
@@ -54,7 +54,7 @@ msgstr "Recorte rápido"
 #: ../src/extension/internal/filter/transparency.h:302
 #: ../src/extension/internal/filter/transparency.h:368
 msgid "Fill and Transparency"
-msgstr "Preenchimento e transparência"
+msgstr "Preenchimento e Transparência"
 
 #: ../build/share/filters/filters.svg.h:4
 msgid "Does not filter but adds a filter region"
