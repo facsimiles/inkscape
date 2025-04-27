@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2024-10-07 16:57+0000\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic\n"
+"Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/is/>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -32889,7 +32890,7 @@ msgstr "Kjörbúð"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper-lykill"
 
 #: ../src/ui/modifiers.cpp:258
 #, fuzzy
@@ -35301,7 +35302,7 @@ msgstr ""
 
 #: ../src/ui/tools/rect-tool.cpp:226
 msgid "<b>Alt</b>: use with Ctrl to make square"
-msgstr ""
+msgstr "<b>Alt</b>: nota með Ctrl til að gera ferning"
 
 #: ../src/ui/tools/rect-tool.cpp:368
 #, c-format
@@ -35405,7 +35406,7 @@ msgstr "Flýtiforskoðun"
 
 #: ../src/ui/tools/shortcuts.cpp:20
 msgid "Preview how the document will look while the key is pressed."
-msgstr ""
+msgstr "Forskoðaðu hvernig skjalið mun líta út á meðan ýtt er á lykilinn."
 
 #: ../src/ui/tools/shortcuts.cpp:21
 #, fuzzy
@@ -35424,7 +35425,7 @@ msgstr "Línstrigi"
 
 #: ../src/ui/tools/shortcuts.cpp:22
 msgid "Pan the canvas with the mouse while the key is pressed."
-msgstr ""
+msgstr "Hliðra myndfletinum með músinni á meðan ýtt er á lykilinn."
 
 #: ../src/ui/tools/shortcuts.cpp:24
 #, fuzzy
@@ -35433,7 +35434,7 @@ msgstr "Stærð búts"
 
 #: ../src/ui/tools/shortcuts.cpp:24
 msgid "Convert the last pen segment to a straight line."
-msgstr ""
+msgstr "Umbreytir síðasta pennabút yfir í beina línu."
 
 #: ../src/ui/tools/shortcuts.cpp:25
 #, fuzzy
@@ -35442,7 +35443,7 @@ msgstr "Snertill (tangens) á feril"
 
 #: ../src/ui/tools/shortcuts.cpp:25
 msgid "Convert the last pen segment to a curved line."
-msgstr ""
+msgstr "Umbreytir síðasta pennabút yfir í sveigða línu."
 
 #: ../src/ui/tools/shortcuts.cpp:26
 #, fuzzy
@@ -36655,16 +36656,17 @@ msgstr "Stillingar eiginleika á CSS-formi (t.d. \"wxyz\" eða \"wxyz\" 3)."
 #. TRANSLATORS: “Grade” (GRAD in CSS) is an axis that can be used to alter stroke thicknesses (or other forms)
 #. without affecting the type's overall width, inter-letter spacing, or kerning — unlike altering weight.
 #: ../src/ui/widget/font-variations.cpp:52
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Grade"
-msgstr "Litstigull"
+msgstr "Vægi/Gráða"
 
 #: ../src/ui/widget/font-variations.cpp:52
 msgid ""
 "Alter stroke thicknesses (or other forms) without affecting the type’s "
 "overall width"
 msgstr ""
+"Breyttu þykkt útlínu (eða annarra forma) án þess að hafa áhrif á "
+"heildarbreiddina"
 
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
@@ -36676,7 +36678,7 @@ msgstr "100% (ógegnsætt)"
 
 #: ../src/ui/widget/font-variations.cpp:55
 msgid "Alter the opaque stroke forms of glyphs in the X dimension"
-msgstr ""
+msgstr "Breytir ógegnsæum strokuformum staftákna eftir X-ás"
 
 #. TRANSLATORS: “Parametric Thin Stroke”, YOPQ, is a reference to its logical name, “Y Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension
@@ -36688,7 +36690,7 @@ msgstr "100% (ógegnsætt)"
 
 #: ../src/ui/widget/font-variations.cpp:58
 msgid "Alter the opaque stroke forms of glyphs in the Y dimension"
-msgstr ""
+msgstr "Breytir ógegnsæum strokuformum staftákna eftir Y-ás"
 
 #. TRANSLATORS: “Parametric Counter Width”, XTRA, is a reference to its logical name, “X-Transparent,”
 #. which describes how it alters a font’s transparent spaces (also known as negative shapes)
@@ -36703,7 +36705,7 @@ msgstr "0 (gegnsætt)"
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the X "
 "dimension"
-msgstr ""
+msgstr "Breytir gegnsæum svæðum innan og utan staftákna eftir X-ás"
 
 #: ../src/ui/widget/font-variations.cpp:63
 #, fuzzy
@@ -36715,7 +36717,7 @@ msgstr "0 (gegnsætt)"
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the Y "
 "dimension"
-msgstr ""
+msgstr "Breytir gegnsæum svæðum innan og utan staftákna eftir Y-ás"
 
 #. TRANSLATORS: Width/height of Chinese glyphs
 #: ../src/ui/widget/font-variations.cpp:65
@@ -36726,7 +36728,7 @@ msgstr "0 (gegnsætt)"
 
 #: ../src/ui/widget/font-variations.cpp:65
 msgid "Alter the width of Chinese glyphs"
-msgstr ""
+msgstr "Breytir breidd kínverskra staftákna"
 
 #: ../src/ui/widget/font-variations.cpp:66
 #, fuzzy
@@ -36736,7 +36738,7 @@ msgstr "0 (gegnsætt)"
 
 #: ../src/ui/widget/font-variations.cpp:66
 msgid "Alter the height of Chinese glyphs"
-msgstr ""
+msgstr "Breytir hæð kínverskra staftákna"
 
 #. TRANSLATORS: “Parametric Lowercase Height”
 #: ../src/ui/widget/font-variations.cpp:68
@@ -36749,7 +36751,7 @@ msgstr "Staðbundin lýsing"
 msgid ""
 "Vary the height of counters and other spaces between the baseline and x-"
 "height"
-msgstr ""
+msgstr "Aðlagaðu hæð teljara og annarra bila milli grunnlínu og X-hæðar"
 
 #. TRANSLATORS: “Parametric Uppercase Counter Height”
 #: ../src/ui/widget/font-variations.cpp:70
@@ -36760,7 +36762,7 @@ msgstr "Hástafalína:"
 
 #: ../src/ui/widget/font-variations.cpp:70
 msgid "Vary the height of uppercase letterforms"
-msgstr ""
+msgstr "Aðlagaðu hæð hástafa leturs"
 
 #. TRANSLATORS: “Parametric Ascender Height”
 #: ../src/ui/widget/font-variations.cpp:72
@@ -36771,7 +36773,7 @@ msgstr "Hálína:"
 
 #: ../src/ui/widget/font-variations.cpp:72
 msgid "Vary the height of lowercase ascenders"
-msgstr ""
+msgstr "Aðlagaðu hve langt upp háleggir lágstafa ná"
 
 #. TRANSLATORS: “Parametric Descender Depth”
 #: ../src/ui/widget/font-variations.cpp:74
@@ -36782,7 +36784,7 @@ msgstr "Láglína:"
 
 #: ../src/ui/widget/font-variations.cpp:74
 msgid "Vary the depth of lowercase descenders"
-msgstr ""
+msgstr "Aðlagaðu hve langt niður lágleggir lágstafa ná"
 
 #. TRANSLATORS: “Parametric Figure Height”
 #: ../src/ui/widget/font-variations.cpp:76
@@ -36793,7 +36795,7 @@ msgstr "Hæð móðunar:"
 
 #: ../src/ui/widget/font-variations.cpp:76
 msgid "Vary the height of figures"
-msgstr ""
+msgstr "Aðlagaðu hæð lagana"
 
 #. TRANSLATORS: "Serif rise" - found in the wild (https://github.com/googlefonts/amstelvar)
 #: ../src/ui/widget/font-variations.cpp:78
@@ -36815,7 +36817,7 @@ msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:80
 msgid "Controls the flaring of the stems"
-msgstr ""
+msgstr "Stýrir hvernig broddar sveigjast frá legg (flare)"
 
 #. TRANSLATORS: Volume - The volume axis works only in combination with the Flare axis. It transforms the serifs
 #. and adds a little more edge to details.
@@ -36828,6 +36830,7 @@ msgstr "Dálkar"
 #: ../src/ui/widget/font-variations.cpp:83
 msgid "Volume works in combination with flare to transform serifs"
 msgstr ""
+"Umfang (volume) virkar saman með sveigjum frá legg til að ummynda brodda"
 
 #: ../src/ui/widget/font-variations.cpp:85
 #, fuzzy
@@ -36837,7 +36840,7 @@ msgstr "Mýking"
 
 #: ../src/ui/widget/font-variations.cpp:85
 msgid "Softness makes letterforms more soft and rounded"
-msgstr ""
+msgstr "Mýking gerir stafaform mýkri og rúnnaðri"
 
 #: ../src/ui/widget/font-variations.cpp:87
 #, fuzzy
@@ -36848,6 +36851,7 @@ msgstr "Myndrænt"
 #: ../src/ui/widget/font-variations.cpp:87
 msgid "Adjust the letterforms from a more serious style to a more casual style"
 msgstr ""
+"Aðlagar stafaform frá því að vera alvarleg og formleg yfir í afslappaðri stíl"
 
 #: ../src/ui/widget/font-variations.cpp:89
 #, fuzzy
@@ -36857,7 +36861,7 @@ msgstr "Stærð bendils"
 
 #: ../src/ui/widget/font-variations.cpp:89
 msgid "Control the substitution of cursive forms"
-msgstr ""
+msgstr "Stýrðu útskiptingu skriftlíkra lagana"
 
 #: ../src/ui/widget/font-variations.cpp:91
 #, fuzzy
@@ -36867,7 +36871,7 @@ msgstr "Fylling"
 
 #: ../src/ui/widget/font-variations.cpp:91
 msgid "Fill can turn transparent forms opaque"
-msgstr ""
+msgstr "Fylling getur breytt gegnsæum lögunum yfir í ógegnsæ"
 
 #: ../src/ui/widget/font-variations.cpp:93
 #, fuzzy
@@ -36877,16 +36881,16 @@ msgstr "Jafnbreitt letur:"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgid "Adjust the glyphs from a proportional width to a fixed width"
-msgstr ""
+msgstr "Aðlagar staftáknin úr hlutfallslegri breidd yfir í jafnbreið"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgctxt "Variable font axis"
 msgid "Wonky"
-msgstr ""
+msgstr "Óreglulegt"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Binary switch used to control substitution of “wonky” forms"
-msgstr ""
+msgstr "Af/á rofi sem stýrir útskiptingu óreglulegra eða óvenjulegra lagana"
 
 #: ../src/ui/widget/font-variations.cpp:97
 #, fuzzy
@@ -36896,17 +36900,16 @@ msgstr "Stig lögunar"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgid "Selection of the base element glyphs are composed of"
-msgstr ""
+msgstr "Veldu grunneiningarnar sem staftákn eru samsett úr"
 
 #: ../src/ui/widget/font-variations.cpp:99
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Element grid"
-msgstr "Frumstilla hnitanet"
+msgstr "Stakanet"
 
 #: ../src/ui/widget/font-variations.cpp:99
 msgid "Controls how many elements are used per one grid unit"
-msgstr ""
+msgstr "Stýrir hve mörg stök eru notuð á hverja einingu hnitanets"
 
 #. TRANSLATORS: “Optical Size”
 #. Optical sizes in a variable font are different versions of a typeface optimized for use at singular specific sizes,
@@ -36931,7 +36934,7 @@ msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:106
 msgid "Controls the font file’s slant parameter for oblique styles"
-msgstr ""
+msgstr "Stýrir hallaviðfangi leturskrárinnar fyrir skáletraða stíla"
 
 #: ../src/ui/widget/font-variations.cpp:108
 #, fuzzy
@@ -36941,7 +36944,7 @@ msgstr "Fornítalskt"
 
 #: ../src/ui/widget/font-variations.cpp:108
 msgid "Turns on the font’s italic forms"
-msgstr ""
+msgstr "Virkjar skáleturseiginleika letursins"
 
 #. TRANSLATORS: Weight controls the font file’s weight parameter.
 #: ../src/ui/widget/font-variations.cpp:110
@@ -36952,7 +36955,7 @@ msgstr "Þykkt"
 
 #: ../src/ui/widget/font-variations.cpp:110
 msgid "Controls the font file’s weight parameter"
-msgstr ""
+msgstr "Stýrir þykktarviðfangi leturskrárinnar"
 
 #. TRANSLATORS: Width controls the font file’s width parameter.
 #: ../src/ui/widget/font-variations.cpp:112
@@ -36963,7 +36966,7 @@ msgstr "Breidd"
 
 #: ../src/ui/widget/font-variations.cpp:112
 msgid "Controls the font file’s width parameter"
-msgstr ""
+msgstr "Stýrir breiddarviðfangi leturskrárinnar"
 
 #: ../src/ui/widget/font-variations.cpp:114
 #, fuzzy
@@ -37037,34 +37040,31 @@ msgid "Controls the depth of an emboss"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:121
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative X advance"
-msgstr "Afs_tæð breyting"
+msgstr "Afstætt X-framskrið"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgid "Controls the relative X advance - horizontal motion of the glyph"
-msgstr ""
+msgstr "Stýrir afstæðu X-framskriði - láréttri hreyfingu staftáknsins"
 
 #: ../src/ui/widget/font-variations.cpp:122
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative Y advance"
-msgstr "Afs_tæð breyting"
+msgstr "Afstætt Y-framskrið"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgid "Controls the relative Y advance - vertical motion of the glyph"
-msgstr ""
+msgstr "Stýrir afstæðu Y-framskriði - lóðréttri hreyfingu staftáknsins"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Miðað við:"
+msgstr "Afstæð sekúnda"
 
 #: ../src/ui/widget/font-variations.cpp:123
 msgid "Controls the relative second value - as in one second of animation time"
-msgstr ""
+msgstr "Stýrir afstæðu sekúndugildi - eins og í einni sekúndu af hreyfingu"
 
 #: ../src/ui/widget/font-variations.cpp:124
 #, fuzzy
@@ -39247,7 +39247,7 @@ msgstr "Hægri til vinstri"
 
 #: ../share/ui/font-list.glade:221
 msgid "Condensed to expanded"
-msgstr ""
+msgstr "Þjappað til gisið"
 
 #: ../share/ui/font-list.glade:437
 #, fuzzy
@@ -42935,7 +42935,7 @@ msgstr ""
 
 #: ../share/extensions/layout_nup.py:163
 msgid "No padding or margin available."
-msgstr ""
+msgstr "Engin bilsvæði eða spássíur tiltæk."
 
 #: ../share/extensions/markers_strokepaint.py:127
 #, python-format
