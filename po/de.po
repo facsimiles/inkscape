@@ -26,11 +26,11 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-27 18:30+0000\n"
-"Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape."
-"org>\n"
-"Language-Team: German <https://translate.inkscape.org/projects/inkscape/1-4-"
-"x/de/>\n"
+"PO-Revision-Date: 2025-04-27 21:53+0000\n"
+"Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape.org>"
+"\n"
+"Language-Team: German <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10806,9 +10806,8 @@ msgid "Grow/shrink selected objects relative to zoom level"
 msgstr "Die gewählten Objekte relativ zur Zoomstufe vergrößern/verkleinern"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Ausgewählte Objekte exportieren"
+msgstr "Ausgewählte Objekte drehen"
 
 #: ../src/actions/actions-transform.cpp:147
 #, fuzzy
