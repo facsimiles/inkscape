@@ -13,15 +13,16 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2024-09-30 09:16+0200\n"
-"Last-Translator: Lucas Vieites <lucas.vieites@gmail.com>\n"
-"Language-Team: Español; Castellano <inkscape-translator@lists.inkscape.org>\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
+"Last-Translator: Lucas Vieites <lucasvieites@gmail.com>\n"
+"Language-Team: Spanish <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: share\n"
@@ -10809,32 +10810,25 @@ msgstr ""
 "Cambiar el tamaño de los objetos seleccionados en relación al nivel de zoom"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Exportar los objetos seleccionados"
+msgstr "Rotar los objetos seleccionados"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Retoque de rotación"
+msgstr "Rotar paso"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
 msgstr ""
-"Cambiar el tamaño de los objetos seleccionados por múltiplos del valor del "
-"paso"
+"Rotar el tamaño de los objetos seleccionados por múltiplos del valor del paso"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Pantalla «acerca de»"
+msgstr "Rotar pantalla"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr ""
-"Cambiar el tamaño de los objetos seleccionados en relación al nivel de zoom"
+msgstr "Rotar los objetos seleccionados en relación al nivel de zoom"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -15791,13 +15785,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "No hay definiciones sin usar en &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"No se ha encontrado una extensión de inkscape para guardar el documento "
-"(%s). Esto pudo ser causado por una extensión de archivo desconocida."
+"No se ha encontrado una extensión de Inkscape para guardar el documento (%s)"
+". La causa puede ser una extensión de archivo desconocida o faltante."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -21745,13 +21739,13 @@ msgid "Deleted"
 msgstr "Borradas"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Mayús + arrastrar</b> para rotar, <b>Ctrl + arrastrar</b> para mover el "
-"origen. <b>Supr</b> para eliminar."
+"origen. <b>Supr</b> para eliminar, <b>doble clic</b> para editar las "
+"propiedades de esta guía"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -22096,13 +22090,12 @@ msgstr ""
 "booleana."
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
 msgstr ""
-"Debe seleccionar <b>al menos dos trayectos</b> para realizar una operación "
-"booleana."
+"Debe seleccionar <b>al menos dos trayectos</b> para realizar una "
+"intersección o diferencia simétrica."
 
 #: ../src/path/path-boolop.cpp:378
 msgid ""
@@ -29109,30 +29102,27 @@ msgid "GTK open/save dialogs"
 msgstr "Diálogos de abrir/guardar de GTK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Suavizado"
+msgstr "Nada"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "Solamente la pantalla de bienvenida"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Pantalla ancha"
+msgstr "Pantalla de bienvenida"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Inicio:"
+msgstr "Mostrar al inicio:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
-msgstr ""
+msgstr "Configurar lo que se muestra al cargar el programa de forma normal."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -33677,38 +33667,33 @@ msgstr "Constructor de formas"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[NUNCA]"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "Des_plazamiento"
+msgstr "Mayús"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Todo"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Supermercado"
+msgstr "Súper"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hiper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Metadatos"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -42129,9 +42114,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Abrir el diálogo de LPE (para adaptar los parámetros numéricamente)"
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Editar en el lienzo"
+msgstr "Editar marcador en el lienzo."
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -42194,9 +42178,8 @@ msgid "Phantom measure"
 msgstr "Medición fantasma"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Dibujo"
+msgstr "Dibujar"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -42375,9 +42358,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Mostrar los trayectos de recorte de los objetos seleccionados"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Solamente los objetos seleccionados"
+msgstr "Seleccionar objeto en el lienzo"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -43186,6 +43168,8 @@ msgid ""
 "DXF12 supports a maximum of 249 distinct colors. Please simplify color "
 "choices first."
 msgstr ""
+"DXF12 reconoce un máximo de 249 colores distintos. Simplifique la selección "
+"de colores antes de continuar."
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -44303,9 +44287,8 @@ msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Importar un archivo Computer Graphics Metafile (CGM)"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Limpieza"
+msgstr "Limpar trayecto"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44315,20 +44298,26 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Limpia un trayecto mediante la eliminación de nodos y la unión de nodos "
+"cercanos en los trayectos seleccionados.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
 msgstr ""
+"Interpolar nodos de segmentos con una longitud total inferior a la longitud "
+"indicada."
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Longitud máxima de segmento:"
+msgstr "Longitud mínima de segmento"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
-msgstr ""
+msgstr "Eliminar subtrayectos con una longitud total inferior a la indicada"
 
 #: ../share/extensions/clean_up_path.inx:15
 #, fuzzy
@@ -44338,6 +44327,8 @@ msgstr "Longitud mínima de puntada [%]"
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
+"Cerrar subtrayectos en los que la distancia entre el nodo inicial y el final "
+"es menor que"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
@@ -44347,10 +44338,12 @@ msgstr ""
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
+"Unir nodos finales de subtrayectos separados en los que la distancia es "
+"menor que"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Permitir invertir la dirección de subtrayectos"
 
 #: ../share/extensions/clean_up_path.inx:21
 #, fuzzy
@@ -44373,6 +44366,9 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"Unidad como definida en el documento (Archivo->Propiedades del documento).\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
 #, fuzzy
@@ -48142,7 +48138,7 @@ msgstr "Entrada CGM"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr ""
+msgstr "Archivo de curva Linearity (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
 #, fuzzy
@@ -48151,11 +48147,11 @@ msgstr "Importar un archivo Affinity Designer"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr ""
+msgstr "Archivo Vectnornator (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr ""
+msgstr "Importar un archivo Vectornator"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -52564,7 +52560,7 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Editar un logo Flatpak"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
 #, fuzzy
