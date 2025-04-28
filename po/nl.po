@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-02-22 07:06+0000\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/1-4-x/"
 "nl/>\n"
@@ -1828,7 +1828,7 @@ msgstr "Poster met kruisruis"
 
 #: ../../build/share/filters/filters.svg.h:672
 msgid "Overlay with a small scale screen like noise"
-msgstr "Met kleine schermachtige ruis bedekken"
+msgstr "Bedekken met een waas van lichte ruis"
 
 #: ../../build/share/filters/filters.svg.h:674
 msgid "Cross Noise Poster B"
@@ -1836,7 +1836,7 @@ msgstr "Poster met kruisruis B"
 
 #: ../../build/share/filters/filters.svg.h:676
 msgid "Adds a small scale screen like noise locally"
-msgstr "Lokaal een kleine schermachtige ruis toevoegen"
+msgstr "Voegt lokaal een waas met lichte ruis toe"
 
 #: ../../build/share/filters/filters.svg.h:678
 #: ../../build/share/filters/filters.svg.h:680
@@ -1886,7 +1886,7 @@ msgstr "Kruisruis"
 
 #: ../../build/share/filters/filters.svg.h:704
 msgid "Adds a small scale screen like graininess"
-msgstr "Een kleine korrel toevoegen"
+msgstr "Voegt een waas met korreligheid toe"
 
 #: ../../build/share/filters/filters.svg.h:706
 msgid "Duotone Turbulent"
@@ -4280,7 +4280,7 @@ msgstr "Online opslag"
 #: ../../build/share/symbols/symbols.h:159
 msgctxt "Symbol"
 msgid "Keying"
-msgstr "Keying"
+msgstr "Invoer"
 
 #: ../../build/share/symbols/symbols.h:160
 msgctxt "Symbol"
@@ -9760,7 +9760,7 @@ msgstr "Geselecteerde paden met schermpixels vernauwen"
 
 #: ../src/actions/actions-paths.cpp:267
 msgid "Offset Screen"
-msgstr "Verplaatsing scherm"
+msgstr "Verplaatsing van scherm"
 
 #: ../src/actions/actions-paths.cpp:267
 msgid "Offset selected paths by screen pixels"
@@ -10759,7 +10759,7 @@ msgstr "Roteren"
 
 #: ../src/actions/actions-transform.cpp:141
 msgid "Rotate selected objects by degrees"
-msgstr "Geselecteerde objecten draaien in graden"
+msgstr "Geselecteerde objecten draaien (°)"
 
 #: ../src/actions/actions-transform.cpp:142
 #: ../src/live_effects/lpe-measure-segments.cpp:84
@@ -10800,31 +10800,24 @@ msgstr ""
 "Geselecteerde objecten vergroten/verkleinen relatief aan het zoomniveau"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Geselecteerde objecten exporteren"
+msgstr "Geselecteerde objecten roteren"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Roteren"
+msgstr "Rotatiestapgrootte"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
-msgstr ""
-"Geselecteerde objecten vergroten/verkleinen met veelvoud van stapgrootte"
+msgstr "Geselecteerde objecten roteren met veelvoud van stapgrootte"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Draaien resetten"
+msgstr "Scherm roteren"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr ""
-"Geselecteerde objecten vergroten/verkleinen relatief aan het zoomniveau"
+msgstr "Geselecteerde objecten roteren relatief aan het zoomniveau"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -12801,7 +12794,7 @@ msgstr "Donkerder"
 #: ../src/extension/internal/filter/paint.h:725
 #: ../src/extension/internal/filter/transparency.h:64
 msgid "Screen"
-msgstr "Scherm"
+msgstr "Waas"
 
 #: ../src/extension/internal/filter/blurs.h:204
 #: ../src/extension/internal/filter/blurs.h:359
@@ -15700,10 +15693,9 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
-"<small>We hebben Inkscape bijgewerkt conform de CSS standaard van 96 DPI "
-"voor betere compatibiliteit met webbrowsers; Voorheen werd 90 DPI "
-"gehanteerd. \n"
-"Digitale illustraties voor weergave op scherm worden zonder schaking "
+"<small>Inkscape is bijgewerkt conform de CSS-standaard van 96 DPI voor "
+"betere compatibiliteit met webbrowsers; Voorheen werd 90 DPI gehanteerd. \n"
+"Digitale illustraties voor weergave op scherm worden zonder schaling "
 "geconverteerd naar 96 DPI en zouden onaangetast blijven.\n"
 "Illustraties voor een specifieke fysieke grootte die zijn getekend bij 90 "
 "DPI zullen te klein zijn als ze zonder schaling worden geconverteerd naar 96 "
@@ -15765,13 +15757,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Er zijn geen ongebruikte definities in &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Er werd geen Inkscape-uitbreiding aangetroffen om het bestand (%s) op te "
-"slaan. Dit kan komen door een onbekende bestandsextensie."
+"Geen Inkscape-extensie gevonden om document (%s) op te slaan.  Dit kan zijn "
+"veroorzaakt door een onbekende of ontbrekende bestandsextensie."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -18464,7 +18456,7 @@ msgstr "CubicBezierJohan"
 #: ../src/live_effects/lpe-interpolate_points.cpp:28
 #: ../src/live_effects/lpe-powerstroke.cpp:130
 msgid "SpiroInterpolator"
-msgstr "SpiroInterpolator"
+msgstr "Spiro-Interpolatie"
 
 #: ../src/live_effects/lpe-interpolate_points.cpp:29
 #: ../src/live_effects/lpe-powerstroke.cpp:131
@@ -21733,13 +21725,13 @@ msgid "Deleted"
 msgstr "Verwijderd"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Shift+sleep</b> om te draaien, <b>Ctrl+sleep</b> om de oorsprong te "
-"verplaatsen, <b>Del</b> om te verwijderen"
+"verplaatsen, <b>Del</b> om te verwijderen, <b>Dubbel-klik</b> om de "
+"eigenschappen van deze hulplijn te bewerken"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -25718,7 +25710,7 @@ msgstr ""
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
-"Biedt modi voor het mengen van afbeeldingen, zoals scherm, vermenigvuldigen, "
+"Biedt modi voor het mengen van afbeeldingen, zoals waas, vermenigvuldigen, "
 "donkerder maken en lichter maken."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2610
@@ -29051,30 +29043,28 @@ msgid "GTK open/save dialogs"
 msgstr "GTK-dialoogvensters voor openen/bewaren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Afvlakking"
+msgstr "Niets"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "Alleen opstartscherm"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Welkom in"
+msgstr "Welkomstvenster"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Verborgen intersecties tonen"
+msgstr "Weergeven bij opstarten:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
 msgstr ""
+"Instellen wat er wordt weergegeven bij het normaal laden van het programma."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -29690,7 +29680,7 @@ msgstr "Significante cijfers van waarden weggeschreven in SVG-bestand"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2328
 msgid "Minimum _exponent:"
-msgstr "Minimum _exponent:"
+msgstr "Minimale _exponent:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2328
 msgid ""
@@ -33603,38 +33593,33 @@ msgstr "Vormen"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[NOOIT]"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "Ver_plaatsing"
+msgstr "Shift"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Alle"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Supermarkt"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Metadata"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -36964,7 +36949,7 @@ msgstr "Lichter"
 #: ../src/ui/widget/filter-effect-chooser.cpp:33
 msgctxt "BlendMode"
 msgid "Screen"
-msgstr "Scherm"
+msgstr "Waas"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:34
 msgctxt "BlendMode"
@@ -41277,7 +41262,7 @@ msgstr "_Volledig scherm"
 
 #: ../share/ui/menus.ui:643
 msgid "Wide Screen"
-msgstr "Breed scherm"
+msgstr "Breedbeeld scherm"
 
 #: ../share/ui/menus.ui:649
 msgid "_Layer"
@@ -42111,9 +42096,8 @@ msgid "Phantom measure"
 msgstr "Fantoommeting"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Tekening"
+msgstr "Tekenen"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -42288,9 +42272,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Knippad(en) van geselecteerde object(en) tonen"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Alleen geselecteerde objecten"
+msgstr "Object op doek selecteren"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -43104,6 +43087,8 @@ msgid ""
 "DXF12 supports a maximum of 249 distinct colors. Please simplify color "
 "choices first."
 msgstr ""
+"DXF12 ondersteunt maximaal 249 verschillende kleuren. Vereenvoudig eerst de "
+"kleurkeuzes."
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -44166,7 +44151,7 @@ msgstr "Door aantal segmenten"
 #: ../share/extensions/addnodes.inx:9
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:9
 msgid "Maximum segment length:"
-msgstr "Maximum segmentlengte:"
+msgstr "Maximale segmentlengte:"
 
 #: ../share/extensions/addnodes.inx:10
 msgid "Unit of maximum segment length:"
@@ -44214,9 +44199,8 @@ msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Computer Graphics Meta-bestand importeren (CGM)"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Schoonmaken"
+msgstr "Pad opschonen"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44226,57 +44210,64 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Ruim het pad op door dubbele knooppunten te verwijderen en nabije "
+"knooppunten samen te voegen.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
 msgstr ""
+"Interpoleer knooppunten van segmenten met een totale lengte die kleiner is "
+"dan de opgegeven lengte"
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Maximum segmentlengte:"
+msgstr "Minimale segmentlengte"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
 msgstr ""
+"Verwijder subpaden met een totale lengte kleiner dan de opgegeven lengte"
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Minimum steeklengte [%]"
+msgstr "Minimale lengte van het subpad"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
+"Sluit subpaden waar het begin- en eindknooppunt een afstand hebben van "
+"minder dan"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Grenswaarde"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
+"Eindpunten van afzonderlijke subpaden samenvoegen bij een afstand van minder "
+"dan"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Omkering van de richting van subpaden toestaan"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Subpaden samenvoegen"
+msgstr "Subpaden samenvoegen door"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Interpolatiestappen:"
+msgstr "knooppunten interpoleren"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Segmenten effenen"
+msgstr "lijnsegment toevoegen"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44284,9 +44275,11 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"Eenheid zoals gedefinieerd in document (Bestand->Documenteigenschappen).\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Informatie"
 
@@ -44303,6 +44296,16 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Oorspronkelijk gemaakt om paden voor snijders/plotters op te schonen door "
+"overtollige knooppunten of kleine openingen te verwijderen.\n"
+"\n"
+"Echte dubbele knooppunten (exact dezelfde coördinaten) en subpaden met een "
+"lengte van nul worden altijd verwijderd.\n"
+"Om paden samen te voegen, moet je ervoor zorgen dat de paden al zijn "
+"gecombineerd (subpad van hetzelfde pad).\n"
+"Om paden te combineren, selecteer deze en druk Ctrl+K. \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -48029,26 +48032,24 @@ msgstr "Een Affinity Designer-bestand importeren"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "CGM-invoer"
+msgstr "Curve-invoer"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr ""
+msgstr "Linearity Curve-bestand (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
-#, fuzzy
 msgid "Import a Linearity Curve file"
-msgstr "Een Affinity Designer-bestand importeren"
+msgstr "Linearity Curve-bestand importeren"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr ""
+msgstr "Vectornator-bestand (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr ""
+msgstr "Vectornator-bestand importeren"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -48327,7 +48328,7 @@ msgstr ""
 "3. Klik op Toepassen\n"
 "\n"
 "Mogelijk te kleine objecten worden gemarkeerd met gekleurde pijlen.\n"
-"             "
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:47
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:28
@@ -48592,10 +48593,9 @@ msgstr ""
 "plugin doet). Je kan ook de originele vorm bewaren. Enkel het beginpunt van "
 "elke vorm zal gebruikt worden. \n"
 "\n"
-"Je kan een object ook manueel selecteren, de XML-editor openen "
-"(Shift+Ctrl+X) en de 'dxfpoint'-tag met eender welke waarde toevoegen of "
-"verwijderen.\n"
-"           "
+"Je kan een object ook manueel selecteren, de XML-editor openen (Shift+Ctrl+X)"
+" en de 'dxfpoint'-tag met eender welke waarde toevoegen of verwijderen.\n"
+"          "
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:15
 msgid "Convert selection:"
@@ -48815,7 +48815,7 @@ msgstr ""
 "\n"
 "            Deze functie past het pad aan zodat het gesneden kan worden met "
 "een rechthoekig snijmes.\n"
-"         "
+"        "
 
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:4
 msgid "Orientation Points"
@@ -52468,41 +52468,35 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Flatpak Logo bewerken"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Meerdere kleurverlopen"
+msgstr "Meerdere pagina's bewerken"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Aan de slag met Inkscape"
+msgstr "Bewerken met Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Aanpassen van kleurverlopen toestaan"
+msgstr "Kleurverloop bewerken"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "En nog veel meer probleemoplossingen!"
+msgstr "Veel probleemoplossingen!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Veel verbeteringen in de Affinity bestandsimport"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Opstartscherm tonen bij laden"
+msgstr "Opstartscherm tonen"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52729,13 +52723,12 @@ msgid "Much improved text line-height settings"
 msgstr "Sterk verbeterde instellingen voor de hoogte van tekstregels"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:153
-#, fuzzy
 msgid ""
 "Variable fonts support (only if compiled with pango library version >= "
 "1.41.1)"
 msgstr ""
 "Ondersteuning voor variabele lettertypen (alleen indien gecompileerd met "
-"Pango Library versie &gt;= 1.41.1)"
+"pango library versie >= 1.41.1)"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:154
 msgid "Browser-compatible flowed text"
