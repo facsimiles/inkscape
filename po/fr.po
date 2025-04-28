@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-21 20:06+0000\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
-"Language-Team: French <https://translate.inkscape.org/projects/inkscape/1-4-"
-"x/fr/>\n"
+"Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8201,7 +8201,7 @@ msgstr "Définir le nom du fichier"
 
 #: ../src/actions/actions-file.cpp:128
 msgid "Namedview; Update=1, Replace=0"
-msgstr "Namedview; Update=1, Replace=0"
+msgstr "Namedview ; Update=1, Replace=0"
 
 #: ../src/actions/actions-help-url.cpp:115 ../share/ui/menus.ui:1309
 msgid "Ask Us a Question"
@@ -8660,7 +8660,7 @@ msgstr "Aligner les nœuds horizontalement"
 msgid ""
 "Align selected nodes horizontally; usage [last|first|middle|min|max|pref]"
 msgstr ""
-"Aligner les nœuds horizontalement; avec [last|first|middle|min|max|pref]"
+"Aligner les nœuds horizontalement ; avec [last|first|middle|min|max|pref]"
 
 #: ../src/actions/actions-node-align.cpp:93
 msgid "Align nodes vertically"
@@ -8669,8 +8669,8 @@ msgstr "Aligner les nœuds verticalement"
 #: ../src/actions/actions-node-align.cpp:93
 msgid "Align selected nodes vertically; usage [last|first|middle|min|max|pref]"
 msgstr ""
-"Aligner les nœuds sélectionnés verticalement; utilisation [last|first|middle|"
-"min|max|pref]"
+"Aligner les nœuds sélectionnés verticalement ; utilisation "
+"[last|first|middle|min|max|pref]"
 
 #: ../src/actions/actions-node-align.cpp:94
 msgid "Distribute nodes horizontally"
@@ -8738,9 +8738,9 @@ msgid ""
 "bottom]] [last|first|biggest|smallest|page|drawing|selection|pref]? group? "
 "anchor?"
 msgstr ""
-"Aligner les objets sélectionnés; utilisation : [[left|hcenter|right] || [top|"
-"vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection|pref]? "
-"group? anchor?"
+"Aligner les objets sélectionnés ; utilisation : [[left|hcenter|right] || "
+"[top|vcenter|bottom]] "
+"[last|first|biggest|smallest|page|drawing|selection|pref] ? group ? anchor ?"
 
 #: ../src/actions/actions-object-align.cpp:777
 msgid "Align to left edge"
@@ -8807,8 +8807,9 @@ msgid ""
 "Align selected text anchors; usage: [[vertical | horizontal] [last|first|"
 "biggest|smallest|page|drawing|selection]?"
 msgstr ""
-"Aligner les ancres de texte sélectionnées; utilisation : [[vertical | "
-"horizontal] [last|first|biggest|smallest|page|drawing|selection]?"
+"Aligner les ancres de texte sélectionnées ; utilisation : "
+"[[vertical | horizontal] [last|first|biggest|smallest|page|drawing|selection]"
+" ?"
 
 #: ../src/actions/actions-object-align.cpp:786
 msgid "Distribute objects"
@@ -8819,8 +8820,8 @@ msgid ""
 "Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | "
 "top | vcenter | bottom]"
 msgstr ""
-"Distribue les objets sélectionnés; utilisation : [hgap | left | hcenter | "
-"right | vgap | top | vcenter | bottom]"
+"Distribue les objets sélectionnés ; utilisation : "
+"[hgap | left | hcenter | right | vgap | top | vcenter | bottom]"
 
 #: ../src/actions/actions-object-align.cpp:787
 msgid "Even horizontal gaps"
@@ -10821,30 +10822,24 @@ msgid "Grow/shrink selected objects relative to zoom level"
 msgstr "Augmenter la taille des objets sélectionnés relativement à l'écran"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Exporter le objets sélectionnés"
+msgstr "Pivoter les objets sélectionnés"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Ajuster en pivotant"
+msgstr "Pas de la rotation"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
-msgstr ""
-"Augmenter la taille des objets sélectionnés par multiple de la valeur du pas"
+msgstr "Tourner les objets sélectionnés d'un multiple de la valeur du pas"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "À propos"
+msgstr "Tourner l'écran"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr "Augmenter la taille des objets sélectionnés relativement à l'écran"
+msgstr "Tourner les objets sélectionnés relativement au niveau d'agrandissement"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -11599,7 +11594,7 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
-" C'est le résultat d'un fichier .inx incorrect pour cette extension. Un "
+"  C'est le résultat d'un fichier .inx incorrect pour cette extension. Un "
 "fichier .inx incorrect peut être dû à un problème dans l'installation "
 "d'Inkscape."
 
@@ -14558,7 +14553,7 @@ msgid ""
 "not work in all browsers.)"
 msgstr ""
 "Lorsqu'une image est agrandie, la lisser ou bien conserver des blocs (gros "
-"pixels). Non géré par certains navigateurs."
+"pixels). (non géré par certains navigateurs)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:207
 #: ../src/extension/internal/svg.h:32
@@ -15819,13 +15814,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Aucune définition inutilisée dans les &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Aucune extension Inkscape pour enregistrer le document (%s) n'a été trouvée. "
-"Cela peut venir d'une extension de fichier inconnue."
+"Aucune extension Inkscape n'a été trouvée pour enregistrer le document (%s) "
+". Cela peut venir d'une extension de fichier inconnue ou absente."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -21366,7 +21361,7 @@ msgstr "Nomb_re d'itérations :"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid "Depth of the recursion --- keep low!!"
-msgstr "Niveau de récursion (garder une valeur faible !)"
+msgstr "Niveau de récursion --- garder une valeur faible !!"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:49
 msgid "Generating path:"
@@ -21761,13 +21756,13 @@ msgid "Deleted"
 msgstr "Supprimé"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Maj+cliquer-glisser</b> pour pivoter, <b>Ctrl+cliquer-glisser</b> pour "
-"déplacer l'origine, <b>Suppr</b> pour supprimer"
+"déplacer l'origine, <b>Suppr</b> pour supprimer ; <b>double-cliquer</b> pour "
+"modifier les propriétés de ce guide"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -29134,30 +29129,28 @@ msgid "GTK open/save dialogs"
 msgstr "Boîtes de dialogue Ouvrir et Enregistrer GTK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Lissage"
+msgstr "Rien"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "Fenêtre spontanée uniquement"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Écran large"
+msgstr "Écran d'accueil"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Départ :"
+msgstr "A afficher au début :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
 msgstr ""
+"Définir ce qui doit s'afficher quand le programme est chargé normalement."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -31939,7 +31932,7 @@ msgstr "Emplacement des données du système"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3815
 msgid "Custom Font directories"
-msgstr "Dossiers des polices"
+msgstr "Dossiers des polices personnalisées"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3827
 msgid "Icon theme:"
@@ -33716,38 +33709,33 @@ msgstr "Constructeur de forme"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[JAMAIS]"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "_Translation"
+msgstr "Maj"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Tout"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Supermarché"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Métadonnées"
+msgstr "Méta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -35797,11 +35785,11 @@ msgid ""
 msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
-"Une poignée de dégradé rassemblant %d stops (cliquer-glisser avec <b>Maj</b> "
-"pour les séparer) sélectionnée"
+"Une poignée rassemblant %d stop (cliquer-glisser avec <b>Maj</b> pour "
+"séparer) sélectionné"
 msgstr[1] ""
-"Une poignée de dégradé rassemblant %d stops (cliquer-glisser avec <b>Maj</b> "
-"pour les séparer) sélectionnée"
+"Une poignée rassemblant %d stops (cliquer-glisser avec <b>Maj</b> pour les "
+"séparer) sélectionnés"
 
 #: ../src/ui/tools/gradient-tool.cpp:132
 #, c-format
@@ -42149,7 +42137,7 @@ msgstr "Médiatrice"
 
 #: ../share/ui/toolbar-lpe.ui:164
 msgid "Angle Bisector"
-msgstr "Bissectrices"
+msgstr "Bissectrice d'angle"
 
 #: ../share/ui/toolbar-lpe.ui:183
 msgid "Mirror symmetry"
@@ -42242,7 +42230,6 @@ msgid "Phantom measure"
 msgstr "Mesure fantôme"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
 msgstr "Dessin"
 
@@ -42418,9 +42405,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Afficher les chemins de découpe des objets sélectionnés"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Seulement les objets sélectionnés"
+msgstr "Sélectionner l'objet sur le canevas"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -43198,8 +43184,7 @@ msgstr "Nombre d'objets non convertis : {}\n"
 
 #: ../share/extensions/dhw_input.py:63
 msgid "Could not load file, not a ACECAD DHW file!"
-msgstr ""
-"Impossible de charger le fichier, pas un fichier ACECAD Digimemo (*.dhw)"
+msgstr "Impossible de charger le fichier, n'est pas un fichier ACECAD DHW !"
 
 #: ../share/extensions/dhw_input.py:78
 msgid "Unsupported tag: {}\n"
@@ -43242,6 +43227,8 @@ msgid ""
 "DXF12 supports a maximum of 249 distinct colors. Please simplify color "
 "choices first."
 msgstr ""
+"DXF12 supporte un maximum de 249 couleurs différentes. Veuillez d'abord "
+"simplifier le choix des couleurs."
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -44330,9 +44317,8 @@ msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Fichiers Open Computer Graphics Metafile (CGM)"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Nettoyage"
+msgstr "Simplifier le chemin"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44342,57 +44328,65 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Simplifier le chemin en supprimant les nœuds dupliqués et en joignant les "
+"noeuds voisins des chemins sélectionnés.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
 msgstr ""
+"Interpoler les nœuds des segments dont la longueur totale est inférieure à "
+"la longueur spécifiée"
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Longueur maximale de segment :"
+msgstr "Longueur minimale de segment"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
 msgstr ""
+"Supprimer les sous-chemins dont la longueur totale est inférieure à la "
+"longueur spécifiée"
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Longueur minimum du point [%]"
+msgstr "Longueur minimale du sous-chemin"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
+"Fermer les chemins où les nœuds de début est de terminaison sont séparés de "
+"moins de"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
+"Joindre les nœuds de terminaison de sous-chemins différents séparés de moins "
+"de"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Permettre d'inverser le sens des sous-chemins"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Joindre les sous-chemins"
+msgstr "Joindre les sous-chemins par"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Interpoler aucun"
+msgstr "interpolation des nœuds"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Rendre les segments droits"
+msgstr "ajout d'un segment de ligne droite"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44400,9 +44394,11 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"Unité telle que définie dans le document (Fichier->Propriétés du document).\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Information"
 
@@ -44419,6 +44415,16 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Créé initialement pour simplifier les chemins pour les coupeurs et les "
+"traceurs en supprimant l'excès de nœuds ou les petits intervalles.\n"
+"\n"
+"Les nœuds réellement dupliqués (ceux qui ont les mêmes coordonnées) et les "
+"sous-chemins de longueur nulle, seront toujours supprimés.\n"
+"Pour joindre les chemins, vérifiez que les chemins considérés sont déjà "
+"combinés (sous-chemins du même chemin).\n"
+"Pour combiner les chemins, sélectionnez-les et appuyez sur Ctrl+K. \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -44538,7 +44544,7 @@ msgstr ""
 "\n"
 "Ajuste la teinte, la saturation et la luminosité dans la représentation TSL "
 "de la couleur des objets sélectionnés.\n"
-"    "
+"      "
 
 #: ../share/extensions/color_lesshue.inx:3
 msgid "Less Hue"
@@ -44697,7 +44703,7 @@ msgstr "Hauteurs"
 
 #: ../share/extensions/construct_from_triangle.inx:19
 msgid "Angle Bisectors"
-msgstr "Bissectrices"
+msgstr "Bissectrices d'angle"
 
 #: ../share/extensions/construct_from_triangle.inx:20
 #: ../share/extensions/polyhedron_3d.inx:85
@@ -46385,7 +46391,7 @@ msgid ""
 "layer name. eg. (Pen 1)"
 msgstr ""
 "Le numéro du stylo (outil) à utiliser (en standard : 1). Peut être défini "
-"dans le nom du calque (\"Pen1\")."
+"dans le nom du calque (exemple : \"Pen1\")"
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:69
 msgid "Pen force (g):"
@@ -46500,7 +46506,7 @@ msgid ""
 "align the tool orientation. (Default: Checked)"
 msgstr ""
 "Cocher pour faire une petite coupure avant que le dessin réel commence à "
-"aligner correctement l'orientation de l'outil (par défaut : coché)."
+"aligner correctement l'orientation de l'outil. (par défaut : coché)"
 
 #: ../share/extensions/hpgl_output.inx:31 ../share/extensions/plotter.inx:87
 msgid "Curve flatness:"
@@ -46527,7 +46533,8 @@ msgid ""
 msgstr ""
 "Cocher pour aligner automatiquement le dessin au point zéro (auquel s'ajoute "
 "le décalage de l'outil si utilisé). Si décoché, vous devez vous assurer que "
-"tous vos objets sont dans la bordure du document (par défaut : coché)."
+"toutes les parties de votre dessin sont délimitées par la bordure du "
+"document. (par défaut : coché)"
 
 #: ../share/extensions/hpgl_output.inx:35 ../share/extensions/plotter.inx:92
 msgid ""
@@ -47449,9 +47456,9 @@ msgid ""
 "the name of the {rectangle ID}.png (use Object Properties to set this)."
 msgstr ""
 "Si vous créez un calque (avec le nom par défaut \"slices\") contenant des "
-"rectangles, cette extension va exporter un ficheir PNG par rectangle, avec "
+"rectangles, cette extension va exporter un fichier PNG par rectangle, avec "
 "le nom {rectangle ID}.png (utilisez les propriétés de l'objet pour définir "
-"les ID)"
+"les ID)."
 
 #: ../share/extensions/layer2png.inx:17
 msgid ""
@@ -48133,26 +48140,24 @@ msgstr "Importer un fichier Affinity Designer"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "Entrée CGM"
+msgstr "Entrée curviligne"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr ""
+msgstr "Fichier de courbe linéaire (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
-#, fuzzy
 msgid "Import a Linearity Curve file"
-msgstr "Importer un fichier Affinity Designer"
+msgstr "Importer un fichier de courbe linéaire"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr ""
+msgstr "Fichier Vectornator (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr ""
+msgstr "Importer un fichier Vectornator"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -50289,7 +50294,8 @@ msgid ""
 msgstr ""
 "Cocher pour aligner automatiquement le dessin au point zéro (auquel s'ajoute "
 "le décalage de l'outil si utilisé). Si décoché, vous devez vous assurer que "
-"tous vos objets sont dans la bordure du document (par défaut : coché)."
+"toutes les parties de votre dessin sont délimitées par la bordure du "
+"document. (par défaut : coché)"
 
 #: ../share/extensions/polyhedron_3d.inx:3
 msgid "3D Polyhedron"
@@ -51147,15 +51153,18 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Cette extension change l'ordre d'empilement des objets (position sur l'axe "
-"Z)\n"
-" en fonction de leur position sur le canevas ou leur ordre d'empilement "
-"actuel. \n"
+"Cette extension change l'ordre d'empilement des objets (position sur l'axe Z)"
 "\n"
-"Si les éléments d'un groupe sont sélectionnés avec des objets externes, \n"
-"ils seront extraits hors du groupe et placés à côté des autres (de même pour "
-"les calques).\n"
-"          "
+"en fonction de leur position sur le canevas ou leur ordre d'empilement "
+"actuel.\n"
+"L'extension réempile tous les objets sélectionnés. Les groupes sont traités\n"
+"comme des objets uniques.\n"
+"Si les éléments d'un groupe sont sélectionnés avec des objets externes,\n"
+"ils seront extraits hors du groupe et placés à la suite des autres\n"
+"objets empilés (les éléments sur des calques différents sont ramenés "
+"ensemble\n"
+"dans un même calque).\n"
+"            "
 
 #: ../share/extensions/restack.inx:57 ../share/extensions/ungroup_deep.inx:13
 msgid "Arrange"
@@ -52565,41 +52574,35 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Modifier un logo Flatpak"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Plusieurs dégradés"
+msgstr "Edition mutli-page"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Démarrer avec Inkscape"
+msgstr "Modifier avec Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Activer la modification de dégradé"
+msgstr "Modifier un dégradé"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "Et d'autres corrections encore !"
+msgstr "Plusieurs corrections de bogues !"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Beaucoup d'améliorations à l'importation du fichier d'affinité"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Sélectionner un programme à charger"
+msgstr "Fenêtre spontanée au chargement"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52828,11 +52831,12 @@ msgid "Much improved text line-height settings"
 msgstr "Paramètres de hauteur de texte améliorés"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:153
-#, fuzzy
 msgid ""
 "Variable fonts support (only if compiled with pango library version >= "
 "1.41.1)"
-msgstr "Support pour les polices variables (avec pango > 1.41)"
+msgstr ""
+"Support de polices variables (uniquement si compilé avec une version >= "
+"1.41.1 de la bibliothèque pango)"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:154
 msgid "Browser-compatible flowed text"
