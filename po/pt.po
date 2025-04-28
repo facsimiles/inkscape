@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-27 21:53+0000\n"
+"PO-Revision-Date: 2025-04-28 23:06+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -2501,7 +2501,7 @@ msgstr "vermelho indiano indianred (#CD5C5C)"
 #: ../build/share/palettes/palettes.h:39
 msgctxt "Palette"
 msgid "brown (#A52A2A)"
-msgstr "castanho brown brown (#A52A2A)"
+msgstr "castanho brown (#A52A2A)"
 
 #: ../build/share/palettes/palettes.h:40
 msgctxt "Palette"
@@ -2581,7 +2581,7 @@ msgstr "concha do mar seashell (#FFF5EE)"
 #: ../build/share/palettes/palettes.h:55
 msgctxt "Palette"
 msgid "chocolate (#D2691E)"
-msgstr "chocolate chocolate (#D2691E)"
+msgstr "chocolate (#D2691E)"
 
 #: ../build/share/palettes/palettes.h:56
 msgctxt "Palette"
@@ -2946,7 +2946,7 @@ msgstr "azul-aço steelblue (#4682B4)"
 #: ../build/share/palettes/palettes.h:128
 msgctxt "Palette"
 msgid "aliceblue (#F0F8FF)"
-msgstr "azul-alice aliceblue  (#F0F8FF)"
+msgstr "azul-alice aliceblue (#F0F8FF)"
 
 #: ../build/share/palettes/palettes.h:129
 msgctxt "Palette"
@@ -2996,7 +2996,7 @@ msgstr "azul-marinho navy (#000080)"
 #: ../build/share/palettes/palettes.h:138
 msgctxt "Palette"
 msgid "darkblue (#00008B)"
-msgstr "azul-escuro darkblue darkblue (#00008B)"
+msgstr "azul-escuro darkblue (#00008B)"
 
 #: ../build/share/palettes/palettes.h:139
 msgctxt "Palette"
@@ -3041,7 +3041,7 @@ msgstr "violeta-azul blueviolet (#8A2BE2)"
 #: ../build/share/palettes/palettes.h:147
 msgctxt "Palette"
 msgid "indigo (#4B0082)"
-msgstr "indigo indigo (#4B0082)"
+msgstr "índigo indigo (#4B0082)"
 
 #: ../build/share/palettes/palettes.h:148
 msgctxt "Palette"
@@ -3086,7 +3086,7 @@ msgstr "magenta-escuro darkmagenta (#8B008B)"
 #: ../build/share/palettes/palettes.h:156
 msgctxt "Palette"
 msgid "magenta (#FF00FF)"
-msgstr "magenta magenta (#FF00FF)"
+msgstr "magenta (#FF00FF)"
 
 #: ../build/share/palettes/palettes.h:157
 msgctxt "Palette"
@@ -8645,7 +8645,7 @@ msgstr "Espelhar horizontalmente"
 
 #: ../src/actions/actions-object.cpp:321
 msgid "Flip vertically"
-msgstr "Espelhar  verticalmente"
+msgstr "Espelhar verticalmente"
 
 #: ../src/actions/actions-object.cpp:349
 msgid "Remove Live Path Effect"
@@ -11033,7 +11033,7 @@ msgstr "Selector não reconhecido '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:327
 msgid "Empty or improper property, skipped."
-msgstr "Propriedade vazia ou imprópria, ingorada"
+msgstr "Propriedade vazia ou imprópria, ignorada."
 
 #: ../src/display/control/ctrl-handle-styling.cpp:333
 msgid "Unrecognized property '%1'"
@@ -14144,8 +14144,8 @@ msgid ""
 "When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will "
 "not work in all browsers.)"
 msgstr ""
-"Quando uma imagem for amplaida, aplicar suavização ou manter pixelização. "
-"(Não funciona em todos os navegadores de internet)."
+"Quando uma imagem for ampliada, aplicar suavização ou manter pixelização. ("
+"Não funciona em todos os navegadores de internet.)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:195
 #: ../src/extension/internal/svg.h:32
@@ -15114,7 +15114,7 @@ msgstr "Vídeo SD Ecrã Panorâmico / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
 msgid "Video SD NTSC"
-msgstr "Video SD NTSC"
+msgstr "Vídeo SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
 msgid "Video SD Widescreen NTSC"
@@ -15134,7 +15134,7 @@ msgstr "Vídeo DCI 2k (Full Frame)"
 
 #: ../src/extension/internal/template-video.cpp:45
 msgid "Video UHD 4k"
-msgstr "Video UHD 4k"
+msgstr "Vídeo UHD 4k"
 
 #: ../src/extension/internal/template-video.cpp:46
 msgid "Video DCI 4k (Full Frame)"
@@ -15142,7 +15142,7 @@ msgstr "Vídeo DCI 4k (Full Frame)"
 
 #: ../src/extension/internal/template-video.cpp:47
 msgid "Video UHD 8k"
-msgstr "Video UHD 8k"
+msgstr "Vídeo UHD 8k"
 
 #: ../src/extension/internal/vsd-input.cpp:42
 msgid "VSD Input"
@@ -15150,7 +15150,7 @@ msgstr "Importar VSD"
 
 #: ../src/extension/internal/vsd-input.cpp:47
 msgid "Microsoft Visio Diagram (*.vsd)"
-msgstr "Microsoft Visio Diagram (*.vsd)"
+msgstr "Diagrama Microsoft Visio (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:48
 msgid "File format used by Microsoft Visio 6 and later"
@@ -15162,7 +15162,7 @@ msgstr "Importar VDX"
 
 #: ../src/extension/internal/vsd-input.cpp:59
 msgid "Microsoft Visio XML Diagram (*.vdx)"
-msgstr "Microsoft Visio XML Diagram (*.vdx)"
+msgstr "Diagrama Microsoft Visio (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:60
 msgid "File format used by Microsoft Visio 2010 and later"
@@ -15199,7 +15199,7 @@ msgstr "Windows Metafiles (*.wmf)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3157
 msgid "Windows Metafiles"
-msgstr "Windows Metafiles"
+msgstr "Meta ficheiros do Windows"
 
 #: ../src/extension/internal/wmf-inout.cpp:3164
 msgid "WMF Output"
@@ -20717,8 +20717,8 @@ msgid ""
 "Blend scale <b>diagonally</b> (top left tile uses original scale, bottom "
 "right tile uses new scale)"
 msgstr ""
-"Misturar escala <b>diagonalmente<b> (ladrilho superior esquerdo usa a escala "
-"original, o ladrilho inferior direito usa a nova escala)"
+"Misturar escala <b>diagonalmente</b> (ladrilho superior esquerdo usa a "
+"escala original, o ladrilho inferior direito usa a nova escala)"
 
 #: ../src/live_effects/lpe-tiling.cpp:863
 msgid "Uniform scale"
@@ -20726,14 +20726,14 @@ msgstr "Escala Uniforme"
 
 #: ../src/live_effects/lpe-tiling.cpp:864
 msgid "Random scale (hit <b>Randomize</b> button to shuffle)"
-msgstr "Escala aleatória (pressione <b>Aleatorizar<b> para misturar)"
+msgstr "Escala aleatória (pressione <b>Aleatorizar</b> para misturar)"
 
 #: ../src/live_effects/lpe-tiling.cpp:897
 msgid ""
 "Blend rotation from <b>left to right</b> (left column uses original "
 "rotation, right column uses new rotation)"
 msgstr ""
-"Misturar rotação da <b>esquerda para a direita<b> (a coluna esquerda usa a "
+"Misturar rotação da <b>esquerda para a direita</b> (a coluna esquerda usa a "
 "rotação original, a coluna direita usa a nova rotação)"
 
 #: ../src/live_effects/lpe-tiling.cpp:898
@@ -20749,7 +20749,7 @@ msgid ""
 "Blend rotation <b>diagonally</b> (top left tile uses original rotation, "
 "bottom right tile uses new rotation)"
 msgstr ""
-"Misturar rotação <b>diagonalmente<b> (ladrilho superior esquerdo usa a "
+"Misturar rotação <b>diagonalmente</b> (ladrilho superior esquerdo usa a "
 "escala original, o ladrilho inferior direito usa a nova escala)"
 
 #: ../src/live_effects/lpe-tiling.cpp:900
@@ -20758,7 +20758,7 @@ msgstr "Rotação uniforme"
 
 #: ../src/live_effects/lpe-tiling.cpp:901
 msgid "Random rotation (hit <b>Randomize</b> button to shuffle)"
-msgstr "Rotação aleatória (pressione <b>Aleatorizar<b> para misturar)"
+msgstr "Rotação aleatória (pressione <b>Aleatorizar</b> para misturar)"
 
 #: ../src/live_effects/lpe-tiling.cpp:928
 msgid "All horizontal gaps have the same width"
@@ -20767,7 +20767,8 @@ msgstr "Todos intervalos horizontais têm a mesma largura"
 #: ../src/live_effects/lpe-tiling.cpp:929
 msgid "Random horizontal gaps (hit <b>Randomize</b> button to shuffle)"
 msgstr ""
-"Intervalos horizontais aleatórios (pressione <b>Aleatorizar<b> para misturar)"
+"Intervalos horizontais aleatórios (pressione <b>Aleatorizar</b> para "
+"misturar)"
 
 #: ../src/live_effects/lpe-tiling.cpp:955
 msgid "All vertical gaps have the same height"
@@ -20776,7 +20777,7 @@ msgstr "Todos os intervalos verticais têm a mesma altura"
 #: ../src/live_effects/lpe-tiling.cpp:956
 msgid "Random vertical gaps (hit <b>Randomize</b> button to shuffle)"
 msgstr ""
-"Intervalos verticais aleatórios (pressione <b>Aleatorizar<b> para misturar)"
+"Intervalos verticais aleatórios (pressione <b>Aleatorizar</b> para misturar)"
 
 #: ../src/live_effects/lpe-tiling.cpp:1614
 msgid ""
@@ -20957,7 +20958,7 @@ msgid ""
 "open dialog, <b>Ctrl+Alt+Click</b> reset"
 msgstr ""
 "<b>Boleado  inverso</b>: <b>Ctrl+Clique</b> alterna o tipo, <b>Shift+Clique</"
-"b> abre a janela de diálogo, <b>Ctrl+Alt+Clique</b> repõe"
+"b> abre a janela de diálogo, <b>Ctrl+Alt+Clique</b> repor"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:225
 msgid ""
@@ -21519,7 +21520,7 @@ msgstr "Símbolo"
 
 #: ../src/object/sp-use.cpp:263 ../src/ui/dialog/livepatheffect-editor.cpp:497
 msgid "Clone"
-msgstr "Clone"
+msgstr "Clonar"
 
 #: ../src/object/sp-use.cpp:271 ../src/object/sp-use.cpp:273
 #: ../src/object/sp-use.cpp:275
@@ -24431,7 +24432,7 @@ msgstr "Alinhar à página:"
 
 #: ../src/ui/dialog/document-properties.cpp:1775
 msgid "Set angle from aspect ratio:"
-msgstr "Definir ângulo a partir do rácio"
+msgstr "Definir ângulo a partir do rácio:"
 
 #: ../src/ui/dialog/document-properties.cpp:1785
 msgid "Set"
@@ -26040,7 +26041,7 @@ msgstr "Cabeçalho de ficheiro ASE não reconhecido."
 
 #: ../src/ui/dialog/global-palettes.cpp:263
 msgid "ASE color mode not recognized:"
-msgstr "Modo de cor de ficheiro ASE não reconhecido."
+msgstr "Modo de cor de ficheiro ASE não reconhecido:"
 
 #: ../src/ui/dialog/global-palettes.cpp:299
 msgid "Failed to open file"
@@ -27560,7 +27561,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid "Cusp considered flat for deletion:"
-msgstr "Cúspide considerada achatada para eliminação"
+msgstr "Cúspide considerada achatada para eliminação:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid ""
@@ -28149,7 +28150,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1623
 msgid "_Zoom correction factor (in %)"
-msgstr "Factor de correção de _ampliação/redução (em %):"
+msgstr "Factor de correção de _ampliação/redução (em %)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1624
 msgid ""
@@ -28739,7 +28740,7 @@ msgstr "Miscelânea"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2093
 msgid "Whether the Welcome dialog will be shown when Inkscape starts."
-msgstr "Se a janela de de boas-vindas é mostrada quando o Inkscape inicia."
+msgstr "Se a janela de de Boas-Vindas é mostrada quando o Inkscape inicia."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2095
 msgid ""
@@ -29354,7 +29355,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2440
 msgid "User monitor profile:"
-msgstr "Usar perfil do monitor"
+msgstr "Usar perfil do monitor:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2445
 msgid "Use profile from user"
@@ -29513,7 +29514,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "Limit Undo Size:"
-msgstr "Limitar Lista de Desfazer"
+msgstr "Limitar Lista de Desfazer:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid ""
@@ -29525,7 +29526,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2554
 msgid "Maximum _Undo Size:"
-msgstr "Tamanho Máximo de Lista de _Desfazer"
+msgstr "Tamanho Máximo de Lista de _Desfazer:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid ""
@@ -29533,7 +29534,7 @@ msgid ""
 "memory."
 msgstr ""
 "Quão grande a lista de desfazer operações pode crescer até ser reduzida para "
-"libertar memória"
+"libertar memória."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid "Color stock markers the same color as object"
@@ -30371,7 +30372,7 @@ msgid ""
 "replace those of the target object when using 'Paste style'"
 msgstr ""
 "Os valores do 'estilo' e 'classe' do objecto serão copiados verbatim e irão "
-"substituir os valores do objecto alvo quando 'estilo Colar' é usado."
+"substituir os valores do objecto alvo quando 'estilo Colar' é usado"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2877
 msgid "Clipboard"
@@ -30764,7 +30765,7 @@ msgstr "Pintar uma cor translúcida aleatória em cada nova quadrícula desenhad
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3066
 msgid "Show unclean region"
-msgstr "Mostrar  da tela"
+msgstr "Mostrar região desactualizada"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3066
 msgid "Show the region that needs to be redrawn in red (only in Cairo mode)"
@@ -30773,7 +30774,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3068
 msgid "Show snapshot region"
-msgstr "Mostrar  da tela"
+msgstr "Mostrar região a armazenada"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3068
 msgid ""
@@ -31117,9 +31118,7 @@ msgstr "Ignorar palavras TOTALMENTE EM MAIÚSCULAS"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3715
 msgid "Ignore words in all capitals, such as \"IUPAC\""
-msgstr ""
-"Ignorar palavras com letras todas em maiúsculas, normalmente siglas como "
-"UNICEF, EUA, CPLP…"
+msgstr "Ignorar palavras todas em maiúsculas, como \"UNICEF\", \"EU\", \"EUA\""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3717
 msgid "Spellcheck"
@@ -31338,7 +31337,7 @@ msgstr "Sistema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3933
 msgid "<span size='large'><b>No Results</b></span>"
-msgstr "<span size=‘large’><b>Sem resultados</b></span>"
+msgstr "<span size=‘large’><b>Sem Resultados</b></span>"
 
 #: ../src/ui/dialog/knot-properties.cpp:99
 msgid "Modify Knot Position"
@@ -31581,7 +31580,6 @@ msgid ""
 "Select objects on canvas"
 msgstr ""
 "<b>Ferramenta Apanhar</b>\n"
-"\n"
 "Seleccionar objectos na tela"
 
 #: ../src/ui/dialog/object-attributes.cpp:517
@@ -33485,9 +33483,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, "
 "Shift+Y to make symmetric. (more: %s)"
 msgstr ""
-"<b>%s</b>: arrastar para formar o caminho, arrastar para o nó para eliminar "
-"o manípulo, <b>Shift+S</b> para suavizar, <b>Shift+Y</b> para fazer "
-"simétrico. (mais: %s)"
+"<b>%s</b>: arrastar para dar forma ao caminho, pairar o cursor para trancar, "
+"Shift+S para tornar suave, Shift+Y para tornar simétrico. (mais: %s)"
 
 #: ../src/ui/tool/node.cpp:698
 #, c-format
@@ -33496,8 +33493,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
 msgstr ""
-"<b>%s</b>: arrastar para formar o caminho, arrastar para o nó para eliminar "
-"o manípulo, <b>Shift+Y</b> para fazer simétrico. (mais: %s)"
+"<b>%s</b>: arrastar para dar forma ao caminho, pairar o cursor para trancar, "
+"Shift+Y para tornar simétrico. (mais: %s)"
 
 #: ../src/ui/tool/node.cpp:708
 #, c-format
@@ -33506,8 +33503,8 @@ msgid ""
 "<b>%s</b>: drag to make smooth, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
 msgstr ""
-"<b>%s</b>: arrastar para suavizar, pairar com cursor para bloquear, "
-"<b>Shift+Y</b> para fazer simétrico. (mais: %s)"
+"<b>%s</b>: arrastar para para tornar suave, pairar com cursor para bloquear, "
+"Shift+Y para fazer simétrico. (mais: %s)"
 
 #: ../src/ui/tool/node.cpp:717
 #, c-format
@@ -35380,7 +35377,7 @@ msgid ""
 "Shift+Click make a cusp node"
 msgstr ""
 "<b>Clicar</b> ou <b>clicar e arrastar</b> para fechar e terminar o caminho. "
-"<b>Shift+clicar</b> para fazer um nó agudo"
+"Shift+clique para fazer um nó pontiagudo"
 
 #: ../src/ui/tools/pen-tool.cpp:577
 msgid ""
@@ -35395,7 +35392,7 @@ msgid ""
 "Shift+Click make a cusp node"
 msgstr ""
 "<b>Clicar</b> ou <b>clicar e arrastar</b> para continuar o caminho a partir "
-"deste ponto. <b>Shift+clicar</b> para fazer um nó agudo"
+"deste ponto. Shift+clicar para fazer um nó pontiagudo"
 
 #: ../src/ui/tools/pen-tool.cpp:1697
 #, c-format
@@ -35612,7 +35609,7 @@ msgstr "Pré-Visualização Rápida"
 #: ../src/ui/tools/shortcuts.cpp:20
 msgid "Preview how the document will look while the key is pressed."
 msgstr ""
-"Pré visualizar como o documento ficará enquanto a tecla está pressionada"
+"Pré visualizar como o documento ficará enquanto a tecla está pressionada."
 
 #: ../src/ui/tools/shortcuts.cpp:21
 msgid "Quick Zoom"
@@ -36156,9 +36153,7 @@ msgstr "%s. Arrastar ou clicar para tornar <b>os caminhos rugosos</b>."
 #: ../src/ui/tools/tweak-tool.cpp:206
 #, c-format
 msgid "%s. Drag or click to <b>paint objects</b> with color."
-msgstr ""
-"%s. Arrastar ou clicar para <b>pintar objectos</b> com cor (apenas objectos "
-"com cor definida)"
+msgstr "%s. Arrastar ou clicar para <b>pintar objectos</b> com cor."
 
 #: ../src/ui/tools/tweak-tool.cpp:210
 #, c-format
@@ -36431,7 +36426,7 @@ msgstr "Sobreposição"
 #: ../src/ui/widget/filter-effect-chooser.cpp:37
 msgctxt "BlendMode"
 msgid "Soft Light"
-msgstr "Luz  Suave"
+msgstr "Luz Suave"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:38
 msgctxt "BlendMode"
@@ -36905,7 +36900,7 @@ msgid ""
 "overall width"
 msgstr ""
 "Alterar a espessura do traço (ou outras formas) sem afectar a largura total "
-"do tipo"
+"da fonte"
 
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
@@ -37287,7 +37282,7 @@ msgstr "Controla a rotação dos glifos em graus"
 #: ../src/ui/widget/font-variations.cpp:127
 msgctxt "Variable font axis"
 msgid "Unicode variation"
-msgstr "Variação Unicode:"
+msgstr "Variação Unicode"
 
 #: ../src/ui/widget/font-variations.cpp:127
 msgid "Controls the glyph’s unicode ID"
@@ -39393,7 +39388,7 @@ msgstr ""
 "<i>Importar através da biblioteca interna. Texto editável é reconstruído. "
 "Páginas, camadas e margens são preservadas, preenchimentos e traços de "
 "objectos são recombinados e malhas de gradientes são convertidos em "
-"ladrilhos.<i>"
+"ladrilhos.</i>"
 
 #: ../share/ui/extension-pdfinput.glade:193
 msgid "Family Name"
@@ -39452,7 +39447,7 @@ msgstr "Recortar a:"
 
 #: ../share/ui/extension-pdfinput.glade:439
 msgid "<b>Internal import</b>"
-msgstr "<b>Importação interna<b>"
+msgstr "<b>Importação interna</b>"
 
 #: ../share/ui/extension-pdfinput.glade:457
 msgid ""
@@ -39463,7 +39458,7 @@ msgstr ""
 "<i>Importar através de uma biblioteca externa. O texto consiste em grupos "
 "que contém glifos clonados onde cada um destes é um caminho. As imagens são "
 "armazenadas internamente. Malhas fazem com que o documento inteiro seja "
-"renderizado como uma imagem raster.<i>"
+"renderizado como uma imagem raster.</i>"
 
 #: ../share/ui/extension-pdfinput.glade:466
 msgid "<b>Cairo import</b>"
@@ -39499,7 +39494,7 @@ msgstr "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #: ../share/ui/font-list.glade:21
 msgctxt "font-sample-text"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr "Jovem craque belga prediz falhas no taxi"
+msgstr "Jovem craque belga prediz falhas no taxi."
 
 #. Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.
 #: ../share/ui/font-list.glade:22
@@ -39756,8 +39751,8 @@ msgid ""
 "<big><b>Do you want to get involved with Inkscape? <a href=\"https://"
 "inkscape.org/contribute/\">Check this page!</a></b></big>"
 msgstr ""
-"<big><b>Quer envolver-se com o Inkscape? <a href=“https://inkscape.org/pt/"
-"contribuir/“>Veja esta página!</a></b></big>"
+"<big><b>Quer envolver-se com o Inkscape? <a href=<a href="
+"\"https://inkscape.org/contribute/\">Veja esta página!</a></b></big>"
 
 #: ../share/ui/inkscape-about.glade:94
 msgid "List of authors who contributed to the code"
@@ -39789,8 +39784,8 @@ msgid ""
 "<big><b>See the full details about the Inkscape licenses <a href=\"https://"
 "inkscape.org/about/license/\">here</a>!</b></big>"
 msgstr ""
-"<big><b>Veja todos os detalhes sobre as licenças do Inkscape <a "
-"href=“https://inkscape.org/pt/sobre/licenciamento/“>aqui</a>!</b></big>"
+"<big><b>Veja todos os detalhes sobre as licenças do Inkscape  <a href="
+"\"https://inkscape.org/about/license/\">aqui</a>!</b></big>"
 
 #: ../share/ui/inkscape-about.glade:171
 msgid "License file failed to load."
@@ -39915,20 +39910,17 @@ msgstr ""
 "dedicação da comunidade, com conhecimento, perícia, tempo e ajuda financeira "
 "conseguimos desenvolver este programa dedicado a todas as pessoas do mundo, "
 "para que possam usufruir sem restrições e livre de custos.\n"
-"                Se quiser envolver-se e tornar a próxima versão do Inkscape "
-"ainda melhor, por favor considere juntar-se ao projecto Inkscape.</big>"
+"                <v>Se quiser envolver-se e tornar a próxima versão do "
+"Inkscape ainda melhor, por favor considere juntar-se ao projecto "
+"Inkscape.</b>"
 
 #: ../share/ui/inkscape-start.glade:551
 msgid "Learn how to Contribute Time"
-msgstr ""
-"Saiba como contribuir\n"
-"com tempo"
+msgstr "Saiba como Contribuir com Tempo"
 
 #: ../share/ui/inkscape-start.glade:587
 msgid "Learn how to Fund Inkscape"
-msgstr ""
-"Aprenda como ajudar\n"
-"financeiramente"
+msgstr "Aprenda como Financiar o Inkscape"
 
 #: ../share/ui/inkscape-start.glade:604
 msgid "Thanks!"
@@ -43599,7 +43591,7 @@ msgid ""
 "Ghostscript was unable to read the file. \n"
 "The following error message was returned:"
 msgstr ""
-"Ghostscript  não conseguiu ler o ficheiro,\n"
+"Ghostscript  não conseguiu ler o ficheiro.\n"
 "A seguinte mensagem de erro foi recebida:"
 
 #: ../share/extensions/raster_output_png.py:44
@@ -43736,6 +43728,9 @@ msgstr ""
 "\n"
 "Mensagem de erro: %s\n"
 "\n"
+"O converser SVG para Synfig foi concebido para lidar com ficheiros SVG que "
+"foram criados com o Inkscape. Funcionalidades não suportadas são mais "
+"prováveis de ocorrer em ficheiros escritos por outros programas.\n"
 
 #: ../share/extensions/text_split.py:176
 msgid ""
@@ -44361,7 +44356,7 @@ msgstr "Deslocamento normal:"
 
 #: ../share/extensions/distribute_along_path.inx:12
 msgid "Tangential offset (percentage of pattern length):"
-msgstr "Deslocamento tangencial (percentagem do comprimento do padrão)"
+msgstr "Deslocamento tangencial (percentagem do comprimento do padrão):"
 
 #: ../share/extensions/distribute_along_path.inx:13
 msgid "Rotate pattern 90° clockwise"
@@ -45555,32 +45550,32 @@ msgstr "Hershey Sans 1-stroke"
 #: ../share/extensions/hershey.inx:24
 msgctxt "Font name"
 msgid "Hershey Serif medium italic"
-msgstr "Hershey Serif medium italic"
+msgstr "Hershey Serif media italica"
 
 #: ../share/extensions/hershey.inx:26
 msgctxt "Font name"
 msgid "Hershey Serif bold"
-msgstr "Hershey Serif bold"
+msgstr "Hershey Serif negrito"
 
 #: ../share/extensions/hershey.inx:27
 msgctxt "Font name"
 msgid "Hershey Serif bold italic"
-msgstr "Hershey Serif bold italic"
+msgstr "Hershey Serif negrito italica"
 
 #: ../share/extensions/hershey.inx:29
 msgctxt "Font name"
 msgid "Hershey Script 1-stroke"
-msgstr "Hershey Script 1-stroke"
+msgstr "Hershey Script 1-traço"
 
 #: ../share/extensions/hershey.inx:30
 msgctxt "Font name"
 msgid "Hershey Script medium"
-msgstr "Hershey Script medium"
+msgstr "Hershey Script media"
 
 #: ../share/extensions/hershey.inx:45
 msgctxt "Font name"
 msgid "EMS Readability Italic"
-msgstr "EMS Readability Italic"
+msgstr "EMS Readability Italica"
 
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:49
@@ -45736,12 +45731,12 @@ msgid ""
 "The number of steps (plotter units) the plotter moves if it moves by 1 inch "
 "(Default: 1016.0)"
 msgstr ""
-"A quantidade de passos (unidades plotter) que a impressora plotter se "
-"desloca se se mover 1 polegada (Padrão: 1016.0)"
+"A quantidade de passos (unidades de plotter) que a impressora plotter se "
+"desloca se se mover 1 polegada (Pré-definição: 1016.0)"
 
 #: ../share/extensions/hpgl_input.inx:8
 msgid "Width (in):"
-msgstr "Largura (in)"
+msgstr "Largura (pol):"
 
 #: ../share/extensions/hpgl_input.inx:8
 msgid "Width of the PCL picture frame"
@@ -45808,8 +45803,8 @@ msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the X axis "
 "(Default: 1016.0)"
 msgstr ""
-"A quantidade de passos que a plotter se move se se mover 1 polegada no eixo "
-"do X (pré-definição: 1016.0)"
+"A quantidade de passos (unidades de plotter) que a impressora plotter se "
+"desloca se se mover 1 polegada no eixo X (Pré-definição: 1016.0)"
 
 #: ../share/extensions/hpgl_output.inx:11 ../share/extensions/plotter.inx:67
 msgid "Resolution Y (dpi):"
@@ -45820,8 +45815,8 @@ msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the Y axis "
 "(Default: 1016.0)"
 msgstr ""
-"A quantidade de passos que a plotter se move se se mover 1 polegada no eixo "
-"do Y (pré-definição: 1016.0)"
+"A quantidade de passos (unidades de plotter) que a impressora plotter se "
+"desloca se se mover Y polegada no eixo X (Pré-definição: 1016.0)"
 
 #: ../share/extensions/hpgl_output.inx:12 ../share/extensions/plotter.inx:68
 msgid "Pen number:"
@@ -45844,9 +45839,9 @@ msgid ""
 "The amount of force pushing down the pen in grams, set to 0 to omit command; "
 "most plotters ignore this command (Default: 0)"
 msgstr ""
-"A quantidade de força a puxar a caneta em gramas. Aplicar 0 para omitir o "
-"comando. A maioria das impressoras plotters ignora este comando (Pré-"
-"definição: 0)."
+"A quantidade de força a empurrar a caneta em gramas. Usar 0 para omitir o "
+"comando; a maioria das impressoras plotters ignora este comando "
+"(Pré-definição: 0)"
 
 #: ../share/extensions/hpgl_output.inx:14 ../share/extensions/plotter.inx:70
 msgid "Pen speed (cm/s or mm/s):"
@@ -45859,11 +45854,11 @@ msgid ""
 "ignore this command (Default: 0)Can be defined in the layer name together "
 "with the pen number. eg. (Pen3 Speed10)"
 msgstr ""
-"A velocidade que a caneta se move, em centímetros ou milímetros por segundo "
-"(dependendo do modelo da impressora plotter). Aplicar “0” para omitir o "
-"comando. A maioria das plotters ignoram este comando (Pré-definição: 0). "
-"Pode ser definido no nome da camada juntamente com o número da caneta. Por "
-"exemplo “Caneta 3 Velocidade 10”."
+"A velocidade que a caneta se move, em centímetros ou milímetros por segundo ("
+"dependendo do modelo da impressora plotter). Usar 0 para omitir o comando; a "
+"maioria das plotters ignoram este comando (Pré-definição: 0). Pode ser "
+"definido no nome da camada juntamente com o número da caneta, por exemplo ("
+"Caneta 3 Velocidade 10)"
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation (°, Clockwise):"
@@ -45939,7 +45934,7 @@ msgid ""
 "command (Default: 0.25)"
 msgstr ""
 "O desvio desde a ponta da ferramenta ao eixo da ferramenta em mm. Usar 0.0 "
-"para omitir este comando (Pré-definição: 0.25)."
+"para omitir este comando (Pré-definição: 0.25)"
 
 #: ../share/extensions/hpgl_output.inx:30 ../share/extensions/plotter.inx:86
 msgid "Precut"
@@ -45951,7 +45946,7 @@ msgid ""
 "align the tool orientation. (Default: Checked)"
 msgstr ""
 "Activar para cortar uma pequena linha antes do desenho começar para alinhar "
-"a orientação da ferramenta correctamente (Pré-definição: Activado)."
+"a orientação da ferramenta correctamente (Pré-definição: Activado)"
 
 #: ../share/extensions/hpgl_output.inx:31 ../share/extensions/plotter.inx:87
 msgid "Curve flatness:"
@@ -45975,10 +45970,10 @@ msgid ""
 "if used). If unchecked you have to make sure that all parts of your drawing "
 "are within the document border! (Default: Checked)"
 msgstr ""
-"Activar isto para alinhar automaticamente o desenho ao ponto zero (mais o "
-"desvio da ferramenta, se usado). Se desmarcado, deve confirmar que todas as "
-"partes do seu desenho se encontram dentro das bordas do documento! (Pré-"
-"definição: Marcado)."
+"Activar para alinhar automaticamente o desenho ao ponto zero (mais o desvio "
+"da ferramenta, se usado). Se desmarcado, deve confirmar que todas as partes "
+"do seu desenho se encontram dentro das bordas do documento! (Pré-definição: "
+"Marcado)"
 
 #: ../share/extensions/hpgl_output.inx:35 ../share/extensions/plotter.inx:92
 msgid ""
@@ -46139,15 +46134,15 @@ msgstr ""
 
 #: ../share/extensions/ink2canvas.inx:3
 msgid "Convert to html5 canvas"
-msgstr "Converter para tela  HTML5"
+msgstr "Converter para tela html5"
 
 #: ../share/extensions/ink2canvas.inx:8
 msgid "HTML 5 canvas (*.html)"
-msgstr "HTML 5 canvas (*.html)"
+msgstr "Tela HTML 5 (*.html)"
 
 #: ../share/extensions/ink2canvas.inx:9
 msgid "HTML 5 canvas code"
-msgstr "HTML 5 canvas code"
+msgstr "Código tela HTML 5"
 
 #: ../share/extensions/inkscape_follow_link.inx:3
 msgid "Follow Link"
@@ -47113,7 +47108,7 @@ msgstr ""
 "\n"
 "O caminho é gerado aplicando as \n"
 "substituições de Regras do Axioma, \n"
-"tempos do pedido. Os seguintes comandos são \n"
+"tempos de pedido. Os seguintes comandos são \n"
 "reconhecidos no Axioma e Regras:\n"
 "\n"
 "Qualquer um de A,B,C,D,E,F: andar em frente \n"
@@ -47124,12 +47119,11 @@ msgstr ""
 "\n"
 "-: virar à direita\n"
 "\n"
-"├: virar 180 graus\n"
+"|: virar 180 graus\n"
 "\n"
 "[: memorizar ponto\n"
 "\n"
 "]: retornar ao ponto memorizado\n"
-"\n"
 "\n"
 "Podem ser fornecidas várias regras \n"
 "Separando-as com ponto-e-vírgula (;).\n"
@@ -48212,9 +48206,8 @@ msgstr ""
 "\n"
 "cone....(45 graus)......................: w\n"
 "cone....(altura/diâmetro=10/3)..: 10*w/3\n"
-"5444\n"
 "esfera..(raios r)...........................: math.sqrt(max(0,r**2-w**2))\n"
-"elipse.(eixo secundário r, principal 4r).....: math.sqrt(max(0,r**2-w**2))*4"
+"elipse.(eixo menor r, eixo mair 4r).....: math.sqrt(max(0,r**2-w**2))*4"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:8
@@ -49010,7 +49003,7 @@ msgstr "A saída SVG optimizada é fornecida por"
 
 #: ../share/extensions/output_scour.inx:102
 msgid "Scour - An SVG Scrubber"
-msgstr "Scour - An SVG Scrubber"
+msgstr "Scour - Um Limpa SVGs"
 
 #: ../share/extensions/output_scour.inx:104
 msgid "For details please refer to"
@@ -49282,7 +49275,7 @@ msgstr ""
 
 #: ../share/extensions/pdflatex.inx:3
 msgid "Formula (pdflatex)"
-msgstr "Formula (pdflatex)"
+msgstr "Fórmula (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:8 ../share/extensions/typst_formula.inx:8
 msgid "Basic settings"
@@ -49631,8 +49624,8 @@ msgid ""
 "The force pushing down the pen in grams. Set to 0 to omit command; most "
 "plotters ignore this command (default: 0)"
 msgstr ""
-"A quantidade de força a puxar a caneta em gramas. Aplicar “0” para omitir o "
-"comando. A maioria das plotters ignora este comando (pré-definição: 0)."
+"A força a empurrar a caneta em gramas. Usar “0” para omitir o comando. A "
+"maioria das plotters ignora este comando (pré-definição: 0)"
 
 #: ../share/extensions/plotter.inx:70
 msgid ""
@@ -49642,10 +49635,10 @@ msgid ""
 "with the pen number (e.g. 'Pen 3 Speed 10')."
 msgstr ""
 "A velocidade que a caneta se movimenta em centímetros ou milímetros por "
-"segundo (dependendo do modelo da plotter). Aplicar o valor “0” para omitir o "
-"comando. A maioria das plotters ignoram este comando (pré-definição: 0). "
-"Pode ser definido no nome da camada junto com o nome da caneta (por exemplo "
-"'Caneta 3 Velocidade 10')"
+"segundo (dependendo do modelo da plotter). Usar “0” para omitir o comando. A "
+"maioria das plotters ignoram este comando (pré-definição: 0). Pode ser "
+"definido no nome da camada junto com o nome da caneta (por exemplo 'Caneta 3 "
+"Velocidade 10')."
 
 #: ../share/extensions/plotter.inx:71
 msgid "Rotation (°, clockwise):"
@@ -49693,7 +49686,7 @@ msgid ""
 "prevent open paths. Set to 0.0 to omit command (default: 1.00)."
 msgstr ""
 "A distância em mm que será cortada no ponto inicial do caminho para prevenir "
-"caminhos abertos. Usar 0.0 para omitir este comando (pré-definição: 1.00)"
+"caminhos abertos. Usar 0.0 para omitir este comando (pré-definição: 1.00)."
 
 #: ../share/extensions/plotter.inx:85
 msgid "Tool (knife) offset correction (mm):"
@@ -49721,7 +49714,7 @@ msgid ""
 "be reproduced, the smaller the finer (default: 1.2)."
 msgstr ""
 "As curvas são divididas em linhas. Este número controla quão finas as curvas "
-"serão reproduzidas. Quanto mais pequeno mais fino (pré-definição: 1.2)"
+"serão reproduzidas. Quanto mais pequeno mais fino (pré-definição: 1.2)."
 
 #: ../share/extensions/plotter.inx:88
 msgid ""
@@ -49731,7 +49724,7 @@ msgid ""
 msgstr ""
 "Marcar para alinhar automaticamente à origem (mais o desvio da ferramenta, "
 "se usado). Se desmarcado, deve confirmar que todas as partes do desenho se "
-"encontram dentro das bordas do documento! (Pré-definição: Marcado)."
+"encontram dentro das bordas do documento! (Pré-definição: Marcado)"
 
 #: ../share/extensions/polyhedron_3d.inx:3
 msgid "3D Polyhedron"
@@ -50147,7 +50140,7 @@ msgstr "JPEG"
 
 #: ../share/extensions/raster_output_tiff.inx:14
 msgid "Deflate"
-msgstr "Deflate"
+msgstr "Desinsuflar"
 
 #: ../share/extensions/raster_output_tiff.inx:15
 msgid "SGI Log"
@@ -50686,7 +50679,7 @@ msgstr "Intenção de visualização:"
 
 #: ../share/extensions/scribus_export_pdf.inx:34
 msgid "Scribus CMYK PDF (*.PDF)"
-msgstr "Scribus CMYK PDF (*.PDF)"
+msgstr "PDF CMYK Scribus (*.PDF)"
 
 #: ../share/extensions/scribus_export_pdf.inx:35
 msgid "Exports the document to PDF using Scribus"
@@ -51320,7 +51313,7 @@ msgstr "Rotação é no sentido horário"
 
 #: ../share/extensions/typst_formula.inx:3
 msgid "Formula (typst)"
-msgstr "Formula (typst)"
+msgstr "Fórmula (typst)"
 
 #: ../share/extensions/typst_formula.inx:9
 msgid "typst input:"
@@ -51642,7 +51635,7 @@ msgid ""
 "browser (like Firefox)."
 msgstr ""
 "Este efeito adiciona uma funcionalidade visível (ou usável) apenas num "
-"navegador de internet que suporte SVG (como o Firefox)"
+"navegador de internet que suporte SVG (como o Firefox)."
 
 #: ../share/extensions/web_set_att.inx:35
 msgid ""
