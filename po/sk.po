@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-23 17:49+0000\n"
+"PO-Revision-Date: 2025-04-28 23:06+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/sk/>\n"
@@ -6518,7 +6518,7 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-mode.cpp:267
 msgid "Display Mode: Outline Overlay"
-msgstr "Vykreslovací režim: Čiary+ Priehladnosť"
+msgstr "Vykreslovací režim: Čiary + Priehladnosť"
 
 #: ../src/actions/actions-canvas-mode.cpp:267
 #: ../share/ui/display-popup.glade:67
@@ -7085,10 +7085,8 @@ msgid "Rotate by a relative amount (radians)"
 msgstr ""
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
-#| msgid "Rotation, degrees"
 msgid "Rotate Absolute (Degrees)"
-msgstr "Rotácia (stupne)"
+msgstr "Absol= Rotácia (stupne)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
 #, fuzzy
