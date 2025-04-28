@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-27 21:53+0000\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
 "Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape.org>"
 "\n"
 "Language-Team: German <https://translate.inkscape.org/projects/inkscape/"
@@ -10810,26 +10810,20 @@ msgid "Rotate selected objects"
 msgstr "Ausgewählte Objekte drehen"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Optimieren durch Rotieren"
+msgstr "Schrittweise Drehen"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
-msgstr ""
-"Die gewählten Objekte um ein Mehrfaches der Schrittweite vergrößern/"
-"verkleinern"
+msgstr "Die gewählten Objekte um ein Mehrfaches der Schrittweite drehen"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "'Über Inkscape'-Bild"
+msgstr "Zoomabhängiges Drehen"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr "Die gewählten Objekte relativ zur Zoomstufe vergrößern/verkleinern"
+msgstr "Die gewählten Objekte relativ zur Zoomstufe (pixelweise) drehen"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -15786,13 +15780,14 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Keine überflüssigen Elemente in &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
 "Keine vorhandene Erweiterung von Inkscape kann das Dokument (%s) sichern. "
-"Dies Ursache dafür ist möglicherweise eine unbekannte Dateinamenendung."
+"Die Ursache dafür ist möglicherweise eine unbekannte oder fehlende "
+"Dateinamenendung."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -17583,7 +17578,7 @@ msgstr "Differenz"
 
 #: ../src/live_effects/lpe-bool.cpp:54
 msgid "symmetric difference"
-msgstr "Symmetrische Differenz"
+msgstr "Exklusiv-Oder (Ausschluss)"
 
 #: ../src/live_effects/lpe-bool.cpp:55
 msgid "division"
@@ -21773,13 +21768,12 @@ msgid "Deleted"
 msgstr "Gelöscht"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Umschalt+Ziehen</b> rotiert, <b>Strg+Ziehen</b> bewegt Ursprung, <b>Entf</"
-"b> löscht."
+"b> löscht; Eigenschaften der Hilfslinie bearbeiten mit <b>Doppelklick</b>"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -22128,21 +22122,19 @@ msgstr ""
 "auszuführen."
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
 msgstr ""
-"Wählen Sie <b>mindestens 2 Pfade</b> aus, um eine boolesche Operation "
-"auszuführen."
+"Wählen Sie <b>mindestens 2 Pfade</b> aus, um eine Überschneidungs- oder "
+"Exklusiv-Oder-(Ausschluss-)Operation auszuführen."
 
 #: ../src/path/path-boolop.cpp:378
-#, fuzzy
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
 msgstr ""
-"Wählen Sie <b>mindestens 2 Pfade</b> aus, um eine boolesche Operation "
-"auszuführen."
+"Wählen Sie <b>genau 2 Pfade</b> aus, um eine Differenz-, Divisions- oder "
+"Zerschneiden-Operation auszuführen."
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -29163,30 +29155,29 @@ msgid "GTK open/save dialogs"
 msgstr "GTK Dialoge für Öffnen/Speichern"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Glättung"
+msgstr "Nichts"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "nur Startbildschirm"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Willkommen in"
+msgstr "Willkommensdialog"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Zeige versteckte Überschneidungen"
+msgstr "Während Inkscape startet, zeige:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
 msgstr ""
+"Die Einstellung bestimmt, was während eines normalen Inkscape-Programmstarts "
+"zu sehen ist."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -33745,38 +33736,33 @@ msgstr "Formerstellungswerkzeug"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[NIE]"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
 msgstr "Strg"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "Versc_hiebung"
+msgstr "Umschalt"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Alles"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Supermarkt"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Metadaten"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -42226,9 +42212,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Öffnet den LPE-Dialog (erlaubt Anpassung der Parameterwerte)"
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Auf der Arbeitsfläche bearbeiten"
+msgstr "Markierung auf der Arbeitsfläche bearbeiten"
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -42292,9 +42277,8 @@ msgstr "Phantombild des aktuellen Maßstabs erstellen"
 
 # not sure here -cm-
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Zeichnung"
+msgstr "Einzeichnen"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -42471,9 +42455,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Zeige Ausschneidepfade der gewählten Objekte"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Nur ausgewählte Objekte"
+msgstr "Ein Objekt in der Zeichnung auswählen"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -43288,6 +43271,8 @@ msgid ""
 "DXF12 supports a maximum of 249 distinct colors. Please simplify color "
 "choices first."
 msgstr ""
+"DXF12 unterstützt maximal 249 unterschiedliche Farben. Bitte Anzahl der "
+"Farben reduzieren!"
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -44403,9 +44388,8 @@ msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Computer Graphics Metafile (CGM) importieren"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Bereinigen"
+msgstr "Pfad bereinigen"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44415,57 +44399,60 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Diese Erweiterung bereinigt einen Pfad durch die Entfernung doppelt "
+"angelegter Knoten oder das Verbinden nahe beieinander liegender Knoten in "
+"den gewählten Pfaden.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
-msgstr ""
+msgstr "Knoten von Segmenten, die kürzer als dies sind, interpolieren"
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Maximale Segmentlänge:"
+msgstr "Maximale Segmentlänge"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
-msgstr ""
+msgstr "Unterpfade, die kürzer als dies sind, löschen"
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Minimale Stichlänge [%]"
+msgstr "Minimale Unterpfadlänge"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
-msgstr ""
+msgstr "Unterpfade schließen bei Abstand der Endknoten geringer als"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Schwellwert"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
+"Endknoten unterschiedlicher Unterpfade miteinander verbinden, wenn ihr "
+"Abstand geringer ist als"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Pfadrichtung von Unterpfaden bei Bedarf umkehren"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Unterpfade verbinden"
+msgstr "Verbinde Unterpfade durch"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Keine Interpolation"
+msgstr "Interpolation von Knoten"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Segmente begradigen"
+msgstr "das Hinzufügen von Liniensegmenten"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44473,9 +44460,12 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"Die Einheit ist die Dokumenteneinheit (siehe Datei > Dokumenteinstellungen)."
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Information"
 
@@ -44492,6 +44482,18 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Diese Erweiterung wurde ursprünglich zum Bereinigen von Pfaden durch das "
+"Entfernen überzähliger Knoten oder kleiner Lücken für die Verwendung mit "
+"Plottern / Schneidemaschinen geschrieben.\n"
+"\n"
+"Übereinanderliegende Knoten mit identischen Koordinaten und Unterpfade mit "
+"einer Länge von 0 werden immer entfernt.\n"
+"Um Pfade miteinander verbinden zu können, müssen diese bereits zu einem Pfad "
+"kombiniert worden sein (als Unterpfade desselben Pfades).\n"
+"Zum Kombinieren die Pfade auswählen und im Menü Pfad > Kombinieren "
+"verwenden. \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -48253,26 +48255,24 @@ msgstr "Eine Affinity-Designer-Datei importieren"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "CGM-Import"
+msgstr "Linearity-Curve-/Vectornator-Import"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr ""
+msgstr "Linearity-Curve-Datei (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
-#, fuzzy
 msgid "Import a Linearity Curve file"
-msgstr "Eine Affinity-Designer-Datei importieren"
+msgstr "Eine Linearity-Curve-Datei importieren"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr ""
+msgstr "Vectornator-Datei (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr ""
+msgstr "Eine Vectornator-Datei importieren"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -52717,41 +52717,35 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Bearbeitung des Flatpak-Logos"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Mehrfache Farbverläufe"
+msgstr "Mehrseitige Dokumente"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Erste Schritte mit Inkscape"
+msgstr "Vektorbearbeitung mit Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Farbverlaufsbearbeitung aktiviert"
+msgstr "Farbverlaufsbearbeitung"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "Und viele weitere Fehlerkorrekturen!"
+msgstr "Viele Fehlerkorrekturen!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Viele Verbesserungen für den Affinity-Datei-Import"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Startbildschirm wird ... beim Laden / nach dem Laden angezeigt."
+msgstr "Startbildschirm beim Programmstart"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52979,13 +52973,12 @@ msgid "Much improved text line-height settings"
 msgstr "Stark verbesserte Einstellungen für die Zeilenhöhe von Texten"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:153
-#, fuzzy
 msgid ""
 "Variable fonts support (only if compiled with pango library version >= "
 "1.41.1)"
 msgstr ""
-"Unterstützung für variable Schriftarten (nur wenn mit Version &gt;= 1.41.1 "
-"der Pango-Bibliothek kompiliert)"
+"Unterstützung für variable Schriftarten (nur wenn mit Version >= 1.41.1 der "
+"Pango-Bibliothek kompiliert)"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:154
 msgid "Browser-compatible flowed text"
