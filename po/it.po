@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-19 11:06+0000\n"
+"PO-Revision-Date: 2025-04-28 22:06+0000\n"
 "Last-Translator: marco riva <oelimar@mail.com>\n"
-"Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/1-4-"
-"x/it/>\n"
+"Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8174,7 +8174,7 @@ msgstr "Inserisci nome file"
 
 #: ../src/actions/actions-file.cpp:128
 msgid "Namedview; Update=1, Replace=0"
-msgstr ""
+msgstr "Namedview; Aggiorna=1, Sostituisci=0"
 
 #: ../src/actions/actions-help-url.cpp:115 ../share/ui/menus.ui:1309
 msgid "Ask Us a Question"
@@ -10807,32 +10807,26 @@ msgstr ""
 "Ridimensiona gli oggetti selezionati relativamente alla visuale attuale"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Esporta Oggetti selezionati"
+msgstr "Rutoa gli oggetti selezionati"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Ritocco rotazione"
+msgstr "Incremento angolo di rotazione"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
 msgstr ""
-"Ridimensiona gli oggetti selezionati relativamente allo Scatto definito "
-"nelle Preferenze"
+"Ruota gli oggetti selezionati di un multiplo del valore impostato nelle "
+"preferenze"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Ruota gradiente"
+msgstr "Ruota lo schermo"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr ""
-"Ridimensiona gli oggetti selezionati relativamente alla visuale attuale"
+msgstr "Ruota gli oggetti selezionati relativamente al livello di ingrandimento"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -11156,8 +11150,9 @@ msgid "Close the active window, does not check for data loss"
 msgstr "Chiude la finestra attiva, senza controllare la perdita di dati"
 
 #: ../src/actions/actions-window.cpp:108
+#, fuzzy
 msgid "Window Query Geometry"
-msgstr ""
+msgstr "Geometria di query della finestra"
 
 #: ../src/actions/actions-window.cpp:108
 msgid "Query the active window's location and size"
@@ -14935,8 +14930,9 @@ msgid "Load from User File"
 msgstr "Carica da file"
 
 #: ../src/extension/internal/template-from-file.cpp:115
+#, fuzzy
 msgid "Custom list of templates for a folder"
-msgstr ""
+msgstr "Elenco personalizzato dei modelli per una cartella"
 
 #: ../src/extension/internal/template-from-file.cpp:116
 msgctxt "TemplateCategory"
@@ -15776,14 +15772,14 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Nessuna definizione non utilizzata in &lt;defs&gt;"
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
 "Non è stata trovata alcuna estensione di Inkscape per salvare il documento "
-"(%s). Ciò potrebbe esser stato causato da un'estensione del nome del file "
-"sconosciuta."
+"(%s). Ciò potrebbe esser stato causato da un'estensione  sconosciuta del "
+"nome del file."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -21735,13 +21731,13 @@ msgid "Deleted"
 msgstr "Cancellata"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Maiusc+trascina</b> per ruotare, <b>Ctrl+trascina</b> per spostare "
-"l'origine, <b>Canc</b> per cancellare"
+"l'origine, <b>Canc</b> per cancellare; <b>doppio clic</b> per modificare le "
+"proprietà di questa guida"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -22087,19 +22083,19 @@ msgid "Select <b>at least 1 path</b> to perform a boolean union."
 msgstr "Seleziona <b>almeno 1 tracciato</b> per effettuare un'unione booleana"
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
 msgstr ""
-"Seleziona <b>almeno 2 tracciati</b> per effettuare un'operazione booleana"
+"Seleziona <b>almeno 2 tracciati</b> per effettuare un'intersezione o una "
+"differenza simmetrica."
 
 #: ../src/path/path-boolop.cpp:378
-#, fuzzy
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
 msgstr ""
-"Seleziona <b>almeno 2 tracciati</b> per effettuare un'operazione booleana"
+"Seleziona <b>solamente 2 tracciati</b> per effettuare una differenza, "
+"divisione o taglio di tracciato."
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -29082,30 +29078,28 @@ msgid "GTK open/save dialogs"
 msgstr "Finestre apri/salva in stile GTK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Smussamento"
+msgstr "Nulla"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "Solo schermata di benvenuto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Schermo largo"
+msgstr "Schermata di benvenuto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Mostra le intersezioni nascoste"
+msgstr "All'inizio mostra:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
 msgstr ""
+"Impostare ciò che viene mostrato quando si carica il programma normalmente."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -31209,6 +31203,7 @@ msgstr "Usa aggiornamenti in blocco"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2991
 msgid "Update the dragged region as a single block"
 msgstr ""
+"Aggiorna la regione soggetta a trascinamento come se foss un blocco singolo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2994
 msgid "Persistent"
@@ -31223,9 +31218,8 @@ msgid "Synchronous"
 msgstr "Sincrono"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2996
-#, fuzzy
 msgid "Pixel streaming method"
-msgstr "Metodo riempimento"
+msgstr "Metodo di flusso dei pixel"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2996
 msgid ""
@@ -31233,6 +31227,9 @@ msgid ""
 "Auto, which picks the best method available at runtime. As for the other "
 "options, higher up is better."
 msgstr ""
+"Modifica il metodo utilizzato per il flusso dei dati dei pixel verso la GPU. "
+"Il default è Auto, che sceglie in tempo reale il metodo migliore "
+"disponibile. Per quanto riguarda le altre opzioni, più alto è meglio."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2999
 msgid "Buffer padding"
@@ -33671,31 +33668,27 @@ msgstr "Crea Forme"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[MAI]"
 
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
-msgstr "Ctrl, Alt"
+msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "Spos_tamento"
+msgstr "Maiuscolo"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Tutti"
+msgstr "Alt/Opt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Supermercato"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Iper"
 
 #: ../src/ui/modifiers.cpp:258
 #, fuzzy
@@ -35238,14 +35231,12 @@ msgstr "Stella: Imposta valori predefiniti"
 
 # i can't get this to work... Giambattista Caltabiano
 #: ../src/ui/toolbar/text-toolbar.cpp:274
-#, fuzzy
 msgid "Single spaced"
-msgstr "Scansione unica"
+msgstr "Monospazio"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:274
-#, fuzzy
 msgid "Double spaced"
-msgstr "Spazio non interrompibile"
+msgstr "Spaziatura doppia"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:275
 #: ../src/ui/toolbar/text-toolbar.cpp:276
@@ -37686,10 +37677,9 @@ msgid "Softness makes letterforms more soft and rounded"
 msgstr "Lo Smussamento rende i caratteri più arrotondati e dolci"
 
 #: ../src/ui/widget/font-variations.cpp:87
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Casual"
-msgstr "Visivo"
+msgstr "Casuale"
 
 #: ../src/ui/widget/font-variations.cpp:87
 msgid "Adjust the letterforms from a more serious style to a more casual style"
@@ -37726,11 +37716,13 @@ msgstr "Adatta i glifi da una larghezza proporzionale ad una larghezza fissa"
 #: ../src/ui/widget/font-variations.cpp:95
 msgctxt "Variable font axis"
 msgid "Wonky"
-msgstr ""
+msgstr "Traballante"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Binary switch used to control substitution of “wonky” forms"
 msgstr ""
+"Commutatore binario per il controllo della sostituzione delle forme "
+"\"traballanti\""
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgctxt "Variable font axis"
@@ -37767,7 +37759,7 @@ msgstr "Ottimizza per l'utilizzo ad una dimensione specifica"
 #: ../src/ui/widget/font-variations.cpp:106
 msgctxt "Variable font axis"
 msgid "Slant"
-msgstr ""
+msgstr "Inclinazione"
 
 #: ../src/ui/widget/font-variations.cpp:106
 msgid "Controls the font file’s slant parameter for oblique styles"
@@ -37885,14 +37877,16 @@ msgid "Controls the relative Y advance - vertical motion of the glyph"
 msgstr "Controlla l'avanzamento relativo lungo Y - moto verticale del glifo"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Relativo a:"
+msgstr "Relativo a"
 
 #: ../src/ui/widget/font-variations.cpp:123
+#, fuzzy
 msgid "Controls the relative second value - as in one second of animation time"
 msgstr ""
+"Controlla il relativo secondo valore - come in un secondo del tempo di "
+"animazione"
 
 #: ../src/ui/widget/font-variations.cpp:124
 msgctxt "Variable font axis"
@@ -40057,10 +40051,11 @@ msgstr "Fu questa volpe a ghermir d'un balzo il cane."
 
 #. Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.
 #: ../share/ui/font-list.glade:192
-#, fuzzy
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr "Yélløw ьüřtle fröm Áłphårettä íś čōmińgil fôr ïñęr đtòy."
+msgstr ""
+"£ì$tà dí çárâttèrî śpéćïälį ùšætī ∂å Àlt®€ lœñgûê: ò, ó, ô, ö, õ, ō, ø; ã, "
+"å, ā; ë, ę, ē, ü, ū; ß, č..."
 
 #: ../share/ui/font-list.glade:205
 msgid "Sort alphabetically"
@@ -42128,9 +42123,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Apre la finestra LPE (per la modifica dei parametri numerici)"
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Modifica sul disegno"
+msgstr "Modifica i marcatori direttamente nello spazio di lavoro."
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -42193,9 +42187,8 @@ msgid "Phantom measure"
 msgstr "Misura fantasma"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Disegno"
+msgstr "Disegna"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -42370,9 +42363,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Mostra i tracciati di fissaggio degli oggetti selezionati"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Solo oggetti selezionati"
+msgstr "Seleziona oggetti nello spazio di lavoro"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -43185,6 +43177,8 @@ msgid ""
 "DXF12 supports a maximum of 249 distinct colors. Please simplify color "
 "choices first."
 msgstr ""
+"DXF12 supporta un massimo di 249 colori distinti. Si prega di semplificare "
+"le scelte di colore."
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -44305,9 +44299,8 @@ msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Importa un file Computer Graphics Metafile (CGM)"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Pulisci"
+msgstr "Pulisci il tracciato"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44317,57 +44310,64 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Pulire il tracciato rimuovendo, nei percorsi selezionati, i nodi duplicati e "
+"unendo i nodi vicini.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
 msgstr ""
+"Interpola i nodi di segmenti con lunghezza totale inferiore a quella "
+"specificata"
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Lunghezza massima del segmento:"
+msgstr "Lunghezza minima del segmento"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
 msgstr ""
+"Rimuovere i sottotracciati con lunghezza totale inferiore a quella "
+"specificata"
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Lunghezza minima punto [%]"
+msgstr "Lunghezza minima del sottotracciato"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
+"Chiudi i sottotracciati quando i nodi iniziale e finale sono distanti meno di"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
+"Unisci i nodi finali dei sottotracciati singoli quando la loro distanza è "
+"inferiore a"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Consenti di invertire la direzione dei sottotracciati"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Connetti sottotracciati"
+msgstr "Unisci i sottotracciati di"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Passi d'interpolazione:"
+msgstr "nodi di interpolazione"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Appiattisci segmenti"
+msgstr "aggiungi segmenti dritti"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44375,6 +44375,9 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"Unità definita nel documento (File->Document Properties).\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
 #, fuzzy
@@ -44394,6 +44397,16 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Originariamente creata per ripulire i tracciati da nodi in eccesso o piccole "
+"interruzioni, per l'utilizzo con incisori/intagliatori laser.\n"
+"\n"
+"I nodi esattamente sovrapposti (coordinate identiche) ed i sottotracciati di "
+"lunghezza zero saranno sempre rimossi.\n"
+"Per unire i tracciati, assicurarsi che questi siano già stati combinati ("
+"cioè siano sottotracciati dello stesso tracciato).\n"
+"Per combinae i tracciati, selezionarli e premere Ctrl+K (o Cmd+K su Mac). \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -46312,6 +46325,10 @@ msgid ""
 "dependent pen size for anisotropic scaling, and pattern lengths may be "
 "incorrect"
 msgstr ""
+"La disabilitazione è utile per il debugging dei comandi IP/IR/SC, ma fa sì "
+"che la scalatura anisotropica sia collegata alla dimensione della penna, "
+"dipendente dalla sua direzione, quindi le lunghezze dei tracciati possono "
+"essere errate"
 
 #: ../share/extensions/hpgl_input.inx:12
 msgid "Break apart subpaths"
@@ -48225,26 +48242,24 @@ msgstr "Importa un file Affinity Designer"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "Input CGM"
+msgstr "Input della curva"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr ""
+msgstr "File di Linearity Curve (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
-#, fuzzy
 msgid "Import a Linearity Curve file"
-msgstr "Importa un file Affinity Designer"
+msgstr "Importa un file di Linearity Curve"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr ""
+msgstr "File di Vectornator (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr ""
+msgstr "Importa un file di Vectornator"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -48265,6 +48280,11 @@ msgid ""
 "animated. Canvas is more suitable for complex drawings where individual "
 "elements should be animated, or user controls be added into."
 msgstr ""
+"DrawingGroup supporta caratteristiche SVG meno complesse, ma generalmente ha "
+"prestazioni migliori, rendendolo adatto per i le collezioni di icone. Le "
+"Primitive non possono essere animate. Canvas è più adatto per disegni "
+"complessi in cui gli elementi individuali devono essere animati, o i "
+"controlli degli utenti devono essere aggiunti."
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:17
 #, fuzzy
@@ -48277,6 +48297,10 @@ msgid ""
 "layer if 'Layers as Resources' is enabled, the entire drawing otherwise) to "
 "facilitate using the drawing as Image source or Brush."
 msgstr ""
+"Un elemento di questo tipo sarà aggiunto per ogni disegno di alto livello ("
+"cioè ogni strato se è abilitato 'Livelli come Risorse', altrimenti l'intero "
+"disegno) per facilitare l'utilizzo del disegno come sorgente immagine o "
+"pennello."
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:25
 msgid ""
@@ -48284,6 +48308,9 @@ msgid ""
 "Span elements for WPF Canvas mode. Texts are always converted to path in "
 "DrawingGroup mode or when targeting Avalonia."
 msgstr ""
+"Per molti testi, c'è il supporto per esportarli come blocchi di testo "
+"editabili per il modo WPF di Canvas. I testi sono sempre convertiti in "
+"tracciati nella modalità DrawingGroup."
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:30
 msgid "Export layers as separate top-level resources"
@@ -52827,17 +52854,15 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Modifica un logo Flatpak"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Più gradienti"
+msgstr "Modifica multipagina"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Primi passi con Inkscape"
+msgstr "Modifica con Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
 #, fuzzy
@@ -52845,9 +52870,8 @@ msgid "Gradient editing"
 msgstr "Abilita l'editore di gradiente"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
 #, fuzzy
@@ -52856,12 +52880,11 @@ msgstr "E molti altri errori corretti!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Diversi miglioramenti nell'importazione dei file di Affinity"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Seleziona uno script da caricare"
+msgstr "Schermata di benvenuto al caricamento"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52873,7 +52896,7 @@ msgstr "Galleria delle estensioni"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:75
 msgid "Experimental unified font browser"
-msgstr ""
+msgstr "Navigatore di caratteri unificato, sperimentale"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:76
 msgid "Customizable handles"
