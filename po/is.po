@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-29 10:32+0000\n"
+"PO-Revision-Date: 2025-04-29 11:59+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/is/>\n"
@@ -31239,7 +31239,7 @@ msgstr "Breyta gildi stafhnikunar"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:786
 #: ../share/extensions/setup_typography_canvas.py:69
 msgid "ascender"
-msgstr "hálína"
+msgstr "háleggur"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:787
 #: ../share/extensions/setup_typography_canvas.py:70
@@ -31258,7 +31258,7 @@ msgstr "grunnlína"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:790
 #: ../share/extensions/setup_typography_canvas.py:72
 msgid "descender"
-msgstr "láglína"
+msgstr "lágleggur"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:811
 msgid "Set up typography canvas"
@@ -31323,12 +31323,12 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:850
 #: ../share/extensions/setup_typography_canvas.inx:6
 msgid "Ascender:"
-msgstr "Hálína:"
+msgstr "Háleggur:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:850
 msgid ""
 "Amount of space taken up by ascenders like the tall line on the letter 'h'"
-msgstr "Pláss sem þarf fyrir hálínur eins og uppréttu línuna í stafnum 'h'"
+msgstr "Pláss sem þarf fyrir háleggi eins og uppréttu línuna í stafnum 'h'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:851
 msgid "Caps height:"
@@ -31351,12 +31351,11 @@ msgstr "Hæð lágstafs upp fyrir grunnlínu eins og í stafnum 'x'"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:853
 #: ../share/extensions/setup_typography_canvas.inx:9
 msgid "Descender:"
-msgstr "Láglína:"
+msgstr "Lágleggur:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:853
 msgid "Amount of space taken up by descenders like the tail on the letter 'g'"
-msgstr ""
-"Pláss sem þarf fyrir láglínur eins og niðurteygða skottið í stafnum 'g'"
+msgstr "Pláss sem þarf fyrir lágleggi eins og niðurteygða skottið í stafnum 'g'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:887
 msgid "Set up canvas"
