@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 13:23+0000\n"
+"PO-Revision-Date: 2025-04-29 13:37+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -15493,7 +15493,7 @@ msgstr "Vidéo SD PAL"
 
 #: ../src/extension/internal/template-video.cpp:39
 msgid "Video SD Widescreen / PAL"
-msgstr "Vidéo SD-Large / PAL"
+msgstr "Vidéo SD écran large / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
 msgid "Video SD NTSC"
@@ -15501,7 +15501,7 @@ msgstr "Vidéo SD / NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
 msgid "Video SD Widescreen NTSC"
-msgstr "Vidéo SD-Large / NTSC"
+msgstr "Vidéo SD écran large / NTSC"
 
 #: ../src/extension/internal/template-video.cpp:42
 msgid "Video HD 720p"
