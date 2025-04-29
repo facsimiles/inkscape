@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-28 22:06+0000\n"
+"PO-Revision-Date: 2025-04-29 17:11+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hu/>\n"
@@ -8001,7 +8001,7 @@ msgstr "Szerkesztés külső alkalmazással"
 #: ../src/actions/actions-element-image.cpp:211
 msgid "Edit image externally (image must be selected and not embedded)."
 msgstr ""
-"Kép külső szerkesztése (a képet ki kell jelölni és nem lehet beágyazott),"
+"Kép külső szerkesztése (a képet ki kell jelölni és nem lehet beágyazott)."
 
 #: ../src/actions/actions-file-window.cpp:115
 #: ../src/ui/dialog/document-properties.cpp:977
@@ -10470,7 +10470,7 @@ msgid ""
 "objects."
 msgstr ""
 "Kijelölt objektumok permetezése: <b>húzással</b>, <b>kattintással</b> vagy "
-"<b>kattintással + görgetéssel</b>,"
+"<b>kattintással + görgetéssel</b>."
 
 #: ../src/actions/actions-tools.cpp:107
 msgid "<b>Click and drag</b> between shapes to create a connector."
@@ -11258,7 +11258,7 @@ msgstr "Nem ismert kijelölés: „%1”"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:321
 msgid "Empty or improper property, skipped."
-msgstr "Üres vagy helytelen tulajdonság, kihagyva"
+msgstr "Üres vagy helytelen tulajdonság, kihagyva."
 
 #: ../src/display/control/ctrl-handle-styling.cpp:327
 msgid "Unrecognized property '%1'"
