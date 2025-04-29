@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 11:59+0000\n"
+"PO-Revision-Date: 2025-04-29 13:24+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/is/>\n"
@@ -19981,7 +19981,7 @@ msgstr "Merkja horn:"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
 msgid "Rotate marks (-180° to 180°)"
-msgstr ""
+msgstr "Snúa merkjum (-180° til 180°)"
 
 #: ../src/live_effects/lpe-ruler.cpp:54
 msgid "Shift marks _by:"
@@ -20964,7 +20964,7 @@ msgstr "Líma viðfang ferils"
 #: ../src/live_effects/parameter/path.cpp:598
 #: ../src/live_effects/parameter/patharray.cpp:134
 msgid "Link path parameter to path"
-msgstr ""
+msgstr "Tengja færibreytu ferils við feril"
 
 #: ../src/live_effects/parameter/patharray.cpp:103
 msgid "Visible"
