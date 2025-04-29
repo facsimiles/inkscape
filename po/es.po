@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-28 22:06+0000\n"
+"PO-Revision-Date: 2025-04-29 13:23+0000\n"
 "Last-Translator: Lucas Vieites <lucasvieites@gmail.com>\n"
 "Language-Team: Spanish <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/es/>\n"
@@ -4217,7 +4217,7 @@ msgstr "Fusionar"
 #: ../../build/share/symbols/symbols.h:149
 msgctxt "Symbol"
 msgid "Decision"
-msgstr "Decision"
+msgstr "Decisión"
 
 #: ../../build/share/symbols/symbols.h:150
 msgctxt "Symbol"
@@ -8421,7 +8421,7 @@ msgstr "Cambiar a la capa anterior"
 
 #: ../src/actions/actions-layer.cpp:255
 msgid "Switched to previous layer."
-msgstr "Cambiado a la capa anterior"
+msgstr "Cambiado a la capa anterior."
 
 #: ../src/actions/actions-layer.cpp:257
 msgid "Cannot go before first layer."
@@ -11585,7 +11585,7 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
-" La causa de esto es un archivo .inx incorrecto para esta extensión. Un "
+"  La causa de esto es un archivo .inx incorrecto para esta extensión. Un "
 "archivo inx incorrecto puede ser el resultado de una instalación defectuosa "
 "de Inkscape."
 
@@ -15626,7 +15626,7 @@ msgstr "Vista en directo"
 
 #: ../src/extension/prefdialog/prefdialog.cpp:216
 msgid "Is the effect previewed live on canvas?"
-msgstr "¿Se previsualiza el el efecto en el lienzo?"
+msgstr "¿Se previsualiza el efecto en el lienzo?"
 
 #: ../src/extension/system.cpp:133 ../src/extension/system.cpp:135
 msgid ""
@@ -15718,9 +15718,9 @@ msgid ""
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
 "<small>Hemos actualizado Inkscape para que cumpla el estándar CSS de 96 PPP "
-"para mejor compatibilidad con navegadores web; solíamos usar 90 PPP. El arte "
-"digital para uso en pantallas se convertirá a 96 PPP sin escalado y no "
-"debería verse afectado.\n"
+"para mejor compatibilidad con navegadores web; solíamos usar 90 PPP.\n"
+"El arte digital para uso en pantallas se convertirá a 96 PPP sin escalado y "
+"no debería verse afectado.\n"
 "Los diseños creados a 90 PPP para un tamaño físico en concreto serán "
 "demasiado pequeños si se convierten a 96 PPP sin escalado. Hay dos métodos "
 "de escalado:\n"
@@ -15732,13 +15732,13 @@ msgstr ""
 "correcto.\n"
 "\n"
 "<b>Escalar elementos individuales en el dibujo:</b> Este método es menos "
-"fiable y puede resultar en un cambio de aspecto, pero es mejor para un medio "
-"externo (soporte físico) que dependa de tamaños y posicionamientos exactos "
-"(por ejemplo, para impresión 3D.)\n"
+"fiable y puede resultar en un cambio de aspecto,\n"
+"pero es mejor para un medio externo (soporte físico) que dependa de tamaños "
+"y posicionamientos exactos (por ejemplo, para impresión 3D.)\n"
 "\n"
 "Hay más información disponible acerca de este cambio en <a href='https://"
-"inkscape.org/en/learn/faq#dpi_change'>Inkscape - Preguntas frecuentes</a></"
-"small>"
+"inkscape.org/en/learn/faq#dpi_change'>Inkscape - Preguntas "
+"frecuentes</a></small>"
 
 #: ../src/file-update.cpp:373 ../share/ui/attribute-edit-component.glade:210
 msgid "OK"
@@ -16274,8 +16274,7 @@ msgstr "Leer archivo de entrada de la entrada estándar (stdin)"
 
 #: ../src/inkscape-application.cpp:729
 msgid "Page numbers to import from multi-page document, i.e. PDF"
-msgstr ""
-"Números de las página a importar de un un documento multipágina, p.ej. PDF"
+msgstr "Números de las página a importar de un documento multipágina, p.ej. PDF"
 
 #: ../src/inkscape-application.cpp:729
 msgid "PAGE[,PAGE]"
@@ -20469,7 +20468,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-ruler.cpp:48
 msgid "Major mar_k gap:"
-msgstr "Espacio de mar_ca mayor"
+msgstr "Espacio de mar_ca mayor:"
 
 #: ../src/live_effects/lpe-ruler.cpp:50
 #, no-c-format
@@ -21033,8 +21032,8 @@ msgid ""
 "Split elements, so they can be selected, styled, and moved (if grouped) "
 "independently"
 msgstr ""
-"Separar elementos para que puedan sel seleccionados, estilizado, y movidos "
-"(si están agrupados) independientemente."
+"Separar elementos para que puedan ser seleccionados, estilizado, y movidos ("
+"si están agrupados) independientemente."
 
 #: ../src/live_effects/lpe-tiling.cpp:107
 msgid "Mirror rows in X"
@@ -23007,7 +23006,7 @@ msgstr "Restablecer centro"
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>%s</b> to lock ratio"
 msgstr ""
-"<b>Escala</b>:  %0.2f%% x %0.2f%%; con <b>%s</b> para bloquear proporción"
+"<b>Escala</b>: %0.2f%% x %0.2f%%; con <b>%s</b> para bloquear proporción"
 
 #. TRANSLATORS: don't modify the first ";"
 #. (it will NOT be displayed as ";" - only the second one will be)
@@ -23209,7 +23208,7 @@ msgstr "No hay tamaño en el portapapeles."
 #: ../src/ui/clipboard.cpp:852
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr ""
-"Seleccione los <b>objetos</b> a los que pegar el el efecto de trayecto vivo."
+"Seleccione los <b>objetos</b> a los que pegar el efecto de trayecto vivo."
 
 #: ../src/ui/clipboard.cpp:879
 msgid "No effect on the clipboard."
@@ -24401,7 +24400,7 @@ msgstr "par de números decimales"
 
 #: ../src/ui/dialog/command-palette.cpp:574
 msgid "Enter a %1..."
-msgstr "Introduzca un(a) %1"
+msgstr "Introduzca un(a) %1..."
 
 #: ../src/ui/dialog/command-palette.cpp:1082
 msgid "Enter search term to search for a command"
@@ -25100,7 +25099,7 @@ msgstr "Cambiar color de rejilla"
 
 #: ../src/ui/dialog/document-properties.cpp:1925
 msgid "Change grid number of lines"
-msgstr "Cambiar número  de líneas de rejilla"
+msgstr "Cambiar número de líneas de rejilla"
 
 #: ../src/ui/dialog/document-properties.cpp:2016
 msgid "Block _width:"
@@ -26044,8 +26043,8 @@ msgid ""
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
-"Determina cómo extender la imagen de entrada lo necesaro con valores de "
-"color de modo que  las operaciones de matriz se puedan aplicar cuando el "
+"Determina cómo extender la imagen de entrada lo necesario con valores de "
+"color de modo que las operaciones de matriz se puedan aplicar cuando el "
 "núcleo esté posicionado en o cerca de la imagen de entrada."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2983
@@ -26577,7 +26576,7 @@ msgstr "Tipografía «%1» sustituida por «%2»"
 
 #: ../src/ui/dialog/global-palettes.cpp:117
 msgid "ACB file header not recognized."
-msgstr "No se ha reconocido la cabecera de archivo ABC"
+msgstr "No se ha reconocido la cabecera de archivo ACB"
 
 #: ../src/ui/dialog/global-palettes.cpp:166
 msgid "ACB file color space not supported."
@@ -27968,7 +27967,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:963
 msgid "Per-object selection cue"
-msgstr "Marca de de selección por cada objeto"
+msgstr "Marca de selección por cada objeto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:964
 msgctxt "Selection cue"
@@ -32003,7 +32002,7 @@ msgstr "Experimental"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:483
 msgid "Text objects do not support Live Path Effects"
-msgstr "Los objetos de texto no soportan  efectos de trayecto vivo (LPE)"
+msgstr "Los objetos de texto no soportan efectos de trayecto vivo (LPE)"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:518
 #: ../src/ui/dialog/livepatheffect-editor.cpp:568
@@ -32203,7 +32202,7 @@ msgstr "Cambiar tipo de arco"
 
 #: ../src/ui/dialog/object-attributes.cpp:905
 msgid "Nodes: "
-msgstr "Nodos:"
+msgstr "Nodos: "
 
 #: ../src/ui/dialog/object-attributes.cpp:926
 msgid "Change path"
@@ -33781,9 +33780,10 @@ msgid ""
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Sitúe el <b>punto de inicio</b> del arco o segmento;con <b>Mayús</b> para "
-"mover con , con <b>Ctrl</b> para fijar el ángulo; arrastre <b>por dentro</b> "
-"para obtener la elipse del arco, <b>por fuera</b> para obtener el segmento"
+"Sitúe el <b>punto de inicio</b> del arco o segmento; con <b>Mayús</b> para "
+"mover con el <b>punto final</b>, con <b>Ctrl</b> para fijar el ángulo; "
+"arrastre <b>por dentro</b> para obtener la elipse del arco, <b>por fuera</b> "
+"para obtener el segmento"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1660
 msgid ""
@@ -33792,8 +33792,9 @@ msgid ""
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
 "Sitúe el <b>punto de inicio</b> del arco o segmento;con <b>Mayús</b> para "
-"acompañar, con <b>Ctrl</b> para fijar el ángulo; arrastre <b>por dentro</b> "
-"para obtener la elipse del arco, <b>por fuera</b> para obtener el segmento."
+"mover con el <b>punto de inicio</b>, con <b>Ctrl</b> para fijar el ángulo; "
+"arrastre <b>por dentro</b> para obtener la elipse del arco, <b>por fuera</b> "
+"para obtener el segmento."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1665
 msgid "Drag to move the ellipse"
@@ -36054,7 +36055,7 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp "
 "node, <b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b>Segmento de línea</b>: ángulo de %3.2f&#176;;  con <b>Mayús+clic</b> para "
+"<b>Segmento de línea</b>: ángulo de %3.2f&#176;; con <b>Mayús+clic</b> para "
 "nodo cúspide <b>Alt</b> mover anterior, <b>Enter</b> o <b>Mayús+Enter</b> "
 "para terminar"
 
@@ -36188,7 +36189,7 @@ msgid ""
 "ratio, or golden-ratio rectangle; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
-"<b>Rectángulo</b>: %s&#215;  %s; con <b>Ctrl</b> crear un cuadrado, un "
+"<b>Rectángulo</b>: %s&#215; %s; con <b>Ctrl</b> crear un cuadrado, un "
 "rectángulo de proporción entera, o uno de proporción áurea; con <b>Mayús</b> "
 "para dibujar alrededor del punto inicial"
 
@@ -37398,7 +37399,7 @@ msgstr "Versalita pequeña (minúsculas). Tabla Opentype: 'pcap'"
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
-"Todo versalita pequeña (mayúsculas y minúsculas). Tablas Opentype: 'c2sc' y  "
+"Todo versalita pequeña (mayúsculas y minúsculas). Tablas Opentype: 'c2sc' y "
 "'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:318
@@ -37634,7 +37635,7 @@ msgstr "Variar la altura de los ascendentes de minúsculas"
 #: ../src/ui/widget/font-variations.cpp:74
 msgctxt "Variable font axis"
 msgid "Descender depth"
-msgstr "Profundidad  de descendente"
+msgstr "Profundidad de descendente"
 
 #: ../src/ui/widget/font-variations.cpp:74
 msgid "Vary the depth of lowercase descenders"
@@ -40087,7 +40088,7 @@ msgstr "Muestra"
 
 #: ../share/ui/font-list.glade:449
 msgid "Preview size"
-msgstr "Tamaño de vista previa:"
+msgstr "Tamaño de vista previa"
 
 #: ../share/ui/font-list.glade:458
 msgid "Show font name"
@@ -40999,7 +41000,7 @@ msgstr ""
 
 #: ../share/ui/align-and-distribute.ui:1000
 msgid "Align selected nodes to a common horizontal line"
-msgstr "Alinear los nodos seleccionados  a una línea común horizontal"
+msgstr "Alinear los nodos seleccionados a una línea común horizontal"
 
 #: ../share/ui/align-and-distribute.ui:1020
 msgid "Align selected nodes to a common vertical line"
@@ -42760,7 +42761,7 @@ msgstr "Evitar objetos solapados"
 
 #: ../share/ui/toolbar-spray.ui:537
 msgid "Increase to segregate objects more (value in percent)"
-msgstr "Incrementar para separar más los objetos (valor en porcentaje):"
+msgstr "Incrementar para separar más los objetos (valor en porcentaje)"
 
 #: ../share/ui/toolbar-spray.ui:595
 msgid ""
@@ -43535,8 +43536,8 @@ msgid ""
 "{} is now a property of the SvgDocumentElement class. Use `self.svg.width` "
 "instead."
 msgstr ""
-"{} ahora es una propiedad de la clase SvgDocumentElement. Utilice  «self.svg."
-"width» en su lugar."
+"{} ahora es una propiedad de la clase SvgDocumentElement. Utilice "
+"«self.svg.width» en su lugar."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:256
 msgid ""
@@ -44320,9 +44321,8 @@ msgid "Remove subpaths with total length less than specified length"
 msgstr "Eliminar subtrayectos con una longitud total inferior a la indicada"
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Longitud mínima de puntada [%]"
+msgstr "Longitud mínima de subtrayecto"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
@@ -44333,7 +44333,7 @@ msgstr ""
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Límite"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
@@ -44388,6 +44388,16 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Creado originalmente para limpiar los trayectos para cortadores/plóters, al "
+"eliminar nodos supérfluos o pequeños huecos.\n"
+"\n"
+"Los nodos duplicados (coordenadas exactamente iguales) y subtrayectos de "
+"longitud cero siempre se eliminaran.\n"
+"Para unir trayectos, asegúrese de que los trayectos a considerar ya estén "
+"combinados (subtrayecto del mismo trayecto).\n"
+"Para combinar trayectos, selecciónelos y pulse Ctrl+K. \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -45091,7 +45101,6 @@ msgstr ""
 "- para escalado manual, asume que el dibujo dxf está en mm.\n"
 "- asume que el dibujo svg está en píxeles, a 96 ppp.\n"
 "- el factor de escala y origen solamente se aplican al escalado manual.\n"
-"\n"
 "- para determinar la escala del texto cf. dxf_input_text_scale_factor.svg \n"
 "- «Escalado automático» se ajustará al ancho de una hoja A4\n"
 "- «Cargar desde archivo» utiliza la variable $MEDIDA.\n"
@@ -45327,7 +45336,7 @@ msgid ""
 "false, they will be inserted in newly created group. Only applies to "
 "mode=lines."
 msgstr ""
-"Si es cierto, las líneas conectadas se insertarán como subtrayectos de un un "
+"Si es cierto, las líneas conectadas se insertarán como subtrayectos de un "
 "solo trayecto. Si es falso, se insertarán en un grupo nuevo. Solo se aplica "
 "a modo=líneas."
 
@@ -45472,7 +45481,7 @@ msgstr "Color de relleno:"
 
 #: ../share/extensions/frame.inx:29
 msgid "Stroke width (user units)"
-msgstr "Ancho de trazo (unidades de usuario):"
+msgstr "Ancho de trazo (unidades de usuario)"
 
 #: ../share/extensions/frame.inx:30
 msgid "Stacking order"
@@ -45831,11 +45840,11 @@ msgstr "Grosor de división principal (px):"
 
 #: ../share/extensions/grid_isometric.inx:11
 msgid "Minor Division Thickness (px):"
-msgstr "Espaciado de división secundaria (px)"
+msgstr "Grosor de división secundaria (px):"
 
 #: ../share/extensions/grid_isometric.inx:12
 msgid "Subminor Division Thickness (px):"
-msgstr "Grosor de división secundaria (px)"
+msgstr "Grosor de división secundaria (px):"
 
 #: ../share/extensions/grid_isometric.inx:13
 msgid "Border Thickness (px):"
@@ -49251,7 +49260,7 @@ msgstr ""
 "Indica la cantidad de dígitos significativos que deberían ser la salida para "
 "las coordenadas. Fíjese en que los dígitos significativos *no* son el número "
 "de decimales, pero el total de dígitos en la salida. Por ejemplo si se "
-"indica un un valor de \"3\", la coordenada 3.14159 será 3.14 mientras que la "
+"indica un valor de \"3\", la coordenada 3.14159 será 3.14 mientras que la "
 "coordenada 123.675 será 124."
 
 #: ../share/extensions/output_scour.inx:14
@@ -52555,7 +52564,7 @@ msgstr ""
 "clones, mezcla alfa, etc.) y se pone mucho cuidado en el diseño de una "
 "interfaz optimizada. Es muy fácil de editar nodos, realizar operaciones "
 "complejas con rutas, mapas de bits y mucho más. También tenemos como "
-"objetivo mantener una  próspera comunidad de desarrolladores y usuarios "
+"objetivo mantener una próspera comunidad de desarrolladores y usuarios "
 "mediante el uso de desarrollo abierto, orientado a la comunidad."
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
@@ -52589,7 +52598,7 @@ msgstr "Y muchas más correcciones de erratas"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Varias mejoras en el importador de archivos affinity"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
 #, fuzzy
