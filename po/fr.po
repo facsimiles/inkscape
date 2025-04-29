@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 10:32+0000\n"
+"PO-Revision-Date: 2025-04-29 13:23+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -1831,7 +1831,7 @@ msgstr "Poster de bruit croisé"
 
 #: ../../build/share/filters/filters.svg.h:672
 msgid "Overlay with a small scale screen like noise"
-msgstr "Ajouter un grain de photo à l'image"
+msgstr "Ajouter un léger grain de photo à l'image"
 
 #: ../../build/share/filters/filters.svg.h:674
 msgid "Cross Noise Poster B"
@@ -1839,7 +1839,7 @@ msgstr "Poster de bruit croisé B"
 
 #: ../../build/share/filters/filters.svg.h:676
 msgid "Adds a small scale screen like noise locally"
-msgstr "Ajoute du bruit localement"
+msgstr "Ajoute un léger grain de photo localement"
 
 #: ../../build/share/filters/filters.svg.h:678
 #: ../../build/share/filters/filters.svg.h:680
@@ -1890,7 +1890,7 @@ msgstr "Bruit croisé"
 
 #: ../../build/share/filters/filters.svg.h:704
 msgid "Adds a small scale screen like graininess"
-msgstr "Ajoute du grain"
+msgstr "Ajoute une légère granulosité"
 
 #: ../../build/share/filters/filters.svg.h:706
 msgid "Duotone Turbulent"
@@ -6781,7 +6781,9 @@ msgstr "Mode d'affichage : Améliorer les traits fins"
 #: ../src/actions/actions-canvas-mode.cpp:271
 #: ../share/ui/display-popup.glade:88
 msgid "Ensure all strokes are displayed on screen as at least 1 pixel wide"
-msgstr "S'assure que tous les contours affichés ont au moins un pixel de large"
+msgstr ""
+"Assurer que tous les contours affichés à l'écran ont au moins un pixel de "
+"large"
 
 #: ../src/actions/actions-canvas-mode.cpp:272
 msgid "Display Mode: Outline Overlay"
@@ -9781,19 +9783,19 @@ msgstr ""
 
 #: ../src/actions/actions-paths.cpp:266
 msgid "Inset Screen"
-msgstr "Écran incrusté"
+msgstr "Éroder à l'écran"
 
 #: ../src/actions/actions-paths.cpp:266
 msgid "Inset selected paths by screen pixels"
-msgstr "Éroder les chemins sélectionnés d'1 px écran"
+msgstr "Éroder les chemins sélectionnés par pixels d'écran"
 
 #: ../src/actions/actions-paths.cpp:267
 msgid "Offset Screen"
-msgstr "Dilatage Écran"
+msgstr "Dilater à l'écran"
 
 #: ../src/actions/actions-paths.cpp:267
 msgid "Offset selected paths by screen pixels"
-msgstr "Dilater les chemins sélectionnés d'1 px écran"
+msgstr "Dilater les chemins sélectionnés par pixels d'écran"
 
 #: ../src/actions/actions-paths.cpp:269
 msgid "Shape Builder: Add"
@@ -10815,7 +10817,7 @@ msgstr ""
 
 #: ../src/actions/actions-transform.cpp:145
 msgid "Grow/Shrink Screen"
-msgstr "Grossir par rapport à l'écran"
+msgstr "Grossir/Rétrécir à l'écran"
 
 #: ../src/actions/actions-transform.cpp:145
 msgid "Grow/shrink selected objects relative to zoom level"
@@ -10835,7 +10837,7 @@ msgstr "Tourner les objets sélectionnés d'un multiple de la valeur du pas"
 
 #: ../src/actions/actions-transform.cpp:148
 msgid "Rotate Screen"
-msgstr "Tourner l'écran"
+msgstr "Tourner l'affichage"
 
 #: ../src/actions/actions-transform.cpp:148
 msgid "Rotate selected objects relative to zoom level"
@@ -11096,7 +11098,7 @@ msgstr "Afficher cette fenêtre de document en plein écran"
 
 #: ../src/actions/actions-view-mode.cpp:278
 msgid "Fullscreen & Focus Mode"
-msgstr "Plein écran et mode de _focus"
+msgstr "Mode plein écran et focus"
 
 #: ../src/actions/actions-view-mode.cpp:279
 msgid "Focus Mode"
