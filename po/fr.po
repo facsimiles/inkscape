@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 13:37+0000\n"
+"PO-Revision-Date: 2025-04-29 17:11+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -25770,8 +25770,8 @@ msgstr ""
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
-"<b>feBlend</b> fournit divers modes de fondu d'image : produit, "
-"superposition, obscurcir et éclaircir."
+"Fournit divers modes de fondu d'image : filtrage, multiplication, obscurcir "
+"et éclaircir."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2610
 msgid ""
@@ -29138,7 +29138,7 @@ msgstr "Rien"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr "Fenêtre spontanée uniquement"
+msgstr "Écran d'accueil uniquement"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
 msgctxt "Start mode"
@@ -30400,8 +30400,8 @@ msgid ""
 "One mouse wheel notch scrolls by this distance in screen pixels "
 "(horizontally with Shift)"
 msgstr ""
-"Un cran de la molette de la souris fait défiler de tant de pixels "
-"(horizontalement avec Maj)"
+"Un cran de la molette de la souris déplace l'image de tant de pixels ("
+"horizontalement avec Maj)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2605
 msgid "Ctrl+arrows"
@@ -30414,7 +30414,7 @@ msgstr "Défile_r de :"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2608
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
 msgstr ""
-"Appuyer sur Ctrl+flèche fait défiler de cette distance (en pixels d'écran)"
+"Appuyer sur Ctrl+flèche déplace l'image de cette distance (en pixels d'écran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2610
 msgid "_Acceleration:"
@@ -30453,9 +30453,9 @@ msgid ""
 "How far (in screen pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
-"Distance (en pixels d'écran) à laquelle il faut être du bord de la zone de "
-"travail pour activer le défilement automatique ; les valeurs positives sont "
-"en dehors de la zone, les négatives à l'intérieur"
+"Distance (en pixels d'écran) à laquelle il faut être du bord du canevas pour "
+"activer le défilement automatique ; les valeurs positives sont en dehors de "
+"la zone, les négatives à l'intérieur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2619
 msgid "Mouse move pans when Space is pressed"
@@ -30755,7 +30755,8 @@ msgid ""
 "relative to the screen, not to the rotated document."
 msgstr ""
 "Permet aux flèches directionnelles de bouger les objets relativement à "
-"l'écran, et pas relativement au document, quand le canevas est tourné."
+"l'écran. Quand le canevas pivote, la sélection se déplace horizontalement "
+"verticalement par rapport à l'écran et pas relativement au document tourné."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2734
 msgid "Steps"
@@ -52607,7 +52608,7 @@ msgstr "Beaucoup d'améliorations à l'importation du fichier d'affinité"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
 msgid "Splash screen on load"
-msgstr "Fenêtre spontanée au chargement"
+msgstr "Écran d'accueil au chargement"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52768,7 +52769,7 @@ msgstr "Plus d'options de personnalisations et de thèmes"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:139
 msgid "Better HiDPI (high resolution) screen support"
-msgstr "Meilleur support du HiDPI des écrans"
+msgstr "Meilleur prise en charge des écrans HiDPI (haute résolution)"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:140
 msgid "Native support for macOS with a signed and notarized .dmg file"
