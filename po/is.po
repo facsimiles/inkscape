@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 10:32+0000\n"
+"PO-Revision-Date: 2025-04-29 11:59+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/is/>\n"
@@ -1986,7 +1986,7 @@ msgstr "Myndrista með ójöfnum"
 
 #: ../../build/share/filters/filters.svg.h:804
 msgid "Carving emboss effect"
-msgstr ""
+msgstr "Upphleypt útskurðaráferð"
 
 #: ../../build/share/filters/filters.svg.h:806
 msgid "Chromolitho Alternate"
@@ -2002,7 +2002,7 @@ msgstr "Samundnar ójöfnur"
 
 #: ../../build/share/filters/filters.svg.h:812
 msgid "Convoluted emboss effect"
-msgstr ""
+msgstr "Flókin upphleypingaráferð"
 
 #: ../../build/share/filters/filters.svg.h:814
 msgid "Emergence"
@@ -6492,7 +6492,7 @@ msgstr "Zine-bæklingur (A4)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
-msgstr ""
+msgstr "Samanbrjótanlegur einnar-síðu bæklingur (A4)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "297 × 210 mm"
@@ -6504,7 +6504,7 @@ msgstr "Zine-bæklingur (BNA)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
-msgstr ""
+msgstr "Samanbrjótanlegur einnar-síðu bæklingur (US-bréfsefni)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "11 × 8.5 in"
@@ -6540,7 +6540,7 @@ msgstr "Villuleitarupplýsingar"
 
 #: ../src/actions/actions-base.cpp:198
 msgid "Print debugging information and exit"
-msgstr "Birta villuleitarupplýsingar og hætta."
+msgstr "Birta villuleitarupplýsingar og hætta"
 
 #: ../src/actions/actions-base.cpp:199
 msgid "System Directory"
@@ -7185,7 +7185,7 @@ msgstr "Hlutfallslegur aðdráttur"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
 msgid "Zoom by a relative amount"
-msgstr ""
+msgstr "Hlutfallslegur aðdráttur"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate Absolute (Radians)"
@@ -8126,7 +8126,7 @@ msgstr "Leiðbeiningar fyrir byrjendur"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
-msgstr ""
+msgstr "Leiðbeiningar fyrir þróun forritsviðauka"
 
 #: ../src/actions/actions-help-url.cpp:124 ../share/ui/menus.ui:1325
 msgid "Donate"
@@ -9412,7 +9412,7 @@ msgstr "Settu inn 1/0 fyrir Já/Nei til að nota litfléttun"
 
 #: ../src/actions/actions-output.cpp:314
 msgid "Enter integer for PNG compression level (0 (none) to 9 (max))"
-msgstr ""
+msgstr "Settu inn heiltölu fyrir PNG-þjöppunarstig (0 (ekkert) til 9 (hám.))"
 
 #: ../src/actions/actions-output.cpp:315
 msgid "Enter integer for PNG antialiasing level (0 (none) to 3 (best))"
@@ -9981,7 +9981,7 @@ msgstr "Setja SVG-útgáfu sem 1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:698
 msgid "Set the document's SVG version to 1.1"
-msgstr ""
+msgstr "Setja skjalið í SVG-útgáfu 1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:699
 msgid "Set SVG Version to 2.0"
@@ -9989,7 +9989,7 @@ msgstr "Setja SVG-útgáfu sem 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:699
 msgid "Set the document's SVG version to 2.0"
-msgstr ""
+msgstr "Setja skjalið í SVG-útgáfu 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:700
 msgid "Prune Inkscape Namespaces"
@@ -10001,11 +10001,11 @@ msgstr "Fjarlægja öll Inkscape-sértæk SVG-gögn"
 
 #: ../src/actions/actions-svg-processing.cpp:701
 msgid "Prune Proprietary Namespaces"
-msgstr ""
+msgstr "Hreinsa út nafnasvið séreignarhugbúnaðar"
 
 #: ../src/actions/actions-svg-processing.cpp:701
 msgid "Remove any known proprietary SVG data"
-msgstr ""
+msgstr "Fjarlægja öll sértæk SVG-gögn frá séreignarhugbúnaði"
 
 #: ../src/actions/actions-svg-processing.cpp:703
 #, fuzzy
@@ -10084,9 +10084,8 @@ msgid "Turn all strokes recursively into fill-only paths"
 msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:714
-#, fuzzy
 msgid "Normalize Path Data"
-msgstr "Samræma"
+msgstr "Samræma gögn ferils"
 
 #: ../src/actions/actions-svg-processing.cpp:714
 msgid "Make all paths absolute and predictable"
@@ -11010,7 +11009,7 @@ msgstr "Þvinga hrun"
 
 #: ../src/actions/actions-window.cpp:110
 msgid "Force Inkscape to crash, useful for testing."
-msgstr "Þvinga Inkscape til að hrynja, nýtist fyrir prófanir"
+msgstr "Þvinga Inkscape til að hrynja, nýtist fyrir prófanir."
 
 #: ../src/auto-save.cpp:155
 msgid "Autosave failed! Could not find inkscape extension to save document."
@@ -14701,7 +14700,7 @@ msgstr "Ívefja SVG-skrá í image-merki (ekki breytanlegt í þessu skjali)"
 
 #: ../src/extension/internal/svg.h:27
 msgid "Link the SVG file in an image tag (not editable in this document)."
-msgstr "Tengja SVG-skrá í image-merki (ekki breytanlegt í þessu skjali)"
+msgstr "Tengja SVG-skrá í image-merki (ekki breytanlegt í þessu skjali)."
 
 #: ../src/extension/internal/svg.h:28
 msgid "Open SVG image as separate document"
@@ -16607,8 +16606,8 @@ msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
-"Bættu mælistikumerkjum á hlutinn með stillanlegu millibili með því að nota "
-"stíl útlínu"
+"Bættu mælistikumerkjum á hlutinn með stillanlegu millibili, með því að nota "
+"stíl útlínu."
 
 #: ../src/live_effects/effect.cpp:287
 msgctxt "path effect"
@@ -16633,7 +16632,7 @@ msgid ""
 "another object."
 msgstr ""
 "Láta hlut fá sömu lögun, fyllingu, útlínu og/eða aðra eiginleika frá öðrum "
-"hlut"
+"hlut."
 
 #: ../src/live_effects/effect.cpp:316
 msgctxt "path effect"
@@ -18788,7 +18787,7 @@ msgid ""
 "When the path is grouped and the group is then scaled, adjust the dimensions."
 msgstr ""
 "Þegar ferillinn er í hópi og hópurinn síðan er kvarðaður, á að aðlaga "
-"stærðina"
+"stærðina."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Localize number format"
@@ -19162,11 +19161,11 @@ msgstr "Skilgreinir hægri enda á samsíðungi"
 
 #: ../src/live_effects/lpe-parallel.cpp:108
 msgid "Adjust the \"left\" end of the parallel"
-msgstr "Stilla \"vinstri\" endann á samsíðungnum."
+msgstr "Stilla \"vinstri\" endann á samsíðungnum"
 
 #: ../src/live_effects/lpe-parallel.cpp:114
 msgid "Adjust the \"right\" end of the parallel"
-msgstr "Stilla \"hægri\" endann á samsíðungnum."
+msgstr "Stilla \"hægri\" endann á samsíðungnum"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:63
 #: ../share/extensions/patternalongpath.inx:9
@@ -20079,11 +20078,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-simplify.cpp:34
 msgid "Just coalesce"
-msgstr ""
+msgstr "Bara sameina"
 
 #: ../src/live_effects/lpe-simplify.cpp:34
 msgid "Simplify just coalesce"
-msgstr ""
+msgstr "Einfalda með því að sameina"
 
 #: ../src/live_effects/lpe-sketch.cpp:34
 msgid "Strokes"
@@ -20280,11 +20279,11 @@ msgstr "Stilla festipunkt snertilsins"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:108
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Stilla <b>vinstri</b> endann á snertlinum."
+msgstr "Stilla <b>vinstri</b> endann á snertlinum"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:114
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Stilla <b>hægri</b> endann á snertlinum."
+msgstr "Stilla <b>hægri</b> endann á snertlinum"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:81
 msgid "Extrapolated"
@@ -24642,9 +24641,8 @@ msgid "Format %1, Selection %2"
 msgstr "Snið %1, valið %2"
 
 #: ../src/ui/dialog/export-batch.cpp:811
-#, fuzzy
 msgid "Select where to save the exported files"
-msgstr "Umbreytir textum í ferla í útfluttum skrám"
+msgstr "Veldu hvar á að vista útfluttar skrár"
 
 #: ../src/ui/dialog/export-single.cpp:119
 msgid "Color used to fill background"
@@ -27966,7 +27964,7 @@ msgstr "Sýna val á mælistiku"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1618
 msgid "Shows a blue line in the ruler where the selection is."
-msgstr "Birtir bláa línu á mælistiku þar sem valið er"
+msgstr "Birtir bláa línu á mælistiku þar sem valið er."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
 msgid "User Interface"
@@ -27982,7 +27980,7 @@ msgstr "Nota mjóa reiti til innsetningar á tölum"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1625
 msgid "Make number editing boxes smaller by limiting padding"
-msgstr "Minnka reiti til innsetningar á tölum með takmörkun á bólstrun."
+msgstr "Minnka reiti til innsetningar á tölum með takmörkun á bólstrun"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1627
 msgid "Status bar"
@@ -28313,9 +28311,8 @@ msgid "Welcome screen"
 msgstr "Kynningarskjár"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Birta falda skurðpunkta"
+msgstr "Birta í ræsingu:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
@@ -28516,9 +28513,8 @@ msgid "Font selector"
 msgstr "Leturveljari"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2050
-#, fuzzy
 msgid "Unified font scale factor"
-msgstr "Kvörðunarhlutfall texta:"
+msgstr "Sameiginlegt kvörðunargildi leturs"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2050
 msgid "Correction multiplier to scale up font previews in unified browser"
@@ -28703,9 +28699,8 @@ msgid "Margin Y:"
 msgstr "Spássía Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2181
-#, fuzzy
 msgid "Color used for block margins"
-msgstr "Litur á venjulegum hnitalínum"
+msgstr "Litur notaður á spássíur blokka"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2182
 msgid "Color used for grid blocks"
@@ -29419,7 +29414,7 @@ msgstr "Alt+skrunhjól"
 msgid "Wrap around at start and end when cycling objects in z-order"
 msgstr ""
 "Fara í hring milli upphafs og endaatriða þegar flett er í gegnum atriði í z-"
-"röð þeirra (dýpt á lagi)."
+"röð þeirra (dýpt á lagi)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2568
 msgid "Paste above selection instead of layer-top"
@@ -31557,7 +31552,7 @@ msgstr "Bæta við"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1032
 msgid "Invalid CSS selector."
-msgstr "Ógildur CSS-veljari"
+msgstr "Ógildur CSS-veljari."
 
 #: ../src/ui/dialog/spellcheck.cpp:94
 msgid "_Accept"
@@ -32776,7 +32771,7 @@ msgstr "Laga til stefnu merkis með snúningi"
 #: ../src/ui/shape-editor-knotholders.cpp:1356
 #: ../src/ui/shape-editor-knotholders.cpp:1359
 msgid "Adjust the <b>size</b> of the marker"
-msgstr "Aðlaga <b>stærð</b> merkisins."
+msgstr "Aðlaga <b>stærð</b> merkisins"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1649
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -36398,31 +36393,31 @@ msgstr "Skástrikuð núll. OpenType tafla: 'zero'"
 
 #: ../src/ui/widget/font-variants.cpp:431
 msgid "Default variant."
-msgstr "Sjálfgefið tilbrigði"
+msgstr "Sjálfgefið tilbrigði."
 
 #: ../src/ui/widget/font-variants.cpp:432
 msgid "JIS78 forms. OpenType table: 'jp78'."
-msgstr "JIS78 form. OpenType tafla: 'jp78'"
+msgstr "JIS78 form. OpenType tafla: 'jp78'."
 
 #: ../src/ui/widget/font-variants.cpp:433
 msgid "JIS83 forms. OpenType table: 'jp83'."
-msgstr "JIS83 form. OpenType tafla: 'jp83'"
+msgstr "JIS83 form. OpenType tafla: 'jp83'."
 
 #: ../src/ui/widget/font-variants.cpp:434
 msgid "JIS90 forms. OpenType table: 'jp90'."
-msgstr "JIS90 form. OpenType tafla: 'jp90'"
+msgstr "JIS90 form. OpenType tafla: 'jp90'."
 
 #: ../src/ui/widget/font-variants.cpp:435
 msgid "JIS2004 forms. OpenType table: 'jp04'."
-msgstr "JIS2004 form. OpenType tafla: 'jp04'"
+msgstr "JIS2004 form. OpenType tafla: 'jp04'."
 
 #: ../src/ui/widget/font-variants.cpp:436
 msgid "Simplified forms. OpenType table: 'smpl'."
-msgstr "Einfölduð form OpenType tafla: 'smpl'"
+msgstr "Einfölduð form OpenType tafla: 'smpl'."
 
 #: ../src/ui/widget/font-variants.cpp:437
 msgid "Traditional forms. OpenType table: 'trad'."
-msgstr "Hefðbundin form. OpenType tafla: 'trad'"
+msgstr "Hefðbundin form. OpenType tafla: 'trad'."
 
 #: ../src/ui/widget/font-variants.cpp:438
 msgid "Default width."
@@ -36430,7 +36425,7 @@ msgstr "Sjálfgefin breidd."
 
 #: ../src/ui/widget/font-variants.cpp:439
 msgid "Full width variants. OpenType table: 'fwid'."
-msgstr "Fullbreið tilbrigði. OpenType tafla: 'fwid'"
+msgstr "Fullbreið tilbrigði. OpenType tafla: 'fwid'."
 
 #: ../src/ui/widget/font-variants.cpp:440
 msgid "Proportional width variants. OpenType table: 'pwid'."
@@ -36438,7 +36433,7 @@ msgstr "Hlutfallsbreið tilbrigði. OpenType tafla: 'pwid'."
 
 #: ../src/ui/widget/font-variants.cpp:441
 msgid "Ruby variants. OpenType table: 'ruby'."
-msgstr "Ruby-tilbrigði (smáletur). OpenType tafla: 'ruby'"
+msgstr "Ruby-tilbrigði (smáletur). OpenType tafla: 'ruby'."
 
 #: ../src/ui/widget/font-variants.cpp:491
 msgid "Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."
@@ -38096,7 +38091,7 @@ msgstr "Mappa:"
 
 #: ../share/ui/dialog-export.glade:1101
 msgid "Export to multiple files and file formats"
-msgstr "Flytja út í margar skrár og margvísleg skráasnið."
+msgstr "Flytja út í margar skrár og margvísleg skráasnið"
 
 #: ../share/ui/dialog-export.glade:1102
 msgid "Batch Export"
@@ -38971,9 +38966,8 @@ msgid "View"
 msgstr "Skoða"
 
 #: ../share/ui/font-list.glade:541
-#, fuzzy
 msgid "Show all fonts in a flat list"
-msgstr "Sýna punkta í stað lína"
+msgstr "Sýna allar leturgerðir í flötum lista"
 
 #: ../share/ui/font-list.glade:558
 msgid "Arrange all fonts in a compact grid display"
@@ -42263,8 +42257,8 @@ msgid ""
 "{} is now a new method in the SvgDocumentElement class. Use `self.svg."
 "getElement(path)` instead."
 msgstr ""
-"{} er núna ný aðferð (method) í SvgDocumentElement klasa. Notaðu `self.svg."
-"getElement(path)` í staðinn.`"
+"{} er núna ný aðferð (method) í SvgDocumentElement klasa. Notaðu "
+"`self.svg.getElement(path)` í staðinn."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
 msgid "{} is no longer in use. Use the lxml `.getparent()` method instead."
@@ -42277,8 +42271,8 @@ msgid ""
 "{} is now a property of the SvgDocumentElement class. Use `self.svg."
 "namedview` to access this element."
 msgstr ""
-"{} er núna eiginleiki (property) í SvgDocumentElement klasa. Notaðu `self."
-"svg.namedview` til að nálgast þetta einindi"
+"{} er núna eiginleiki (property) í SvgDocumentElement klasa. Notaðu "
+"`self.svg.namedview` til að nálgast þetta einindi."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
@@ -43047,9 +43041,8 @@ msgid "Remove subpaths with total length less than specified length"
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Hámarkslengd saums [%]"
+msgstr "Lágmarkslengd undirferils"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
@@ -43069,19 +43062,16 @@ msgid "Allow reversing direction of subpaths"
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Sameina undirferla"
+msgstr "Sameina undirferla með því að"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Þrep brúunar:"
+msgstr "brúa hnúta"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Rétta af búta"
+msgstr "bæta við beinum línubút"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44202,7 +44192,7 @@ msgstr "Vista stoðlínur"
 
 #: ../share/extensions/gimp_xcf.inx:9
 msgid "Convert all guides to Gimp guides."
-msgstr "Umbreyta öllum stoðlínum í Gimp-stoðlínur"
+msgstr "Umbreyta öllum stoðlínum í Gimp-stoðlínur."
 
 #: ../share/extensions/gimp_xcf.inx:10
 msgid "Save Grid"
@@ -46530,9 +46520,8 @@ msgstr ""
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "Opna inntak"
+msgstr "Inntak sveiglínu"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
@@ -50722,18 +50711,16 @@ msgid "Many improvements to affinity file importer"
 msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Veldu skriftu til að hlaða inn"
+msgstr "Kynningarskjár við að hlaða inn"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
 msgstr "Inkscape 1.4"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:74
-#, fuzzy
 msgid "Extension Gallery"
-msgstr "Beta-forritsaukastýring á tilraunastigi"
+msgstr "Safn forritsviðauka"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:75
 msgid "Experimental unified font browser"
@@ -51033,11 +51020,11 @@ msgstr "Meiri stöðugleiki við endurheimt og vistun skráa"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:204
 msgid "An additional handle at the center of shapes"
-msgstr ""
+msgstr "Viðbótarhaldfang á miðju lagana"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:205
 msgid "A command line option for updating the file's DPI"
-msgstr ""
+msgstr "Skipanalínurofi til að uppfæra upplausn skrár"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:206
 msgid "Improvements to user-defined shortcuts"
