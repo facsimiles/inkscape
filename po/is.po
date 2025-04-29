@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-28 22:06+0000\n"
+"PO-Revision-Date: 2025-04-29 10:32+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/is/>\n"
@@ -1590,7 +1590,7 @@ msgstr "Mynddílaverkfæri"
 
 #: ../../build/share/filters/filters.svg.h:596
 msgid "Reduce or remove antialiasing around shapes"
-msgstr ""
+msgstr "Minnka eða fjarlægja afstöllun í kringum laganir"
 
 #: ../../build/share/filters/filters.svg.h:598
 msgid "Basic Diffuse Bump"
@@ -3343,11 +3343,11 @@ msgstr "Regndropar 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Abstract fill 2"
-msgstr "Óhlutbundin fylling  2"
+msgstr "Óhlutbundin fylling 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Abstract fill 3"
-msgstr "Óhlutbundin fylling  3"
+msgstr "Óhlutbundin fylling 3"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Pills 2"
@@ -3585,27 +3585,27 @@ msgstr "Lóðrétt línuskygging"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
-msgstr "Hálfhringjaskygging með línum"
+msgstr "Hálfhringjaskygging með línum "
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 5"
-msgstr "Þríhyrningaskygging  5"
+msgstr "Þríhyrningaskygging 5"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 4"
-msgstr "Þríhyrningaskygging  4"
+msgstr "Þríhyrningaskygging 4"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 3"
-msgstr "Þríhyrningaskygging  3"
+msgstr "Þríhyrningaskygging 3"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 2"
-msgstr "Þríhyrningaskygging  2"
+msgstr "Þríhyrningaskygging 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 1"
-msgstr "Þríhyrningaskygging  1"
+msgstr "Þríhyrningaskygging 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines shading 2"
@@ -3648,9 +3648,8 @@ msgid "Noise"
 msgstr "Truflanir"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Hatches"
-msgstr "Möskvanet"
+msgstr "Strikaskyggingar"
 
 #: ../../build/share/symbols/symbols.h:2
 msgctxt "Symbol"
@@ -6489,7 +6488,7 @@ msgstr "engin lög auð"
 
 #: ../../build/share/templates/templates.h:1
 msgid "Zine Booklet (A4)"
-msgstr ""
+msgstr "Zine-bæklingur (A4)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
@@ -6497,11 +6496,11 @@ msgstr ""
 
 #: ../../build/share/templates/templates.h:1
 msgid "297 × 210 mm"
-msgstr ""
+msgstr "297 × 210 mm"
 
 #: ../../build/share/templates/templates.h:1
 msgid "Zine Booklet (US)"
-msgstr ""
+msgstr "Zine-bæklingur (BNA)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
@@ -6509,7 +6508,7 @@ msgstr ""
 
 #: ../../build/share/templates/templates.h:1
 msgid "11 × 8.5 in"
-msgstr ""
+msgstr "11 × 8.5 in"
 
 #: ../src/actions/actions-base.cpp:195
 msgid "Inkscape Version"
@@ -6568,14 +6567,12 @@ msgid "Print a list of actions and exit"
 msgstr "Birta lista yfir aðgerðir og hætta"
 
 #: ../src/actions/actions-base.cpp:202
-#, fuzzy
 msgid "List Input File Extensions"
-msgstr "Hljóðfræðitákn"
+msgstr "Gera lista yfir skráaendingar inntaksskráa"
 
 #: ../src/actions/actions-base.cpp:202
-#, fuzzy
 msgid "Print a list of input file extensions and exit"
-msgstr "Birta lista yfir aðgerðir og hætta"
+msgstr "Gera lista yfir skráaendingar inntaksskráa og hætta"
 
 #: ../src/actions/actions-base.cpp:203
 msgid "Quit"
@@ -6704,7 +6701,7 @@ msgid ""
 "Show objects as outlines, and the actual drawing below them with reduced "
 "opacity"
 msgstr ""
-"Sýnir alla hluti sem útlínur, en með raunverulega teikningu  fyrir neðan með "
+"Sýnir alla hluti sem útlínur, en með raunverulega teikningu fyrir neðan með "
 "meira gegnsæi"
 
 #: ../src/actions/actions-canvas-mode.cpp:273
@@ -6968,12 +6965,10 @@ msgid "Toggle snapping to grids"
 msgstr "Víxla gripi í hnitanet af/á"
 
 #: ../src/actions/actions-canvas-snapping.cpp:274
-#, fuzzy
 msgid "Snap Grid Lines"
 msgstr "Grípa í stoðlínur"
 
 #: ../src/actions/actions-canvas-snapping.cpp:274
-#, fuzzy
 msgid "Toggle snapping to grid lines"
 msgstr "Víxla gripi í stoðlínur af/á"
 
@@ -7177,19 +7172,16 @@ msgid "Reset canvas flipping"
 msgstr "Núllstilla flettingu myndflatar"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
 msgid "Zoom Absolute"
-msgstr "Að algildi"
+msgstr "Aðdráttur í algildi"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
 msgid "Zoom to an absolute value"
-msgstr "Fast vægisgildi"
+msgstr "Renna að algildi"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
-#, fuzzy
 msgid "Zoom Relative"
-msgstr "Hlutfallsleg"
+msgstr "Hlutfallslegur aðdráttur"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
 msgid "Zoom by a relative amount"
@@ -7197,39 +7189,35 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate Absolute (Radians)"
-msgstr ""
+msgstr "Snúa algilt (radíanar)"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate to an absolute value (radians)"
-msgstr ""
+msgstr "Snúa í algilt horn (radíanar)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate Relative (Radians)"
-msgstr ""
+msgstr "Snúa afstætt (radíanar)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate by a relative amount (radians)"
-msgstr ""
+msgstr "Snúa um afstætt horn (radíanar)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
 msgid "Rotate Absolute (Degrees)"
-msgstr "Snúa völdum hlutum í gráðum"
+msgstr "Snúa um algilt horn (gráður)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
 msgid "Rotate to an absolute value (degrees)"
-msgstr "Snúa flísum um þetta margar gráður"
+msgstr "Snúa í algilt horn (gráður)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
 msgid "Rotate Relative (Degrees)"
-msgstr "Snúa völdum hlutum í gráðum"
+msgstr "Snúa afstætt (gráður)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
 msgid "Rotate by a relative amount (degrees)"
-msgstr "Snúa flísum um þetta margar gráður"
+msgstr "Snúa um afstætt horn (gráður)"
 
 #: ../src/actions/actions-canvas-transform.cpp:298 ../share/ui/menus.ui:450
 msgid "Lock Rotation"
@@ -7274,14 +7262,12 @@ msgid "Show document overview and resources"
 msgstr "Birta yfirlit og tilföng skjals"
 
 #: ../src/actions/actions-dialogs.cpp:38
-#, fuzzy
 msgid "Open Extension Gallery"
-msgstr "Opna möppu forritsviðauka"
+msgstr "Opna safn forritsviðauka"
 
 #: ../src/actions/actions-dialogs.cpp:38
-#, fuzzy
 msgid "Show and run available extensions"
-msgstr "Sýna allar tiltækar leturgerðir"
+msgstr "Sýna og keyra tiltækar viðbætur"
 
 #: ../src/actions/actions-dialogs.cpp:39
 msgid "Open Export"
@@ -7312,14 +7298,12 @@ msgid "Manage, edit, and apply SVG filters"
 msgstr "Sýsla með, breyta og beita SVG-síum"
 
 #: ../src/actions/actions-dialogs.cpp:42
-#, fuzzy
 msgid "Open Filter Gallery"
-msgstr "Opna LPE-safn"
+msgstr "Opna síusafn"
 
 #: ../src/actions/actions-dialogs.cpp:42
-#, fuzzy
 msgid "Show and apply available filters"
-msgstr "Sýna allar tiltækar leturgerðir"
+msgstr "Sýna og beita tiltækum síum"
 
 #: ../src/actions/actions-dialogs.cpp:43
 msgid "Open Find"
@@ -8138,7 +8122,7 @@ msgstr "Inkscape handbók"
 
 #: ../src/actions/actions-help-url.cpp:122
 msgid "Beginners' Guide"
-msgstr ""
+msgstr "Leiðbeiningar fyrir byrjendur"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
@@ -8404,14 +8388,12 @@ msgid "Create a new layer"
 msgstr "Búa til nýtt lag"
 
 #: ../src/actions/actions-layer.cpp:481
-#, fuzzy
 msgid "Add Layer Above"
-msgstr "Bæta við lagi"
+msgstr "Bæta við lagi fyrir ofan"
 
 #: ../src/actions/actions-layer.cpp:481
-#, fuzzy
 msgid "Create a new layer above current"
-msgstr "Búa til nýtt lag"
+msgstr "Búa til nýtt lag fyrir ofan núverandi lag"
 
 #: ../src/actions/actions-layer.cpp:482
 msgid "Duplicate Current Layer"
@@ -8666,7 +8648,7 @@ msgstr "Jafna myndval lárétt að hægri jaðri"
 
 #: ../src/actions/actions-object-align.cpp:780
 msgid "Align to top edge"
-msgstr "Jafna að  efri jaðri"
+msgstr "Jafna að efri jaðri"
 
 #: ../src/actions/actions-object-align.cpp:780
 msgid "Align selection vertically to top edge"
@@ -8674,7 +8656,7 @@ msgstr "Jafna myndval lárétt að efri brún"
 
 #: ../src/actions/actions-object-align.cpp:781
 msgid "Align to bottom edge"
-msgstr "Jafna að  neðri jaðri"
+msgstr "Jafna að neðri jaðri"
 
 #: ../src/actions/actions-object-align.cpp:781
 msgid "Align selection vertically to bottom edge"
@@ -9299,24 +9281,20 @@ msgid "Set dithering for PNG export"
 msgstr "Stilla litfléttingu fyrir PNG-útflutning"
 
 #: ../src/actions/actions-output.cpp:277
-#, fuzzy
 msgid "Export PNG Compression"
-msgstr "0 - Engin þjöppun"
+msgstr "Flytja út PNG-þjöppun"
 
 #: ../src/actions/actions-output.cpp:277
-#, fuzzy
 msgid "Set compression level for PNG export"
-msgstr "Stilla litaham fyrir PNG-útflutning"
+msgstr "Stilla þjöppunarstig fyrir PNG-útflutning"
 
 #: ../src/actions/actions-output.cpp:278
-#, fuzzy
 msgid "Export PNG Antialiasing"
-msgstr "PNG-litflétting útflutnings"
+msgstr "Flytja út PNG-afstöllun"
 
 #: ../src/actions/actions-output.cpp:278
-#, fuzzy
 msgid "Set antialiasing level for PNG export"
-msgstr "Stilla litfléttingu fyrir PNG-útflutning"
+msgstr "Stilla stig afstöllunar fyrir PNG-útflutning"
 
 #: ../src/actions/actions-output.cpp:280
 msgid "Do Export"
@@ -9439,6 +9417,7 @@ msgstr ""
 #: ../src/actions/actions-output.cpp:315
 msgid "Enter integer for PNG antialiasing level (0 (none) to 3 (best))"
 msgstr ""
+"Settu inn heiltölugildi fyrir stig PNG-afstöllunar (0 (ekkert) til 3 (best))"
 
 #: ../src/actions/actions-pages.cpp:94 ../src/actions/actions-pages.cpp:125
 msgid "New Page"
@@ -9575,7 +9554,6 @@ msgid "Fracture one or more overlapping objects into all possible segments"
 msgstr "Brjóta einn eða fleiri skaraða hluti upp í alla mögulega búta"
 
 #: ../src/actions/actions-paths.cpp:257
-#, fuzzy
 msgctxt "Path flatten"
 msgid "Flatten"
 msgstr "Fletja"
@@ -9682,9 +9660,8 @@ msgid "Remove shapes by clicking or clicking and dragging"
 msgstr "Fjarlægja laganir með því að smella eða smella og draga"
 
 #: ../src/actions/actions-paths.cpp:271
-#, fuzzy
 msgid "Replace Objects"
-msgstr "Opna hluti"
+msgstr "Skipta út hlutum"
 
 #: ../src/actions/actions-paths.cpp:271
 msgid "Remove selected objects when shape building is completed"
@@ -9999,32 +9976,28 @@ msgid "Empty stored backup of selection of objects or nodes"
 msgstr "Tæmdu geymt öryggisafrit af vali hluta eða hnúta"
 
 #: ../src/actions/actions-svg-processing.cpp:698
-#, fuzzy
 msgid "Set SVG Version to 1.1"
-msgstr "Settu heiti SVG-leturs"
+msgstr "Setja SVG-útgáfu sem 1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:698
 msgid "Set the document's SVG version to 1.1"
 msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:699
-#, fuzzy
 msgid "Set SVG Version to 2.0"
-msgstr "Settu heiti SVG-leturs"
+msgstr "Setja SVG-útgáfu sem 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:699
 msgid "Set the document's SVG version to 2.0"
 msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:700
-#, fuzzy
 msgid "Prune Inkscape Namespaces"
-msgstr "Birta útgáfunúmer Inkscape"
+msgstr "Hreinsa út nafnasvið Inkscape"
 
 #: ../src/actions/actions-svg-processing.cpp:700
-#, fuzzy
 msgid "Remove any Inkscape-specific SVG data"
-msgstr "Fjarlægja Inkscape-sértæk SVG eigindi/eiginleika"
+msgstr "Fjarlægja öll Inkscape-sértæk SVG-gögn"
 
 #: ../src/actions/actions-svg-processing.cpp:701
 msgid "Prune Proprietary Namespaces"
@@ -10044,14 +10017,12 @@ msgid "Remove auto start positions from markers"
 msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:704
-#, fuzzy
 msgid "Try to Remove All Transforms"
-msgstr "Fjarlægja ummyndanir"
+msgstr "Reyna að fjarlægja allar ummyndanir"
 
 #: ../src/actions/actions-svg-processing.cpp:704
-#, fuzzy
 msgid "Attempt to remove all transforms from all shapes"
-msgstr "Fjarlægir allar ummyndanir af völdum hlutum"
+msgstr "Gerir tilraun til að fjarlægja allar ummyndanir af öllum lögunum"
 
 #: ../src/actions/actions-svg-processing.cpp:705
 #, fuzzy
@@ -10069,32 +10040,27 @@ msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Replace SVG2 text with SVG1.1 text"
-msgstr ""
+msgstr "Skipta út SVG2-texta með SVG1.1 texta"
 
 #: ../src/actions/actions-svg-processing.cpp:708
-#, fuzzy
 msgid "Insert Mesh Polyfill"
-msgstr "Setja möskva í fyllingu"
+msgstr "Setja inn möskva-fjölfyllingu"
 
 #: ../src/actions/actions-svg-processing.cpp:708
-#, fuzzy
 msgid "Insert JavaScript for rendering meshes"
-msgstr "Setja inn JavaScript-kóða fyrir litstigulsmöskva"
+msgstr "Setja inn JavaScript-kóða til að myndgera möskva"
 
 #: ../src/actions/actions-svg-processing.cpp:709
-#, fuzzy
 msgid "Insert Hatch Polyfill"
-msgstr "Umhverfa fyllingu"
+msgstr "Setja inn strikaskyggingar-fjölfyllingu"
 
 #: ../src/actions/actions-svg-processing.cpp:709
-#, fuzzy
 msgid "Insert JavaScript for rendering hatches"
-msgstr "Setja inn JavaScript-kóða fyrir SVG2-strikaskyggingar"
+msgstr "Setja inn JavaScript-kóða til að myndgera strikaskyggingar"
 
 #: ../src/actions/actions-svg-processing.cpp:711
-#, fuzzy
 msgid "Unlink All Clones"
-msgstr "Aftengja klóna"
+msgstr "Aftengja alla klóna"
 
 #: ../src/actions/actions-svg-processing.cpp:711
 #, fuzzy
@@ -10102,18 +10068,16 @@ msgid "Recursively unlink all clones and symbols"
 msgstr "Aftengja klón og tákn"
 
 #: ../src/actions/actions-svg-processing.cpp:712
-#, fuzzy
 msgid "All Objects to Paths"
-msgstr "Hlutur sem _ferill"
+msgstr "Allir hlutir sem ferlar"
 
 #: ../src/actions/actions-svg-processing.cpp:712
 msgid "Turn all shapes recursively into path elements"
 msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:713
-#, fuzzy
 msgid "All Strokes to Paths"
-msgstr "Útlína sem ferill"
+msgstr "Allar útlínur sem ferlar"
 
 #: ../src/actions/actions-svg-processing.cpp:713
 msgid "Turn all strokes recursively into fill-only paths"
@@ -10214,14 +10178,12 @@ msgid "Convert flowed text to regular text object (preserves appearance)"
 msgstr "Umbreyta flæðitexta í venjulegan textahlut (heldur í útlit)"
 
 #: ../src/actions/actions-text.cpp:79
-#, fuzzy
 msgid "Convert to Glyphs"
-msgstr "Umbreyta í ferla"
+msgstr "Umbreyta í staftákn (glyphs)"
 
 #: ../src/actions/actions-text.cpp:79
-#, fuzzy
 msgid "Convert text into individual glyphs"
-msgstr "Umbreyta texta í ferla"
+msgstr "Umbreyta texta í einstök staftákn (glyphs)"
 
 #: ../src/actions/actions-text.cpp:80
 msgid "Remove Manual Kerns"
@@ -10412,9 +10374,8 @@ msgid "Create and manage pages."
 msgstr "Búa til og sýsla með síður."
 
 #: ../src/actions/actions-tools.cpp:112
-#, fuzzy
 msgid "Pick objects."
-msgstr "Læsa hlutum"
+msgstr "Veldu hluti."
 
 #: ../src/actions/actions-tools.cpp:359
 msgid "Selector Tool"
@@ -10692,29 +10653,24 @@ msgid "Grow/shrink selected objects relative to zoom level"
 msgstr "Gera valda hluti stærri/minni miðað við aðdráttarstig"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Flytja út valda hluti"
+msgstr "Snúa völdum hlutum"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Aflögun snúnings"
+msgstr "Þrepun snúnings"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
-msgstr "Gera valda hluti stærri/minni í margfeldi af þrepum"
+msgstr "Snúa völdum hlutum miðað við margfeldi af þrepum"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Snúa afritum"
+msgstr "Snúa skjánum"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr "Gera valda hluti stærri/minni miðað við aðdráttarstig"
+msgstr "Snúa völdum hlutum miðað við aðdráttarstig"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -10729,13 +10685,12 @@ msgid "Reapply the last transformation to the selection"
 msgstr "Beita síðustu ummyndun aftur á valið"
 
 #: ../src/actions/actions-transform.cpp:152
-#, fuzzy
 msgid "Rotate Page 90°"
-msgstr "Snúa 90° réttsælis"
+msgstr "Snúa síðu 90°"
 
 #: ../src/actions/actions-transform.cpp:152
 msgid "Rotate page by 90-degree rotation steps"
-msgstr ""
+msgstr "Snúa síðu í 90-gráðu þrepum"
 
 #: ../src/actions/actions-transform.cpp:159
 msgid "Enter two comma-separated numbers, e.g. 50,-2.5"
@@ -11069,9 +11024,8 @@ msgid "Autosave failed! File %s could not be saved."
 msgstr "Sjálfvirk vistun mistókst! Ekki tókst að vista skrána %s."
 
 #: ../src/color/cms-util.cpp:109
-#, fuzzy
 msgid "(Unnamed)"
-msgstr "ónefnt"
+msgstr "(ónefnt)"
 
 #: ../src/context-fns.cpp:48 ../src/context-fns.cpp:77
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
@@ -11118,47 +11072,43 @@ msgstr ""
 
 #: ../src/display/control/ctrl-handle-styling.cpp:121
 msgid "Unrecognized shape '%1'"
-msgstr ""
+msgstr "Óþekkjanleg lögun '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:131
 msgid "Unrecognized color '%1'"
-msgstr ""
+msgstr "Óþekkjanlegur litur '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:140
-#, fuzzy
 msgid "Invalid opacity '%1'"
-msgstr "Ógilt eigindasett"
+msgstr "Ógilt ógegnsæi '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:149
-#, fuzzy
 msgid "Invalid opacity units '%1'"
-msgstr "Ógilt eigindasett"
+msgstr "Ógildar einingar ógegnsæis '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:153
-#, fuzzy
 msgid "Opacity '%1' out of range"
-msgstr "Svið ógegnsæis (%)"
+msgstr "Ógegnsæi '%1' utan sviðs"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:164
 msgid "Invalid width '%1'"
-msgstr ""
+msgstr "Ógild breidd: '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:171
 msgid "Invalid width units '%1'"
-msgstr ""
+msgstr "Ógildar breiddareiningar '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:181
-#, fuzzy
 msgid "Invalid scale '%1'"
-msgstr "Ógilt bitagildi, {}!"
+msgstr "Ógildur kvarði '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:190
 msgid "Invalid scale units '%1'"
-msgstr ""
+msgstr "Ógildar kvarðaeiningar '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:194
 msgid "Scale '%1' out of range"
-msgstr ""
+msgstr "Kvarði '%1' utan sviðs"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:235
 msgid "Unrecognized selector '%1'"
@@ -11379,14 +11329,12 @@ msgid "page margin center"
 msgstr "miðja spássíu"
 
 #: ../src/display/control/snap-indicator.cpp:98
-#, fuzzy
 msgid "page bleed border"
-msgstr "jaðar síðu"
+msgstr "jaðar síðublæðingar"
 
 #: ../src/display/control/snap-indicator.cpp:99
-#, fuzzy
 msgid "page bleed corner"
-msgstr "horn síðu"
+msgstr "horn síðublæðingar"
 
 #: ../src/display/control/snap-indicator.cpp:100
 msgid "object midpoint"
@@ -13573,7 +13521,7 @@ msgstr "Bjarmi"
 
 #: ../src/extension/internal/filter/color.h:1833
 msgid "Glow blend:"
-msgstr "Blöndun bjarma"
+msgstr "Blöndun bjarma:"
 
 #: ../src/extension/internal/filter/color.h:1838
 msgid "Local light"
@@ -14679,9 +14627,8 @@ msgid "Antialias"
 msgstr "Afstöllun"
 
 #: ../src/extension/internal/png-output.cpp:85
-#, fuzzy
 msgid "PNG (*.png)"
-msgstr "JPEG (*.jpg)"
+msgstr "PNG (*.png)"
 
 #: ../src/extension/internal/png-output.cpp:86
 msgid "Default raster graphic export"
@@ -14910,18 +14857,16 @@ msgid "Landscape"
 msgstr "Lárétt"
 
 #: ../src/extension/internal/template-paper.cpp:58
-#, fuzzy
 msgid "A4 (Portrait)"
-msgstr "Lóðrétt"
+msgstr "A4 (lóðrétt)"
 
 #: ../src/extension/internal/template-paper.cpp:59
 msgid "A4 (Landscape)"
 msgstr "Lárétt A4"
 
 #: ../src/extension/internal/template-paper.cpp:60
-#, fuzzy
 msgid "US Letter (Portrait)"
-msgstr "Lóðrétt (skammsnið)"
+msgstr "BNA-bréfsefni (lóðrétt)"
 
 #: ../src/extension/internal/template-paper.cpp:61
 msgid "US Letter (Landscape)"
@@ -14953,166 +14898,155 @@ msgstr "A5"
 
 #: ../src/extension/internal/template-paper.cpp:68
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: ../src/extension/internal/template-paper.cpp:69
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: ../src/extension/internal/template-paper.cpp:70
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: ../src/extension/internal/template-paper.cpp:71
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: ../src/extension/internal/template-paper.cpp:72
-#, fuzzy
 msgid "A10"
-msgstr "A0"
+msgstr "A10"
 
 #: ../src/extension/internal/template-paper.cpp:73
-#, fuzzy
 msgid "B0"
-msgstr "B"
+msgstr "B0"
 
 #: ../src/extension/internal/template-paper.cpp:74
-#, fuzzy
 msgid "B1"
-msgstr "B"
+msgstr "B1"
 
 #: ../src/extension/internal/template-paper.cpp:75
-#, fuzzy
 msgid "B2"
-msgstr "B"
+msgstr "B2"
 
 #: ../src/extension/internal/template-paper.cpp:76
-#, fuzzy
 msgid "B3"
-msgstr "B"
+msgstr "B3"
 
 #: ../src/extension/internal/template-paper.cpp:77
-#, fuzzy
 msgid "B4"
-msgstr "B"
+msgstr "B4"
 
 #: ../src/extension/internal/template-paper.cpp:78
-#, fuzzy
 msgid "B5"
-msgstr "B"
+msgstr "B5"
 
 #: ../src/extension/internal/template-paper.cpp:79
-#, fuzzy
 msgid "B6"
-msgstr "B"
+msgstr "B6"
 
 #: ../src/extension/internal/template-paper.cpp:80
-#, fuzzy
 msgid "B7"
-msgstr "B"
+msgstr "B7"
 
 #: ../src/extension/internal/template-paper.cpp:81
-#, fuzzy
 msgid "B8"
-msgstr "B"
+msgstr "B8"
 
 #: ../src/extension/internal/template-paper.cpp:82
-#, fuzzy
 msgid "B9"
-msgstr "B"
+msgstr "B9"
 
 #: ../src/extension/internal/template-paper.cpp:83
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: ../src/extension/internal/template-paper.cpp:84
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: ../src/extension/internal/template-paper.cpp:85
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: ../src/extension/internal/template-paper.cpp:86
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: ../src/extension/internal/template-paper.cpp:87
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: ../src/extension/internal/template-paper.cpp:88
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: ../src/extension/internal/template-paper.cpp:89
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: ../src/extension/internal/template-paper.cpp:90
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: ../src/extension/internal/template-paper.cpp:91
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: ../src/extension/internal/template-paper.cpp:92
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: ../src/extension/internal/template-paper.cpp:93
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: ../src/extension/internal/template-paper.cpp:94
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: ../src/extension/internal/template-paper.cpp:95
 msgid "D1"
-msgstr ""
+msgstr "D1"
 
 #: ../src/extension/internal/template-paper.cpp:96
 msgid "D2"
-msgstr ""
+msgstr "D2"
 
 #: ../src/extension/internal/template-paper.cpp:97
 msgid "D3"
-msgstr ""
+msgstr "D3"
 
 #: ../src/extension/internal/template-paper.cpp:98
 msgid "D4"
-msgstr ""
+msgstr "D4"
 
 #: ../src/extension/internal/template-paper.cpp:99
 msgid "D5"
-msgstr ""
+msgstr "D5"
 
 #: ../src/extension/internal/template-paper.cpp:100
 msgid "D6"
-msgstr ""
+msgstr "D6"
 
 #: ../src/extension/internal/template-paper.cpp:101
 msgid "D7"
-msgstr ""
+msgstr "D7"
 
 #: ../src/extension/internal/template-paper.cpp:102
 msgid "E3"
-msgstr ""
+msgstr "E3"
 
 #: ../src/extension/internal/template-paper.cpp:103
 msgid "E4"
-msgstr ""
+msgstr "E4"
 
 #: ../src/extension/internal/template-paper.cpp:104
 msgid "E5"
-msgstr ""
+msgstr "E5"
 
 #: ../src/extension/internal/template-paper.cpp:105
 msgid "E6"
-msgstr ""
+msgstr "E6"
 
 #: ../src/extension/internal/template-paper.cpp:106
 msgid "Ledger/Tabloid"
@@ -15139,33 +15073,28 @@ msgid "US #10 Envelope"
 msgstr "US #10 umslag"
 
 #: ../src/extension/internal/template-paper.cpp:112
-#, fuzzy
 msgid "Arch A"
-msgstr "Bogfimi"
+msgstr "Arch A"
 
 #: ../src/extension/internal/template-paper.cpp:113
-#, fuzzy
 msgid "Arch B"
-msgstr "Bogfimi"
+msgstr "Arch B"
 
 #: ../src/extension/internal/template-paper.cpp:114
-#, fuzzy
 msgid "Arch C"
-msgstr "Bogfimi"
+msgstr "Arch C"
 
 #: ../src/extension/internal/template-paper.cpp:115
-#, fuzzy
 msgid "Arch D"
-msgstr "Bogfimi"
+msgstr "Arch D"
 
 #: ../src/extension/internal/template-paper.cpp:116
-#, fuzzy
 msgid "Arch E"
-msgstr "Bogfimi"
+msgstr "Arch E"
 
 #: ../src/extension/internal/template-paper.cpp:117
 msgid "Arch E1"
-msgstr ""
+msgstr "Arch E1"
 
 #: ../src/extension/internal/template-screen.cpp:28
 msgid "Screen Sizes"
@@ -15185,9 +15114,8 @@ msgid "Desktop 1080p"
 msgstr "Skjáborð 1080p"
 
 #: ../src/extension/internal/template-screen.cpp:39
-#, fuzzy
 msgid "Desktop 2K"
-msgstr "Skjáborð 4K"
+msgstr "Skjáborð 2K"
 
 #: ../src/extension/internal/template-screen.cpp:40
 msgid "Desktop 4K"
@@ -15203,11 +15131,11 @@ msgstr "Skjáborð SD"
 
 #: ../src/extension/internal/template-screen.cpp:43
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../src/extension/internal/template-screen.cpp:44
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../src/extension/internal/template-screen.cpp:45
 msgid "Mobile-smallest"
@@ -15287,9 +15215,8 @@ msgid "LinkedIn dynamic ad"
 msgstr "Breytileg auglýsing á LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:51
-#, fuzzy
 msgid "LinkedIn hero image"
-msgstr "Mynd á fyrirtækisborða LinkedIn"
+msgstr "Aðalmynd LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:52
 msgid "LinkedIn sponsored content image"
@@ -15341,24 +15268,20 @@ msgid "Video"
 msgstr "Myndskeið"
 
 #: ../src/extension/internal/template-video.cpp:38
-#, fuzzy
 msgid "Video SD PAL"
-msgstr "Myndskeið SD / PAL"
+msgstr "Myndskeið SD PAL"
 
 #: ../src/extension/internal/template-video.cpp:39
-#, fuzzy
 msgid "Video SD Widescreen / PAL"
 msgstr "Myndskeið SD-breiðtjald / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
-#, fuzzy
 msgid "Video SD NTSC"
-msgstr "Myndskeið SD / NTSC"
+msgstr "Myndskeið SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
-#, fuzzy
 msgid "Video SD Widescreen NTSC"
-msgstr "Myndskeið SD-breiðtjald / NTSC"
+msgstr "Myndskeið SD-breiðtjald NTSC"
 
 #: ../src/extension/internal/template-video.cpp:42
 msgid "Video HD 720p"
@@ -15556,16 +15479,16 @@ msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
-"Útlit og framsetning eininda á borð við afmarkanir, hulur, síur og klóna er "
-"mikilvægast í þessari skrá. <b>(Veldu þetta ef þú ert ekki viss.)</b>"
+"Útlit og framsetning eininda á borð við afmarkanir, hulur, síur og klóna\n"
+"er mikilvægast í þessari skrá. <b>(Veldu þetta ef þú ert ekki viss.)</b>"
 
 #: ../src/file-update.cpp:332
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
-"Nákvæmni raunverulegra mælieininga og gildi staðsetninga teiknaðra hluta er "
-"mikilvægast í þessari skrá. (Á tilraunastigi.)"
+"Nákvæmni raunverulegra mælieininga og gildi staðsetninga teiknaðra\n"
+"hluta er mikilvægast í þessari skrá. (Á tilraunastigi.)"
 
 #: ../src/file-update.cpp:334
 msgid "Create a backup file in same directory."
@@ -15601,28 +15524,28 @@ msgid ""
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
 "<small>Við höfum uppfært Inkscape þannig að það fylgir núna CSS-staðlinum "
-"með 96 PÁT til að ná betri samhæfingu við vafra; áður var stuðst við 90 "
-"PÁT.\n"
+"með 96 PÁT til að ná betri samhæfingu við vafra; áður var stuðst við 90 PÁT."
 "\n"
 "Stafrænu myndefni til birtingar á skjá verður umbreytt í 96 PÁT án kvörðunar "
-"og ætti það ekki að hafa mikil áhrif á framsetninguna. Myndefni sem teiknað "
-"hefur verið í 90 PÁT fyrir einhverja tiltekna raunstærð verður of lítið sé "
-"því umbreytt í 96 PÁT án nokkurar kvörðunar. Tvær aðferðir eru í boði fyrir "
-"kvörðun:\n"
+"og ætti það ekki að hafa mikil áhrif á framsetninguna. \n"
+"Myndefni sem teiknað hefur verið í 90 PÁT fyrir einhverja tiltekna raunstærð "
+"verður of lítið sé því umbreytt í 96 PÁT án nokkurar kvörðunar. Tvær "
+"aðferðir eru í boði fyrir kvörðun:\n"
 "\n"
 "<b>Kvarða allt skjalið:</b> Aðferð þar sem lítil hætta er á villum, þetta "
 "viðheldur best útliti myndefnisins, þar með töldum síum og staðsetningum á "
-"hulum, o.s.frv. Kvarði myndefnisins miðað við stærð skjalsins (myndflatar) "
-"gæti verið ónákvæm.\n"
+"hulum, o.s.frv. \n"
+"Kvarði myndefnisins miðað við stærð skjalsins (myndflatar) gæti verið "
+"ónákvæm.\n"
 "\n"
 "<b>Kvarða sérstaklega einstakar einingar myndefnisins:</b> Þessi aðferð er "
-"ekki eins áreiðanleg og getur haft áhrif á útlit myndefnisins, en er betra "
-"fyrir úttak raunstærða sem reiðir sig á nákvæmni stærða og staðsetninga "
-"(eins og til dæmis fyrir þrívíddarprentun.)\n"
+"ekki eins áreiðanleg og getur haft áhrif á útlit myndefnisins, \n"
+"en er betra fyrir úttak raunstærða sem reiðir sig á nákvæmni stærða og "
+"staðsetninga (eins og til dæmis fyrir þrívíddarprentun.)\n"
 "\n"
 "Nánari upplýsingar um þessa breytingu er hægt að skoða á <a href='https://"
-"inkscape.org/en/learn/faq#dpi_change'>Algengar spurningar um Inkscape - FAQ</"
-"a></small>"
+"inkscape.org/en/learn/faq#dpi_change'>Algengar spurningar um Inkscape - "
+"FAQ</a></small>"
 
 #: ../src/file-update.cpp:373 ../share/ui/attribute-edit-component.glade:210
 msgid "OK"
@@ -15669,13 +15592,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Engar ónotaðar skilgreiningar í &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Fann ekki Inkscape-forritsviðauka til að vista skjalið (%s).  Það gæti "
-"stafað af óþekktri skráarendingu."
+"Fann ekki Inkscape-forritsviðauka til að vista skjalið (%s). Það gæti stafað "
+"af skráarendingu sem vantar eða er óþekkt."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -16063,7 +15986,7 @@ msgstr "Opna"
 
 #: ../src/helper/choose-file.cpp:68
 msgid "All Supported Formats"
-msgstr ""
+msgstr "Öll studd snið"
 
 #: ../src/helper/save-image.cpp:33
 #: ../share/extensions/image_extract_selected.inx:3
@@ -16093,7 +16016,7 @@ msgstr "Flytja út SVG-ílag (%1) yfir í PDF (%2) format:"
 #: ../src/inkscape-application.cpp:712
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
 msgstr ""
-"Flytja út ílagsskrár  (%1) yfir í PNG-snið og halda upprunalegu heiti (%2):"
+"Flytja út ílagsskrár (%1) yfir í PNG-snið og halda upprunalegu heiti (%2):"
 
 #: ../src/inkscape-application.cpp:714
 msgid "See %1 and %2 for more details."
@@ -16116,9 +16039,8 @@ msgid "Print user data directory"
 msgstr "Birta möppu notandagagna"
 
 #: ../src/inkscape-application.cpp:723
-#, fuzzy
 msgid "List all available input file extensions"
-msgstr "Telja upp allar tiltækar aðgerðir"
+msgstr "Gera lista yfir allar tiltækar skráaendingar inntaksskráa"
 
 #: ../src/inkscape-application.cpp:724
 msgid ""
@@ -16373,14 +16295,12 @@ msgid "Force dithering or disables it"
 msgstr "Þvinga fram litfléttingu eða gera hana óvirka"
 
 #: ../src/inkscape-application.cpp:771
-#, fuzzy
 msgid "Compression level for PNG export (0 to 9); default is 6"
-msgstr "Postscript-stig (2 eða 3); sjálfgefið er 3"
+msgstr "Þjöppunarstig fyrir PNG-útflutning (0 til 9); sjálfgefið er 6"
 
 #: ../src/inkscape-application.cpp:773
-#, fuzzy
 msgid "Antialias level for PNG export (0 to 3); default is 2"
-msgstr "Postscript-stig (2 eða 3); sjálfgefið er 3"
+msgstr "Stig afstöllunar fyrir PNG-útflutning (0 til 3); sjálfgefið er 2"
 
 #: ../src/inkscape-application.cpp:776
 msgid "Query object/document geometry"
@@ -16561,7 +16481,7 @@ msgstr "Allt letur"
 
 #: ../src/libnrtype/font-lister.cpp:156
 msgid "Fonts "
-msgstr "Letur"
+msgstr "Letur "
 
 #: ../src/live_effects/effect.cpp:103
 msgctxt "path effect"
@@ -18797,9 +18717,8 @@ msgid "Distance of the perpendicular lines' ends from the dimension line"
 msgstr "Fjarlægð enda á samhliða línum frá málsetningalínu"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
 msgid "Dimension line width in mm. DIN standard: 0.25 or 0.35 mm"
-msgstr "Breidd málsetningarlínu. DIN-staðall: 0.25 eða 0.35 mm"
+msgstr "Breidd málsetningarlínu í mm. DIN-staðall: 0.25 eða 0.35 mm"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Scaling factor"
@@ -18927,9 +18846,8 @@ msgid "Distance"
 msgstr "Vegalengd"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:101
-#, fuzzy
 msgid "Distance of the dimension lines from the outermost node (mm)"
-msgstr "Fjarlægð málsetningalínanna frá ysta liðnum"
+msgstr "Fjarlægð málsetningalínanna frá ysta hnútnum (mm)"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
 msgid "Angle of projection"
@@ -20059,9 +19977,8 @@ msgid "Draw a major mark every ... steps"
 msgstr ""
 
 #: ../src/live_effects/lpe-ruler.cpp:53
-#, fuzzy
 msgid "Mark angle:"
-msgstr "_Merkja fjarlægð:"
+msgstr "Merkja horn:"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
 msgid "Rotate marks (-180° to 180°)"
@@ -20136,7 +20053,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-simplify.cpp:28
 msgid "Drag slider to set the amount of simplification"
-msgstr ""
+msgstr "Dragðu sleðann til að stilla magn einföldunar"
 
 #: ../src/live_effects/lpe-simplify.cpp:29
 msgid "Max degree difference on handles to perform smoothing"
@@ -20379,7 +20296,7 @@ msgstr "Miðja"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:97
 msgid "Clamp"
-msgstr ""
+msgstr "Þvinga"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:105
 msgid "Select subpath:"
@@ -20463,12 +20380,16 @@ msgid ""
 "<b>Start point of the taper</b>: drag to alter the taper, <b>Shift+click</b> "
 "changes the taper direction"
 msgstr ""
+"<b>Upphafspunktur mjókkunarinnar</b>: dragðu til að breyta mjókkuninni, "
+"<b>Shift+smella</b> breytir stefnu mjókkunarinnar"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:620
 msgid ""
 "<b>End point of the taper</b>: drag to alter the taper, <b>Shift+click</b> "
 "changes the taper direction"
 msgstr ""
+"<b>Endapunktur mjókkunarinnar</b>: dragðu til að breyta mjókkuninni, "
+"<b>Shift+smella</b> breytir stefnu mjókkunarinnar"
 
 #: ../src/live_effects/lpe-tiling.cpp:93
 msgid "Columns"
@@ -21132,21 +21053,18 @@ msgstr "Virku víxlað"
 
 #. TRANSLATORS: %1 is the translated version of "up" or "down".
 #: ../src/live_effects/parameter/satellitearray.cpp:254
-#, fuzzy
 msgid "Move item %1"
-msgstr "Færa atriði upp"
+msgstr "Færa atriði %1"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item up'
 #: ../src/live_effects/parameter/satellitearray.cpp:261
-#, fuzzy
 msgid "up"
-msgstr "Ójöfnur"
+msgstr "upp"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item down'
 #: ../src/live_effects/parameter/satellitearray.cpp:267
-#, fuzzy
 msgid "down"
-msgstr "Stafhnikun niður"
+msgstr "niður"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:276
 msgid "Remove item"
@@ -21262,22 +21180,21 @@ msgid "Axonometric Grid"
 msgstr "Jafnhliða hnitanet"
 
 #: ../src/object/sp-grid.cpp:613 ../src/ui/dialog/inkscape-preferences.cpp:2121
-#, fuzzy
 msgid "Modular Grid"
-msgstr "Pólhnitanet"
+msgstr "Eininganet"
 
 #: ../src/object/sp-guide.cpp:479
 msgid "Deleted"
 msgstr "Eytt"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Shift+draga</b> til að snúa, <b>Ctrl+draga</b> til að færa upphafspunkt, "
-"<b>Del</b> til að eyða"
+"<b>Del</b> til að eyða; <b>tvísmella</b> til að breyta eiginleikum þessarar "
+"stoðlínu"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -21608,7 +21525,7 @@ msgstr "Snúa við ferlum"
 
 #: ../src/path-chemistry.cpp:696
 msgid "<b>No paths</b> to reverse in the selection."
-msgstr "<b>Engir ferlar</b>  í valinu til að snúa við."
+msgstr "<b>Engir ferlar</b> í valinu til að snúa við."
 
 #: ../src/path/path-boolop.cpp:74
 msgid "Cut path"
@@ -21620,17 +21537,19 @@ msgstr ""
 "Veldu <b>að minnsta kosti 1 feril</b> til að framkvæma bool-sameiningu."
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
-msgstr "Veldu <b>að minnsta kosti 2 ferla</b> til að framkvæma bool-aðgerð."
+msgstr ""
+"Veldu <b>að minnsta kosti 2 ferla</b> til að framkvæma skörun eða mismun "
+"samhverfu."
 
 #: ../src/path/path-boolop.cpp:378
-#, fuzzy
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
-msgstr "Veldu <b>að minnsta kosti 2 ferla</b> til að framkvæma bool-aðgerð."
+msgstr ""
+"Veldu <b>nákvæmlega 2 ferla</b> til að framkvæma mismun, uppskiptingu eða "
+"skurð ferils."
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -22189,7 +22108,7 @@ msgstr "Veldu <b>klóna</b> sem á að aftengja."
 
 #: ../src/selection-chemistry.cpp:2776 ../src/selection-chemistry.cpp:2814
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr "<b>Engir klónar</b>  í valinu til að aftengja."
+msgstr "<b>Engir klónar</b> í valinu til að aftengja."
 
 #: ../src/selection-chemistry.cpp:2780
 msgid "Unlink clone"
@@ -22371,8 +22290,8 @@ msgstr " í nafnlausum hóp (%s)"
 #, c-format
 msgid " in <b>%i</b> parent (%s)"
 msgid_plural " in <b>%i</b> parents (%s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " í <b>%i</b> forvera (%s)"
+msgstr[1] " í <b>%i</b> forverum (%s)"
 
 #: ../src/selection-describer.cpp:170
 #, c-format
@@ -22387,19 +22306,19 @@ msgstr "Umbreyta tákni í hóp til að breyta"
 
 #: ../src/selection-describer.cpp:186
 msgid "Remove from symbols tray to edit symbol"
-msgstr ""
+msgstr "Fjarlægja úr táknalager til að breyta tákni"
 
 #: ../src/selection-describer.cpp:192
 msgid "Use <b>Shift+D</b> to look up original"
-msgstr ""
+msgstr "Notaðu <b>Shift+D</b> til að finna upprunalegt"
 
 #: ../src/selection-describer.cpp:198
 msgid "Use <b>Shift+D</b> to look up path"
-msgstr ""
+msgstr "Notaðu <b>Shift+D</b> til að finna feril"
 
 #: ../src/selection-describer.cpp:204
 msgid "Use <b>Shift+D</b> to look up frame"
-msgstr ""
+msgstr "Notaðu <b>Shift+D</b> til að finna ramma"
 
 #: ../src/selection-describer.cpp:220
 #, c-format
@@ -22480,6 +22399,8 @@ msgid ""
 "<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; "
 "<b>Ctrl</b> to group whole selection."
 msgstr ""
+"<b>Jafna</b> hluti að ásmelltri hlið; <b>Shift</b>+smella til að snúa við "
+"hlið; <b>Ctrl</b> til að hópa allt valið."
 
 #: ../src/seltrans.cpp:807
 msgid ""
@@ -22605,14 +22526,12 @@ msgid "Unflow flowed text"
 msgstr "Afflæða flæðitexta"
 
 #: ../src/text-chemistry.cpp:645
-#, fuzzy
 msgid "Select <b>text(s)</b> to convert to glyphs."
-msgstr "Veldu <b>hluti</b> sem á að umbreyta í ferla."
+msgstr "Veldu <b>texta</b> til að umbreyta í staftákn."
 
 #: ../src/text-chemistry.cpp:647
-#, fuzzy
 msgid "Convert text to glyphs"
-msgstr "Umbreyta texta í ferla"
+msgstr "Umbreyta texta í staftákn (glyphs)"
 
 #: ../src/text-chemistry.cpp:661
 msgid "Select <b>flowed text(s)</b> to convert."
@@ -22676,9 +22595,8 @@ msgid "Trace bitmap"
 msgstr "Línuteikna bitamynd"
 
 #: ../src/trace/trace.cpp:537
-#, fuzzy
 msgid "Trace: Done. %1 node(s) created"
-msgstr "Línuteiknun: Lokið. Gerði %ld hnúta"
+msgstr "Línuteiknun: Lokið. Gerði %1 hnút(a)"
 
 #: ../src/ui/clipboard.cpp:476
 msgid "Can't paste text outside of the text tool."
@@ -22837,7 +22755,6 @@ msgid "_Move to Layer..."
 msgstr "_Flytja á lag ..."
 
 #: ../src/ui/contextmenu.cpp:265
-#, fuzzy
 msgid "Create Anchor (Hyperlink)"
 msgstr "Búa til markstiklu (tengil)"
 
@@ -22850,7 +22767,6 @@ msgid "_Ungroup"
 msgstr "Skipta _upp hóp"
 
 #: ../src/ui/contextmenu.cpp:269
-#, fuzzy
 msgid "Enter Group %1"
 msgstr "Fara inn í hóp %1"
 
@@ -22859,9 +22775,8 @@ msgid "Group to Layer"
 msgstr "Hóp sem lag"
 
 #: ../src/ui/contextmenu.cpp:279
-#, fuzzy
 msgid "_Pop Selection out of Group"
-msgstr "_Henda völdu út úr hóp"
+msgstr "Henda völdu út úr hó_p"
 
 #: ../src/ui/contextmenu.cpp:286
 msgid "Set Cl_ip"
@@ -22892,7 +22807,6 @@ msgid "Lock Selected Objects"
 msgstr "Læsa völdum hlutum"
 
 #: ../src/ui/contextmenu.cpp:310
-#, fuzzy
 msgid "_Open Link in Browser"
 msgstr "_Opna tengil í vafra"
 
@@ -22937,32 +22851,26 @@ msgid "_Lower Layer"
 msgstr "_Lækka lag"
 
 #: ../src/ui/contextmenu.cpp:343
-#, fuzzy
 msgid "_Hide/Show Other Layers"
 msgstr "_Birta/Fela önnur lög"
 
 #: ../src/ui/contextmenu.cpp:344
-#, fuzzy
 msgid "_Hide All Layers"
 msgstr "_Fela öll lög"
 
 #: ../src/ui/contextmenu.cpp:345
-#, fuzzy
 msgid "_Show All Layers"
 msgstr "_Birta öll lög"
 
 #: ../src/ui/contextmenu.cpp:349
-#, fuzzy
 msgid "_Lock/Unlock Other Layers"
 msgstr "_Læsa/Aflæsa öðrum lögum"
 
 #: ../src/ui/contextmenu.cpp:350
-#, fuzzy
 msgid "_Lock All Layers"
 msgstr "_Læsa öllum lögum"
 
 #: ../src/ui/contextmenu.cpp:351
-#, fuzzy
 msgid "_Unlock All Layers"
 msgstr "A_flæsa öllum lögum"
 
@@ -23812,12 +23720,10 @@ msgstr "Setja fyllilit af litaprufuspjaldi"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/ui/dialog/color-item.cpp:401
-#, fuzzy
 msgid "Set Fill"
 msgstr "Setja fyllingu"
 
 #: ../src/ui/dialog/color-item.cpp:402
-#, fuzzy
 msgid "Set Stroke"
 msgstr "Setja útlínu"
 
@@ -23848,41 +23754,35 @@ msgstr "Losa litaprufu"
 
 #: ../src/ui/dialog/command-palette.cpp:548
 msgid "boolean"
-msgstr ""
+msgstr "bólskt"
 
 #: ../src/ui/dialog/command-palette.cpp:551
-#, fuzzy
 msgid "whole number"
-msgstr "Númer skyggnu"
+msgstr "heiltala"
 
 #: ../src/ui/dialog/command-palette.cpp:554
-#, fuzzy
 msgid "decimal number"
-msgstr "Númer skyggnu"
+msgstr "rauntala"
 
 #: ../src/ui/dialog/command-palette.cpp:557
-#, fuzzy
 msgid "text string"
-msgstr "strengur"
+msgstr "textastrengur"
 
 #: ../src/ui/dialog/command-palette.cpp:560
-#, fuzzy
 msgid "pair of decimal numbers"
-msgstr "Ógilt inntak! Settu inn tugagildi."
+msgstr "par af rauntölum"
 
 #: ../src/ui/dialog/command-palette.cpp:574
-#, fuzzy
 msgid "Enter a %1..."
-msgstr "Fara inn í hóp %1"
+msgstr "Fara inn í %1..."
 
 #: ../src/ui/dialog/command-palette.cpp:1082
 msgid "Enter search term to search for a command"
 msgstr ""
 
 #: ../src/ui/dialog/command-palette.cpp:1115
-#, fuzzy
 msgid "Enter action argument"
-msgstr "Aðferð við brúun:"
+msgstr "Settu inn viðfang aðgerðar"
 
 #: ../src/ui/dialog/command-palette.cpp:1143
 msgid "History mode"
@@ -23925,9 +23825,8 @@ msgid "_Export"
 msgstr "_Flytja út"
 
 #: ../src/ui/dialog/dialog-data.cpp:36
-#, fuzzy
 msgid "_Extension Gallery"
-msgstr "Beta-forritsaukastýring á tilraunastigi"
+msgstr "_Forritsaukasafn"
 
 #: ../src/ui/dialog/dialog-data.cpp:37
 msgid "_Fill and Stroke"
@@ -23938,9 +23837,8 @@ msgid "Filter _Editor"
 msgstr "Sí_uritill"
 
 #: ../src/ui/dialog/dialog-data.cpp:39
-#, fuzzy
 msgid "Filter Gallery"
-msgstr "Listagallerí"
+msgstr "Síusafn"
 
 #: ../src/ui/dialog/dialog-data.cpp:40
 msgid "_Find/Replace"
@@ -24198,7 +24096,7 @@ msgstr "Víxla jaðri efst af/á"
 
 #: ../src/ui/dialog/document-properties.cpp:546
 msgid "Toggle page shadow"
-msgstr "Víxla skugga síðu af/á:"
+msgstr "Víxla skugga síðu af/á"
 
 #: ../src/ui/dialog/document-properties.cpp:549
 msgid "Toggle anti-aliasing"
@@ -24306,9 +24204,8 @@ msgid "Select a script to load"
 msgstr "Veldu skriftu til að hlaða inn"
 
 #: ../src/ui/dialog/document-properties.cpp:1198
-#, fuzzy
 msgid "JavaScript Files"
-msgstr "JavaScript"
+msgstr "JavaScript-skrár"
 
 #: ../src/ui/dialog/document-properties.cpp:1235
 msgid "Add embedded script..."
@@ -24335,21 +24232,18 @@ msgid "<b>Defined grids</b>"
 msgstr "<b>Skilgreind hnitanet</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:1482
-#, fuzzy
 msgid "Add grid:"
-msgstr "Bæta við skyggnu:"
+msgstr "Bæta við hnitaneti:"
 
 #: ../src/ui/dialog/document-properties.cpp:1485
-#, fuzzy
 msgctxt "Grid"
 msgid "Rectangular"
-msgstr "Rétthyrnt hnitanet"
+msgstr "Rétthyrnt"
 
 #: ../src/ui/dialog/document-properties.cpp:1486
-#, fuzzy
 msgctxt "Grid"
 msgid "Axonometric"
-msgstr "Jafnhliða hnitanet"
+msgstr "Jafnhliða"
 
 #: ../src/ui/dialog/document-properties.cpp:1487
 msgctxt "Grid"
@@ -24409,9 +24303,8 @@ msgid "Align to page:"
 msgstr "Jafna að síðu:"
 
 #: ../src/ui/dialog/document-properties.cpp:1819
-#, fuzzy
 msgid "Set angle from aspect ratio:"
-msgstr "Halda stærðarhlutföllum"
+msgstr "Setja horn út frá stærðarhlutföllum:"
 
 #: ../src/ui/dialog/document-properties.cpp:1832
 msgid "Set"
@@ -24463,53 +24356,44 @@ msgid "Distance between vertical grid lines"
 msgstr "Lóðrétt millibil hnitanetslína"
 
 #: ../src/ui/dialog/document-properties.cpp:1892
-#, fuzzy
 msgid "Gap _X:"
-msgstr "Skarð X:"
+msgstr "Skarð _X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1892
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
-#, fuzzy
 msgid "Horizontal distance between blocks"
-msgstr "Lárétt millibil dálka."
+msgstr "Lárétt millibil blokka"
 
 #: ../src/ui/dialog/document-properties.cpp:1895
-#, fuzzy
 msgid "Gap _Y:"
-msgstr "Skarð Y:"
+msgstr "Skarð _Y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1895
 #: ../src/ui/dialog/inkscape-preferences.cpp:2178
-#, fuzzy
 msgid "Vertical distance between blocks"
-msgstr "Lóðrétt millibil raða."
+msgstr "Lóðrétt millibil blokka"
 
 #: ../src/ui/dialog/document-properties.cpp:1898
-#, fuzzy
 msgid "_Margin X:"
-msgstr "Uppha_f X:"
+msgstr "S_pássía X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1898
 #: ../src/ui/dialog/inkscape-preferences.cpp:2179
-#, fuzzy
 msgid "Right and left margins"
-msgstr "Hægri spássía"
+msgstr "Hægri og vinstri spássíur"
 
 #: ../src/ui/dialog/document-properties.cpp:1901
-#, fuzzy
 msgid "M_argin Y:"
-msgstr "Upp_haf Y:"
+msgstr "Spássí_a Y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1901
 #: ../src/ui/dialog/inkscape-preferences.cpp:2180
-#, fuzzy
 msgid "Top and bottom margins"
-msgstr "Neðri spássía"
+msgstr "Efri og neðri spássíur"
 
 #: ../src/ui/dialog/document-properties.cpp:1905
-#, fuzzy
 msgid "An_gle X:"
-msgstr "Horn X:"
+msgstr "_Horn X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1905
 #: ../src/ui/dialog/inkscape-preferences.cpp:2148
@@ -24517,9 +24401,8 @@ msgid "Angle of x-axis"
 msgstr "Horn X-áss"
 
 #: ../src/ui/dialog/document-properties.cpp:1907
-#, fuzzy
 msgid "Ang_le Z:"
-msgstr "Horn Z:"
+msgstr "H_orn Z:"
 
 #: ../src/ui/dialog/document-properties.cpp:1907
 #: ../src/ui/dialog/inkscape-preferences.cpp:2149
@@ -24553,42 +24436,35 @@ msgid "Color of the major (highlighted) grid lines"
 msgstr "Litur á aðal-hnitalínum (áherslulínum)"
 
 #: ../src/ui/dialog/document-properties.cpp:1916
-#, fuzzy
 msgid "Major grid line e_very:"
-msgstr "Aðalhnitalínur hverja:"
+msgstr "Aðalhnitalínur h_verja:"
 
 #: ../src/ui/dialog/document-properties.cpp:1916
-#, fuzzy
 msgid "Number of lines"
-msgstr "Fjöldi skyggna"
+msgstr "Fjöldi lína"
 
 #: ../src/ui/dialog/document-properties.cpp:1920
-#, fuzzy
 msgid "Change grid units"
-msgstr "Breyta auðkenni hnúts"
+msgstr "Breyta einingum hnitanets"
 
 #: ../src/ui/dialog/document-properties.cpp:1921
 #: ../src/ui/dialog/document-properties.cpp:1922
 #: ../src/ui/dialog/document-properties.cpp:1927
-#, fuzzy
 msgid "Change grid dimensions"
-msgstr "Síðustærðir"
+msgstr "Breyta stærðum hnitanets"
 
 #: ../src/ui/dialog/document-properties.cpp:1923
 #: ../src/ui/dialog/document-properties.cpp:1924
-#, fuzzy
 msgid "Change grid color"
-msgstr "Breyta stopplit litstiguls"
+msgstr "Breyta lit hnitanets"
 
 #: ../src/ui/dialog/document-properties.cpp:1925
-#, fuzzy
 msgid "Change grid number of lines"
-msgstr "Stjarna: Breyta fjölda horna"
+msgstr "Breyta fjölda lína í hnitaneti"
 
 #: ../src/ui/dialog/document-properties.cpp:2016
-#, fuzzy
 msgid "Block _width:"
-msgstr "Breidd móðunar:"
+msgstr "Brei_dd blokkar:"
 
 #: ../src/ui/dialog/document-properties.cpp:2016
 msgid "Spacing _X:"
@@ -24750,11 +24626,12 @@ msgid ""
 "<span weight=\"bold\" size=\"larger\">Directory \"%s\" doesn't exist. Create "
 "it now?</span>"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Mappan \"%s\" er ekki til, viltu búa "
+"hana til núna?</span>"
 
 #: ../src/ui/dialog/export-batch.cpp:664
-#, fuzzy
 msgid "Set Batch Export Options"
-msgstr "Stilla útflutningsvalkosti"
+msgstr "Stilla valkosti magnútflutnings"
 
 #: ../src/ui/dialog/export-batch.cpp:781 ../src/ui/dialog/export-single.cpp:640
 msgid "Exporting %1"
@@ -24790,9 +24667,9 @@ msgid "Select a filename for exporting"
 msgstr "Veldu skráarheiti til útflutnings"
 
 #: ../src/ui/dialog/export.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Directory <b>%s</b> does not exist and can't be created.\n"
-msgstr "Mappan <b>%s</b> er ekki til, eða slóðin er ekki mappa.\n"
+msgstr "Mappan <b>%s</b> er ekki til og er ekki hægt að búa hana til.\n"
 
 #: ../src/ui/dialog/export.cpp:210
 msgid "The chosen area to be exported is invalid."
@@ -24852,43 +24729,35 @@ msgid "bitmap"
 msgstr "bitamynd"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:252
-#, fuzzy
 msgid "All Effects"
-msgstr "Sjónbrellur"
+msgstr "Allar sjónbrellur"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:252
-#, fuzzy
 msgid "All Filters"
-msgstr "Allar skrár"
+msgstr "Allar síur"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:280
-#, fuzzy
 msgctxt "apply-filter"
 msgid "_Apply"
 msgstr "Virkj_a"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:284
-#, fuzzy
 msgid "Select extension to run:"
-msgstr "Velja fyrirliggjandi möppu"
+msgstr "Veldu hvaða forritsauka eigi að keyra:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:285
-#, fuzzy
 msgid "Select filter to apply:"
-msgstr "Veldu skrá til að opna"
+msgstr "Veldu síu til að beita:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:309
-#, fuzzy
 msgid "Toggle list of effect categories"
-msgstr "Víxla sýnileika virks lags"
+msgstr "Víxla af/á lista yfir flokka af sjónbrellum"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:310
-#, fuzzy
 msgid "Toggle list of filter categories"
-msgstr "Hæð áhrifasvæðis síu"
+msgstr "Víxla af/á lista yfir flokka af síum"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:459
-#, fuzzy
 msgctxt "take-input"
 msgid "..."
 msgstr "..."
@@ -25119,7 +24988,6 @@ msgid "R_ename"
 msgstr "Endu_rnefna"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1381
-#, fuzzy
 msgid "Select Filter Elements"
 msgstr "Veldu síueiningar"
 
@@ -25996,9 +25864,8 @@ msgid "ACB file header not recognized."
 msgstr ""
 
 #: ../src/ui/dialog/global-palettes.cpp:166
-#, fuzzy
 msgid "ACB file color space not supported."
-msgstr "Hliðrænar (LPT) tengingar eru ekki studdar."
+msgstr "Ekki er stuðningur við litrýmd ACB-skrár."
 
 #: ../src/ui/dialog/global-palettes.cpp:243
 msgid "Palette color space unexpected."
@@ -26013,51 +25880,45 @@ msgid "ASE color mode not recognized:"
 msgstr ""
 
 #: ../src/ui/dialog/global-palettes.cpp:366
-#, fuzzy
 msgid "Failed to open file"
-msgstr "Mistókst að opna sjálfgefinn prentara"
+msgstr "Mistókst að opna skrá"
 
 #: ../src/ui/dialog/global-palettes.cpp:369
-#, fuzzy
 msgid "File is empty"
-msgstr "Innflutningur skráa"
+msgstr "Skráin er tóm"
 
 #: ../src/ui/dialog/global-palettes.cpp:370
-#, fuzzy
 msgid "First line is wrong"
-msgstr "Fyrsta lína inniheldur fyrirsagnir"
+msgstr "Fyrsta línan er röng"
 
 #: ../src/ui/dialog/global-palettes.cpp:414
-#, fuzzy
 msgctxt "Palette"
 msgid "Invalid line "
-msgstr "Ógild stærð tákns."
+msgstr "Ógild lína "
 
 #: ../src/ui/dialog/global-palettes.cpp:428
 msgid "Error loading palette %1: %2"
-msgstr ""
+msgstr "Villa við að hlaða inn litaspjaldi %1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:453
 msgid "Unknown error loading palette %1"
-msgstr ""
+msgstr "Óþekkt villa við að hlaða inn litaspjaldi %1"
 
 #: ../src/ui/dialog/global-palettes.cpp:495
-#, fuzzy
 msgid "Gimp Color Palette"
-msgstr "Flytja út litaspjald"
+msgstr "Gimp-litaspjald"
 
 #: ../src/ui/dialog/global-palettes.cpp:496
 msgid "Adobe Color Book"
-msgstr ""
+msgstr "Adobe litabók"
 
 #: ../src/ui/dialog/global-palettes.cpp:497
 msgid "Adobe Swatch Exchange"
-msgstr ""
+msgstr "Adobe Swatch Exchange litasýni"
 
 #: ../src/ui/dialog/global-palettes.cpp:499
-#, fuzzy
 msgid "Load color palette"
-msgstr "Flytja út litaspjald"
+msgstr "Hlaða inn litaspjaldi"
 
 #: ../src/ui/dialog/glyphs.cpp:47 ../src/ui/dialog/glyphs.cpp:214
 msgid "all"
@@ -27036,9 +26897,8 @@ msgid "X:"
 msgstr "X:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:470
-#, fuzzy
 msgid "Horizontal spacing between columns"
-msgstr "Lárétt millibil dálka."
+msgstr "Lárétt millibil dálka"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:471
 #: ../src/ui/widget/registered-widget.cpp:560
@@ -27049,9 +26909,8 @@ msgid "Y:"
 msgstr "Y:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:471
-#, fuzzy
 msgid "Vertical spacing between rows"
-msgstr "Lóðrétt millibil raða."
+msgstr "Lóðrétt millibil raða"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:489
 msgid "_Rows:"
@@ -27078,9 +26937,8 @@ msgid "If not set, each column has the width of the widest object in it"
 msgstr ""
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:561
-#, fuzzy
 msgid "<b>Alignment:</b>"
-msgstr "<b>Innihald:</b>"
+msgstr "<b>Jöfnun:</b>"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:574
 msgid "_Fit into selection box"
@@ -27189,24 +27047,20 @@ msgid "Whether selected objects display gradient editing controls"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:763
-#, fuzzy
 msgid "Change layer on selection"
-msgstr "Breyta öllum myndum í vali"
+msgstr "Skipta um lag við að velja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:764
-#, fuzzy
 msgid "Whether selecting objects in another layer changes the active layer"
-msgstr "Við að velja hluti er það sá síðasti sá sem farið er á."
+msgstr "Við að velja hluti í öðru lagi er skipt um virkt lag"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:770
-#, fuzzy
 msgid "Change page on selection"
-msgstr "Breyta öllum myndum í vali"
+msgstr "Skipta um síðu við að velja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:771
-#, fuzzy
 msgid "Whether selecting objects on another page changes the current page"
-msgstr "Flytja val á næsta lag fyrir ofan lagið sem þú ert að vinna á núna"
+msgstr "Hvort skipt sé um síðu við að velja hluti á annarri síðu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:776
 msgid "Conversion to guides uses edges instead of bounding box"
@@ -28444,10 +28298,9 @@ msgid "GTK open/save dialogs"
 msgstr "Nota Opna/Vista glugga úr GTK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Mýking"
+msgstr "Ekkert"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
@@ -28455,10 +28308,9 @@ msgid "Splash screen only"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Breiðskjár"
+msgstr "Kynningarskjár"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
 #, fuzzy
@@ -28640,33 +28492,28 @@ msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr "Hvort fela eigi samskiptaglugga á verkefnastiku gluggastjórans"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2042
-#, fuzzy
 msgid "Text and Font dialog"
-msgstr "_Texti og letur"
+msgstr "Texta- og leturgluggi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2044
-#, fuzzy
 msgid "List fonts and styles"
-msgstr "Síðast notaða stíl"
+msgstr "Birta letur og stíla"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2044
-#, fuzzy
 msgid "List fonts and styles separately"
-msgstr "Breyta ljósum og skuggum hvoru fyrir sig"
+msgstr "Birta letur og stíla aðskilið"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2045
 msgid "Unified font browser (experimental)"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2045
-#, fuzzy
 msgid "Show all font styles in a single list"
-msgstr "Birta sýnishorn af letri í fellilistanum"
+msgstr "Birta alla letrurstíla í einum lista"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2047
-#, fuzzy
 msgid "Font selector"
-msgstr "Val"
+msgstr "Leturveljari"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2050
 #, fuzzy
@@ -28822,24 +28669,20 @@ msgid "Angle Z:"
 msgstr "Horn Z:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2175
-#, fuzzy
 msgid "Block width:"
-msgstr "Breidd móðunar:"
+msgstr "Breidd blokkar:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2175
-#, fuzzy
 msgid "Width of grid modules"
-msgstr "Skipta yfir í yfirlitsham:"
+msgstr "Breidd hnitanetseininga"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2176
-#, fuzzy
 msgid "Block height:"
-msgstr "Hæð móðunar:"
+msgstr "Hæð blokkar:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2176
-#, fuzzy
 msgid "Height of grid modules"
-msgstr "Hæð rétthyrnings"
+msgstr "Hæð hnitanetseininga"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
 #: ../share/ui/pattern-edit.glade:538
@@ -28852,14 +28695,12 @@ msgid "Gap Y:"
 msgstr "Skarð Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2179
-#, fuzzy
 msgid "Margin X:"
-msgstr "Upphaf X:"
+msgstr "Spássía X:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2180
-#, fuzzy
 msgid "Margin Y:"
-msgstr "Upphaf Y:"
+msgstr "Spássía Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2181
 #, fuzzy
@@ -28867,9 +28708,8 @@ msgid "Color used for block margins"
 msgstr "Litur á venjulegum hnitalínum"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2182
-#, fuzzy
 msgid "Color used for grid blocks"
-msgstr "Litur á venjulegum hnitalínum"
+msgstr "Litur notaður á hnitablokkir"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2210
 msgid "Display Options"
@@ -29298,14 +29138,12 @@ msgstr ""
 "Leitað í möppum: %s"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2407
-#, fuzzy
 msgid "User monitor profile:"
-msgstr "Litasnið:"
+msgstr "Nota litasnið skjás:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2412
-#, fuzzy
 msgid "Use profile from user"
-msgstr "Ná í litasnið frá skjá"
+msgstr "Nota litasnið frá notanda"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2414
 msgid ""
@@ -29824,9 +29662,8 @@ msgid "Restrict Snap Targets"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2663
-#, fuzzy
 msgid "Always snap to grids"
-msgstr "Víxla gripi í hnitanet af/á"
+msgstr "Ávallt grípa í hnitanet"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2664
 msgid ""
@@ -29835,9 +29672,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2666
-#, fuzzy
 msgid "Always snap to guides"
-msgstr "Ávallt birta útlínu"
+msgstr "Ávallt grípa í stoðlínur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2667
 msgid ""
@@ -29847,14 +29683,12 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2669
-#, fuzzy
 msgid "While Always Snapping to Grid/Guides"
-msgstr "Víxla gripi í hnitanet af/á"
+msgstr "Þegar ávallt er gripið í hnitanet/stoðlínur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2671
-#, fuzzy
 msgid "Allow snapping to objects"
-msgstr "Víxla gripi í hnúta af/á"
+msgstr "Leyfa grip í hluti"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2672
 msgid ""
@@ -29863,9 +29697,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2674
-#, fuzzy
 msgid "Allow alignment snapping"
-msgstr "Víxla gripi í jafnaða hluti af/á"
+msgstr "Leyfa grip í jafnaða hluti"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2675
 msgid ""
@@ -29981,7 +29814,6 @@ msgstr ""
 "stýra aðdrætti."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2724
-#, fuzzy
 msgid "Canvas rotation"
 msgstr "Snúningur myndflatar"
 
@@ -29994,9 +29826,8 @@ msgid "Rotate canvas clockwise and counter-clockwise by this amount."
 msgstr "Snúa myndfleti réttsælis og rangsælis um þetta horn."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2730
-#, fuzzy
 msgid "Arrow keys move object relative to screen"
-msgstr "Gera valda hluti minni miðað við skjá"
+msgstr "Örvalyklar færa hlut miðað við skjá"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2732
 msgid ""
@@ -30542,7 +30373,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3011
 msgid "Debugging, profiling and experiments"
-msgstr ""
+msgstr "Villukembing, afkastaprófanir og tilraunir"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3013
 msgid "Framecheck"
@@ -31392,9 +31223,8 @@ msgid "Multiple objects selected"
 msgstr "Margir hlutir valdir"
 
 #: ../src/ui/dialog/object-attributes.cpp:156
-#, fuzzy
 msgid "No selection"
-msgstr "Læsa myndvali"
+msgstr "Ekkert valið"
 
 #: ../src/ui/dialog/object-attributes.cpp:250
 msgid "Removed live path effect"
@@ -31407,23 +31237,20 @@ msgid "Change object attribute"
 msgstr "Breyta eigindum hlutar"
 
 #: ../src/ui/dialog/object-attributes.cpp:521
-#, fuzzy
 msgid "Add fillet/chamfer effect"
-msgstr "Bæta við gagnvirkri ferilbrellu"
+msgstr "Bæta við kverkrúnnun/hornskurðaráhrifum"
 
 #: ../src/ui/dialog/object-attributes.cpp:664
 msgid "Change arc type"
 msgstr "Skipta um gerð boga"
 
 #: ../src/ui/dialog/object-attributes.cpp:905
-#, fuzzy
 msgid "Nodes: "
-msgstr "Hnútar"
+msgstr "Hnútar: "
 
 #: ../src/ui/dialog/object-attributes.cpp:926
-#, fuzzy
 msgid "Change path"
-msgstr "Breyta ógegnsæi"
+msgstr "Breyta ferli"
 
 #: ../src/ui/dialog/object-properties.cpp:61
 #: ../src/ui/dialog/object-properties.cpp:367
@@ -31639,10 +31466,9 @@ msgid "Starting angle"
 msgstr "Upphafshorn"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "<b>Anchor point:</b>"
-msgstr "Festipunktur:"
+msgstr "<b>Festipunktur:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:49
 msgctxt "Polar arrange tab"
@@ -31655,10 +31481,9 @@ msgid "Objects' rotational centers"
 msgstr "Snúningsmiðjur hlutar"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:65
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "<b>Arrange on:</b>"
-msgstr "<b>Horn:</b>"
+msgstr "<b>Raða upp á:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:70
 msgctxt "Polar arrange tab"
@@ -31850,14 +31675,12 @@ msgid "Current value"
 msgstr "Núverandi gildi"
 
 #: ../src/ui/dialog/styledialog.cpp:544
-#, fuzzy
 msgid "Used in style attribute"
-msgstr "Eyða eigindi"
+msgstr "Notað í stíleigindi"
 
 #: ../src/ui/dialog/styledialog.cpp:720
-#, fuzzy
 msgid "Stylesheet value"
-msgstr "Stílblað"
+msgstr "Gildi stílblaðs"
 
 #: ../src/ui/dialog/styledialog.cpp:726
 msgid "This value is commented out."
@@ -31869,9 +31692,8 @@ msgid "Used in %1"
 msgstr "Notað í %1"
 
 #: ../src/ui/dialog/styledialog.cpp:840
-#, fuzzy
 msgid "Used in inline attributes"
-msgstr "Eigindi innan línu"
+msgstr "Notað í eigindi innan línu"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:181
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:251
@@ -32100,14 +31922,12 @@ msgid "Switch to a layer with the same name as current glyph"
 msgstr "Skipta yfir á lag með sama heiti og fyrirliggjandi staftákn"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1389
-#, fuzzy
 msgid "Sort glyphs"
-msgstr "Raða _staftáknum"
+msgstr "Raða staftáknum"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1390
-#, fuzzy
 msgid "Sort glyphs in Unicode order"
-msgstr "Setja Unicode-staftákn"
+msgstr "Raða staftáknum í Unicode-röð"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1395
 msgid "Add new glyph"
@@ -32134,9 +31954,8 @@ msgid "Add pair"
 msgstr "Bæta við pari"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1555
-#, fuzzy
 msgid "Remove pair"
-msgstr "Fjarlægja feril"
+msgstr "Fjarlægja par"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1559
 msgid "Select glyphs:"
@@ -32201,9 +32020,8 @@ msgstr "Of stórt fyrir forskoðun"
 
 #. TRANSLATORS: A list of swatches in the document
 #: ../src/ui/dialog/swatches.cpp:484
-#, fuzzy
 msgid "Document swatches"
-msgstr "Skjalið vistað."
+msgstr "Litaprufur skjals"
 
 #: ../src/ui/dialog/symbols.cpp:158
 msgid "All symbol sets"
@@ -32558,17 +32376,16 @@ msgid "Drop bitmap image"
 msgstr "Sleppa bitamynd"
 
 #: ../src/ui/interface.cpp:117
-#, fuzzy
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%1\" already exists. Do "
 "you want to replace it?</span>\n"
 "\n"
 "The file already exists in \"%2\". Replacing it will overwrite its contents."
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Skrá með heitinu \"%s\" er þegar til. "
+"<span weight=\"bold\" size=\"larger\">Skrá með heitinu \"%1\" er þegar til. "
 "Viltu skipta henni út?</span>\n"
 "\n"
-"Skráin er þegar til í \"%s\". Verði henni skipt út verður skrifað yfir "
+"Skráin er þegar til í \"%2\". Verði henni skipt út verður skrifað yfir "
 "innihaldið."
 
 #: ../src/ui/interface.cpp:124 ../share/extensions/web_set_att.inx:25
@@ -32657,7 +32474,7 @@ msgid ""
 "makes y equal to x; <b>Shift</b>+<b>Ctrl</b>+<b>Drag</b> scales blur "
 "proportionately "
 msgstr ""
-"Draga</b> til að <b>aðlaga</b> móðun í y-stefnu; <b>Ctrl</b>+<b>Draga</b> "
+"<b>Draga</b> til að <b>aðlaga</b> móðun í y-stefnu; <b>Ctrl</b>+<b>Draga</b> "
 "gerir y jafnt og x; <b>Shift</b>+<b>Ctrl</b>+<b>Draga</b> kvarðar móðun "
 "hlutfallslega "
 
@@ -32866,36 +32683,31 @@ msgstr "Lögunarsmíði"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[ALDREI]"
 
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
 msgid "Shift"
-msgstr "_Hliðra"
+msgstr "Shift"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
 msgid "Alt"
-msgstr "Allt"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
-msgstr "Kjörbúð"
+msgstr "Super (WIN)"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
 msgstr "Hyper-lykill"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Lýsigögn"
+msgstr "Meta-breytilykill"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -33107,40 +32919,36 @@ msgid "<b>Ctrl+Alt</b>: click to insert a node"
 msgstr "<b>Ctrl+Alt</b>: Smella til að setja inn hnút"
 
 #: ../src/ui/tool/curve-drag-point.cpp:215
-#, fuzzy
 msgctxt "Path segment tip"
 msgid "<b>Alt</b>: double click to change line type"
-msgstr "<b>Ctrl</b>: smella til að skipta um tegund línu"
+msgstr "<b>Alt</b>: tvísmella til að skipta um tegund línu"
 
 #: ../src/ui/tool/curve-drag-point.cpp:218
-#, fuzzy
 msgctxt "Path segment tip"
 msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Alt, Shift, Ctrl+Alt)"
 msgstr ""
 "<b>BSplínu-bútur</b>: draga til að forma bútinn, tvísmella til að setja inn "
-"hnút, smella til að velja (meira: Shift, Ctrl+Alt)"
+"hnút, smella til að velja (meira: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:222
-#, fuzzy
 msgctxt "Path segment tip"
 msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
 "insert node, click to select (more: Alt, Shift, Ctrl+Alt)"
 msgstr ""
 "<b>Línulegur bútur</b>: draga til að umbreyta í Bezier bút, tvísmella til að "
-"setja inn hnút, smella til að velja (meira: Shift, Ctrl+Alt)"
+"setja inn hnút, smella til að velja (meira: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:225
-#, fuzzy
 msgctxt "Path segment tip"
 msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Alt, Shift, Ctrl+Alt)"
 msgstr ""
 "<b>Bezier bútur</b>: draga til að forma bútinn, tvísmella til að setja inn "
-"hnút, smella til að velja (meira: Shift, Ctrl+Alt)"
+"hnút, smella til að velja (meira: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:313
 msgid "Retract handles"
@@ -34177,7 +33985,7 @@ msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr ""
-"Núna eru <b>mynstur <b>ummynduð</b> ásamt hlutum sínum þegar þeim er "
+"Núna eru <b>mynstur</b> <b>ummynduð</b> ásamt hlutum sínum þegar þeim er "
 "umbreytt (fært, kvarðað, snúið eða skekkt)."
 
 #: ../src/ui/toolbar/select-toolbar.cpp:493
@@ -34185,8 +33993,8 @@ msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
 msgstr ""
-"Núna haldast <b>mynstur <b>föst</b> þegar hlutum er umbreytt (fært, kvarðað, "
-"snúið eða skekkt)."
+"Núna haldast <b>mynstur</b> <b>föst</b> þegar hlutum er umbreytt (fært, "
+"kvarðað, snúið eða skekkt)."
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:67
 msgid "just a curve"
@@ -34398,19 +34206,16 @@ msgid "Star: Change randomization"
 msgstr "Stjarna: Breyta slembigerð"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:385
-#, fuzzy
 msgid "Star: Reset to defaults"
-msgstr "Setja sjálfgefin gildi"
+msgstr "Stjarna: Frumstilla á sjálfgefin gildi"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:274
-#, fuzzy
 msgid "Single spaced"
-msgstr "Einföld umferð"
+msgstr "Einfalt bil"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:274
-#, fuzzy
 msgid "Double spaced"
-msgstr "Tvö_falda stærð"
+msgstr "Tvöfalt bil"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:275
 #: ../src/ui/toolbar/text-toolbar.cpp:276
@@ -34597,9 +34402,8 @@ msgid "<b>Shift</b>: draw around the starting point"
 msgstr "<b>Shift</b>: teikna hring í kringum upphafspunkt"
 
 #: ../src/ui/tools/arc-tool.cpp:210
-#, fuzzy
 msgid "<b>Alt</b>: snap ellipse to mouse pointer"
-msgstr "<b>Alt</b>: kvarða með heiltöluhlutfalli"
+msgstr "<b>Alt</b>: láta sporbaug grípa í músarbendil"
 
 #: ../src/ui/tools/arc-tool.cpp:372
 #, c-format
@@ -35095,11 +34899,10 @@ msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>: draga til að bæta hnútum við valið"
 
 #: ../src/ui/tools/node-tool.cpp:679
-#, fuzzy
 msgid "<b>%1 of %2</b> node selected."
 msgid_plural "<b>%1 of %2</b> nodes selected."
-msgstr[0] "<b>%u af %u</b> hnút valinn."
-msgstr[1] "<b>%u af %u</b> hnútum valið."
+msgstr[0] "<b>%1 af %2</b> hnút valinn."
+msgstr[1] "<b>%1 af %2</b> hnútum valdir."
 
 #. TRANSLATORS: %1 is an angle in degrees, formatted with two decimal places.
 #: ../src/ui/tools/node-tool.cpp:697
@@ -35107,18 +34910,16 @@ msgid "Angle: %1°."
 msgstr "Horn: %1°."
 
 #: ../src/ui/tools/node-tool.cpp:704
-#, fuzzy
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
-"%s Dragðu til að velja hnúta, smelltu til að breyta einungis þessum hlut "
+"%1 Dragðu til að velja hnúta, smelltu til að breyta einungis þessum hlut "
 "(meira: Shift)"
 
 #: ../src/ui/tools/node-tool.cpp:710
-#, fuzzy
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to clear the selection"
-msgstr "Dragðu til að velja hnúta, smelltu til að hreinsa val"
+msgstr "%1 Dragðu til að velja hnúta, smelltu til að hreinsa val"
 
 #: ../src/ui/tools/node-tool.cpp:717
 msgctxt "Node tool tip"
@@ -35400,7 +35201,6 @@ msgid "Selected object is not a group. Cannot enter."
 msgstr "Valinn hlutur er ekki hópur. Get ekki opnað."
 
 #: ../src/ui/tools/shortcuts.cpp:20
-#, fuzzy
 msgid "Quick Preview"
 msgstr "Flýtiforskoðun"
 
@@ -35414,46 +35214,40 @@ msgid "Quick Zoom"
 msgstr "Flýtiaðdráttur:"
 
 #: ../src/ui/tools/shortcuts.cpp:21
-#, fuzzy
 msgid "Zoom into the selected objects while the key is pressed."
-msgstr "Margir af völdu hlutunum eru með sömu útlínu"
+msgstr "Renna að völdum hlutum á meðan ýtt er á lykilinn."
 
 #: ../src/ui/tools/shortcuts.cpp:22
-#, fuzzy
 msgid "Quick Pan Canvas"
-msgstr "Línstrigi"
+msgstr "Flýtihliðra myndfleti"
 
 #: ../src/ui/tools/shortcuts.cpp:22
 msgid "Pan the canvas with the mouse while the key is pressed."
 msgstr "Hliðra myndfletinum með músinni á meðan ýtt er á lykilinn."
 
 #: ../src/ui/tools/shortcuts.cpp:24
-#, fuzzy
 msgid "Pen Segment To Line"
-msgstr "Stærð búts"
+msgstr "Pennabútur yfir í línu"
 
 #: ../src/ui/tools/shortcuts.cpp:24
 msgid "Convert the last pen segment to a straight line."
 msgstr "Umbreytir síðasta pennabút yfir í beina línu."
 
 #: ../src/ui/tools/shortcuts.cpp:25
-#, fuzzy
 msgid "Pen Segment To Curve"
-msgstr "Snertill (tangens) á feril"
+msgstr "Pennabútur yfir í sveiglínu"
 
 #: ../src/ui/tools/shortcuts.cpp:25
 msgid "Convert the last pen segment to a curved line."
 msgstr "Umbreytir síðasta pennabút yfir í sveigða línu."
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
 msgid "Pen Segments To Guides"
-msgstr "Gera búta sveigða"
+msgstr "Pennabútar yfir í stoðlínur"
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
 msgid "Convert the pen shape into guides."
-msgstr "Umbreyting í stoðlínur"
+msgstr "Umbreyta pennalögun yfir í stoðlínur."
 
 #: ../src/ui/tools/spiral-tool.cpp:207
 msgid "<b>Ctrl</b>: snap angle"
@@ -35486,31 +35280,31 @@ msgid "<b>Nothing</b> selected"
 msgstr "<b>Ekkert</b> valið"
 
 #: ../src/ui/tools/spray-tool.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
 "selection. Right-click + move to update single click item."
 msgstr ""
-"%s. Draga, smella eða smella+draga til að sprauta <b>afritum</b> upphaflegs "
-"vals."
+"%s. Draga, smella eða smella+skruna til að sprauta <b>afritum</b> upphaflegs "
+"vals. Hægri-smelltu+færðu til að uppfæra eins-smells atriði."
 
 #: ../src/ui/tools/spray-tool.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
 "selection. Right-click + move to update single click item."
 msgstr ""
-"%s. Draga, smella eða smella+draga til að sprauta <b>klónum</b> upphaflegs "
-"vals."
+"%s. Draga, smella eða smella+skruna til að sprauta <b>klónum</b> upphaflegs "
+"vals. Hægri-smelltu+færðu til að uppfæra eins-smells atriði."
 
 #: ../src/ui/tools/spray-tool.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray into a <b>single path</b>. "
 "Right-click + move to update single click item.."
 msgstr ""
-"%s. Draga, smella eða smella+draga til að sprauta <b>einum ferli</b> "
-"upphaflegs vals."
+"%s. Draga, smella eða smella+draga til að sprauta inn í <b>einn feril</b>. "
+"Hægri-smelltu+færðu til að uppfæra eins-smells atriði."
 
 #: ../src/ui/tools/spray-tool.cpp:1273
 msgid "<b>Nothing selected!</b> Select objects to spray."
@@ -35712,7 +35506,7 @@ msgstr "<b>Bilslá+bendilhreyfing</b> til að hliðra myndfleti"
 #: ../src/ui/tools/tweak-tool.cpp:143
 #, c-format
 msgid "%s. Drag to <b>move</b>."
-msgstr "%s. Draga til að  <b>flytja</b>."
+msgstr "%s. Draga til að <b>flytja</b>."
 
 #: ../src/ui/tools/tweak-tool.cpp:147
 #, c-format
@@ -36252,22 +36046,19 @@ msgstr "Ertu viss um að þú viljir eyða \"%1\" letursafninu?\n"
 
 #: ../src/ui/widget/font-list.cpp:106
 msgid "Sans Serif"
-msgstr ""
+msgstr "Steinskrift (sans)"
 
 #: ../src/ui/widget/font-list.cpp:851
-#, fuzzy
 msgctxt "N-of-fonts"
 msgid "All fonts"
 msgstr "Allt letur"
 
 #: ../src/ui/widget/font-list.cpp:851
-#, fuzzy
 msgctxt "N-of-fonts"
 msgid "of"
-msgstr "Golf"
+msgstr "af"
 
 #: ../src/ui/widget/font-list.cpp:851
-#, fuzzy
 msgctxt "N-of-fonts"
 msgid "fonts"
 msgstr "letur"
@@ -36278,7 +36069,7 @@ msgstr "Velja allan texta með þessari leturgerð"
 
 #: ../src/ui/widget/font-selector-toolbar.cpp:154
 msgid "Font not found on system: "
-msgstr "Letrið fannst ekki á kerfinu:"
+msgstr "Letrið fannst ekki á kerfinu: "
 
 #: ../src/ui/widget/font-selector.cpp:50
 msgid "Font family"
@@ -36671,10 +36462,9 @@ msgstr ""
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
 #: ../src/ui/widget/font-variations.cpp:55
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "X opaque"
-msgstr "100% (ógegnsætt)"
+msgstr "X ógegnsætt"
 
 #: ../src/ui/widget/font-variations.cpp:55
 msgid "Alter the opaque stroke forms of glyphs in the X dimension"
@@ -36683,10 +36473,9 @@ msgstr "Breytir ógegnsæum strokuformum staftákna eftir X-ás"
 #. TRANSLATORS: “Parametric Thin Stroke”, YOPQ, is a reference to its logical name, “Y Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension
 #: ../src/ui/widget/font-variations.cpp:58
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Y opaque"
-msgstr "100% (ógegnsætt)"
+msgstr "Y ógegnsætt"
 
 #: ../src/ui/widget/font-variations.cpp:58
 msgid "Alter the opaque stroke forms of glyphs in the Y dimension"
@@ -36696,10 +36485,9 @@ msgstr "Breytir ógegnsæum strokuformum staftákna eftir Y-ás"
 #. which describes how it alters a font’s transparent spaces (also known as negative shapes)
 #. inside and around all glyphs along the X dimension
 #: ../src/ui/widget/font-variations.cpp:62
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "X transparent"
-msgstr "0 (gegnsætt)"
+msgstr "X gegnsætt"
 
 #: ../src/ui/widget/font-variations.cpp:62
 msgid ""
@@ -36708,10 +36496,9 @@ msgid ""
 msgstr "Breytir gegnsæum svæðum innan og utan staftákna eftir X-ás"
 
 #: ../src/ui/widget/font-variations.cpp:63
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Y transparent"
-msgstr "0 (gegnsætt)"
+msgstr "Y gegnsætt"
 
 #: ../src/ui/widget/font-variations.cpp:63
 msgid ""
@@ -36721,20 +36508,18 @@ msgstr "Breytir gegnsæum svæðum innan og utan staftákna eftir Y-ás"
 
 #. TRANSLATORS: Width/height of Chinese glyphs
 #: ../src/ui/widget/font-variations.cpp:65
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "X transparent Chinese"
-msgstr "0 (gegnsætt)"
+msgstr "X gegnsætt kínverskt"
 
 #: ../src/ui/widget/font-variations.cpp:65
 msgid "Alter the width of Chinese glyphs"
 msgstr "Breytir breidd kínverskra staftákna"
 
 #: ../src/ui/widget/font-variations.cpp:66
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Y transparent Chinese"
-msgstr "0 (gegnsætt)"
+msgstr "Y gegnsætt kínverskt"
 
 #: ../src/ui/widget/font-variations.cpp:66
 msgid "Alter the height of Chinese glyphs"
@@ -36742,10 +36527,9 @@ msgstr "Breytir hæð kínverskra staftákna"
 
 #. TRANSLATORS: “Parametric Lowercase Height”
 #: ../src/ui/widget/font-variations.cpp:68
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Lowercase height"
-msgstr "Staðbundin lýsing"
+msgstr "Hæð lágstafa"
 
 #: ../src/ui/widget/font-variations.cpp:68
 msgid ""
@@ -36755,10 +36539,9 @@ msgstr "Aðlagaðu hæð teljara og annarra bila milli grunnlínu og X-hæðar"
 
 #. TRANSLATORS: “Parametric Uppercase Counter Height”
 #: ../src/ui/widget/font-variations.cpp:70
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Uppercase height"
-msgstr "Hástafalína:"
+msgstr "Hæð hástafa"
 
 #: ../src/ui/widget/font-variations.cpp:70
 msgid "Vary the height of uppercase letterforms"
@@ -36766,10 +36549,9 @@ msgstr "Aðlagaðu hæð hástafa leturs"
 
 #. TRANSLATORS: “Parametric Ascender Height”
 #: ../src/ui/widget/font-variations.cpp:72
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Ascender height"
-msgstr "Hálína:"
+msgstr "Hæð háleggs"
 
 #: ../src/ui/widget/font-variations.cpp:72
 msgid "Vary the height of lowercase ascenders"
@@ -36777,10 +36559,9 @@ msgstr "Aðlagaðu hve langt upp háleggir lágstafa ná"
 
 #. TRANSLATORS: “Parametric Descender Depth”
 #: ../src/ui/widget/font-variations.cpp:74
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Descender depth"
-msgstr "Láglína:"
+msgstr "Dýpt lágleggs"
 
 #: ../src/ui/widget/font-variations.cpp:74
 msgid "Vary the depth of lowercase descenders"
@@ -36788,10 +36569,9 @@ msgstr "Aðlagaðu hve langt niður lágleggir lágstafa ná"
 
 #. TRANSLATORS: “Parametric Figure Height”
 #: ../src/ui/widget/font-variations.cpp:76
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Figure height"
-msgstr "Hæð móðunar:"
+msgstr "Hæð lögunar"
 
 #: ../src/ui/widget/font-variations.cpp:76
 msgid "Vary the height of figures"
@@ -36799,21 +36579,19 @@ msgstr "Aðlagaðu hæð lagana"
 
 #. TRANSLATORS: "Serif rise" - found in the wild (https://github.com/googlefonts/amstelvar)
 #: ../src/ui/widget/font-variations.cpp:78
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Serif rise"
-msgstr "Broddletursendi"
+msgstr "Hæð brodds"
 
 #: ../src/ui/widget/font-variations.cpp:78
-#, fuzzy
 msgid "Vary the shape of the serifs"
-msgstr "Ákvarðar lögun á hornum ferilsins"
+msgstr "Hafa breytilega lögun á broddum"
 
 #. TRANSLATORS: Flare - flaring of the stems
 #: ../src/ui/widget/font-variations.cpp:80
 msgctxt "Variable font axis"
 msgid "Flare"
-msgstr ""
+msgstr "Blossi"
 
 #: ../src/ui/widget/font-variations.cpp:80
 msgid "Controls the flaring of the stems"
@@ -36822,10 +36600,9 @@ msgstr "Stýrir hvernig broddar sveigjast frá legg (flare)"
 #. TRANSLATORS: Volume - The volume axis works only in combination with the Flare axis. It transforms the serifs
 #. and adds a little more edge to details.
 #: ../src/ui/widget/font-variations.cpp:83
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Volume"
-msgstr "Dálkar"
+msgstr "Umfang"
 
 #: ../src/ui/widget/font-variations.cpp:83
 msgid "Volume works in combination with flare to transform serifs"
@@ -36833,7 +36610,6 @@ msgstr ""
 "Umfang (volume) virkar saman með sveigjum frá legg til að ummynda brodda"
 
 #: ../src/ui/widget/font-variations.cpp:85
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Softness"
 msgstr "Mýking"
@@ -36843,10 +36619,9 @@ msgid "Softness makes letterforms more soft and rounded"
 msgstr "Mýking gerir stafaform mýkri og rúnnaðri"
 
 #: ../src/ui/widget/font-variations.cpp:87
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Casual"
-msgstr "Myndrænt"
+msgstr "Afslappað"
 
 #: ../src/ui/widget/font-variations.cpp:87
 msgid "Adjust the letterforms from a more serious style to a more casual style"
@@ -36854,17 +36629,15 @@ msgstr ""
 "Aðlagar stafaform frá því að vera alvarleg og formleg yfir í afslappaðri stíl"
 
 #: ../src/ui/widget/font-variations.cpp:89
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Cursive"
-msgstr "Stærð bendils"
+msgstr "Skriftletur"
 
 #: ../src/ui/widget/font-variations.cpp:89
 msgid "Control the substitution of cursive forms"
 msgstr "Stýrðu útskiptingu skriftlíkra lagana"
 
 #: ../src/ui/widget/font-variations.cpp:91
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Fill"
 msgstr "Fylling"
@@ -36874,10 +36647,9 @@ msgid "Fill can turn transparent forms opaque"
 msgstr "Fylling getur breytt gegnsæum lögunum yfir í ógegnsæ"
 
 #: ../src/ui/widget/font-variations.cpp:93
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Monospace"
-msgstr "Jafnbreitt letur:"
+msgstr "Jafnbreitt"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgid "Adjust the glyphs from a proportional width to a fixed width"
@@ -36893,10 +36665,9 @@ msgid "Binary switch used to control substitution of “wonky” forms"
 msgstr "Af/á rofi sem stýrir útskiptingu óreglulegra eða óvenjulegra lagana"
 
 #: ../src/ui/widget/font-variations.cpp:97
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Element shape"
-msgstr "Stig lögunar"
+msgstr "Lögun staks"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgid "Selection of the base element glyphs are composed of"
@@ -36916,31 +36687,28 @@ msgstr "Stýrir hve mörg stök eru notuð á hverja einingu hnitanets"
 #. such as 14 pt or 144 pt. Small (or body) optical sizes tend to have less stroke contrast, more open and wider spacing,
 #. and a taller x-height than those of their large (or display) counterparts.
 #: ../src/ui/widget/font-variations.cpp:104
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Optical size"
-msgstr "Upphafleg stærð:"
+msgstr "Sjónræn stærð"
 
 #: ../src/ui/widget/font-variations.cpp:104
-#, fuzzy
 msgid "Optimize the typeface for use at specific size"
-msgstr "Besta PNG frálag gagnvart skjáastærð."
+msgstr "Besta letrið fyrir notkun í tiltekinni stærð"
 
 #. TRANSLATORS: Slant controls the font file’s slant parameter for oblique styles.
 #: ../src/ui/widget/font-variations.cpp:106
 msgctxt "Variable font axis"
 msgid "Slant"
-msgstr ""
+msgstr "Halli"
 
 #: ../src/ui/widget/font-variations.cpp:106
 msgid "Controls the font file’s slant parameter for oblique styles"
 msgstr "Stýrir hallaviðfangi leturskrárinnar fyrir skáletraða stíla"
 
 #: ../src/ui/widget/font-variations.cpp:108
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Italic"
-msgstr "Fornítalskt"
+msgstr "Skáletrað"
 
 #: ../src/ui/widget/font-variations.cpp:108
 msgid "Turns on the font’s italic forms"
@@ -36948,7 +36716,6 @@ msgstr "Virkjar skáleturseiginleika letursins"
 
 #. TRANSLATORS: Weight controls the font file’s weight parameter.
 #: ../src/ui/widget/font-variations.cpp:110
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Weight"
 msgstr "Þykkt"
@@ -36959,7 +36726,6 @@ msgstr "Stýrir þykktarviðfangi leturskrárinnar"
 
 #. TRANSLATORS: Width controls the font file’s width parameter.
 #: ../src/ui/widget/font-variations.cpp:112
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Width"
 msgstr "Breidd"
@@ -36969,75 +36735,67 @@ msgid "Controls the font file’s width parameter"
 msgstr "Stýrir breiddarviðfangi leturskrárinnar"
 
 #: ../src/ui/widget/font-variations.cpp:114
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Tabular width"
-msgstr "Í töflu"
+msgstr "Breidd í töflu"
 
 #: ../src/ui/widget/font-variations.cpp:114
 msgid "Controls the tabular width"
-msgstr ""
+msgstr "Stýrir breidd í töflu"
 
 #: ../src/ui/widget/font-variations.cpp:115
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Underline"
-msgstr "Stoðlína"
+msgstr "Undirstrikað"
 
 #: ../src/ui/widget/font-variations.cpp:115
 msgid "Controls the weight of an underline"
-msgstr ""
+msgstr "Stýrir breidd undirstrikunar"
 
 #: ../src/ui/widget/font-variations.cpp:116
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Shadow"
-msgstr "Skuggar"
+msgstr "Skuggi"
 
 #: ../src/ui/widget/font-variations.cpp:116
 msgid "Controls the depth of a shadow"
-msgstr ""
+msgstr "Stýrir dýpt á skugga"
 
 #: ../src/ui/widget/font-variations.cpp:117
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Reflection"
-msgstr "Myndval"
+msgstr "Endurkast"
 
 #: ../src/ui/widget/font-variations.cpp:117
-#, fuzzy
 msgid "Controls the Y reflection"
-msgstr "Umbreyta vali:"
+msgstr "Stýrir Y-endurkasti"
 
 #: ../src/ui/widget/font-variations.cpp:118
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Outline"
 msgstr "Útlína"
 
 #: ../src/ui/widget/font-variations.cpp:118
 msgid "Controls the weight of a font’s outline"
-msgstr ""
+msgstr "Stýrir breidd útlínu á letri"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Engrave"
 msgstr "Myndrista"
 
 #: ../src/ui/widget/font-variations.cpp:119
 msgid "Controls the width of an engraving"
-msgstr ""
+msgstr "Stýrir breidd útskurðar"
 
 #: ../src/ui/widget/font-variations.cpp:120
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Emboss"
-msgstr "Upphleypa"
+msgstr "Upphleypt"
 
 #: ../src/ui/widget/font-variations.cpp:120
 msgid "Controls the depth of an emboss"
-msgstr ""
+msgstr "Stýrir dýpt upphleypingar"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgctxt "Variable font axis"
@@ -37067,44 +36825,39 @@ msgid "Controls the relative second value - as in one second of animation time"
 msgstr "Stýrir afstæðu sekúndugildi - eins og í einni sekúndu af hreyfingu"
 
 #: ../src/ui/widget/font-variations.cpp:124
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Rotation"
-msgstr "_Snúningur"
+msgstr "Snúningur"
 
 #: ../src/ui/widget/font-variations.cpp:124
 msgid "Controls the rotation of the glyph in degrees"
-msgstr ""
+msgstr "Stýrir snúningi staftáknsins í gráðum"
 
 #: ../src/ui/widget/font-variations.cpp:125
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Unicode variation"
-msgstr "Unicode-tákn:"
+msgstr "Unicode-tilbrigði"
 
 #: ../src/ui/widget/font-variations.cpp:125
-#, fuzzy
 msgid "Controls the glyph’s unicode ID"
-msgstr "Setja Unicode-staftákn"
+msgstr "Stýrir Unicode-auðkenni staftákns"
 
 #: ../src/ui/widget/font-variations.cpp:126
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Feature variation"
-msgstr "Breytileiki lengdar:"
+msgstr "Tilbrigðaeiginleikar"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgid "Controls the glyph’s feature variation"
-msgstr ""
+msgstr "Stýrir tilbrigðaeiginleikum staftákns (feature variation)"
 
 #: ../src/ui/widget/gradient-editor.cpp:216
 msgid "Stop color"
 msgstr "Litur stoppmerkis"
 
 #: ../src/ui/widget/gradient-editor.cpp:477
-#, fuzzy
 msgid "Rotate gradient"
-msgstr "Endurnefna litstigul"
+msgstr "Snúa litstigli"
 
 #: ../src/ui/widget/gradient-selector.cpp:70
 #: ../src/ui/widget/gradient-selector.cpp:194
@@ -37155,7 +36908,7 @@ msgstr "Skipta um mynd"
 
 #: ../src/ui/widget/image-properties.cpp:98
 msgid "Set image rendering option"
-msgstr "Setja valkost myndgerðarmarkmiðs:"
+msgstr "Setja valkost myndgerðarmarkmiðs"
 
 #: ../src/ui/widget/image-properties.cpp:106
 msgid "Preserve image aspect ratio"
@@ -37232,18 +36985,16 @@ msgstr "Breyta einangrun"
 
 #. TRANSLATORS: "US" is an abbreviation for United States.
 #: ../src/ui/widget/page-properties.cpp:71
-#, fuzzy
 msgid "US"
-msgstr "S"
+msgstr "BNA"
 
 #. TRANSLATORS: %1 is a paper size class, e.g. 'A' or 'B' – as in "A4".
 #: ../src/ui/widget/page-properties.cpp:79
 msgid "ISO %1"
-msgstr ""
+msgstr "ISO %1"
 
 #. TRANSLATORS: This refers to page sizes
 #: ../src/ui/widget/page-properties.cpp:84
-#, fuzzy
 msgid "Others"
 msgstr "Annað"
 
@@ -37417,7 +37168,6 @@ msgid "<i>None</i>"
 msgstr "<i>Ekkert</i>"
 
 #: ../src/ui/widget/selected-style.cpp:73
-#, fuzzy
 msgid "No fill, middle-click for black fill"
 msgstr "Engin fylling, miðjusmella fyrir svarta fyllingu"
 
@@ -37427,7 +37177,6 @@ msgid "<i>None</i>"
 msgstr "<i>Ekkert</i>"
 
 #: ../src/ui/widget/selected-style.cpp:74
-#, fuzzy
 msgid "No stroke, middle-click for black stroke"
 msgstr "Engin útlína, miðjusmella fyrir svarta stroku"
 
@@ -37505,9 +37254,8 @@ msgstr "Litstigulsmöskvi (stroka)"
 
 #: ../src/ui/widget/selected-style.cpp:89
 #: ../src/ui/widget/selected-style.cpp:90
-#, fuzzy
 msgid "<b>C</b>"
-msgstr "<b>L</b>"
+msgstr "<b>C</b>"
 
 #: ../src/ui/widget/selected-style.cpp:89
 msgid "Flat color (fill)"
@@ -37579,76 +37327,62 @@ msgid "Paste stroke"
 msgstr "Líma útlínu"
 
 #: ../src/ui/widget/selected-style.cpp:688
-#, fuzzy
 msgid "Edit Fill..."
 msgstr "Breyta fyllingu..."
 
 #: ../src/ui/widget/selected-style.cpp:689
-#, fuzzy
 msgid "Edit Stroke..."
 msgstr "Breyta útlínu..."
 
 #: ../src/ui/widget/selected-style.cpp:694
-#, fuzzy
 msgid "Last Set Color"
 msgstr "Síðast stillti litur"
 
 #: ../src/ui/widget/selected-style.cpp:696
-#, fuzzy
 msgid "Last Selected Color"
 msgstr "Síðast valinn litur"
 
 #: ../src/ui/widget/selected-style.cpp:714
-#, fuzzy
 msgid "Copy Color"
 msgstr "Afrita lit"
 
 #: ../src/ui/widget/selected-style.cpp:718
-#, fuzzy
 msgid "Paste Color"
-msgstr "Gifsaður litur"
+msgstr "Líma lit"
 
 #: ../src/ui/widget/selected-style.cpp:720
-#, fuzzy
 msgid "Swap Fill and Stroke"
 msgstr "Víxla fyllingu og útlínu"
 
 #: ../src/ui/widget/selected-style.cpp:725
-#, fuzzy
 msgid "Make Fill Opaque"
-msgstr "Gera lit ógegnsæjan"
+msgstr "Gera fyllingu ógegnsæja"
 
 #: ../src/ui/widget/selected-style.cpp:726
-#, fuzzy
 msgid "Make Stroke Opaque"
 msgstr "Gera útlínu ógegnsæja"
 
 #. TRANSLATORS COMMENT: unset is a verb here
 #: ../src/ui/widget/selected-style.cpp:728
-#, fuzzy
 msgid "Unset Fill"
 msgstr "Afstilla fyllingu"
 
 #: ../src/ui/widget/selected-style.cpp:729
-#, fuzzy
 msgid "Unset Stroke"
 msgstr "Afstilla útlínu"
 
 #: ../src/ui/widget/selected-style.cpp:730
-#, fuzzy
 msgid "Remove Fill"
 msgstr "Fjarlægja fyllingu"
 
 #: ../src/ui/widget/selected-style.cpp:731
 #: ../src/ui/widget/selected-style.cpp:768
-#, fuzzy
 msgid "Remove Stroke"
 msgstr "Fjarlægja útlínu"
 
 #: ../src/ui/widget/selected-style.cpp:740
-#, fuzzy
 msgid "<b>Stroke Width</b>"
-msgstr "Breidd útlínu"
+msgstr "<b>Breidd útlínu</b>"
 
 #: ../src/ui/widget/selected-style.cpp:793
 msgid "Change stroke width"
@@ -37667,12 +37401,10 @@ msgid "Stroke is averaged over selected objects"
 msgstr "Útlína er meðaltal valinna atriða"
 
 #: ../src/ui/widget/selected-style.cpp:938
-#, fuzzy
 msgid "Multiple selected objects have same fill"
 msgstr "Margir af völdu hlutunum eru með sömu fyllingu"
 
 #: ../src/ui/widget/selected-style.cpp:939
-#, fuzzy
 msgid "Multiple selected objects have same stroke"
 msgstr "Margir af völdu hlutunum eru með sömu útlínu"
 
@@ -37681,6 +37413,8 @@ msgid ""
 "<b>Opacity (%)</b>\n"
 "Middle-click cycles through 0%, 50%, 100%"
 msgstr ""
+"<b>Ógegnsæi (%)</b>\n"
+"Miðju-músarsmellur flettir í gegnum 0%, 50%, 100%"
 
 #: ../src/ui/widget/selected-style.cpp:992
 #: ../src/ui/widget/stroke-style.cpp:232 ../src/ui/widget/style-swatch.cpp:301
@@ -37703,12 +37437,10 @@ msgid " (averaged)"
 msgstr " (meðalgildi)"
 
 #: ../src/ui/widget/selected-style.cpp:1039
-#, fuzzy
 msgid "0% (Transparent)"
-msgstr "0 (gegnsætt)"
+msgstr "0% (gegnsætt)"
 
 #: ../src/ui/widget/selected-style.cpp:1043
-#, fuzzy
 msgid "100% (Opaque)"
 msgstr "100% (ógegnsætt)"
 
@@ -37984,42 +37716,37 @@ msgstr "Letur skjals"
 #: ../src/util/font-tags.cpp:15
 msgctxt "Font category"
 msgid "Sans Serif"
-msgstr ""
+msgstr "Steinskrift (sans)"
 
 #: ../src/util/font-tags.cpp:16
-#, fuzzy
 msgctxt "Font category"
 msgid "Serif"
-msgstr "Raðtengi (serial)"
+msgstr "Broddletur (serif)"
 
 #: ../src/util/font-tags.cpp:17
-#, fuzzy
 msgctxt "Font category"
 msgid "Script"
-msgstr "Skrift: "
+msgstr "Skrifta"
 
 #: ../src/util/font-tags.cpp:19
-#, fuzzy
 msgctxt "Font category"
 msgid "Symbols"
 msgstr "Tákn"
 
 #: ../src/util/font-tags.cpp:20
-#, fuzzy
 msgctxt "Font category"
 msgid "Monospace"
-msgstr "Jafnbreitt letur:"
+msgstr "Jafnbreitt"
 
 #: ../src/util/font-tags.cpp:21
-#, fuzzy
 msgctxt "Font category"
 msgid "Variable"
-msgstr "Óvirkt"
+msgstr "Breytilegt"
 
 #: ../src/util/font-tags.cpp:22
 msgctxt "Font category"
 msgid "Oblique"
-msgstr ""
+msgstr "Hallandi"
 
 #: ../src/util/paper.cpp:35
 msgid "Failed to create the page file."
@@ -38038,14 +37765,14 @@ msgid "3D box: Move vanishing point"
 msgstr "Þrívíddarkassi: Færa hvarfpunkt"
 
 #: ../src/vanishing-point.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Finite</b> vanishing point shared by the box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
 msgstr[0] "<b>Óendanlegur</b> hvarfpunktur deilt með kassanum"
 msgstr[1] ""
-"<b>Óendanlegur</b> hvarfpunktur deilt með <b>%d</b> kössunum; draga með "
+"<b>Óendanlegur</b> hvarfpunktur deilt með <b>%d</b> kössum; draga með "
 "<b>Shift</b> til að aðskilja valda kassa"
 
 #: ../src/vanishing-point.cpp:315
@@ -38075,7 +37802,6 @@ msgstr[1] ""
 "<b>Shift</b> til að aðskilja"
 
 #: ../src/widgets/paintdef.cpp:55
-#, fuzzy
 msgctxt "Paint"
 msgid "None"
 msgstr "Ekkert"
@@ -38218,6 +37944,8 @@ msgid ""
 "Select this on canvas (if applicable) or in the XML dialog (e.g. a pattern "
 "in the 'defs' section)"
 msgstr ""
+"Veldu þetta á myndfletinum (ef það er hægt) eða í XML-glugganum (t.d. "
+"mynstur í 'defs' hlutanum)"
 
 #: ../share/ui/dialog-document-resources.glade:163
 msgid "Delete selected item from the document"
@@ -38240,9 +37968,8 @@ msgid "Export Format Options"
 msgstr "Valkostir útflutningssniðs"
 
 #: ../share/ui/dialog-export-prefs.glade:54
-#, fuzzy
 msgid "View export format options"
-msgstr "Valkostir útflutningssniðs"
+msgstr "Skoða valkosti útflutningssniðs"
 
 #: ../share/ui/dialog-export.glade:61
 msgid "Export selected objects"
@@ -38303,7 +38030,6 @@ msgid "Export Selected Only"
 msgstr "Einungis flytja út valið"
 
 #: ../share/ui/dialog-export.glade:539 ../share/ui/dialog-export.glade:872
-#, fuzzy
 msgid "Background Color"
 msgstr "Bakgrunnslitur"
 
@@ -38345,9 +38071,8 @@ msgid "Preview"
 msgstr "Forskoðun"
 
 #: ../share/ui/dialog-export.glade:909
-#, fuzzy
 msgid "Overwrite existing files"
-msgstr "Skrifa yfir fyrirliggjandi útflutning"
+msgstr "Yfirskrifa fyrirliggjandi skrár"
 
 #: ../share/ui/dialog-export.glade:914
 msgid ""
@@ -38378,20 +38103,18 @@ msgid "Batch Export"
 msgstr "Magnútflutningur"
 
 #: ../share/ui/dialog-extensions.glade:22
-#, fuzzy
 msgid "Thumbnail size:"
-msgstr "Stærð flísa:"
+msgstr "Stærð smámynda:"
 
 #: ../share/ui/dialog-extensions.glade:167
-#, fuzzy
 msgid "column"
-msgstr "Dálkar"
+msgstr "dálkur"
 
 #. This verb is used to execute an extension. If extension accepts input parameters, then ellipsis will be appended to this word -> _Run...
 #: ../share/ui/dialog-extensions.glade:244
 msgctxt "run-extension"
 msgid "_Run"
-msgstr ""
+msgstr "_Keyra"
 
 #: ../share/ui/dialog-filter-editor.glade:49
 #: ../share/ui/dialog-filter-editor.glade:290
@@ -38471,12 +38194,10 @@ msgid "Flatten"
 msgstr "Fletja"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:26
-#, fuzzy
 msgid "Set Custom Defaults"
 msgstr "Setja sjálfgefin gildi"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:31
-#, fuzzy
 msgid "Forget Custom Defaults"
 msgstr "Gleyma sjálfgefnum gildum"
 
@@ -38570,34 +38291,28 @@ msgid "Set as default template"
 msgstr "Setja sem sjálfgefið sniðmát"
 
 #: ../share/ui/dialog-swatches.glade:55
-#, fuzzy
 msgid "Search colors by their name"
-msgstr "Leita að heiti eiginda"
+msgstr "Leita að litum eftir nafni þeirra"
 
 #: ../share/ui/dialog-swatches.glade:102
-#, fuzzy
 msgid "Load palette of colors or swatches"
-msgstr "Setja fyllilit af litaprufuspjaldi"
+msgstr "Hlaða inn litaspjaldi eða litasýnum"
 
 #: ../share/ui/dialog-swatches.glade:118
-#, fuzzy
 msgid "New swatch"
-msgstr "Festa litaprufu"
+msgstr "Ný litaprufa"
 
 #: ../share/ui/dialog-swatches.glade:134
-#, fuzzy
 msgid "Edit swatch"
-msgstr "Festa litaprufu"
+msgstr "Breyta litaprufu"
 
 #: ../share/ui/dialog-swatches.glade:170
-#, fuzzy
 msgid "Show colors with names"
-msgstr "Sýna litamerkingar"
+msgstr "Sýna liti með nöfnum"
 
 #: ../share/ui/dialog-swatches.glade:188
-#, fuzzy
 msgid "Show colors in a grid"
-msgstr "Birta eða fela hnitanet síðu"
+msgstr "Sýna liti í reitum"
 
 #: ../share/ui/dialog-symbols.glade:58 ../share/ui/pattern-edit.glade:79
 msgid "Show names"
@@ -38644,9 +38359,8 @@ msgid "Open the Font Collections Manager dialogue"
 msgstr "Opna stjórnglugga fyrir letursöfn"
 
 #: ../share/ui/dialog-text-edit.glade:50
-#, fuzzy
 msgid "Clear all filters"
-msgstr "Veldu síu"
+msgstr "Hreinsa allar síur"
 
 #: ../share/ui/dialog-text-edit.glade:54
 msgid "Reset filters and show all available fonts"
@@ -38940,17 +38654,14 @@ msgid "Abort trace operation"
 msgstr "Geyma línuteikningaraðgerð"
 
 #: ../share/ui/dialog-xml.glade:9
-#, fuzzy
 msgid "Automatic Layout"
 msgstr "Sjálfvirk framsetning"
 
 #: ../share/ui/dialog-xml.glade:14
-#, fuzzy
 msgid "Horizontal Layout"
 msgstr "Lárétt framsetning"
 
 #: ../share/ui/dialog-xml.glade:19
-#, fuzzy
 msgid "Vertical Layout"
 msgstr "Lóðrétt framsetning"
 
@@ -39004,7 +38715,7 @@ msgstr "Flýtiaðdráttur:"
 
 #: ../share/ui/display-popup.glade:133
 msgid "Quick preview:"
-msgstr "Flýtiforskoðun"
+msgstr "Flýtiforskoðun:"
 
 #: ../share/ui/display-popup.glade:166
 msgid "Zoom with window size"
@@ -39037,7 +38748,6 @@ msgid "Media Box"
 msgstr "Gagnamiðlareitur"
 
 #: ../share/ui/extension-pdfinput.glade:23
-#, fuzzy
 msgid "Crop Box"
 msgstr "Afmaörkunarreitur"
 
@@ -39173,54 +38883,49 @@ msgid "<b>Cairo import</b>"
 msgstr "<b>Cairo innflutningur</b>"
 
 #: ../share/ui/font-list.glade:59
-#, fuzzy
 msgid "Font collections:"
-msgstr "Letursöfn"
+msgstr "Letursöfn:"
 
 #: ../share/ui/font-list.glade:69
-#, fuzzy
 msgid "All fonts"
 msgstr "Allt letur"
 
 #: ../share/ui/font-list.glade:73
-#, fuzzy
 msgid "Show all fonts"
-msgstr "Sýna allar tiltækar leturgerðir"
+msgstr "Sýna allar leturgerðir"
 
 #: ../share/ui/font-list.glade:116
-#, fuzzy
 msgid "Edit font collections"
-msgstr "Letursöfn"
+msgstr "Breyta letursöfnum"
 
 #. This is an option to select to show font name as a font preview in font browser
 #: ../share/ui/font-list.glade:138
-#, fuzzy
 msgid "Font name"
-msgstr "Sýnishorn leturs"
+msgstr "Heiti leturs"
 
 #. A few alphanumeric characters to see what font glyphs look like
 #: ../share/ui/font-list.glade:152
 msgctxt "font-sample-text"
 msgid "AbcdEfgh1234"
-msgstr ""
+msgstr "AbcdEfgh1234"
 
 #. Sample text consisting of Arabic numerals
 #: ../share/ui/font-list.glade:160
 msgctxt "font-sample-text"
 msgid "1234567890"
-msgstr ""
+msgstr "1234567890"
 
 #. Sample text of lowercase Latin letters. Feel free to add diacritics if your language uses Latin script.
 #: ../share/ui/font-list.glade:168
 msgctxt "font-sample-text"
 msgid "abcdefghijklmnopqrstuvwxyz"
-msgstr ""
+msgstr "aábcdðeéfghiíjklmnoópqrstuúvwxyzþæö"
 
 #. Sample text of uppercase Latin letters. Feel free to add diacritics if your language uses Latin script.
 #: ../share/ui/font-list.glade:176
 msgctxt "font-sample-text"
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-msgstr ""
+msgstr "AÁBCDÐEÉFGHIÍJKLMNOÓPQRSTUÚVWXYZÞÆÖ"
 
 #. Provide a sentence in your language that uses every letter in your alphabet. If your language uses logographs, you may want to include a few to give a glimpse of what selected font looks like.
 #.
@@ -39228,41 +38933,37 @@ msgstr ""
 #: ../share/ui/font-list.glade:184
 msgctxt "font-sample-text"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr ""
+msgstr "Öllum dýrunum í skóginum þætti bezt að vera vinir."
 
 #. Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.
 #: ../share/ui/font-list.glade:192
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr ""
+msgstr "Güła ønđiñ frå Ármōtï śńæðíř hâlmkökúr méð bezťu lýst."
 
 #: ../share/ui/font-list.glade:205
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Raða í stafrófsröð"
 
 #: ../share/ui/font-list.glade:213
-#, fuzzy
 msgid "Light to heavy"
-msgstr "Hægri til vinstri"
+msgstr "Létt til svert"
 
 #: ../share/ui/font-list.glade:221
 msgid "Condensed to expanded"
 msgstr "Þjappað til gisið"
 
 #: ../share/ui/font-list.glade:437
-#, fuzzy
 msgid "Sample"
-msgstr "Sýnishorn:"
+msgstr "Sýnishorn"
 
 #: ../share/ui/font-list.glade:449
-#, fuzzy
 msgid "Preview size"
-msgstr "Stærð forskoðunar (px):"
+msgstr "Stærð forskoðunar"
 
 #: ../share/ui/font-list.glade:458
-#, fuzzy
 msgid "Show font name"
-msgstr "Sýna heiti"
+msgstr "Sýna heiti leturs"
 
 #: ../share/ui/font-list.glade:506 ../share/extensions/jessyink_view.inx:3
 #: ../share/extensions/polyhedron_3d.inx:32
@@ -39280,18 +38981,13 @@ msgstr ""
 
 #. A short text sample for when fonts are arranged in grid
 #: ../share/ui/font-list.glade:573
-#, fuzzy
 msgctxt "font-sample-text"
 msgid "Aa"
-msgstr "Svæði"
+msgstr "Aa"
 
 #: ../share/ui/font-list.glade:575
-#, fuzzy
 msgid "Sample text to show in a font grid display"
-msgstr ""
-"\n"
-"\n"
-"Sýnitexti til að nota við gerð leturtöflu:"
+msgstr "Sýnitexti til að nota við gerð leturtöflu"
 
 #: ../share/ui/font-list.glade:615 ../share/extensions/nicechart.inx:52
 #: ../share/extensions/path_number_nodes.inx:8
@@ -39299,19 +38995,17 @@ msgid "Font size:"
 msgstr "Leturstærð:"
 
 #: ../share/ui/font-list.glade:715
-#, fuzzy
 msgctxt "loading-fonts"
 msgid "Initializing"
-msgstr "Afstöllun"
+msgstr "Frumstilli"
 
 #: ../share/ui/gradient-edit.glade:70 ../share/ui/toolbar-gradient.ui:216
 msgid "Reverse the direction of the gradient"
 msgstr "Snúa við stefnu litstiguls"
 
 #: ../share/ui/gradient-edit.glade:83
-#, fuzzy
 msgid "Rotate gradient 90 degrees"
-msgstr "Snúa völdum hlutum í gráðum"
+msgstr "Snúa litstigli um 90 gráður"
 
 #: ../share/ui/gradient-edit.glade:140
 msgid "Stop Offset:"
@@ -39335,9 +39029,8 @@ msgid "Orientation:"
 msgstr "Stefna:"
 
 #: ../share/ui/gradient-edit.glade:283
-#, fuzzy
 msgid "Adjust angle of the gradient"
-msgstr "Laga til uppruna snúningsins"
+msgstr "Aðlaga horn litstigulsins"
 
 #: ../share/ui/gradient-edit.glade:299
 msgid "Repeat:"
@@ -39629,10 +39322,9 @@ msgid "Recent Files"
 msgstr "Nýlegar skrár"
 
 #: ../share/ui/inkscape-welcome.glade:901
-#, fuzzy
 msgctxt "Welcome dialog"
 msgid "Emergency Save"
-msgstr "Skuggamynd"
+msgstr "Neyðarvistun"
 
 #: ../share/ui/inkscape-welcome.glade:917
 msgctxt "Welcome dialog"
@@ -39679,7 +39371,7 @@ msgstr "Tiltekið fast horn"
 
 #: ../share/ui/marker-popup.glade:275
 msgid "Fixed angle:"
-msgstr "Valtól"
+msgstr "Fast horn:"
 
 #: ../share/ui/marker-popup.glade:300 ../share/ui/pattern-edit.glade:487
 msgid "Offset X:"
@@ -39777,7 +39469,6 @@ msgstr "Breidd rétthyrnings (án útlínu)"
 #: ../share/ui/object-attributes.glade:471
 #: ../share/ui/object-attributes.glade:1185 ../share/ui/toolbar-rect.ui:85
 #: ../share/ui/toolbar-select.ui:492
-#, fuzzy
 msgctxt "Abbreviation of Height"
 msgid "H:"
 msgstr "H:"
@@ -39854,33 +39545,28 @@ msgid "Base radius to tip radius ratio"
 msgstr "Hlutfall radíusa grunnhorns og arma"
 
 #: ../share/ui/object-attributes.glade:1082
-#, fuzzy
 msgid "Path vertical position"
-msgstr "Staðsetning merkingar"
+msgstr "Lóðrétt staðsetning ferils"
 
 #: ../share/ui/object-attributes.glade:1108
-#, fuzzy
 msgid "Path horizontal position"
-msgstr "Láréttur punktur:"
+msgstr "Lárétt staðsetning ferils"
 
 #: ../share/ui/object-attributes.glade:1147
-#, fuzzy
 msgid "Location"
-msgstr "Staðsetning:"
+msgstr "Staðsetning"
 
 #: ../share/ui/object-attributes.glade:1169
-#, fuzzy
 msgid "Width of path shape"
-msgstr "Breidd pappírs"
+msgstr "Breidd lögunar ferils"
 
 #: ../share/ui/object-attributes.glade:1195
-#, fuzzy
 msgid "Height of path shape"
-msgstr "Hæð pappírs"
+msgstr "Hæð lögunar ferils"
 
 #: ../share/ui/object-attributes.glade:1354
 msgid "Press Shift+Enter to commit editing changes"
-msgstr ""
+msgstr "Ýttu á Shift+Enter til að staðfesta breytingarnar"
 
 #: ../share/ui/page-properties.glade:68
 msgid "Front page"
@@ -40016,18 +39702,16 @@ msgid "If unset, no antialiasing will be done on the drawing."
 msgstr "Ef þetta er ekki valið, verður engri afstöllun beitt á myndina."
 
 #: ../share/ui/pattern-edit.glade:125
-#, fuzzy
 msgid "Gap control:"
-msgstr "Gripstýrislá:"
+msgstr "Stýring skarða:"
 
 #: ../share/ui/pattern-edit.glade:135
 msgid "Mouse-friendly"
-msgstr ""
+msgstr "Músarvænt"
 
 #: ../share/ui/pattern-edit.glade:150
-#, fuzzy
 msgid "Precise"
-msgstr "Nákvæmni"
+msgstr "Nákvæmt"
 
 #: ../share/ui/pattern-edit.glade:193
 msgid "Pattern fill"
@@ -40043,9 +39727,8 @@ msgstr "Y-kvarði:"
 
 #. This is a hint that shows up when pattern name is blank
 #: ../share/ui/pattern-edit.glade:589
-#, fuzzy
 msgid "name"
-msgstr "Endu_rnefna"
+msgstr "heiti"
 
 #: ../share/ui/pattern-edit.glade:653
 msgid "Color: "
@@ -40127,9 +39810,8 @@ msgid "Align left edges of objects to the right edge of anchor"
 msgstr "Jafna vinstri jaðra hluta við hægri jaðar festipunktsins"
 
 #: ../share/ui/align-and-distribute.ui:315
-#, fuzzy
 msgid "Align text anchors horizontally"
-msgstr "Dreifa festingum texta lárétt"
+msgstr "Jafna festingum texta lárétt"
 
 #: ../share/ui/align-and-distribute.ui:335
 msgid "Align bottom edges of objects to the top edge of anchor"
@@ -40152,12 +39834,10 @@ msgid "Align top edges of objects to bottom edge of anchor"
 msgstr "Jafna efri jaðra hluta við neðri jaðar festipunktsins"
 
 #: ../share/ui/align-and-distribute.ui:435
-#, fuzzy
 msgid "Align text anchors vertically"
-msgstr "Dreifa festingum texta lóðrétt"
+msgstr "Jafna festingum texta lóðrétt"
 
 #: ../share/ui/align-and-distribute.ui:886
-#, fuzzy
 msgctxt "Abbreviation of Horizontal"
 msgid "H:"
 msgstr "H:"
@@ -40811,18 +40491,16 @@ msgid "Remove Manual _Kerns"
 msgstr "Fjar_lægja handvirka stafhnikun"
 
 #: ../share/ui/menus.ui:1160
-#, fuzzy
 msgid "Text to Glyphs"
-msgstr "Opna staftákn"
+msgstr "Texti í staftákn"
 
 #: ../share/ui/menus.ui:1174
 msgid "Filter_s"
 msgstr "_Síur"
 
 #: ../share/ui/menus.ui:1177
-#, fuzzy
 msgid "Filter _Gallery..."
-msgstr "Sí_uritill..."
+msgstr "Síusa_fn..."
 
 #: ../share/ui/menus.ui:1183
 msgid "Filter _Editor..."
@@ -40845,9 +40523,8 @@ msgid "_Previous Extension Settings..."
 msgstr "Stillin_gar síðasta forritsviðauka..."
 
 #: ../share/ui/menus.ui:1209
-#, fuzzy
 msgid "_Extension Gallery..."
-msgstr "_Forritsviðaukar..."
+msgstr "_Forritsaukasafn..."
 
 #: ../share/ui/menus.ui:1218
 #: ../share/extensions/other/inkman/manage_extensions.inx:3
@@ -40899,9 +40576,8 @@ msgid "_Tips and Tricks"
 msgstr "Á_bendingar og góð ráð"
 
 #: ../share/ui/menus.ui:1278
-#, fuzzy
 msgid "Learn more"
-msgstr "Kornahamur"
+msgstr "Kanna nánar"
 
 #: ../share/ui/menus.ui:1329
 msgid "_About Inkscape"
@@ -40920,22 +40596,18 @@ msgid "Cursor coordinates"
 msgstr "Hnit bendils"
 
 #: ../share/ui/statusbar.ui:191
-#, fuzzy
 msgid "Zoom (also Ctrl+scroll)"
-msgstr "Snúningur. (Einnig Ctrl+Shift+skrun)"
+msgstr "Aðdráttur (einnig Ctrl+skrun)"
 
 #: ../share/ui/statusbar.ui:197
-#, fuzzy
 msgid "Z:"
 msgstr "Z:"
 
 #: ../share/ui/statusbar.ui:219
-#, fuzzy
 msgid "Rotation (also Ctrl+Shift+scroll)"
-msgstr "Snúningur. (Einnig Ctrl+Shift+skrun)"
+msgstr "Snúningur (einnig Ctrl+Shift+skrun)"
 
 #: ../share/ui/statusbar.ui:225
-#, fuzzy
 msgid "R:"
 msgstr "R:"
 
@@ -40956,47 +40628,41 @@ msgid "Accept"
 msgstr "Samþykkja"
 
 #: ../share/ui/toolbar-box3d.ui:32
-#, fuzzy
 msgid "Angle of perspective lines in x-direction"
-msgstr "Horn hjálparlína í X-stefnu"
+msgstr "Horn fjarvíddarlína í x-stefnu"
 
 #: ../share/ui/toolbar-box3d.ui:61
-#, fuzzy
 msgid ""
 "Toggle vanishing point in x-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Víxla hvarfpunkti í X-stefnu milli 'endanlegs' og 'óendanlegs' (=samhliða)"
+"Víxla hvarfpunkti í x-stefnu milli 'endanlegs' og 'óendanlegs' (=samhliða)"
 
 #: ../share/ui/toolbar-box3d.ui:77
-#, fuzzy
 msgid "Angle of perspective lines in y-direction"
-msgstr "Horn hjálparlína í X-stefnu"
+msgstr "Horn fjarvíddarlína í y-stefnu"
 
 #: ../share/ui/toolbar-box3d.ui:81
 msgid "Angle Y:"
 msgstr "Horn Y:"
 
 #: ../share/ui/toolbar-box3d.ui:108
-#, fuzzy
 msgid ""
 "Toggle vanishing point in y-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Víxla hvarfpunkti í X-stefnu milli 'endanlegs' og 'óendanlegs' (=samhliða)"
+"Víxla hvarfpunkti í y-stefnu milli 'endanlegs' og 'óendanlegs' (=samhliða)"
 
 #: ../share/ui/toolbar-box3d.ui:124
-#, fuzzy
 msgid "Angle of perspective lines in z-direction"
-msgstr "Horn hjálparlína í X-stefnu"
+msgstr "Horn fjarvíddarlína í z-stefnu"
 
 #: ../share/ui/toolbar-box3d.ui:155
-#, fuzzy
 msgid ""
 "Toggle vanishing point in z-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Víxla hvarfpunkti í X-stefnu milli 'endanlegs' og 'óendanlegs' (=samhliða)"
+"Víxla hvarfpunkti í z-stefnu milli 'endanlegs' og 'óendanlegs' (=samhliða)"
 
 #: ../share/ui/toolbar-calligraphy.ui:88
 msgid "Choose a preset"
@@ -41069,9 +40735,8 @@ msgstr ""
 #: ../share/ui/toolbar-spray.ui:421 ../share/ui/toolbar-spray.ui:552
 #: ../share/ui/toolbar-text.ui:841 ../share/ui/toolbar-tweak.ui:378
 #: ../share/ui/toolbar-tweak.ui:407 ../share/ui/toolbar-tweak.ui:453
-#, fuzzy
 msgid "0"
-msgstr "A0"
+msgstr "0"
 
 #: ../share/ui/toolbar-calligraphy.ui:310
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
@@ -41118,49 +40783,40 @@ msgid "Wiggle:"
 msgstr "Vagg:"
 
 #: ../share/ui/toolbar-commands.ui:50
-#, fuzzy
 msgid "Open..."
-msgstr "_Opna..."
+msgstr "Opna..."
 
 #: ../share/ui/toolbar-commands.ui:94
-#, fuzzy
 msgid "Print..."
-msgstr "_Prenta..."
+msgstr "Prenta..."
 
 #: ../share/ui/toolbar-commands.ui:127
-#, fuzzy
 msgid "Import..."
-msgstr "Flytja _inn..."
+msgstr "Flytja inn..."
 
 #: ../share/ui/toolbar-commands.ui:149
-#, fuzzy
 msgid "Export..."
-msgstr "_Flytja út..."
+msgstr "Flytja út..."
 
 #: ../share/ui/toolbar-commands.ui:626
-#, fuzzy
 msgid "Text and Font"
-msgstr "_Texti og letur"
+msgstr "Texti og letur"
 
 #: ../share/ui/toolbar-commands.ui:652
-#, fuzzy
 msgid "Layers and Objects"
-msgstr "_Lög og hlutir"
+msgstr "Lög og hlutir"
 
 #: ../share/ui/toolbar-commands.ui:704
-#, fuzzy
 msgid "Selectors and CSS..."
-msgstr "_Veljarar og CSS..."
+msgstr "Veljarar og CSS..."
 
 #: ../share/ui/toolbar-commands.ui:730
-#, fuzzy
 msgid "Align and Distribute..."
-msgstr "J_afna og dreifa..."
+msgstr "Jafna og dreifa..."
 
 #: ../share/ui/toolbar-commands.ui:796
-#, fuzzy
 msgid "Preferences..."
-msgstr "_Kjörstillingar..."
+msgstr "Kjörstillingar..."
 
 #: ../share/ui/toolbar-connector.ui:65
 msgid "Make connector orthogonal or polyline"
@@ -41259,7 +40915,6 @@ msgid "Link gradients to change all related gradients"
 msgstr "Tengja litstigla þannig að hægt sé að breyta öllum tengdum litstiglum"
 
 #: ../share/ui/toolbar-gradient.ui:273 ../share/ui/toolbar-select.ui:459
-#, fuzzy
 msgid "Width of selection"
 msgstr "Breidd myndvals"
 
@@ -41268,27 +40923,22 @@ msgid "No geometric tool is active"
 msgstr "Ekkert rúmfræðilegt verkfæri er virkt"
 
 #: ../share/ui/toolbar-lpe.ui:69
-#, fuzzy
 msgid "Line Segment"
 msgstr "Línubútur"
 
 #: ../share/ui/toolbar-lpe.ui:88
-#, fuzzy
 msgid "Circle by 3 points"
-msgstr "Hringur af þremur punktum"
+msgstr "Hringur úr þremur punktum"
 
 #: ../share/ui/toolbar-lpe.ui:145
-#, fuzzy
 msgid "Perpendicular bisector"
 msgstr "Hornrétt helmingaskipting"
 
 #: ../share/ui/toolbar-lpe.ui:164
-#, fuzzy
 msgid "Angle Bisector"
-msgstr "Helmingalínur horna"
+msgstr "Helmingalína horns"
 
 #: ../share/ui/toolbar-lpe.ui:183
-#, fuzzy
 msgid "Mirror symmetry"
 msgstr "Samhverfa speglunar"
 
@@ -41313,9 +40963,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Opna LPE-glugga (til að setja inn tölulegar stærðir)"
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Breyta á myndfleti"
+msgstr "Breyta merki á myndfleti."
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -41378,9 +41027,8 @@ msgid "Phantom measure"
 msgstr "Draugamæling"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Teikningu"
+msgstr "Teikning"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -41552,9 +41200,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Birta afmörkunarferil á völdum hlutum"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Aðeins valda hluti"
+msgstr "Veldu hlut á myndfleti"
 
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
@@ -41689,46 +41336,38 @@ msgid "Select all objects"
 msgstr "Velja alla hluti"
 
 #: ../share/ui/toolbar-select.ui:124
-#, fuzzy
 msgid "Select all in all layers"
-msgstr "Velja í öllum lögum"
+msgstr "Velja allt í öllum lögum"
 
 #: ../share/ui/toolbar-select.ui:142
 msgid "Deselect any selected objects"
 msgstr "Afvelja alla valda hluti"
 
 #: ../share/ui/toolbar-select.ui:161
-#, fuzzy
 msgid "Toggle selection box to select all touched objects"
-msgstr "Víxla valsvæði af/á til að velja alla snerta hluti."
+msgstr "Víxla valsvæði af/á til að velja alla snerta hluti"
 
 #: ../share/ui/toolbar-select.ui:209
-#, fuzzy
 msgid "Rotate selection 90\\xc2\\xb0 counter-clockwise"
-msgstr "Snúa völdu 90° rangsælis"
+msgstr "Snúa völdu 90\\xc2\\xb0 rangsælis"
 
 #: ../share/ui/toolbar-select.ui:229
-#, fuzzy
 msgid "Rotate selection 90\\xc2\\xb0 clockwise"
-msgstr "Snúa völdu 90° réttsælis"
+msgstr "Snúa völdu 90\\xc2\\xb0 réttsælis"
 
 #: ../share/ui/toolbar-select.ui:408
-#, fuzzy
 msgid "Horizontal coordinate of selection"
 msgstr "Lárétt hnit myndvals"
 
 #: ../share/ui/toolbar-select.ui:433
-#, fuzzy
 msgid "Vertical coordinate of selection"
 msgstr "Lóðrétt hnit myndvals"
 
 #: ../share/ui/toolbar-select.ui:476
-#, fuzzy
 msgid "When locked, change width and height by the same proportion"
 msgstr "Þegar þessu er læst, breytast breidd og hæð í sömu hlutföllum"
 
 #: ../share/ui/toolbar-select.ui:499
-#, fuzzy
 msgid "Height of selection"
 msgstr "Hæð myndvals"
 
@@ -41833,9 +41472,8 @@ msgid "Page margins"
 msgstr "Spássíur á síðu"
 
 #: ../share/ui/toolbar-snap.ui:766
-#, fuzzy
 msgid "Grid Lines"
-msgstr "Stoðlínur"
+msgstr "Hnitalínur"
 
 #: ../share/ui/toolbar-snap.ui:930
 msgid "Advanced mode"
@@ -41854,16 +41492,14 @@ msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Hversu gisnari eru ytri umferðirnar; 1 = jafnt"
 
 #: ../share/ui/toolbar-spiral.ui:71
-#, fuzzy
 msgid "Divergence"
-msgstr "Samleitni:"
+msgstr "Samleitni"
 
 #: ../share/ui/toolbar-spiral.ui:96
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radíus innstu umferðar (hlutfall af stærð spírals)"
 
 #: ../share/ui/toolbar-spiral.ui:100
-#, fuzzy
 msgid "Inner Radius:"
 msgstr "Innri radíus:"
 
@@ -41932,7 +41568,6 @@ msgid "Increase to scatter sprayed objects"
 msgstr "Auka til að tvístra sprautuðum hlutum"
 
 #: ../share/ui/toolbar-spray.ui:388
-#, fuzzy
 msgid "Scatter:"
 msgstr "Tvístrun:"
 
@@ -41991,30 +41626,24 @@ msgid "Pick from center instead of average area."
 msgstr "Plokka af miðju í stað meðaltals svæðis."
 
 #: ../share/ui/toolbar-star.ui:28
-#, fuzzy
 msgid "radiobutton"
-msgstr "Hefðbundin"
+msgstr "valhnappur"
 
 #: ../share/ui/toolbar-star.ui:121
 msgid "Corners:"
 msgstr "Horn:"
 
 #: ../share/ui/toolbar-star.ui:149
-#, fuzzy
 msgid "Spoke Ratio:"
 msgstr "Hlutfall arma:"
 
 #: ../share/ui/toolbar-star.ui:276
-#, fuzzy
 msgid "Reset all parameters to their default values"
-msgstr ""
-"Frumstilla sjálfgefnar stillingar þessarar gagnvirku ferilbrellu á "
-"sjálfgefin gildi Inkscape"
+msgstr "Frumstilla færibreytur á sjálfgefin gildi þeirra"
 
 #: ../share/ui/toolbar-text.ui:85
-#, fuzzy
 msgid "Open the Font Collections dialog"
-msgstr "Opna stjórnglugga fyrir letursöfn"
+msgstr "Opna glugga fyrir letursöfn"
 
 #: ../share/ui/toolbar-text.ui:177
 msgid "Select Font Collections"
@@ -42263,19 +41892,16 @@ msgid "In color mode, act on object's opacity"
 msgstr "Í litaham virkar þetta á ógegnsæi hluta (O)"
 
 #: ../share/ui/toolbar-zoom.ui:53
-#, fuzzy
 msgid "Zoom 1-1"
-msgstr "Aðdráttur 1:1"
+msgstr "Aðdráttur 1-1"
 
 #: ../share/ui/toolbar-zoom.ui:70
-#, fuzzy
 msgid "Zoom 1-2"
-msgstr "Aðdráttur 1:2"
+msgstr "Aðdráttur 1-2"
 
 #: ../share/ui/toolbar-zoom.ui:87
-#, fuzzy
 msgid "Zoom 2-1"
-msgstr "Aðdráttur 2:1"
+msgstr "Aðdráttur 2-1"
 
 #: ../share/extensions/barcode/Base.py:49
 msgid "Error encoding '{}' as {} barcode: {}\n"
@@ -43273,9 +42899,8 @@ msgid "Invalid Triangle Specifications."
 msgstr "Ógildar skilgreiningar þríhyrnings."
 
 #: ../share/extensions/typst_formula.py:63
-#, fuzzy
 msgid "An exception occurred during typst compilation: "
-msgstr "Villa kom upp við undirbúning skjals"
+msgstr "Villa kom upp við vistþýðingu typst: "
 
 #: ../share/extensions/typst_formula.py:68
 msgid "No svg has been produced by compilation: "
@@ -43384,24 +43009,20 @@ msgid "Cleans the cruft out of Adobe Illustrator SVGs before opening"
 msgstr "Hreinsar drasl úr Adobe Illustrator SVG-skrám áður en þær eru opnaðar"
 
 #: ../share/extensions/cgm_input.inx:3
-#, fuzzy
 msgid "CGM Input"
-msgstr "EMF ílag"
+msgstr "CGM-ílag"
 
 #: ../share/extensions/cgm_input.inx:11
-#, fuzzy
 msgid "Computer Graphics Metafile (*.cgm)"
-msgstr "XFIG myndskrá (*.fig)"
+msgstr "Computer Graphics Metafile (*.cgm)"
 
 #: ../share/extensions/cgm_input.inx:12
-#, fuzzy
 msgid "Import a Computer Graphics Metafile (CGM)"
-msgstr "Flytja inn HP Graphics Language skrá"
+msgstr "Flytja inn Computer Graphics Metafile (CGM)"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Hreinsun"
+msgstr "Hreinsa feril"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -43418,9 +43039,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Hámarkslengd búts:"
+msgstr "Lágmarkslengd búts"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
@@ -43471,7 +43091,6 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Upplýsingar"
 
@@ -44139,6 +43758,8 @@ msgid ""
 "Some tools do not support curves in DXF files. Enabling this will export "
 "curves as series of straight line segments."
 msgstr ""
+"Sum forrit styðja ekki sveiglínur í DXF-skrám. Sé þetta virkjað verða "
+"sveiglínur fluttir út sem runur af beinum línubútum."
 
 #: ../share/extensions/dxf_outlines.inx:13
 msgid "Use Document unit as base unit"
@@ -44153,6 +43774,8 @@ msgid ""
 "Only takes effect if the previous parameter is disabled. 1 user unit in the "
 "SVG file will correspond to 1 (selected unit) in the DXF file."
 msgstr ""
+"Gildir einungis ef breytan hér á undan sé ekki virk. 1 eining notandans í "
+"SVG-skránni mun samsvara 1 (valinni einingu) í DXF-skránni."
 
 #: ../share/extensions/dxf_outlines.inx:15
 msgid "px (unitless)"
@@ -44425,7 +44048,7 @@ msgstr "Breidd útlínu (einingar notanda)"
 
 #: ../share/extensions/frame.inx:30
 msgid "Stacking order"
-msgstr "Stöflun:"
+msgstr "Röð stöflunar"
 
 #: ../share/extensions/frame.inx:31
 msgid "Frame below object(s)"
@@ -44590,6 +44213,8 @@ msgid ""
 "Convert the first rectangular grid to a Gimp grid (note that the default "
 "Inkscape grid is very narrow when shown in Gimp)."
 msgstr ""
+"Umbreyttu fyrsta rétthyrnda hnitanetinu í Gimp-hnitanet (athugaðu að "
+"sjálfgefið hnitanet Inkscape er mjög mjótt þegar það er birt í Gimp)."
 
 #: ../share/extensions/gimp_xcf.inx:11
 msgid "Save Background"
@@ -44597,7 +44222,7 @@ msgstr "Vista bakgrunn"
 
 #: ../share/extensions/gimp_xcf.inx:11
 msgid "Add the document background to each converted layer."
-msgstr ""
+msgstr "Bættu bakgrunni skjals í hvert umbreytt lag."
 
 #: ../share/extensions/gimp_xcf.inx:12
 msgid "File Resolution:"
@@ -44616,6 +44241,11 @@ msgid ""
 "concatenated and converted with their first level parent layer into a single "
 "Gimp layer."
 msgstr ""
+"Þessi viðbót flytur skjalið út á Gimp XCF-snið samkvæmt eftirfarandi "
+"valkostum:\n"
+"\n"
+"Hverju efsta-stigs lagi er umbreytt í Gimp-lag. Undirlög eru sameinuð og "
+"þeim umbreytt ásamt yfirlagi þeirra í eitt Gimp-lag."
 
 #: ../share/extensions/gimp_xcf.inx:23 ../share/extensions/gimp_xcf.inx:24
 msgid "GIMP XCF maintaining layers (*.xcf)"
@@ -45158,7 +44788,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_input.inx:8
 msgid "Width (in):"
-msgstr "Breidd (in)"
+msgstr "Breidd (in):"
 
 #: ../share/extensions/hpgl_input.inx:8
 msgid "Width of the PCL picture frame"
@@ -45211,7 +44841,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:9 ../share/extensions/plotter.inx:65
 msgid "Plotter Settings"
-msgstr "Plotterstillingar "
+msgstr "Plotterstillingar"
 
 #: ../share/extensions/hpgl_output.inx:10 ../share/extensions/plotter.inx:66
 msgid "Resolution X (dpi):"
@@ -45312,7 +44942,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:27 ../share/extensions/plotter.inx:83
 msgid "Plot Features"
-msgstr "Eiginleikar plotts "
+msgstr "Eiginleikar plotts"
 
 #: ../share/extensions/hpgl_output.inx:28 ../share/extensions/plotter.inx:84
 msgid "Overcut (mm):"
@@ -45437,7 +45067,7 @@ msgstr "Gæði myndgerðar"
 
 #: ../share/extensions/image_attributes.inx:47
 msgid "Image rendering attribute:"
-msgstr "Eigindi myndgerðar"
+msgstr "Eigindi myndgerðar:"
 
 #: ../share/extensions/image_attributes.inx:58
 msgid "Apply attribute to parent group of selection"
@@ -45473,6 +45103,8 @@ msgid ""
 "Relative paths are interpreted with respect to the current file location. "
 "Missing folders are created automatically."
 msgstr ""
+"Afstæðar slóðir eru túlkaðar miðað við fyrirliggjandi staðsetningu skráar. "
+"Möppur sem vantar eru útbúnar sjálfkrafa."
 
 #: ../share/extensions/image_extract.inx:7
 msgid "File name base:"
@@ -45484,6 +45116,9 @@ msgid ""
 "image id for the file names. The file extension will be appended "
 "automatically."
 msgstr ""
+"Forskeyti skráarheitis; verður viðskeytt með talningarnúmeri. Skildu eftir "
+"autt til að nota auðkenni myndar sem skráarheiti. Skráarendingunni er bætt "
+"við eða hún lagfærð sjálfkrafa."
 
 #: ../share/extensions/image_extract.inx:9
 #: ../share/extensions/image_extract_selected.inx:10
@@ -45496,6 +45131,7 @@ msgid ""
 "After saving the image file, the image data is replaced with a link to that "
 "file."
 msgstr ""
+"Eftir að myndskrá er vistuð, er myndgögnum skipt út fyrir tengil í þá skrá."
 
 #: ../share/extensions/image_extract_selected.inx:6
 msgid "Enter filename:"
@@ -45507,6 +45143,9 @@ msgid ""
 "a folder is given instead of a filename, the image id is used as filename. "
 "The file extension is appended or corrected automatically."
 msgstr ""
+"Afstæðar slóðir eru túlkaðar miðað við fyrirliggjandi staðsetningu skráar. "
+"Ef gefin er upp mappa í stað skráarheitis, er auðkenni myndar notað sem "
+"skráarheiti. Skráarendingunni er bætt við eða hún lagfærð sjálfkrafa."
 
 #: ../share/extensions/ink2canvas.inx:3
 msgid "Convert to html5 canvas"
@@ -45577,7 +45216,7 @@ msgstr "Kljúfa ferla í jafnlanga búta"
 
 #: ../share/extensions/interp.inx:9
 msgid "Discard extra nodes of longer path"
-msgstr ""
+msgstr "Henda aukahnútum úr lengri ferli"
 
 #: ../share/extensions/interp.inx:11
 msgid "Duplicate endpaths"
@@ -46878,9 +46517,8 @@ msgid "Import Web Image..."
 msgstr "Flytja inn vefmynd..."
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:10
-#, fuzzy
 msgid "Afdesign Input"
-msgstr "Opna inntak"
+msgstr "Afdesign-ílag"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:15
 msgid "Affinity Designer file (*.afdesign)"
@@ -47043,8 +46681,9 @@ msgid ""
 "Gcodetools ver. 1.7\n"
 msgstr ""
 "\n"
-"Gcodetools viðauki: umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og "
-"getur rist hvöss horn með kónískum skurðarhausum.\n"
+"Gcodetools viðauki: \n"
+"Umbreytir ferlum í Gcode-kóða, útbýr hliðraða ferla og getur rist hvöss horn "
+"með kónískum skurðarhausum.\n"
 "Þessi viðauki reiknar Gcode-kóða fyrir ferla með hringlaga brúun "
 "(interpolation) eða með línulegri hreyfingu ef þess er óskað.\n"
 "\n"
@@ -47088,7 +46727,7 @@ msgstr "Breidd svæðis:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:11
 msgid "Area tool overlap (0..0.9):"
-msgstr ""
+msgstr "Skörun svæðaverkfæris (0..0.9):"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:13
 msgid ""
@@ -47203,7 +46842,7 @@ msgstr "Umferð eftir umferð"
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:37
 #: ../share/extensions/other/gcodetools/gcodetools_path_to_gcode.inx:17
 msgid "Depth function:"
-msgstr ""
+msgstr "Dýptarfall:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:57
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:38
@@ -47463,7 +47102,7 @@ msgstr "Graffiti"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:10
 msgid "Minimal connector radius:"
-msgstr "Lágmarksradíus tengilínu"
+msgstr "Lágmarksradíus tengilínu:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:11
 msgid "Start position (x;y):"
@@ -47670,7 +47309,7 @@ msgstr "Lengd inn-út ferils:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:11
 msgid "In-out path max distance to reference point:"
-msgstr ""
+msgstr "Fjarlægð inn-út ferils að viðmiðunarpunkti:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:12
 msgid "In-out path type:"
@@ -47706,7 +47345,7 @@ msgstr "Undirbúa horn"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:23
 msgid "Stepout distance for corners:"
-msgstr ""
+msgstr "Vegalengd útstigs á hornum:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:24
 msgid "Maximum angle for corner (0-180 deg):"
@@ -47812,7 +47451,6 @@ msgid "Shape Builder Prefab"
 msgstr "Forbyggt í lögunarsmíði"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:7
-#, fuzzy
 msgctxt "TemplateCategory"
 msgid "Shape Builder"
 msgstr "Lögunarsmíði"
@@ -47823,77 +47461,67 @@ msgstr "Sniðmát:"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:12
 msgid "Trellis"
-msgstr ""
+msgstr "Grind"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:14
-#, fuzzy
 msgid "Cross"
-msgstr "Þver-móðun"
+msgstr "Kross"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:15
-#, fuzzy
 msgid "Very Cross"
-msgstr "Bylgjaður kross"
+msgstr "Sveigður kross"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:16
-#, fuzzy
 msgid "Target"
-msgstr "Úttak:"
+msgstr "Mark"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:17
 msgid "Hive"
-msgstr ""
+msgstr "Býflugnabú"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:18
-#, fuzzy
 msgid "Double Vision"
-msgstr "Tvö_falda stærð"
+msgstr "Tvöföld sjón"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:19
-#, fuzzy
 msgid "Celtic Flower"
-msgstr "Margir litir"
+msgstr "Keltneskt blóm"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:20
-#, fuzzy
 msgid "Celtic Knot"
-msgstr "Seinasti hnútur"
+msgstr "Keltneskur hnútur"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:21
 msgid "Kitchen Tile"
-msgstr ""
+msgstr "Eldhúsflís"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:22
 msgid "Rose"
-msgstr ""
+msgstr "Rós"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:23
 msgid "Lily"
-msgstr ""
+msgstr "Lilja"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:24
 msgid "Crown"
-msgstr ""
+msgstr "Kóróna"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:25
-#, fuzzy
 msgid "Diamond Target"
-msgstr "Demantsplata"
+msgstr "Demantsmark"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:26
-#, fuzzy
 msgid "TV Test Pattern"
-msgstr "Hlutir sem mynstur"
+msgstr "Prófunarmynstur sjónvarpsmerkis"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:27
-#, fuzzy
 msgid "Explosion"
-msgstr "Útilokun"
+msgstr "Sprenging"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:28
-#, fuzzy
 msgid "Droplet"
-msgstr "Litaplokkari"
+msgstr "Smádropi"
 
 #: ../share/extensions/output_scour.inx:3
 msgid "Optimized SVG Output"
@@ -48077,7 +47705,7 @@ msgstr "Ekkert"
 
 #: ../share/extensions/output_scour.inx:68
 msgid "Depth of indentation:"
-msgstr "Dýpt inndráttar"
+msgstr "Dýpt inndráttar:"
 
 #: ../share/extensions/output_scour.inx:68
 msgid ""
@@ -48367,6 +47995,9 @@ msgid ""
 "will rotate along with the path direction. With \"Ribbon\", the pattern will "
 "stay upright, so the result will look like a printed ribbon."
 msgstr ""
+"Það eru tvær mismunandi aðferðir við aflögun. \"Snákur\" þýðir að mynstrið "
+"mun snúast miðað við stefnu ferilsins. Með aðferðinni \"Borði\" mun mynstrið "
+"haldast upprétt, þannig að útkoman líkist prentuðum borða."
 
 #: ../share/extensions/patternalongpath.inx:17
 msgid "Ribbon"
@@ -48563,7 +48194,7 @@ msgstr ""
 
 #: ../share/extensions/pixelsnap.inx:10
 msgid "Maximum slope to consider straight (%)"
-msgstr ""
+msgstr "Hámarkslengd sveigs til að skilgreina sem beinan (%)"
 
 #: ../share/extensions/pixelsnap.inx:11
 msgid "Origin of the coordinate system:"
@@ -49680,6 +49311,16 @@ msgid ""
 "to the same layer).\n"
 "            "
 msgstr ""
+"\n"
+"Þessi viðbót breytir the z-röðun hluta út frá staðsetningu þeirra á\n"
+"myndfletinum eða fyrirliggjandi z-röðun.\n"
+"Viðbótin endurstaflar öllum völdu hlutunum. Litið er á hópa\n"
+"sem stakan hlut.\n"
+"Ef einindi hóps eru valin ásamt utanaðkomandi hlutum, þá eru\n"
+"einindin tekin úr hópnum og sett næst hinum hlutunum sem\n"
+"verið er að endurstafla (einindi á mismunandi lögum enda öll \n"
+"á sama lagi).\n"
+"            "
 
 #: ../share/extensions/restack.inx:57 ../share/extensions/ungroup_deep.inx:13
 msgid "Arrange"
@@ -50146,7 +49787,7 @@ msgstr "2in x 2in (BNA ferningslaga)"
 
 #: ../share/extensions/template_business_card.inx:23
 msgid "Various Countries"
-msgstr ""
+msgstr "Ýmis lönd"
 
 #: ../share/extensions/template_dvd_cover.inx:3
 #: ../share/extensions/template_dvd_cover.inx:19
@@ -50178,9 +49819,8 @@ msgid "DVD cover bleed (mm):"
 msgstr "Blæðing DVD kápu (mm):"
 
 #: ../share/extensions/template_dvd_cover.inx:19
-#, fuzzy
 msgid "Various Sizes"
-msgstr "Myndskeiðastærðir"
+msgstr "Ýmsar stærðir"
 
 #: ../share/extensions/template_seamless_pattern.inx:3
 #: ../share/extensions/template_seamless_pattern.inx:13
@@ -50196,9 +49836,8 @@ msgid "Custom Height (px):"
 msgstr "Sérsniðin hæð (px):"
 
 #: ../share/extensions/template_seamless_pattern.inx:13
-#, fuzzy
 msgid "Tiled Canvas"
-msgstr "Línstrigi"
+msgstr "Flísalagður myndflötur"
 
 #: ../share/extensions/text_braille.inx:3
 msgid "Convert to Braille"
@@ -50298,6 +49937,8 @@ msgstr "Stafir"
 msgid ""
 "Threshold for separating manual kerns into words (multiples of font size)"
 msgstr ""
+"Þolvik til að skipta handvirkum hnikunum (kerns) upp í orð (margfeldi af "
+"stærð leturs)"
 
 #: ../share/extensions/text_split.inx:16
 msgid "This effect splits texts into different lines, words or letters."
@@ -50393,13 +50034,12 @@ msgid "Rotation is clockwise"
 msgstr "Snúningur er réttsælis"
 
 #: ../share/extensions/typst_formula.inx:3
-#, fuzzy
 msgid "Formula (typst)"
-msgstr "Formúla (pdflatex)"
+msgstr "Formúla (typst)"
 
 #: ../share/extensions/typst_formula.inx:9
 msgid "typst input:"
-msgstr ""
+msgstr "typst inntak:"
 
 #: ../share/extensions/ungroup_deep.inx:3
 msgid "Deep Ungroup"
@@ -50422,14 +50062,12 @@ msgid "Depth to Keep (from bottom)"
 msgstr "Dýpt sem á að halda hópum (að neðan frá botni)"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
 msgid "Preserve Layers"
-msgstr "Varðveita"
+msgstr "Varðveita lög"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
 msgid "Do not ungroup layers"
-msgstr "Læsa hinum lögunum"
+msgstr "Ekki taka lög úr hóp"
 
 #: ../share/extensions/voronoi_diagram.inx:3
 #: ../share/extensions/voronoi_diagram.inx:9
@@ -51057,32 +50695,27 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Breytingar á Flatpak-myndmerki"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Margir litstiglar"
+msgstr "Vinnsla margra síðna"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Til að komast í gang með Inkscape"
+msgstr "Breytingar með Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Leyfa breytingar á litstiglum"
+msgstr "Breytingar á litstigli"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.1"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "Og margar fleiri lagfæringar!"
+msgstr "Margar lagfæringar!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
@@ -51094,9 +50727,8 @@ msgid "Splash screen on load"
 msgstr "Veldu skriftu til að hlaða inn"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
-#, fuzzy
 msgid "Inkscape 1.4"
-msgstr "Inkscape 1.3"
+msgstr "Inkscape 1.4"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:74
 #, fuzzy
@@ -51108,9 +50740,8 @@ msgid "Experimental unified font browser"
 msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:76
-#, fuzzy
 msgid "Customizable handles"
-msgstr "Sérsniðinn forsendukóði"
+msgstr "Sérsníðanleg haldföng"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:83
 msgid "Inkscape 1.3"
