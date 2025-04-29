@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-28 23:06+0000\n"
+"PO-Revision-Date: 2025-04-29 10:32+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -14938,7 +14938,7 @@ msgstr "Tamanhos de Ecrã"
 
 #: ../src/extension/internal/template-screen.cpp:29
 msgid "Document formats using common screen resolutions"
-msgstr "Formatos de documento usando resoluções comuns de ecrã"
+msgstr "Formatos de documento usando resoluções de ecrã comuns"
 
 #: ../src/extension/internal/template-screen.cpp:30
 msgctxt "TemplateCategory"
@@ -15302,7 +15302,7 @@ msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
-"Este ficheiro contém arte digital para ser mostrada em ecrãs. <b>(escolha "
+"Este ficheiro contém arte digital para ser mostrada em ecrãs. <b>(Escolha "
 "este se não tiver a certeza)</b>"
 
 #: ../src/file-update.cpp:317
@@ -25214,8 +25214,8 @@ msgstr ""
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
-"Fornece modos de mistura de imagem: ecrã, multiplicar, mais escuro e mais "
-"claro."
+"Fornece modos de mistura de imagem: multiplicação negativa, multiplicar, "
+"mais escuro e mais claro."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2620
 msgid ""
