@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 13:23+0000\n"
+"PO-Revision-Date: 2025-04-29 13:37+0000\n"
 "Last-Translator: Lucas Vieites <lucasvieites@gmail.com>\n"
 "Language-Team: Spanish <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/es/>\n"
@@ -16151,7 +16151,7 @@ msgid_plural ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
 "separate"
 msgstr[0] ""
-"Punto de degradado compartido por <b>%d</b> degradados, arrastre con "
+"Punto de degradado compartido por <b>%d</b> degradado, arrastre con "
 "<b>Mayús</b> para separar"
 msgstr[1] ""
 "Punto de degradado compartido por <b>%d</b> degradados, arrastre con "
@@ -38456,7 +38456,7 @@ msgstr "No definir relleno"
 
 #: ../src/ui/widget/selected-style.cpp:729
 msgid "Unset Stroke"
-msgstr "No definir trazo "
+msgstr "No definir trazo"
 
 #: ../src/ui/widget/selected-style.cpp:730
 msgid "Remove Fill"
@@ -42452,7 +42452,7 @@ msgstr "Mín:"
 
 #: ../share/ui/toolbar-pencil.ui:280
 msgid "Max percent of pressure"
-msgstr "Porcentaje mínimo de presión"
+msgstr "Porcentaje máximo de presión"
 
 #: ../share/ui/toolbar-pencil.ui:284
 msgid "Max:"
@@ -44346,19 +44346,16 @@ msgid "Allow reversing direction of subpaths"
 msgstr "Permitir invertir la dirección de subtrayectos"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Unir subtrayectos"
+msgstr "Unir subtrayectos mediante"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Interpolar nada"
+msgstr "interpolación de nodos"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Enderezar segmentos"
+msgstr "adición de segmentos rectos"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -44371,7 +44368,6 @@ msgstr ""
 "            "
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Información"
 
@@ -44825,7 +44821,7 @@ msgstr ""
 "etc. Así mismo puede trazar las conjugadas isogonal e isotómica del punto. "
 "Tenga en cuenta que esto puede causar un error de «división entre cero» para "
 "ciertos puntos.\n"
-"      "
+"            "
 
 #: ../share/extensions/convert2dashes.inx:3
 msgid "Convert Dashes to Path"
@@ -45844,7 +45840,7 @@ msgstr "Grosor de división secundaria (px):"
 
 #: ../share/extensions/grid_isometric.inx:12
 msgid "Subminor Division Thickness (px):"
-msgstr "Grosor de división secundaria (px):"
+msgstr "Grosor de división submenor (px):"
 
 #: ../share/extensions/grid_isometric.inx:13
 msgid "Border Thickness (px):"
@@ -46266,8 +46262,9 @@ msgstr ""
 "son derivadas de tipografías licenciadas bajo la licencia\n"
 "de fuentes libres SIL.\n"
 "\n"
-"Para más información, lea los créditos incluidos en las fuentes SVG\n"
-"que acompañan esta distribución.\n"
+"Para más información acerca de licencias y acreditaciones,\n"
+"lea los créditos incluidos en las fuentes SVG que acompañan\n"
+"esta distribución.\n"
 
 #: ../share/extensions/hpgl_input.inx:3
 msgid "HPGL2 Input"
@@ -48141,18 +48138,16 @@ msgstr "Importar un archivo Affinity Designer"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
-#, fuzzy
 msgid "Curve Input"
-msgstr "Entrada CGM"
+msgstr "Entrada de curvas"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
 msgstr "Archivo de curva Linearity (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
-#, fuzzy
 msgid "Import a Linearity Curve file"
-msgstr "Importar un archivo Affinity Designer"
+msgstr "Importar un archivo de Linearity Curve"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
@@ -48760,13 +48755,14 @@ msgstr ""
 "\n"
 "Esta función crea trayectos para grabar letras o cualquier forma con ángulos "
 "agudos.\n"
-"La profundidad del corte como una función de radio lo define la "
-"herramienta.\n"
+"La profundidad del corte como una función de radio lo define la herramienta."
+"\n"
 "La profundidad puede ser cualquier expresión Python. Por ejemplo:\n"
+"\n"
 "cono....(45 grados).......................: w\n"
 "cono....(altura/diámetro=10/3)..: 10*w/3\n"
-"esfera...(radio r).............................: math.sqrt(max(0,r**2-"
-"w**2))\n"
+"esfera...(radio r).............................: math.sqrt(max(0,r**2-w**2))"
+"\n"
 "elipse..(eje menor r, mayor 4r)....: math.sqrt(max(0,r**2-w**2))*4"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
@@ -49158,7 +49154,6 @@ msgstr ""
 "y en ruso:\n"
 "    http://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
-"Existe un manual traducido al español en http://bit.ly/GcodeES\n"
 "Créditos: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
 "Chris Lusby Taylor.\n"
 "\n"
@@ -52572,38 +52567,32 @@ msgid "Editing a Flatpak Logo"
 msgstr "Editar un logo Flatpak"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Varios degradados"
+msgstr "Edición multipágina"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Introducción a Inkscape"
+msgstr "Edición con Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Activar edición de degradados"
+msgstr "Edición de degradados"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "Y muchas más correcciones de erratas"
+msgstr "Y muchas más correcciones de erratas."
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
 msgstr "Varias mejoras en el importador de archivos affinity"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Seleccione un script para cargar"
+msgstr "Pantalla de bienvenida durante la carga"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
@@ -52833,7 +52822,6 @@ msgid "Much improved text line-height settings"
 msgstr "Mejoras en los ajustes de altura de línea en textos"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:153
-#, fuzzy
 msgid ""
 "Variable fonts support (only if compiled with pango library version >= "
 "1.41.1)"
