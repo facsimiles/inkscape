@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 17:11+0000\n"
+"PO-Revision-Date: 2025-04-30 11:11+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -22986,8 +22986,8 @@ msgid ""
 "<b>Center</b> of transformation: drag to reposition; scaling, rotation and "
 "skew with %1 also uses this center"
 msgstr ""
-"<b>Centre</b> de rotation/inclinaison : cliquer-glisser pour le déplacer ; "
-"redimensionner avec <b>%1</b> utilise aussi ce centre"
+"<b>Centre</b> de la transformation : cliquer-glisser pour le déplacer ; "
+"redimensionner, pivoter et tordre avec %1 utilisent aussi ce centre"
 
 #
 # File: ../src/seltrans-handles.cpp, line: 23
@@ -33762,9 +33762,8 @@ msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
 msgstr ""
-"Ajuster la <b>hauteur</b> et la <b>largeur</b> du rectangle ; <b>Ctrl</b> "
-"pour verrouiller le rapport des dimensions ou incliner dans une seule "
-"dimension"
+"Ajuster la <b>largeur et la hauteur</b> du rectangle ; <b>Ctrl</b> pour "
+"verrouiller le rapport des dimensions ou étirer dans une seule dimension"
 
 #: ../src/ui/shape-editor-knotholders.cpp:592
 msgid "Drag to move the rectangle"
@@ -35557,7 +35556,7 @@ msgstr ""
 
 #: ../src/ui/tools/calligraphic-tool.cpp:453
 msgid "<b>Select a guide path</b> to track with <b>Ctrl</b>"
-msgstr "Choisir un chemin comme guide avec <b>Ctrl</b>"
+msgstr "<b>Choisir un chemin de guidage</b> à suivre avec <b>Ctrl</b>"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:587
 msgid "Tracking: <b>connection to guide path lost!</b>"
@@ -35661,8 +35660,8 @@ msgstr ""
 msgid ""
 "Cannot cut out from a path with zero area, use <b>Clip</b> mode instead."
 msgstr ""
-"Impossible de découper un chemin qui ne délimite pas une zone, utilisez un "
-"mode de découpe."
+"Impossible de découper un chemin qui ne délimite pas une zone, utilisez à la "
+"place le mode <b>découpage</b>."
 
 #: ../src/ui/tools/flood-tool.cpp:77
 msgid "Visible Colors"
@@ -38610,8 +38609,8 @@ msgid ""
 "modifiers to adjust hue"
 msgstr ""
 "Ajustement de la <b>saturation</b> : valeur précédente %.3g, désormais "
-"<b>%.3g</b> (diff. %.3g) ; <b>Ctrl</b> pour ajuster la luminosité, sans "
-"touche modificatrice pour ajuster la teinte"
+"<b>%.3g</b> (diff. %.3g) ; avec <b>Ctrl</b> pour ajuster la luminosité, "
+"<b>Alt</b> le canal alpha, sans modificateur pour la teinte"
 
 #: ../src/ui/widget/selected-style.cpp:1202
 msgid "Adjust lightness"
