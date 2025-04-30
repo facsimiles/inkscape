@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 17:11+0000\n"
+"PO-Revision-Date: 2025-05-01 12:06+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hu/>\n"
@@ -6738,7 +6738,7 @@ msgstr "Megjelenítési mód: vékony vonalak kiemelése"
 msgid "Ensure all strokes are displayed on screen as at least 1 pixel wide"
 msgstr ""
 "Biztosítja, hogy minden képernyőn megjelenített körvonal legalább 1 pixel "
-"széles legyen."
+"széles legyen"
 
 #: ../src/actions/actions-canvas-mode.cpp:272
 msgid "Display Mode: Outline Overlay"
@@ -6751,7 +6751,7 @@ msgid ""
 "opacity"
 msgstr ""
 "Az objektumok megjelenítése körvonalként, az alattuk lévő tényleges rajz "
-"pedig csökkentett átlátszatlansággal."
+"pedig csökkentett átlátszatlansággal"
 
 #: ../src/actions/actions-canvas-mode.cpp:273
 msgid "Display Mode: Cycle"
@@ -9110,7 +9110,7 @@ msgid ""
 "path) can be added"
 msgstr ""
 "Önmetsző csoport létrehozása, amelyhez (a vágóútvonalhoz nem hozzájáruló) "
-"objektumok adhatók hozzá."
+"objektumok adhatók hozzá"
 
 #: ../src/actions/actions-object.cpp:389
 msgid "Object Mask Set"
@@ -9176,13 +9176,13 @@ msgstr "A kijelölt objektumok függőleges tükrözése"
 msgid "Enter comma-separated string for attribute name, attribute value"
 msgstr ""
 "Adja meg vesszővel elválasztott karakterlánccal az attribútum nevét és "
-"értékét."
+"értékét"
 
 #: ../src/actions/actions-object.cpp:404
 msgid "Enter comma-separated string for property name, property value"
 msgstr ""
 "Adja meg vesszővel elválasztott karakterlánccal a tulajdonság nevét és "
-"értékét."
+"értékét"
 
 #: ../src/actions/actions-output.cpp:250
 msgid "Export Type"
@@ -9732,7 +9732,7 @@ msgstr "Fordított"
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
 msgstr ""
 "A kijelölt útvonalak irányának megfordítása. Hasznos lehet például a "
-"jelölőelemek megfordításához."
+"jelölőelemek megfordításához"
 
 #: ../src/actions/actions-paths.cpp:266
 msgid "Inset Screen"
@@ -12075,7 +12075,7 @@ msgid ""
 "range of color"
 msgstr ""
 "A kijelölt bitképek normalizálása. A színtartományt kiterjeszti a színek "
-"teljes lehetséges tartományára."
+"teljes lehetséges tartományára"
 
 #: ../src/extension/internal/bitmap/oilPaint.cpp:39
 msgid "Oil Paint"
@@ -14851,7 +14851,7 @@ msgstr "SVG hozzáadása új oldal(ak)ként az aktuális fájlba"
 msgid "Embed the SVG file in an image tag (not editable in this document)"
 msgstr ""
 "Az SVG fájl beágyazása egy kép címkébe (nem szerkeszthető ebben a "
-"dokumentumban)."
+"dokumentumban)"
 
 #: ../src/extension/internal/svg.h:27
 msgid "Link the SVG file in an image tag (not editable in this document)."
@@ -16206,7 +16206,7 @@ msgid ""
 "Inkscape.TAG'"
 msgstr ""
 "Egy egyedi példányt hogy létre az Inkscape-ből „org.inkscape.Inkscape.CÍMKE” "
-"alkalmazásazonosítóval."
+"alkalmazásazonosítóval"
 
 #: ../src/inkscape-application.cpp:727
 msgid "File import"
@@ -16312,7 +16312,7 @@ msgstr "Az exportálandó terület a rajz (oldalméret figyelmen kívül hagyás
 
 #: ../src/inkscape-application.cpp:746
 msgid "Area to export in SVG user units"
-msgstr "Az exportálandó terület SVG felhasználói mértékegységekkel."
+msgstr "Az exportálandó terület SVG felhasználói mértékegységekkel"
 
 #: ../src/inkscape-application.cpp:746
 msgid "x0:y0:x1:y1"
@@ -16380,7 +16380,7 @@ msgstr "mind|n[,a-b]"
 
 #: ../src/inkscape-application.cpp:756
 msgid "ID(s) of object(s) to export"
-msgstr "Az exportálandó objektum(ok) azonosítója vagy azonosítói."
+msgstr "Az exportálandó objektum(ok) azonosítója vagy azonosítói"
 
 #: ../src/inkscape-application.cpp:756
 msgid "OBJECT-ID[;OBJECT-ID]*"
@@ -16486,7 +16486,7 @@ msgstr "Lekérdezett objektum/ dokumentum geometriája"
 
 #: ../src/inkscape-application.cpp:777
 msgid "ID(s) of object(s) to be queried"
-msgstr "A lekérdezett objektum(ok) azonosítója vagy azonosítói."
+msgstr "A lekérdezett objektum(ok) azonosítója vagy azonosítói"
 
 #: ../src/inkscape-application.cpp:777 ../src/inkscape-application.cpp:787
 msgid "OBJECT-ID[,OBJECT-ID]*"
@@ -16494,7 +16494,7 @@ msgstr "OBJEKTUMAZONOSÍTÓ[,OBJEKTUMAZONOSÍTÓ]*"
 
 #: ../src/inkscape-application.cpp:778
 msgid "Print bounding boxes of all objects"
-msgstr "Az összes objektum határoló dobozának kiírása."
+msgstr "Az összes objektum határoló dobozának kiírása"
 
 #: ../src/inkscape-application.cpp:779
 msgid "X coordinate of drawing or object (if specified by --query-id)"
@@ -16721,7 +16721,7 @@ msgstr "Von Koch"
 
 #: ../src/live_effects/effect.cpp:163
 msgid "Create VonKoch fractal"
-msgstr "Von Koch fraktál létrehozása."
+msgstr "Von Koch fraktál létrehozása"
 
 #: ../src/live_effects/effect.cpp:174
 msgctxt "path effect"
@@ -16730,7 +16730,7 @@ msgstr "Csomó"
 
 #: ../src/live_effects/effect.cpp:177
 msgid "Create gaps in self-intersections, as in Celtic knots"
-msgstr "Rések létrehozása az önkeresztezéseknél úgy, mint a kelta csomóknál."
+msgstr "Rések létrehozása az önkeresztezéseknél úgy, mint a kelta csomóknál"
 
 #: ../src/live_effects/effect.cpp:188
 msgctxt "path effect"
@@ -16853,8 +16853,7 @@ msgstr "Rács-deformáció"
 
 #: ../src/live_effects/effect.cpp:333
 msgid "Warp an object's shape based on a 5x5 grid"
-msgstr ""
-"Objektum alakzatában vetemedés létrehozása egy 5×5-ös rács segítségével."
+msgstr "Objektum alakzatában vetemedés létrehozása egy 5×5-ös rács segítségével"
 
 #: ../src/live_effects/effect.cpp:344
 msgctxt "path effect"
@@ -16939,7 +16938,7 @@ msgid ""
 "extrapolated arc, ...)"
 msgstr ""
 "Választás több különböző saroktípus között az objektum sarokcsomópontjai "
-"számára (hegyes, lekerekített, extrapolált körív, …)."
+"számára (hegyes, lekerekített, extrapolált körív, …)"
 
 #: ../src/live_effects/effect.cpp:442
 msgctxt "path effect"
@@ -18914,7 +18913,7 @@ msgstr "Végződés típusa:"
 
 #: ../src/live_effects/lpe-line_segment.cpp:35
 msgid "Determines on which side the line or line segment is infinite."
-msgstr "Annak meghatározása, hogy mely vonal- vagy szakaszvég végtelen"
+msgstr "Annak meghatározása, hogy mely vonal- vagy szakaszvég végtelen."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:65
 #: ../src/live_effects/lpe-slice.cpp:112
@@ -19079,7 +19078,7 @@ msgid ""
 "When the path is grouped and the group is then scaled, adjust the dimensions."
 msgstr ""
 "Ha az útvonal csoportba van foglalva és a csoport méretezve, a méretvonalak "
-"igazodjanak ehhez"
+"igazodjanak ehhez."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Localize number format"
@@ -19374,7 +19373,7 @@ msgstr "Ellentétes oldalak összeolvasztása"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:69
 msgid "Picks the part on the other side of the mirror line as the original."
-msgstr "A tükörvonal ellenkező oldalán lévő rész eredetiként való leolvasása"
+msgstr "A tükörvonal ellenkező oldalán lévő rész eredetiként való leolvasása."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:70
 msgid ""
@@ -19972,7 +19971,7 @@ msgid ""
 "0=sharp, 1=default"
 msgstr ""
 "Az útvonal simasága/élessége egy „alsó” félfordulat elérésekor. 0=éles, "
-"1=alapértelmezés."
+"1=alapértelmezés"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:219
 msgid "Smooth: Bottom →"
@@ -21237,7 +21236,7 @@ msgid ""
 "(otherwise, they define a general transform)."
 msgstr ""
 "2 egymást követő szakasz csak a tájolás megfordítására/megőrzésére van "
-"használva (ettől eltérő esetben általános transzformációt adnak meg)"
+"használva (ettől eltérő esetben általános transzformációt adnak meg)."
 
 #: ../src/live_effects/lpe-vonkoch.cpp:51
 msgid "Dra_w all generations"
@@ -25170,7 +25169,7 @@ msgstr "Raszteres exportálási hiba"
 #: ../src/ui/dialog/export.cpp:222
 msgid "Raster export Method is used for NON RASTER EXTENSION"
 msgstr ""
-"Raszteres exportálási módszer alkalmazva NEM RASZTERES KITERJESZTÉS számára."
+"Raszteres exportálási módszer alkalmazva NEM RASZTERES KITERJESZTÉS számára"
 
 #: ../src/ui/dialog/export.cpp:267 ../src/ui/dialog/export.cpp:427
 #, c-format
@@ -25192,8 +25191,7 @@ msgstr "Vektoros exportálási hiba"
 
 #: ../src/ui/dialog/export.cpp:334
 msgid "Vector export Method is used for RASTER EXTENSION"
-msgstr ""
-"Vektoros exportálási módszer alkalmazva RASZTERES KITERJESZTÉS számára."
+msgstr "Vektoros exportálási módszer alkalmazva RASZTERES KITERJESZTÉS számára"
 
 #: ../src/ui/dialog/export.cpp:400
 #, c-format
@@ -28033,7 +28031,7 @@ msgstr "SVG2 automatikusan tördelt szöveg alkalmazása"
 msgid ""
 "Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"
 msgstr ""
-"SVG2 automatikusan tördelt szöveg alkalmazása az SVG1.2 helyett (Ajánlott)."
+"SVG2 automatikusan tördelt szöveg alkalmazása az SVG1.2 helyett (Ajánlott)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1075
 msgid "Fonts in 'Recently used' collection:"
@@ -29367,7 +29365,7 @@ msgid ""
 "for using them on the command line"
 msgstr ""
 "A parancsok argumentumneveinek megjelenítése a parancspaletta javaslataiban, "
-"ami igen hasznos a parancssori használatukhoz."
+"ami igen hasznos a parancssori használatukhoz"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2215
 msgid "Show untranslated (English) names"
@@ -29375,7 +29373,7 @@ msgstr "Fordítás nélküli (angol) nevek megjelenítése"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2216
 msgid "Also show the English names of the command"
-msgstr "A parancsok angol névvel jelennek meg."
+msgstr "A parancsok angol névvel jelennek meg"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2269
 msgid "Input/Output"
@@ -29720,13 +29718,13 @@ msgstr "Tartalék megoldást ad hozzá a nem SVG2 kompatibilis leképezőknek."
 msgid "Adds a JavaScript polyfill for rendering meshes in web browsers."
 msgstr ""
 "JavaScript kódcsomagot ad hozzá a színátmenetes hálók böngészőkben való "
-"leképezéséhez"
+"leképezéséhez."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "Adds a JavaScript polyfill for rendering hatches in web browsers."
 msgstr ""
 "JavaScript kódcsomagot ad hozzá a vonalkázások böngészőkben való "
-"leképezéséhez"
+"leképezéséhez."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2380
 msgid "SVG 2 to SVG 1.1"
@@ -30017,7 +30015,7 @@ msgid ""
 "selectable even if not in outline mode"
 msgstr ""
 "Jelölje be, hogy a teljesen átlátszó objektumok, körvonalak és kitöltések "
-"kiválaszthatók legyenek nem körvonal módban is."
+"kiválaszthatók legyenek nem körvonal módban is"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2545
 msgid ""
@@ -30664,7 +30662,7 @@ msgstr ""
 msgid "'Object to Path' only unlinks (keeps LPEs, shapes)"
 msgstr ""
 "Az „Objektum útvonallá” csak a hivatkozásokat szünteti meg (megtartja az élő "
-"útvonaleffektusokat, alakzatokat)."
+"útvonaleffektusokat, alakzatokat)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2773
 msgid ""
@@ -30696,7 +30694,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2781
 msgid "When ungrouping, clips/masks are preserved in children"
-msgstr "A csoport felbontásakor a vágások/maszkok megmaradnak a gyermekekben."
+msgstr "A csoport felbontásakor a vágások/maszkok megmaradnak a gyermekekben"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2783
 msgid "Uncheck this to remove clip/mask on ungroup"
@@ -30793,7 +30791,7 @@ msgid ""
 "the object's appearance as in previous Inkscape versions"
 msgstr ""
 "Az objektum stílus attribútuma a számított stílusra lesz beállítva, "
-"megőrizve az objektum megjelenését a korábbi Inkscape verziókhoz hasonlóan."
+"megőrizve az objektum megjelenését a korábbi Inkscape verziókhoz hasonlóan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2833
 msgid ""
@@ -31147,7 +31145,7 @@ msgid ""
 "this."
 msgstr ""
 "Elutasítja a durvító algoritmus kísérletét, ha az eredmény ennél üresebb "
-"lenne"
+"lenne."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3011
 msgid "Debugging, profiling and experiments"
@@ -32372,7 +32370,7 @@ msgstr "Felvétel"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1032
 msgid "Invalid CSS selector."
-msgstr "Érvénytelen CSS-kijelölő"
+msgstr "Érvénytelen CSS-kijelölő."
 
 #: ../src/ui/dialog/spellcheck.cpp:94
 msgid "_Accept"
@@ -33406,7 +33404,7 @@ msgstr "Mozgatás csak egy tengelyen"
 
 #: ../src/ui/modifiers.cpp:102
 msgid "When dragging items, confine to either x or y axis"
-msgstr "Az elemek húzása az x- vagy az y-tengelyre korlátozódjon."
+msgstr "Az elemek húzása az x- vagy az y-tengelyre korlátozódjon"
 
 #: ../src/ui/modifiers.cpp:103
 msgid "Move in increments"
@@ -33459,7 +33457,7 @@ msgstr "Nincs transzformációs illesztés"
 
 #: ../src/ui/modifiers.cpp:108
 msgid "Disable snapping when transforming object."
-msgstr "Illesztés letiltása objektumok transzformációjakor"
+msgstr "Illesztés letiltása objektumok transzformációjakor."
 
 #: ../src/ui/modifiers.cpp:111
 msgid "Switch mode"
@@ -33709,7 +33707,7 @@ msgstr "A szöveg <b>sorközi méretének</b> (line length) igazítása."
 
 #: ../src/ui/shape-editor-knotholders.cpp:2598
 msgid "Drag to resize the <b>flowed text frame</b>"
-msgstr "A <b>tördelt szöveg keretének</b> átméretezése húzással lehetséges."
+msgstr "A <b>tördelt szöveg keretének</b> átméretezése húzással lehetséges"
 
 #: ../src/ui/shortcuts.cpp:920
 msgid "Select a file to import"
@@ -33739,19 +33737,19 @@ msgstr "Szakaszok egyenesítése"
 #: ../src/ui/tool/curve-drag-point.cpp:204
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: drag to open or move BSpline handles"
-msgstr "<b>Shift</b>. B-spline-fogantyúk megnyitása vagy mozgatása: húzással."
+msgstr "<b>Shift</b>: B-spline-fogantyúk megnyitása vagy mozgatása: húzással"
 
 #: ../src/ui/tool/curve-drag-point.cpp:208
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: click to toggle segment selection"
 msgstr ""
-"<b>Shift</b>. Szakasz kijelölése, illetve kijelölésének megszüntetése: "
-"kattintással."
+"<b>Shift</b>: Szakasz kijelölése, illetve kijelölésének megszüntetése: "
+"kattintással"
 
 #: ../src/ui/tool/curve-drag-point.cpp:212
 msgctxt "Path segment tip"
 msgid "<b>Ctrl+Alt</b>: click to insert a node"
-msgstr "<b>Ctrl+Alt</b>. Csomópont beszúrása: kattintással."
+msgstr "<b>Ctrl+Alt</b>: Csomópont beszúrása: kattintással"
 
 #: ../src/ui/tool/curve-drag-point.cpp:215
 msgctxt "Path segment tip"
@@ -35336,7 +35334,7 @@ msgstr ""
 msgid "<b>Select a guide path</b> to track with <b>Ctrl</b>"
 msgstr ""
 "<b>Jelöljön ki egy vezetőútvonalat</b>, amelyet a <b>Ctrl</b> billentyűvel "
-"követni kíván."
+"követni kíván"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:587
 msgid "Tracking: <b>connection to guide path lost!</b>"
@@ -35775,7 +35773,7 @@ msgstr ""
 #: ../src/ui/tools/node-tool.cpp:661
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
-msgstr "<b>Shift</b>. Csomópontok felvétele a kijelölésbe: húzással."
+msgstr "<b>Shift</b>. Csomópontok felvétele a kijelölésbe: húzással"
 
 #: ../src/ui/tools/node-tool.cpp:679
 msgid "<b>%1 of %2</b> node selected."
@@ -35822,7 +35820,7 @@ msgstr ""
 #: ../src/ui/tools/node-tool.cpp:728
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
-msgstr "Szerkesztendő objektumok kijelölése: húzással."
+msgstr "Szerkesztendő objektumok kijelölése: húzással"
 
 #: ../src/ui/tools/pages-tool.cpp:56
 msgid "Resize page"
@@ -37521,7 +37519,7 @@ msgstr "Lágyság"
 
 #: ../src/ui/widget/font-variations.cpp:85
 msgid "Softness makes letterforms more soft and rounded"
-msgstr "A lágyság lágyabbá és gömbölyűbbé teszi a betűformákat."
+msgstr "A lágyság lágyabbá és gömbölyűbbé teszi a betűformákat"
 
 #: ../src/ui/widget/font-variations.cpp:87
 msgctxt "Variable font axis"
@@ -38049,7 +38047,7 @@ msgstr "Bitkép-beállítások"
 
 #: ../src/ui/widget/rendering-options.cpp:33
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "A leképezés előnyben részesített felbontása (pont/hüvelykben)"
+msgstr "A leképezés előnyben részesített felbontása (pont/hüvelykben)."
 
 #: ../src/ui/widget/rendering-options.cpp:42
 msgid ""
@@ -38692,7 +38690,7 @@ msgid_plural ""
 msgstr[0] "Téglatest <b>véges</b> távlatpontja"
 msgstr[1] ""
 "<b>%d</b> téglatest <b>véges</b> távlatpontja; <b>Shift</b>+húzással "
-"szétválaszthatja a kiválasztott téglatesteket."
+"szétválaszthatja a kiválasztott téglatesteket"
 
 #: ../src/vanishing-point.cpp:315
 #, c-format
@@ -38703,7 +38701,7 @@ msgid_plural ""
 msgstr[0] "téglatest <b>végtelen</b> távlatpontja"
 msgstr[1] ""
 "<b>%d</b> téglatest <b>végtelen</b> távlatpontja; <b>Shift</b>+húzással "
-"szétválaszthatja a kiválasztott téglatesteket."
+"szétválaszthatja a kiválasztott téglatesteket"
 
 #: ../src/vanishing-point.cpp:324
 #, c-format
@@ -40621,7 +40619,7 @@ msgstr "Asztal"
 
 #: ../share/ui/page-properties.glade:787
 msgid "If set, use a colored checkerboard for the desk background."
-msgstr "Ha az opció be van jelölve, akkor az asztal háttere színes pepita lesz"
+msgstr "Ha az opció be van jelölve, akkor az asztal háttere színes pepita lesz."
 
 #: ../share/ui/page-properties.glade:798
 msgid "If set, a rectangular page border is shown."
@@ -41796,7 +41794,7 @@ msgstr "Igazítás és elrendezés…"
 
 #: ../share/ui/toolbar-commands.ui:796
 msgid "Preferences..."
-msgstr "Alapbeállítások"
+msgstr "Alapbeállítások..."
 
 #: ../share/ui/toolbar-connector.ui:65
 msgid "Make connector orthogonal or polyline"
@@ -42306,7 +42304,7 @@ msgstr "Élő útvonaleffektus-alapú egyszerűsítő lapítás"
 
 #: ../share/ui/toolbar-pencil.ui:416
 msgid "Scale of the width of the power stroke shape."
-msgstr "Az okos körvonal alakzata szélességének méretezése"
+msgstr "Az okos körvonal alakzata szélességének méretezése."
 
 #: ../share/ui/toolbar-rect.ui:52
 msgid "Width of rectangle"
@@ -42999,7 +42997,7 @@ msgid ""
 "The total length of the pattern is too small\n"
 "Please choose a larger object or set 'Space between copies' > 0"
 msgstr ""
-"A minta teljes hossza túl kicsi\n"
+"A minta teljes hossza túl kicsi.\n"
 "Válasszon egy nagyobb objektumot, vagy állítsa a „Helykihagyás a másolatok "
 "között” értékét nullánál nagyobbra."
 
@@ -43222,7 +43220,7 @@ msgstr "Érvénytelen képformátum."
 
 #: ../share/extensions/image_extract.py:182
 msgid "Unable to decode encoding {}."
-msgstr "Nem lehet dekódolni a kódolást {},"
+msgstr "Nem lehet dekódolni a kódolást {}."
 
 #: ../share/extensions/image_extract.py:195
 msgid "Unable to extract image, file {} already exists."
@@ -43299,7 +43297,7 @@ msgstr ""
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:154
 msgid "{} has been removed"
-msgstr "{} el lett távolítva."
+msgstr "{} el lett távolítva"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
@@ -45461,7 +45459,7 @@ msgstr "Segédvonalak mentése"
 
 #: ../share/extensions/gimp_xcf.inx:9
 msgid "Convert all guides to Gimp guides."
-msgstr "Az összes segédvonalat Gimp-segédvonallá alakítja"
+msgstr "Az összes segédvonalat Gimp-segédvonallá alakítja."
 
 #: ../share/extensions/gimp_xcf.inx:10
 msgid "Save Grid"
@@ -50049,7 +50047,7 @@ msgid ""
 msgstr ""
 "Jelölje be, ha a valódi rajz előtt csak egy rövid vonalat vágjon ki, hogy "
 "így ellenőrzi lehessen az eszköz helyes tájolását (alapértelmezett: "
-"bejelölve)"
+"bejelölve)."
 
 #: ../share/extensions/plotter.inx:87
 msgid ""
@@ -51308,7 +51306,7 @@ msgid ""
 "library/codecs.html#standard-encodings."
 msgstr ""
 "(Válassza ki a rendszerében használt kódolást. További információ: http://"
-"docs.python.org/library/codecs.html#standard-encodings)"
+"docs.python.org/library/codecs.html#standard-encodings)."
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"
