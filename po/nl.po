@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-28 22:06+0000\n"
+"PO-Revision-Date: 2025-04-30 11:11+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/1-4-x/"
 "nl/>\n"
@@ -1828,7 +1828,7 @@ msgstr "Poster met kruisruis"
 
 #: ../../build/share/filters/filters.svg.h:672
 msgid "Overlay with a small scale screen like noise"
-msgstr "Bedekken met een waas van lichte ruis"
+msgstr "Bedekken met een laag van lichte ruis"
 
 #: ../../build/share/filters/filters.svg.h:674
 msgid "Cross Noise Poster B"
@@ -1836,7 +1836,7 @@ msgstr "Poster met kruisruis B"
 
 #: ../../build/share/filters/filters.svg.h:676
 msgid "Adds a small scale screen like noise locally"
-msgstr "Voegt lokaal een waas met lichte ruis toe"
+msgstr "Voegt lokaal een laag met lichte ruis toe"
 
 #: ../../build/share/filters/filters.svg.h:678
 #: ../../build/share/filters/filters.svg.h:680
@@ -1886,7 +1886,7 @@ msgstr "Kruisruis"
 
 #: ../../build/share/filters/filters.svg.h:704
 msgid "Adds a small scale screen like graininess"
-msgstr "Voegt een waas met korreligheid toe"
+msgstr "Voegt een laag met korreligheid toe"
 
 #: ../../build/share/filters/filters.svg.h:706
 msgid "Duotone Turbulent"
@@ -12794,7 +12794,7 @@ msgstr "Donkerder"
 #: ../src/extension/internal/filter/paint.h:725
 #: ../src/extension/internal/filter/transparency.h:64
 msgid "Screen"
-msgstr "Waas"
+msgstr "Scherm"
 
 #: ../src/extension/internal/filter/blurs.h:204
 #: ../src/extension/internal/filter/blurs.h:359
@@ -25710,7 +25710,7 @@ msgstr ""
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
-"Biedt modi voor het mengen van afbeeldingen, zoals waas, vermenigvuldigen, "
+"Biedt modi voor het mengen van afbeeldingen, zoals scherm, vermenigvuldigen, "
 "donkerder maken en lichter maken."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2610
@@ -36949,7 +36949,7 @@ msgstr "Lichter"
 #: ../src/ui/widget/filter-effect-chooser.cpp:33
 msgctxt "BlendMode"
 msgid "Screen"
-msgstr "Waas"
+msgstr "Scherm"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:34
 msgctxt "BlendMode"
