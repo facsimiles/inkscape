@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 10:32+0000\n"
-"Last-Translator: marco riva <oelimar@mail.com>\n"
+"PO-Revision-Date: 2025-05-01 20:42+0000\n"
+"Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
 "Language: it\n"
@@ -744,7 +744,7 @@ msgstr "Cresta gelatinosa con sommità metallizzata"
 
 #: ../../build/share/filters/filters.svg.h:230
 msgid "Fat Oil"
-msgstr "Copertura oleosa"
+msgstr "Patina oleosa"
 
 #: ../../build/share/filters/filters.svg.h:232
 msgid "Fat oil with some adjustable turbulence"
@@ -776,7 +776,7 @@ msgstr "Cubi"
 
 #: ../../build/share/filters/filters.svg.h:240
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr "Cubi sparsi; dimensione regolabile tramite il filtro Morfologia"
+msgstr "Cubi sparsi; modifica il filtro Morfologia per cambiarne la dimensione"
 
 #: ../../build/share/filters/filters.svg.h:242
 msgid "Peel Off"
@@ -1724,8 +1724,8 @@ msgstr "Vortice"
 msgid ""
 "Paint objects with a transparent turbulence which wraps around color edges"
 msgstr ""
-"Dipinge l'oggetto con una turbolenza trasparente che gira attorno ai bordi "
-"di colore"
+"Dipinge l'oggetto con una turbolenza trasparente che avvolge i bordi di "
+"colore"
 
 #: ../../build/share/filters/filters.svg.h:642
 msgid "Pointillism"
@@ -1828,7 +1828,7 @@ msgstr "Alpha monocromatico frammentato"
 #: ../../build/share/filters/filters.svg.h:716
 msgid "Basic noise fill texture; adjust color in Flood"
 msgstr ""
-"Texture semplice di riempimento rumoroso; colore impostabile in Riempimento"
+"Texture semplice del rumore di riempimento; colore impostabile in Riempimento"
 
 #: ../../build/share/filters/filters.svg.h:690
 msgid "Alpha Turbulent"
@@ -3307,7 +3307,7 @@ msgstr "Cerchio"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Hollow circle"
-msgstr "Cerchio cavo"
+msgstr "Circonferenza"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Pills"
@@ -3636,7 +3636,7 @@ msgstr "Sfumatura linee verticali"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
-msgstr "Sfumatura linee semicerchio"
+msgstr "Sfumatura linee semicerchio "
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 5"
@@ -4401,7 +4401,7 @@ msgstr "Simboli mappa parchi nazionali Stati Uniti"
 #: ../../build/share/symbols/symbols.h:814
 msgctxt "Symbol"
 msgid "Airport"
-msgstr "Aereoporto"
+msgstr "Aeroporto"
 
 #: ../../build/share/symbols/symbols.h:191
 #: ../../build/share/symbols/symbols.h:192
@@ -6096,7 +6096,7 @@ msgstr "Aerodromo 2"
 #: ../../build/share/symbols/symbols.h:815
 msgctxt "Symbol"
 msgid "Airport 2"
-msgstr "Aereoporto 2"
+msgstr "Aeroporto 2"
 
 #: ../../build/share/symbols/symbols.h:772
 #: ../../build/share/symbols/symbols.h:816
@@ -6888,7 +6888,7 @@ msgstr "Attiva o disattiva aggancio agli angoli dei riquadri"
 
 #: ../src/actions/actions-canvas-snapping.cpp:254
 msgid "Snap Bounding Box Edge Midpoints"
-msgstr "Aggancia metà lato riquadri"
+msgstr "Aggancia mezzeria lato riquadri"
 
 #: ../src/actions/actions-canvas-snapping.cpp:254
 msgid "Toggle snapping to bounding-box edge mid-points"
@@ -7455,7 +7455,7 @@ msgstr "Visualizza oggetti"
 
 #: ../src/actions/actions-dialogs.cpp:53
 msgid "Open Paint Servers"
-msgstr "Apre la cartella delle trame"
+msgstr "Apre la cartella dei motivi"
 
 #: ../src/actions/actions-dialogs.cpp:53
 msgid "Select paint server from a collection"
@@ -7988,7 +7988,7 @@ msgstr[1] "%s byte rimossi"
 msgid "%s byte added!"
 msgid_plural "%s bytes added!"
 msgstr[0] "%s byte aggiunto!"
-msgstr[1] "%s bytes aggiunti!"
+msgstr[1] "%s byte aggiunti!"
 
 #: ../src/actions/actions-element-image.cpp:203
 msgid "No images cropped!"
@@ -8107,8 +8107,8 @@ msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the "
 "document"
 msgstr ""
-"Elimina dal documento le definizioni inutilizzate (come gradienti o "
-"tracciati di fissaggio)"
+"Elimina dal documento definizioni inutilizzate (come gradienti o tracciati "
+"di fissaggio)"
 
 #: ../src/actions/actions-file-window.cpp:126
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
@@ -8287,7 +8287,7 @@ msgstr "Sblocca tutti gli oggetti"
 # msgid is incorrect: it unblocks objects even of non-selected layers Giambattista Caltabiano
 #: ../src/actions/actions-hide-lock.cpp:200
 msgid "Hide selection"
-msgstr "Nascondi selezione"
+msgstr "Nascondi selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:200
 msgid "Hide all selected objects"
@@ -8295,7 +8295,7 @@ msgstr "Nasconde tutti gli oggetti selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:201
 msgid "Unhide selection"
-msgstr "Mostra selezione"
+msgstr "Mostra selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:201
 msgid "Unhide all selected objects"
@@ -8307,11 +8307,11 @@ msgstr "Mostra discendenti"
 
 #: ../src/actions/actions-hide-lock.cpp:202
 msgid "Unhide all items inside selected objects"
-msgstr "Mostra tutti gli oggetti nascosti contenuti negli oggetti selezionati"
+msgstr "Mostra tutti gli oggetti nascosti contenuti dagli oggetti selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:204
 msgid "Lock selection"
-msgstr "Blocca selezione"
+msgstr "Blocca selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:204
 msgid "Lock all selected objects"
@@ -8319,7 +8319,7 @@ msgstr "Blocca tutti gli oggetti selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:205
 msgid "Unlock selection"
-msgstr "Sblocca selezione"
+msgstr "Sblocca selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:205
 msgid "Unlock all selected objects"
@@ -8331,7 +8331,7 @@ msgstr "Sblocca discendenti"
 
 #: ../src/actions/actions-hide-lock.cpp:206
 msgid "Unlock all items inside selected objects"
-msgstr "Sblocca tutti gli oggetti contenuti negli oggetti selezionati"
+msgstr "Sblocca tutti gli oggetti contenuti dagli oggetti selezionati"
 
 #: ../src/actions/actions-layer.cpp:64
 #: ../src/ui/dialog/layer-properties.cpp:168
@@ -8420,7 +8420,7 @@ msgstr "Impossibile passare ad un livello precedente al primo"
 #: ../src/actions/actions-layer.cpp:305 ../src/actions/actions-layer.cpp:336
 #, c-format
 msgid "Raised layer <b>%s</b>."
-msgstr "Innalzato il livello <b>%s</b>."
+msgstr "Alzato il livello <b>%s</b>"
 
 #: ../src/actions/actions-layer.cpp:306
 msgid "Layer to top"
@@ -8438,7 +8438,7 @@ msgstr "Alza livello"
 #: ../src/actions/actions-layer.cpp:363 ../src/actions/actions-layer.cpp:390
 #, c-format
 msgid "Lowered layer <b>%s</b>."
-msgstr "Abbassato il livello <b>%s</b>."
+msgstr "Abbassato il livello <b>%s</b>"
 
 #: ../src/actions/actions-layer.cpp:364
 msgid "Lower layer"
@@ -9001,15 +9001,15 @@ msgstr "Inserisci due numeri separati da una virgola: orizzontale,verticale"
 
 #: ../src/actions/actions-object.cpp:192
 msgid "Set clipping path"
-msgstr "Imposta fissaggio"
+msgstr "Imposta il tracciato di ritaglio"
 
 #: ../src/actions/actions-object.cpp:203
 msgid "Set Inverse Clip(LPE)"
-msgstr "Imposta fissaggio inverso (LPE)"
+msgstr "Imposta Ritaglio Inverso (LPE)"
 
 #: ../src/actions/actions-object.cpp:214
 msgid "Release clipping path"
-msgstr "Rimuovi il percorso di fissaggio"
+msgstr "Rimuovi il percorso di ritaglio"
 
 #: ../src/actions/actions-object.cpp:232
 msgid "Set mask"
@@ -9099,30 +9099,30 @@ msgstr "Converte i contorni in tracciati"
 
 #: ../src/actions/actions-object.cpp:385
 msgid "Object Clip Set"
-msgstr "Applica oggetto di fissaggio"
+msgstr "Applica oggetto di ritaglio"
 
 #: ../src/actions/actions-object.cpp:385
 msgid ""
 "Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
-"Applica il fissaggio alla selezione (usando l'oggetto più alto come "
-"tracciato di fissaggio)"
+"Applica il ritaglio alla selezione (usando l'oggetto più alto come tracciato "
+"di ritaglio)"
 
 #: ../src/actions/actions-object.cpp:386
 msgid "Object Clip Set Inverse"
-msgstr "Applica oggetto di fissaggio invertito"
+msgstr "Applica oggetto di ritaglio invertito"
 
 #: ../src/actions/actions-object.cpp:386
 msgid "Apply inverse clipping path to selection (Power Clip LPE)"
-msgstr "Applica il fissaggio inverso alla selezione (Fissaggio evoluto)"
+msgstr "Applica il ritaglio inverso alla selezione (Ritaglio evoluto)"
 
 #: ../src/actions/actions-object.cpp:387
 msgid "Object Clip Release"
-msgstr "Rilascia Fissaggio Oggetto"
+msgstr "Rilascia ritaglio Oggetto"
 
 #: ../src/actions/actions-object.cpp:387
 msgid "Remove clipping path from selection"
-msgstr "Rimuove il fissaggio dalla selezione"
+msgstr "Rimuove il tracciato di ritaglio dalla selezione"
 
 #: ../src/actions/actions-object.cpp:388
 msgid "Object Clip Set Group"
@@ -9133,8 +9133,8 @@ msgid ""
 "Create a self-clipping group to which objects (not contributing to the clip-"
 "path) can be added"
 msgstr ""
-"Crea un gruppo di oggetti di fissaggio, al quale oggetti(che non "
-"contribuiscono al fissaggio) possono essere aggiunti"
+"Crea un gruppo di ritaglio, al quale possono essere aggiunti oggetti (non "
+"facenti parte del percorso di ritaglio)"
 
 #: ../src/actions/actions-object.cpp:389
 msgid "Object Mask Set"
@@ -9773,7 +9773,7 @@ msgstr "Intrude il tracciato selezionato di n px (da specificare)"
 
 #: ../src/actions/actions-paths.cpp:267
 msgid "Offset Screen"
-msgstr "Estrudi tracciato in px"
+msgstr "Scostamento schermo"
 
 #: ../src/actions/actions-paths.cpp:267
 msgid "Offset selected paths by screen pixels"
@@ -10810,21 +10810,24 @@ msgstr ""
 
 #: ../src/actions/actions-transform.cpp:146
 msgid "Rotate selected objects"
-msgstr "Rutoa gli oggetti selezionati"
+msgstr "Ruota gli oggetti selezionati"
 
 #: ../src/actions/actions-transform.cpp:147
+#, fuzzy
 msgid "Rotate Step"
-msgstr "Incremento angolo di rotazione"
+msgstr "Ritocco rotazione"
 
 #: ../src/actions/actions-transform.cpp:147
+#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
 msgstr ""
-"Ruota gli oggetti selezionati di un multiplo del valore impostato nelle "
-"preferenze"
+"Ridimensiona gli oggetti selezionati relativamente allo Scatto definito "
+"nelle Preferenze"
 
 #: ../src/actions/actions-transform.cpp:148
+#, fuzzy
 msgid "Rotate Screen"
-msgstr "Ruota lo schermo"
+msgstr "Ruota gradiente"
 
 #: ../src/actions/actions-transform.cpp:148
 msgid "Rotate selected objects relative to zoom level"
@@ -11186,7 +11189,7 @@ msgstr ""
 #: ../src/auto-save.cpp:158 ../src/auto-save.cpp:163
 #, c-format
 msgid "Autosave failed! File %s could not be saved."
-msgstr "Errore nel salvataggio automatico! Impossibile salvare il file %s."
+msgstr "Errore nel salvataggio automatico! Impossibile salvare il file %s"
 
 #: ../src/color/cms-util.cpp:109
 msgid "(Unnamed)"
@@ -11261,7 +11264,7 @@ msgstr "Opacità '%1' fuori scala"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:164
 msgid "Invalid width '%1'"
-msgstr "Larghezza '%1' non valida"
+msgstr "Larghezza non valida '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:171
 msgid "Invalid width units '%1'"
@@ -11269,7 +11272,7 @@ msgstr "Unità larghezza non valida '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:181
 msgid "Invalid scale '%1'"
-msgstr "Scala '%1' non valida"
+msgstr "Scala non valida '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:190
 msgid "Invalid scale units '%1'"
@@ -11304,11 +11307,11 @@ msgstr "Angolo riquadro"
 
 #: ../src/display/control/snap-indicator.cpp:44
 msgid "Bounding box midpoint"
-msgstr "Baricentro riquadro"
+msgstr "Centro riquadro"
 
 #: ../src/display/control/snap-indicator.cpp:45
 msgid "Bounding box side midpoint"
-msgstr "Metà lato riquadro"
+msgstr "Mezzeria lato riquadro"
 
 #: ../src/display/control/snap-indicator.cpp:46 ../src/ui/tool/node.cpp:1685
 msgid "Smooth node"
@@ -11386,11 +11389,11 @@ msgstr "lato riquadro"
 
 #: ../src/display/control/snap-indicator.cpp:70
 msgid "bounding box side midpoint"
-msgstr "metà lato riquadro"
+msgstr "mezzeria lato riquadro"
 
 #: ../src/display/control/snap-indicator.cpp:71
 msgid "bounding box midpoint"
-msgstr "baricentro riquadro"
+msgstr "centro riquadro"
 
 #: ../src/display/control/snap-indicator.cpp:72
 msgid "smooth node"
@@ -11426,7 +11429,7 @@ msgstr "intersezione guida-tracciato"
 
 #: ../src/display/control/snap-indicator.cpp:80
 msgid "clip-path"
-msgstr "tracciato fissaggio"
+msgstr "tracciato di ritaglio"
 
 #: ../src/display/control/snap-indicator.cpp:81
 msgid "mask-path"
@@ -12555,7 +12558,7 @@ msgstr "Output EMF"
 #: ../src/extension/internal/emf-inout.cpp:3654
 #: ../src/extension/internal/wmf-inout.cpp:3228
 msgid "Convert texts to paths"
-msgstr "Converti testo in tracciato"
+msgstr "Converti testi in tracciato"
 
 #: ../src/extension/internal/emf-inout.cpp:3655
 #: ../src/extension/internal/wmf-inout.cpp:3229
@@ -13829,7 +13832,7 @@ msgstr "Personale"
 
 #: ../src/extension/internal/filter/filter-file.cpp:72
 msgid "Bundled"
-msgstr "Incluso"
+msgstr "Aggiunti"
 
 #: ../src/extension/internal/filter/image.h:51
 msgid "Edge Detect"
@@ -14407,7 +14410,7 @@ msgstr "Macchie di inchiostro su tessuto o carta grezza"
 #: ../src/extension/internal/filter/transparency.h:55
 #: ../src/filter-enums.cpp:23
 msgid "Blend"
-msgstr "Miscela"
+msgstr "Miscela (feBlend)"
 
 #: ../src/extension/internal/filter/transparency.h:57 ../src/rdf.cpp:268
 msgid "Source:"
@@ -14471,7 +14474,7 @@ msgstr "Ridipinge tutto il visibile in monocromatico"
 #: ../src/extension/internal/gdkpixbuf-input.cpp:187
 #, c-format
 msgid "%s bitmap image import"
-msgstr "Importa l'immagine bitmap %s"
+msgstr "Importa immagine bitmap %s"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:195
 msgid "Image Import Type:"
@@ -14799,7 +14802,7 @@ msgstr "9 - Compressione migliore"
 
 #: ../src/extension/internal/png-output.cpp:80
 msgid "pHYs DPI"
-msgstr "Parametro pHYs del .png"
+msgstr "DPI del pHYs"
 
 #: ../src/extension/internal/png-output.cpp:81
 msgid "Antialias"
@@ -15407,7 +15410,7 @@ msgstr "LinkedIn immagine contenuto sponsorizzato"
 
 #: ../src/extension/internal/template-social.cpp:53
 msgid "Snapchat advertisement"
-msgstr "Snapchat pubblicità"
+msgstr "Pubblicità Snapchat"
 
 #: ../src/extension/internal/template-social.cpp:54
 msgid "Twitter card image"
@@ -15778,8 +15781,8 @@ msgid ""
 "caused by an unknown or missing filename extension."
 msgstr ""
 "Non è stata trovata alcuna estensione di Inkscape per salvare il documento "
-"(%s). Ciò potrebbe esser stato causato da un'estensione  sconosciuta del "
-"nome del file."
+"(%s). Ciò potrebbe esser stato causato da un'estensione del nome del file "
+"sconosciuta."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -15797,7 +15800,7 @@ msgstr ""
 #: ../src/file.cpp:286 ../src/file.cpp:316
 #, c-format
 msgid "File %s could not be saved."
-msgstr "Impossibile salvare il file %s ."
+msgstr "Impossibile salvare il file %s."
 
 #: ../src/file.cpp:297
 #, c-format
@@ -15806,7 +15809,7 @@ msgid ""
 "No object with ID '%s' found."
 msgstr ""
 "Impossibile salvare il file:\n"
-"Nessun oggetto con ID '%s' ."
+"Nessun oggetto con ID '%s' trovato."
 
 #: ../src/file.cpp:306
 #, c-format
@@ -15816,7 +15819,7 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
-"Impossibile salvare il file %s .\n"
+"Impossibile salvare il file %s.\n"
 "\n"
 "L'estensione di output ha riportato le seguenti informazioni:\n"
 "'%s'"
@@ -15856,7 +15859,7 @@ msgstr "Importa pagine"
 #: ../src/file.cpp:958 ../src/inkscape-application.cpp:887
 #, c-format
 msgid "Failed to load the requested file %s"
-msgstr "Fallito caricamento del file richiesto %s"
+msgstr "Caricamento del file richiesto %s fallito"
 
 #: ../src/file.cpp:1031
 msgid "Select file to import"
@@ -15880,7 +15883,7 @@ msgstr "Illuminazione diffusa"
 
 #: ../src/filter-enums.cpp:29
 msgid "Displacement Map"
-msgstr "Mappa di spostamento"
+msgstr "Mappa di scostamento"
 
 #: ../src/filter-enums.cpp:30
 msgid "Flood"
@@ -15888,7 +15891,7 @@ msgstr "Riempimento"
 
 #: ../src/filter-enums.cpp:33 ../share/extensions/text_merge.inx:3
 msgid "Merge"
-msgstr "Mischia"
+msgstr "Unisci (feMerge)"
 
 #: ../src/filter-enums.cpp:36
 msgid "Specular Lighting"
@@ -15932,7 +15935,7 @@ msgstr "Satura"
 
 #: ../src/filter-enums.cpp:59
 msgid "Hue Rotate"
-msgstr "Ruota luminosità"
+msgstr "Ruota tonalità"
 
 #: ../src/filter-enums.cpp:60
 msgid "Luminance to Alpha"
@@ -15965,7 +15968,7 @@ msgstr "Valori discreti"
 
 #: ../src/filter-enums.cpp:96
 msgid "Wrap"
-msgstr "Ingloba"
+msgstr "Copia opposto"
 
 #: ../src/filter-enums.cpp:97
 msgctxt "Convolve matrix, edge mode"
@@ -15994,7 +15997,7 @@ msgstr "Luce puntiforme"
 
 #: ../src/filter-enums.cpp:136
 msgid "Spot Light"
-msgstr "Punto luce"
+msgstr "Luce spot"
 
 #: ../src/gradient-chemistry.cpp:779 ../src/gradient-drag.cpp:1233
 msgid "Delete gradient stop"
@@ -16096,7 +16099,7 @@ msgid ""
 "<b>Ctrl+Alt</b> to delete stop"
 msgstr ""
 "%s %d per: %s%s; trascina con <b>Ctrl</b> per l'incremento fisso dell'offset;"
-" con <b>Ctrl+Alt</b> cancelli il nodo gradiente"
+" con <b>Ctrl+Alt</b> per cancellare il passaggio"
 
 #: ../src/gradient-drag.cpp:1517 ../src/gradient-drag.cpp:1526
 #: ../src/gradient-drag.cpp:1533
@@ -16115,8 +16118,8 @@ msgid ""
 "preserve angle, with <b>Ctrl+Shift</b> to scale around center"
 msgstr ""
 "%s per: %s%s; trascina con <b>Ctrl</b> per l'incremento fisso dell'angolo; "
-"con <b>Ctrl+Alt</b> per mantenere invariato l'angolo; con <b>Ctrl+Maiusc</b> "
-"per ridimensionare attorno al centro"
+"con <b>Ctrl+Alt</b> per mantenere l'angolo; con <b>Ctrl+Maiusc</b> per "
+"ridimensionare attorno al centro"
 
 #: ../src/gradient-drag.cpp:1538
 msgid ""
@@ -16215,7 +16218,7 @@ msgstr ""
 # File: ../src/inkscape-application.cpp, line: 533
 #: ../src/inkscape-application.cpp:714
 msgid "See %1 and %2 for more details."
-msgstr "Vedi %1 e %2 per ulteriori dettagli."
+msgstr "Vedi %1 e %2 per ulteriori dettagli"
 
 #: ../src/inkscape-application.cpp:719
 msgid "Print Inkscape version"
@@ -17111,8 +17114,7 @@ msgstr "Fissaggio evoluto"
 #: ../src/live_effects/effect.cpp:574
 msgid "Invert, hide or flatten a clip (apply like a Boolean operation)"
 msgstr ""
-"Inverti, nascondi o semplifica un fissaggio (applica come operazione "
-"booleana)"
+"Inverti, nascondi o accetta un ritaglio (applica come operazione booleana)"
 
 #: ../src/live_effects/effect.cpp:585
 msgctxt "path effect"
@@ -17211,8 +17213,8 @@ msgid ""
 "Draw a circle by center and radius, where the first node of the path is the "
 "center, and the last determines its radius"
 msgstr ""
-"Disegna un cerchio dove il primo nodo del tracciato ne definisce il centro, "
-"mentre il secondo il raggio"
+"Disegna un cerchio utilizzando il primo nodo del tracciato per definire il "
+"centro, il secondo per il raggio"
 
 #: ../src/live_effects/effect.cpp:714
 msgctxt "path effect"
@@ -17258,7 +17260,7 @@ msgstr "Crea una linea parallela a due nodi di un tracciato"
 #: ../src/live_effects/effect.cpp:770
 msgctxt "path effect"
 msgid "Perpendicular bisector"
-msgstr "Bisettrice perpendicolare"
+msgstr "Retta perpendicolare"
 
 #: ../src/live_effects/effect.cpp:773
 msgid ""
@@ -17387,7 +17389,7 @@ msgstr "Nessun effetto"
 #: ../src/live_effects/effect.cpp:2002
 #, c-format
 msgid "Editing parameter <b>%s</b>."
-msgstr "Modifica del parametro <b>%s</b>."
+msgstr "Modifica del parametro <b>%s</b>"
 
 #: ../src/live_effects/effect.cpp:2007
 msgid "None of the applied path effect's parameters can be edited on-canvas."
@@ -17422,12 +17424,12 @@ msgstr "Specifica il termine destro della bisettrice"
 #: ../src/live_effects/lpe-angle_bisector.cpp:85
 #: ../src/live_effects/lpe-perp_bisector.cpp:157
 msgid "Adjust the \"left\" end of the bisector"
-msgstr "Modifica il termine \"sinistro\" della bisettrice"
+msgstr "Modifica il terminale \"sinistro\" della bisettrice"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:91
 #: ../src/live_effects/lpe-perp_bisector.cpp:163
 msgid "Adjust the \"right\" end of the bisector"
-msgstr "Modifica il termine \"destro\" della bisettrice"
+msgstr "Modifica il terminale \"destro\" della bisettrice"
 
 #: ../src/live_effects/lpe-attach-path.cpp:26
 msgid "Start path:"
@@ -17535,23 +17537,23 @@ msgstr "Modifica larghezza"
 
 #: ../src/live_effects/lpe-bool.cpp:51
 msgid "union"
-msgstr "Unione"
+msgstr "unione"
 
 #: ../src/live_effects/lpe-bool.cpp:52
 msgid "intersection"
-msgstr "Intersezione"
+msgstr "intersezione"
 
 #: ../src/live_effects/lpe-bool.cpp:53
 msgid "difference"
-msgstr "Differenza"
+msgstr "differenza"
 
 #: ../src/live_effects/lpe-bool.cpp:54
 msgid "symmetric difference"
-msgstr "Differenza simmetrica"
+msgstr "esclusione"
 
 #: ../src/live_effects/lpe-bool.cpp:55
 msgid "division"
-msgstr "Divisione"
+msgstr "divisione"
 
 #: ../src/live_effects/lpe-bool.cpp:56
 msgid "division both"
@@ -17615,7 +17617,7 @@ msgstr "Regola riempimento:"
 
 #: ../src/live_effects/lpe-bool.cpp:87
 msgid "Fill type (winding mode) for this path"
-msgstr "Regola del riempimento per questo tracciato"
+msgstr "Regola il riempimento per questo tracciato"
 
 #: ../src/live_effects/lpe-bool.cpp:89
 msgid "Fill type operand:"
@@ -17623,7 +17625,7 @@ msgstr "Regola riempimento operando:"
 
 #: ../src/live_effects/lpe-bool.cpp:89
 msgid "Fill type (winding mode) for operand path"
-msgstr "Regola del riempimento per questo tracciato operando"
+msgstr "Regola il riempimento per questo tracciato operando"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-many.cpp:34
@@ -17757,8 +17759,8 @@ msgid ""
 "Attributes of the original that the clone should copy, written as a comma-"
 "separated list; e.g. 'transform, style, clip-path, X, Y'."
 msgstr ""
-"Gli attributi dell'originale copiati dal clone, sono indicati come una lista "
-"separata da virgola; e.g. 'transform, X, Y'"
+"Gli attributi dell'originale che il clone dovrebbe ereditare, sono indicati "
+"come una lista separata da virgola; e.g. 'transform, X, Y'"
 
 #: ../src/live_effects/lpe-clone-original.cpp:56
 msgid "CSS Properties"
@@ -17769,8 +17771,8 @@ msgid ""
 "CSS properties of the original that the clone should copy, written as a "
 "comma-separated list; e.g. 'fill, filter, opacity'."
 msgstr ""
-"Proprietà CSS dell'originale copiati dal clone indicati come una lista "
-"separata da virgola; e.g. 'fill, filter, opacity'"
+"Le proprietà CSS dell'originale ed ereditate dal clone sono indicate come "
+"una lista separata da virgola; e.g. 'fill, filter, opacity'"
 
 #: ../src/live_effects/lpe-clone-original.cpp:59
 #: ../src/live_effects/lpe-slice.cpp:55
@@ -17817,7 +17819,7 @@ msgstr "Fondi tracciati"
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:65
 #: ../src/live_effects/lpe-slice.cpp:54 ../src/live_effects/lpe-tiling.cpp:92
 msgid "lpesatellites"
-msgstr "Satelliti LPE"
+msgstr "satelliti LPE"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:59
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:65
@@ -17854,7 +17856,7 @@ msgstr "Angolo iniziale della prima copia"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:62
 msgid "Adjust starting point to define start angle"
-msgstr "Modifica angolo iniziale della prima copia"
+msgstr "Precisa il punto iniziale per definire l'angolo di partenza"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:63
 msgid "Starting angle"
@@ -18116,7 +18118,7 @@ msgstr "muovi all'inizio"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:49
 msgid "move to middle"
-msgstr "muovi a metà"
+msgstr "muovi alla metà"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:50
 msgid "move to end"
@@ -18155,7 +18157,7 @@ msgstr "Lunghezza minima punto [%]"
 msgid ""
 "Merge stitches that are shorter than this percentage of the stitch length"
 msgstr ""
-"Unisce i punti di lunghezza inferiore a questa percentuale della lunghezza "
+"Unisce i tratti di lunghezza inferiore a questa percentuale della lunghezza "
 "punto"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
@@ -18263,7 +18265,7 @@ msgstr "Con Spiro o BSpline"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
 msgid "With all LPEs"
-msgstr "Con LPE"
+msgstr "Con tutti gli LPE"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:34
 msgid "Paths from which to take the original path data"
@@ -19422,10 +19424,9 @@ msgid ""
 "results.\n"
 msgstr ""
 "<b><big>IMPORTANTE</big></b>\n"
-"Questo Effetto su tracciato (LPE) è stato aggiunto con una versione "
-"precedente.\n"
-"L'Effetto su tracciato sarà mantenuto, ma consigliamo di rimuoverlo e "
-"inserirlo nuovamente per un risultato migliore.\n"
+"Questo LPE è presente in una vecchia versione.\n"
+"Esso sarà mantenuto, ma se ne raccomanda la sostituzione con la versione "
+"nuova.\n"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:52
 msgid "Vertical page center"
@@ -19590,11 +19591,11 @@ msgstr "Specifica il termine destro del parallelo"
 
 #: ../src/live_effects/lpe-parallel.cpp:108
 msgid "Adjust the \"left\" end of the parallel"
-msgstr "Modifica il termine \"sinistro\" del parallelo"
+msgstr "Modifica il terminale \"sinistro\" della parallela"
 
 #: ../src/live_effects/lpe-parallel.cpp:114
 msgid "Adjust the \"right\" end of the parallel"
-msgstr "Modifica il termine \"destro\" del parallelo"
+msgstr "Modifica il terminale \"destro\" della parallela"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:63
 #: ../share/extensions/patternalongpath.inx:9
@@ -19766,21 +19767,21 @@ msgstr "_Pulisci"
 
 #: ../src/live_effects/lpe-powerclip.cpp:34
 msgid "Hide clip"
-msgstr "Nascondi fissaggio"
+msgstr "Nascondi ritaglio"
 
 #: ../src/live_effects/lpe-powerclip.cpp:35
 msgid "Inverse clip"
-msgstr "Inverti fissaggio"
+msgstr "Inverti ritaglio"
 
 #: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip"
-msgstr "Appiattisci fissaggio"
+msgstr "Accetta ritaglio"
 
 #: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip, see fill rule once convert to paths"
 msgstr ""
-"Appiattisci fissaggio, guarda le regole di riempimento una volta convertita "
-"in tracciato"
+"Accetta il ritaglio, guarda le regole di riempimento una volta convertita in "
+"tracciato"
 
 #: ../src/live_effects/lpe-powerclip.cpp:38
 msgid "Info Box"
@@ -19792,8 +19793,8 @@ msgid ""
 "after convert clip to paths."
 msgstr ""
 "Usa la regola di riempimento (fill-rule) evenodd in <b>Riempimento e "
-"Contorni</b> se non si ottiene un risultato appiattendo il fissaggio una "
-"volta convertito in tracciato"
+"Contorni</b> se non si ottiene un risultato accettando il ritaglio una volta "
+"convertito in tracciato"
 
 #: ../src/live_effects/lpe-powermask.cpp:34
 msgid "Invert mask"
@@ -19937,7 +19938,7 @@ msgstr "Cerchio isometrico"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:40
 msgid "Perspective circle"
-msgstr "Cerchio in prospettiva"
+msgstr "Cerchio prospettico"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:43
 msgid "Steiner ellipse"
@@ -20785,11 +20786,11 @@ msgstr "Modifica il punto di attacco della tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:108
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Modifica il termine <b>sinistro</b> della tangente"
+msgstr "Modifica il terminale <b>sinistro</b> della tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:114
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Modifica il termine <b>destro</b> della tangente"
+msgstr "Modifica il terminale <b>destro</b> della tangente"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:81
 msgid "Extrapolated"
@@ -21262,7 +21263,7 @@ msgid ""
 "<b>Vertical gaps between tiles</b>: drag to adjust, <b>Shift+click</b> to "
 "reset"
 msgstr ""
-"<b>Spaziatura verticale tra le tile</b>: trascina per modificare; premi "
+"<b>Spaziatura verticale tra i tasselli</b>: trascina per modificare; premi "
 "<b>Maiusc+Clic</b> per ripristinare lo stato originale"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
@@ -21339,7 +21340,7 @@ msgstr "_Numero di generazioni:"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid "Depth of the recursion --- keep low!!"
-msgstr "Profondità della ricorsione: non aumentare troppo!"
+msgstr "Profondità della ricorsione (non aumentare troppo)"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:49
 msgid "Generating path:"
@@ -21378,8 +21379,8 @@ msgstr "Segmento di riferimento:"
 #: ../src/live_effects/lpe-vonkoch.cpp:53
 msgid "The reference segment. Defaults to the horizontal midline of the bbox."
 msgstr ""
-"Il segmento di riferimento. La mediana orizzontale del riquadro è usato come "
-"predefinito."
+"Il segmento di riferimento. La mezzeria orizzontale del riquadro è usato "
+"come predefinito."
 
 #: ../src/live_effects/lpe-vonkoch.cpp:57
 msgid "_Max complexity:"
@@ -21736,8 +21737,7 @@ msgid ""
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Maiusc+trascina</b> per ruotare, <b>Ctrl+trascina</b> per spostare "
-"l'origine, <b>Canc</b> per cancellare; <b>doppio clic</b> per modificare le "
-"proprietà di questa guida"
+"l'origine, <b>Canc</b> per cancellare"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -21752,7 +21752,7 @@ msgstr "orizzontale, a %s"
 #: ../src/object/sp-guide.cpp:502
 #, c-format
 msgid "at %d degrees, through (%s,%s)"
-msgstr "a %d gradi, passante per (%s,%s)"
+msgstr "a %d gradi, intersecante (%s,%s)"
 
 #: ../src/object/sp-image.cpp:520
 msgid "embedded"
@@ -21806,7 +21806,7 @@ msgstr "%s; <i>ritagliato</i>"
 #: ../src/object/sp-item.cpp:1194
 #, c-format
 msgid "%s; <i>masked</i>"
-msgstr "%s; <i>con mascheramento</i>"
+msgstr "%s; <i>con maschera</i>"
 
 #: ../src/object/sp-item.cpp:1204
 #, c-format
@@ -22028,7 +22028,7 @@ msgstr "<b>Nessun tracciato</b> da combinare nella selezione"
 
 #: ../src/path-chemistry.cpp:209
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Seleziona il <b>tracciato</b> da separare"
+msgstr "Seleziona i <b>tracciati</b> da separare"
 
 #: ../src/path-chemistry.cpp:214
 msgid "Breaking apart paths..."
@@ -22088,14 +22088,14 @@ msgid ""
 "difference."
 msgstr ""
 "Seleziona <b>almeno 2 tracciati</b> per effettuare un'intersezione o una "
-"differenza simmetrica."
+"differenza simmetrica"
 
 #: ../src/path/path-boolop.cpp:378
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
 msgstr ""
 "Seleziona <b>solamente 2 tracciati</b> per effettuare una differenza, "
-"divisione o taglio di tracciato."
+"divisione o taglio di tracciato"
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -22192,37 +22192,37 @@ msgstr ""
 #: ../src/preferences.cpp:124
 #, c-format
 msgid "Cannot create profile directory %s."
-msgstr "Impossibile creare la cartella di profilo %s."
+msgstr "Impossibile creare la cartella di profilo %s"
 
 #: ../src/preferences.cpp:133
 #, c-format
 msgid "%s is not a valid directory."
-msgstr "%s non è una cartella valida."
+msgstr "%s non è una cartella valida"
 
 #: ../src/preferences.cpp:151
 #, c-format
 msgid "Failed to create the preferences file %s."
-msgstr "Impossibile creare il file delle preferenze %s."
+msgstr "Impossibile creare il file delle preferenze %s"
 
 #: ../src/preferences.cpp:187
 #, c-format
 msgid "The preferences file %s is not a regular file."
-msgstr "Il file delle preferenze %s non è un file regolare."
+msgstr "Il file delle preferenze %s non è un file regolare"
 
 #: ../src/preferences.cpp:197
 #, c-format
 msgid "The preferences file %s could not be read."
-msgstr "Il file delle preferenze %s non può essere letto."
+msgstr "Impossibile leggere il file delle preferenze %s"
 
 #: ../src/preferences.cpp:208
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
-msgstr "Il file delle preferenze %s non è un documento XML valido."
+msgstr "Il file delle preferenze %s non è un documento XML valido"
 
 #: ../src/preferences.cpp:217
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
-msgstr "Il file %s non è un file delle preferenze Inkscape valido."
+msgstr "Il file %s non è un file delle preferenze Inkscape valido"
 
 #: ../src/preferences.cpp:276
 msgid "Preferences file was backed up to"
@@ -22782,7 +22782,7 @@ msgstr "Crea bitmap"
 
 #: ../src/selection-chemistry.cpp:3634 ../src/selection-chemistry.cpp:3741
 msgid "Select <b>object(s)</b> to create clippath or mask from."
-msgstr "Seleziona l'<b>oggetto</b> da cui creare la maschera o il fissaggio"
+msgstr "Seleziona l'<b>oggetto</b> da cui creare la maschera o il ritaglio"
 
 #: ../src/selection-chemistry.cpp:3717
 msgid "Create Clip Group"
@@ -22792,11 +22792,11 @@ msgstr "Crea gruppo di ritaglio"
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr ""
 "Selezionare l'oggetto maschera e l'<b>oggetto</b> a cui applicare la "
-"maschera o il fissaggio"
+"maschera o il ritaglio"
 
 #: ../src/selection-chemistry.cpp:3902
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
-msgstr "Seleziona l'<b>oggetto</b> da cui rimuovere la maschera o il fissaggio"
+msgstr "Seleziona l'<b>oggetto</b> da cui rimuovere la maschera o il ritaglio"
 
 #: ../src/selection-chemistry.cpp:4031
 msgid "Select <b>object(s)</b> to fit canvas to."
@@ -23005,14 +23005,14 @@ msgstr ""
 #: ../src/seltrans.cpp:1395
 #, c-format
 msgid "<b>Skew</b>: %0.2f&#176;; with <b>%s</b> to snap angle"
-msgstr "<b>Distorsione</b>: %0.2f&#176;; usa <b>%s</b> per aggancare l'angolo"
+msgstr "<b>Distorsione</b>: %0.2f&#176;; usa <b>%s</b> per agganciare l'angolo"
 
 #. TRANSLATORS: don't modify the first ";"
 #. (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:1475
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>%s</b> to snap angle"
-msgstr "<b>Rotazione</b>: %0.2f&#176;; usa <b>%s</b> per aggancare l'angolo"
+msgstr "<b>Rotazione</b>: %0.2f&#176;; usa <b>%s</b> per agganciare l'angolo"
 
 #: ../src/seltrans.cpp:1512
 #, c-format
@@ -23026,7 +23026,7 @@ msgid ""
 "with <b>%s</b> to disable snapping"
 msgstr ""
 "<b>Muove</b> di %s, %s; usa <b>%s</b> per restringere a oriz/vert; usa "
-"<b>%s</b> per disabilitare l'aggancio"
+"<b>%s</b> per disabilitare lo scatto"
 
 #: ../src/text-chemistry.cpp:80
 msgid "Select <b>a text and a path</b> to put text on path."
@@ -23210,7 +23210,7 @@ msgstr "Nessun tracciato negli appunti"
 
 #: ../src/ui/clipboard.cpp:995
 msgid "Clipboard does not contain any objects of type \"%1\"."
-msgstr "Nessun oggetto di tipo \"%1\" negli appunti."
+msgstr "Nessun oggetto di tipo \"%1\" negli appunti"
 
 #: ../src/ui/contextmenu.cpp:81 ../share/ui/menus.ui:134
 msgid "Cu_t"
@@ -23277,7 +23277,7 @@ msgstr "Ve_ttorizza bitmap..."
 
 #: ../src/ui/contextmenu.cpp:229
 msgid "Crop Image to Clip"
-msgstr "Ritaglia immagine al fissaggio"
+msgstr "Ritaglia immagine al tracciato"
 
 #: ../src/ui/contextmenu.cpp:233
 msgid "Extract Image..."
@@ -23357,7 +23357,7 @@ msgstr "Imposta fi_ssaggio"
 
 #: ../src/ui/contextmenu.cpp:289
 msgid "Release C_lip"
-msgstr "Rilascia _fissaggio"
+msgstr "Rilascia _ritaglio"
 
 #: ../src/ui/contextmenu.cpp:291
 msgid "Set Clip G_roup"
@@ -23946,11 +23946,14 @@ msgstr "<b>H:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:701
 msgid "Change the tile hue by this percentage for each row"
-msgstr "Cambia di questa percentuale l'opacità dei cloni per ogni riga"
+msgstr ""
+"Cambia la tonalità di colore dei cloni, per ogni riga, di questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:707
 msgid "Change the tile hue by this percentage for each column"
-msgstr "Cambia di questa percentuale l'opacità dei cloni per ogni colonna"
+msgstr ""
+"Cambia la tonalità di colore dei cloni, per ogni colonna, di questa "
+"percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:713
 msgid "Randomize the tile hue by this percentage"
@@ -24295,7 +24298,7 @@ msgstr "<small>Casualità:</small>"
 msgid ""
 "Color: <b>%1</b>; <b>Click</b> to set fill, <b>Shift+click</b> to set stroke"
 msgstr ""
-"Colore: <b>%s</b>; <b>Clicca</b> per impostare il riempimento, "
+"Colore: <b>%1</b>; <b>Clicca</b> per impostare il riempimento, "
 "<b>Maiusc+Clic</b> per impostare il contorno"
 
 #: ../src/ui/dialog/color-item.cpp:366
@@ -24474,7 +24477,7 @@ msgstr "Livelli e Oggetti"
 
 #: ../src/ui/dialog/dialog-data.cpp:49
 msgid "_Paint Servers"
-msgstr "_Trame"
+msgstr "_Motivi"
 
 #: ../src/ui/dialog/dialog-data.cpp:50 ../share/ui/menus.ui:352
 msgid "P_references"
@@ -25301,7 +25304,7 @@ msgstr ""
 #: ../src/ui/dialog/export.cpp:267 ../src/ui/dialog/export.cpp:427
 #, c-format
 msgid "Could not export to filename <b>%s</b>.\n"
-msgstr "Impossibile esportare col nome del file <b>%s</b>.\n"
+msgstr "Impossibile esportare al nome del file <b>%s</b>\n"
 
 #: ../src/ui/dialog/export.cpp:281
 msgid "Export aborted."
@@ -25326,8 +25329,7 @@ msgstr ""
 #: ../src/ui/dialog/export.cpp:400
 #, c-format
 msgid "Could not export to filename <b>%s</b>. (missing object)\n"
-msgstr ""
-"Impossibile esportare con il nome del file <b>%s</b>. (oggetto mancante)\n"
+msgstr "Impossibile esportare al nome del file <b>%s</b>. (oggetto mancante)\n"
 
 #: ../src/ui/dialog/export.cpp:442 ../src/ui/dialog/export.cpp:495
 msgid "bitmap"
@@ -25550,7 +25552,7 @@ msgstr "Coordinata Y"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1140
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1143
 msgid "Z coordinate"
-msgstr "Coordinata X"
+msgstr "Coordinata Z"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1143
 msgid "Points at:"
@@ -26472,9 +26474,9 @@ msgstr "Niente da sostituire"
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 msgstr[0] ""
-"<b>%d</b> oggetto trovato (su un totale di <b>%d</b>), corrispondenza %s."
+"<b>%d</b> oggetto trovato (su un totale di <b>%d</b>), corrispondenza %s"
 msgstr[1] ""
-"<b>%d</b> oggetti trovati (su un totale di <b>%d</b>), corrispondenza %s."
+"<b>%d</b> oggetti trovati (su un totale di <b>%d</b>), corrispondenza %s"
 
 #: ../src/ui/dialog/find.cpp:1005
 msgid "exact"
@@ -26545,7 +26547,7 @@ msgstr "Il carattere '%1' è stato sostituito con '%2'"
 
 #: ../src/ui/dialog/global-palettes.cpp:117
 msgid "ACB file header not recognized."
-msgstr "File ACB non riconosciuto"
+msgstr "Intestazione file ABC non riconosciuta"
 
 #: ../src/ui/dialog/global-palettes.cpp:166
 msgid "ACB file color space not supported."
@@ -29086,7 +29088,7 @@ msgstr "Nulla"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr "Solo schermata di benvenuto"
+msgstr "Solo splash screen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
 msgctxt "Start mode"
@@ -29095,12 +29097,11 @@ msgstr "Schermata di benvenuto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
 msgid "Show when starting:"
-msgstr "All'inizio mostra:"
+msgstr "Mostra all'avvio:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
-msgstr ""
-"Impostare ciò che viene mostrato quando si carica il programma normalmente."
+msgstr "Imposta ciò che viene visualizzato all'avvio del programma"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -30219,8 +30220,8 @@ msgid ""
 "Check this to make the 'select same' functions work like the select all "
 "functions, restricting to current layer only."
 msgstr ""
-"Seleziona questa opzione per far funzionare le funzioni di Seleziona stesso "
-"come il Seleziona tutto, restringendolo al solo livello attuale"
+"Seleziona questa opzione perché il comando 'Seleziona stesso' funzioni come "
+"seleziona tutto, restringendolo al solo livello attuale"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2561
 msgid "Wrap when cycling objects in z-order"
@@ -30282,7 +30283,8 @@ msgstr "Preserva"
 #: ../share/ui/toolbar-select.ui:552
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
-"Adatta le dimensioni dei contorni durante il ridimensionamento dell'oggetto"
+"Adatta proporzionalmente le dimensioni del contorno durante il "
+"ridimensionamento dell'oggetto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
 #: ../share/ui/toolbar-select.ui:569
@@ -30328,7 +30330,7 @@ msgstr "Trasformazioni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2603
 msgid "Mouse _wheel scrolls by:"
-msgstr "Scorrimento con la _rotella del mouse:"
+msgstr "La _rotella del mouse scorre di:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2604
 msgid ""
@@ -30512,9 +30514,8 @@ msgid ""
 "When a grid is visible, and snapping to grids is active, other snap targets "
 "will be ignored, unless explicitly allowed below."
 msgstr ""
-"Quando una griglia è visibile ed il suo aggancio è attivato, gli altri "
-"elementi di aggancio saranno ignorati se non esplicitamente selezionati "
-"sotto."
+"Quando una griglia è visibile e l'aggancio ad essa è attivato, gli altri "
+"oggetti agganciabili saranno ignorati, salvo dove espressamente stabilito"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2666
 msgid "Always snap to guides"
@@ -30526,9 +30527,9 @@ msgid ""
 "guides is active, other snap targets will be ignored, unless explicitly "
 "allowed below."
 msgstr ""
-"Quando delle guide sono presenti ed il loro aggancio è attivato, gli altri "
-"elementi di aggancio saranno ignorati se non esplicitamente selezionati "
-"sotto."
+"Quando ci sono linee guida nello spazio di lavoro e l'aggancio ad esse è "
+"attivato, gli altri oggetti agganciabili saranno ignorati, salvo dove "
+"espressamente stabilito."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2669
 msgid "While Always Snapping to Grid/Guides"
@@ -30643,7 +30644,7 @@ msgid ""
 "When on, the snap angles when rotating a guideline will be relative to the "
 "original angle"
 msgstr ""
-"Se attivo, l'angolo che scatta alla rotazione della linea guida sarà "
+"Se attivo, l'incremento dell'angolo alla rotazione della linea guida sarà "
 "relativo all'angolo originale"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2717
@@ -30701,10 +30702,10 @@ msgid ""
 "rotated, the selection will then still be moved horizontally and vertically "
 "relative to the screen, not to the rotated document."
 msgstr ""
-"Quando attivo, i tasti Freccia spostano gli oggetti relativamente allo "
-"schermo. Quando lo spazio di lavoro è ruotato, la selezione sarà spostata "
-"orizzontalmente e verticalmente rispetto allo schermo, non al documento "
-"ruotato."
+"Quando attivo, i tasti freccia muovono gli oggetti relativamente allo "
+"schermo. Quando l'area di lavoro è ruotata, la selezione sarà ancora "
+"spostata orizzontalmente e verticalmente rispetto allo schermo e non al "
+"documento ruotato."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2734
 msgid "Steps"
@@ -30808,8 +30809,8 @@ msgid ""
 "'Object to path' only unlinks clones when they are converted to paths, but "
 "preserves any LPEs and shapes within the clones."
 msgstr ""
-"'Da oggetto a tracciato' scollega i cloni quando sono convertiti in "
-"tracciati, mantenendone le forme e gli Effetti su tracciato applicati"
+"'Da oggetto a tracciato' scollega i cloni quando sono convertiti, "
+"mantenendone le forme e gli Effetti su tracciato applicati"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:2775
@@ -30820,31 +30821,31 @@ msgstr "Cloni"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2778
 msgid "When applying, use the topmost selected object as clippath/mask"
 msgstr ""
-"Usa l'oggetto in cima tra quelli selezionati come tracciato di fissaggio o "
-"maschera durante l'applicazione"
+"Durante l'applicazione, usa l'oggetto in cima tra quelli selezionati come "
+"tracciato di ritaglio o di mascheramento"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2780
 msgid ""
 "Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
-"Deseleziona per usare l'oggetto in fondo alla pila tra quelli selezionati, "
-"come tracciato di fissaggio o maschera"
+"Deseleziona per usare l'oggetto in fondo alla pila tra quelli selezionati "
+"come tracciato di ritaglio o maschera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2781
 msgid "When ungrouping, clips/masks are preserved in children"
 msgstr ""
-"Quando si divide un gruppo, conserva il fissaggio/maschera negli elementi "
-"figli"
+"Quando si divide un gruppo, conserva il ritaglio/maschera negli elementi "
+"singoli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2783
 msgid "Uncheck this to remove clip/mask on ungroup"
 msgstr ""
-"Deseleziona questa opzione per rimuovere il fissaggio/maschera quando si "
+"Deseleziona questa opzione per rimuovere il ritaglio/mascheramento quando si "
 "divide un gruppo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2784
 msgid "Remove clippath/mask object after applying"
-msgstr "Rimuovi il tracciato di fissaggio o la maschera dopo l'applicazione"
+msgstr "Rimuovi il tracciato di ritaglio o la maschera dopo l'applicazione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2786
 msgid ""
@@ -30852,7 +30853,7 @@ msgid ""
 "drawing"
 msgstr ""
 "Dopo l'applicazione, rimuove dal disegno l'oggetto usato come tracciato di "
-"fissaggio o maschera"
+"ritaglio o maschera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2788
 msgid "Before applying"
@@ -30860,29 +30861,29 @@ msgstr "Prima di applicare"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2790
 msgid "Do not group clipped/masked objects"
-msgstr "Non raggruppare gli oggetti con fissaggio o mascheramento"
+msgstr "Non raggruppare gli oggetti con ritaglio o mascheramento"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2791
 msgid "Put every clipped/masked object in its own group"
-msgstr "Metti ogni oggetto con fissaggio o mascheramento in un proprio gruppo"
+msgstr "Metti ogni oggetto con ritaglio o mascheramento in un proprio gruppo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2792
 msgid "Put all clipped/masked objects into one group"
-msgstr "Metti tutti gli oggetti con fissaggio e mascheramento in un gruppo"
+msgstr "Metti tutti gli oggetti con ritaglio e mascheramento in un gruppo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2795
 msgid "Apply clippath/mask to every object"
-msgstr "Applica ad ogni oggetto il fissaggio o mascheramento"
+msgstr "Applica il ritaglio od il mascheramento ad ogni oggetto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2798
 msgid "Apply clippath/mask to groups containing single object"
 msgstr ""
-"Applica fissaggio o mascheramento a gruppi che contengono un solo oggetto"
+"Applica ritaglio o mascheramento a gruppi che contengono un solo oggetto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2801
 msgid "Apply clippath/mask to group containing all objects"
 msgstr ""
-"Applica fissaggio o mascheramento a un gruppo che contiene tutti gli oggetti"
+"Applica ritaglio o mascheramento a un gruppo che contiene tutti gli oggetti"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2803
 msgid "After releasing"
@@ -30895,7 +30896,7 @@ msgstr "Dividi gruppi creati automaticamente"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2807
 msgid "Ungroup groups created when setting clip/mask"
 msgstr ""
-"Dividi i gruppi creati (automaticamente) quando viene impostato un fissaggio/"
+"Dividi i gruppi creati (automaticamente) quando viene impostato un ritaglio/"
 "maschera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2809
@@ -31262,7 +31263,9 @@ msgstr "Dimensione anticipazione"
 #: ../src/ui/dialog/inkscape-preferences.cpp:3003
 msgid ""
 "Prevent thin tiles at the rendering edge by making them at least this size."
-msgstr "Dimensione minima degli elementi al bordo di rendering."
+msgstr ""
+"Evita tasselli sottili a bordo rendering assegnando loro almeno questa "
+"dimensione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3005
 msgid "Min size for coarsener algorithm"
@@ -31560,7 +31563,7 @@ msgid ""
 "with an x. This is useful for manual tracing."
 msgstr ""
 "Se attivo, renderizzerà le immagini durante la modalità contorno invece di "
-"mostrare un riquadro rosso con una x. Utile per la vettorizzazione manuale."
+"mostrare un riquadro rosso con una x. Utile per il tracciamento manuale."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3111
 msgid "Imported Images"
@@ -32630,12 +32633,12 @@ msgstr "Apri un file differente"
 #: ../src/ui/dialog/styledialog.cpp:472 ../src/ui/dialog/styledialog.cpp:660
 #: ../src/ui/dialog/styledialog.cpp:798
 msgid "property"
-msgstr "Proprietà"
+msgstr "proprietà"
 
 #: ../src/ui/dialog/styledialog.cpp:485 ../src/ui/dialog/styledialog.cpp:674
 #: ../src/ui/dialog/styledialog.cpp:811
 msgid "value"
-msgstr "Valore"
+msgstr "valore"
 
 #: ../src/ui/dialog/styledialog.cpp:533 ../src/ui/dialog/styledialog.cpp:744
 #: ../src/ui/dialog/styledialog.cpp:839 ../src/ui/dialog/styledialog.cpp:895
@@ -32797,7 +32800,7 @@ msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:885
 msgid "Set up canvas"
-msgstr "Imposta riquadro"
+msgstr "Imposta spazio di lavoro"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1039
 msgid "Add glyph"
@@ -33677,13 +33680,14 @@ msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
 msgid "Shift"
-msgstr "Maiuscolo"
+msgstr "Maiusc"
 
 #: ../src/ui/modifiers.cpp:246
 msgid "Alt"
-msgstr "Alt/Opt"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
+#, fuzzy
 msgid "Super"
 msgstr "Super"
 
@@ -33692,6 +33696,7 @@ msgid "Hyper"
 msgstr "Iper"
 
 #: ../src/ui/modifiers.cpp:258
+#, fuzzy
 msgid "Meta"
 msgstr "Metadati"
 
@@ -33700,16 +33705,16 @@ msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
-"Modifica l'<b>arrotondamento orizzontale</b>; <b>Ctrl</b> per rendere uguale "
-"l'arrotondamento verticale"
+"Modifica il raggio dell'<b>arrotondamento orizzontale</b>; <b>Ctrl</b> per "
+"rendere uguale l'arrotondamento verticale"
 
 #: ../src/ui/shape-editor-knotholders.cpp:580
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
-"Modifica l'<b>arrotondamento verticale</b>; <b>Ctrl</b> per rendere uguale "
-"l'arrotondamento orizzontale"
+"Modifica il raggio dell'<b>arrotondamento verticale</b>; <b>Ctrl</b> per "
+"rendere uguale l'arrotondamento orizzontale"
 
 #: ../src/ui/shape-editor-knotholders.cpp:584
 #: ../src/ui/shape-editor-knotholders.cpp:588
@@ -34139,8 +34144,8 @@ msgid ""
 "<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to "
 "reset. (more: %s)"
 msgstr ""
-"<b>Maniglia nodo BSpline</b> (forza %.3g): Maiusc+trascinamento per "
-"spostare, doppio Clic per resettare. (altro: %s)"
+"<b>Maniglia nodo BSpline</b> (forza %.3g): Maiusc per trascinare, doppio "
+"Clic per reimpostare. (altro: %s)"
 
 #: ../src/ui/tool/node.cpp:676
 #, c-format
@@ -34979,8 +34984,8 @@ msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
 msgstr ""
-"Ora gli <b>angoli arrotondati dei rettangoli non vengono ridimensionati</b> "
-"quando i rettangoli vengono ridimensionati"
+"Ora gli <b>angoli arrotondati dei rettangoli non sono ridimensionati</b> "
+"quando i rettangoli sono ridimensionati"
 
 #: ../src/ui/toolbar/select-toolbar.cpp:480
 msgid ""
@@ -35415,8 +35420,8 @@ msgstr "(buono, ma con molti nodi)"
 msgid ""
 "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
-"<b>Ctrl</b>: crea cerchi o ellissi a proporzioni prefissate; incrementa gli "
-"angoli di archi/segmenti"
+"<b>Ctrl</b>: crea cerchi o ellissi con proporzioni prefissate; incrementa "
+"gli angoli di archi/segmenti"
 
 #: ../src/ui/tools/arc-tool.cpp:209 ../src/ui/tools/rect-tool.cpp:225
 msgid "<b>Shift</b>: draw around the starting point"
@@ -35433,7 +35438,7 @@ msgid ""
 "to draw around the starting point"
 msgstr ""
 "<b>Ellisse</b>: %s &#215; %s; (forzata al rapporto %d:%d); <b>Maiusc</b> per "
-"espandere dal punto iniziale"
+"disegnare attorno al punto iniziale"
 
 #: ../src/ui/tools/arc-tool.cpp:377
 #, c-format
@@ -35442,7 +35447,7 @@ msgid ""
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Ellisse</b>: %s &#215; %s (forzata al rapporto aureo 1.618 : 1); "
-"<b>Maiusc</b> per espandere dal punto iniziale"
+"<b>Maiusc</b> per disegnare attorno al punto iniziale"
 
 #: ../src/ui/tools/arc-tool.cpp:381
 #, c-format
@@ -35451,7 +35456,7 @@ msgid ""
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Ellisse</b>: %s &#215; %s (forzata al rapporto aureo 1 : 1.618); "
-"<b>Maiusc</b> per espandere dal punto iniziale"
+"<b>Maiusc</b> per disegnare attorno al punto iniziale"
 
 #: ../src/ui/tools/arc-tool.cpp:386
 #, c-format
@@ -35461,7 +35466,7 @@ msgid ""
 "starting point"
 msgstr ""
 "<b>Ellisse</b>: %s &#215; %s; <b>Ctrl</b> per fare cerchi o ellissi in scala;"
-" <b>Maiusc</b> per espandere dal punto iniziale"
+" <b>Maiusc</b> per disegnare attorno al punto iniziale"
 
 #: ../src/ui/tools/arc-tool.cpp:406
 msgid "Create ellipse"
@@ -35702,7 +35707,7 @@ msgstr "Crea singolo punto"
 #: ../src/ui/tools/gradient-tool.cpp:114 ../src/ui/tools/mesh-tool.cpp:146
 #, c-format
 msgid "%s selected"
-msgstr "selezionato %s"
+msgstr "%s selezionato"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/gradient-tool.cpp:116 ../src/ui/tools/gradient-tool.cpp:125
@@ -35943,13 +35948,13 @@ msgstr "<b>Maiusc</b>: trascina per aggiungere nodi alla selezione"
 #: ../src/ui/tools/node-tool.cpp:679
 msgid "<b>%1 of %2</b> node selected."
 msgid_plural "<b>%1 of %2</b> nodes selected."
-msgstr[0] "<b>%1 di %2</b> nodo selezionato."
-msgstr[1] "<b>%1 di %2</b> nodi selezionati."
+msgstr[0] "<b>%1 di %2</b> nodo selezionato"
+msgstr[1] "<b>%1 di %2</b> nodi selezionati"
 
 #. TRANSLATORS: %1 is an angle in degrees, formatted with two decimal places.
 #: ../src/ui/tools/node-tool.cpp:697
 msgid "Angle: %1°."
-msgstr "Angolo: %1°."
+msgstr "Angolo: %1°"
 
 #: ../src/ui/tools/node-tool.cpp:704
 msgctxt "Node tool tip"
@@ -36076,9 +36081,9 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Segmento di linea</b>: angolo %3.2f&#176;, distanza %s; <b>Ctrl</b> per "
-"l'incremento prefissato dell'angolo; <b>Invio</b> o <b>Maiusc+Invio</b> per "
-"terminare il tracciato"
+"<b>Segmento di linea</b>: angolo %3.2f&#176;, distanza %s; <b>Ctrl</b> "
+"angoli a scatti; <b>Invio</b> o <b>Maiusc+Invio</b> per terminare il "
+"tracciato"
 
 #: ../src/ui/tools/pen-tool.cpp:1724
 #, c-format
@@ -36087,7 +36092,7 @@ msgid ""
 "angle"
 msgstr ""
 "<b>Maniglia curva</b>: angolo %3.2f&#176; lunghezza %s; <b>Ctrl</b> per "
-"l'incremento prefissato dell'angolo"
+"angoli a scatti"
 
 #: ../src/ui/tools/pen-tool.cpp:1755
 #, c-format
@@ -36096,8 +36101,8 @@ msgid ""
 "b> to snap angle, with <b>Shift</b> to move this handle only"
 msgstr ""
 "<b>Maniglia di curva, simmetrica</b>: angolo %3.2f&#176;, lunghezza %s; con "
-"<b>Ctrl</b> per l'incremento prefissato dell'angolo, <b>Maiusc</b> per "
-"muovere solo questa maniglia"
+"<b>Ctrl</b> per angoli a scatti, <b>Maiusc</b> per muovere solo questa "
+"maniglia"
 
 #: ../src/ui/tools/pen-tool.cpp:1756
 #, c-format
@@ -36106,8 +36111,7 @@ msgid ""
 "angle, with <b>Shift</b> to move this handle only"
 msgstr ""
 "<b>Maniglia di curva</b>: angolo %3.2f&#176;, lunghezza %s; <b>Ctrl</b> per "
-"l'incremento prefissato dell'angolo, <b>Maiusc</b> per muovere solo questa "
-"maniglia"
+"angoli a scatti, <b>Maiusc</b> per muovere solo questa maniglia"
 
 #: ../src/ui/tools/pen-tool.cpp:1930
 msgid "Drawing finished"
@@ -36224,7 +36228,7 @@ msgid ""
 "rubberband selection"
 msgstr ""
 "<b>Disegna</b> sugli oggetti per selezionarli; rilascia <b>%s</b> per "
-"passare alla selezione rettangolare"
+"passare alla selezione ad elastico"
 
 #: ../src/ui/tools/select-tool.cpp:577
 #, c-format
@@ -36309,8 +36313,8 @@ msgstr "<b>Alt</b>: mantiene il raggio della spirale"
 msgid ""
 "<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Spirale</b>: raggio %s, angolo %.2f&#176;; <b>Ctrl</b> per variare "
-"l'angolo della quantità prefissata"
+"<b>Spirale</b>: raggio %s, angolo %.2f&#176;; <b>Ctrl</b> per far scattare "
+"l'angolo"
 
 #: ../src/ui/tools/spiral-tool.cpp:353
 msgid "Create spiral"
@@ -36379,16 +36383,16 @@ msgstr "<b>Ctrl</b>: fa scattare l'angolo; mantiene la direzione dei raggi"
 msgid ""
 "<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Poligono</b>: raggio %s, angolo %.2f&#176;; <b>Ctrl</b> per variare "
-"l'angolo della quantità prefissata"
+"<b>Poligono</b>: raggio %s, angolo %.2f&#176;; <b>Ctrl</b> per far scattare "
+"l'angolo"
 
 #: ../src/ui/tools/star-tool.cpp:345
 #, c-format
 msgid ""
 "<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Stella</b>: raggio %s, angolo %.2f&#176;; <b>Ctrl</b> per variare "
-"l'angolo della quantità prefissata"
+"<b>Stella</b>: raggio %s, angolo %.2f&#176;; <b>Ctrl</b> per far scattare "
+"l'angolo"
 
 #: ../src/ui/tools/star-tool.cpp:369
 msgid "Create star"
@@ -36543,10 +36547,10 @@ msgid_plural ""
 "paragraph."
 msgstr[0] ""
 "Inserisci o modifica il testo sagomato (%d carattere%s); <b>Invio</b> per "
-"iniziare un nuovo paragrafo."
+"iniziare un nuovo paragrafo"
 msgstr[1] ""
 "Inserisci o modifica il testo sagomato (%d caratteri%s); <b>Invio</b> per "
-"iniziare un nuovo paragrafo."
+"iniziare un nuovo paragrafo"
 
 #: ../src/ui/tools/tool-base.cpp:651
 msgid "<b>Space+mouse move</b> to pan canvas"
@@ -36555,26 +36559,26 @@ msgstr "<b>Spazio+spostamento puntatore</b> per muovere l'area di lavoro"
 #: ../src/ui/tools/tweak-tool.cpp:143
 #, c-format
 msgid "%s. Drag to <b>move</b>."
-msgstr "%s. Trascina per <b>spostare</b>."
+msgstr "%s. Trascina per <b>spostare</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:147
 #, c-format
 msgid "%s. Drag or click to <b>move in</b>; with Shift to <b>move out</b>."
 msgstr ""
 "%s. Trascina o clicca per <b>spostare dentro</b>; con Maiusc per <b>spostare "
-"fuori</b>."
+"fuori</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:155
 #, c-format
 msgid "%s. Drag or click to <b>move randomly</b>."
-msgstr "%s. Trascina o clicca per <b>spostare casualmente</b>."
+msgstr "%s. Trascina o clicca per <b>spostare casualmente</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:159
 #, c-format
 msgid "%s. Drag or click to <b>scale down</b>; with Shift to <b>scale up</b>."
 msgstr ""
 "%s. Trascina o clicca per <b>rimpicciolire</b>; con Maiusc per "
-"<b>ingrandire</b>."
+"<b>ingrandire</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:167
 #, c-format
@@ -36583,47 +36587,47 @@ msgid ""
 "<b>counterclockwise</b>."
 msgstr ""
 "%s. Trascina o clicca per <b>ruotare in senso orario</b>; con Maiusc, <b>in "
-"senso antiorario</b>."
+"senso antiorario</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:175
 #, c-format
 msgid "%s. Drag or click to <b>duplicate</b>; with Shift, <b>delete</b>."
 msgstr ""
-"%s. Trascina o clicca per <b>duplicare</b>; con Maiusc, per <b>eliminare</b>."
+"%s. Trascina o clicca per <b>duplicare</b>; con Maiusc, per <b>eliminare</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:183
 #, c-format
 msgid "%s. Drag to <b>push paths</b>."
-msgstr "%s. Trascina per <b>spingere il tracciato</b>."
+msgstr "%s. Trascina per <b>spingere il tracciato</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:187
 #, c-format
 msgid "%s. Drag or click to <b>inset paths</b>; with Shift to <b>outset</b>."
 msgstr ""
 "%s. Trascina o clicca per <b>intrudere tracciati</b>; con Maiusc, per "
-"<b>estrudere</b>."
+"<b>estrudere</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:195
 #, c-format
 msgid "%s. Drag or click to <b>attract paths</b>; with Shift to <b>repel</b>."
 msgstr ""
 "%s. Trascina o clicca per <b>attrarre i tracciati</b>; con Maiusc per "
-"<b>respingerli</b>."
+"<b>respingerli</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:203
 #, c-format
 msgid "%s. Drag or click to <b>roughen paths</b>."
-msgstr "%s, Trascina o clicca per <b>increspare i tracciati</b>."
+msgstr "%s, Trascina o clicca per <b>increspare i tracciati</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:207
 #, c-format
 msgid "%s. Drag or click to <b>paint objects</b> with color."
-msgstr "%s. Trascina o clicca per <b>dipingere un oggetto</b> con un colore."
+msgstr "%s. Trascina o clicca per <b>dipingere un oggetto</b> con un colore"
 
 #: ../src/ui/tools/tweak-tool.cpp:211
 #, c-format
 msgid "%s. Drag or click to <b>randomize colors</b>."
-msgstr "%s. Trascina o clicca per <b>rendere casuali i colori</b>."
+msgstr "%s. Trascina o clicca per <b>rendere casuali i colori</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:215
 #, c-format
@@ -36631,7 +36635,7 @@ msgid ""
 "%s. Drag or click to <b>increase blur</b>; with Shift to <b>decrease</b>."
 msgstr ""
 "%s. Trascina o clicca per <b>aumentare la sfocatura</b>; con Maiusc, per "
-"<b>diminuirla</b>."
+"<b>diminuirla</b>"
 
 #: ../src/ui/tools/tweak-tool.cpp:1151
 msgid "<b>Nothing selected!</b> Select objects to tweak."
@@ -37858,7 +37862,7 @@ msgstr "Rilievo"
 
 #: ../src/ui/widget/font-variations.cpp:120
 msgid "Controls the depth of an emboss"
-msgstr "Controlla l'elevazione di un rilievo"
+msgstr "Controlla la profondità di un rilievo"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgctxt "Variable font axis"
@@ -37879,9 +37883,10 @@ msgid "Controls the relative Y advance - vertical motion of the glyph"
 msgstr "Controlla l'avanzamento relativo lungo Y - moto verticale del glifo"
 
 #: ../src/ui/widget/font-variations.cpp:123
+#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Relativo a"
+msgstr "Relativo a:"
 
 #: ../src/ui/widget/font-variations.cpp:123
 #, fuzzy
@@ -40054,9 +40059,7 @@ msgstr "Fu questa volpe a ghermir d'un balzo il cane."
 #: ../share/ui/font-list.glade:192
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr ""
-"£ì$tà dí çárâttèrî śpéćïälį ùšætī ∂å Àlt®€ lœñgûê: ò, ó, ô, ö, õ, ō, ø; ã, "
-"å, ā; ë, ę, ē, ü, ū; ß, č..."
+msgstr "Yélløw ьüřtle fröm Áłphårettä íś čōmińgil fôr ïñęr đtòy."
 
 #: ../share/ui/font-list.glade:205
 msgid "Sort alphabetically"
@@ -41426,15 +41429,15 @@ msgstr "Fi_ssaggio"
 
 #: ../share/ui/menus.ui:815
 msgid "_Set Clip"
-msgstr "_Imposta fissaggio"
+msgstr "_Imposta Ritaglio"
 
 #: ../share/ui/menus.ui:819
 msgid "_Set Inverse Clip (LPE)"
-msgstr "Imposta fissaggio in_verso (LPE)"
+msgstr "Imposta ritaglio in_verso (LPE)"
 
 #: ../share/ui/menus.ui:823
 msgid "_Release Clip"
-msgstr "_Rimuovi fissaggio"
+msgstr "_Rimuovi ritaglio"
 
 #: ../share/ui/menus.ui:830
 msgid "Mas_k"
@@ -41744,7 +41747,7 @@ msgstr "Ingrandimento (Ctrl+Scroll)"
 
 #: ../share/ui/statusbar.ui:197
 msgid "Z:"
-msgstr "I:"
+msgstr "Z:"
 
 #: ../share/ui/statusbar.ui:219
 msgid "Rotation (also Ctrl+Shift+scroll)"
@@ -42124,8 +42127,9 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Apre la finestra LPE (per la modifica dei parametri numerici)"
 
 #: ../share/ui/toolbar-marker.ui:16
+#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Modifica i marcatori direttamente nello spazio di lavoro."
+msgstr "Modifica sul disegno"
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -42188,8 +42192,9 @@ msgid "Phantom measure"
 msgstr "Misura fantasma"
 
 #: ../share/ui/toolbar-measure.ui:435
+#, fuzzy
 msgid "Draw"
-msgstr "Disegna"
+msgstr "Disegno"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
@@ -42361,7 +42366,7 @@ msgstr "Mostra le maschere degli oggetti selezionati"
 
 #: ../share/ui/toolbar-node.ui:656
 msgid "Show clipping path(s) of selected object(s)"
-msgstr "Mostra i tracciati di fissaggio degli oggetti selezionati"
+msgstr "Mostra i tracciati di ritaglio degli oggetti selezionati"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
 msgid "Select object on canvas"
@@ -42609,7 +42614,7 @@ msgstr "Nodi stesso tracciato"
 
 #: ../share/ui/toolbar-snap.ui:320
 msgid "Reset to simple snapping mode"
-msgstr "Resetta alla modalità semplice"
+msgstr "Ritorna alla modalità semplificata di aggancio"
 
 #: ../share/ui/toolbar-snap.ui:515
 msgid "Masks"
@@ -43192,7 +43197,7 @@ msgstr ""
 
 #: ../share/extensions/dxf_input.py:1400
 msgid "Binary DXF file has unexpected header."
-msgstr "Il file Binario DXF ha un'intestazione inaspettata."
+msgstr "Il file Binario DXF ha un'intestazione inaspettata"
 
 #: ../share/extensions/dxf_input.py:1699
 msgid ""
@@ -43337,8 +43342,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl2_input.py:98
 msgid "Unsupported commands encountered. The following commands were ignored:"
-msgstr ""
-"Incontrati comandi non supportati. I seguenti comandi sono stati ignorati:"
+msgstr "Comando sconosciuto. Sono stati ignorati i seguenti comandi:"
 
 #: ../share/extensions/hpgl_output.py:79
 msgid "No convertible objects were found"
@@ -44188,7 +44192,7 @@ msgstr "Nessun svg è stato generato dalla compilazione: "
 
 #: ../share/extensions/voronoi_diagram.py:163
 msgid "Please select objects!"
-msgstr "Seleziona degli oggetti!"
+msgstr "Seleziona degli oggetti"
 
 #: ../share/extensions/web_interactive_mockup.py:37
 msgid ""
@@ -44301,7 +44305,7 @@ msgstr "Importa un file Computer Graphics Metafile (CGM)"
 
 #: ../share/extensions/clean_up_path.inx:3
 msgid "Clean up path"
-msgstr "Pulisci il tracciato"
+msgstr "Pulisci tracciato"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -44326,7 +44330,7 @@ msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:13
 msgid "Minimum segment length"
-msgstr "Lunghezza minima del segmento"
+msgstr "Lunghezza minima del segmento:"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
@@ -44377,7 +44381,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Unità definita nel documento (File->Document Properties).\n"
+"Unità definita nel documento (File->Proprietà del documento).\n"
 "            "
 
 #: ../share/extensions/clean_up_path.inx:29
@@ -45104,19 +45108,19 @@ msgid ""
 "- layers are preserved only on File->Open, not Import.\n"
 "- limited support for BLOCKS, use AutoCAD Explode Blocks instead, if needed."
 msgstr ""
-"- Versione minima: AutoCad 13 o succ.\n"
-"- Per scalare manualmente, considera che il disegno DXF sia in mm.\n"
-"- Per il disegno SVG considera che sia in pixels con 96 dpi.\n"
-"- Il fattore scala e l'origine si applicano solo alla scalatura manuale\n"
-"- Per determinare il fattore di scala del testo confronta il file: "
-"dxf_input_text_scale_factor.svg\n"
-"- 'Scalatura automatica' modifica la larghezza per farla entrare in un "
-"foglio A4.\n"
+"- Versione minima di AutoCad 13.\n"
+"- Per scalare manualmente, puoi presumere che il disegno DXF è in mm.\n"
+"- Per il disegno SVG puoi presumere che è in pixels con 96 dpi.\n"
+"- Per determinare il fattore di scala del testo confronta il file:\n"
+"     (Inkscape/share/inkscape/extensions/) dxf_input_text_scale_factor.svg\n"
+"- 'Scala automatica' scala la larghezza per farla entrare in un foglio A4.\n"
 "- 'Leggi da file' usa la variabile $MEASUREMENT del file.\n"
-"- I livelli vengono mantenuti solo se il file viene aperto (File > Apri), "
-"non importato.\n"
+"- I livelli vengono mantenuti solo se il file viene aperto (File > Apri); se "
+"il\n"
+"    file viene importato (Importa), non vengono mantenuti.\n"
 "- Il supporto per i BLOCKS è limitato, invece usa 'AutoCad Explode Blocks', "
-"se necessario."
+"se\n"
+"    necessario."
 
 #: ../share/extensions/dxf_input.inx:42
 msgid "AutoCAD DXF R13 (*.dxf)"
@@ -48243,23 +48247,23 @@ msgstr "Importa un file Affinity Designer"
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:4
 #: ../share/extensions/other/extension-curve/inkvn.inx:4
 msgid "Curve Input"
-msgstr "Input della curva"
+msgstr "Input Curve"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:9
 msgid "Linearity Curve file (*.curve)"
-msgstr "File di Linearity Curve (*.curve)"
+msgstr "File Linearity Curve (*.curve)"
 
 #: ../share/extensions/other/extension-curve/inkvn-curve.inx:10
 msgid "Import a Linearity Curve file"
-msgstr "Importa un file di Linearity Curve"
+msgstr "Importa un file Linearity Curve"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:9
 msgid "Vectornator file (*.vectornator)"
-msgstr "File di Vectornator (*.vectornator)"
+msgstr "File Vectornator (*.vectornator)"
 
 #: ../share/extensions/other/extension-curve/inkvn.inx:10
 msgid "Import a Vectornator file"
-msgstr "Importa un file di Vectornator"
+msgstr "Importa un file Vectornator"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -49586,7 +49590,7 @@ msgid ""
 msgstr ""
 "Rimuove i metadati e le informazioni associate, come le informazioni sulla "
 "licenza e gli autori, le versioni alternative per i browser che non "
-"gestiscono SVG eccetera"
+"gestiscono SVG, eccetera"
 
 #: ../share/extensions/output_scour.inx:47
 msgid "Remove comments"
@@ -51662,8 +51666,7 @@ msgstr "Imposta automaticamente dimensione e posizione"
 #: ../share/extensions/svgcalendar.inx:23
 msgid "The options below have no influence when the above is checked."
 msgstr ""
-"Le opzioni successive non sono applicabili quando la precedente è "
-"selezionata."
+"Le opzioni successive non sono applicabili quando la precedente è selezionata"
 
 #: ../share/extensions/svgcalendar.inx:24
 msgid "Months per line:"
@@ -52874,7 +52877,7 @@ msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
 msgid "Many bugfixes!"
-msgstr "E molti errori corretti!"
+msgstr "E molti altri errori corretti!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
@@ -53170,7 +53173,7 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:177
 msgid "Performance improvements"
-msgstr "Miglioramenti di prestazione"
+msgstr "Prestazioni migliorate"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:178
 #: ../org.inkscape.Inkscape.appdata.xml.in:191
