@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-28 23:06+0000\n"
+"PO-Revision-Date: 2025-05-01 20:42+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/sk/>\n"
@@ -3671,7 +3671,7 @@ msgstr "Horizontálne tienovacie čiari"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
-msgstr ""
+msgstr "Tienovacie polkruhmi "
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles horizontal shading 5"
