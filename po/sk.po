@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-23 17:49+0000\n"
+"PO-Revision-Date: 2025-05-01 12:06+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
-"Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/1-4-"
-"x/sk/>\n"
+"Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24804,7 +24804,7 @@ msgstr "Rozšírenie „"
 
 #: ../src/ui/dialog/dialog-data.cpp:37
 msgid "_Fill and Stroke"
-msgstr "Výplň a ťah"
+msgstr "Výplň a Ťah"
 
 #: ../src/ui/dialog/dialog-data.cpp:38
 msgid "Filter _Editor"
