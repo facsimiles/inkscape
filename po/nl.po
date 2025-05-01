@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-30 11:11+0000\n"
+"PO-Revision-Date: 2025-05-01 12:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/1-4-x/"
 "nl/>\n"
@@ -7280,7 +7280,7 @@ msgstr "Roteren Absoluut (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate to an absolute value (radians)"
-msgstr "Roteer met een absolute waarde (radialen)"
+msgstr "Roteren met een absolute waarde (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate Relative (Radians)"
@@ -7288,7 +7288,7 @@ msgstr "Roteren Relatief (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate by a relative amount (radians)"
-msgstr "Roteer met een relatieve waarde (radialen)"
+msgstr "Roteren met een relatieve waarde (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
 msgid "Rotate Absolute (Degrees)"
@@ -7296,7 +7296,7 @@ msgstr "Roteren Absoluut (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
 msgid "Rotate to an absolute value (degrees)"
-msgstr "Roteer met een absolute waarde (graden)"
+msgstr "Roteren met een absolute waarde (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
 msgid "Rotate Relative (Degrees)"
@@ -7304,7 +7304,7 @@ msgstr "Roteren Relatief (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
 msgid "Rotate by a relative amount (degrees)"
-msgstr "Roteer met een relatieve waarde (graden)"
+msgstr "Roteren met een relatieve waarde (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:298 ../share/ui/menus.ui:450
 msgid "Lock Rotation"
