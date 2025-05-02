@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-01 12:06+0000\n"
+"PO-Revision-Date: 2025-05-02 15:33+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -15997,7 +15997,7 @@ msgstr "Éclaircir"
 
 #: ../src/filter-enums.cpp:75
 msgid "Arithmetic"
-msgstr "Arithmetic"
+msgstr "Arithmétique"
 
 #: ../src/filter-enums.cpp:84
 msgid "Table Lookup"
@@ -36000,8 +36000,8 @@ msgstr "<b>Maj</b> : cliquer-glisser pour ajouter des nœuds à la sélection"
 #: ../src/ui/tools/node-tool.cpp:679
 msgid "<b>%1 of %2</b> node selected."
 msgid_plural "<b>%1 of %2</b> nodes selected."
-msgstr[0] "<b>%1</b> nœud sur <b>%2</b> sélectionné."
-msgstr[1] "<b>%1</b> nœuds sur <b>%2</b> sélectionnés."
+msgstr[0] "<b>%1 nœud sur %2</b> sélectionné."
+msgstr[1] "<b>%1 nœuds sur %2</b> sélectionnés."
 
 #. TRANSLATORS: %1 is an angle in degrees, formatted with two decimal places.
 #: ../src/ui/tools/node-tool.cpp:697
@@ -38912,9 +38912,9 @@ msgid "<b>Finite</b> vanishing point shared by the box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
-msgstr[0] "Point de fuite <b>infini</b> partagé par la boîte"
+msgstr[0] "Point de fuite <b>fini</b> partagé par la boîte"
 msgstr[1] ""
-"Point de fuite <b>infini</b> partagé par <b>%d</b> boîtes ; cliquer-glisser "
+"Point de fuite <b>fini</b> partagé par <b>%d</b> boîtes ; cliquer-glisser "
 "avec <b>Maj</b> pour séparer la/les boîte(s) sélectionnée(s)"
 
 #: ../src/vanishing-point.cpp:315
