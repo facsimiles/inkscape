@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-01 12:06+0000\n"
+"PO-Revision-Date: 2025-05-02 15:33+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sk/>\n"
@@ -13163,7 +13163,7 @@ msgstr "Stmaviť"
 #: ../src/extension/internal/filter/paint.h:725
 #: ../src/extension/internal/filter/transparency.h:64
 msgid "Screen"
-msgstr "Tieniť"
+msgstr "Obrazovka"
 
 #: ../src/extension/internal/filter/blurs.h:204
 #: ../src/extension/internal/filter/blurs.h:359
@@ -17387,7 +17387,6 @@ msgstr ""
 "Roztrasie siluetu objektu, tak že pridá body na objekt a posunie ich náhodne"
 
 #: ../src/live_effects/effect.cpp:414
-#, fuzzy
 msgctxt "path effect"
 msgid "BSpline"
 msgstr "BSpline"
@@ -24804,7 +24803,7 @@ msgstr "Rozšírenie „"
 
 #: ../src/ui/dialog/dialog-data.cpp:37
 msgid "_Fill and Stroke"
-msgstr "Výplň a Ťah"
+msgstr "Výplň a ťah"
 
 #: ../src/ui/dialog/dialog-data.cpp:38
 msgid "Filter _Editor"
@@ -37389,7 +37388,7 @@ msgstr "Nastavenie"
 #: ../share/extensions/plotter.inx:53
 #: ../share/extensions/raster_output_tiff.inx:9
 msgid "None"
-msgstr "Žiadny"
+msgstr "Žiadna"
 
 #: ../src/ui/widget/color-scales.cpp:77 ../src/ui/widget/color-scales.cpp:134
 msgid "RGB"
@@ -38911,7 +38910,6 @@ msgid "<i>None</i>"
 msgstr "<i>Žiadna</i>"
 
 #: ../src/ui/widget/selected-style.cpp:73
-#, fuzzy
 msgid "No fill, middle-click for black fill"
 msgstr "Žiadna výplň, stlač stredne tlačidlo na vyplnenie čiernou"
 
@@ -38921,7 +38919,6 @@ msgid "<i>None</i>"
 msgstr "<i>Žiaden</i>"
 
 #: ../src/ui/widget/selected-style.cpp:74
-#, fuzzy
 msgid "No stroke, middle-click for black stroke"
 msgstr "Žiaden ťah, stlač stredne tlačidlo na vyplnenie čiernou"
 
@@ -41882,7 +41879,6 @@ msgid "Align text anchors vertically"
 msgstr "Zvislo rozmiestniť vybrané uzly"
 
 #: ../share/ui/align-and-distribute.ui:886
-#, fuzzy
 msgctxt "Abbreviation of Horizontal"
 msgid "H:"
 msgstr "V:"
@@ -43027,7 +43023,6 @@ msgid "Link gradients to change all related gradients"
 msgstr "Spojením farebných prechodov zmeniť všetky súvisiace farebné prechody"
 
 #: ../share/ui/toolbar-gradient.ui:273 ../share/ui/toolbar-select.ui:459
-#, fuzzy
 msgid "Width of selection"
 msgstr "Šírka výberu"
 
@@ -43491,12 +43486,10 @@ msgid "Rotate selection 90\\xc2\\xb0 clockwise"
 msgstr "Otočí výber 90° v smere hodinových ručičiek"
 
 #: ../share/ui/toolbar-select.ui:408
-#, fuzzy
 msgid "Horizontal coordinate of selection"
 msgstr "Vodorovné súradnice výberu"
 
 #: ../share/ui/toolbar-select.ui:433
-#, fuzzy
 msgid "Vertical coordinate of selection"
 msgstr "Zvislé súradnice výberu"
 
@@ -43506,7 +43499,6 @@ msgid "When locked, change width and height by the same proportion"
 msgstr "V zamknutom stave meniť šírku a výšku v rovnakom pomere"
 
 #: ../share/ui/toolbar-select.ui:499
-#, fuzzy
 msgid "Height of selection"
 msgstr "Výška výberu"
 
@@ -43728,7 +43720,6 @@ msgid "Increase to scatter sprayed objects"
 msgstr "Zväčšením rozptýlite sprejované objekty"
 
 #: ../share/ui/toolbar-spray.ui:388
-#, fuzzy
 msgid "Scatter:"
 msgstr "Roztrúsenie:"
 
