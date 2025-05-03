@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-01 20:42+0000\n"
+"PO-Revision-Date: 2025-05-03 10:28+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/sk/>\n"
@@ -6385,7 +6385,7 @@ msgstr "Vypísať adresár s rozšíreniami a skončiť"
 
 #: ../src/actions/actions-base.cpp:209
 msgid "List Actions"
-msgstr "Operácia"
+msgstr "List Operácii"
 
 #: ../src/actions/actions-base.cpp:209
 msgid "Print a list of actions and exit"
@@ -6525,7 +6525,7 @@ msgstr "Vykreslovací režim: Čiary + Priehladnosť"
 msgid ""
 "Show objects as outlines, and the actual drawing below them with reduced "
 "opacity"
-msgstr ""
+msgstr "Zobraz objekty ako obrysy a pod nimi normálne priehľadné objekty"
 
 #: ../src/actions/actions-canvas-mode.cpp:268
 msgid "Display Mode: Cycle"
@@ -6545,7 +6545,7 @@ msgstr "Prepína medzi normálnym režimom a neštandartnými zobrazeniami"
 
 #: ../src/actions/actions-canvas-mode.cpp:270
 msgid "Display Mode: Toggle Preview"
-msgstr ""
+msgstr "Prepínanie"
 
 #: ../src/actions/actions-canvas-mode.cpp:270
 msgid "Toggle between preview and previous mode"
@@ -6570,7 +6570,7 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-mode.cpp:274
 msgid "Split Mode: X-Ray"
-msgstr "Rendgen"
+msgstr "Röntgen"
 
 #: ../src/actions/actions-canvas-mode.cpp:274
 msgid "Render a circular area in outline mode"
@@ -6635,9 +6635,8 @@ msgid "Toggle snapping objects at equal distances"
 msgstr ""
 
 #: ../src/actions/actions-canvas-snapping.cpp:252
-#, fuzzy
 msgid "Snap Bounding Boxes"
-msgstr "Prichytávať ohraničeniu"
+msgstr "Prichytávať k ohraničeniu"
 
 #: ../src/actions/actions-canvas-snapping.cpp:252
 #, fuzzy
@@ -6645,9 +6644,8 @@ msgid "Toggle snapping to bounding boxes (global)"
 msgstr "Prichytávanie k stredom okrajov ohraničenia"
 
 #: ../src/actions/actions-canvas-snapping.cpp:253
-#, fuzzy
 msgid "Snap Bounding Box Edges"
-msgstr "Prichytávať ohraničeniu"
+msgstr "Prichytávať hrany ohraničenia"
 
 #: ../src/actions/actions-canvas-snapping.cpp:253
 #, fuzzy
@@ -6685,7 +6683,6 @@ msgid "Toggle snapping to bounding-box centers"
 msgstr "Prichytávanie k stredom okrajov ohraničenia"
 
 #: ../src/actions/actions-canvas-snapping.cpp:258
-#, fuzzy
 msgid "Snap Nodes"
 msgstr "Prichytávať uzly"
 
@@ -6694,24 +6691,20 @@ msgid "Toggle snapping to nodes (global)"
 msgstr "Zapnúť prichytávanie (Globálne)"
 
 #: ../src/actions/actions-canvas-snapping.cpp:259
-#, fuzzy
 msgid "Snap Paths"
 msgstr "Prichytávať k cestám"
 
 #: ../src/actions/actions-canvas-snapping.cpp:259
-#, fuzzy
 msgid "Toggle snapping to paths"
-msgstr "Prepnúť prichytávanie"
+msgstr "Prepnúť prichytávanie k cestám"
 
 #: ../src/actions/actions-canvas-snapping.cpp:260
-#, fuzzy
 msgid "Snap Path Intersections"
-msgstr "Prichytávať k priesečníkom ciest"
+msgstr "Prichytávať na prieniky ciest"
 
 #: ../src/actions/actions-canvas-snapping.cpp:260
-#, fuzzy
 msgid "Toggle snapping to path intersections"
-msgstr "Prichytávať k priesečníkom ciest"
+msgstr "Prichytávať na na miesta kde sa pretnú cesty"
 
 #: ../src/actions/actions-canvas-snapping.cpp:261
 msgid "Snap Cusp Nodes"
@@ -6727,47 +6720,40 @@ msgid "Snap Smooth Node"
 msgstr "Prichytávať Hladké uzly"
 
 #: ../src/actions/actions-canvas-snapping.cpp:262
-#, fuzzy
 msgid "Toggle snapping to smooth nodes, including quadrant points of ellipses"
-msgstr "Prichytávať hladké uzly, vrátane kvadrantových bodov elíps"
+msgstr "Prichytávať hladké uzly, vrátane bodov elíps"
 
 #: ../src/actions/actions-canvas-snapping.cpp:263
 msgid "Snap Line Midpoints"
 msgstr "Prichytávať Stredy úsečiek"
 
 #: ../src/actions/actions-canvas-snapping.cpp:263
-#, fuzzy
 msgid "Toggle snapping to midpoints of lines"
-msgstr "Prepnúť prichytávanie"
+msgstr "Prepnúť Prichytávanie na Stredy úsečiek"
 
 #: ../src/actions/actions-canvas-snapping.cpp:264
-#, fuzzy
 msgid "Snap Perpendicular Lines"
-msgstr "Prichytávať kolmo"
+msgstr "Prichytávať kolmo na segment"
 
 #: ../src/actions/actions-canvas-snapping.cpp:264
-#, fuzzy
 msgid "Toggle snapping to perpendicular lines"
-msgstr "Prepnúť prichytávanie"
+msgstr "Prepnúť prichytávanie dotknutých uzlov kolmo na segmenty cesty"
 
 #: ../src/actions/actions-canvas-snapping.cpp:265
-#, fuzzy
 msgid "Snap Tangential Lines"
-msgstr "Prichytávať dotyčnicovo"
+msgstr "Prichytávať dotyčnicovo na segment"
 
 #: ../src/actions/actions-canvas-snapping.cpp:265
-#, fuzzy
 msgid "Toggle snapping to tangential lines"
-msgstr "Prepnúť prichytávanie"
+msgstr "Prepnúť prichytávanie dotknutých uzlov dotyčno na segmenty cesty"
 
 #: ../src/actions/actions-canvas-snapping.cpp:267
 msgid "Snap Others"
 msgstr "Prichytávať Ostatné"
 
 #: ../src/actions/actions-canvas-snapping.cpp:267
-#, fuzzy
 msgid "Toggle snapping to misc. points (global)"
-msgstr "Prepnúť prichytávanie"
+msgstr "Prepnúť prichytávanie ostatných bodov (globálne)"
 
 #: ../src/actions/actions-canvas-snapping.cpp:268
 msgid "Snap Object Midpoint"
@@ -6834,47 +6820,40 @@ msgid "Toggle snapping to guide lines"
 msgstr "Prepnúť prichytávanie na vodítka"
 
 #: ../src/actions/actions-canvas-snapping.cpp:278
-#, fuzzy
 msgid "Snap Mask Paths"
 msgstr "Prichytávať k cestám masky"
 
 #: ../src/actions/actions-canvas-snapping.cpp:278
-#, fuzzy
 msgid "Toggle snapping to mask paths"
-msgstr "Prichytávať k cestám masky"
+msgstr "Prepnúť prichytávať k cestám masky"
 
 #: ../src/actions/actions-canvas-snapping.cpp:279
-#, fuzzy
 msgid "Snap Clip Paths"
 msgstr "Prichytávať k cestám orezania"
 
 #: ../src/actions/actions-canvas-snapping.cpp:279
-#, fuzzy
 msgid "Toggle snapping to clip paths"
-msgstr "Prichytávať k cestám orezania"
+msgstr "Prepni prichytávanie k cestám orezania"
 
 #: ../src/actions/actions-canvas-snapping.cpp:281
 msgid "Simple Snap Bounding Box"
-msgstr "Prichytávať ohraničeniu objektu"
+msgstr "Jedoduché Prichytávanie ohraničeniu objektu"
 
 #: ../src/actions/actions-canvas-snapping.cpp:281
-#, fuzzy
 msgid "Toggle snapping to bounding boxes"
-msgstr "Prichytávanie k stredom okrajov ohraničenia"
+msgstr "Prepnúť Prichytávanie k ohraničeniu objektu"
 
 #: ../src/actions/actions-canvas-snapping.cpp:282
-#, fuzzy
 msgid "Simple Snap Nodes"
-msgstr "Prichytávať uzly"
+msgstr "Jedoduché Prichytávanie uzlov"
 
 #: ../src/actions/actions-canvas-snapping.cpp:282
-#, fuzzy
 msgid "Toggle snapping to nodes"
-msgstr "Prepnúť prichytávanie"
+msgstr "Prepnúť prichytávanie na uzly"
 
 #: ../src/actions/actions-canvas-snapping.cpp:283
 msgid "Simple Snap Alignment"
-msgstr "Prichytávať na Automatické zarovnávanie"
+msgstr "Jednoduché Automatické zarovnávanie"
 
 #: ../src/actions/actions-canvas-transform.cpp:269
 #: ../share/ui/toolbar-zoom.ui:11
@@ -7054,10 +7033,8 @@ msgid "Zoom Absolute"
 msgstr "Priblíž Absolútne"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
-#| msgid "A constant vote value"
 msgid "Zoom to an absolute value"
-msgstr "Konštantná hodnota hlasu"
+msgstr "Priblížiť na absolútnu hodnotu"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
 msgid "Zoom Relative"
@@ -7065,12 +7042,11 @@ msgstr "Relatívne Priblíženie"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
 msgid "Zoom by a relative amount"
-msgstr ""
+msgstr "Priblíž o relatívnu vzdialenosť"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
-#, fuzzy
 msgid "Rotate Absolute (Radians)"
-msgstr "Otočenie písmen"
+msgstr "Otočenie absolútne (rad)"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate to an absolute value (radians)"
@@ -7078,7 +7054,7 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate Relative (Radians)"
-msgstr ""
+msgstr "Otáčanie relatívne (rad)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate by a relative amount (radians)"
@@ -7089,20 +7065,16 @@ msgid "Rotate Absolute (Degrees)"
 msgstr "Absol= Rotácia (stupne)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
 msgid "Rotate to an absolute value (degrees)"
-msgstr "Otáčať dlaždice o tento uhol každý riadok"
+msgstr "Otáč na absolútnu hodnotu (stupne)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
-#| msgid "Rotation, degrees"
 msgid "Rotate Relative (Degrees)"
-msgstr "Rotácia (stupne)"
+msgstr "Rotácia relatívna (Stupne)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
 msgid "Rotate by a relative amount (degrees)"
-msgstr "Otáčať dlaždice o tento uhol každý riadok"
+msgstr "Otoč o tento relatúvny uhol (stupne)"
 
 #: ../src/actions/actions-canvas-transform.cpp:298 ../share/ui/menus.ui:450
 #, fuzzy
