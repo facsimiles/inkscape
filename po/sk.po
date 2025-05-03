@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-02 15:33+0000\n"
+"PO-Revision-Date: 2025-05-03 10:28+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sk/>\n"
@@ -1613,7 +1613,7 @@ msgstr "Nástroje na prácu s pixlami"
 
 #: ../../build/share/filters/filters.svg.h:596
 msgid "Reduce or remove antialiasing around shapes"
-msgstr "Znížiť alebo vypnúť prekladanie okolo tvarov."
+msgstr "Znížiť alebo vypnúť antialiasing okolo tvarov."
 
 #: ../../build/share/filters/filters.svg.h:598
 msgid "Basic Diffuse Bump"
@@ -2261,9 +2261,8 @@ msgid "Butt cap"
 msgstr "Rovné zakončenie"
 
 #: ../../build/share/markers/markers.svg.h:38
-#, fuzzy
 msgid "Serif cap"
-msgstr "Sériový port:"
+msgstr ""
 
 #: ../../build/share/palettes/palettes.h:2
 msgctxt "Palette"
@@ -3248,9 +3247,8 @@ msgid "Jet Black"
 msgstr "Uhľovočierna"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Decorative Paper"
-msgstr "Pijavý papier"
+msgstr "Okrasný papier"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Zig Zag"
@@ -3261,9 +3259,8 @@ msgid "Ticks"
 msgstr "Čiarky"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles 3"
-msgstr "Trojuholník"
+msgstr "Trojuholníky 3"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Bricks"
@@ -8141,17 +8138,17 @@ msgstr[2] "<b>%d</b> obrázokov bolo orezaných."
 #, c-format
 msgid "%s byte removed"
 msgid_plural "%s bytes removed"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%s byt bol odstránený"
+msgstr[1] "Odstránené %s byty"
+msgstr[2] "Odstránené %s bytov"
 
 #: ../src/actions/actions-element-image.cpp:197
 #, c-format
 msgid "%s byte added!"
 msgid_plural "%s bytes added!"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Bol pridaný %s byt!"
+msgstr[1] "Boli pridané %s byty!"
+msgstr[2] "Bolo pridaných %s bytov!"
 
 #: ../src/actions/actions-element-image.cpp:203
 msgid "No images cropped!"
@@ -11316,9 +11313,8 @@ msgid "Principles of design in the tutorial form"
 msgstr "Princípy návrhu vo forme návodu"
 
 #: ../src/actions/actions-tutorial.cpp:64
-#, fuzzy
 msgid "Tips and Tricks"
-msgstr "_Tipy a triky"
+msgstr "Tipy a triky"
 
 #: ../src/actions/actions-tutorial.cpp:64
 msgid "Miscellaneous tips and tricks"
