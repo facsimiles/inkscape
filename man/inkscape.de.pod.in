@@ -58,8 +58,8 @@ Optionen:
     -j, --export-id-only
     -l, --export-plain-svg
         --export-png-color-mode=FARBMODUS
-        --export_png_compression=LEVEL
-        --export_png_antialias=LEVEL
+        --export-png-compression=LEVEL
+        --export-png-antialias=LEVEL
         --export-png-use-dithering=WAHRHEITSWERT
         --export-ps-level=LEVEL
         --export-pdf-version=VERSION
@@ -364,12 +364,12 @@ anzugeben wird die Option L<--export-filename> benutzt.
 Bestimmt den Farbmodus (Bittiefe und Farbtyp) für exportierte Rastergrafiken
 (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)
 
-=item B<--export_png_compression>=I<LEVEL>
+=item B<--export-png-compression>=I<LEVEL>
 
 Bestimmt das Kompressionslevel für den Export zu PNG (0 bis 9), Standardwert
 6.
 
-=item B<--export_png_antialias>=I<LEVEL>
+=item B<--export-png-antialias>=I<LEVEL>
 
 Bestimmt die Intensität der Kantenglättung für den Export zu PNG (0 bis 3),
 Standardwert 2.
