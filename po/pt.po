@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-29 10:32+0000\n"
+"PO-Revision-Date: 2025-05-05 12:07+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -20741,7 +20741,7 @@ msgid ""
 "Blend rotation from <b>top to bottom</b> (top row uses original rotation, "
 "bottom row uses new rotation)"
 msgstr ""
-"Misturar rotação de <b>cima para baixo<b> (a fila de cima usa a rotação "
+"Misturar rotação de <b>cima para baixo</b> (a fila de cima usa a rotação "
 "original, a fila de baixo usa a nova rotação)"
 
 #: ../src/live_effects/lpe-tiling.cpp:899
@@ -20957,7 +20957,7 @@ msgid ""
 "<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> "
 "open dialog, <b>Ctrl+Alt+Click</b> reset"
 msgstr ""
-"<b>Boleado  inverso</b>: <b>Ctrl+Clique</b> alterna o tipo, <b>Shift+Clique</"
+"<b>Boleado inverso</b>: <b>Ctrl+Clique</b> alterna o tipo, <b>Shift+Clique</"
 "b> abre a janela de diálogo, <b>Ctrl+Alt+Clique</b> repor"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:225
@@ -22481,7 +22481,7 @@ msgid ""
 "skew with %1 also uses this center"
 msgstr ""
 "<b>Centro</b> de rotação e inclinação: arrastar para reposicionar; "
-"redimensionar, rodar e inclinar com <b>%1</b> também usa este centro"
+"redimensionar, rodar e entortar com %1 também usa este centro"
 
 #: ../src/seltrans.cpp:803
 msgid ""
@@ -28740,7 +28740,7 @@ msgstr "Miscelânea"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2093
 msgid "Whether the Welcome dialog will be shown when Inkscape starts."
-msgstr "Se a janela de de Boas-Vindas é mostrada quando o Inkscape inicia."
+msgstr "Se a janela de Boas-Vindas é mostrada quando o Inkscape inicia."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2095
 msgid ""
@@ -31337,7 +31337,7 @@ msgstr "Sistema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3933
 msgid "<span size='large'><b>No Results</b></span>"
-msgstr "<span size=‘large’><b>Sem Resultados</b></span>"
+msgstr "<span size='large'><b>Sem Resultados</b></span>"
 
 #: ../src/ui/dialog/knot-properties.cpp:99
 msgid "Modify Knot Position"
@@ -32322,7 +32322,7 @@ msgstr "_Glifos"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1709
 msgid "_Kerning"
-msgstr "_Kerning"
+msgstr "_Entreletra Compensada"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1725
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1726
@@ -32378,7 +32378,7 @@ msgstr "Símbolos sem nome"
 #. * interested in.
 #: ../src/ui/dialog/text-edit.cpp:83
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
-msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
+msgstr "AaBbCçIiPpQq12369$€$?.;/()"
 
 #: ../src/ui/dialog/text-edit.cpp:530 ../src/ui/dialog/text-edit.cpp:533
 #: ../src/ui/tools/text-tool.cpp:1410
@@ -33503,7 +33503,7 @@ msgid ""
 "<b>%s</b>: drag to make smooth, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
 msgstr ""
-"<b>%s</b>: arrastar para para tornar suave, pairar com cursor para bloquear, "
+"<b>%s</b>: arrastar para tornar suave, pairar com cursor para bloquear, "
 "Shift+Y para fazer simétrico. (mais: %s)"
 
 #: ../src/ui/tool/node.cpp:717
@@ -36892,7 +36892,7 @@ msgstr ""
 #: ../src/ui/widget/font-variations.cpp:54
 msgctxt "Variable font axis"
 msgid "Grade"
-msgstr "Grade"
+msgstr "Grad"
 
 #: ../src/ui/widget/font-variations.cpp:54
 msgid ""
@@ -38560,7 +38560,7 @@ msgid ""
 "(px)"
 msgstr ""
 "Altura\n"
-"(px):"
+"(px)"
 
 #: ../share/ui/dialog-export.glade:439
 msgid "Show Preview"
@@ -39500,7 +39500,7 @@ msgstr "Jovem craque belga prediz falhas no taxi."
 #: ../share/ui/font-list.glade:22
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
+msgstr "Yélløw ťüřtlé fröm Áłphårettã íś çõmińġ fôr ďïññęr tòđây."
 
 #. This is an option to select to show font name as a font preview in font browser
 #: ../share/ui/font-list.glade:28
@@ -39751,7 +39751,7 @@ msgid ""
 "<big><b>Do you want to get involved with Inkscape? <a href=\"https://"
 "inkscape.org/contribute/\">Check this page!</a></b></big>"
 msgstr ""
-"<big><b>Quer envolver-se com o Inkscape? <a href=<a href="
+"<big><b>Quer envolver-se com o Inkscape? <a href="
 "\"https://inkscape.org/contribute/\">Veja esta página!</a></b></big>"
 
 #: ../share/ui/inkscape-about.glade:94
@@ -39784,7 +39784,7 @@ msgid ""
 "<big><b>See the full details about the Inkscape licenses <a href=\"https://"
 "inkscape.org/about/license/\">here</a>!</b></big>"
 msgstr ""
-"<big><b>Veja todos os detalhes sobre as licenças do Inkscape  <a href="
+"<big><b>Veja todos os detalhes sobre as licenças do Inkscape <a href="
 "\"https://inkscape.org/about/license/\">aqui</a>!</b></big>"
 
 #: ../share/ui/inkscape-about.glade:171
@@ -39910,7 +39910,7 @@ msgstr ""
 "dedicação da comunidade, com conhecimento, perícia, tempo e ajuda financeira "
 "conseguimos desenvolver este programa dedicado a todas as pessoas do mundo, "
 "para que possam usufruir sem restrições e livre de custos.\n"
-"                <v>Se quiser envolver-se e tornar a próxima versão do "
+"                <b>Se quiser envolver-se e tornar a próxima versão do "
 "Inkscape ainda melhor, por favor considere juntar-se ao projecto "
 "Inkscape.</b>"
 
@@ -43591,7 +43591,7 @@ msgid ""
 "Ghostscript was unable to read the file. \n"
 "The following error message was returned:"
 msgstr ""
-"Ghostscript  não conseguiu ler o ficheiro.\n"
+"Ghostscript não conseguiu ler o ficheiro.\n"
 "A seguinte mensagem de erro foi recebida:"
 
 #: ../share/extensions/raster_output_png.py:44
@@ -45545,7 +45545,7 @@ msgstr "Face da fonte:"
 #: ../share/extensions/hershey.inx:20
 msgctxt "Font name"
 msgid "Hershey Sans 1-stroke"
-msgstr "Hershey Sans 1-stroke"
+msgstr "Hershey Sans 1-traço"
 
 #: ../share/extensions/hershey.inx:24
 msgctxt "Font name"
@@ -45862,7 +45862,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation (°, Clockwise):"
-msgstr "Rotação (°, sentido horário):"
+msgstr "Rotação (°, Sentido Horário):"
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation of the drawing (Default: 0°)"
@@ -48586,9 +48586,9 @@ msgid ""
 "Gcodetools ver. 1.7\n"
 msgstr ""
 "\n"
-"Plug-in para Gcodetools:\n"
-"Converte caminhos em Gcode (usando interpolação circular), faz caminhos de "
-"desvio e grava cantos agudos usando cortes de cone.\n"
+"Plug-in para Gcodetools: Converte caminhos em Gcode (usando interpolação "
+"circular), faz caminhos de desvio e grava cantos agudos usando cortes de "
+"cone.\n"
 "Este plug-in calcula o código de Gcode para caminhos usando interpolação "
 "circular ou movimento linear quando necessário.\n"
 "\n"
@@ -48597,7 +48597,7 @@ msgstr ""
 "    http://www.cnc-club.ru/gcodetools\n"
 "\n"
 "e no fórum de apoio em russo:\n"
-"    hhttp://www.cnc-club.ru/gcodetoolsru\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
 "Créditos: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
 "Chris Lusby Taylor.\n"
@@ -51021,7 +51021,7 @@ msgstr "74mm x 52mm (A8)"
 
 #: ../share/extensions/template_business_card.inx:11
 msgid "ISO Card (ISO 7810)"
-msgstr "Cartão ISO (ISO 7810)"
+msgstr "ISO Card (ISO 7810)"
 
 #: ../share/extensions/template_business_card.inx:12
 msgid "85mm x 55mm (Europe)"
