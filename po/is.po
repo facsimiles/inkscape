@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-04-29 13:24+0000\n"
+"PO-Revision-Date: 2025-05-05 12:07+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/is/>\n"
@@ -7900,7 +7900,7 @@ msgstr[1] "<b>%d</b> myndir utanskornar"
 msgid "%s byte removed"
 msgid_plural "%s bytes removed"
 msgstr[0] "%s bæti fjarlægt"
-msgstr[1] "%s bæti fjarlægt"
+msgstr[1] "%s bæti fjarlægð"
 
 #: ../src/actions/actions-element-image.cpp:197
 #, c-format
@@ -9665,7 +9665,7 @@ msgstr "Skipta út hlutum"
 
 #: ../src/actions/actions-paths.cpp:271
 msgid "Remove selected objects when shape building is completed"
-msgstr ""
+msgstr "Fjarlægja valda hluti þegar byggingu lögunar er lokið"
 
 #: ../src/actions/actions-selection-object.cpp:37
 #: ../src/actions/actions-selection-object.cpp:147
@@ -10008,13 +10008,12 @@ msgid "Remove any known proprietary SVG data"
 msgstr "Fjarlægja öll sértæk SVG-gögn frá séreignarhugbúnaði"
 
 #: ../src/actions/actions-svg-processing.cpp:703
-#, fuzzy
 msgid "Reverse Auto Start Markers"
-msgstr "Snýr við röð næsta ferils"
+msgstr "Snúa við sjálfvirkum upphafsmerkjum"
 
 #: ../src/actions/actions-svg-processing.cpp:703
 msgid "Remove auto start positions from markers"
-msgstr ""
+msgstr "Fjarlægja sjálfvirkar upphafsstaðsetningar af merkjum"
 
 #: ../src/actions/actions-svg-processing.cpp:704
 msgid "Try to Remove All Transforms"
@@ -10025,18 +10024,16 @@ msgid "Attempt to remove all transforms from all shapes"
 msgstr "Gerir tilraun til að fjarlægja allar ummyndanir af öllum lögunum"
 
 #: ../src/actions/actions-svg-processing.cpp:705
-#, fuzzy
 msgid "Remove Marker Context Paint"
-msgstr "Fjarlægja stafhnikunarpar"
+msgstr "Fjarlægja samhengismálningu (Context Paint) af merki"
 
 #: ../src/actions/actions-svg-processing.cpp:705
-#, fuzzy
 msgid "Remove context paints from markers"
-msgstr "Fjarlægja texta af ferli"
+msgstr "Fjarlægja samhengismálningu (Context Paint) af merkjum"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Insert Text Fallback"
-msgstr ""
+msgstr "Setja inn varatexta"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Replace SVG2 text with SVG1.1 text"
@@ -10063,9 +10060,8 @@ msgid "Unlink All Clones"
 msgstr "Aftengja alla klóna"
 
 #: ../src/actions/actions-svg-processing.cpp:711
-#, fuzzy
 msgid "Recursively unlink all clones and symbols"
-msgstr "Aftengja klón og tákn"
+msgstr "Aftengja öll klón og tákn undir þessu"
 
 #: ../src/actions/actions-svg-processing.cpp:712
 msgid "All Objects to Paths"
@@ -10092,9 +10088,8 @@ msgid "Make all paths absolute and predictable"
 msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:716
-#, fuzzy
 msgid "Annotate all Bounding Boxes"
-msgstr "Grípa í umgjarðir"
+msgstr "Glósa í allar umgjarðir"
 
 #: ../src/actions/actions-svg-processing.cpp:716
 msgid ""
@@ -10104,7 +10099,7 @@ msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid "Annotate all Shape Paths"
-msgstr ""
+msgstr "Glósa í alla ferla lögunar"
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid ""
@@ -10725,7 +10720,7 @@ msgstr ""
 
 #: ../src/actions/actions-transform.cpp:165
 msgid "Enter number of 90-degree rotation steps"
-msgstr ""
+msgstr "Settu inn fjölda 90-gráðu snúningsþrepa"
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
 #. the link this way: https://inkscape.org/[lang]/learn/tutorials/
@@ -11067,7 +11062,7 @@ msgstr "lg1p$"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:111
 msgid "Empty or improper value, skipped"
-msgstr ""
+msgstr "Tómt eða ónothæft gildi, sleppi því"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:121
 msgid "Unrecognized shape '%1'"
@@ -11111,15 +11106,15 @@ msgstr "Kvarði '%1' utan sviðs"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:235
 msgid "Unrecognized selector '%1'"
-msgstr ""
+msgstr "Ókunnuglegur veljari '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:321
 msgid "Empty or improper property, skipped."
-msgstr ""
+msgstr "Tómt eða ónothæft eigindi, sleppi því."
 
 #: ../src/display/control/ctrl-handle-styling.cpp:327
 msgid "Unrecognized property '%1'"
-msgstr ""
+msgstr "Ókunnuglegt eigindi '%1'"
 
 #: ../src/display/control/snap-indicator.cpp:42
 #: ../src/display/control/snap-indicator.cpp:67
@@ -16046,6 +16041,8 @@ msgid ""
 "Create a unique instance of Inkscape with the application ID 'org.inkscape."
 "Inkscape.TAG'"
 msgstr ""
+"Útbúa einstakt tilvik af Inkscape með forritsauðkennið "
+"'org.inkscape.Inkscape.TAG'"
 
 #: ../src/inkscape-application.cpp:727
 msgid "File import"
@@ -16997,7 +16994,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:814
 msgctxt "path effect"
 msgid "doEffect stack test"
-msgstr ""
+msgstr "doEffect stöflunarpróf"
 
 #: ../src/live_effects/effect.cpp:817
 msgid "Test LPE"
@@ -17030,7 +17027,7 @@ msgstr "Lengd ferils"
 
 #: ../src/live_effects/effect.cpp:859
 msgid "Display the total length of a (curved) path"
-msgstr ""
+msgstr "Birta heildarlengd (sveigðs) ferils"
 
 #: ../src/live_effects/effect.cpp:870
 msgctxt "path effect"
@@ -17215,6 +17212,7 @@ msgstr "U_pprunalegur ferill er lóðréttur"
 #: ../src/live_effects/lpe-bendpath.cpp:68
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
 msgstr ""
+"Snýr frumritinu um 90 gráður, áður en það er sveigt eftir beygingarferlinum"
 
 #: ../src/live_effects/lpe-bendpath.cpp:69
 #: ../src/live_effects/lpe-patternalongpath.cpp:92
@@ -17571,6 +17569,8 @@ msgstr "Skarð"
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Gap space between copies, use small negative gaps to fix some joins"
 msgstr ""
+"Breidd skarðs á milli eintaka, notaðu lítil neikvæð skörð til að lagfæra "
+"sumar samsetningar"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Distribute evenly"
@@ -21248,7 +21248,7 @@ msgstr "Hópur"
 msgid "of <b>%d</b> object"
 msgid_plural "of <b>%d</b> objects"
 msgstr[0] "af <b>%d</b> hlut"
-msgstr[1] "af <b>%d</b> hlut"
+msgstr[1] "af <b>%d</b> hlutum"
 
 #: ../src/object/sp-item.cpp:1176
 msgid "Object"
@@ -21339,7 +21339,7 @@ msgstr ", ferilbrella: %s"
 msgid "%i node%s"
 msgid_plural "%i nodes%s"
 msgstr[0] "%i hnútur%s"
-msgstr[1] "%i hnútur%s"
+msgstr[1] "%i hnútar%s"
 
 #: ../src/object/sp-polygon.cpp:224
 msgid "<b>Polygon</b>"
@@ -21379,7 +21379,7 @@ msgstr "Marghyrningur"
 msgid "with %d vertex"
 msgid_plural "with %d vertices"
 msgstr[0] "með %d hlið"
-msgstr[1] "með %d hlið"
+msgstr[1] "með %d hliðar"
 
 #: ../src/object/sp-switch.cpp:68
 msgid "Conditional Group"
@@ -24024,7 +24024,7 @@ msgstr "Eyða öllum stoðlínum"
 #: ../src/ui/dialog/document-properties.cpp:201
 msgctxt "Grid"
 msgid "_Remove"
-msgstr "_Fjarlægja"
+msgstr "Fja_rlægja"
 
 #: ../src/ui/dialog/document-properties.cpp:201
 msgid "Remove selected grid."
@@ -33418,13 +33418,13 @@ msgstr ""
 #, c-format
 msgctxt "Transform handle tip"
 msgid "Skew horizontally by %.2f°"
-msgstr "Skew horizontally by %.2f°"
+msgstr "Skekkja lárétt um %.2f°"
 
 #: ../src/ui/tool/transform-handle-set.cpp:591
 #, c-format
 msgctxt "Transform handle tip"
 msgid "Skew vertically by %.2f°"
-msgstr "Skew vertically by %.2f°"
+msgstr "Skekkja lóðrétt um %.2f°"
 
 #: ../src/ui/tool/transform-handle-set.cpp:642
 msgctxt "Transform handle tip"
@@ -38626,7 +38626,7 @@ msgstr "Radíus glugga"
 
 #: ../share/ui/dialog-trace.glade:1151
 msgid "Pixel art"
-msgstr "Pixel art"
+msgstr "Pixel-art mynddílateikning"
 
 #: ../share/ui/dialog-trace.glade:1197
 msgid "Live updates"
@@ -42288,11 +42288,11 @@ msgstr "{} er núna `Effect.run()`. Viðfangið `output` hefur breyst."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:215
 msgid "self.args[-1] is now self.options.input_file."
-msgstr "self.args[-1] is now self.options.input_file."
+msgstr "self.args[-1] er núna self.options.input_file."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:220
 msgid "self.svg_file is now self.options.input_file."
-msgstr "self.svg_file is now self.options.input_file."
+msgstr "self.svg_file er núna self.options.input_file."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:236
 msgid ""
@@ -47087,7 +47087,7 @@ msgstr ""
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:8
 msgid "Graffiti"
-msgstr "Graffiti"
+msgstr "Veggjakrot"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:10
 msgid "Minimal connector radius:"
@@ -48882,7 +48882,7 @@ msgstr "SGI Log 24"
 
 #: ../share/extensions/raster_output_tiff.inx:17
 msgid "Raw 16"
-msgstr "Raw 16"
+msgstr "RAW 16"
 
 #: ../share/extensions/raster_output_tiff.inx:30
 msgid "TIFF (*.tiff)"
@@ -48934,7 +48934,7 @@ msgstr "Betra"
 
 #: ../share/extensions/raster_output_webp.inx:23
 msgid "Best"
-msgstr "Best"
+msgstr "Besta"
 
 #: ../share/extensions/raster_output_webp.inx:31
 msgid "WebP (*.webp)"
@@ -49460,11 +49460,11 @@ msgstr "Hegðun:"
 
 #: ../share/extensions/svg2fxg.inx:3
 msgid "FXG Output"
-msgstr "FXG frálag"
+msgstr "FXG-frálag"
 
 #: ../share/extensions/svg2fxg.inx:8
 msgid "Flash XML Graphics (*.fxg)"
-msgstr "Flash XML Graphics (*.fxg)"
+msgstr "Flash XML mynd (*.fxg)"
 
 #: ../share/extensions/svg2fxg.inx:9
 msgid "Adobe's XML Graphics file format"
