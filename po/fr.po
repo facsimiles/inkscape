@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-02 15:33+0000\n"
+"PO-Revision-Date: 2025-05-06 01:22+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -8909,7 +8909,7 @@ msgstr "Distribuer des objets texte"
 
 #: ../src/actions/actions-object-align.cpp:796
 msgid "Distribute text anchors; usage [vertical | horizontal]"
-msgstr "Distribuer des ancres de texte; avec [vertical | horizontal]"
+msgstr "Distribuer des ancres de texte ; avec [vertical | horizontal]"
 
 #: ../src/actions/actions-object-align.cpp:797
 #: ../share/ui/align-and-distribute.ui:573
@@ -10105,7 +10105,7 @@ msgid ""
 "layers' (top level objects in layers), 'groups' (all groups including "
 "layers), 'no-groups' (all objects other than groups and layers, default)"
 msgstr ""
-"Tout sélectionner ; options: 'all' (tous les objets y compris les groupes), "
+"Tout sélectionner ; options : 'all' (tous les objets y compris les groupes), "
 "'layers' (les calques), 'no-layers' (objets de plus haut niveau dans les "
 "calques), 'groups' (tous les groupes y compris les calques), 'no-groups' ("
 "objets autres que les groupes et les calques, par défaut)"
@@ -15862,6 +15862,7 @@ msgid ""
 "'%s'"
 msgstr ""
 "Le fichier %s n'a pas pu être enregistré.\n"
+"\n"
 "L'information suivante a été fournie par l'extension :\n"
 "« %s »"
 
@@ -16412,7 +16413,7 @@ msgstr ""
 #: ../src/inkscape-application.cpp:748
 msgid "Resolution for bitmaps and rasterized filters; default is 96"
 msgstr ""
-"Résolution pour l'exportation en matriciel et la rastérisation des filtres; "
+"Résolution pour l'exportation en matriciel et la rastérisation des filtres ; "
 "96 par défaut"
 
 #: ../src/inkscape-application.cpp:748 ../src/ui/widget/export-lists.cpp:174
@@ -16440,8 +16441,8 @@ msgstr "HAUTEUR"
 #: ../src/inkscape-application.cpp:751
 msgid "Margin around export area: units of page size for SVG, mm for PS/PDF"
 msgstr ""
-"Marges autour de la zone à exporter; dans l'unité des dimensions de la page "
-"en SVG, en mm pour PS/EPS/PDF"
+"Marges autour de la zone à exporter ; dans l'unité des dimensions de la page "
+"en SVG, en mm pour PS/PDF"
 
 #: ../src/inkscape-application.cpp:751
 msgid "MARGIN"
@@ -16481,7 +16482,7 @@ msgstr "Supprimer les attributs/propriétés SVG spécifiques à Inkscape"
 
 #: ../src/inkscape-application.cpp:759
 msgid "Postscript level (2 or 3); default is 3"
-msgstr "Niveau PostScript (2 ou 3); 3 par défaut"
+msgstr "Niveau PostScript (2 ou 3) ; 3 par défaut"
 
 #: ../src/inkscape-application.cpp:759 ../src/inkscape-application.cpp:771
 #: ../src/inkscape-application.cpp:773
@@ -16490,7 +16491,7 @@ msgstr "NIVEAU"
 
 #: ../src/inkscape-application.cpp:760
 msgid "PDF version (1.4 or 1.5); default is 1.5"
-msgstr "Version PDF (1.4 ou 1.5); par défaut 1.5"
+msgstr "Version PDF (1.4 ou 1.5) ; par défaut 1.5"
 
 #: ../src/inkscape-application.cpp:760
 msgid "VERSION"
@@ -16561,7 +16562,7 @@ msgstr "Niveau de compression pour l'export PNG (0-9), 6 par défaut"
 
 #: ../src/inkscape-application.cpp:773
 msgid "Antialias level for PNG export (0 to 3); default is 2"
-msgstr "Niveau d'antialias pour l'export PNG (0-3); 2 par défaut"
+msgstr "Niveau d'antialias pour l'export PNG (0-3) ; 2 par défaut"
 
 #
 # File: ../src/inkscape-application.cpp, line: 579
@@ -17799,7 +17800,7 @@ msgid ""
 "separated list; e.g. 'transform, style, clip-path, X, Y'."
 msgstr ""
 "Attributs de l'original à copier par les clones, sous forme de liste avec "
-"virgules; e.g. 'transform, style, clip-path, X, Y'."
+"virgules ; e.g. 'transform, style, clip-path, X, Y'."
 
 #: ../src/live_effects/lpe-clone-original.cpp:56
 msgid "CSS Properties"
@@ -17811,7 +17812,7 @@ msgid ""
 "comma-separated list; e.g. 'fill, filter, opacity'."
 msgstr ""
 "Propriétés CSS de l'original à copier par les clones, sous forme de liste "
-"avec virgules; e.g. 'fill, filter, opacity'."
+"avec virgules ; e.g. 'fill, filter, opacity'."
 
 #: ../src/live_effects/lpe-clone-original.cpp:59
 #: ../src/live_effects/lpe-slice.cpp:55
@@ -20319,8 +20320,8 @@ msgid ""
 "<b>Segment size:</b> add nodes to path evenly; <b>Number of segments:</b> "
 "add nodes between existing nodes"
 msgstr ""
-"<b>Taille de segment :</b> ajoute des nœuds au chemin uniformément; "
-"<b>Nombre de segments :</b> ajoute des nœuds entre les nœuds existants"
+"<b>Taille de segment :</b> ajoute des nœuds au chemin uniformément ; "
+"<b>Nombre de segments :</b> ajoute des nœuds entre les nœuds existants"
 
 #: ../src/live_effects/lpe-roughen.cpp:51
 msgid ""
@@ -22211,8 +22212,8 @@ msgstr "Gravure"
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
-"Inkscape va démarrer avec les préférences par défaut.\n"
-"Les nouvelles préférences ne seront pas enregistrées. "
+"Inkscape va démarrer avec les préférences par défaut et les nouvelles "
+"préférences ne seront pas enregistrées. "
 
 #: ../src/preferences.cpp:124
 #, c-format
@@ -40235,8 +40236,8 @@ msgid ""
 "Linked</small>"
 msgstr ""
 "<small>123 x 345 px\n"
-"RGBA\n"
-"Linked</small>"
+"RVBA\n"
+"Lié</small>"
 
 #: ../share/ui/image-properties.glade:77
 msgid "URL:"
@@ -42846,7 +42847,7 @@ msgstr "Capturer depuis le centre plutôt que depuis une zone moyenne."
 
 #: ../share/ui/toolbar-star.ui:28
 msgid "radiobutton"
-msgstr "radiobutton"
+msgstr "bouton radio"
 
 #: ../share/ui/toolbar-star.ui:121
 msgid "Corners:"
