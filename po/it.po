@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-01 20:42+0000\n"
+"PO-Revision-Date: 2025-05-05 12:07+0000\n"
 "Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
@@ -8991,7 +8991,7 @@ msgid ""
 "randomize, unclump."
 msgstr ""
 "Inserisci il metodo di riordinamento. Valori possibili: graph, exchange, "
-"exchange, rotate, randomize, unclump"
+"exchangez, rotate, randomize, unclump"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 45
@@ -10813,16 +10813,13 @@ msgid "Rotate selected objects"
 msgstr "Ruota gli oggetti selezionati"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Ritocco rotazione"
+msgstr "Scatto rotazione"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
 msgstr ""
-"Ridimensiona gli oggetti selezionati relativamente allo Scatto definito "
-"nelle Preferenze"
+"Ridimensiona gli oggetti selezionati di un multiplo del valore di scatto"
 
 #: ../src/actions/actions-transform.cpp:148
 #, fuzzy
@@ -17155,7 +17152,7 @@ msgid ""
 "same number of dashes per path segment"
 msgstr ""
 "Aggiunge un contorno tratteggiato i cui tratteggi terminino esattamente sui "
-"sui nodi, anche con lo stesso numero di tratteggi per segmento"
+"nodi, anche con lo stesso numero di tratteggi per segmento"
 
 #: ../src/live_effects/effect.cpp:642
 msgctxt "path effect"
