@@ -20,16 +20,17 @@ msgstr ""
 "Project-Id-Version: Arabic Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2022-05-21 13:03+0300\n"
-"Last-Translator: zer0-x <zer0-x.7ty50@aleeas.com>\n"
-"Language-Team: Arabic\n"
+"PO-Revision-Date: 2025-05-06 01:22+0000\n"
+"Last-Translator: NA <nisreenalaas@gmail.com>\n"
+"Language-Team: Arabic <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Lokalize 22.04.0\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 #, fuzzy
@@ -1100,6 +1101,7 @@ msgid "Wavy Tartan"
 msgstr "طرطان مُتَمَوِّج"
 
 #: ../build/share/filters/filters.svg.h:396
+#, fuzzy
 msgid "Tartan pattern with a wavy displacement and bevel around the edges"
 msgstr "نمط قِماش الطرطان مع إزاحة مُتَمَوِّجَة وميل حول الأطراف"
 
@@ -1275,7 +1277,7 @@ msgstr "عِلكة مَضغ"
 msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
-msgstr "ينشئ بقعًا قابلة للتلوين تتدفق بسلاسة على أطراف الخطوطعند تقاطعهم"
+msgstr "ينشئ بقعًا قابلة للتلوين تتدفق بسلاسة على أطراف الخطوط عند تقاطعهم"
 
 #: ../build/share/filters/filters.svg.h:438
 msgid "Dark and Glow"
@@ -1287,7 +1289,7 @@ msgstr "يُغَمِّق الحافة بتغبيش داخلي ويُضيف تو�
 
 #: ../build/share/filters/filters.svg.h:442
 msgid "Warped Rainbow"
-msgstr "طيف مُشوَّه"
+msgstr "قوس قزح مُشوّه"
 
 #: ../build/share/filters/filters.svg.h:444
 msgid "Smooth rainbow colors warped along the edges and colorizable"
@@ -1307,8 +1309,7 @@ msgstr "طابع بريدي قديم"
 
 #: ../build/share/filters/filters.svg.h:452
 msgid "Slightly posterize and draw edges like on old printed postcards"
-msgstr ""
-"التلصيق ورسم الأطراف قليلاً كما هو الحال في الطوابع البريدية المطبوعة القديمة"
+msgstr "رسم حواف بسيطة مثل الموجودة على البطاقات البريدية المطبوعة القديمة"
 
 #: ../build/share/filters/filters.svg.h:454
 msgid "Dots Transparency"
@@ -1316,11 +1317,11 @@ msgstr "شفافيَّة نُقطيَّة"
 
 #: ../build/share/filters/filters.svg.h:456
 msgid "Gives a pointillist HSL sensitive transparency"
-msgstr "يُعطي تنقيط شفافيَّة صبغة-إشباع-الإضاءة الحساسة (HSL)"
+msgstr "يمنح شفافية حساسة لـ HSL"
 
 #: ../build/share/filters/filters.svg.h:458
 msgid "Canvas Transparency"
-msgstr "شفافية لوحة قماشيَّة"
+msgstr "شفافية القماش"
 
 #: ../build/share/filters/filters.svg.h:460
 msgid "Gives a canvas like HSL sensitive transparency."
@@ -1333,7 +1334,7 @@ msgstr "شفافيَّة مُشوَّشة"
 #: ../build/share/filters/filters.svg.h:464
 msgid ""
 "Paint objects with a transparent turbulence which turns around color edges"
-msgstr "طلاء الكائنات باضطراب شفَّاف يدور حول أطراف اللون"
+msgstr "طلاء الكائنات باضطراب شفَّاف يدور حول لون الأطراف"
 
 #: ../build/share/filters/filters.svg.h:466
 msgid "Thick Paint"
@@ -1361,7 +1362,7 @@ msgid ""
 "texture"
 msgstr ""
 "الجمع بين نتوء اكتشاف أطراف صبغة-إشباع-الإضاءة (HSL) مع نتوء جلدي أو خشبي "
-"وقابل للتلوينبُنية"
+"وقابل للتلوين"
 
 #: ../build/share/filters/filters.svg.h:478
 msgid "Carnaval"
@@ -1382,7 +1383,8 @@ msgid ""
 "HSL edges detection bump with a wavy reflective surface effect and variable "
 "crumple"
 msgstr ""
-"نتوء اكتشاف أطراف صبغة-إشباع-الإضاءة (HSL) مع تأثير ومتغير سطح عاكس مُتَمَوِّجتَجَعُّد"
+"نتوء اكتشاف أطراف صبغة-إشباع-الإضاءة (HSL) مع تأثير ومتغير سطح عاكس مُتَمَوِّج "
+"مُجعَّد"
 
 #: ../build/share/filters/filters.svg.h:486
 msgid "Plaster"
@@ -1392,8 +1394,7 @@ msgstr "لَاصِق"
 msgid ""
 "Combine a HSL edges detection bump with a matte and crumpled surface effect"
 msgstr ""
-"الجمع بين نتوء اكتشاف أطراف صبغة-إشباع-الإضاءة (HSL) مع تأثير سطح غير لامع "
-"ومُجعَّد"
+"دمج نتوء اكتشاف أطراف صبغة-إشباع-الإضاءة (HSL) مع تأثير سطح غير لامع ومُجعَّد"
 
 #: ../build/share/filters/filters.svg.h:490
 msgid "Rough Transparency"
@@ -1401,7 +1402,7 @@ msgstr "شفافيَّة خشنة"
 
 #: ../build/share/filters/filters.svg.h:492
 msgid "Adds a turbulent transparency which displaces pixels at the same time"
-msgstr "يضيف شفافية مضطربة تُزيح وحدات البكسل في نفس الوقت"
+msgstr "اضف شفافية مضطربة تُزيح وحدات البكسل في نفس الوقت"
 
 #: ../build/share/filters/filters.svg.h:494
 msgid "Gouache"
@@ -1409,7 +1410,7 @@ msgstr "جواش"
 
 #: ../build/share/filters/filters.svg.h:496
 msgid "Partly opaque water color effect with bleed"
-msgstr "تأثير لون مائي كامِد مع نزيف"
+msgstr "تأثير الألوان المائية المعتمة جزئيًا مع سيلان"
 
 #: ../build/share/filters/filters.svg.h:498
 msgid "Alpha Engraving"
@@ -1417,7 +1418,7 @@ msgstr "نَقش ألفا"
 
 #: ../build/share/filters/filters.svg.h:500
 msgid "Gives a transparent engraving effect with rough line and filling"
-msgstr "يعطي تأثير نقش شفاف مع خط خشن وتعبئة"
+msgstr "يعطي تأثير نقش شفاف مع خط خشن ومعبأ"
 
 #: ../build/share/filters/filters.svg.h:502
 msgid "Alpha Draw Liquid"
@@ -1425,7 +1426,7 @@ msgstr "سائل رسم ألفا"
 
 #: ../build/share/filters/filters.svg.h:504
 msgid "Gives a transparent fluid drawing effect with rough line and filling"
-msgstr "يعطي تأثير مائع رسم شفاف مع خط خشن وتعبئة"
+msgstr "يعطي تأثير رسم سائل شفاف مع خط خشن معبأ."
 
 #: ../build/share/filters/filters.svg.h:506
 msgid "Liquid Drawing"
@@ -53726,7 +53727,7 @@ msgstr ""
 # File: ../share/ui/units.xml, line: 99
 #: ../share/ui/units.xml:113
 msgid "Half of font height"
-msgstr ""
+msgstr "نصف ارتفاع الخط"
 
 #, fuzzy
 #~ msgid "Open Memory"
