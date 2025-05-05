@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-05 12:07+0000\n"
+"PO-Revision-Date: 2025-05-06 01:22+0000\n"
 "Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
@@ -10818,13 +10818,11 @@ msgstr "Scatto rotazione"
 
 #: ../src/actions/actions-transform.cpp:147
 msgid "Rotate selected objects by multiple of step value"
-msgstr ""
-"Ridimensiona gli oggetti selezionati di un multiplo del valore di scatto"
+msgstr "Ruota gli oggetti ad angoli multipli del valore di scatto"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Ruota gradiente"
+msgstr "Ruota lo schermo"
 
 #: ../src/actions/actions-transform.cpp:148
 msgid "Rotate selected objects relative to zoom level"
@@ -21734,7 +21732,8 @@ msgid ""
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Maiusc+trascina</b> per ruotare, <b>Ctrl+trascina</b> per spostare "
-"l'origine, <b>Canc</b> per cancellare"
+"l'origine, <b>Canc</b> per cancellare; <b>doppio clic</b> per modificare le "
+"proprietà della guida"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -24630,7 +24629,7 @@ msgstr "Rimuove la griglia selezionata"
 #: ../src/ui/dialog/document-properties.cpp:211
 #: ../share/ui/page-properties.glade:643 ../share/ui/toolbar-measure.ui:314
 msgid "Display"
-msgstr "Visualizzazione"
+msgstr "Mostra"
 
 #: ../src/ui/dialog/document-properties.cpp:212
 msgid "Guides"
@@ -32753,7 +32752,9 @@ msgstr "Dimensione Em:"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:847
 msgid ""
 "Display units per <italic>em</italic> (nominally width of 'M' character)"
-msgstr "Mostra unità per em (nominalmente la larghezza del carattere 'M')"
+msgstr ""
+"Mostra unità per <italic>em</italic> (nominalmente la larghezza del "
+"carattere 'M')"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:848
 #: ../share/extensions/setup_typography_canvas.inx:6
@@ -33684,7 +33685,6 @@ msgid "Alt"
 msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
 msgid "Super"
 msgstr "Super"
 
@@ -33693,9 +33693,8 @@ msgid "Hyper"
 msgstr "Iper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
 msgid "Meta"
-msgstr "Metadati"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:576
 msgid ""
@@ -40715,8 +40714,7 @@ msgid ""
 "SVG element positions are expressed in user units."
 msgstr ""
 "La scala del documento fissa la misura delle unità-utente.\n"
-"Le posizioni degli elementi di SVG vengono espresse in unità-utente.\n"
-"(se l'unità è mm e la scala è 10, unità-utente=1cm)"
+"Le posizioni degli elementi di SVG vengono espresse in unità-utente."
 
 # added example to make it clearer Giambattista Caltabiano
 #: ../share/ui/page-properties.glade:412
@@ -42189,9 +42187,8 @@ msgid "Phantom measure"
 msgstr "Misura fantasma"
 
 #: ../share/ui/toolbar-measure.ui:435
-#, fuzzy
 msgid "Draw"
-msgstr "Disegno"
+msgstr "Disegna"
 
 #: ../share/ui/toolbar-measure.ui:457
 msgid "To guides"
