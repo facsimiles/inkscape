@@ -182,8 +182,7 @@ elseif(WITH_CAPYPDF)
     set(CAPY_LIBDIR ${CAPY_PREFIX}/${CMAKE_INSTALL_LIBDIR})
     include(ExternalProject)
     ExternalProject_Add(capypdf
-        #URL https://github.com/jpakkane/capypdf/archive/refs/tags/0.17.0.zip
-        URL https://github.com/jpakkane/capypdf/archive/refs/heads/master.zip
+        URL https://github.com/jpakkane/capypdf/archive/refs/tags/0.16.0.zip
         DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         CONFIGURE_COMMAND meson setup . ../capypdf --libdir=${CAPY_LIBDIR} --prefix=${CAPY_PREFIX}
         BUILD_COMMAND meson compile
