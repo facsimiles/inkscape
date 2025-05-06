@@ -15,32 +15,29 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <string>
+#include "path-chemistry.h"
+
 #include <boost/range/adaptor/reversed.hpp>
+#include <cstring>
 #include <glibmm/i18n.h>
+#include <string>
 
 #include "desktop.h"
+#include "display/curve.h"
 #include "document-undo.h"
 #include "document.h"
 #include "message-stack.h"
-#include "path-chemistry.h"
-#include "text-editing.h"
-
-#include "display/curve.h"
-
 #include "object/box3d.h"
 #include "object/object-set.h"
+#include "object/sp-ellipse.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "style.h"
-
-#include "ui/icon-names.h"
-
 #include "svg/svg.h"
-
+#include "text-editing.h"
+#include "ui/icon-names.h"
 #include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
@@ -631,6 +628,11 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     /* Transformation */
     repr->setAttribute("transform", item->getRepr()->attribute("transform"));
+
+    /* Manually specify symmetric nodes on an ellipse to preserve the historical look and feel in Node Tool */
+    if (is<SPGenericEllipse>(item)) {
+        repr->setAttribute("sodipodi:nodetypes", "sssss");
+    }
 
     /* Style */
     Glib::ustring style_str =

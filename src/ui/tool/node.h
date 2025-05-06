@@ -31,6 +31,7 @@ class CanvasItemCurve;
 
 namespace UI {
 
+class CurveHandler;
 class PathManipulator;
 class MultiPathManipulator;
 
@@ -49,14 +50,7 @@ struct ListNode
     NodeList *ln_list;
 };
 
-struct NodeSharedData
-{
-    SPDesktop *desktop;
-    ControlPointSelection *selection;
-    Inkscape::CanvasItemGroup *node_group;
-    Inkscape::CanvasItemGroup *handle_group;
-    Inkscape::CanvasItemGroup *handle_line_group;
-};
+struct NodeSharedData;
 
 class Handle : public ControlPoint
 {
@@ -139,6 +133,9 @@ public:
 
     NodeType type() const { return _type; }
 
+    /// Write a textual representation of the node type to an output stream
+    virtual void writeType(std::ostream &output_stream) const { output_stream << _type; }
+
     /**
      * Sets the node type and optionally restores the invariants associated with the given type.
      * @param type The type to set.
@@ -147,11 +144,22 @@ public:
      *                       and when making cusp nodes during some node algorithms.
      *                       Pass true when used in response to an UI node type button.
      */
-    void setType(NodeType type, bool update_handles = true);
+    virtual void setType(NodeType type, bool update_handles);
 
-    void showHandles(bool v);
+    virtual void showHandles(bool v);
 
+    /// Create a CurveHandler object which can process events such as drag on the curve segment before the node.
+    virtual std::unique_ptr<CurveHandler> createEventHandlerForPrecedingCurve();
+
+    /// \todo: Create a BezierNode class deriving from Node and move all functionality related to handles there.
     void updateHandles();
+
+    virtual bool handlesAllowedOnPrecedingSegment() const { return true; }
+
+    virtual bool areHandlesVisible() const { return visible() && _handles_shown; }
+
+    /// Notify this node that the previous node in the path underwent an update.
+    virtual void notifyPrecedingNodeUpdate(Node & /* previous_node */) {}
 
     /**
      * Pick the best type for this node, based on the position of its handles.
@@ -160,6 +168,10 @@ public:
     void pickBestType(); // automatically determine the type from handle positions
 
     bool isDegenerate() const { return _front.isDegenerate() && _back.isDegenerate(); }
+    virtual bool isPrecedingSegmentStraight() const;
+
+    virtual void changePrecedingSegmentType(SegmentType new_type, Node &preceding_node);
+
     bool isEndNode() const;
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
@@ -188,7 +200,10 @@ public:
      */
     Node *nodeAwayFrom(Handle *h);
 
-    NodeList &nodeList() { return *(static_cast<ListNode*>(this)->ln_list); }
+    /// Append the preceding curve segment to a path sink.
+    virtual void writeSegment(Geom::PathSink &output, Node const &previous) const;
+
+    NodeList &nodeList() { return *(static_cast<ListNode *>(this)->ln_list); }
     NodeList &nodeList() const { return *(static_cast<ListNode const*>(this)->ln_list); }
 
     /**
@@ -197,7 +212,6 @@ public:
      */
     void sink();
 
-    static NodeType parse_nodetype(char x);
     static char const *node_type_to_localized_string(NodeType type);
 
     // temporarily public
@@ -215,6 +229,11 @@ protected:
     Glib::ustring _getTip(unsigned state) const override;
     Glib::ustring _getDragTip(MotionEvent const &event) const override;
     bool _hasDragTips() const override { return true; }
+    inline PathManipulator &_pm();
+    inline PathManipulator &_pm() const;
+
+    /// Destroy this node and replace it with another one.
+    void _replace(Node *replacement) &&;
 
 private:
     void _updateAutoHandles();
@@ -231,8 +250,6 @@ private:
     Node const *_prev() const;
     Inkscape::SnapSourceType _snapSourceType() const;
     Inkscape::SnapTargetType _snapTargetType() const;
-    inline PathManipulator &_pm();
-    inline PathManipulator &_pm() const;
 
     /** Determine whether two nodes are joined by a linear segment. */
     static bool _is_line_segment(Node *first, Node *second);
@@ -387,6 +404,9 @@ public:
 
     /** insert a node before pos. */
     iterator insert(iterator pos, Node *x);
+
+    /// Replace the node at a given position with a new one
+    void replace(iterator pos, Node *replacement);
 
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {

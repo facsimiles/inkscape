@@ -1,0 +1,169 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Factory for creating Node objects for the Node Tool
+ */
+/* Authors:
+ *   Rafał M. Siejakowski <rs@rs-math.net>
+ *
+ * Copyright (C) 2025 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
+#include "node-factory.h"
+
+#include <2geom/bezier-curve.h>
+#include <2geom/curve.h>
+#include <2geom/elliptical-arc.h>
+#include <2geom/exception.h>
+#include <2geom/line.h>
+#include <span>
+#include <string_view>
+#include <tuple>
+#include <vector>
+
+#include "elliptical-arc-end-node.h"
+#include "node.h"
+#include "ui/tool/path-manipulator.h"
+
+namespace Inkscape::UI {
+
+namespace {
+
+Geom::EllipticalArc make_semicircle(Geom::Point const &from, Geom::Point const &to)
+{
+    auto const r = 0.5 * Geom::distance(from, to);
+    return {from, r, r, 0.0, true, true, to};
+}
+
+std::optional<Geom::EllipticalArc> fit_arc_to_cubic_bezier(Geom::CubicBezier const &bezier)
+{
+    assert(!bezier.isLineSegment());
+
+    Geom::Line const initial_tangent{bezier.initialPoint(), bezier.controlPoint(1)};
+    Geom::Line const final_tangent{bezier.finalPoint(), bezier.controlPoint(2)};
+    try {
+        return Geom::EllipticalArc::from_tangents_and_point(initial_tangent, bezier.pointAt(0.5), final_tangent);
+    } catch (Geom::RangeError const &) {
+        return {};
+    }
+    return {};
+}
+} // namespace
+
+std::vector<NodeTypeRequest> read_node_type_requests(char const *xml_node_type_string)
+{
+    std::string_view const node_type_str = xml_node_type_string ? xml_node_type_string : "";
+
+    std::vector<NodeTypeRequest> result;
+    result.reserve(node_type_str.size());
+
+    auto const parse_symbol = [&node_type_str](auto &it) -> NodeTypeRequest {
+        if (it == node_type_str.end()) {
+            return {};
+        }
+
+        NodeTypeRequest result;
+
+        while (it != node_type_str.end() && *it == static_cast<char>(XmlNodeType::ELLIPSE_MODIFIER)) {
+            result.elliptical_arc_requested = true;
+            ++it;
+        }
+        if (it == node_type_str.end()) {
+            return result;
+        }
+
+        result.requested_type = static_cast<XmlNodeType>(*it++);
+        return result;
+    };
+
+    auto iterator = node_type_str.begin();
+    while (iterator != node_type_str.end()) {
+        result.push_back(parse_symbol(iterator));
+    }
+    return result;
+}
+
+void set_node_types(SubpathList &subpath_list, std::span<NodeTypeRequest const> requests)
+{
+    auto const get_next = [&requests](auto &it) { return it == requests.end() ? NodeTypeRequest{} : *it++; };
+
+    auto iterator = requests.begin();
+    for (auto &subpath : subpath_list) {
+        for (auto &node : *subpath) {
+            auto const [node_type, ellipse_modifier] = get_next(iterator);
+            node.setType(decode_node_type(node_type), false);
+        }
+        if (subpath->closed()) {
+            // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
+            // the first one to remain backward compatible.
+            auto const [node_type, ellipse_modifier] = get_next(iterator);
+            if (node_type != XmlNodeType::BOGUS) {
+                subpath->begin()->setType(decode_node_type(node_type), false);
+            }
+        }
+    }
+}
+
+NodeFactory::NodeFactory(std::span<NodeTypeRequest const> request_sequence, PathManipulator *manipulator)
+    : _manipulator{manipulator}
+    , _requests{request_sequence}
+    , _always_create_elliptical_arcs{request_sequence.empty()}
+{
+    assert(_manipulator);
+    _shared_data = _manipulator->getNodeSharedData();
+}
+
+std::unique_ptr<Node> NodeFactory::createInitialNode(Geom::Path const &path)
+{
+    std::ignore = _getNextRequest();
+
+    // Initial node is always of base type; we can change it upon reaching the end of a closed path
+    return std::make_unique<Node>(_shared_data, path.initialPoint());
+}
+
+std::unique_ptr<Node> NodeFactory::createNextNode(Geom::Curve const &preceding_curve)
+{
+    auto const type_request = _getNextRequest();
+    if (type_request.elliptical_arc_requested || _always_create_elliptical_arcs) {
+        if (auto const *arc = dynamic_cast<Geom::EllipticalArc const *>(&preceding_curve)) {
+            return std::make_unique<EllipticalArcEndNode>(*arc, _shared_data, *_manipulator);
+        }
+    }
+    return std::make_unique<Node>(_shared_data, preceding_curve.finalPoint());
+}
+
+std::unique_ptr<Node> NodeFactory::createArcEndpointNode(Geom::Curve const &curve)
+{
+    Geom::EllipticalArc arc = make_semicircle(curve.initialPoint(), curve.finalPoint());
+    if (!curve.isLineSegment()) {
+        if (auto const *cubic_bezier = dynamic_cast<Geom::CubicBezier const *>(&curve)) {
+            if (auto const fitted = fit_arc_to_cubic_bezier(*cubic_bezier)) {
+                arc = *fitted;
+            }
+        } else if (auto const *already_arc = dynamic_cast<Geom::EllipticalArc const *>(&curve)) {
+            arc = *already_arc;
+        }
+    }
+    return std::make_unique<EllipticalArcEndNode>(arc, _shared_data, *_manipulator);
+}
+
+NodeTypeRequest NodeFactory::_getNextRequest()
+{
+    if (_pos < _requests.size()) {
+        return _requests[_pos++];
+    }
+    return {};
+}
+
+} // namespace Inkscape::UI
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

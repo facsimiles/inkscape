@@ -8,14 +8,16 @@
  */
 
 #include "ui/tool/curve-drag-point.h"
+
 #include <glib/gi18n.h>
+
 #include "desktop.h"
+#include "object/sp-namedview.h"
+#include "ui/modifiers.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/widget/events/canvas-event.h"
-
-#include "object/sp-namedview.h"
 
 namespace Inkscape {
 namespace UI {
@@ -44,27 +46,53 @@ bool CurveDragPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context,
     return ControlPoint::_eventHandler(event_context, event);
 }
 
+void CurveDragPoint::setIterator(NodeList::iterator iterator)
+{
+    if (iterator == NodeList::iterator()) {
+        _curve_event_handler.reset();
+        return;
+    }
+    if (iterator == first) {
+        return;
+    }
+    first = iterator;
+    _curve_event_handler.reset();
+    if (!first) {
+        return;
+    }
+
+    if (auto end_node = first.next()) {
+        _curve_event_handler = end_node->createEventHandlerForPrecedingCurve();
+    }
+}
+
 bool CurveDragPoint::grabbed(MotionEvent const &/*event*/)
 {
     _pm._selection.hideTransformHandles();
     NodeList::iterator second = first.next();
 
-    // move the handles to 1/3 the length of the segment for line segments
-    if (first->front()->isDegenerate() && second->back()->isDegenerate()) {
-        _segment_was_degenerate = true;
-
-        // delta is a vector equal 1/3 of distance from first to second
-        Geom::Point delta = (second->position() - first->position()) / 3.0;
-        // only update the nodes if the mode is bspline
-        if (!_pm._isBSpline()) {
-            first->front()->move(first->front()->position() + delta);
-            second->back()->move(second->back()->position() - delta);
-        }
-        _pm.update();
-    } else {
-        _segment_was_degenerate = false;
+    if (_curve_event_handler) {
+        _curve_event_handler->pointGrabbed(first, second);
     }
     return false;
+}
+
+void CurveDragPoint::_adjustPointToSnappedPosition(Geom::Point &point_to_adjust, CanvasEvent const &event,
+                                                   SPItem const &item_to_ignore) const
+{
+    if (!is_drag_initiated()) {
+        return;
+    }
+    if (auto const *snap_inhibitor = Modifiers::Modifier::get(Modifiers::Type::MOVE_SNAPPING);
+        snap_inhibitor && snap_inhibitor->active(event.modifiers)) {
+        return;
+    }
+
+    auto &snap_manager = _desktop->getNamedView()->snap_manager;
+    snap_manager.setup(_desktop, true, &item_to_ignore);
+    SnapCandidatePoint const candidate_point{point_to_adjust, Inkscape::SNAPSOURCE_OTHER_HANDLE};
+    point_to_adjust = snap_manager.freeSnap(candidate_point, {}, false).getPoint();
+    snap_manager.unSetup();
 }
 
 void CurveDragPoint::dragged(Geom::Point &new_pos, MotionEvent const &event)
@@ -72,58 +100,15 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, MotionEvent const &event)
     if (!first || !first.next()) return;
     NodeList::iterator second = first.next();
 
-    // special cancel handling - retract handles when if the segment was degenerate
-    if (_is_drag_cancelled(event) && _segment_was_degenerate) {
-        first->front()->retract();
-        second->back()->retract();
-        _pm.update();
+    auto const *path_item = cast<SPItem>(_pm._path);
+    if (!_curve_event_handler || !path_item) {
         return;
     }
 
-    if (_drag_initiated && !(event.modifiers & GDK_SHIFT_MASK)) {
-        auto &m = _desktop->getNamedView()->snap_manager;
-        SPItem *path = static_cast<SPItem *>(_pm._path);
-        m.setup(_desktop, true, path); // We will not try to snap to "path" itself
-        Inkscape::SnapCandidatePoint scp(new_pos, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-        Inkscape::SnappedPoint sp = m.freeSnap(scp, Geom::OptRect(), false);
-        new_pos = sp.getPoint();
-        m.unSetup();
+    _adjustPointToSnappedPosition(new_pos, event, *path_item);
+    if (_curve_event_handler->pointDragged(first, second, _t, position(), new_pos, event)) {
+        _pm.update();
     }
-
-    // Magic Bezier Drag Equations follow!
-    // "weight" describes how the influence of the drag should be distributed
-    // among the handles; 0 = front handle only, 1 = back handle only.
-    double weight, t = _t;
-    if (t <= 1.0 / 6.0) weight = 0;
-    else if (t <= 0.5) weight = (pow((6 * t - 1) / 2.0, 3)) / 2;
-    else if (t <= 5.0 / 6.0) weight = (1 - pow((6 * (1-t) - 1) / 2.0, 3)) / 2 + 0.5;
-    else weight = 1;
-
-    Geom::Point delta = new_pos - position();
-    Geom::Point offset0 = ((1-weight)/(3*t*(1-t)*(1-t))) * delta;
-    Geom::Point offset1 = (weight/(3*t*t*(1-t))) * delta;
-
-    //modified so that, if the trace is bspline, it only acts if the SHIFT key is pressed
-    if (!_pm._isBSpline()) {
-        first->front()->move(first->front()->position() + offset0);
-        second->back()->move(second->back()->position() + offset1);
-    } else if (weight >= 0.8) {
-        if (held_shift(event)) {
-            second->back()->move(new_pos);
-        } else {
-            second->move(second->position() + delta);
-        }
-    } else if (weight <= 0.2) {
-        if (held_shift(event)) {
-            first->back()->move(new_pos);
-        } else {
-            first->move(first->position() + delta);
-        }
-    } else {
-        first->move(first->position() + delta);
-        second->move(second->position() + delta);
-    }
-    _pm.update();
 }
 
 void CurveDragPoint::ungrabbed(ButtonReleaseEvent const *)
@@ -196,35 +181,10 @@ void CurveDragPoint::_insertNode(bool take_selection)
 
 Glib::ustring CurveDragPoint::_getTip(unsigned state) const
 {
-    if (_pm.empty()) return "";
-    if (!first || !first.next()) return "";
-    bool linear = first->front()->isDegenerate() && first.next()->back()->isDegenerate();
-    if (state_held_shift(state) && _pm._isBSpline()) {
-        return C_("Path segment tip",
-            "<b>Shift</b>: drag to open or move BSpline handles");
+    if (_pm.empty() || !first || !first.next() || !_curve_event_handler) {
+        return {};
     }
-    if (state_held_shift(state)) {
-        return C_("Path segment tip",
-            "<b>Shift</b>: click to toggle segment selection");
-    }
-    if (state_held_ctrl(state) && state_held_alt(state)) {
-        return C_("Path segment tip",
-            "<b>Ctrl+Alt</b>: click to insert a node");
-    }
-    if (state_held_alt(state)) {
-        return C_("Path segment tip", "<b>Alt</b>: double click to change line type");
-    }
-    if (_pm._isBSpline()) {
-        return C_("Path segment tip", "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert node, "
-                                      "click to select (more: Alt, Shift, Ctrl+Alt)");
-    }
-    if (linear) {
-        return C_("Path segment tip", "<b>Linear segment</b>: drag to convert to a Bezier segment, "
-                                      "doubleclick to insert node, click to select (more: Alt, Shift, Ctrl+Alt)");
-    } else {
-        return C_("Path segment tip", "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert node, "
-                                      "click to select (more: Alt, Shift, Ctrl+Alt)");
-    }
+    return _curve_event_handler->getTooltip(state, first);
 }
 
 } // namespace UI

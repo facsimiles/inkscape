@@ -70,6 +70,7 @@ public:
     void reverseSubpaths();
     void move(Geom::Point const &delta);
     void scale(Geom::Point const &center, Geom::Point const &scale);
+    void commit(CommitEvent cps);
 
     void showOutline(bool show);
     void showHandles(bool show);
@@ -123,7 +124,6 @@ private:
         }
     }
 
-    void _commit(CommitEvent cps);
     void _done(gchar const *reason, bool alert_LPE = true);
     void _doneWithCleanup(gchar const *reason, bool alert_LPE = false);
     Colors::Color _getOutlineColor(ShapeRole role, SPObject *object);

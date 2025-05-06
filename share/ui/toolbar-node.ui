@@ -233,6 +233,22 @@
       </object>
     </child>
     <child>
+      <object class="GtkButton" id="elliptical_btn">
+        <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="tooltip-text" translatable="yes">Make selected nodes arc handles</property>
+        <property name="has-frame">False</property>
+        <style>
+            <class name="priority2"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="image9.5">
+            <property name="icon-name">node-type-elliptical</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparator">
         <style>
             <class name="priority2"/>
@@ -267,6 +283,22 @@
         <child>
           <object class="GtkImage" id="image11">
             <property name="icon-name">node-segment-curve</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="arc_btn">
+        <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="tooltip-text" translatable="yes">Create arcs</property>
+        <property name="has-frame">False</property>
+        <style>
+            <class name="priority2"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="image11.5">
+            <property name="icon-name">node-segment-arc</property>
           </object>
         </child>
       </object>

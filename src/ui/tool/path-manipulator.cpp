@@ -11,36 +11,37 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "ui/tool/path-manipulator.h"
+
 #include <2geom/bezier-utils.h>
+#include <2geom/forward.h>
 #include <2geom/path-sink.h>
 #include <2geom/point.h>
-
+#include <optional>
+#include <string_view>
 #include <utility>
 #include <vector>
 
-#include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
-
-#include <2geom/forward.h>
+#include "display/curve.h"
 #include "helper/geom.h"
-
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-bspline.h"
+#include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpeobject.h"
 #include "live_effects/parameter/path.h"
-
 #include "object/sp-path.h"
+#include "path/splinefit/bezier-fit.h"
+#include "remove-elliptical-arcs.h"
 #include "style.h"
-
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
+#include "ui/tool/elliptical-arc-end-node.h"
 #include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/node-factory.h"
 #include "ui/tool/node-types.h"
-#include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/events/canvas-event.h"
-#include "path/splinefit/bezier-fit.h"
 #include "xml/node-observer.h"
 
 namespace Inkscape::UI {
@@ -53,10 +54,44 @@ enum PathChange {
     PATH_CHANGE_TRANSFORM
 };
 
+/// Remove empty paths from a path vector.
+void sanitize_path_vector(Geom::PathVector &pathvector)
+{
+    for (auto it = pathvector.begin(); it != pathvector.end();) {
+        if (it->empty()) {
+            it = pathvector.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+enum class BezierHandleType
+{
+    INITIAL,
+    FINAL
+};
+
+std::optional<Geom::Point> compute_handle_position(Geom::BezierCurve const *bezier, BezierHandleType type)
+{
+    if (!bezier || bezier->order() != 3) {
+        return {};
+    }
+    return bezier->controlPoint(type == BezierHandleType::INITIAL ? 1 : 2);
+}
+
+void set_handle_position(Handle *handle, std::optional<Geom::Point> const &position)
+{
+    if (handle && position) {
+        handle->setPosition(*position);
+    }
+}
+
+constexpr double BSPLINE_TOL = 0.001;
+constexpr double NO_POWER = 0.0;
+constexpr double DEFAULT_START_POWER = 1.0 / 3.0;
+
 } // anonymous namespace
-static constexpr double BSPLINE_TOL = 0.001;
-static constexpr double NO_POWER = 0.0;
-static constexpr double DEFAULT_START_POWER = 1.0/3.0;
 
 /**
  * Notifies the path manipulator when something changes the path being edited
@@ -104,7 +139,6 @@ private:
     bool _blocked;
 };
 
-void build_segment(Geom::PathBuilder &, Node *, Node *);
 PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPObject *path,
         Geom::Affine const &et, guint32 outline_color, Glib::ustring lpe_key)
     : PointManipulator(mpm._path_data.node_data.desktop, *mpm._path_data.node_data.selection)
@@ -255,6 +289,11 @@ void PathManipulator::invertSelectionInSubpaths()
             }
         }
     }
+}
+
+NodeFactory PathManipulator::createNodeFactory(std::span<NodeTypeRequest const> request_sequence)
+{
+    return {request_sequence, this};
 }
 
 /** Insert a new node in the middle of each selected segment. */
@@ -416,7 +455,7 @@ void PathManipulator::copySelectedPath(Geom::PathBuilder *builder)
                 if (!builder->inPath() || !prev) {
                     builder->moveTo(node.position());
                 } else {
-                    build_segment(*builder, prev, &node);
+                    node.writeSegment(*builder, *prev);
                 }
                 prev = &node;
                 is_last_node = true;
@@ -428,7 +467,7 @@ void PathManipulator::copySelectedPath(Geom::PathBuilder *builder)
         // Complete the path, especially for closed sub paths where the last node is selected
         if (subpath->closed() && is_last_node) {
             if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate())   {
-                build_segment(*builder, prev, subpath->begin().ptr());
+                subpath->front().writeSegment(*builder, *prev);
             }
             // if that segment is linear, we just call closePath().
             builder->closePath();
@@ -796,11 +835,11 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
     } else if (mode == NodeDeleteMode::line_segment) {
         // Handle line straigtening
         if (start.prev()) {
-            start.prev()->setType(NodeType::NODE_CUSP);
+            start.prev()->setType(NodeType::NODE_CUSP, true);
             start.prev()->front()->move(start.prev()->position());
         }
         if (end) {
-            end->setType(NodeType::NODE_CUSP);
+            end->setType(NodeType::NODE_CUSP, true);
             end->back()->move(end->position());
         }
     }
@@ -910,26 +949,16 @@ void PathManipulator::reverseSubpaths(bool selected_only)
 /** Make selected segments curves / lines. */
 void PathManipulator::setSegmentType(SegmentType type)
 {
-    if (_selection.empty()) return;
-    for (auto & _subpath : _subpaths) {
-        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-            NodeList::iterator k = j.next();
-            if (!(k && j->selected() && k->selected())) continue;
-            switch (type) {
-            case SEGMENT_STRAIGHT:
-                if (j->front()->isDegenerate() && k->back()->isDegenerate())
-                    break;
-                j->front()->move(j->position());
-                k->back()->move(k->position());
-                break;
-            case SEGMENT_CUBIC_BEZIER:
-                if (!j->front()->isDegenerate() || !k->back()->isDegenerate())
-                    break;
-                // move both handles to 1/3 of the line
-                j->front()->move(j->position() + (k->position() - j->position()) / 3);
-                k->back()->move(k->position() + (j->position() - k->position()) / 3);
-                break;
+    if (_selection.empty()) {
+        return;
+    }
+    for (auto &subpath : _subpaths) {
+        for (auto node = subpath->begin(); node != subpath->end(); ++node) {
+            auto next = node.next();
+            if (!next || !node->selected() || !next->selected()) {
+                continue;
             }
+            next->changePrecedingSegmentType(type, *node);
         }
     }
 }
@@ -937,7 +966,7 @@ void PathManipulator::setSegmentType(SegmentType type)
 void PathManipulator::scaleHandle(Node *n, int which, int dir, bool pixel)
 {
     if (n->type() == NODE_SYMMETRIC || n->type() == NODE_AUTO) {
-        n->setType(NODE_SMOOTH);
+        n->setType(NODE_SMOOTH, true);
     }
     Handle *h = _chooseHandle(n, which);
     double length_change;
@@ -970,7 +999,7 @@ void PathManipulator::scaleHandle(Node *n, int which, int dir, bool pixel)
 void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
 {
     if (n->type() != NODE_CUSP) {
-        n->setType(NODE_CUSP);
+        n->setType(NODE_CUSP, true);
     }
     Handle *h = _chooseHandle(n, which);
     if (h->isDegenerate()) return;
@@ -1092,7 +1121,12 @@ void PathManipulator::setControlsTransform(Geom::Affine const &tnew)
 void PathManipulator::hideDragPoint()
 {
     _dragpoint->setVisible(false);
-    _dragpoint->setIterator(NodeList::iterator());
+    _dragpoint->setIterator({});
+}
+
+NodeSharedData const &PathManipulator::getNodeSharedData() const
+{
+    return _multi_path_manipulator._path_data.node_data;
 }
 
 /** Insert a node in the segment beginning with the supplied iterator,
@@ -1115,7 +1149,10 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
     ++insert_at;
 
     NodeList::iterator inserted;
-    if (first->front()->isDegenerate() && second->back()->isDegenerate()) {
+    // TODO: refactor so that a dynamic cast is not needed.
+    if (auto *arc_endpoint = dynamic_cast<Inkscape::UI::EllipticalArcEndNode *>(second.ptr())) {
+        inserted = list.insert(insert_at, arc_endpoint->subdivideArc(t).release());
+    } else if (first->front()->isDegenerate() && second->back()->isDegenerate()) {
         // for a line segment, insert a cusp node
         Node *n = new Node(_multi_path_manipulator._path_data.node_data,
             Geom::lerp(t, first->position(), second->position()));
@@ -1265,98 +1302,83 @@ void PathManipulator::_createControlPointsFromGeometry()
 {
     clear();
 
-    // sanitize pathvector and store it in SPCurve,
-    // so that _updateDragPoint doesn't crash on paths with naked movetos
+    // XML Tree being used here directly while it shouldn't be.
+    auto const requests =
+        read_node_type_requests(_path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr);
+
     Geom::PathVector pathv;
     if (_is_bspline) {
         pathv = pathv_to_cubicbezier(_spcurve.get_pathvector(), false);
     } else {
-        pathv = pathv_to_linear_and_cubic_beziers(_spcurve.get_pathvector());
+        pathv = remove_elliptical_arcs_if_not_requested(_spcurve.get_pathvector(), requests);
     }
-    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
-        // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
-        // When we erase an element, the next one slides into position,
-        // so we do not increment the iterator even though it is theoretically invalidated.
-        if (i->empty()) {
-            i = pathv.erase(i);
-        } else {
-            ++i;
-        }
-    }
+
+    // sanitize pathvector and store it in SPCurve,
+    // so that _updateDragPoint doesn't crash on paths with naked movetos
+    sanitize_path_vector(pathv);
     if (pathv.empty()) {
         return;
     }
     _spcurve = SPCurve(pathv);
-
     pathv *= _getTransform();
 
+    auto factory = createNodeFactory(requests);
+
     // in this loop, we know that there are no zero-segment subpaths
-    for (auto & pit : pathv) {
-        // prepare new subpath
-        SubpathPtr subpath(new NodeList(_subpaths));
+    for (auto const &geometric_path : pathv) {
+        auto subpath = std::make_shared<NodeList>(_subpaths);
         _subpaths.push_back(subpath);
 
-        Node *previous_node = new Node(_multi_path_manipulator._path_data.node_data, pit.initialPoint());
-        subpath->push_back(previous_node);
+        auto first_node_on_path = factory.createInitialNode(geometric_path);
+        Node *previous_node = first_node_on_path.get();
+        subpath->push_back(first_node_on_path.release());
 
-        bool closed = pit.closed();
+        bool const closed = geometric_path.closed();
 
-        for (Geom::Path::iterator cit = pit.begin(); cit != pit.end(); ++cit) {
-            Geom::Point pos = cit->finalPoint();
-            Node *current_node;
+        for (auto curve_it = geometric_path.begin(); curve_it != geometric_path.end(); ++curve_it) {
+            Node *current_node = nullptr;
             // if the closing segment is degenerate and the path is closed, we need to move
             // the handle of the first node instead of creating a new one
-            if (closed && cit == --(pit.end())) {
+            if (closed && curve_it == std::prev(geometric_path.end())) {
                 current_node = subpath->begin().get_pointer();
             } else {
-                /* regardless of segment type, create a new node at the end
-                 * of this segment (unless this is the last segment of a closed path
-                 * with a degenerate closing segment */
-                current_node = new Node(_multi_path_manipulator._path_data.node_data, pos);
-                subpath->push_back(current_node);
+                auto new_node = factory.createNextNode(*curve_it);
+                current_node = new_node.get();
+                subpath->push_back(new_node.release());
             }
             // if this is a bezier segment, move handles appropriately
-            // TODO: I don't know why the dynamic cast below doesn't want to work
-            //       when I replace BezierCurve with CubicBezier. Might be a bug
-            //       somewhere in pathv_to_linear_and_cubic_beziers
-            Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const*>(&*cit);
-            if (bezier && bezier->order() == 3)
-            {
-                previous_node->front()->setPosition((*bezier)[1]);
-                current_node ->back() ->setPosition((*bezier)[2]);
-            }
+            // TODO: this probably isn't the right place for this code
+            Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const *>(&*curve_it);
+            set_handle_position(previous_node->front(), compute_handle_position(bezier, BezierHandleType::INITIAL));
+            set_handle_position(current_node->back(), compute_handle_position(bezier, BezierHandleType::FINAL));
+
             previous_node = current_node;
         }
         // If the path is closed, make the list cyclic
-        if (pit.closed()) subpath->setClosed(true);
-    }
+        if (closed) {
+            // If the closing segment is degenerate, the first node of the subpath is at the end
+            // of the last "real" segment of the path (excluding the closing segment) and may therefore
+            // be affected by the geometry of that segment
+            if (geometric_path.size_open() && geometric_path.closingSegment().isDegenerate()) {
+                auto replacement_node = factory.createNextNode(geometric_path.back_open());
+                subpath->pop_front();
+                subpath->push_front(replacement_node.release());
 
-    // we need to set the nodetypes after all the handles are in place,
-    // so that pickBestType works correctly
-    // TODO maybe migrate to inkscape:node-types?
-    // TODO move this into SPPath - do not manipulate directly
-
-    //XML Tree being used here directly while it shouldn't be.
-    gchar const *nts_raw = _path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr;
-    /* Calculate the needed length of the nodetype string.
-     * For closed paths, the entry is duplicated for the starting node,
-     * so we can just use the count of segments including the closing one
-     * to include the extra end node. */
-    /* pad the string to required length with a bogus value.
-     * 'b' and any other letter not recognized by the parser causes the best fit to be set
-     * as the node type */
-    auto const *tsi = nts_raw ? nts_raw : "";
-    for (auto & _subpath : _subpaths) {
-        for (auto & j : *_subpath) {
-            char nodetype = (*tsi) ? (*tsi++) : 'b';
-            j.setType(Node::parse_nodetype(nodetype), false);
-        }
-        if (_subpath->closed() && *tsi) {
-            // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
-            // the first one to remain backward compatible.
-            _subpath->begin()->setType(Node::parse_nodetype(*tsi++), false);
+                // Since the node was recreated, set up its Bézier handles again
+                set_handle_position(
+                    subpath->front().front(),
+                    compute_handle_position(dynamic_cast<Geom::BezierCurve const *>(&geometric_path.front()),
+                                            BezierHandleType::INITIAL));
+                set_handle_position(
+                    subpath->front().back(),
+                    compute_handle_position(dynamic_cast<Geom::BezierCurve const *>(&geometric_path.back_open()),
+                                            BezierHandleType::FINAL));
+            }
+            subpath->setClosed(true);
         }
     }
+
+    set_node_types(_subpaths, requests);
 }
 
 //determines if the trace has a bspline effect and the number of steps that it takes
@@ -1470,14 +1492,14 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         NodeList::iterator prev = subpath->begin();
         builder.moveTo(prev->position());
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
-            build_segment(builder, prev.ptr(), i.ptr());
+            i->writeSegment(builder, *prev);
             prev = i;
         }
         if (subpath->closed()) {
             // Here we link the last and first node if the path is closed.
-            // If the last segment is Bezier, we add it.
-            if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate()) {
-                build_segment(builder, prev.ptr(), subpath->begin().ptr());
+            // If the last segment is not straight, we add it.
+            if (!subpath->front().isPrecedingSegmentStraight()) {
+                subpath->front().writeSegment(builder, *prev);
             }
             // if that segment is linear, we just call closePath().
             builder.closePath();
@@ -1486,16 +1508,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
     builder.flush();
     Geom::PathVector pathv = builder.peek() * _getTransform().inverse();
-    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
-        // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
-        // When we erase an element, the next one slides into position,
-        // so we do not increment the iterator even though it is theoretically invalidated.
-        if (i->empty()) {
-            i = pathv.erase(i);
-        } else {
-            ++i;
-        }
-    }
+    sanitize_path_vector(pathv);
     if (pathv.empty()) {
         return;
     }
@@ -1524,37 +1537,24 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
 }
 
-/** Build one segment of the geometric representation.
- * @relates PathManipulator */
-void build_segment(Geom::PathBuilder &builder, Node *prev_node, Node *cur_node)
-{
-    if (cur_node->back()->isDegenerate() && prev_node->front()->isDegenerate())
-    {
-        // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
-        // and trying to display a path using them results in funny artifacts.
-        builder.lineTo(cur_node->position());
-    } else {
-        // this is a bezier segment
-        builder.curveTo(
-            prev_node->front()->position(),
-            cur_node->back()->position(),
-            cur_node->position());
-    }
-}
-
-/** Construct a node type string to store in the sodipodi:nodetypes attribute. */
+/** Construct a node type string to store in the sodipodi:nodetypes attribute.
+ *  @pre no single-node subpaths
+ */
 std::string PathManipulator::_createTypeString()
 {
-    // precondition: no single-node subpaths
-    std::stringstream tstr;
-    for (auto & _subpath : _subpaths) {
-        for (auto & j : *_subpath) {
-            tstr << j.type();
+    std::stringstream output;
+
+    for (auto const &subpath : _subpaths) {
+        for (auto const &node : *subpath) {
+            node.writeType(output);
         }
         // nodestring format peculiarity: first node is counted twice for closed paths
-        if (_subpath->closed()) tstr << _subpath->begin()->type();
+        if (subpath->closed()) {
+            subpath->begin()->writeType(output);
+        }
     }
-    return tstr.str();
+
+    return output.str();
 }
 
 /** Update the path outline. */
@@ -1650,12 +1650,10 @@ void PathManipulator::_setGeometry()
 /** Figure out in what attribute to store the nodetype string. */
 Glib::ustring PathManipulator::_nodetypesKey()
 {
-    auto lpeobj = cast<LivePathEffectObject>(_path);
-    if (!lpeobj) {
-        return "sodipodi:nodetypes";
-    } else {
+    if (is<LivePathEffectObject>(_path)) {
         return _lpe_key + "-nodetypes";
     }
+    return "sodipodi:nodetypes";
 }
 
 /** Return the XML node we are editing.
@@ -1698,7 +1696,7 @@ bool PathManipulator::_nodeClicked(Node *n, ButtonReleaseEvent const &event)
     } else if (held_ctrl(event)) {
         // Ctrl+click: cycle between node types
         if (!n->isEndNode()) {
-            n->setType(static_cast<NodeType>((n->type() + 1) % NODE_LAST_REAL_TYPE));
+            n->setType(static_cast<NodeType>((n->type() + 1) % NODE_LAST_REAL_TYPE), true);
             update();
             _commit(_("Cycle node type"));
         }

@@ -35,25 +35,33 @@ set(ui_SRC
 	knot/knot-holder-entity.cpp
 	knot/knot-ptr.cpp
 
+	tool/bezier-curve-handler.cpp
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
 	tool/curve-drag-point.cpp
+	tool/elliptical-arc-end-node.cpp
+	tool/elliptical-arc-handler.cpp
+	tool/elliptical-manipulator.cpp
 	tool/modifier-tracker.cpp
 	tool/multi-path-manipulator.cpp
+	tool/node-factory.cpp
 	tool/node.cpp
 	tool/path-manipulator.cpp
+	tool/remove-elliptical-arcs.cpp
 	tool/selectable-control-point.cpp
 	tool/transform-handle-set.cpp
 
 	toolbar/arc-toolbar.cpp
+	toolbar/booleans-toolbar.cpp
 	toolbar/box3d-toolbar.cpp
 	toolbar/calligraphy-toolbar.cpp
+	toolbar/command-toolbar.cpp
 	toolbar/connector-toolbar.cpp
 	toolbar/dropper-toolbar.cpp
-	toolbar/marker-toolbar.cpp
 	toolbar/eraser-toolbar.cpp
 	toolbar/gradient-toolbar.cpp
 	toolbar/lpe-toolbar.cpp
+	toolbar/marker-toolbar.cpp
 	toolbar/measure-toolbar.cpp
 	toolbar/mesh-toolbar.cpp
 	toolbar/node-toolbar.cpp
@@ -63,19 +71,16 @@ set(ui_SRC
 	toolbar/pencil-toolbar.cpp
 	toolbar/rect-toolbar.cpp
 	toolbar/select-toolbar.cpp
-	toolbar/booleans-toolbar.cpp
+	toolbar/snap-toolbar.cpp
 	toolbar/spiral-toolbar.cpp
 	toolbar/spray-toolbar.cpp
 	toolbar/star-toolbar.cpp
 	toolbar/text-toolbar.cpp
+	toolbar/tool-toolbar.cpp
 	toolbar/toolbar.cpp
+	toolbar/toolbars.cpp
 	toolbar/tweak-toolbar.cpp
 	toolbar/zoom-toolbar.cpp
-
-	toolbar/command-toolbar.cpp
-	toolbar/tool-toolbar.cpp
-	toolbar/snap-toolbar.cpp
-	toolbar/toolbars.cpp
 
 	tools/arc-tool.cpp
 	tools/box3d-tool.cpp
@@ -141,7 +146,7 @@ set(ui_SRC
 	dialog/font-collections-manager.cpp
 	dialog/font-substitution.cpp
 	dialog/global-palettes.cpp
-    dialog/glyphs.cpp
+	dialog/glyphs.cpp
 	dialog/grid-arrange-tab.cpp
 	dialog/guides.cpp
 	dialog/icon-preview.cpp
@@ -311,7 +316,7 @@ set(ui_SRC
 	pack.h
 	popup-menu.h
 	shape-editor.h
-        shape-editor-knotholders.h
+	shape-editor-knotholders.h
 	simple-pref-pusher.h
 	shortcuts.h
 	svg-renderer.h
@@ -397,16 +402,23 @@ set(ui_SRC
 	knot/knot-holder-entity.h
 	knot/knot-ptr.h
 
+	tool/bezier-curve-handler.h
 	tool/commit-events.h
 	tool/control-point-selection.h
 	tool/control-point.h
 	tool/curve-drag-point.h
+	tool/curve-event-handler.h
+	tool/elliptical-arc-end-node.h
+	tool/elliptical-arc-handler.h
+	tool/elliptical-manipulator.h
 	tool/manipulator.h
 	tool/modifier-tracker.h
 	tool/multi-path-manipulator.h
+	tool/node-factory.h
 	tool/node-types.h
 	tool/node.h
 	tool/path-manipulator.h
+	tool/remove-elliptical-arcs.h
 	tool/selectable-control-point.h
 	tool/shape-record.h
 	tool/transform-handle-set.h

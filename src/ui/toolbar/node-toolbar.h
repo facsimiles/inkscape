@@ -114,6 +114,7 @@ private:
     void edit_auto();
     void edit_toline();
     void edit_tocurve();
+    void edit_toarc();
     void on_pref_toggled(Gtk::ToggleButton *item, Glib::ustring const &path);
 
     void setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name);

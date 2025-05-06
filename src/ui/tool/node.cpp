@@ -21,7 +21,9 @@
 #include "object/sp-namedview.h"
 #include "snap.h"
 #include "ui/modifiers.h"
+#include "ui/tool/bezier-curve-handler.h"
 #include "ui/tool/control-point-selection.h"
+#include "ui/tool/elliptical-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/events/canvas-event.h"
@@ -129,6 +131,11 @@ bool are_collinear_within_serializing_error(const Geom::Point &A, const Geom::Po
     return Geom::are_near(C_reflect_scaled, A, tolerance_C_reflect_scaled + tolerance_A);
 }
 
+/// Compute a unit vector in the direction from first to second control point
+Geom::Point direction(Geom::Point const &first, Geom::Point const &second)
+{
+    return Geom::unit_vector(second - first);
+}
 } // namespace
 
 namespace Inkscape {
@@ -140,30 +147,7 @@ const double DEFAULT_START_POWER = 1.0 / 3.0;
 
 std::ostream &operator<<(std::ostream &out, NodeType type)
 {
-    switch (type) {
-        case NODE_CUSP:
-            out << 'c';
-            break;
-        case NODE_SMOOTH:
-            out << 's';
-            break;
-        case NODE_AUTO:
-            out << 'a';
-            break;
-        case NODE_SYMMETRIC:
-            out << 'z';
-            break;
-        default:
-            out << 'b';
-            break;
-    }
-    return out;
-}
-
-/** Computes an unit vector of the direction from first to second control point */
-static Geom::Point direction(Geom::Point const &first, Geom::Point const &second)
-{
-    return Geom::unit_vector(second - first);
+    return out << static_cast<char>(encode_node_type(type));
 }
 
 Geom::Point Handle::_saved_other_pos(0, 0);
@@ -295,16 +279,8 @@ void Handle::setPosition(Geom::Point const &p)
     _handle_line->set_coords(_parent->position(), position());
 
     // update degeneration info and visibility
-    if (Geom::are_near(position(), _parent->position()))
-        _degenerate = true;
-    else
-        _degenerate = false;
-
-    if (_parent->_handles_shown && _parent->visible() && !_degenerate) {
-        setVisible(true);
-    } else {
-        setVisible(false);
-    }
+    _degenerate = Geom::are_near(position(), _parent->position());
+    setVisible(!_degenerate && _parent->areHandlesVisible());
 }
 
 void Handle::setLength(double len)
@@ -829,6 +805,9 @@ void Node::move(Geom::Point const &new_pos)
             nextNode->back()->setPosition(_pm()._bsplineHandleReposition(nextNode->back(), nextNodeWeight));
         }
     }
+    if (nextNode) {
+        nextNode->notifyPrecedingNodeUpdate(*this);
+    }
     Inkscape::UI::Tools::sp_update_helperpath(_desktop);
 }
 
@@ -855,6 +834,10 @@ void Node::transform(Geom::Affine const &m)
     setPosition(position() * m);
     _front.setPosition(_front.position() * m);
     _back.setPosition(_back.position() * m);
+
+    if (nextNode) {
+        nextNode->notifyPrecedingNodeUpdate(*this);
+    }
 
     // move the involved handles. First the node ones, later the adjoining ones.
     if (_pm()._isBSpline()) {
@@ -971,12 +954,35 @@ void Node::showHandles(bool v)
     }
 }
 
+bool Node::isPrecedingSegmentStraight() const
+{
+    auto const *previous_node = _prev();
+    return previous_node && _back.isDegenerate() && previous_node->_front.isDegenerate();
+}
+
 void Node::updateHandles()
 {
     _handleControlStyling();
 
     _front._handleControlStyling();
     _back._handleControlStyling();
+}
+
+void Node::writeSegment(Geom::PathSink &output, Node const &previous) const
+{
+    if (_back.isDegenerate() && previous._front.isDegenerate()) {
+        // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
+        // and trying to display a path using them results in funny artifacts.
+        output.lineTo(position());
+    } else {
+        // The preceding segment is a Bezier curve
+        output.curveTo(previous._front.position(), _back.position(), position());
+    }
+}
+
+std::unique_ptr<CurveHandler> Node::createEventHandlerForPrecedingCurve()
+{
+    return std::make_unique<BezierCurveHandler>(_pm()._isBSpline());
 }
 
 void Node::setType(NodeType type, bool update_handles)
@@ -1100,6 +1106,34 @@ void Node::setType(NodeType type, bool update_handles)
     updateState();
 }
 
+void Node::changePrecedingSegmentType(SegmentType new_type, Node &preceding_node)
+{
+    if (new_type == SEGMENT_STRAIGHT) {
+        if (isPrecedingSegmentStraight()) {
+            return; // Nothing to do
+        }
+        preceding_node.front()->move(preceding_node.position());
+        _back.move(position());
+    } else if (new_type == SEGMENT_CUBIC_BEZIER) {
+        if (!preceding_node.front()->isDegenerate() || !_back.isDegenerate()) {
+            return; // Nothing to do
+        }
+
+        // move both handles to 1/3 of the line
+        auto const prev_pos = preceding_node.position();
+        auto const this_pos = position();
+        preceding_node.front()->move(Geom::lerp(1.0 / 3.0, prev_pos, this_pos));
+        _back.move(Geom::lerp(2.0 / 3.0, prev_pos, this_pos));
+    } else if (new_type == SEGMENT_ELLIPTICAL) {
+        Geom::CubicBezier const current_bezier{preceding_node.position(), preceding_node.front()->position(),
+                                               _back.position(), position()};
+        preceding_node.front()->retract();
+        _back.retract();
+        auto replacement_node = _pm().createNodeFactory().createArcEndpointNode(current_bezier);
+        std::move(*this)._replace(replacement_node.release());
+    }
+}
+
 void Node::pickBestType()
 {
     _type = NODE_CUSP;
@@ -1150,22 +1184,6 @@ bool Node::isEndNode() const
 void Node::sink()
 {
     _canvas_item_ctrl->lower_to_bottom();
-}
-
-NodeType Node::parse_nodetype(char x)
-{
-    switch (x) {
-        case 'a':
-            return NODE_AUTO;
-        case 'c':
-            return NODE_CUSP;
-        case 's':
-            return NODE_SMOOTH;
-        case 'z':
-            return NODE_SYMMETRIC;
-        default:
-            return NODE_PICK_BEST;
-    }
 }
 
 bool Node::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &event)
@@ -1607,6 +1625,11 @@ Node *Node::nodeAwayFrom(Handle *h)
     return nullptr;
 }
 
+void Node::_replace(Node *replacement) &&
+{
+    ln_list->replace(NodeList::get_iterator(this), replacement);
+}
+
 Glib::ustring Node::_getTip(unsigned state) const
 {
     bool isBSpline = _pm()._isBSpline();
@@ -1791,6 +1814,26 @@ NodeList::iterator NodeList::insert(iterator pos, Node *x)
     ins->ln_prev = x;
     x->ln_list = this;
     return iterator(x);
+}
+
+void NodeList::replace(iterator pos, Node *replacement)
+{
+    assert(replacement);
+    Node *to_replace = static_cast<Node *>(pos._node);
+    bool const was_selected = to_replace->selected();
+
+    ListNode *prev = to_replace->ln_prev;
+    ListNode *next = to_replace->ln_next;
+
+    to_replace->_pm().hideDragPoint();
+    delete to_replace;
+
+    prev->ln_next = replacement;
+    next->ln_prev = replacement;
+    replacement->ln_prev = prev;
+    replacement->ln_next = next;
+    replacement->ln_list = this;
+    replacement->select(was_selected);
 }
 
 void NodeList::splice(iterator pos, NodeList &list)
