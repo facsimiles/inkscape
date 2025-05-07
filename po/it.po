@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-06 01:22+0000\n"
+"PO-Revision-Date: 2025-05-07 23:22+0000\n"
 "Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
@@ -10822,7 +10822,7 @@ msgstr "Ruota gli oggetti ad angoli multipli del valore di scatto"
 
 #: ../src/actions/actions-transform.cpp:148
 msgid "Rotate Screen"
-msgstr "Ruota lo schermo"
+msgstr "Ruota schermo"
 
 #: ../src/actions/actions-transform.cpp:148
 msgid "Rotate selected objects relative to zoom level"
