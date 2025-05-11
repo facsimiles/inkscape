@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-03 10:28+0000\n"
+"PO-Revision-Date: 2025-05-11 15:07+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sk/>\n"
@@ -2262,7 +2262,7 @@ msgstr "Rovné zakončenie"
 
 #: ../../build/share/markers/markers.svg.h:38
 msgid "Serif cap"
-msgstr ""
+msgstr "Pätka"
 
 #: ../../build/share/palettes/palettes.h:2
 msgctxt "Palette"
@@ -3271,14 +3271,12 @@ msgid "Alternating chevron"
 msgstr "Chevron"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Inverted circle"
-msgstr "Invertované"
+msgstr "Invertované kruhy"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Diamond Plate"
-msgstr "Dilatovať"
+msgstr "Diamantové"
 
 #: ../../build/share/paint/patterns.svg.h:1 ../src/object/sp-ellipse.cpp:430
 #: ../share/ui/toolbar-lpe.ui:107
@@ -32392,9 +32390,8 @@ msgid "Below current"
 msgstr "Pod aktuálnu"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:169
-#, fuzzy
 msgid "Add Live Path Effect"
-msgstr "Pridať efekt cesty"
+msgstr "Pridaj živý efekt cesty"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:299
 msgid "Deactivate path effect"
@@ -32428,9 +32425,8 @@ msgstr ""
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:518
 #: ../src/ui/dialog/livepatheffect-editor.cpp:568
-#, fuzzy
 msgid "Select a path, shape, clone or group"
-msgstr "Vybrať cestu alebo tvar"
+msgstr "Vyber cestu, tvar alebo skupinu"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:542
 msgid "Select %1 with %2 LPE"
@@ -32647,11 +32643,11 @@ msgstr "Zmeniť krytie"
 #: ../src/ui/dialog/object-properties.cpp:422
 #: ../src/ui/dialog/object-properties.cpp:428
 msgid "_ID:"
-msgstr "_ID: "
+msgstr "_ID:"
 
 #: ../src/ui/dialog/object-properties.cpp:63
 msgid "_Title:"
-msgstr "_Titulok:"
+msgstr "Titulok:"
 
 #: ../src/ui/dialog/object-properties.cpp:64
 msgid "_DPI SVG:"
