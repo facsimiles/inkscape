@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <epoxy/gl.h>
 #include "pixelstreamer.h"
+
+#include <cassert>
+#include <iostream>
+#include <vector>
+#include <epoxy/gl.h>
+
 #include "helper/mathfns.h"
 
 namespace Inkscape {
@@ -234,7 +239,10 @@ class AsynchronousPixelStreamer : public PixelStreamer
     static int constexpr minbufsize = 0x4000; // 16 KiB
     static int constexpr expire_timeout = 10000;
 
-    static int constexpr size_to_bucket(int size) { return Util::floorlog2((size - 1) / minbufsize) + 1; }
+    static int constexpr size_to_bucket(unsigned size)
+    {
+        return Util::index_to_binary_bucket<unsigned, minbufsize>(size);
+    }
     static int constexpr bucket_maxsize(int b) { return minbufsize * (1 << b); }
 
     struct Buffer

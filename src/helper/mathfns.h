@@ -13,11 +13,11 @@
 #ifndef INKSCAPE_HELPER_MATHFNS_H
 #define INKSCAPE_HELPER_MATHFNS_H
 
+#include <bit>
 #include <cmath>
-#include <2geom/point.h>
+#include <concepts>
 
-namespace Inkscape {
-namespace Util {
+namespace Inkscape::Util {
 
 /**
  * \return x rounded to the nearest multiple of c1 plus c0.
@@ -55,22 +55,20 @@ inline double round_to_upper_multiple_plus(double x, double const c1, double con
     return std::ceil((x - c0) / c1) * c1 + c0;
 }
 
-/// Returns floor(log_2(x)), assuming x >= 1.
-// Note: This is a naive implementation.
-// Todo: (C++20) Replace with std::bit_floor.
-template <typename T>
-int constexpr floorlog2(T x)
+/// Returns floor(log_2(x)), assuming x >= 1; if x == 0, returns -1.
+int constexpr floorlog2(std::unsigned_integral auto x)
 {
-    int n = -1;
-    while (x > 0) {
-        x /= 2;
-        n++;
-    }
-    return n;
+    return std::bit_width(x) - 1;
+}
+
+template <std::unsigned_integral T, T size>
+int constexpr index_to_binary_bucket(T index)
+{
+    return floorlog2((index - 1) / size) + 1;
 }
 
 /// Returns \a a mod \a b, always in the range 0..b-1, assuming b >= 1.
-template <typename T, typename std::enable_if<std::is_integral<T>::value, bool>::type = true>
+template <std::integral T>
 T constexpr safemod(T a, T b)
 {
     a %= b;
@@ -78,33 +76,41 @@ T constexpr safemod(T a, T b)
 }
 
 /// Returns \a a rounded down to the nearest multiple of \a b, assuming b >= 1.
-template <typename T, typename std::enable_if<std::is_integral<T>::value, bool>::type = true>
+template <std::integral T>
 T constexpr round_down(T a, T b)
 {
     return a - safemod(a, b);
 }
 
 /// Returns \a a rounded up to the nearest multiple of \a b, assuming b >= 1.
-template <typename T, typename std::enable_if<std::is_integral<T>::value, bool>::type = true>
+template <std::integral T>
 T constexpr round_up(T a, T b)
 {
     return round_down(a - 1, b) + b;
 }
 
+template <typename T>
+concept strictly_ordered = requires(T a, T b) {
+    { a < b } -> std::convertible_to<bool>;
+    { a > b } -> std::convertible_to<bool>;
+};
+
 /**
  * Just like std::clamp, except it doesn't deliberately crash if lo > hi due to rounding errors,
  * so is safe to use with floating-point types. (Note: compiles to branchless.)
  */
-template <typename T>
+template <strictly_ordered T>
 T safeclamp(T val, T lo, T hi)
 {
-    if (val < lo) return lo;
-    if (val > hi) return hi;
+    if (val < lo) {
+        return lo;
+    }
+    if (val > hi) {
+        return hi;
+    }
     return val;
 }
-
-} // namespace Util
-} // namespace Inkscape
+} // namespace Inkscape::Util
 
 #endif // INKSCAPE_HELPER_MATHFNS_H
 

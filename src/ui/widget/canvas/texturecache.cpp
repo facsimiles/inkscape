@@ -17,7 +17,7 @@ class BasicTextureCache : public TextureCache
     static int constexpr min_dimension = 16;
     static int constexpr expiration_timeout = 10000;
 
-    static int constexpr dim_to_ind(int dim) { return Util::floorlog2((dim - 1) / min_dimension) + 1; }
+    static int constexpr dim_to_ind(unsigned dim) { return Util::index_to_binary_bucket<unsigned, min_dimension>(dim); }
     static int constexpr ind_to_maxdim(int index) { return min_dimension * (1 << index); }
 
     static std::pair<int, int> dims_to_inds(Geom::IntPoint const &dims) { return { dim_to_ind(dims.x()), dim_to_ind(dims.y()) }; }
