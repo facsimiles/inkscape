@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-03 10:28+0000\n"
+"PO-Revision-Date: 2025-05-11 15:07+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/sk/>\n"
@@ -8874,7 +8874,7 @@ msgstr "Pridaj Rohy"
 
 #: ../src/actions/actions-object.cpp:383
 msgid "Add Corners Live Path Effect to path"
-msgstr "Pridaj efekt živej cesty na cestu"
+msgstr "Pridaj Zaoblené rohy na cestu"
 
 #: ../src/actions/actions-object.cpp:384
 msgid "Stroke to Path"
@@ -16804,14 +16804,13 @@ msgid "Create gaps in self-intersections, as in Celtic knots"
 msgstr "Vytvorí medzeri mendzi prienik zvolených ciest. Ako Keltické Ornamenty"
 
 #: ../src/live_effects/effect.cpp:188
-#, fuzzy
 msgctxt "path effect"
 msgid "Construct grid"
 msgstr "Zostrojiť mriežku"
 
 #: ../src/live_effects/effect.cpp:191
 msgid "Create a (perspective) grid from a 3-node path"
-msgstr ""
+msgstr "Vytvor perspektývnu mriežku s 3 uzlov"
 
 #: ../src/live_effects/effect.cpp:202
 msgctxt "path effect"
@@ -21808,10 +21807,8 @@ msgid "Axonometric Grid"
 msgstr "Axonometrická mriežka"
 
 #: ../src/object/sp-grid.cpp:610 ../src/ui/dialog/inkscape-preferences.cpp:2164
-#, fuzzy
-#| msgid "Polar Grid"
 msgid "Modular Grid"
-msgstr "Polárna mriežka"
+msgstr "Modulárna mriežka"
 
 #: ../src/object/sp-guide.cpp:490
 msgid "Deleted"
@@ -24660,9 +24657,8 @@ msgid "Icon Preview"
 msgstr "Náhľad iko_ny..."
 
 #: ../src/ui/dialog/dialog-data.cpp:45
-#, fuzzy
 msgid "Path E_ffects"
-msgstr "E_fekty ciest..."
+msgstr "Efekty ciest"
 
 #: ../src/ui/dialog/dialog-data.cpp:46
 #, fuzzy
@@ -25048,43 +25044,37 @@ msgid "Edit embedded script"
 msgstr "Upraviť vnorený skript"
 
 #: ../src/ui/dialog/document-properties.cpp:1448
-#, fuzzy
-#| msgid "Save Grid"
 msgid "New Grid"
-msgstr "Uložiť mriežku"
+msgstr "Nová mriežka"
 
 #: ../src/ui/dialog/document-properties.cpp:1459
-#, fuzzy
-#| msgid "there was no name defined for it."
 msgid "There are no grids defined."
-msgstr "názov preň nebol definovaný."
+msgstr "V dokumente niesu žiadne mriežky."
 
 #: ../src/ui/dialog/document-properties.cpp:1673
 msgid "Create new grid"
 msgstr "Vytvoriť novú mriežku"
 
 #: ../src/ui/dialog/document-properties.cpp:1708
-#, fuzzy
 msgctxt "Grid"
 msgid "Rectangular"
-msgstr "Pravouhlá mriežka"
+msgstr "Normálna"
 
 #: ../src/ui/dialog/document-properties.cpp:1709
-#, fuzzy
 msgctxt "Grid"
 msgid "Axonometric"
-msgstr "Axonometrická mriežka"
+msgstr "Axonometrická"
 
 #: ../src/ui/dialog/document-properties.cpp:1710
 msgctxt "Grid"
 msgid "Modular"
-msgstr "Modulárny"
+msgstr "Modulárna"
 
 #
 # File: ../src/display/canvas-grid.cpp, line: 306
 #: ../src/ui/dialog/document-properties.cpp:1735
 msgid "Makes the grid available for working with on the canvas."
-msgstr "Spístupní mriežku na používanie na plátne"
+msgstr "Odomkne mriežku na používanie na plátne."
 
 #: ../src/ui/dialog/document-properties.cpp:1739
 msgid "Snap to visible _grid lines only"
@@ -25140,7 +25130,7 @@ msgstr ""
 
 #: ../src/ui/dialog/document-properties.cpp:1827
 msgid "Grid _units:"
-msgstr "_Jednotky mriežky:"
+msgstr "Jednotky mriežky:"
 
 #: ../src/ui/dialog/document-properties.cpp:1829
 msgid "_Origin X:"
@@ -25245,16 +25235,12 @@ msgid "Angle of z-axis"
 msgstr "Uhol osi z"
 
 #: ../src/ui/dialog/document-properties.cpp:1859
-#, fuzzy
-#| msgid "Grid line color"
 msgid "Grid color"
-msgstr "Farba čiar mriežky"
+msgstr "Farba mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:1860
-#, fuzzy
-#| msgid "Color of the minor grid lines"
 msgid "Color of the grid lines"
-msgstr "Farba vedľajších čiar mriežky"
+msgstr "Farba čiar mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:1874
 #, fuzzy
@@ -25269,57 +25255,43 @@ msgid "Number of lines"
 msgstr "Počet snímok"
 
 #: ../src/ui/dialog/document-properties.cpp:1878
-#, fuzzy
-#| msgid "Change index of knot"
 msgid "Change grid units"
-msgstr "Zmeniť index uzla"
+msgstr "Zmeniť jdenotky mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:1879
 #: ../src/ui/dialog/document-properties.cpp:1880
 #: ../src/ui/dialog/document-properties.cpp:1884
-#, fuzzy
-#| msgid "Page dimensions"
 msgid "Change grid dimensions"
-msgstr "Rozmery strany"
+msgstr "Rozmery mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:1881
-#, fuzzy
-#| msgid "Change gradient stop color"
 msgid "Change grid color"
-msgstr "Zmeniť farbu priehradky farebného prechodu"
+msgstr "Zmeniť farbu mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:1882
-#, fuzzy
-#| msgid "Change number of simplify steps "
 msgid "Change grid number of lines"
-msgstr "Zmeniť počet krokov zjednodušenia"
+msgstr "Zmeniť počet čiar v mriežke"
 
 #: ../src/ui/dialog/document-properties.cpp:1911
-#, fuzzy
-#| msgid "Delete guide"
 msgid "Delete this grid"
-msgstr "Zmazať vodidlo"
+msgstr "Zmazať mriežku"
 
 #: ../src/ui/dialog/document-properties.cpp:1915
 msgid "Remove grid"
 msgstr "Odstrániť mriežku"
 
 #: ../src/ui/dialog/document-properties.cpp:1931
-#, fuzzy
-#| msgid "Align"
 msgctxt "popup-align-grid-origin"
 msgid "Align"
-msgstr "Zarovnať"
+msgstr "Zarovnanie"
 
 #: ../src/ui/dialog/document-properties.cpp:1932
 msgid "Align grid origin relative to active page."
 msgstr "Zarovnaj Začiatočný bod mriežky relatívne na aktývnu stránku."
 
 #: ../src/ui/dialog/document-properties.cpp:1964
-#, fuzzy
-#| msgid "Change segment type"
 msgid "Change to a different grid type."
-msgstr "Zmeniť typ segmentu"
+msgstr "Zmeniť typ mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:2061
 #, fuzzy
@@ -29684,17 +29656,13 @@ msgstr "Rozostup Y:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
 #: ../src/ui/dialog/inkscape-preferences.cpp:2207
 #: ../src/ui/dialog/inkscape-preferences.cpp:2218
-#, fuzzy
-#| msgid "Guide co_lor:"
 msgid "Grid color:"
-msgstr "Farba vodidiel:"
+msgstr "Farba mriežky:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2175
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
-#, fuzzy
-#| msgid "Color used for normal grid lines"
 msgid "Color used for grid lines"
-msgstr "Farba pre bežné čiary mriežky"
+msgstr "Farba pre čiary mriežky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
 #: ../src/ui/dialog/inkscape-preferences.cpp:2194
@@ -29733,7 +29701,7 @@ msgstr "Šírka rozostrenia:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2212
 msgid "Width of grid modules"
-msgstr ""
+msgstr "Šírka modulov mriežky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2213
 #, fuzzy
@@ -29742,10 +29710,8 @@ msgid "Block height:"
 msgstr "Výška rozostrenia:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2213
-#, fuzzy
-#| msgid "Height of rectangle"
 msgid "Height of grid modules"
-msgstr "Výška obdĺžnika"
+msgstr "Výška modulov mriežky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2214
 #: ../share/ui/pattern-edit.glade:449
@@ -29770,10 +29736,8 @@ msgid "Margin Y:"
 msgstr "Začiatok Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2218
-#, fuzzy
-#| msgid "Color used for normal grid lines"
 msgid "Color used for grid blocks"
-msgstr "Farba pre bežné čiary mriežky"
+msgstr "Farba čiar mriežky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2246
 msgid "Display Options"
@@ -30771,9 +30735,8 @@ msgid "Restrict Snap Targets"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2701
-#, fuzzy
 msgid "Always snap to grids"
-msgstr "Prepnúť prichytávanie"
+msgstr "Vždy prichytávaj v mriežke"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2702
 msgid ""
@@ -32595,7 +32558,7 @@ msgstr "Počiatočný uhol"
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
 msgctxt "Polar arrange tab"
 msgid "<b>Anchor point:</b>"
-msgstr "<b>Bod ukotvenia:<b>"
+msgstr "<b>Bod ukotvenia:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
 msgctxt "Polar arrange tab"
@@ -37969,11 +37932,9 @@ msgid "Selection of the base element glyphs are composed of"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:101
-#, fuzzy
-#| msgid "Reset grid"
 msgctxt "Variable font axis"
 msgid "Element grid"
-msgstr "Obnoviť mriežku"
+msgstr "Element mriežky"
 
 #: ../src/ui/widget/font-variations.cpp:101
 msgid "Controls how many elements are used per one grid unit"
@@ -41972,7 +41933,7 @@ msgstr "Správa farieb"
 
 #: ../share/ui/menus.ui:540
 msgid "Page _Grid"
-msgstr "_Mriežka stránky"
+msgstr "Mriežka Stránky"
 
 #: ../share/ui/menus.ui:544
 msgid "G_uides"
@@ -42291,7 +42252,7 @@ msgstr "_Obrátiť smer"
 
 #: ../share/ui/menus.ui:1082
 msgid "Path E_ffects..."
-msgstr "E_fekty ciest..."
+msgstr "Efekty ciest..."
 
 #: ../share/ui/menus.ui:1088
 msgid "Paste Path _Effect"
@@ -43420,9 +43381,8 @@ msgid "Page margins"
 msgstr "Okraje strán"
 
 #: ../share/ui/toolbar-snap.ui:678
-#, fuzzy
 msgid "Grid Lines"
-msgstr "Vodidlo"
+msgstr "Čiary na Mriežke"
 
 #: ../share/ui/toolbar-snap.ui:822
 #, fuzzy
@@ -44578,12 +44538,11 @@ msgstr ""
 
 #: ../share/extensions/merge_styles.py:58
 msgid "There are no common styles between these elements."
-msgstr ""
+msgstr "Tieto objekty nemajú žiadne spoločné štýly."
 
 #: ../share/extensions/nicechart.py:113
-#, fuzzy
 msgid "Chart-Layer: {}"
-msgstr "Typ grafu:"
+msgstr "Graf-Vrstva: {}"
 
 #: ../share/extensions/nicechart.py:228
 msgid "Negative values are currently not supported!"
@@ -46497,7 +46456,7 @@ msgstr "Odsadenie okružného označenia (px):"
 
 #: ../share/extensions/grid_polar.inx:14
 msgid "Circular Divisions"
-msgstr "Kruhové delenia:"
+msgstr "Kruhové delenia"
 
 #: ../share/extensions/grid_polar.inx:15
 msgid "Major Circular Divisions:"
