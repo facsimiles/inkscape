@@ -227,16 +227,16 @@ public:
     {
         auto const fill_origin = target_style->fill.paintOrigin;
         if (fill_origin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) {
-            _copyPaint(&target_style->fill, _findContextPaint(true));
+            _copyPaint(&target_style->fill, *_origin->style->getFillOrStroke(true));
         } else if (fill_origin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
-            _copyPaint(&target_style->fill, _findContextPaint(false));
+            _copyPaint(&target_style->fill, *_origin->style->getFillOrStroke(false));
         }
 
         auto const stroke_origin = target_style->stroke.paintOrigin;
         if (stroke_origin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) {
-            _copyPaint(&target_style->stroke, _findContextPaint(true));
+            _copyPaint(&target_style->stroke, *_origin->style->getFillOrStroke(true));
         } else if (stroke_origin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
-            _copyPaint(&target_style->stroke, _findContextPaint(false));
+            _copyPaint(&target_style->stroke, *_origin->style->getFillOrStroke(false));
         }
     }
 
@@ -252,24 +252,6 @@ public:
     }
 
 private:
-    /** @brief Find the paint that context-fill or context-stroke is referring to.
-     *
-     * @param is_fill If true, handle context-fill, otherwise context-stroke.
-     * @return The paint relevant to the specified context.
-     */
-    SPIPaint _findContextPaint(bool is_fill) const
-    {
-        if (auto *clone = cast<SPUse>(_origin); clone && clone->child) {
-            // Copy the paint of the child and merge with the parent's. This is similar
-            // to style merge operations performed when unlinking a clone, but here it's
-            // done only for a paint.
-            SPIPaint paint = *clone->child->style->getFillOrStroke(is_fill);
-            paint.merge(clone->style->getFillOrStroke(is_fill));
-            return paint;
-        }
-        return *_origin->style->getFillOrStroke(is_fill);
-    }
-
     /** Copy paint from origin to destination, saving a copy of the old paint. */
     template<typename PainT>
     void _copyPaint(PainT *destination, SPIPaint paint)
@@ -313,17 +295,7 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
     std::unique_ptr<ContextPaintManager> context_fs_manager;
 
     if (origin) {
-        // If the shape is a child of a marker, we must set styles from the origin.
-        auto parentobj = shape->parent;
-        while (parentobj) {
-            if (is<SPMarker>(parentobj)) {
-                // Create a manager to temporarily rewrite any fill/stroke properties
-                // set to context-fill/context-stroke with usable values.
-                context_fs_manager = std::make_unique<ContextPaintManager>(style, origin);
-                break;
-            }
-            parentobj = parentobj->parent;
-        }
+        context_fs_manager = std::make_unique<ContextPaintManager>(style, origin);
     }
 
     if (style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_NORMAL ||
@@ -350,7 +322,7 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
         if (SPMarker *marker = shape->_marker[marker_type]) {
             Geom::Affine tr(sp_shape_marker_get_transform_at_start(pathv.begin()->front()));
             tr = marker->get_marker_transform(tr, style->stroke_width.computed, true);
-            sp_shape_render_invoke_marker_rendering(marker, tr, ctx, origin ? origin : shape);
+            sp_shape_render_invoke_marker_rendering(marker, tr, ctx, shape);
         }
     }
     // MID marker
@@ -366,7 +338,8 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
             {
                 Geom::Affine tr(sp_shape_marker_get_transform_at_start(path_it->front()));
                 tr = marker->get_marker_transform(tr, style->stroke_width.computed, false);
-                sp_shape_render_invoke_marker_rendering(marker, tr, ctx, origin ? origin : shape);
+                // Marker's context-fill/context-stroke always refer to shape.
+                sp_shape_render_invoke_marker_rendering(marker, tr, ctx, shape);
             }
             // MID position
             if (path_it->size_default() > 1) {
@@ -379,7 +352,7 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
                      * there should be a midpoint marker between last segment and closing straight line segment */
                     Geom::Affine tr(sp_shape_marker_get_transform(*curve_it1, *curve_it2));
                     tr = marker->get_marker_transform(tr, style->stroke_width.computed, false);
-                    sp_shape_render_invoke_marker_rendering(marker, tr, ctx, origin ? origin : shape);
+                    sp_shape_render_invoke_marker_rendering(marker, tr, ctx, shape);
 
                     ++curve_it1;
                     ++curve_it2;
@@ -390,7 +363,7 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
                 Geom::Curve const &lastcurve = path_it->back_default();
                 Geom::Affine tr = sp_shape_marker_get_transform_at_end(lastcurve);
                 tr = marker->get_marker_transform(tr, style->stroke_width.computed, false);
-                sp_shape_render_invoke_marker_rendering(marker, tr, ctx, origin ? origin : shape);
+                sp_shape_render_invoke_marker_rendering(marker, tr, ctx, shape);
             }
         }
     }
@@ -409,7 +382,7 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
             Geom::Curve const &lastcurve = path_last[index];
             Geom::Affine tr = sp_shape_marker_get_transform_at_end(lastcurve);
             tr = marker->get_marker_transform(tr, style->stroke_width.computed, false);
-            sp_shape_render_invoke_marker_rendering(marker, tr, ctx, origin ? origin : shape);
+            sp_shape_render_invoke_marker_rendering(marker, tr, ctx, shape);
         }
     }
 

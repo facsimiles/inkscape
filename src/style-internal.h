@@ -748,6 +748,7 @@ public:
     SPIPaint& operator=(const SPIPaint& rhs) {
         SPIBase::operator=(rhs);
         paintOrigin     = rhs.paintOrigin;
+        paintSource     = rhs.paintSource;
         colorSet        = rhs.colorSet;
         noneSet         = rhs.noneSet;
         value.color     = rhs.value.color;
@@ -758,7 +759,11 @@ public:
     bool equals(const SPIBase& rhs) const override;
 
     bool isSameType( SPIPaint const & other ) const {
-        return (isPaintserver() == other.isPaintserver()) && (colorSet == other.colorSet) && (paintOrigin == other.paintOrigin);
+        return
+            (isPaintserver() == other.isPaintserver()) &&
+            (colorSet == other.colorSet) &&
+            (paintOrigin == other.paintOrigin) &&
+            (paintSource == other.paintSource);
     }
 
     bool isNoneSet() const {
@@ -791,12 +796,19 @@ public:
 
     void setNone() {noneSet = true; colorSet=false;}
 
+    bool isContext() const {
+        return
+            paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ||
+            paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
+    }
+
     void setTag(SPObject* tag) { this->tag = tag; }
     SPObject* getTag() { return tag; }
 
   // To do: make private
 public:
-    SPPaintOrigin paintOrigin : 2;
+    SPPaintOrigin paintOrigin : 2; // Inherited value (from cascade)
+    SPPaintOrigin paintSource:  2; // Set value (from XML)
     bool colorSet : 1;
     bool noneSet : 1;
     struct {
