@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-01 12:06+0000\n"
+"PO-Revision-Date: 2025-05-12 19:12+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/1-4-x/"
 "nl/>\n"
@@ -16204,7 +16204,7 @@ msgstr "Inkscapeversie weergeven"
 
 #: ../src/inkscape-application.cpp:720
 msgid "Print debugging information"
-msgstr "Debuginformatie weergeven"
+msgstr "Foutopsporingsinformatie weergeven"
 
 #: ../src/inkscape-application.cpp:721
 msgid "Print system data directory"
