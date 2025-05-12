@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-12 19:12+0000\n"
+"PO-Revision-Date: 2025-05-12 21:17+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/1-4-x/"
 "nl/>\n"
@@ -1307,7 +1307,7 @@ msgstr "Comics cream"
 #: ../../build/share/filters/filters.svg.h:795
 #: ../../build/share/filters/filters.svg.h:799
 msgid "Non-Realistic 3D Shaders"
-msgstr "Niet realistische 3D shaders"
+msgstr "Niet-realistische 3D shaders"
 
 #: ../../build/share/filters/filters.svg.h:432
 msgid "Comics shader with creamy waves transparency"
@@ -29783,7 +29783,7 @@ msgid ""
 "Inkscape, mostly useful for debugging)"
 msgstr ""
 "Attributen en stijleigenschappen nakijken bij het bewerken van SVG-bestanden "
-"(kan Inkscape vertragen, bruikbaar bij het debuggen)"
+"(kan Inkscape vertragen, bruikbaar bij foutopsporing)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2362
 msgid "Writing"
@@ -40229,7 +40229,7 @@ msgstr "Foutopsporingsinformatie gekopieerd!"
 
 #: ../share/ui/inkscape-about.glade:461
 msgid "Click to copy debug info to the clipboard"
-msgstr "Klik om debuginfo naar het klembord te kopiëren"
+msgstr "Klik om foutopsporingsinformatie naar het klembord te kopiëren"
 
 #: ../share/ui/inkscape-welcome.glade:36 ../share/ui/inkscape-welcome.glade:578
 msgid "Dark"
