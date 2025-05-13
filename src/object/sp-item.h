@@ -162,7 +162,7 @@ public:
     sigc::signal<void (Geom::Affine const *, SPItem *)> _transformed_signal;
 
     bool isLocked() const;
-    void setLocked(bool lock);
+    void setLocked(bool lock, bool recursive = false);
 
     bool isHidden() const;
     void setHidden(bool hidden);
