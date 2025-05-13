@@ -9,7 +9,7 @@ if(WIN32)
   file(GLOB MINGW_LIBS
     ${MINGW_BIN}/LIBEAY32.dll
     ${MINGW_BIN}/SSLEAY32.dll
-    ${MINGW_BIN}/imagequant.dll
+    ${MINGW_BIN}/libimagequant.dll
     ${MINGW_BIN}/lib2geom.dll
     ${MINGW_BIN}/libLerc.dll
     ${MINGW_BIN}/libaom.dll
@@ -29,6 +29,8 @@ if(WIN32)
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
     ${MINGW_BIN}/libdav1d.dll
+    ${MINGW_BIN}/libdav1d-[0-9]*.dll
+    ${MINGW_BIN}/libdavif-[0-9]*.dll
     ${MINGW_BIN}/libde265-[0-9]*.dll
     ${MINGW_BIN}/libdeflate.dll
     ${MINGW_BIN}/libdouble-conversion.dll
@@ -112,6 +114,7 @@ if(WIN32)
     ${MINGW_BIN}/libssl-1_[0-9]*.dll
     ${MINGW_BIN}/libssl-3*.dll
     ${MINGW_BIN}/libstdc++-[0-9]*.dll
+    ${MINGW_BIN}/libSvtAv1Enc-[0-9]*.dll
     ${MINGW_BIN}/libtermcap-[0-9]*.dll
     ${MINGW_BIN}/libthai-[0-9]*.dll
     ${MINGW_BIN}/libtiff-[0-9]*.dll
@@ -128,6 +131,7 @@ if(WIN32)
     ${MINGW_BIN}/libxml2-[0-9]*.dll
     ${MINGW_BIN}/libxslt-[0-9]*.dll
     ${MINGW_BIN}/libx265.dll
+    ${MINGW_BIN}/libyuv.dll
     ${MINGW_BIN}/libzstd.dll
     ${MINGW_BIN}/nss[0-9]*.dll
     ${MINGW_BIN}/nssutil[0-9]*.dll
