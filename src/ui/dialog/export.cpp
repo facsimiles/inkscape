@@ -503,6 +503,10 @@ std::string Export::prependDirectory(const std::string &name, const std::string 
     if (Glib::path_is_absolute(name) || name.empty())
         return name;
 
+    if (Glib::path_get_basename(name) != name) {
+        return name;
+    }
+
     std::string directory;
 
     if (!orig.empty()) {
