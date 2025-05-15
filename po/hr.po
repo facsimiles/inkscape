@@ -13,16 +13,17 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2024-07-31 15:12+0200\n"
-"Last-Translator: Milo Ivir <mail@mivirtype.de>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-05-15 22:17+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.4\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -26267,16 +26268,15 @@ msgstr "Prvi redak je neispravan"
 #: ../src/ui/dialog/global-palettes.cpp:414
 msgctxt "Palette"
 msgid "Invalid line "
-msgstr "Neispravn redak "
+msgstr "Neispravan redak "
 
 #: ../src/ui/dialog/global-palettes.cpp:428
 msgid "Error loading palette %1: %2"
 msgstr "Greška pri učitavanju palete %1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:453
-#, fuzzy
 msgid "Unknown error loading palette %1"
-msgstr "Nepoznata greška pri učitavanju palete %"
+msgstr "Nepoznata greška pri učitavanju palete %1"
 
 #: ../src/ui/dialog/global-palettes.cpp:495
 msgid "Gimp Color Palette"
@@ -32734,7 +32734,7 @@ msgstr "Rela_tivan pomak"
 
 #: ../src/ui/dialog/transformation.cpp:78
 msgid "_Scale proportionally"
-msgstr "_Skaliraj proporcijalno"
+msgstr "_Skaliraj proporcionalno"
 
 #: ../src/ui/dialog/transformation.cpp:79
 msgid "Apply to each _object separately"
@@ -33878,7 +33878,7 @@ msgstr "Uvuci ručku"
 #: ../src/ui/tool/transform-handle-set.cpp:198
 msgctxt "Transform handle tip"
 msgid "<b>Shift+Ctrl</b>: scale uniformly about the rotation center"
-msgstr "<b>Shift</b>: skaliraj proporcionalno oko središta okretanja"
+msgstr "<b>Shift+Ctrl</b>: skaliraj proporcionalno oko središta okretanja"
 
 #: ../src/ui/tool/transform-handle-set.cpp:200
 msgctxt "Transform handle tip"
@@ -36833,7 +36833,7 @@ msgstr "Standardni stil"
 #: ../src/ui/widget/font-variants.cpp:201
 msgctxt "Font feature"
 msgid "Proportional"
-msgstr "Proporcijalne"
+msgstr "Proporcionalne"
 
 #: ../src/ui/widget/font-variants.cpp:183
 msgctxt "Font feature"
@@ -37018,8 +37018,7 @@ msgstr "Normalna širina."
 
 #: ../src/ui/widget/font-variants.cpp:363
 msgid "Proportional width numerals. OpenType table: 'pnum'"
-msgstr ""
-"Brojke proporcijonalnih (individualnih) širina. OpenType tablica: 'pnum'"
+msgstr "Brojke proporcionalnih (individualnih) širina. OpenType tablica: 'pnum'"
 
 #: ../src/ui/widget/font-variants.cpp:364
 msgid "Same width numerals. OpenType table: 'tnum'"
@@ -37306,7 +37305,7 @@ msgstr "Jednometrično"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgid "Adjust the glyphs from a proportional width to a fixed width"
-msgstr "Promijeni grafeme iz proporcionalne u fiksnu širinu"
+msgstr "Promijeni grafeme iz proporcionalne širine u fiksnu širinu"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgctxt "Variable font axis"
