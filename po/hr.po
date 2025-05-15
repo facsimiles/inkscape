@@ -13,16 +13,17 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2023-07-16 15:58+0200\n"
+"PO-Revision-Date: 2025-05-15 22:17+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: \n"
+"Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -16465,7 +16466,7 @@ msgstr "Svi fontovi"
 
 #: ../src/libnrtype/font-lister.cpp:156
 msgid "Fonts "
-msgstr "Fontovi"
+msgstr "Fontovi "
 
 #: ../src/live_effects/effect.cpp:103
 msgctxt "path effect"
@@ -20177,7 +20178,7 @@ msgid ""
 "that need to be significantly simplified. "
 msgstr ""
 "Promijeni broj ponavljanja za pojednostavljene operacije. Korisno za složene "
-"staze koje se moraju značajno pojednostaviti."
+"staze koje se moraju značajno pojednostaviti. "
 
 #: ../src/live_effects/lpe-simplify.cpp:29
 msgid "Drag slider to set the amount of simplification"
@@ -24769,10 +24770,8 @@ msgid "Change grid color"
 msgstr "Promijeni kontrolnu točku gradijenta"
 
 #: ../src/ui/dialog/document-properties.cpp:1882
-#, fuzzy
-#| msgid "Change number of simplify steps "
 msgid "Change grid number of lines"
-msgstr "Promijeni broj koraka pojednostavljenja "
+msgstr "Promijeni broj linija mreže"
 
 #: ../src/ui/dialog/document-properties.cpp:1911
 #, fuzzy
@@ -28366,12 +28365,12 @@ msgid "Clear list"
 msgstr "Izbriši popis"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
-#, fuzzy
-#| msgid "Maximum documents in Open _Recent:"
 msgid ""
 "Maximum documents\n"
 " in Open _Recent:"
-msgstr "Maks. broj dokumenata u „Otvori _nedavne”:"
+msgstr ""
+"Maks. broj dokumenata\n"
+" u „Otvori _nedavne”:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1621
 msgid ""
@@ -31784,10 +31783,8 @@ msgid "Multiple objects selected"
 msgstr "Odabrano je više objekata"
 
 #: ../src/ui/dialog/object-attributes.cpp:153
-#, fuzzy
-#| msgid "Lock selection"
 msgid "No selection"
-msgstr "Zaključaj odabir"
+msgstr "Bez odabira"
 
 #: ../src/ui/dialog/object-attributes.cpp:247
 msgid "Removed live path effect"
@@ -31800,12 +31797,12 @@ msgid "Change object attribute"
 msgstr "Promijeni atribut objekta"
 
 #: ../src/ui/dialog/object-attributes.cpp:403
-#, fuzzy
-#| msgid "Selected objects only"
 msgid ""
 "<b>Picker Tool</b>\n"
 "Select objects on canvas"
-msgstr "Samo odabrane objekte"
+msgstr ""
+"<b>Alat za biranje</b>\n"
+"Odaberi objekte na platnu"
 
 #: ../src/ui/dialog/object-attributes.cpp:517
 #, fuzzy
@@ -31818,10 +31815,8 @@ msgid "Change arc type"
 msgstr "Promijeni vrsta luka"
 
 #: ../src/ui/dialog/object-attributes.cpp:902
-#, fuzzy
-#| msgid "Nodes"
 msgid "Nodes: "
-msgstr "Čvorovi"
+msgstr "Čvorovi: "
 
 #: ../src/ui/dialog/object-attributes.cpp:923
 #, fuzzy
@@ -42800,57 +42795,38 @@ msgid "Select all objects"
 msgstr "Odaberi sve objekte"
 
 #: ../share/ui/toolbar-select.ui:53
-#, fuzzy
-#| msgid "Select in all layers"
 msgid "Select all in all layers"
-msgstr "Odaberi u svim slojevima"
+msgstr "Odaberi sve u svim slojevima"
 
 #: ../share/ui/toolbar-select.ui:70
 msgid "Deselect any selected objects"
 msgstr "Odznači sve odabrane objekte"
 
 #: ../share/ui/toolbar-select.ui:87
-#, fuzzy
-#| msgid "Toggle selection box to select all touched objects."
 msgid "Toggle selection box to select all touched objects"
-msgstr "Uključi/Isključi okvir odabira za biranje svih dodirnutih objekata."
+msgstr "Uključi/Isključi okvir odabira za biranje svih dodirnutih objekata"
 
 #: ../share/ui/toolbar-select.ui:110
-#, fuzzy
-#| msgid "Rotate selection 90° counter-clockwise"
 msgid "Rotate selection 90\\xc2\\xb0 counter-clockwise"
 msgstr "Okreni odabir za 90 ° nalijevo"
 
 #: ../share/ui/toolbar-select.ui:131
-#, fuzzy
-#| msgid "Rotate selection 90° clockwise"
 msgid "Rotate selection 90\\xc2\\xb0 clockwise"
 msgstr "Okreni odabir za 90 ° nadesno"
 
 #: ../share/ui/toolbar-select.ui:349
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Horizontal coordinate of selection"
 msgid "Horizontal coordinate of selection"
 msgstr "Vodoravna koordinata odabira"
 
 #: ../share/ui/toolbar-select.ui:372
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Vertical coordinate of selection"
 msgid "Vertical coordinate of selection"
 msgstr "Okomita koordinata odabira"
 
 #: ../share/ui/toolbar-select.ui:412
-#, fuzzy
-#| msgid "When locked, change both width and height by the same proportion"
 msgid "When locked, change width and height by the same proportion"
-msgstr "Kad je zaključano, proporcionalno mijenja širinu i visinu"
+msgstr "Kad je zaključano, proporcionalno promijeni širinu i visinu"
 
 #: ../share/ui/toolbar-select.ui:432
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Height of selection"
 msgid "Height of selection"
 msgstr "Visina odabira"
 
