@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-15 22:17+0000\n"
+"PO-Revision-Date: 2025-05-16 00:17+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/hr/>\n"
@@ -37454,11 +37454,9 @@ msgid "Fill can turn transparent forms opaque"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:95
-#, fuzzy
-#| msgid "Monospaced font:"
 msgctxt "Variable font axis"
 msgid "Monospace"
-msgstr "Jednometrični font:"
+msgstr "Jednometrični"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Adjust the glyphs from a proportional width to a fixed width"
@@ -37535,8 +37533,6 @@ msgstr ""
 
 #. TRANSLATORS: Weight controls the font file’s weight parameter.
 #: ../src/ui/widget/font-variations.cpp:112
-#, fuzzy
-#| msgid "Weight"
 msgctxt "Variable font axis"
 msgid "Weight"
 msgstr "Debljina"
@@ -37547,8 +37543,6 @@ msgstr ""
 
 #. TRANSLATORS: Width controls the font file’s width parameter.
 #: ../src/ui/widget/font-variations.cpp:114
-#, fuzzy
-#| msgid "Width"
 msgctxt "Variable font axis"
 msgid "Width"
 msgstr "Širina"
@@ -37605,8 +37599,6 @@ msgid "Controls the Y reflection"
 msgstr "Pretvori odabir:"
 
 #: ../src/ui/widget/font-variations.cpp:120
-#, fuzzy
-#| msgid "Outline"
 msgctxt "Variable font axis"
 msgid "Outline"
 msgstr "Kontura"
@@ -38618,16 +38610,14 @@ msgid "R Gradient"
 msgstr "Kružni gradijent"
 
 #: ../src/ui/widget/style-swatch.cpp:261
-#, fuzzy, c-format
-#| msgid "Fill:"
+#, c-format
 msgid "Fill: %s"
-msgstr "Ispuna:"
+msgstr "Ispuna: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:263
-#, fuzzy, c-format
-#| msgid "Stroke:"
+#, c-format
 msgid "Stroke: %s"
-msgstr "Linija:"
+msgstr "Linija: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:268
 msgctxt "Fill and stroke"
@@ -38673,34 +38663,24 @@ msgid "Change swatch color"
 msgstr "Promijeni boju palete boja"
 
 #: ../src/ui/widget/tabs-widget.cpp:94
-#, fuzzy
-#| msgid "Move Tab to New Window"
 msgid "Detach to New Window"
-msgstr "Pomakni karticu u novi prozor"
+msgstr "Odvoji u novi prozor"
 
 #: ../src/ui/widget/tabs-widget.cpp:95
-#, fuzzy
-#| msgid "Noise Fill"
 msgid "Close File"
-msgstr "Ispuna šumom"
+msgstr "Zatvori datoteku"
 
 #: ../src/ui/widget/tabs-widget.cpp:112
-#, fuzzy
-#| msgid "New Document"
 msgid "New Document..."
-msgstr "Novi dokument"
+msgstr "Novi dokument …"
 
 #: ../src/ui/widget/tabs-widget.cpp:113
-#, fuzzy
-#| msgid "New Document"
 msgid "Open Document..."
-msgstr "Novi dokument"
+msgstr "Otvori dokument …"
 
 #: ../src/ui/widget/template-list.cpp:130
-#, fuzzy
-#| msgid "User templates:"
 msgid "<new template>"
-msgstr "Korisnički predlošci:"
+msgstr "<novi predložak>"
 
 #: ../src/util/font-collections.h:35
 msgid "Recently Used Fonts"
@@ -38713,47 +38693,37 @@ msgstr "Fontovi u dokumentu"
 #: ../src/util/font-tags.cpp:15
 msgctxt "Font category"
 msgid "Sans Serif"
-msgstr ""
+msgstr "Bezserifni"
 
 #: ../src/util/font-tags.cpp:16
-#, fuzzy
-#| msgid "Serial"
 msgctxt "Font category"
 msgid "Serif"
-msgstr "Serijski"
+msgstr "Serifni"
 
 #: ../src/util/font-tags.cpp:17
-#, fuzzy
-#| msgid "Script: "
 msgctxt "Font category"
 msgid "Script"
-msgstr "Pismo: "
+msgstr "Rukopisni"
 
 #: ../src/util/font-tags.cpp:19
-#, fuzzy
-#| msgid "Symbols"
 msgctxt "Font category"
 msgid "Symbols"
 msgstr "Simboli"
 
 #: ../src/util/font-tags.cpp:20
-#, fuzzy
-#| msgid "Monospaced font:"
 msgctxt "Font category"
 msgid "Monospace"
-msgstr "Jednometrični font:"
+msgstr "Jednometrični"
 
 #: ../src/util/font-tags.cpp:21
-#, fuzzy
-#| msgid "Disabled"
 msgctxt "Font category"
 msgid "Variable"
-msgstr "Deaktivirano"
+msgstr "Varijabilni"
 
 #: ../src/util/font-tags.cpp:22
 msgctxt "Font category"
 msgid "Oblique"
-msgstr ""
+msgstr "Ukošeni"
 
 #: ../src/util/paper.cpp:35
 msgid "Failed to create the page file."
