@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-16 00:17+0000\n"
+"PO-Revision-Date: 2025-05-16 10:34+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/hr/>\n"
@@ -37586,17 +37586,13 @@ msgid "Controls the depth of a shadow"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Selection"
 msgctxt "Variable font axis"
 msgid "Reflection"
-msgstr "Odabir"
+msgstr "Refleksija"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Convert selection:"
 msgid "Controls the Y reflection"
-msgstr "Pretvori odabir:"
+msgstr "Kontrolira Y refleksiju"
 
 #: ../src/ui/widget/font-variations.cpp:120
 msgctxt "Variable font axis"
@@ -37605,86 +37601,70 @@ msgstr "Kontura"
 
 #: ../src/ui/widget/font-variations.cpp:120
 msgid "Controls the weight of a font’s outline"
-msgstr ""
+msgstr "Kontrolira debljinu konture fonta"
 
 #: ../src/ui/widget/font-variations.cpp:121
-#, fuzzy
-#| msgid "Engraving"
 msgctxt "Variable font axis"
 msgid "Engrave"
-msgstr "Graviranje"
+msgstr "Gravura"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgid "Controls the width of an engraving"
-msgstr ""
+msgstr "Kontrolira širinu gravure"
 
 #: ../src/ui/widget/font-variations.cpp:122
-#, fuzzy
-#| msgid "Emboss"
 msgctxt "Variable font axis"
 msgid "Emboss"
 msgstr "Reljef"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgid "Controls the depth of an emboss"
-msgstr ""
+msgstr "Kontrolira dubinu reljefa"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
-#| msgid "Rela_tive change"
 msgctxt "Variable font axis"
 msgid "Relative X advance"
-msgstr "Rela_tivna promjena"
+msgstr "Relativna x-širina"
 
 #: ../src/ui/widget/font-variations.cpp:123
 msgid "Controls the relative X advance - horizontal motion of the glyph"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:124
-#, fuzzy
-#| msgid "Rela_tive change"
 msgctxt "Variable font axis"
 msgid "Relative Y advance"
-msgstr "Rela_tivna promjena"
+msgstr "Relativna y-širina"
 
 #: ../src/ui/widget/font-variations.cpp:124
 msgid "Controls the relative Y advance - vertical motion of the glyph"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:125
-#, fuzzy
-#| msgid "Relative to:"
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Relativno u odnosu na:"
+msgstr "Relativna sekunda"
 
 #: ../src/ui/widget/font-variations.cpp:125
 msgid "Controls the relative second value - as in one second of animation time"
-msgstr ""
+msgstr "Kontrolira relativno trajanje animacije u sekundama"
 
 #: ../src/ui/widget/font-variations.cpp:126
-#, fuzzy
-#| msgid "_Rotation"
 msgctxt "Variable font axis"
 msgid "Rotation"
-msgstr "_Okretanje"
+msgstr "Okretanje"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgid "Controls the rotation of the glyph in degrees"
-msgstr ""
+msgstr "Kontrolira okretanje grafema u stupnjevima"
 
 #: ../src/ui/widget/font-variations.cpp:127
-#, fuzzy
-#| msgid "Unicode character:"
 msgctxt "Variable font axis"
 msgid "Unicode variation"
-msgstr "Unicode znak:"
+msgstr "Varijanta Unicoda"
 
 #: ../src/ui/widget/font-variations.cpp:127
-#, fuzzy
-#| msgid "Set glyph unicode"
 msgid "Controls the glyph’s unicode ID"
-msgstr "Postavi Unicode grafema"
+msgstr "Konrtolira Unicode ID grafema"
 
 #: ../src/ui/widget/font-variations.cpp:128
 #, fuzzy
@@ -37711,10 +37691,8 @@ msgid "None"
 msgstr "Bez"
 
 #: ../src/ui/widget/gradient-editor.cpp:473
-#, fuzzy
-#| msgid "Rename gradient"
 msgid "Rotate gradient"
-msgstr "Preimenuj gradijent"
+msgstr "Okreni gradijent"
 
 #: ../src/ui/widget/gradient-selector.cpp:69
 #: ../src/ui/widget/gradient-selector.cpp:193
@@ -38742,21 +38720,17 @@ msgid "3D box: Move vanishing point"
 msgstr "3D kutija: pomakni točku nestajanja"
 
 #: ../src/vanishing-point.cpp:306
-#, fuzzy, c-format
-#| msgid "<b>Infinite</b> vanishing point shared by the box"
-#| msgid_plural ""
-#| "<b>Infinite</b> vanishing point shared by <b>%d</b> boxes; drag with "
-#| "<b>Shift</b> to separate selected box(es)"
+#, c-format
 msgid "<b>Finite</b> vanishing point shared by the box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
-msgstr[0] "<b>Beskonačna</b> točka nestajanja korištena za kutiju"
+msgstr[0] "<b>Konačna</b> točka nestajanja korištena za kutiju"
 msgstr[1] ""
-"<b>Beskonačna</b> točka nestajanja korištena za <b>%d</b> kutije. Povuci sa "
+"<b>Konačna</b> točka nestajanja korištena za <b>%d</b> kutije. Povuci sa "
 "<b>Shift</b> za rastavljanje odabranih kutija"
 msgstr[2] ""
-"<b>Beskonačna</b> točka nestajanja korištena za <b>%d</b> kutija. Povuci sa "
+"<b>Konačna</b> točka nestajanja korištena za <b>%d</b> kutija. Povuci sa "
 "<b>Shift</b> za rastavljanje odabranih kutija"
 
 #: ../src/vanishing-point.cpp:315
