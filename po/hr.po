@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-16 10:34+0000\n"
+"PO-Revision-Date: 2025-05-16 10:50+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/hr/>\n"
@@ -37714,7 +37714,7 @@ msgstr "Uredi gradijent"
 #: ../src/ui/widget/gradient-selector.cpp:182
 #: ../src/ui/widget/paint-selector.cpp:161
 msgid "Swatch"
-msgstr "Paleta boja"
+msgstr "Varijanta boje"
 
 #: ../src/ui/widget/gradient-selector.cpp:216
 msgid "Rename gradient"
