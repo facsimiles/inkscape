@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-16 00:17+0000\n"
+"PO-Revision-Date: 2025-05-16 10:34+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -37457,7 +37457,7 @@ msgstr "Relativna x-širina"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgid "Controls the relative X advance - horizontal motion of the glyph"
-msgstr "Kontrolira relativnu vodoravnu širinu grafema"
+msgstr "Kontrolira relativnu x-širinu – vodoravna širina grafema"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgctxt "Variable font axis"
@@ -37466,7 +37466,7 @@ msgstr "Relativna y-širina"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgid "Controls the relative Y advance - vertical motion of the glyph"
-msgstr "Kontrolira relativnu okomitu širinu grafema"
+msgstr "Kontrolira relativnu y-širinu – okomita širina grafema"
 
 #: ../src/ui/widget/font-variations.cpp:123
 msgctxt "Variable font axis"
@@ -37498,11 +37498,11 @@ msgstr "Konrtolira Unicode ID grafema"
 #: ../src/ui/widget/font-variations.cpp:126
 msgctxt "Variable font axis"
 msgid "Feature variation"
-msgstr "Varijante grafema"
+msgstr "Varijanta funkcije"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgid "Controls the glyph’s feature variation"
-msgstr "Kontrolira varijante grafema"
+msgstr "Kontrolira varijantu funkcije grafema"
 
 #: ../src/ui/widget/gradient-editor.cpp:216
 msgid "Stop color"
