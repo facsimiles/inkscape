@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-16 10:34+0000\n"
+"PO-Revision-Date: 2025-05-16 10:50+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -37310,12 +37310,13 @@ msgstr "Promijeni grafeme iz proporcionalne širine u fiksnu širinu"
 #: ../src/ui/widget/font-variations.cpp:95
 msgctxt "Variable font axis"
 msgid "Wonky"
-msgstr "Wonky"
+msgstr "Izobličeni"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Binary switch used to control substitution of “wonky” forms"
 msgstr ""
-"Binarni prekidač koji se koristi za kontrolu zamjene tzv. „wonky“ oblika"
+"Binarni prekidač koji se koristi za kontrolu zamjene tzv. „izobličenih“ "
+"oblika"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgctxt "Variable font axis"
@@ -37324,7 +37325,7 @@ msgstr "Oblik elementa"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgid "Selection of the base element glyphs are composed of"
-msgstr "Odabir osnovnog elementa grafema sastoje se od"
+msgstr "Odabir osnovnog elementa od kojih se grafemi sastoje"
 
 #: ../src/ui/widget/font-variations.cpp:99
 msgctxt "Variable font axis"
