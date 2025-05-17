@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-17 12:33+0000\n"
+"PO-Revision-Date: 2025-05-17 13:11+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -15591,9 +15591,9 @@ msgstr ""
 "ispise, za koje je važno zadržavanje točnih dimenzija i pozicija (npr. za 3D "
 "ispise)\n"
 "\n"
-"Više informacije o ovoj promjeni možeš pronaći na Inkscapeovoj stranici<a "
-"href='https://inkscape.org/en/learn/faq#dpi_change'>Pitanja i odgovori</a></"
-"small>"
+"Više informacije o ovoj promjeni možeš pronaći na Inkscapeovoj stranici <a "
+"href='https://inkscape.org/hr/nauci/pitanja-i-odgovori/#dpi_change'>Pitanja "
+"i odgovori</a></small>"
 
 #: ../src/file-update.cpp:373 ../share/ui/attribute-edit-component.glade:210
 msgid "OK"
@@ -21462,13 +21462,12 @@ msgid "Deleted"
 msgstr "Izbrisano"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
-"<b>Shift+povuci</b> za okretanje. <b>Ctrl+povuci</b> za pomicanje ishodišta. "
-"<b>Del</b> za brisanje"
+"<b>Shift+povuci</b> za okretanje, <b>Ctrl+povuci</b> za pomicanje ishodišta, "
+"<b>Del</b> za brisanje, <b>dvoklik</b> za uređivanje svojstva vodilice"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
