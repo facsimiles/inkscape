@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-17 13:11+0000\n"
+"PO-Revision-Date: 2025-05-17 15:18+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/hr/>\n"
@@ -34767,7 +34767,7 @@ msgstr "ekspolodirano"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:107
 msgid "NOT randomized"
-msgstr "NIJE slučajno"
+msgstr "NE slučajno"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:108
 msgid "slightly irregular"
