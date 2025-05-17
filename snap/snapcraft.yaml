@@ -232,6 +232,8 @@ apps:
       - x11
       - unity7
       - dot-config-inkscape
+      - home # direct access to /home, needed because e.g. drag-and-drop is not working via XDG portal
+      - removable-media # direct access to /mnt, same reason as /home
       - raw-usb # plotter support
       - network # for extension manager
     slots:
