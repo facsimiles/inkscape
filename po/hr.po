@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-17 13:27+0000\n"
+"PO-Revision-Date: 2025-05-17 15:18+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -28722,21 +28722,19 @@ msgid "GTK open/save dialogs"
 msgstr "GTK dijalozi za otvori/spremi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1959
-#, fuzzy
 msgctxt "Start mode"
 msgid "Nothing"
-msgstr "Zaglađivanje"
+msgstr "Ništa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgctxt "Start mode"
 msgid "Splash screen only"
-msgstr ""
+msgstr "Samo početni ekran"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1961
-#, fuzzy
 msgctxt "Start mode"
 msgid "Welcome screen"
-msgstr "Široki ekran"
+msgstr "Ekran dobrodošlice"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
 msgid "Show when starting:"
@@ -28744,7 +28742,7 @@ msgstr "Prikaži pri pokretanju:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
-msgstr ""
+msgstr "Postavi što će se prikazati prilikom normalnog učitavanja programa."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1969
 msgid "Dialogs are hidden in taskbar"
@@ -34655,9 +34653,8 @@ msgid "(high scale variation)"
 msgstr "Varijanta Unicoda"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:148
-#, fuzzy
 msgid "(minimum scatter)"
-msgstr "Minimalna veličina:"
+msgstr "(minimalna razbacanost)"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:155
 msgid "(maximum scatter)"
@@ -34668,14 +34665,12 @@ msgid "(maximum mean)"
 msgstr ""
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:170
-#, fuzzy
 msgid "(minimum offset)"
-msgstr "Minimalna veličina:"
+msgstr "(minimalni odmak)"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:177
-#, fuzzy
 msgid "(maximum offset)"
-msgstr "Normalni odmak:"
+msgstr "(maksimalni odmak)"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:74
 msgid "triangle/tri-star"
@@ -43815,9 +43810,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:13
-#, fuzzy
 msgid "Minimum segment length"
-msgstr "Maksimalna duljiina segmenta:"
+msgstr "Minimalna duljiina segmenta"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
@@ -43868,7 +43862,6 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:29
-#, fuzzy
 msgid "Information"
 msgstr "Informacije"
 
@@ -49278,7 +49271,7 @@ msgstr "LaTeX unos:"
 
 #: ../share/extensions/pdflatex.inx:10 ../share/extensions/typst_formula.inx:10
 msgid "Font size (pt)"
-msgstr "Veličina fonta (pt):"
+msgstr "Veličina fonta (pt)"
 
 #: ../share/extensions/pdflatex.inx:12
 msgid "Advanced settings"
