@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-17 13:11+0000\n"
+"PO-Revision-Date: 2025-05-17 13:27+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -28739,9 +28739,8 @@ msgid "Welcome screen"
 msgstr "Široki ekran"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1965
-#, fuzzy
 msgid "Show when starting:"
-msgstr "Prikaži skrivena sjecišta"
+msgstr "Prikaži pri pokretanju:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1966
 msgid "Set what shows when loading the program normally."
@@ -34191,9 +34190,8 @@ msgid "(no wiggle)"
 msgstr ""
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:171
-#, fuzzy
 msgid "(slight deviation)"
-msgstr "Standardna devijacija zamućivanja:"
+msgstr "(blago odstupanje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:174
 msgid "(wild waves and curls)"
@@ -34617,9 +34615,8 @@ msgid "starts from center"
 msgstr "Započni od ruba"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:90
-#, fuzzy
 msgid "starts mid-way"
-msgstr "Početni dan tjedna:"
+msgstr "počinje iz sredine"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:91
 #, fuzzy
@@ -45733,14 +45730,16 @@ msgid ""
 "distribution.\n"
 msgstr ""
 "\n"
-"Hershey fontove je izradio dr. A. V. Hershey.\n"
+"Uključeni klasični Hershey fontovi su izvedeni iz\n"
+"radova od dr. A. V. Hershey.\n"
 "\n"
-"Dodatni moderni „EMS” fontovi u ovoj distribuciji derivati su\n"
-"fontova licenciranih pod SIL Open Font licencom.\n"
+"Dodatni moderni „EMS” fontovi u ovoj distribuciji su\n"
+"derivati, stvoreni iz fontova koji su licencirani pod\n"
+"SIL Open Font licencom.\n"
 "\n"
 "Za potpune podatke o zaslugama i informacijama o licenci,\n"
-"pročitaj zasluge u SVG fontovima, koji su uključeni u \n"
-"ovu distribuciju.\n"
+"pročitaj u SVG fontovima ugrađene zasluge, koji su uključeni u \n"
+"ovoj distribuciji.\n"
 
 #: ../share/extensions/hpgl_input.inx:3
 msgid "HPGL2 Input"
@@ -47135,7 +47134,6 @@ msgstr ""
 "\n"
 "Moguće je zadati više pravila\n"
 "odvojena točka-zarezom (;).\n"
-"\n"
 
 #: ../share/extensions/long_shadow.inx:3
 msgid "Long Shadow"
@@ -47822,10 +47820,9 @@ msgstr ""
 "izvornog područja staze, do vrijednosti za „Širina područja”.\n"
 "\n"
 "Konture počinju s „½ D” do ukupne širine od „Širina područja” u „D” "
-"koracima, gdje je D uzeto iz definicije najbližeg alata (vrijednost za "
-"„Promjer alata”).\n"
+"koracima, gdje je D uzeto iz definicije najbližeg alata (vrijednost za „"
+"Promjer alata”).\n"
 "Stvorit će se samo jedan odmak, ako je „Širina područja” jednaka „½ D”.\n"
-"\n"
 "            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:21
@@ -48152,7 +48149,6 @@ msgstr ""
 "\n"
 "Također možeš odabrati objekt, otvoriti XML uređivač (Shift+Ctrl+X) i dodati "
 "ili ukloniti XML oznaku „dxfpoint” bilo koje vrijednosti.\n"
-"\n"
 "          "
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:15
@@ -48370,9 +48366,8 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Ova funkcija mijenja stazu na taj način, da se može rezati s "
+"            Ova funkcija mijenja stazu tako da će biti moguće je rezati s "
 "pravokutnim rezačem.\n"
-"\n"
 "        "
 
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:4
