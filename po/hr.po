@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-16 10:50+0000\n"
+"PO-Revision-Date: 2025-05-17 12:33+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/hr/>\n"
@@ -37233,65 +37233,57 @@ msgstr ""
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
 #: ../src/ui/widget/font-variations.cpp:57
-#, fuzzy
-#| msgid "100% (opaque)"
 msgctxt "Variable font axis"
 msgid "X opaque"
-msgstr "100 % (neprozirno)"
+msgstr "X neprozirno"
 
 #: ../src/ui/widget/font-variations.cpp:57
 msgid "Alter the opaque stroke forms of glyphs in the X dimension"
-msgstr ""
+msgstr "Promijeni oblike neprozirnih poteza grafema u X pravcu"
 
 #. TRANSLATORS: “Parametric Thin Stroke”, YOPQ, is a reference to its logical name, “Y Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension
 #: ../src/ui/widget/font-variations.cpp:60
-#, fuzzy
-#| msgid "100% (opaque)"
 msgctxt "Variable font axis"
 msgid "Y opaque"
-msgstr "100 % (neprozirno)"
+msgstr "Y neprozirno"
 
 #: ../src/ui/widget/font-variations.cpp:60
 msgid "Alter the opaque stroke forms of glyphs in the Y dimension"
-msgstr ""
+msgstr "Promijeni oblike neprozirnih poteza grafema u Y pravcu"
 
 #. TRANSLATORS: “Parametric Counter Width”, XTRA, is a reference to its logical name, “X-Transparent,”
 #. which describes how it alters a font’s transparent spaces (also known as negative shapes)
 #. inside and around all glyphs along the X dimension
 #: ../src/ui/widget/font-variations.cpp:64
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "X transparent"
-msgstr "0 (transparentno)"
+msgstr "X transparentno"
 
 #: ../src/ui/widget/font-variations.cpp:64
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the X "
 "dimension"
 msgstr ""
+"Promijeni oblike transparentnih područja unutar i izvan grafema po X pravcu"
 
 #: ../src/ui/widget/font-variations.cpp:65
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "Y transparent"
-msgstr "0 (transparentno)"
+msgstr "Y transparentno"
 
 #: ../src/ui/widget/font-variations.cpp:65
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the Y "
 "dimension"
 msgstr ""
+"Promijeni oblike transparentnih područja unutar i izvan grafema po Y pravcu"
 
 #. TRANSLATORS: Width/height of Chinese glyphs
 #: ../src/ui/widget/font-variations.cpp:67
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "X transparent Chinese"
-msgstr "0 (transparentno)"
+msgstr "X transparentno kineski"
 
 #: ../src/ui/widget/font-variations.cpp:67
 #, fuzzy
