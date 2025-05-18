@@ -323,6 +323,8 @@ set(ui_SRC
 
 	cache/svg_preview_cache.h
 
+	desktop/canvas-flip.h
+	desktop/desktop-affine.h
 	desktop/document-check.h
 	desktop/menubar.h
 	desktop/menu-set-tooltips-shift-icons.h

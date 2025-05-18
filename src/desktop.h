@@ -27,25 +27,25 @@
 #ifndef INKSCAPE_DESKTOP_H
 #define INKSCAPE_DESKTOP_H
 
+#include <2geom/affine.h>
+#include <2geom/parallelogram.h>
+#include <2geom/transforms.h>
 #include <cstddef>
-#include <list>
-#include <memory>
-#include <string>
-#include <vector>
-#include <optional>
+#include <gdkmm/toplevel.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
 #include <gtk/gtk.h> // EventController et al.
-#include <gdkmm/toplevel.h>
+#include <memory>
+#include <optional>
+#include <sigc++/scoped_connection.h>
 #include <sigc++/signal.h>
-#include <2geom/affine.h>
-#include <2geom/transforms.h>
-#include <2geom/parallelogram.h>
+#include <string>
+#include <vector>
 
 #include "display/rendermode.h"
-#include <sigc++/scoped_connection.h>
 #include "message-stack.h"
 #include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
+#include "ui/desktop/desktop-affine.h"
 
 namespace Gtk {
 class Box;
@@ -109,6 +109,7 @@ class CanvasItemCatchall;
 class CanvasItemDrawing;
 class CanvasItemGroup;
 class CanvasItemRotate;
+enum class CanvasFlip : int;
 
 namespace UI {
 
@@ -352,16 +353,11 @@ public:
     void rotate_absolute_center_point(Geom::Point const &c, double rotate);
     void rotate_relative_center_point(Geom::Point const &c, double rotate);
 
-    enum CanvasFlip {
-        FLIP_NONE       = 0,
-        FLIP_HORIZONTAL = 1,
-        FLIP_VERTICAL   = 2
-    };
-    void flip_absolute_keep_point  (Geom::Point const &c, CanvasFlip flip);
-    void flip_relative_keep_point  (Geom::Point const &c, CanvasFlip flip);
-    void flip_absolute_center_point(Geom::Point const &c, CanvasFlip flip);
-    void flip_relative_center_point(Geom::Point const &c, CanvasFlip flip);
-    bool is_flipped(CanvasFlip flip);
+    void flip_absolute_keep_point(Geom::Point const &c, Inkscape::CanvasFlip flip);
+    void flip_relative_keep_point(Geom::Point const &c, Inkscape::CanvasFlip flip);
+    void flip_absolute_center_point(Geom::Point const &c, Inkscape::CanvasFlip flip);
+    void flip_relative_center_point(Geom::Point const &c, Inkscape::CanvasFlip flip);
+    bool is_flipped(Inkscape::CanvasFlip flip);
 
     Geom::Rotate const &current_rotation() const { return _current_affine.getRotation(); }
 
@@ -438,102 +434,12 @@ private:
     void _attachDocument();
     void _detachDocument();
 
-    // This simple class ensures that _w2d is always in sync with _rotation and _scale
-    // We keep rotation and scale separate to avoid having to extract them from the affine.
-    // With offset, this describes fully how to map the drawing to the window.
-    // Future: merge offset as a translation in w2d.
-    class DesktopAffine
-    {
-    public:
-        Geom::Affine const &w2d() const { return _w2d; };
-        Geom::Affine const &d2w() const { return _d2w; };
+    Inkscape::DesktopAffine _current_affine;
+    std::list<Inkscape::DesktopAffine> transforms_past;
+    std::list<Inkscape::DesktopAffine> transforms_future;
+    Inkscape::DesktopAffine _quick_zoom_affine; ///< The transform of the screen before quick zoom
 
-        void setScale(Geom::Scale scale) {
-            _scale = scale;
-            _update();
-        }
-        void addScale(Geom::Scale scale) {
-            _scale *= scale;
-            _update();
-        }
-
-        void setRotate(Geom::Rotate rotate) {
-            _rotate = rotate;
-            _update();
-        }
-        void setRotate(double rotate) {
-            setRotate(Geom::Rotate{rotate});
-        }
-        void addRotate(Geom::Rotate rotate) {
-            _rotate *= rotate;
-            _update();
-        }
-        void addRotate(double rotate) {
-            addRotate(Geom::Rotate{rotate});
-        }
-
-        void setFlip(CanvasFlip flip) {
-            _flip = Geom::Scale();
-            addFlip( flip );
-        }
-
-        bool isFlipped(CanvasFlip flip) {
-            if ((flip & FLIP_HORIZONTAL) && Geom::are_near(_flip[0], -1)) {
-                return true;
-            }
-            if ((flip & FLIP_VERTICAL) && Geom::are_near(_flip[1], -1)) {
-                return true;
-            }
-            return false;
-        }
-
-        void addFlip(CanvasFlip flip) {
-            if (flip & FLIP_HORIZONTAL) {
-                _flip *= Geom::Scale(-1.0, 1.0);
-            }
-            if (flip & FLIP_VERTICAL) {
-                _flip *= Geom::Scale(1.0, -1.0);
-            }
-            _update();
-        }
-
-        double getZoom() const {
-            return _d2w.descrim();
-        }
-
-        Geom::Rotate const &getRotation() const {
-            return _rotate;
-        }
-
-        void setOffset(Geom::Point offset) {
-            _offset = offset;
-        }
-        void addOffset(Geom::Point offset) {
-            _offset += offset;
-        }
-        Geom::Point const &getOffset() {
-            return _offset;
-        }
-
-    private:
-        void _update() {
-            _d2w = _scale * _rotate * _flip;
-            _w2d = _d2w.inverse();
-        }
-        Geom::Affine _w2d;      // Window to desktop
-        Geom::Affine _d2w;      // Desktop to window
-        Geom::Rotate _rotate;   // Rotate part of _w2d
-        Geom::Scale  _scale;    // Scale part of _w2d, holds y-axis direction
-        Geom::Scale  _flip;     // Flip part of _w2d
-        Geom::Point  _offset;   // Point on canvas to align to (0,0) of window
-    };
-
-    DesktopAffine _current_affine;
-    std::list<DesktopAffine> transforms_past;
-    std::list<DesktopAffine> transforms_future;
     bool _quick_zoom_enabled = false; ///< Signifies that currently we're in quick zoom mode
-    DesktopAffine _quick_zoom_affine; ///< The transform of the screen before quick zoom
-
     bool _overlays_visible = true; ///< Whether the overlays are temporarily hidden
     bool _saved_guides_visible = false; ///< Remembers guides' visibility when hiding overlays
 

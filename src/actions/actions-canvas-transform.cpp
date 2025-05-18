@@ -8,26 +8,21 @@
  *
  */
 
-#include <iostream>
+#include "actions-canvas-transform.h"
 
-#include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <2geom/angle.h> // rad_from_deg
+#include <giomm.h>       // Not <gtkmm.h>! To eventually allow a headless version!
 #include <glibmm/i18n.h>
 
-#include <2geom/angle.h>  // rad_from_deg
-
-#include "actions-canvas-transform.h"
 #include "actions-helper.h"
+#include "desktop.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
-#include "desktop.h"
-
-#include "object/sp-namedview.h"
 #include "page-manager.h"
-
+#include "ui/desktop/canvas-flip.h"
 #include "ui/tools/freehand-base.h" // SP_DRAW_CONTEXT
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
-
 #include "ui/widget/canvas.h" // Canvas area
 
 enum {
@@ -152,15 +147,15 @@ canvas_transform(InkscapeWindow *win, const int& option)
             break;
 
         case INK_CANVAS_FLIP_HORIZONTAL:
-            dt->flip_relative_center_point (midpoint, SPDesktop::FLIP_HORIZONTAL);
+            dt->flip_relative_center_point(midpoint, Inkscape::CanvasFlip::FLIP_HORIZONTAL);
             break;
 
         case INK_CANVAS_FLIP_VERTICAL:
-            dt->flip_relative_center_point (midpoint, SPDesktop::FLIP_VERTICAL);
+            dt->flip_relative_center_point(midpoint, Inkscape::CanvasFlip::FLIP_VERTICAL);
             break;
 
         case INK_CANVAS_FLIP_RESET:
-            dt->flip_absolute_center_point (midpoint, SPDesktop::FLIP_NONE);
+            dt->flip_absolute_center_point(midpoint, Inkscape::CanvasFlip::FLIP_NONE);
             break;
 
         default:
