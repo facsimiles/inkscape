@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-17 15:18+0000\n"
+"PO-Revision-Date: 2025-05-20 18:37+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -660,7 +660,7 @@ msgstr "Kora"
 
 #: ../../build/share/filters/filters.svg.h:192
 msgid "Bark texture, vertical; use with deep colors"
-msgstr "Tekstura kore, okomito; koristi s dubokim bojama"
+msgstr "Tekstura kore, okomito; koristi s tamnim bojama"
 
 #: ../../build/share/filters/filters.svg.h:194
 msgid "Lizard Skin"
@@ -4685,13 +4685,13 @@ msgstr "Alpinska koliba"
 #: ../../build/share/symbols/symbols.h:308
 msgctxt "Symbol"
 msgid "Bed and breakfast"
-msgstr "Bed and breakfast"
+msgstr "Noćenje s doručkom"
 
 #: ../../build/share/symbols/symbols.h:295
 #: ../../build/share/symbols/symbols.h:309
 msgctxt "Symbol"
 msgid "Bed and breakfast 2"
-msgstr "Bed and breakfast 2"
+msgstr "Noćenje s doručkom 2"
 
 #: ../../build/share/symbols/symbols.h:296
 #: ../../build/share/symbols/symbols.h:310
@@ -5063,19 +5063,19 @@ msgstr "Slavina"
 #: ../../build/share/symbols/symbols.h:436
 msgctxt "Symbol"
 msgid "Fast food"
-msgstr "Fast food"
+msgstr "Brza hrana"
 
 #: ../../build/share/symbols/symbols.h:426
 #: ../../build/share/symbols/symbols.h:437
 msgctxt "Symbol"
 msgid "Fast food 2"
-msgstr "Fast food 2"
+msgstr "Brza hrana 2"
 
 #: ../../build/share/symbols/symbols.h:427
 #: ../../build/share/symbols/symbols.h:438
 msgctxt "Symbol"
 msgid "Fast food (pizza)"
-msgstr "Fast food (pizza)"
+msgstr "Brza hrana (pizza)"
 
 #: ../../build/share/symbols/symbols.h:428
 #: ../../build/share/symbols/symbols.h:439
