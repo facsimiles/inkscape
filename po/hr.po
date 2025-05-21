@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-21 17:00+0000\n"
+"PO-Revision-Date: 2025-05-21 18:32+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -24781,7 +24781,7 @@ msgstr "_Visina bloka:"
 
 #: ../src/ui/dialog/document-properties.cpp:2017
 msgid "Spacing _Y:"
-msgstr "Ra_zmak y:"
+msgstr "Razmak _y:"
 
 #: ../src/ui/dialog/document-resources.cpp:221
 msgid "Export Color Palette"
@@ -25111,12 +25111,11 @@ msgstr "Izvezi kao SVG 1.1 na osnovi postavaka u dijalogu „Postavke”"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:513
 msgid "Guess from extension"
-msgstr "Pogodi na osnovi ekstenzije"
+msgstr "Pogodi na osnovi sufiksa"
 
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:385
-#, fuzzy
 msgid "All Executable Files"
-msgstr "Sve Inkscape datoteke"
+msgstr "Sve izvršne datoteke"
 
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:576
 #: ../share/ui/dialog-export.glade:506
@@ -25124,9 +25123,8 @@ msgid "Show Preview"
 msgstr "Prikaži pregled"
 
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:714
-#, fuzzy
 msgid "No file selected"
-msgstr "Nijedan filtar nije odabran"
+msgstr "Nijedna datoteka nije odabrana"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:54
 msgid "_Fill"
@@ -30260,7 +30258,7 @@ msgstr "_Uvećaj/Umanji prikaz za:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2870 ../share/ui/units.xml:4
 #: ../share/ui/units.xml:5
 msgid "%"
-msgstr " %"
+msgstr "%"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2718
 msgid ""
@@ -34061,9 +34059,8 @@ msgstr "standardno"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:107
 #: ../src/ui/toolbar/eraser-toolbar.cpp:82
-#, fuzzy
 msgid "(broad stroke)"
-msgstr " (linija)"
+msgstr "(široka linija)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:111
 #: ../src/ui/toolbar/eraser-toolbar.cpp:86
@@ -35052,7 +35049,7 @@ msgstr "Za korištenje alata za izradu oblika moraš odabrati neke objekte."
 
 #: ../src/ui/tools/booleans-tool.cpp:117
 msgid "The Shape Builder requires regular shapes to be selected."
-msgstr "Alat za izradu oblika zahtijeva biranje regularnih oblika"
+msgstr "Alat za izradu oblika zahtijeva neke odabrane regularne oblike."
 
 #: ../src/ui/tools/box3d-tool.cpp:299 ../src/ui/tools/box3d-tool.cpp:305
 #: ../src/ui/tools/box3d-tool.cpp:311 ../src/ui/tools/box3d-tool.cpp:317
@@ -39298,7 +39295,7 @@ msgstr "Zadrži stepeničaste artefakte"
 
 #: ../share/ui/dialog-trace.glade:1072
 msgid "Voronoi"
-msgstr "Voronoi"
+msgstr "Voronoj"
 
 #: ../share/ui/dialog-trace.glade:1075
 msgid "Output composed of straight lines"
@@ -39631,7 +39628,8 @@ msgstr "Gojazni đačić s biciklom drži hmeǉ i finu vatu u ǆepu nošǌe."
 #: ../share/ui/font-list.glade:192
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
+msgstr ""
+"Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây, ćčđšžĆČĐŠŽ, €."
 
 #: ../share/ui/font-list.glade:205
 msgid "Sort alphabetically"
@@ -42893,7 +42891,7 @@ msgstr ""
 #: ../share/extensions/image_extract.py:124
 msgid "{} error occurred"
 msgid_plural "{} errors occurred."
-msgstr[0] "Dogodila se {} greška"
+msgstr[0] "Dogodila se {} greška."
 msgstr[1] "Dogodile su se {} greške."
 msgstr[2] "Dogodilo se {} grešaka."
 
@@ -48740,8 +48738,8 @@ msgid ""
 "Create groups for runs of elements having at least one attribute in common "
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
-"Stvori grupe za niz elemenata, koji imaju barem jedan zajednički atribut "
-"(nrp. boju ispune, neprozirnost linije, …)"
+"Stvori grupe za niz elemenata, koji imaju barem jedan zajednički atribut ("
+"nrp. boju ispune, neprozirnost linije, …)."
 
 #: ../share/extensions/output_scour.inx:28
 msgid "Keep editor data"
@@ -49625,7 +49623,7 @@ msgstr ""
 "Brzina kojom će se pisaljka pomicati u centimetrima ili milimetrima u "
 "sekundi (ovisno o modelu plotera). Postavi na 0 za ispuštanje naredbe. "
 "Većina plotera zanemaruje ovu naredbu (standardno: 0). Može se definirati u "
-"imenu sloja zajedno s brojem pisaljke, npr. („Pisaljka 3 Brzina 10”)"
+"imenu sloja zajedno s brojem pisaljke, npr. („Pisaljka 3 Brzina 10”)."
 
 #: ../share/extensions/plotter.inx:71
 msgid "Rotation (°, clockwise):"
@@ -50744,7 +50742,7 @@ msgstr "Konfiguracija"
 
 #: ../share/extensions/svgcalendar.inx:7
 msgid "Year (4 digits):"
-msgstr "Godina (četveroznamenkasta):"
+msgstr "Godina (4 znamenke):"
 
 #: ../share/extensions/svgcalendar.inx:8
 msgid "Month (0 for all):"
