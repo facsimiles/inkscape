@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-21 21:45+0000\n"
+"PO-Revision-Date: 2025-05-22 02:22+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -6618,7 +6618,7 @@ msgstr "Zatvori Inkscape odmah bez provjere gubitka podataka"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Import Page Number"
-msgstr "Uvezi stranicu"
+msgstr "Uvezi broj stranice"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Select PDF page number to import"
@@ -43777,9 +43777,8 @@ msgid "Import a Computer Graphics Metafile (CGM)"
 msgstr "Uvezi Computer Graphics Metafile (CGM) datoteku"
 
 #: ../share/extensions/clean_up_path.inx:3
-#, fuzzy
 msgid "Clean up path"
-msgstr "Čišćenje"
+msgstr "Pojednostavni stazu"
 
 #: ../share/extensions/clean_up_path.inx:8
 msgid ""
@@ -43789,6 +43788,11 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"Pojednostavni stazu uklanjanjem duplih čvorova i spajanjem bliskih čvorova u "
+"odabranim stazama.\n"
+"\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
@@ -43801,7 +43805,7 @@ msgstr "Minimalna duljiina segmenta"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
-msgstr ""
+msgstr "Ukloni podstaze ukupne duljine manje od navedene duljine"
 
 #: ../share/extensions/clean_up_path.inx:15
 msgid "Minimum subpath length"
@@ -43810,15 +43814,16 @@ msgstr "Minimalna duljiina podstaze"
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
+"Zatvori podstaze gdje je udaljenost između početnog i krajnjeg čvora manja od"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
 msgid "Limit"
-msgstr ""
+msgstr "Ograničenje"
 
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
-msgstr ""
+msgstr "Spoji krajnje čvorove podstaza gdje je udaljenost manja od"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
@@ -43863,6 +43868,16 @@ msgid ""
 "To combine paths, select them and press Ctrl+K. \n"
 "            "
 msgstr ""
+"\n"
+"Izvorno stvoren za pojednostavljenje staza za rezače/crtače uklanjanjem "
+"prekomjernog broja čvorova ili malih praznina.\n"
+"\n"
+"Pravi dupli čvorovi (potpuno iste koordinate) i podstaze bez duljine će se "
+"uvijek ukloniti.\n"
+"Za spajanje staza provjeri jesu li staze koje se uzimaju u obzir već "
+"združene (podstaza iste staze).\n"
+"Za združivanje staza odaberi ih i pritisni Ctrl+K. \n"
+"            "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -44060,7 +44075,7 @@ msgstr "Zamijeni boju"
 
 #: ../share/extensions/color_replace.inx:6
 msgid "Color to replace"
-msgstr "Boja, koja se zamjenjuje"
+msgstr "Boja koja se zamjenjuje"
 
 #: ../share/extensions/color_replace.inx:7
 msgid "From color"
