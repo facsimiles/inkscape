@@ -1566,7 +1566,7 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
     , _title_label(NULL)
     , _title_edit(NULL)
 {
-    FileSaveDialog::myDocTitle = docTitle;
+    FileSaveDialog::myDocTitle = docTitle ? docTitle : "";
 
     if (dialogType != CUSTOM_TYPE)
         createFilterMenu();
