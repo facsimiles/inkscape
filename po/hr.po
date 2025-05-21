@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-21 18:32+0000\n"
+"PO-Revision-Date: 2025-05-21 21:45+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -6514,27 +6514,27 @@ msgstr "bez slojeva prazno"
 
 #: ../../build/share/templates/templates.h:1
 msgid "Zine Booklet (A4)"
-msgstr ""
+msgstr "Zine brošura (A4)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
-msgstr ""
+msgstr "Savitljiva brošura s jednom stranicom (A4)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "297 × 210 mm"
-msgstr ""
+msgstr "297 × 210 mm"
 
 #: ../../build/share/templates/templates.h:1
 msgid "Zine Booklet (US)"
-msgstr ""
+msgstr "Zine brošura (US)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
-msgstr ""
+msgstr "Savitljiva brošura s jednom stranicom (US Letter)"
 
 #: ../../build/share/templates/templates.h:1
 msgid "11 × 8.5 in"
-msgstr ""
+msgstr "11 × 8.5 in"
 
 #: ../src/actions/actions-base.cpp:195
 msgid "Inkscape Version"
@@ -18098,7 +18098,7 @@ msgstr "Koje LPE efekte povezanih staza treba uzeti u obzir"
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:26
 msgid "Join subpaths"
-msgstr "Spoji pod-staze"
+msgstr "Spoji podstaze"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:27
@@ -34035,9 +34035,8 @@ msgstr "3D kutija: promijeni perspektivu (kut beskonačnih osi)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:98
 #: ../src/ui/toolbar/eraser-toolbar.cpp:73
-#, fuzzy
 msgid "(hairline)"
-msgstr "Tanka linija"
+msgstr "(tanka linija)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:136
@@ -34053,9 +34052,8 @@ msgstr "Tanka linija"
 #: ../src/ui/toolbar/tweak-toolbar.cpp:70
 #: ../src/ui/toolbar/tweak-toolbar.cpp:81
 #: ../src/ui/toolbar/tweak-toolbar.cpp:92
-#, fuzzy
 msgid "(default)"
-msgstr "standardno"
+msgstr "(standardno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:107
 #: ../src/ui/toolbar/eraser-toolbar.cpp:82
@@ -34065,124 +34063,115 @@ msgstr "(široka linija)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:111
 #: ../src/ui/toolbar/eraser-toolbar.cpp:86
 msgid "(speed blows up stroke)"
-msgstr ""
+msgstr "(brzina podebljava liniju)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:114
 #: ../src/ui/toolbar/eraser-toolbar.cpp:89
 msgid "(slight widening)"
-msgstr ""
+msgstr "(blago širenje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:115
 #: ../src/ui/toolbar/eraser-toolbar.cpp:90
-#, fuzzy
 msgid "(constant width)"
-msgstr "ograničenje"
+msgstr "(konstantna širina)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:116
 #: ../src/ui/toolbar/eraser-toolbar.cpp:91
 msgid "(slight thinning, default)"
-msgstr ""
+msgstr "(blago stanjivanje, standardno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:119
 #: ../src/ui/toolbar/eraser-toolbar.cpp:94
-#, fuzzy
 msgid "(speed deflates stroke)"
-msgstr "Oblik kraja linije"
+msgstr "(brzina stanjuje liniju)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:123
 #: ../src/ui/toolbar/eraser-toolbar.cpp:116
 msgid "(no inertia)"
-msgstr ""
+msgstr "(bez inercije)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:124
 #: ../src/ui/toolbar/eraser-toolbar.cpp:117
 msgid "(slight smoothing, default)"
-msgstr ""
+msgstr "(blago zaglađivanje, standardno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
 #: ../src/ui/toolbar/eraser-toolbar.cpp:118
 msgid "(noticeable lagging)"
-msgstr ""
+msgstr "(primjetno zaostajanje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
 #: ../src/ui/toolbar/eraser-toolbar.cpp:121
 msgid "(maximum inertia)"
-msgstr ""
+msgstr "(maksimalna inercija)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
-#, fuzzy
 msgid "(left edge up)"
-msgstr "Jednaki lijevi rubovi"
+msgstr "(lijevi rub gore)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:135
-#, fuzzy
 msgid "(horizontal)"
-msgstr "Vodoravno"
+msgstr "(vodoravno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:138
-#, fuzzy
 msgid "(right edge up)"
-msgstr "Jednaki desni rubovi"
+msgstr "(desni rub gore)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:143
-#, fuzzy
 msgid "(perpendicular to stroke, \"brush\")"
-msgstr "Okomita simetrala"
+msgstr "(okomito na potez, „kist”)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(almost fixed, default)"
-msgstr ""
+msgstr "(nepotpuno fiksirano, standardno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:148
 msgid "(fixed by Angle, \"pen\")"
-msgstr ""
+msgstr "(fiksirano kutom, „pisaljka”)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:152
 #: ../src/ui/toolbar/eraser-toolbar.cpp:98
-#, fuzzy
 msgid "(blunt caps, default)"
-msgstr "Inkscape (standardno)"
+msgstr "(ravni krajevi, standardno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:153
 #: ../src/ui/toolbar/eraser-toolbar.cpp:99
 msgid "(slightly bulging)"
-msgstr ""
+msgstr "(blago ispupčenje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:156
 #: ../src/ui/toolbar/eraser-toolbar.cpp:102
-#, fuzzy
 msgid "(approximately round)"
-msgstr "Polumjer približno"
+msgstr "(približno zaobljeno)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:157
 #: ../src/ui/toolbar/eraser-toolbar.cpp:103
 msgid "(long protruding caps)"
-msgstr ""
+msgstr "(dugačko istureni krajevi)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:161
 #: ../src/ui/toolbar/eraser-toolbar.cpp:107
-#, fuzzy
 msgid "(smooth line)"
-msgstr "zaglađen čvor"
+msgstr "(glatka linija)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:162
 #: ../src/ui/toolbar/eraser-toolbar.cpp:108
 msgid "(slight tremor)"
-msgstr ""
+msgstr "(lagano podrhtavanje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:163
 #: ../src/ui/toolbar/eraser-toolbar.cpp:109
 msgid "(noticeable tremor)"
-msgstr ""
+msgstr "(primjetno podrhtavanje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:166
 #: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(maximum tremor)"
-msgstr ""
+msgstr "(maksimalno podrhtavanje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:170
 msgid "(no wiggle)"
-msgstr ""
+msgstr "(bez vijuganja)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:171
 msgid "(slight deviation)"
@@ -34190,7 +34179,7 @@ msgstr "(blago odstupanje)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:174
 msgid "(wild waves and curls)"
-msgstr ""
+msgstr "(divlji valovi i uvojci)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:491
@@ -34218,9 +34207,8 @@ msgid "Arrange connector network"
 msgstr "Rasporedi mrežu spojnica"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:72
-#, fuzzy
 msgid "(no width)"
-msgstr "Bez širine"
+msgstr "(bez širine)"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:130
 #: ../src/ui/toolbar/gradient-toolbar.cpp:153
@@ -43786,7 +43774,7 @@ msgstr "Computer Graphics Metafile (*.cgm)"
 
 #: ../share/extensions/cgm_input.inx:12
 msgid "Import a Computer Graphics Metafile (CGM)"
-msgstr "Uvezi jednu Computer Graphics Metafile (CGM)"
+msgstr "Uvezi Computer Graphics Metafile (CGM) datoteku"
 
 #: ../share/extensions/clean_up_path.inx:3
 #, fuzzy
@@ -43805,7 +43793,7 @@ msgstr ""
 #: ../share/extensions/clean_up_path.inx:12
 msgid ""
 "Interpolate nodes of segments with total length less than specified length"
-msgstr ""
+msgstr "Interpoliraj čvorove segmenata ukupne duljine manje od navedene duljine"
 
 #: ../share/extensions/clean_up_path.inx:13
 msgid "Minimum segment length"
@@ -43816,9 +43804,8 @@ msgid "Remove subpaths with total length less than specified length"
 msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:15
-#, fuzzy
 msgid "Minimum subpath length"
-msgstr "Minimalna duljiina veza [%]"
+msgstr "Minimalna duljiina podstaze"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
@@ -43835,22 +43822,19 @@ msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr ""
+msgstr "Dozvoli preokretanje smjera podstaza"
 
 #: ../share/extensions/clean_up_path.inx:21
-#, fuzzy
 msgid "Join subpaths by"
-msgstr "Spoji pod-staze"
+msgstr "Spoji podstaze"
 
 #: ../share/extensions/clean_up_path.inx:22
-#, fuzzy
 msgid "interpolating nodes"
-msgstr "Broj koraka interpolacije:"
+msgstr "interpoliranjem čvorova"
 
 #: ../share/extensions/clean_up_path.inx:23
-#, fuzzy
 msgid "adding straight line segment"
-msgstr "Izravnaj segmente"
+msgstr "dodavanjem segmenta u obliku ravne linije"
 
 #: ../share/extensions/clean_up_path.inx:25
 msgid ""
@@ -43858,6 +43842,9 @@ msgid ""
 "Unit as defined in document (File->Document Properties).\n"
 "            "
 msgstr ""
+"\n"
+"Jedinica kako je definirana u dokumentu (Datoteka → Svojstva dokumenta).\n"
+"            "
 
 #: ../share/extensions/clean_up_path.inx:29
 msgid "Information"
@@ -43879,11 +43866,11 @@ msgstr ""
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
-msgstr "Crno i bijelo"
+msgstr "Crno-bijela"
 
 #: ../share/extensions/color_blackandwhite.inx:5
 msgid "Threshold Color (1-255):"
-msgstr "Prag boje (1-255):"
+msgstr "Prag boje (1 – 255):"
 
 #: ../share/extensions/color_brighter.inx:3
 msgid "Brighter"
@@ -47873,7 +47860,7 @@ msgstr ""
 "2. Objekt/Razgrupiraj (Shift+Strg+G)\n"
 "3. Klikni „Primijeni”\n"
 "\n"
-"Sumnjivo mali objekti, bit će označeni obojenim strelicama.\n"
+"Sumnjivo mali objekti će biti označeni obojenim strelicama.\n"
 "            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:47
