@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-20 18:37+0000\n"
+"PO-Revision-Date: 2025-05-21 14:47+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -15327,7 +15327,7 @@ msgstr "Video SD PAL"
 
 #: ../src/extension/internal/template-video.cpp:39
 msgid "Video SD Widescreen / PAL"
-msgstr "Video SD Widescreen / PAL"
+msgstr "Video SD široki ekran / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
 msgid "Video SD NTSC"
@@ -15335,7 +15335,7 @@ msgstr "Video SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
 msgid "Video SD Widescreen NTSC"
-msgstr "Video SD Widescreen NTSC"
+msgstr "Video SD široki ekran NTSC"
 
 #: ../src/extension/internal/template-video.cpp:42
 msgid "Video HD 720p"
@@ -15367,7 +15367,7 @@ msgstr "VSD unos"
 
 #: ../src/extension/internal/vsd-input.cpp:323
 msgid "Microsoft Visio Diagram (*.vsd)"
-msgstr "Microsoft Visio Diagram (*.vsd)"
+msgstr "Microsoft Visio dijagram (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:324
 msgid "File format used by Microsoft Visio 6 and later"
@@ -15379,7 +15379,7 @@ msgstr "VDX unos"
 
 #: ../src/extension/internal/vsd-input.cpp:335
 msgid "Microsoft Visio XML Diagram (*.vdx)"
-msgstr "Microsoft Visio XML Diagram (*.vdx)"
+msgstr "Microsoft Visio XML dijagram (*.vdx)"
 
 #: ../src/extension/internal/vsd-input.cpp:336
 msgid "File format used by Microsoft Visio 2010 and later"
@@ -15428,11 +15428,11 @@ msgstr "Preslikaj sve mustre ispune u standardne WMF šrafure"
 
 #: ../src/extension/internal/wmf-inout.cpp:3240
 msgid "Windows Metafile (*.wmf)"
-msgstr "Windows Metafile (*.wmf)"
+msgstr "Windows metadatoteka (*.wmf)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3241
 msgid "Windows Metafile"
-msgstr "Windows Metafile"
+msgstr "Windows metadatoteka"
 
 #: ../src/extension/internal/wpg-input.cpp:136
 msgid "WPG Input"
@@ -15440,7 +15440,7 @@ msgstr "WPG unos"
 
 #: ../src/extension/internal/wpg-input.cpp:141
 msgid "WordPerfect Graphics (*.wpg)"
-msgstr "WordPerfect Graphics (*.wpg)"
+msgstr "WordPerfect grafike (*.wpg)"
 
 #: ../src/extension/internal/wpg-input.cpp:142
 msgid "Vector graphics format used by Corel WordPerfect"
