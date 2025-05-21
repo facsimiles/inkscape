@@ -103,6 +103,7 @@ set(TEST_SOURCES
     object-links-test
     object-set-test
     object-style-test
+    page-management
     path-boolop-test
     path-reverse-lpe-test
     preferences-test
