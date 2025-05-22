@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-22 02:22+0000\n"
+"PO-Revision-Date: 2025-05-22 18:27+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -24680,7 +24680,7 @@ msgstr "Okomiti razmak između blokova"
 
 #: ../src/ui/dialog/document-properties.cpp:1898
 msgid "_Margin X:"
-msgstr "_Margin x:"
+msgstr "_Margina x:"
 
 #: ../src/ui/dialog/document-properties.cpp:1898
 #: ../src/ui/dialog/inkscape-preferences.cpp:2179
@@ -24689,7 +24689,7 @@ msgstr "Desna i lijeva margina"
 
 #: ../src/ui/dialog/document-properties.cpp:1901
 msgid "M_argin Y:"
-msgstr "M_argin y:"
+msgstr "M_argina y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1901
 #: ../src/ui/dialog/inkscape-preferences.cpp:2180
@@ -43410,7 +43410,7 @@ msgid ""
 "Try using the procedure Path->Object to Path."
 msgstr ""
 "Prvi odabrani objekt nije staza niti grupa.\n"
-"Pokušaj proceduru Staza → Objekt u stazu."
+"Pokušaj proceduru Staza → Objekt u stazu."
 
 #: ../share/extensions/path_envelope.py:72
 msgid "Second selected path is too short. Must be four or more nodes."
@@ -43848,7 +43848,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Jedinica kako je definirana u dokumentu (Datoteka → Svojstva dokumenta).\n"
+"Jedinica kako je definirana u dokumentu (Datoteka → Svojstva dokumenta).\n"
 "            "
 
 #: ../share/extensions/clean_up_path.inx:29
@@ -44571,7 +44571,7 @@ msgstr ""
 "dxf_input_text_scale_factor.svg\n"
 "- „Automatsko skaliranje” odgovarat će širini A4 stranice.\n"
 "- „Čitaj iz datoteke” koristi varijablu $MEASUREMENT.\n"
-"- slojevi se zadržavaju samo putem Datoteka->Otvori, ne putem Uvezi.\n"
+"- slojevi se zadržavaju samo putem Datoteka → Otvori, ne putem Uvezi.\n"
 "- ograničena podrška za BLOCKS, umjesto toga koristi AutoCAD Explode Blocks, "
 "ako je potrebno."
 
