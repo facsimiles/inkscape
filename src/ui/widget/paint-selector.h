@@ -80,7 +80,7 @@ class PaintSelector : public Gtk::Box {
     Mode _mode;
 
     Gtk::Box *_style;
-    StyleToggleButton *_none;
+    StyleToggleButton *_none = nullptr;
     StyleToggleButton *_solid;
     StyleToggleButton *_gradient;
     StyleToggleButton *_radial;

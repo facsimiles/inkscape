@@ -218,6 +218,9 @@ StyleToggleButton *PaintSelector::style_button_add(gchar const *pixmap, PaintSel
     b->set_visible(true);
     b->set_has_frame(false);
     b->set_style(mode);
+    if (_none) {
+        b->set_group(*_none);
+    }
 
     b->set_image_from_icon_name(pixmap, Gtk::IconSize::NORMAL); // Previously GTK_ICON_SIZE_BUTTON
 
