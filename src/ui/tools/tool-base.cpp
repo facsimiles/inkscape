@@ -114,6 +114,8 @@ ToolBase::ToolBase(SPDesktop *desktop, std::string &&prefs_path, std::string &&c
 
     sp_event_context_read(this, "changelayer");
     sp_event_context_read(this, "changepage");
+
+    _hide_selection_connection = desktop->connectHideSelectionBoxes(sigc::mem_fun(*this, &ToolBase::onHideSelectionChanged));
 }
 
 ToolBase::~ToolBase()

@@ -17,8 +17,11 @@
 #define SEEN_SP_PAINT_SELECTOR_H
 
 #include "fill-or-stroke.h"
+#include "ui/operation-blocker.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/swatch-selector.h"
+#include "selection.h"
+#include "ui/widget/recolor-art-manager.h"
 
 class SPGradient;
 class SPLinearGradient;
@@ -27,12 +30,15 @@ class SPRadialGradient;
 class SPMeshGradient;
 #endif
 class SPDesktop;
+class Selection;
 class SPPattern;
 class SPStyle;
 
 namespace Gtk {
 class Label;
 class ToggleButton;
+class Button;
+class Popover;
 } // namespace Gtk
 
 namespace Inkscape::UI::Widget {
@@ -41,6 +47,8 @@ class FillRuleRadioButton;
 class GradientEditor;
 class PatternEditor;
 class StyleToggleButton;
+class RecolorArt;
+class RecolorArtManager;
 
 /**
  * Generic paint selector widget.
@@ -93,7 +101,14 @@ class PaintSelector : public Gtk::Box {
     Gtk::Box         *_selector_mesh = nullptr;
     SwatchSelector   *_selector_swatch = nullptr;
     PatternEditor* _selector_pattern = nullptr;
-
+    
+    UI::Widget::RecolorArtManager *_recolorManager = nullptr;
+    std::array<std::unique_ptr<Gtk::Button>, 5> _recolorButtonTrigger;
+    OperationBlocker _blocker;
+    SPDesktop *_desktop = nullptr;
+    void onSelectionChanged(Inkscape::Selection *selection);
+    bool checkSelection(Inkscape::Selection *selection);
+    void hideAllExcept(Gtk::Button *recolorButtonTrigger = nullptr);
     Gtk::Label *_label;
     GtkWidget *_patternmenu = nullptr;
     bool _patternmenu_update = false;
@@ -116,6 +131,7 @@ class PaintSelector : public Gtk::Box {
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void (SPStop*)> _signal_stop_selected;
     sigc::signal<void ()> _signal_edit_pattern;
+    sigc::scoped_connection _selection_changed_connection;
 
     StyleToggleButton *style_button_add(gchar const *px, PaintSelector::Mode mode, gchar const *tip);
     void style_button_toggled(StyleToggleButton *tb);
@@ -192,6 +208,7 @@ class PaintSelector : public Gtk::Box {
     Geom::Scale get_pattern_gap();
     Glib::ustring get_pattern_label();
     bool is_pattern_scale_uniform();
+    void setDesktop(SPDesktop *desktop);
 };
 
 enum {

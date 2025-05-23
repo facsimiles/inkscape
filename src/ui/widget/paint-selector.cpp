@@ -25,6 +25,8 @@
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
 
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
 #include "object/sp-hatch.h"
@@ -33,12 +35,18 @@
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-stop.h"
+#include "pattern-manipulation.h"
+#include "selection.h"
+#include "style.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/gradient-editor.h"
 #include "ui/widget/pattern-editor.h"
+#include "ui/widget/swatch-selector.h"
+#include "ui/widget/recolor-art-manager.h"
 #include "widgets/widget-sizes.h"
+#include "recolor-art-manager.h"
 
 #ifdef SP_PS_VERBOSE
 static gchar const *modeStrings[] = {
@@ -114,10 +122,14 @@ GradientSelectorInterface *PaintSelector::getGradientFromData() const
 
 PaintSelector::PaintSelector(FillOrStroke kind, std::shared_ptr<Colors::ColorSet> colors)
     : _selected_colors(std::move(colors))
-{
+{       
     set_orientation(Gtk::Orientation::VERTICAL);
 
     _mode = static_cast<PaintSelector::Mode>(-1); // huh?  do you mean 0xff?  --  I think this means "not in the enum"
+
+    for (int i = 0; i < 5; i++) {
+        _recolorButtonTrigger[i] = std::make_unique<Gtk::Button>();
+    }
 
     /* Paint style button box */
     _style = Gtk::make_managed<Gtk::Box>();
@@ -188,6 +200,66 @@ PaintSelector::PaintSelector(FillOrStroke kind, std::shared_ptr<Colors::ColorSet
     setMode(PaintSelector::MODE_MULTIPLE);
 
     _fillrulebox->set_visible(kind == FILL);
+
+    for (auto const &b : _recolorButtonTrigger) {
+        b->set_label(_("Recolor Selection"));
+        b->set_hexpand(false);
+        b->set_vexpand(false);
+        b->set_size_request(180);
+        b->set_halign(Gtk::Align::CENTER);
+        b->set_valign(Gtk::Align::START);
+        b->set_margin_top(8);
+        b->set_visible(false);
+
+        b->signal_clicked().connect([b = b.get(), this] {
+            auto guard = _blocker.block();
+            if (!_recolorManager) {
+                // Lazy-load the recolour widget and popover.
+                _recolorManager = &RecolorArtManager::get();
+                if (_recolorManager->getPopOver().get_parent()) {
+                    _recolorManager->getPopOver().unparent();
+                }
+                _recolorManager->getPopOver().set_parent(*b);
+                _recolorManager->setDesktop(_desktop);
+            } else if (_recolorManager->getPopOver().get_parent() != b) {
+                // Reparent the popover to this button if necessary.
+                _recolorManager->getPopOver().unparent();
+                _recolorManager->getPopOver().set_parent(*b);
+            }
+            _recolorManager->getPopOver().popup();
+            _recolorManager->performUpdate();
+        });
+    }
+
+    _frame->append(*_recolorButtonTrigger[0]);
+}
+
+void PaintSelector::setDesktop(SPDesktop *desktop)
+{
+    if (_desktop == desktop) {
+        return;
+    }
+    
+    if (_recolorManager) {
+        _recolorManager->getPopOver().popdown();
+    }
+    
+    if (_selection_changed_connection) {
+        _selection_changed_connection.disconnect();
+    }
+    
+    _desktop = desktop;  
+    
+    if (_desktop) {
+        if (auto selection = _desktop->getSelection()) {
+            _selection_changed_connection = 
+                selection->connectChanged(sigc::mem_fun(*this, &PaintSelector::onSelectionChanged));
+        }
+    }
+    
+    if (_recolorManager) {
+        _recolorManager->setDesktop(_desktop);
+    }
 }
 
 StyleToggleButton *PaintSelector::style_button_add(gchar const *pixmap, PaintSelector::Mode mode, gchar const *tip)
@@ -225,7 +297,11 @@ void PaintSelector::fillrule_toggled(FillRuleRadioButton *tb)
     }
 }
 
-void PaintSelector::setMode(Mode mode) {
+void PaintSelector::setMode(Mode mode)
+{
+    if (_recolorManager && _recolorManager->getPopOver().get_visible() && checkSelection(_desktop->getSelection())) {
+        return;
+    }
     set_mode_ex(mode, false);
 }
 
@@ -276,6 +352,11 @@ void PaintSelector::set_mode_ex(Mode mode, bool switch_style) {
         }
         _mode = mode;
         _signal_mode_changed.emit(_mode, switch_style);
+        if (_desktop) {
+            if (auto sel = _desktop->getSelection()) {
+                onSelectionChanged(sel);
+            }
+        }
         _update = false;
     }
 }
@@ -497,12 +578,15 @@ void PaintSelector::set_mode_color()
             auto const color_selector = Gtk::make_managed<ColorNotebook>(_selected_colors);
             color_selector->set_visible(true);
             UI::pack_start(*_selector_solid_color, *color_selector, true, true);
+            UI::pack_start(*_selector_solid_color, *_recolorButtonTrigger[1], false, false);
+
             /* Pack everything to frame */
             _frame->append(*_selector_solid_color);
             color_selector->set_label(_("<b>Flat color</b>"));
         }
 
         _selector_solid_color->set_visible(true);
+        _selector_solid_color->set_vexpand(false);
     }
 
     _label->set_markup(""); //_("<b>Flat color</b>"));
@@ -547,6 +631,7 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
                 _selector_gradient->signal_changed().connect(sigc::mem_fun(*this, &PaintSelector::gradient_changed));
                 _selector_gradient->signal_stop_selected().connect([this](SPStop* stop) { _signal_stop_selected.emit(stop); });
                 /* Pack everything to frame */
+                _selector_gradient->getColorBox().append(*_recolorButtonTrigger[2]);
                 _frame->append(*_selector_gradient);
             }
             catch (std::exception& ex) {
@@ -816,6 +901,7 @@ void PaintSelector::set_mode_mesh(PaintSelector::Mode mode)
             UI::pack_start(*_selector_mesh, *hb2, false, false, AUX_BETWEEN_BUTTON_GROUPS);
 
             _frame->append(*_selector_mesh);
+            _frame->reorder_child_after(*_recolorButtonTrigger[0], *_selector_mesh);
         }
 
         _selector_mesh->set_visible(true);
@@ -902,8 +988,10 @@ void PaintSelector::pattern_destroy(GtkWidget *widget, PaintSelector * /*psel*/)
     g_object_unref(G_OBJECT(widget));
 }
 
-void PaintSelector::pattern_change(GtkWidget * /*widget*/, PaintSelector *psel) { psel->_signal_changed.emit(); }
-
+void PaintSelector::pattern_change(GtkWidget * /*widget*/, PaintSelector *psel)
+{
+    psel->_signal_changed.emit();
+}
 
 /*update pattern list*/
 void PaintSelector::updatePatternList(SPPattern *pattern)
@@ -932,7 +1020,9 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
             _selector_pattern->signal_changed().connect([this](){ _signal_changed.emit(); });
             _selector_pattern->signal_color_changed().connect([this](Colors::Color const &){ _signal_changed.emit(); });
             _selector_pattern->signal_edit().connect([this](){ _signal_edit_pattern.emit(); });
+            _recolorButtonTrigger[3]->set_label(_("Recolor Pattern"));
             _frame->append(*_selector_pattern);
+            _frame->append(*_recolorButtonTrigger[3]);
         }
 
         SPDocument* document = SP_ACTIVE_DOCUMENT;
@@ -1059,6 +1149,8 @@ void PaintSelector::set_mode_swatch(PaintSelector::Mode mode)
             gsel->signal_released().connect(sigc::mem_fun(*this, &PaintSelector::gradient_released));
             gsel->signal_changed().connect(sigc::mem_fun(*this, &PaintSelector::gradient_changed));
 
+            _selector_swatch->append(*_recolorButtonTrigger[4]);
+            _recolorButtonTrigger[4]->hide();
             // Pack everything to frame
             _frame->append(*_selector_swatch);
         } else {
@@ -1123,9 +1215,59 @@ PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrS
     return mode;
 }
 
+void PaintSelector::onSelectionChanged(Inkscape::Selection *selection)
+{
+    if (_blocker.pending()) {
+        return;
+    }
+
+    if (checkSelection(selection)) {
+        if (_mode == MODE_MULTIPLE || _mode == MODE_UNSET || _mode == MODE_GRADIENT_MESH) {
+            hideAllExcept(_recolorButtonTrigger[0].get());
+        } else if (_mode == MODE_SOLID_COLOR) {
+            hideAllExcept(_recolorButtonTrigger[1].get());
+        } else if (_mode == MODE_GRADIENT_RADIAL || _mode == MODE_GRADIENT_LINEAR) {
+            hideAllExcept(_recolorButtonTrigger[2].get());
+        } else if (_mode == MODE_PATTERN) {
+            hideAllExcept(_recolorButtonTrigger[3].get());
+        } else if (_mode == MODE_SWATCH) {
+            hideAllExcept(_recolorButtonTrigger[4].get());
+        } else {
+            hideAllExcept();
+        }
+    } else {
+        hideAllExcept();
+    }
+
+    if (_recolorManager && _recolorManager->getPopOver().get_visible() && checkSelection(selection)) {
+        auto guard = _blocker.block();
+        _recolorManager->performUpdate();
+    }
+}
+
+bool PaintSelector::checkSelection(Inkscape::Selection *selection)
+{
+    return (_mode == MODE_GRADIENT_MESH && (selection->size() > 1 || RecolorArtManager::checkMeshObject(selection))) ||
+           RecolorArtManager::checkSelection(selection);
+}
+
+void PaintSelector::hideAllExcept(Gtk::Button *recolorButtonTrigger)
+{
+    if (recolorButtonTrigger) {
+        recolorButtonTrigger->show();
+    }
+
+    for (auto const &b : _recolorButtonTrigger) {
+        if (b.get() != recolorButtonTrigger) {
+            b->hide();
+        }
+    }
+}
+
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
+
 /*
   Local Variables:
   mode:c++

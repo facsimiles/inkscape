@@ -102,7 +102,7 @@ void SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
                 } else if (auto rect = dynamic_cast<CanvasItemRect *>(canvas_item)) {
                     rect->set_rect(*b);
                 }
-                canvas_item->set_visible(true);
+                canvas_item->set_visible(_bboxes_visible);
             } else { // no bbox
                 canvas_item->set_visible(false);
             }
@@ -150,7 +150,7 @@ void SelCue::_newItemBboxes()
             if (canvas_item) {
                 canvas_item->set_pickable(false);
                 canvas_item->lower_to_bottom(); // Just low enough to not get in the way of other draggable knots.
-                canvas_item->set_visible(true);
+                canvas_item->set_visible(_bboxes_visible);
                 _item_bboxes.emplace_back(std::move(canvas_item));
             }
         }
@@ -217,6 +217,12 @@ void SelCue::_boundingBoxPrefsChanged(int prefs_bbox)
     g_return_if_fail(_selection != nullptr);
 
     _updateItemBboxes(mode, prefs_bbox);
+}
+
+void SelCue::setBboxesVisible(bool visible)
+{
+    _bboxes_visible = visible;
+    _updateItemBboxes();
 }
 
 } // namespace Inkscape

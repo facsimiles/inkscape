@@ -225,6 +225,106 @@ private:
     int _square_size = 1;
 };
 
+/**
+ * @class MultiMarkerWheel
+ */
+class MultiMarkerWheel
+    : public WidgetVfuncsClassInit
+    , public ColorWheelBase
+{
+public:
+    MultiMarkerWheel();
+    MultiMarkerWheel(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &builder);
+    bool setColor(Colors::Color const &color, bool overrideHue = true, bool emit = true) override;
+    void setColors(std::vector<Colors::Color> colors);
+    Colors::Color getColor() const override
+    {
+        if (!_values_vector.empty() && _active_index >= 0 && _active_index < _values_vector.size())
+            return _values_vector[_active_index];
+        else
+          return Colors::Color(0x00000000);
+    }
+    bool setActiveIndex(int index)
+    {
+        if (!_values_vector.empty() && index >= 0 && index < _values_vector.size()) {
+            _active_index = index;
+            return true;
+        } else
+            return false;
+    }
+    int getActiveIndex()
+    {
+        if (!_values_vector.empty() && _active_index >= 0 && _active_index < _values_vector.size())
+            return _active_index;
+        else
+            return -1;
+    }
+    int getHoverIndex()
+    {
+        if (!_values_vector.empty() && _hover_index >= 0 && _hover_index < _values_vector.size())
+            return _hover_index;
+        else
+            return -1;
+    }
+    bool changeColor(int index, Colors::Color const &color);
+    sigc::connection connect_color_hovered(sigc::slot<void ()> slot) { return _signal_color_hovered.connect(std::move(slot)); }
+    void toggleHueLock(bool locked){_hue_lock = locked ;}
+    bool getHueLock(){return _hue_lock;}
+    std::vector<Colors::Color> const &getColors() const { return _values_vector; }
+    void setLightness(double value);
+    void setSaturation(double value);
+    void redrawOnHueLocked(){queue_drawing_area_draw();}
+
+private:
+    void on_drawing_area_size(int width, int height, int baseline) override;
+    void on_drawing_area_draw(Cairo::RefPtr<Cairo::Context> const &cr, int, int) override;
+    std::optional<bool> focus(Gtk::DirectionType direction) override;
+    bool _is_in_wheel(double x, double y);
+    void _update_wheel_color(double x, double y, int index);
+    void _draw_line_to_marker(Cairo::RefPtr<Cairo::Context> const &cr, double mx, double my, double cx, double cy, Colors::Color const &value, int index);
+    void _draw_marker(Cairo::RefPtr<Cairo::Context> const &cr, Colors::Color const &value, int index);
+    int _get_marker_index(Geom::Point const &p);
+    void _update_hue_lock_positions();
+
+    enum class DragMode
+    {
+        NONE,
+        HUE,
+        SATURATION_VALUE
+    };
+
+    static constexpr double _wheel_width = 1.0;
+    DragMode _mode = DragMode::NONE;
+    bool _focus_on_wheel = true;
+
+    Gtk::EventSequenceState on_click_pressed(Gtk::GestureClick const &controller, int n_press, double x,
+                                             double y) final;
+    Gtk::EventSequenceState on_click_released(int n_press, double x, double y) final;
+    void on_motion(Gtk::EventControllerMotion const &motion, double x, double y) final;
+    bool on_key_pressed(unsigned keyval, unsigned keycode, Gdk::ModifierType state) final;
+
+    // caches to speed up drawing
+    using MinMax = std::array<double, 2>;
+    std::vector<Colors::Color> _values_vector;
+    std::optional<Geom::IntPoint> _cache_size;
+    std::optional<MinMax> _radii;
+    std::optional<Geom::Point> _marker_point;
+    std::vector<std::optional<Geom::Point>> _markers_points;
+    std::vector<guint32> _buffer_wheel;
+    Cairo::RefPtr<Cairo::ImageSurface> _source_wheel;
+    MinMax const &get_radii();
+    Geom::Point get_marker_point(int index);
+    int _active_index = 0;
+    int _hover_index = -1;
+    bool _hue_lock = 0;
+    std::vector<double>_relative_hue_angles;
+    static constexpr double marker_click_tolerance = 5.0;
+    sigc::signal<void ()> _signal_color_hovered;
+    double lightness = 1.0;
+    double saturation = 1.0;
+    void update_wheel_source();
+};
+
 } // namespace Inkscape::UI::Widget
 
 #endif // INK_COLORWHEEL_HSLUV_H

@@ -302,9 +302,10 @@ set(ui_SRC
 	widget/widget-vfuncs-class-init.cpp
 	widget/xml-treeview.cpp
 	widget/property-utils.cpp
-
+	widget/recolor-art.cpp
+	widget/multi-marker-color-plate.cpp
+	widget/recolor-art-manager.cpp
 	view/svg-view-widget.cpp
-
 
 	# -------
 	# Headers
@@ -633,7 +634,10 @@ set(ui_SRC
 	widget/widget-vfuncs-class-init.h
 	widget/xml-treeview.h
 	widget/property-utils.h
-
+	widget/recolor-art.h
+	widget/multi-marker-color-plate.h
+	widget/recolor-art-manager.h
+	
 	view/svg-view-widget.h
 )
 

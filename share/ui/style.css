@@ -1727,3 +1727,48 @@ editablelabel.editing {
     outline-offset: 0;
     outline: 1px solid @theme_fg_color;
 }
+
+/*
+**********************
+* Recolor Art class  *
+**********************
+*/
+
+#recolor-art #original,
+#recolored {
+    min-height: 12px;
+    border-radius: 4px;
+    /* border: 2px solid transparent; */
+}
+
+#original-recolor-box{
+padding:0 1px;
+}
+.type_box {
+  background-color: alpha(@theme_bg_color,0.8);
+  border-radius: 2px;
+  padding-left: 2px;
+  padding-right: 6px;
+}
+#recolor-art listview row:selected{
+    background-color: transparent;
+    border: 2px solid @theme_selected_bg_color;
+    border-radius: 4px;
+    color: @theme_fg_color;
+}
+
+#recolor-art gridview child:selected {
+    background-color: transparent;
+    border: 1px solid @theme_selected_bg_color;
+    border-radius: 1px;
+    color: @theme_fg_color;
+}
+
+#recolor-art scrollbar slider {
+    min-width: 0px;
+    min-height: 0px;
+    margin: 0px;
+    padding: 0px;
+    background: transparent;
+    border: none;
+}

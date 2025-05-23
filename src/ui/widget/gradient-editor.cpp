@@ -66,13 +66,12 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_t
     _turn_gradient(get_widget<Gtk::Button>(_builder, "turnBtn")),
     _angle_adj(get_object<Gtk::Adjustment>(_builder, "adjustmentAngle")),
     _angle_btn(get_widget<InkSpinButton>(_builder, "angle")),
+    _main_box(get_widget<Gtk::Box>(_builder, "main-box")),
     _color_picker(ColorPickerPanel::create(space, get_plate_type_preference(prefs, ColorPickerPanel::None), _colors)),
     _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "type-linear")),
     _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "type-radial")),
     _repeat_mode_btn(get_widget<Gtk::MenuButton>(_builder, "repeat-mode"))
 {
-    auto& main_box(get_widget<Gtk::Box>(_builder, "main-box"));
-
     // gradient type buttons
     _linear_btn.set_active();
     _linear_btn.signal_clicked().connect([this]{ fire_change_type(true); });
@@ -114,11 +113,11 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_t
         expander->property_expanded().signal_changed().connect([this, expander]{
             _color_picker->set_plate_type(expander->get_expanded() ? ColorPickerPanel::Circle : ColorPickerPanel::None);
         });
-        main_box.append(*expander);
+        _main_box.append(*expander);
     }
 
     // add color selector
-    main_box.append(*_color_picker);
+    _main_box.append(*_color_picker);
 
     // gradient library in a popup
     get_widget<Gtk::Popover>(_builder, "libraryPopover").set_child(*_selector);
@@ -169,7 +168,7 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_t
     _color_picker->get_last_column_size()->add_widget(get_widget<Gtk::Box>(_builder, "offset-box"));
     _color_picker->get_last_column_size()->add_widget(get_widget<Gtk::Box>(_builder, "angle-box"));
 
-    append(main_box);
+    append(_main_box);
 }
 
 void GradientEditor::set_stop_color(Inkscape::Colors::Color const &color)

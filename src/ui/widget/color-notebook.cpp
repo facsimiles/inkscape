@@ -126,7 +126,7 @@ void ColorNotebook::_initUI()
     _book->set_margin_start(2);
     _book->set_margin_end(2);
     _book->set_hexpand();
-    _book->set_vexpand();
+    _book->set_vexpand(false);
     attach(*_book, 0, row, 2, 1);
 
     // restore the last active page
@@ -193,7 +193,7 @@ void ColorNotebook::_initUI()
 
     gtk_widget_set_margin_start(rgbabox, XPAD);
     gtk_widget_set_margin_end(rgbabox, XPAD);
-    gtk_widget_set_margin_top(rgbabox, YPAD);
+    gtk_widget_set_margin_top(rgbabox, 8);
     gtk_widget_set_margin_bottom(rgbabox, YPAD);
     attach(*Glib::wrap(rgbabox), 0, row, 2, 1);
 
@@ -309,6 +309,14 @@ void ColorNotebook::_addPageForSpace(std::shared_ptr<Colors::Space::AnySpace> sp
     });
     obs->call();
     _visibility_observers.emplace_back(std::move(obs));
+}
+
+void ColorNotebook::setCurrentColor(std::shared_ptr<Colors::ColorSet> colors)
+{
+    auto visible_child = _book->get_visible_child();
+    if (auto current_page = dynamic_cast<ColorPage *>(visible_child)) {
+        current_page->setCurrentColor(colors);
+    }
 }
 
 } // namespace Inkscape::UI::Widget

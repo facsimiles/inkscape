@@ -473,6 +473,9 @@ void StrokeStyle::setDesktop(SPDesktop *desktop)
             desktop->connectDocumentReplaced(sigc::mem_fun(*this, &StrokeStyle::_handleDocumentReplaced));
 
         _handleDocumentReplaced(nullptr, desktop->getDocument());
+        for (MarkerComboBox *combo : {startMarkerCombo, midMarkerCombo, endMarkerCombo}) {
+            combo->setDesktop(desktop);
+        }
 
         updateLine();
     }

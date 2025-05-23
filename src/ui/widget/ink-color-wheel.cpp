@@ -27,6 +27,7 @@
 #include "ui/widget/bin.h"
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"
+#include "ink-color-wheel.h"
 
 using namespace Inkscape::Colors;
 using Inkscape::Colors::Space::Luv;
@@ -133,14 +134,15 @@ ColorWheelBase::ColorWheelBase(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
     construct();
 }
 
-void ColorWheelBase::_on_motion(Gtk::EventControllerMotion const &motion, double x, double y) {
-    if (!_adjusting) return;
-
-    auto state = motion.get_current_event_state();
-    if (!Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK)) {
-        // lost button release event
-        on_click_released(0, x, y);
-        return;
+void ColorWheelBase::_on_motion(Gtk::EventControllerMotion const &motion, double x, double y)
+{
+    if (_adjusting) {
+        auto state = motion.get_current_event_state();
+        if (!Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK)) {
+            // lost button release event
+            on_click_released(0, x, y);
+            return;
+        }
     }
 
     on_motion(motion, x, y);
@@ -598,13 +600,6 @@ Gtk::EventSequenceState ColorWheelHSL::on_click_released(int /*n_press*/, double
 void ColorWheelHSL::on_motion(Gtk::EventControllerMotion const &motion, double x, double y)
 {
     if (!_adjusting) return;
-    auto state = motion.get_current_event_state();
-    if (!Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK)) {
-        // lost button release event
-        _mode = DragMode::NONE;
-        _adjusting = false;
-        return;
-    }
 
     if (_mode == DragMode::HUE) {
         _update_ring_color(x, y);
@@ -637,6 +632,7 @@ bool ColorWheelHSL::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::M
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
             dx = +1.0;
+            break;
     }
 
     if (dx == 0.0 && dy == 0.0) return false;
@@ -761,6 +757,668 @@ bool ColorWheelHSLuv::setColor(Color const &color,
     }
     return false;
 }
+
+/* Multi-marker Color Wheel */
+
+/**
+ * takes the color parameter and push it into the _values_vectors vector
+ * them if emit is true it calls the color_changed() to emit signal changed then queue redraw the area
+ */
+bool MultiMarkerWheel::setColor(Color const &color, bool /*overrideHue*/, bool emit)
+{
+    if (_values.set(color, true)) {
+        _values_vector.push_back(_values);
+        if (emit) {
+            color_changed();
+        } else {
+            queue_drawing_area_draw();
+        }
+        return true;
+    }
+    return false;
+}
+
+/**
+ * it takes a vector of colors then clears the current _values_vector and _markers_points
+ * and resets the color wheel then repopulates it with the new colors
+ * then emit the color changed signal 
+ */
+void MultiMarkerWheel::setColors(std::vector<Colors::Color> colors)
+{
+    _values_vector = std::move(colors);
+    for (auto &col : _values_vector) {
+        col.convert(Colors::Space::Type::HSV);
+    }
+    _source_wheel.reset();
+    _markers_points.clear();
+    _markers_points.resize(_values_vector.size());
+    _active_index = _values_vector.empty() ? -1 : 0;
+    color_changed();
+}
+
+/**
+ * takes cairo context , color value and index of the color
+ * get the center of the colorwheel by dividing width and height by 2
+ * get the center of the marker by passing the index to get_marker_point function
+ * then choose the color of the marker (black or white) based on its luminance
+ * then start start drawing with cairo , if the index == hover index just make the radius bigger
+ * then if the marker has foucs add focus dash to it 
+ */
+void MultiMarkerWheel::_draw_marker(Cairo::RefPtr<Cairo::Context> const &cr, Colors::Color const &value, int index)
+{
+    auto const [width, height] = *_cache_size;
+    auto const cx = width / 2.0;
+    auto const cy = height / 2.0;
+    auto const &[mx, my] = get_marker_point(index);
+
+   _draw_line_to_marker(cr,mx,my,cx,cy,value,index);
+
+    auto color_on_wheel = Color(Type::HSV, {value[0], 1.0, 1.0});
+    double a = luminance(color_on_wheel) < 0.5 ? 1.0 : 0.0;
+    if (index == _active_index) {
+        cr->set_source_rgb(0.2588, 0.5216, 0.9255);
+    } else {
+        cr->set_source_rgb(a, a, a);
+    }
+    cr->set_dash(std::valarray<double>(), 0);
+    cr->begin_new_path();
+    if (index == _hover_index) {
+        cr->arc(mx, my, marker_radius+2, 0, 2 * M_PI);
+    } else {
+        cr->arc(mx, my, marker_radius, 0, 2 * M_PI);
+    }
+    cr->stroke();
+
+    // Draw focus
+    if (drawing_area_has_focus()) {
+        // The focus_dash width & alpha(foreground_color) are from GTK3 Adwaita.
+        if (index == _active_index) {
+            cr->set_dash(focus_dash, 0);
+            cr->set_line_width(1.0);
+            cr->set_source_rgb(1 - a, 1 - a, 1 - a);
+            cr->begin_new_path();
+            cr->arc(mx, my, marker_radius + focus_padding, 0, 2 * M_PI);
+        }
+
+        cr->stroke();
+    }
+}
+
+/**
+ * try to get marker index from the input position (x,y)
+ * by getting the distance between the marker center and the point (x,y)
+ * if it is less than marker_radius + marker_click_tolerance it means that 
+ * the point is inside the marker area then return its index
+ * if not found return -1
+ */
+int MultiMarkerWheel::_get_marker_index(Geom::Point const &p)
+{
+    for (int i = 0; i < _values_vector.size(); i++) {
+        auto m = get_marker_point(i);
+        if (Geom::distance(p, m) <= marker_radius + marker_click_tolerance) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
+ * If hue lock is enabled, this function calculates how far each marker's hue
+ * is from the active marker's hue.
+ *
+ * Because hue is a circle (0.0 and 1.0 are the same color), the raw difference
+ * can sometimes look too big (e.g. 0.9 - 0.1 = 0.8), even though the real
+ * distance around the circle is much smaller (0.2).
+ *
+ * To fix this, the delta is adjusted:
+ *   - If delta > 0.5  → subtract 1.0
+ *   - If delta < -0.5 → add 1.0
+ *
+ * This makes sure the difference is always the shortest distance on the color wheel,
+ * inside the range [-0.5, +0.5].
+ */
+void MultiMarkerWheel::_update_hue_lock_positions()
+{
+    if (!_hue_lock) {
+        return;
+    }
+
+    std::vector<double> delta_angles;
+    auto active_hue = _values_vector[_active_index][0];
+    for (int i = 0; i < _values_vector.size(); i++) {
+        if (i == _active_index) {
+            delta_angles.push_back(0.0);
+            continue;
+        }
+        auto delta_hue = _values_vector[i][0] - active_hue;
+        if (delta_hue > 0.5) delta_hue -= 1.0;
+        if (delta_hue < -0.5) delta_hue += 1.0;
+        delta_angles.push_back(delta_hue);
+    }
+
+    _relative_hue_angles = delta_angles;
+}
+
+/**
+ * function to draw line to the begining of the marker by calculating the distance from the wheel center
+ * to marker center
+ * normalize the differences between centers by dividing them by the length of the line
+ * to be a unit vector between [-1,1]
+ * then calculate the end points ty,tx by subtracting the marker radius multiplied by the direction of the vector 
+ * from the marker center , calculate the luminance of the line
+ * move the cairo context tot the center of the colorwheel by converting the polar coordinates to cartisain ones
+ * then draw the line to point (tx,ty)
+ */
+void MultiMarkerWheel::_draw_line_to_marker(Cairo::RefPtr<Cairo::Context> const &cr, double mx, double my, double cx,
+                                           double cy, Colors::Color const &value, int index)
+{
+    auto const &[r_min, r_max] = get_radii(); 
+    auto color_on_wheel = Color(Type::HSV, {value[0], 1.0, 1.0});
+    double dy = my-cy;
+    double dx = mx-cx;
+    double len = std::sqrt(dx*dx+dy*dy); 
+    if (len > 1e-5) {
+        dx /= len;
+        dy /= len;
+    }
+    double mr = index == _hover_index ? marker_radius+2 : marker_radius; // bigger radius for on hover effect
+    double tx = mx - dx * mr;
+    double ty = my - dy * mr;
+    double l = luminance(color_on_wheel) < 0.5 ? 1.0 : 0.0;
+    cr->save();
+    cr->set_source_rgb(l, l, l);
+    cr->move_to(cx + cos(value[0] * M_PI * 2.0) * r_min,
+                cy - sin(value[0] * M_PI * 2.0) * r_min); // x = r*cos(angel) , y = r*sin(angel)
+    // adding cx and subtracting cy to start from wheel center not the origin (0,0)
+    cr->line_to(tx,ty);
+    if (index != _active_index && !_hue_lock) {
+        cr->set_dash(focus_dash, 0);
+        cr->set_line_width(1.0);
+    } else if (!_hue_lock) {
+        auto const dash = std::vector{3.0}; // wider dashes for focused line 
+        cr->set_dash(dash,0);
+        cr->set_line_width(2.0);
+    } else {
+        cr->set_dash(std::valarray<double>(), 0);
+        if (index == _active_index) {
+            cr->set_line_width(3.0);
+        }
+    }
+    cr->stroke();
+    cr->restore();
+}
+
+/**
+ * draw the colorwheel pixel by pixel
+ */
+void MultiMarkerWheel::update_wheel_source()
+{
+    if (_radii && _source_wheel) {
+        return;
+    }
+
+    auto const [width, height] = *_cache_size;
+    auto const cx = width / 2.0;
+    auto const cy = height / 2.0;
+
+    auto const stride = Cairo::ImageSurface::format_stride_for_width(Cairo::Surface::Format::RGB24, width);
+    _source_wheel.reset();
+    _buffer_wheel.resize(height * stride / 4);
+
+    auto const &[r_min, r_max] = get_radii();
+    double r2_max = (r_max + 2) * (r_max + 2); // Must expand a bit to avoid edge effects.
+    double r2_min = (r_min - 2) * (r_min - 2); // Must shrink a bit to avoid edge effects.
+
+    for (int i = 0; i < height; ++i) {
+        auto p = _buffer_wheel.data() + i * width;
+        double dy = (cy - i);
+        for (int j = 0; j < width; ++j) {
+            double dx = (j - cx);
+            double r2 = dx * dx + dy * dy;
+            if (r2 < r2_min || r2 > r2_max) {
+                *p++ = 0; // Save calculation time.
+            } else {
+                double angle = atan2(dy, dx);
+                if (angle < 0.0) {
+                    angle += 2.0 * M_PI;
+                }
+                double hue = angle / (2.0 * M_PI);
+
+                double saturation = sqrt(r2)/r_max;
+                saturation = std::clamp(saturation,0.0,1.0);
+                // double value = 1.0 - ((dy+(height/2.0))/height);
+                // value = std::clamp(value,0.0,1.0);
+
+                *p++ = Color(Type::HSV, {hue, saturation,lightness}).toARGB();
+            }
+        }
+    }
+
+    auto const data = reinterpret_cast<unsigned char *>(_buffer_wheel.data());
+    _source_wheel = Cairo::ImageSurface::create(data, Cairo::Surface::Format::RGB24, width, height, stride);
+}
+
+/**
+ * takes index of the requested changed color and the new color
+ * change it in the _values_vector and reset its marker and emit color changed signal to update the widget
+ * and return true if succeeded
+ * used to sync wheel's colors if the color chnaged from the colorlist
+ */
+bool MultiMarkerWheel::changeColor(int index, Colors::Color const &color)
+{
+    if (index < 0 || index >= _values_vector.size()) {
+        return false;
+    }
+
+    if (_values_vector[index].set(color, true)) {
+        _markers_points[index].reset();
+        color_changed();
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * set lightness for all colors in the wheel when hue lock is on
+ * if it is off just changed lightness for the active color
+ */
+void MultiMarkerWheel::setLightness(double value) 
+{
+    lightness = value / 100.0;
+    _source_wheel.reset();
+    if (_hue_lock) {
+        for (size_t i = 0; i < _values_vector.size(); i++) {
+            _values_vector[i].set(2, lightness);
+            if (i < _markers_points.size()) {
+                _markers_points[i].reset();
+            }
+        }
+        color_changed();
+    } else {
+        int index = getActiveIndex();
+        if (index > -1) {
+            _values_vector[index].set(2, lightness);
+            _markers_points[index].reset();
+            color_changed();
+        }
+    }
+}
+
+/**
+ * set saturation for all colors in the wheel when hue lock is on
+ * if it is off just change saturation for the active color
+ */
+void MultiMarkerWheel::setSaturation(double value) 
+{
+    saturation = value / 100.0;
+    if (_hue_lock) {
+        for (size_t i = 0; i < _values_vector.size(); i++) {
+            _values_vector[i].set(1, saturation);
+            if (i < _markers_points.size()) {
+                _markers_points[i].reset();
+            }
+        }
+        color_changed();
+    } else {
+        int index = getActiveIndex();
+        if (index >- 1) {
+            _values_vector[index].set(1, saturation);
+            _markers_points[index].reset();
+            color_changed();
+        }
+    }
+}
+
+void MultiMarkerWheel::on_drawing_area_size(int width, int height, int baseline)
+{
+    auto const size = Geom::IntPoint{width, height};
+    if (size == _cache_size) {
+        return;
+    }
+    _cache_size = size;
+    _radii.reset();
+    _source_wheel.reset();
+}
+
+/**
+ * main function for drawing the whole wheel and markers and lines
+ */
+void MultiMarkerWheel::on_drawing_area_draw(Cairo::RefPtr<Cairo::Context> const &cr, int, int)
+{
+
+    auto const [width, height] = *_cache_size;
+    auto const cx = width / 2.0;
+    auto const cy = height / 2.0;
+
+    cr->set_antialias(Cairo::ANTIALIAS_SUBPIXEL);
+
+    // Update caches
+    update_wheel_source();
+    auto const &[r_min, r_max] = get_radii();
+
+    // Paint with ring surface, clipping to ring.
+    cr->save();
+    cr->set_source(_source_wheel, 0, 0);
+    cr->set_line_width(r_max - r_min);
+    cr->begin_new_path();
+    cr->arc(cx, cy, (r_max + r_min) / 2.0, 0, 2.0 * M_PI);
+    cr->stroke();
+    cr->restore();
+    // Paint line to markers and markers
+    if (_markers_points.size() != _values_vector.size()) {
+        _markers_points.resize(_values_vector.size());
+    }
+
+    for (int i = 0; i < _values_vector.size(); i++) {
+        _draw_marker(cr, _values_vector[i], i);
+    }
+}
+
+std::optional<bool> MultiMarkerWheel::focus(Gtk::DirectionType const direction)
+{
+    // Any focus change must update focus indicators (add or remove).
+    queue_drawing_area_draw();
+
+    // In forward direction, focus passes from no focus to ring focus to triangle
+    // focus to no focus.
+    if (!drawing_area_has_focus()) {
+        _focus_on_wheel = (direction == Gtk::DirectionType::TAB_FORWARD);
+        focus_drawing_area();
+        return true;
+    }
+
+    // Already have focus
+    bool keep_focus = true;
+
+    switch (direction) {
+        case Gtk::DirectionType::TAB_BACKWARD:
+            if (!_focus_on_wheel) {
+                _focus_on_wheel = true;
+            } else {
+                keep_focus = false;
+            }
+            break;
+
+        case Gtk::DirectionType::TAB_FORWARD:
+            if (_focus_on_wheel) {
+                _focus_on_wheel = false;
+            } else {
+                keep_focus = false;
+            }
+    }
+
+    return keep_focus;
+}
+
+/**
+ * checks whether the point is inside the wheel or not
+ * by checking if the distance is less than the wheel radius
+ */
+bool MultiMarkerWheel::_is_in_wheel(double x, double y)
+{
+    // std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
+    auto const [width, height] = *_cache_size;
+    // std::cout<<"w: "<<width<<" h: "<<height<<std::endl;
+    auto const cx = width / 2.0;
+    auto const cy = height / 2.0;
+
+    auto const &[r_min, r_max] = get_radii();
+    double r2_max = r_max * r_max;
+
+    double dx = x - cx;
+    double dy = y - cy;
+    double r2 = dx * dx + dy * dy;
+
+    return r2 < r2_max;
+}
+
+/**
+ * used to update colors when markers pressed or moves by
+ * calculating the angle of the line from the point to the wheel center to calculate the new hue value
+ * if angle less than 0 normalize it then flip it to follow the mouse movement by subtracting it from 1
+ * calculate the distance from the point to the center of the wheel to get the saturation value
+ * then set them in the _values_vector[index] reset its old marker and emit color changed signal
+ */
+void MultiMarkerWheel::_update_wheel_color(double x, double y, int index)
+{
+    auto const [width, height] = *_cache_size;
+    double cx = width / 2.0;
+    double cy = height / 2.0;
+
+    double angle = std::atan2(y - cy, x - cx);
+    if (angle < 0) {
+        angle += 2.0 * M_PI;
+    }
+    angle = 1.0 - angle / (2.0 * M_PI);
+    double dx = x-cx;
+    double dy = y-cy;
+    double distance = std::sqrt(dx*dx+dy*dy);
+    auto const &[r_min, r_max] = get_radii();
+    double saturation = distance/r_max;
+    saturation = std::clamp(saturation,0.0,1.0);
+
+    bool changed = false;
+
+    if (_values_vector[index].set(0, angle)) {
+        changed = true;
+    }
+
+    if (_values_vector[index].set(1, saturation)) {
+        changed = true;
+    }
+
+    if (_values_vector[index].set(2, lightness)) {
+        changed = true;
+    }
+
+    if (changed) {
+        _markers_points[index].reset();
+        color_changed();
+    }
+}
+
+/**
+ * signal handler that checks if clicked point is inside the wheel
+ * then search for the marker pressed to make it active
+ * check for hue lock by calling _update_hue_lock_positions()
+ * updates the clicked color to new pressed point
+ */
+Gtk::EventSequenceState MultiMarkerWheel::on_click_pressed(Gtk::GestureClick const &controller, int /*n_press*/,
+                                                           double x, double y)
+{
+    if (_is_in_wheel(x, y)) {
+        _adjusting = true;
+        _mode = DragMode::HUE;
+        focus_drawing_area();
+        _focus_on_wheel = true;
+        int index = _get_marker_index({x, y});
+        if (index >= 0) {
+            _active_index = index;
+        }
+        _update_hue_lock_positions();
+        if (_active_index >= 0 && _active_index < _values_vector.size()) {
+            _update_wheel_color(x, y, _active_index);
+        }
+        return Gtk::EventSequenceState::CLAIMED;
+    }
+
+    return Gtk::EventSequenceState::NONE;
+}
+
+Gtk::EventSequenceState MultiMarkerWheel::on_click_released(int /*n_press*/, double /*x*/, double /*y*/)
+{
+    _mode = DragMode::NONE;
+    _adjusting = false;
+    return Gtk::EventSequenceState::CLAIMED;
+}
+
+/**
+ * if not adusting a marker
+ * it detects if the point is on or near some marker gets its index and emits _signal_color_hovered
+ * so the marker gets redrawed with a bigger radius and call for any action related to hover 
+ * (e.g. highlighting objects that has the hovered marker color)
+ * -1 _hover_index to cancel the hover effect when start moving the marker
+ * also checks for the _hue_lock to change reset of the markers accordingly if it is on
+ */
+void MultiMarkerWheel::on_motion(Gtk::EventControllerMotion const &motion, double x, double y)
+{
+    if (!_adjusting) {
+        int hover_index = _get_marker_index({x, y});
+        _signal_color_hovered.emit();
+        if (_hover_index != hover_index) {
+            _hover_index = hover_index;
+            if (hover_index >= 0 && hover_index < _values_vector.size()) {
+                queue_drawing_area_draw();
+            }
+        }
+        return;
+    }
+    auto state = motion.get_current_event_state();
+    if (!Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK)) {
+        // lost button release event
+        _mode = DragMode::NONE;
+        _adjusting = false;
+        return;
+    }
+
+    if (_mode == DragMode::HUE || _mode == DragMode::SATURATION_VALUE) {
+        _hover_index = -1;
+        _signal_color_hovered.emit();
+        if (_active_index >= 0 && _active_index < _values_vector.size()) {
+            _update_wheel_color(x, y, _active_index);
+        }
+        if (_hue_lock && !_relative_hue_angles.empty()) {
+            bool changed = false;
+            double hue = _values_vector[_active_index][0];
+            for (int i = 0; i < _values_vector.size(); i++) {
+                if (i != _active_index) {
+                    double new_hue = hue + _relative_hue_angles[i];
+                    new_hue = fmod(new_hue + 1.0, 1.0);
+                    if (_values_vector[i].set(0, new_hue)) {
+                        _markers_points[i].reset();
+                        changed = true;
+                    }
+                }
+            }
+            if (changed) {
+                color_changed();
+            }
+        }
+    }
+}
+
+/**
+ * signal handler function that handels keyboard adjustments to the wheel on hue and saturation values
+ * same as the one in ColorWheelHSL too
+ */
+bool MultiMarkerWheel::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::ModifierType state)
+{
+    static constexpr double delta_hue = 2.0 / MAX_HUE;
+    static constexpr double delta_sat = 2.0 / MAX_SATURATION;
+    auto dx = 0.0, dy = 0.0;
+
+    switch (keyval) {
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+            dy = -1.0;
+            break;
+
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+            dy = +1.0;
+            break;
+
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Left:
+            dx = -1.0;
+            break;
+
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Right:
+            dx = +1.0;
+    }
+
+    if (dx == 0.0 && dy == 0.0) {
+        return false;
+    }
+
+    bool changed = false;
+    if (_focus_on_wheel) {
+        changed = _values_vector[_active_index].set(0, _values_vector[_active_index][0] - ((dx != 0 ? dx : dy) * delta_hue));
+        changed = _values_vector[_active_index].set(1, _values_vector[_active_index][1] - ((dy != 0 ? dy : dx) * delta_sat));
+    }
+   
+    _values_vector[_active_index].normalize();
+
+    if (changed) {
+        _markers_points[_active_index].reset();
+        color_changed();
+    }
+
+    return changed;
+}
+
+/**
+ * that is the same as get radii in the ColorWheelHSL i didn't change any thing even
+ * though it has only one radius (r_max = r_min) now as a whole circle not a ring but i dare not change a working function
+ * (and i am lazy too)
+ */
+MultiMarkerWheel::MinMax const &MultiMarkerWheel::get_radii()
+{
+    if (_radii) {
+        return *_radii;
+    }
+
+    _radii.emplace();
+    auto &[r_min, r_max] = *_radii;
+    auto const [width, height] = *_cache_size;
+    r_max = std::min(width, height) / 2.0 - 2 * (focus_line_width + focus_padding);
+    r_min = r_max * (1.0 - _wheel_width);
+    return *_radii;
+}
+
+/**
+ * if the marker isn't in _markers_points it calculates the marker position
+ * by the hue angle and saturation as the distance from the center to the desired color
+ */
+Geom::Point MultiMarkerWheel::get_marker_point(int index)
+{
+    if (index < 0 || index >= _values_vector.size()) {
+        return {};
+    }
+
+    if (index >= _markers_points.size()) {
+        _markers_points.resize(_values_vector.size());
+    }
+
+    if (_markers_points[index]) {
+        return *_markers_points[index];
+    }
+
+    auto const [width, height] = *_cache_size;
+    auto const cx = width / 2.0;
+    auto const cy = height / 2.0;
+    auto const&[r_min,r_max] = get_radii();
+    double hue = _values_vector[index][0];
+    double saturation = _values_vector[index][1];
+    double angle = (1.0 - hue) * 2 * M_PI;
+    _markers_points[index].emplace();
+    auto &[mx, my] = *_markers_points[index];
+    mx = cx + r_max * saturation * cos(angle); // polar cooordinates to cartesian coordinates calculation
+    my = cy + r_max * saturation * sin(angle);
+    return *_markers_points[index];
+}
+
+MultiMarkerWheel::MultiMarkerWheel()
+    : Glib::ObjectBase{"MultiMarkerWheel"}
+    , WidgetVfuncsClassInit{} // All the calculations are based on HSV, not HSL
+    , ColorWheelBase(Type::HSV, {0.5, 0.2, 0.7, 1}) // redundant values nothing important 
+{}
+
+MultiMarkerWheel::MultiMarkerWheel(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &builder)
+    : ColorWheelBase(cobject, builder, Type::HSV, {0.5, 0.2, 0.7, 1}) // redundant values nothing important 
+{}
 
 /**
  * Update the PickerGeometry structure owned by the instance.

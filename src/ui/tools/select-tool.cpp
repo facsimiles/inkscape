@@ -1046,6 +1046,11 @@ std::pair<Rubberband::Mode, CanvasItemCtrlType> SelectTool::get_default_rubberba
     return {mode, handle};
 }
 
+void SelectTool::onHideSelectionChanged(bool hide)
+{
+    _seltrans->getSelCue().setBboxesVisible(!hide);
+}
+
 } // namespace Inkscape::UI::Tools
 
 /*

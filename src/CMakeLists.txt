@@ -44,6 +44,7 @@ set(inkscape_SRC
   message-context.cpp
   message-stack.cpp
   mod360.cpp
+  object-colors.cpp
   object-hierarchy.cpp
   object-snapper.cpp
   page-manager.cpp
@@ -126,6 +127,7 @@ set(inkscape_SRC
   message.h
   mod360.h
   number-opt-number.h
+  object-colors.h
   object-hierarchy.h
   object-snapper.h
   page-manager.h

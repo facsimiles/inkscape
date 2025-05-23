@@ -18,6 +18,8 @@
 #define SEEN_SP_MARKER_COMBO_BOX_H
 
 #include <giomm/liststore.h>
+#include <gtkmm/box.h>
+#include <gtkmm/popover.h>
 #include <gtkmm/cellrendererpixbuf.h>
 
 #include "display/drawing.h"
@@ -26,6 +28,9 @@
 #include "ink-spin-button.h"
 #include "snapshot-widget.h"
 #include "ui/operation-blocker.h"
+#include "ui/widget/widget-vfuncs-class-init.h"
+#include "ui/widget/recolor-art.h"
+#include "ui/widget/recolor-art-manager.h"
 
 namespace Gtk {
 class Builder;
@@ -55,7 +60,7 @@ public:
     MarkerComboBox(Glib::ustring id, int loc);
 
     void setDocument(SPDocument *);
-
+    void setDesktop(SPDesktop *desktop);
     void set_current(SPObject *marker);
     std::string get_active_marker_uri();
     bool in_update() const { return _update.pending(); };
@@ -123,8 +128,30 @@ private:
     std::unique_ptr<SPDocument> _sandbox;
     InkPropertyGrid _grid;
     WidgetGroup _widgets;
+    Gtk::CellRendererPixbuf _image_renderer;
 
-    void update_ui(SPMarker* marker, bool select);
+    UI::Widget::RecolorArtManager* _recolorManager = nullptr;
+    SPDesktop *_desktop = nullptr;
+    sigc::scoped_connection _selection_changed_connection;
+    Gtk::Button *_recolorButtonTrigger = nullptr;
+
+    class MarkerColumns : public Gtk::TreeModel::ColumnRecord
+    {
+    public:
+        Gtk::TreeModelColumn<Glib::ustring> label;
+        Gtk::TreeModelColumn<const gchar *> marker;   // ustring doesn't work here on windows due to unicode
+        Gtk::TreeModelColumn<gboolean> stock;
+        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> pixbuf;
+        Gtk::TreeModelColumn<gboolean> history;
+        Gtk::TreeModelColumn<gboolean> separator;
+
+        MarkerColumns() {
+            add(label); add(stock);  add(marker);  add(history); add(separator); add(pixbuf);
+        }
+    };
+    MarkerColumns marker_columns;
+
+    void update_ui(SPMarker *marker, bool select);
     void update_widgets_from_marker(SPMarker* marker);
     void update_store();
     Glib::RefPtr<MarkerItem> add_separator(bool filler);

@@ -39,6 +39,7 @@ public:
     ~ColorNotebook() override;
 
     void set_label(const Glib::ustring& label);
+    void setCurrentColor(std::shared_ptr<Colors::ColorSet> colors);
 
 protected:
     void _initUI();

@@ -162,6 +162,9 @@ public:
 
     void setDesktopWidget(SPDesktopWidget *dtw);
 
+    void setHideSelectionBoxes(bool hide);
+    bool getHideSelectionBoxes() const { return _hide_selection_boxes; }
+
 private:
     SPDocument *document = nullptr;
     std::unique_ptr<Inkscape::MessageStack> _message_stack;
@@ -182,6 +185,8 @@ private:
     int _view_number{};
 
     std::unique_ptr<Inkscape::UI::Widget::Canvas> canvas;
+
+    bool _hide_selection_boxes = false;
 
 public:
     Inkscape::UI::Tools::ToolBase    *getTool         () const { return _tool.get(); }
@@ -268,6 +273,10 @@ public:
 
     template <typename F> sigc::connection connectQueryStyle(F &&slot) {
         return _query_style_signal.connect(std::forward<F>(slot));
+    }
+
+    template <typename F> sigc::connection connectHideSelectionBoxes(F &&slot) {
+        return _signal_hide_selection_boxes_changed.connect(std::forward<F>(slot));
     }
 
     // there's an object selected and it has a gradient fill and/or stroke; one of the gradient stops has been selected
@@ -548,6 +557,8 @@ private:
     sigc::signal<void (SPStop *)> _gradient_stop_selected;
     sigc::signal<void (Inkscape::UI::ControlPointSelection *)> _control_point_selected;
     sigc::signal<void (Inkscape::UI::Tools::TextTool *)> _text_cursor_moved;
+
+    sigc::signal<void (bool)> _signal_hide_selection_boxes_changed;
 
     sigc::scoped_connection _reconstruction_start_connection;
     sigc::scoped_connection _reconstruction_finish_connection;

@@ -114,6 +114,8 @@ set(TEST_SOURCES
     lpe-test
     ui-util-test
     sp-document-test
+    object-colors-test
+    multi-marker-color-wheel-test
     ${LPE_TESTS_64bit}
     )
 

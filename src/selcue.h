@@ -43,6 +43,8 @@ public:
         BBOX
     };
 
+    void setBboxesVisible(bool visible);
+
 private:
     class BoundingBoxPrefsObserver: public Preferences::Observer
     {
@@ -65,6 +67,7 @@ private:
     void _newTextBaselines();
     void _boundingBoxPrefsChanged(int prefs_bbox);
 
+    bool _bboxes_visible = true;
     SPDesktop *_desktop;
     Selection *_selection;
     sigc::connection _sel_changed_connection;

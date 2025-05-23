@@ -22,6 +22,7 @@
 #include "color-slider.h"
 #include "color-preview.h"
 #include "ui/widget/color-slider.h"
+#include "ui/widget/ink-color-wheel.h"
 
 using namespace Inkscape::Colors;
 
@@ -55,6 +56,13 @@ public:
 
     void attach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column);
     void detach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column);
+    void setCurrentColor(std::shared_ptr<ColorSet> color)
+    {
+        if (_color_wheel) {
+            _color_wheel->set_color(color->get().value());
+        }
+    }
+
 protected:
     std::shared_ptr<Space::AnySpace> _space;
     std::shared_ptr<ColorSet> _selected_colors;

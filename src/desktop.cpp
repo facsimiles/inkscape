@@ -212,6 +212,14 @@ void SPDesktop::setDesktopWidget(SPDesktopWidget *dtw)
     _widget = dtw;
 }
 
+void SPDesktop::setHideSelectionBoxes(bool hide)
+{
+    if (_hide_selection_boxes != hide) {
+        _hide_selection_boxes = hide;
+        _signal_hide_selection_boxes_changed.emit(hide);
+    }
+}
+
 //--------------------------------------------------------------------
 /* Public methods */
 
@@ -1183,7 +1191,6 @@ SPDesktop::getCurrentOrToolStylePath(Glib::ustring const &tool_path)
         return tool_path + "/style";
     }
 }
-
 
 void
 SPDesktop::setToolboxFocusTo(char const * const label)

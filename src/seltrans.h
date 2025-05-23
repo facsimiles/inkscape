@@ -97,6 +97,7 @@ public:
     }
 
     void getNextClosestPoint(bool reverse);
+    SelCue &getSelCue() { return _selcue; }
 
 private:
     class BoundingBoxPrefsObserver: public Preferences::Observer

@@ -70,6 +70,7 @@ public:
     ColorPickerPanel::PlateType get_color_picker_plate() const;
     SPGradientType get_type() const;
     ColorPickerPanel& get_picker() { return *_color_picker; }
+    Gtk::Box &getColorBox() { return _main_box; }
 
 private:
     void set_gradient(SPGradient* gradient);
@@ -102,6 +103,7 @@ private:
     InkSpinButton& _offset_btn;
     InkSpinButton& _angle_btn;
     int _current_stop_index = 0;
+    Gtk::Box &_main_box;
     SPGradient* _gradient = nullptr;
     SPDocument* _document = nullptr;
     OperationBlocker _update;

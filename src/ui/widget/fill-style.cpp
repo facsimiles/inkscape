@@ -129,6 +129,9 @@ void FillNStroke::setDesktop(SPDesktop *desktop)
             stop_selected_connection.disconnect();
         }
         _desktop = desktop;
+        if (_psel) {
+            _psel->setDesktop(desktop);
+        }
         if (desktop && desktop->getSelection()) {
             subselChangedConn = desktop->connect_text_cursor_moved([this] (Inkscape::UI::Tools::TextTool *) {
                 performUpdate();

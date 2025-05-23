@@ -16,7 +16,6 @@
 #include "marker-combo-box.h"
 
 #include <cairo.h>
-#include <chrono>
 #include <optional>
 #include <sstream>
 #include <utility>
@@ -159,7 +158,8 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _orient_auto(get_widget<Gtk::ToggleButton>(_builder, "orient-auto")),
     _orient_angle(get_widget<Gtk::ToggleButton>(_builder, "orient-angle")),
     _orient_flip_horz(get_widget<Gtk::Button>(_builder, "btn-horz-flip")),
-    _edit_marker(get_widget<Gtk::Button>(_builder, "edit-marker"))
+    _edit_marker(get_widget<Gtk::Button>(_builder, "edit-marker")),
+    _recolorButtonTrigger(Gtk::make_managed<Gtk::Button>())
 {
     set_name("MarkerComboBox");
 
@@ -345,7 +345,36 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     init_combo();
     update_scale_link();
     update_menu_btn();
-    set_visible(true);
+
+    _recolorButtonTrigger->set_label(_("Recolor Marker"));
+    _recolorButtonTrigger->set_hexpand(true);
+    _recolorButtonTrigger->set_vexpand(false);
+    _recolorButtonTrigger->set_size_request(180);
+    _recolorButtonTrigger->set_halign(Gtk::Align::FILL);
+    _recolorButtonTrigger->set_valign(Gtk::Align::START);
+    _recolorButtonTrigger->set_margin_top(8);
+
+    _grid.add_full_row(_recolorButtonTrigger);
+    _recolorButtonTrigger->signal_clicked().connect([this] {
+        if (!_recolorManager) {
+            // Lazy-load the recolour widget and popover.
+            _recolorManager = &RecolorArtManager::get();
+            if (_recolorManager->getPopOver().get_parent()) {
+                _recolorManager->getPopOver().unparent();
+            }
+            _recolorManager->getPopOver().set_parent(*_recolorButtonTrigger);
+            _recolorManager->setDesktop(_desktop);
+
+        } else if (_recolorManager->getPopOver().get_parent() != _recolorButtonTrigger) {
+            // Reparent the popover to this button if necessary.
+            _recolorManager->getPopOver().unparent();
+            _recolorManager->getPopOver().set_parent(*_recolorButtonTrigger);
+        }
+        _recolorManager->getPopOver().popup();
+        _recolorManager->performMarkerUpdate(get_current());
+    });
+
+    _recolorButtonTrigger->hide();
 }
 
 void MarkerComboBox::update_widgets_from_marker(SPMarker* marker) {
@@ -380,6 +409,8 @@ void MarkerComboBox::update_widgets_from_marker(SPMarker* marker) {
             _angle_btn.set_sensitive(true);
         }
     }
+
+    _recolorButtonTrigger->set_visible(marker);
 }
 
 void MarkerComboBox::update_scale_link() {
@@ -479,6 +510,22 @@ Glib::RefPtr<MarkerComboBox::MarkerItem> MarkerComboBox::get_active() {
     }
 }
 
+void MarkerComboBox::setDesktop(SPDesktop *desktop)
+{
+    if (_desktop == desktop) {
+        return;
+    }
+
+    if (_recolorManager) {
+        _recolorManager->getPopOver().popdown();
+    }
+
+    _desktop = desktop;
+
+    if (_recolorManager) {
+        _recolorManager->setDesktop(_desktop);
+    }
+}
 void MarkerComboBox::setDocument(SPDocument *document)
 {
     if (_document != document) {

@@ -61,6 +61,7 @@ private:
     bool _force_dragging = false;
 
     std::string _default_cursor;
+    void onHideSelectionChanged(bool hide) override;
 };
 
 } // namespace Inkscape::UI::Tools

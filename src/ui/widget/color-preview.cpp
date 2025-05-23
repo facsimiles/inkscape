@@ -49,8 +49,8 @@ void ColorPreview::setRgba32(std::uint32_t const rgba) {
     _gradient.clear();
     queue_draw();
 }
-
-void ColorPreview::setPattern(Cairo::RefPtr<Cairo::Pattern> pattern) {
+void ColorPreview::setPattern(Cairo::RefPtr<Cairo::Pattern> pattern)
+{
     if (_pattern == pattern) return;
 
     _pattern = pattern;

@@ -152,6 +152,9 @@ protected:
                           EventType::BUTTON_PRESS);
     void ungrabCanvasEvents();
 
+    sigc::scoped_connection _hide_selection_connection;
+    virtual void onHideSelectionChanged(bool hide) {};
+
 private:
     enum Panning
     {
