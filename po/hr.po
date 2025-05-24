@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-05-22 18:27+0000\n"
+"PO-Revision-Date: 2025-05-24 08:56+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/hr/>\n"
@@ -24652,10 +24652,8 @@ msgid "Distance between vertical grid lines"
 msgstr "Razmak između okomitih linija mreže"
 
 #: ../src/ui/dialog/document-properties.cpp:1842
-#, fuzzy
-#| msgid "Gap X:"
 msgid "Gap _X:"
-msgstr "x-razmak:"
+msgstr "Razmak _x:"
 
 #: ../src/ui/dialog/document-properties.cpp:1842
 #: ../src/ui/dialog/inkscape-preferences.cpp:2214
