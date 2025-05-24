@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-22 18:27+0000\n"
+"PO-Revision-Date: 2025-05-24 08:47+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -10335,8 +10335,8 @@ msgid ""
 "path. <b>Arrow keys</b> adjust width (left/right) and angle (up/down)."
 msgstr ""
 "<b>Povuci</b> za crtanje kaligrafskog poteza; <b>Ctrl</b> za praćenje staze "
-"vodilice. <b>Strelicama na tipkovnici</b> se podešavaju širina (lijevo/"
-"desno) i kut (gore/dolje)."
+"vodilice. <b>Strelicama na tipkovnici</b> podesi širinu (lijevo/desno) i kut "
+"(gore/dolje)."
 
 #: ../src/actions/actions-tools.cpp:99 ../src/ui/tools/text-tool.cpp:1663
 msgid ""
@@ -14748,14 +14748,11 @@ msgstr "Dodaj SVG kao nove stranice u aktualnu datoteku"
 
 #: ../src/extension/internal/svg.h:26
 msgid "Embed the SVG file in an image tag (not editable in this document)"
-msgstr ""
-"Ugradi SVG datoteku u kodnu oznaku za slike (nepromjenjivo u ovom dokumentu)"
+msgstr "Ugradi SVG datoteku u oznaku za slike (nepromjenjivo u ovom dokumentu)"
 
 #: ../src/extension/internal/svg.h:27
 msgid "Link the SVG file in an image tag (not editable in this document)."
-msgstr ""
-"Upiši poveznicu za SVG datoteku u kodnu oznaku za slike (nepromjenjivo u "
-"ovom dokumentu)"
+msgstr "Poveži SVG datoteku u oznaku za slike (nepromjenjivo u ovom dokumentu)."
 
 #: ../src/extension/internal/svg.h:28
 msgid "Open SVG image as separate document"
@@ -15585,6 +15582,7 @@ msgstr ""
 "\n"
 "<b>Skaliranje cijelog dokumenta:</b> Ova metoda najmanje utječe na djelo. "
 "Zadržat će prikaz djela, uključujući filtre i poziciju maske, itd.\n"
+"Ilustracija možda neće biti točno skalirana u odnosu na veličinu dokumenta.\n"
 "\n"
 "<b>Skaliranje elemenata pojedinačno:</b> Ova je metoda nesigurnija i može "
 "rezultirati u promijenjenom izgledu. Međutim, metoda je bolja za fizičke "
@@ -15640,7 +15638,7 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Nema nekorištenih stavki u &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
@@ -16156,7 +16154,7 @@ msgid ""
 "scale-document]"
 msgstr ""
 "Metoda za konvertiranje dpi-veličina za dokumente, stvorenih ranijim "
-"verzijama od 0.92, ako je potrebno: [none|scale-viewbox|scale-document]."
+"verzijama od 0.92, ako je potrebno: [none|scale-viewbox|scale-document]"
 
 #: ../src/inkscape-application.cpp:732
 msgid "METHOD"
@@ -16246,7 +16244,7 @@ msgstr "DPI"
 
 #: ../src/inkscape-application.cpp:749
 msgid "Bitmap width in pixels (overrides --export-dpi)"
-msgstr "Širina bitmapa u pikselima (zanemaruje --export-dpi)."
+msgstr "Širina bitmapa u pikselima (zanemaruje --export-dpi)"
 
 #: ../src/inkscape-application.cpp:749
 msgid "WIDTH"
@@ -16254,7 +16252,7 @@ msgstr "ŠIRINA"
 
 #: ../src/inkscape-application.cpp:750
 msgid "Bitmap height in pixels (overrides --export-dpi)"
-msgstr "Visina bitmapa u pikselima (zanemaruje --export-dpi)."
+msgstr "Visina bitmapa u pikselima (zanemaruje --export-dpi)"
 
 #: ../src/inkscape-application.cpp:750
 msgid "HEIGHT"
@@ -16322,7 +16320,7 @@ msgstr "VERZIJA"
 
 #: ../src/inkscape-application.cpp:761
 msgid "Convert text to paths (PS/EPS/PDF/SVG)"
-msgstr "Pretvori tekst u staze. (PS/EPS/PDF/SVG)."
+msgstr "Pretvori tekst u staze (PS/EPS/PDF/SVG)"
 
 #: ../src/inkscape-application.cpp:762
 msgid "Export text separately to LaTeX file (PS/EPS/PDF)"
@@ -16351,8 +16349,7 @@ msgstr "BOJA"
 
 #: ../src/inkscape-application.cpp:767
 msgid "Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"
-msgstr ""
-"Neprozirnost pozadine izvezenog bitmapa (od 0,0 do 1,0 ili od 1 do 255)."
+msgstr "Neprozirnost pozadine izvezenog bitmapa (od 0,0 do 1,0 ili od 1 do 255)"
 
 #: ../src/inkscape-application.cpp:767
 msgid "VALUE"
@@ -16411,7 +16408,7 @@ msgstr "y-koordinata crteža ili objekta (ako je određeno s --query-id)"
 
 #: ../src/inkscape-application.cpp:781
 msgid "Width of drawing or object (if specified by --query-id)"
-msgstr "Širina crteža ili objekta (ako je određeno s --query-id)."
+msgstr "Širina crteža ili objekta (ako je određeno s --query-id)"
 
 #: ../src/inkscape-application.cpp:782
 msgid "Height of drawing or object (if specified by --query-id)"
@@ -19530,7 +19527,7 @@ msgstr "Sjedini isječak"
 
 #: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip, see fill rule once convert to paths"
-msgstr "Sjedini isječak, pogledaj pravilo ispune nakon konvertiranja u staze"
+msgstr "Sjedini isječak, pogledaj pravilo ispune nakon pretvaranja u staze"
 
 #: ../src/live_effects/lpe-powerclip.cpp:38
 msgid "Info Box"
@@ -19542,7 +19539,7 @@ msgid ""
 "after convert clip to paths."
 msgstr ""
 "Koristi parno-neparni način ispune u dijalogu <b>ispuna i linija</b>, ako "
-"nema sjedinjenog rezultata nakon konvertiranja isječka u stazu."
+"nema sjedinjenog rezultata nakon pretvaranja isječka u stazu."
 
 #: ../src/live_effects/lpe-powermask.cpp:34
 msgid "Invert mask"
