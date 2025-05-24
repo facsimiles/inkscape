@@ -42,6 +42,7 @@
 #include "ui/util.h"
 #include "util/scope_exit.h"
 #include "util/units.h"
+#include "util/uri.h"
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 17, 6)
 #define CAIRO_HAS_HAIRLINE
@@ -181,65 +182,9 @@ Pixbuf *Pixbuf::cropTo(const Geom::IntRect &area) const
 Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
 {
     Pixbuf *pixbuf = nullptr;
+    auto [data, type] = extract_uri_data(uri_data);
 
-    bool data_is_image = false;
-    bool data_is_svg = false;
-    bool data_is_base64 = false;
-
-    gchar const *data = uri_data;
-
-    while (*data) {
-        if (strncmp(data,"base64",6) == 0) {
-            /* base64-encoding */
-            data_is_base64 = true;
-            data_is_image = true; // Illustrator produces embedded images without MIME type, so we assume it's image no matter what
-            data += 6;
-        }
-        else if (strncmp(data,"image/png",9) == 0) {
-            /* PNG image */
-            data_is_image = true;
-            data += 9;
-        }
-        else if (strncmp(data,"image/jpg",9) == 0) {
-            /* JPEG image */
-            data_is_image = true;
-            data += 9;
-        }
-        else if (strncmp(data,"image/jpeg",10) == 0) {
-            /* JPEG image */
-            data_is_image = true;
-            data += 10;
-        }
-        else if (strncmp(data,"image/jp2",9) == 0) {
-            /* JPEG2000 image */
-            data_is_image = true;
-            data += 9;
-        }
-        else if (strncmp(data,"image/svg+xml",13) == 0) {
-            /* JPEG2000 image */
-            data_is_svg = true;
-            data_is_image = true;
-            data += 13;
-        }
-        else { /* unrecognized option; skip it */
-            while (*data) {
-                if (((*data) == ';') || ((*data) == ',')) {
-                    break;
-                }
-                data++;
-            }
-        }
-        if ((*data) == ';') {
-            data++;
-            continue;
-        }
-        if ((*data) == ',') {
-            data++;
-            break;
-        }
-    }
-
-    if ((*data) && data_is_image && !data_is_svg && data_is_base64) {
+    if ((*data) && type == Base64Data::RASTER) {
         GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
 
         if (!loader) return nullptr;
@@ -275,7 +220,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
         g_object_unref(loader);
     }
     
-    if ((*data) && data_is_image && data_is_svg && data_is_base64) {
+    if ((*data) && type == Base64Data::SVG) {
         gsize decoded_len = 0;
         guchar *decoded = g_base64_decode(data, &decoded_len);
         auto svgDoc = SPDocument::createNewDocFromMem({reinterpret_cast<char const *>(decoded), decoded_len}, false);

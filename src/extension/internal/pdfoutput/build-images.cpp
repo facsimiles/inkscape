@@ -10,6 +10,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "bad-uri-exception.h"
 #include "build-drawing.h"
 #include "build-page.h"
 #include "display/cairo-utils.h"
@@ -18,10 +19,14 @@
 #include "helper/pixbuf-ops.h"
 #include "object/sp-image.h"
 #include "object/sp-root.h"
+#include "object/uri.h"
 #include "page-manager.h"
 #include "style.h"
 #include "svg/svg.h"
 #include "util/units.h"
+#include "util/uri.h"
+#include "xml/href-attribute-helper.h"
+#include "xml/repr.h"
 
 namespace Inkscape::Extension::Internal::PdfBuilder {
 
@@ -62,17 +67,55 @@ void DrawContext::paint_raster(SPImage const *image)
     auto img_width = image->pixbuf->width();
     auto img_height = image->pixbuf->height();
 
-    auto uri = image->getURI();
-    if (uri.getMimeType() == "image/svg+xml") {
+    auto href = Inkscape::getHrefAttribute(*image->getRepr()).second;
+    auto [base64, base64_type] = extract_uri_data(href);
+    std::optional<CapyPDF_ImageId> raster_id;
+    std::unique_ptr<SPDocument> svg;
+
+    gsize decoded_len = 0;
+    const char *decoded = nullptr;
+
+    if (base64_type == Base64Data::NONE) {
+        // We don't use Inkscape::URI for base64 because if it's memory limits
+        try {
+            auto uri = image->getURI();
+            if (uri.getMimeType() == "image/svg+xml") {
+                svg = SPDocument::createNewDoc(uri.toNativeFilename().c_str(), false);
+            } else {
+                auto image = _doc._gen.load_image(uri.toNativeFilename().c_str());
+                raster_id = _doc._gen.add_image(image, props);
+            }
+        } catch (Inkscape::BadURIException &e) {
+            g_warning("Couldn't read image: %s", e.what());
+        } catch (std::exception &e) {
+            g_warning("Could not add image file to PDF: %s", e.what());
+        }
+    } else {
+        decoded = (char *)g_base64_decode(base64, &decoded_len);
+    }
+
+    if (decoded && base64_type == Base64Data::RASTER) {
+        try {
+            auto image = _doc._gen.load_image_from_memory(decoded, decoded_len);
+            raster_id = _doc._gen.add_image(image, props);
+        } catch (std::exception &e) {
+            g_warning("Could not add image file to PDF: %s", e.what());
+        }
+    }
+
+    if (decoded && base64_type == Base64Data::SVG) {
         // Sizing and painting the loaded document depends on the SVG being
         // up to date and having a viewBox and width/height that makes sense.
-        auto doc = SPDocument::createNewDocFromMem(uri.getContents(), false);
-        doc->ensureUpToDate();
-        auto doc_width = doc->getWidth().value("px");
-        auto doc_height = doc->getHeight().value("px");
+        svg = SPDocument::createNewDocFromMem({decoded, decoded_len}, false);
+    }
+
+    if (svg) {
+        svg->ensureUpToDate();
+        auto doc_width = svg->getWidth().value("px");
+        auto doc_height = svg->getHeight().value("px");
 
         // The inside is how the SVG is painted wrt its own viewbox in the svg tag.
-        auto inside_box = doc->getRoot()->get_paintbox(doc_width, doc_height, doc->getViewBox());
+        auto inside_box = svg->getRoot()->get_paintbox(doc_width, doc_height, svg->getViewBox());
         auto inside =
             Geom::Affine(inside_box->width(), 0, 0, inside_box->height(), inside_box->left(), inside_box->bottom());
 
@@ -81,7 +124,7 @@ void DrawContext::paint_raster(SPImage const *image)
         auto outside =
             Geom::Affine(outside_box->width(), 0, 0, outside_box->height(), outside_box->left(), outside_box->bottom());
 
-        if (auto drawing_id = _doc.item_to_transparency_group(doc->getRoot())) {
+        if (auto drawing_id = _doc.item_to_transparency_group(svg->getRoot())) {
             _ctx.cmd_q();
             // Clip to the outside box, because svg's can run over their defined edges.
             set_clip_rectangle(outside_box);
@@ -94,7 +137,7 @@ void DrawContext::paint_raster(SPImage const *image)
         } else {
             g_warning("Unable to paint embedded SVG image into PDF.");
         }
-    } else if (auto image_id = _doc.load_image(uri, props)) {
+    } else if (raster_id) {
         // Format the width and height into a transformation matrix, the image is a unit square painted
         // from the bottom upwards so must be scaled out and flipped. No cropping is needed.
         auto paint_box = image->get_paintbox(img_width, img_height, image_box);
@@ -103,10 +146,10 @@ void DrawContext::paint_raster(SPImage const *image)
 
         _ctx.cmd_q();
         transform(outside);
-        _ctx.cmd_Do(*image_id);
+        _ctx.cmd_Do(*raster_id);
         _ctx.cmd_Q();
     } else {
-        g_warning("Unable to paint image into PDF.");
+        g_warning("No image loaded for image tag.");
     }
 }
 

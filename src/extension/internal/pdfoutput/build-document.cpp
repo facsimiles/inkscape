@@ -12,7 +12,6 @@
 
 #include "build-document.h"
 
-#include "bad-uri-exception.h"
 #include "build-drawing.h"
 #include "build-page.h"
 #include "build-text.h"
@@ -27,7 +26,6 @@
 #include "object/sp-symbol.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
-#include "object/uri.h"
 #include "style.h"
 
 namespace Inkscape::Extension::Internal::PdfBuilder {
@@ -218,28 +216,6 @@ std::optional<CapyPDF_TransparencyGroupId> Document::style_to_transparency_mask(
         if (painted) {
             return _gen.add_transparency_group(gradient_mask._ctx);
         }
-    }
-    return {};
-}
-
-/**
- * Add an image into the PDF stream, returns the image id if successful.
- */
-std::optional<CapyPDF_ImageId> Document::load_image(Inkscape::URI const &uri, capypdf::ImagePdfProperties const &props)
-{
-    try {
-        if (uri.hasScheme("data")) {
-            auto contents = uri.getContents();
-            auto image = _gen.load_image_from_memory(contents.c_str(), contents.size());
-            return _gen.add_image(image, props);
-        } else {
-            auto image = _gen.load_image(uri.toNativeFilename().c_str());
-            return _gen.add_image(image, props);
-        }
-    } catch (Inkscape::BadURIException &e) {
-        g_warning("Couldn't read image: %s", e.what());
-    } catch (std::exception &e) {
-        g_warning("Could not add image to PDF: %s", e.what());
     }
     return {};
 }

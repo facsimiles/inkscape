@@ -63,6 +63,55 @@ TEST(ExtractUriTest, endptr)
     ASSERT_STREQ(extract_end("url( )bar"), "bar");
 }
 
+TEST(ExtractUriTest, data_uri)
+{
+    // Adobe mime-type missing image
+    {
+        char const *data = "base64,ADOBE";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::RASTER);
+        ASSERT_STREQ(now, "ADOBE");
+    }
+    // Data: already consumed
+    {
+        char const *data = "image/jpeg;base64,TRUE";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::RASTER);
+        ASSERT_STREQ(now, "TRUE");
+    }
+    // Regular data uri
+    {
+        char const *data = "data:image/jpeg;base64,TRUE";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::RASTER);
+        ASSERT_STREQ(now, "TRUE");
+    }
+    {
+        char const *data = "data:image/svg+xml;base64,TRUE";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::SVG);
+        ASSERT_STREQ(now, "TRUE");
+    }
+    {
+        char const *data = "data:text/plain;base64,FALSE";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::NONE);
+        ASSERT_STREQ(now, "FALSE");
+    }
+    {
+        char const *data = "http://example.com/foo.png";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::NONE);
+        ASSERT_STREQ(now, "");
+    }
+}
+
 /*
   Local Variables:
   mode:c++

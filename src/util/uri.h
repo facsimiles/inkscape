@@ -15,6 +15,13 @@
 #include <optional>
 #include <string>
 
+enum class Base64Data
+{
+    NONE,
+    RASTER,
+    SVG,
+};
+
 /**
  * Parse functional URI notation, as per 4.3.4 of CSS 2.1
  *
@@ -54,6 +61,16 @@ std::optional<std::string> try_extract_uri(const char* url);
  * @return Extracted non-empty objectid or no value if provided input is not an URI or not an id
  */
 std::optional<std::string> try_extract_uri_id(const char* url);
+
+/**
+ * @brief Attempt to extract the data in a data uri, but does not decode the base64.
+ *
+ * @param uri_data pointer to the uri data encoded in base64
+ * @param base64_type the detected base64 type based on the mime-type.
+ *
+ * @return The same uri_data pointer advanced to just after the uri components.
+ */
+std::tuple<char const *, Base64Data> extract_uri_data(char const *uri_data);
 
 #endif /* !SEEN_UTIL_URI_H */
 

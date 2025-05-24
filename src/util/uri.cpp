@@ -114,6 +114,75 @@ std::optional<std::string> try_extract_uri_id(const char *url) {
     return std::nullopt;
 }
 
+std::tuple<char const *, Base64Data> extract_uri_data(char const *uri_data)
+{
+    bool data_is_base64 = false;
+    bool data_is_image = false;
+    bool data_is_svg = false;
+    bool data_has_mime = false;
+
+    gchar const *data = uri_data;
+
+    if ((*data) && strncmp(data, "data:", 5) == 0) {
+        data += 5;
+    }
+
+    while (*data) {
+        if (strncmp(data, "base64", 6) == 0) {
+            /* base64-encoding */
+            data_is_base64 = true;
+            // Illustrator produces embedded images without MIME type, so we assume it's image if no mime found
+            data_is_image = !data_has_mime;
+            data += 6;
+        }
+        else if (strncmp(data, "image/png", 9) == 0
+              || strncmp(data, "image/jpg", 9) == 0
+              || strncmp(data, "image/jp2", 9) == 0
+              || strncmp(data, "image/bmp", 9) == 0) {
+            /* PNGi, JPEG, JPEG200, BMP image */
+            data_is_image = true;
+            data += 9;
+        }
+        else if (strncmp(data, "image/jpeg", 10) == 0
+              || strncmp(data, "image/tiff", 10) == 0) {
+            /* JPEG, TIFF image */
+            data_is_image = true;
+            data += 10;
+        }
+        else if (strncmp(data, "image/svg+xml", 13) == 0) {
+            /* SVG image */
+            data_is_svg = true;
+            data_is_image = true;
+            data += 13;
+        }
+        else { /* unrecognized option; skip it */
+            while (*data) {
+                if (((*data) == ';') || ((*data) == ',')) {
+                    break;
+                }
+                if ((*data) == '/') {
+                    data_has_mime = true;
+                }
+                data++;
+            }
+        }
+        if ((*data) == ';') {
+            data++;
+            continue;
+        }
+        if ((*data) == ',') {
+            data++;
+            break;
+        }
+    }
+    if (data_is_base64 && data_is_image) {
+        return {data, data_is_svg ? Base64Data::SVG : Base64Data::RASTER};
+    }
+    // No other data format yet
+    return std::tuple{data, Base64Data::NONE};
+}
+
+
 /*
   Local Variables:
   mode:c++

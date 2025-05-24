@@ -138,8 +138,6 @@ private:
                                                           int to);
 
 public:
-    std::optional<CapyPDF_ImageId> load_image(Inkscape::URI const &uri, capypdf::ImagePdfProperties const &props);
-
     CapyPDF_Device_Colorspace get_default_colorspace() const;
     CapyPDF_Device_Colorspace get_colorspace(std::shared_ptr<Colors::Space::AnySpace> const &space) const;
     std::optional<CapyPDF_IccColorSpaceId> get_icc_profile(std::shared_ptr<Colors::Space::CMS> const &profile);
