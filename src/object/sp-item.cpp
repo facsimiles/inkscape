@@ -55,13 +55,13 @@
 #include "snap-preferences.h"
 #include "snap-candidate.h"
 
-#include "extract-uri.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"
 
 #include "ui/util.h"
 #include "util/units.h"
+#include "util/uri.h"
 
 #define noSP_ITEM_DEBUG_IDLE
 

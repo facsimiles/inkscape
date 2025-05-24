@@ -30,7 +30,6 @@
 #include <poppler/Page.h>
 #include <poppler/Stream.h>
 #include "document.h"
-#include "extract-uri.h"
 #include "pdf-parser.h"
 #include "pdf-utils.h"
 #include <png.h>
@@ -48,6 +47,7 @@
 #include "svg/path-string.h"
 #include "svg/svg.h"
 #include "util/units.h"
+#include "util/uri.h"
 #include "xml/document.h"
 #include "xml/node.h"
 #include "xml/repr.h"

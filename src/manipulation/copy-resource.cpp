@@ -4,8 +4,8 @@
 #include "document.h"
 #include "object/sp-defs.h"
 #include "object/sp-object.h"
-#include "extract-uri.h"
 #include "style.h"
+#include "util/uri.h"
 #include "xml/repr.h"
 
 // Make a copy of referenced: fill and stroke styles, clip paths

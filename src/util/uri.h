@@ -1,14 +1,16 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * TODO: insert short description here
+ * URI functions as per 4.3.4 of CSS 2.1
+ *   http://www.w3.org/TR/CSS21/syndata.html#uri
+ *
  *//*
  * Authors: see git history
  *
- * Copyright (C) 2018 Authors
+ * Copyright (C) 2006-2024 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#ifndef SEEN_EXTRACT_URI_H
-#define SEEN_EXTRACT_URI_H
+#ifndef SEEN_UTIL_URI_H
+#define SEEN_UTIL_URI_H
 
 #include <optional>
 #include <string>
@@ -53,7 +55,7 @@ std::optional<std::string> try_extract_uri(const char* url);
  */
 std::optional<std::string> try_extract_uri_id(const char* url);
 
-#endif /* !SEEN_EXTRACT_URI_H */
+#endif /* !SEEN_UTIL_URI_H */
 
 /*
   Local Variables:

@@ -12,7 +12,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "extract-uri.h"
+#include "util/uri.h"
 #include <gtest/gtest.h>
 
 TEST(ExtractUriTest, valid)

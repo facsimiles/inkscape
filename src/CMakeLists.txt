@@ -24,7 +24,6 @@ set(inkscape_SRC
   document-undo.cpp
   document.cpp
   event-log.cpp
-  extract-uri.cpp
   file.cpp
   file-update.cpp
   filter-chemistry.cpp
@@ -102,7 +101,6 @@ set(inkscape_SRC
   enums.h
   event-log.h
   event.h
-  extract-uri.h
   file.h
   fill-or-stroke.h
   filter-chemistry.h

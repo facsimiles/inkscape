@@ -91,10 +91,10 @@ set(TEST_SOURCES
     colors/xml-color-test
     uri-test
     util-test
+    util-uri-test
     drag-and-drop-svgz
     drawing-pattern-test
     poppler-utils-test
-    extract-uri-test
     attributes-test
     dir-util-test
     sp-item-test

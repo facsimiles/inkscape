@@ -23,7 +23,7 @@
 #include "document.h"
 #include "sp-object.h"
 #include "uri.h"
-#include "extract-uri.h"
+#include "util/uri.h"
 #include "sp-tag-use.h"
 
 namespace Inkscape {

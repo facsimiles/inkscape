@@ -25,9 +25,9 @@
 
 #include "attributes.h"                              // for SPAttr
 #include "document.h"                                // for SPDocument
-#include "extract-uri.h"                             // for extract_uri
 #include "style-internal.h"                          // for SPIPaint, SPIShapes
 #include "style.h"                                   // for SPStyle, sp_styl...
+#include "util/uri.h"                                // for extract_uri
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"

@@ -1,22 +1,21 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * TODO: insert short description here
+ * URI functions as per 4.3.4 of CSS 2.1
+ *   http://www.w3.org/TR/CSS21/syndata.html#uri
+ *
  *//*
  * Authors: see git history
  *
- * Copyright (C) 2018 Authors
+ * Copyright (C) 2006-2024 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
 #include <cstring>
 #include <glib.h>
 #include <optional>
 
-#include "extract-uri.h"
+#include "uri.h"
 
-// FIXME: kill this ugliness when we have a proper CSS parser
-
-// Functions as per 4.3.4 of CSS 2.1
-// http://www.w3.org/TR/CSS21/syndata.html#uri
 std::string extract_uri(char const *s, char const **endptr)
 {
     std::string result;

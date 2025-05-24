@@ -11,7 +11,6 @@
 #include <2geom/path-intersection.h>
 #include <2geom/intersection-graph.h>
 
-#include "extract-uri.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "selection.h"
@@ -24,6 +23,7 @@
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "util/safe-printf.h"
+#include "util/uri.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

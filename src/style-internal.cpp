@@ -40,7 +40,6 @@
 #include "document.h"
 
 #include "bad-uri-exception.h"
-#include "extract-uri.h"
 #include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
@@ -51,6 +50,7 @@
 #include "svg/css-ostringstream.h"
 
 #include "util/units.h"
+#include "util/uri.h"
 #include "util-string/ustring-format.h"
 
 // TODO REMOVE OR MAKE MEMBER FUNCTIONS
