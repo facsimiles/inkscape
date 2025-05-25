@@ -54,7 +54,6 @@ std::span<const DialogData> get_dialog_data_list() {
     // ASSETS ----------------------------------------
     {"Symbols",            _("S_ymbols"),              INKSCAPE_ICON("symbols"),                     DialogData::Assets,         ScrollProvider::PROVIDE   },
     {"DocumentResources",  _("_Document Resources"),   INKSCAPE_ICON("document-resources"),          DialogData::Assets,         ScrollProvider::NOPROVIDE },
-    {"PaintServers",       _("_Paint Servers"),        INKSCAPE_ICON("dialog-paint-server"),         DialogData::Assets,         ScrollProvider::PROVIDE   },
 
     // ADVANCED --------------------------------------
     {"Selectors",          _("_Selectors and CSS"),    INKSCAPE_ICON("dialog-selectors"),            DialogData::Advanced,       ScrollProvider::PROVIDE   },

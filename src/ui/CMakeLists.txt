@@ -167,7 +167,6 @@ target_sources(inkscape_base PRIVATE
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
-	dialog/paint-servers.cpp
 	dialog/text-edit.cpp
 	dialog/tile.cpp
 	dialog/tracedialog.cpp
@@ -403,7 +402,6 @@ target_sources(inkscape_base PRIVATE
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
 	dialog/symbols.h
-	dialog/paint-servers.h
 	dialog/text-edit.h
 	dialog/tile.h
 	dialog/tracedialog.h
