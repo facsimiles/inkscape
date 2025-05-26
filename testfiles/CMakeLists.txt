@@ -161,6 +161,7 @@ include(${CMAKE_SOURCE_DIR}/CMakeScripts/UnitTest.cmake)
 add_unit_test(assertions-in-tests)
 add_unit_test(version-test SOURCES version.cpp)
 add_unit_test(css-syntactic-decomposition-test SOURCES "css/syntactic-decomposition.cpp" EXTRA_LIBS croco_LIB)
+add_unit_test(xslt-extension-test SOURCES "extension/implementation/xslt.cpp" EXTRA_LIBS 2Geom::2geom)
 add_dependencies(tests unit_tests)
 
 ### CLI rendering tests and LPE
