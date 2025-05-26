@@ -331,6 +331,30 @@ inkscape:android:
     paths:
       - inkscape.apk
 
+inkscape-signed-installers:
+  dependencies:
+    - "inkscape:windows: [exe]"
+    - "inkscape:windows: [msi]"
+  rules:
+    - if: $CI_CERT_CERTIFICATE
+      if: $CI_CERT_KEY
+      if: $CI_CERT_PASSWORD
+      when: manual
+  allow_failure: true
+  script:
+  # We generated the certificate with :
+  # openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/O=Inkscape/CN=inkscape.org/emailAddress=contact@inkscape.org" -addext "extendedKeyUsage=codeSigning"
+    - openssl x509 -in $CI_CERT_CERTIFICATE -text -noout
+    - openssl x509 -in $CI_CERT_CERTIFICATE -pubkey -noout
+    - osslsigncode sign -certs $CI_CERT_CERTIFICATE -key $CI_CERT_KEY -pass $CI_CERT_PASSWORD -h sha256  -t http://timestamp.digicert.com -in build/inkscape*.msi -out inkscape-signed.msi -n "Inkscape" -i "https://inkscape.org"
+    - osslsigncode sign -certs $CI_CERT_CERTIFICATE -key $CI_CERT_KEY -pass $CI_CERT_PASSWORD -h sha256  -t http://timestamp.digicert.com -in build/inkscape*.exe -out inkscape-signed.exe -n "Inkscape" -i "https://inkscape.org"
+    - sha256sum inkscape-signed.msi | tee inkscape-signed.msi.sha256
+    - sha256sum inkscape-signed.exe | tee inkscape-signed.exe.sha256
+  artifacts:
+    paths:
+      - inkscape-signed.*
+      
+
 #tests, always run after building
 test:linux:
   stage: test
@@ -512,7 +536,6 @@ scan-build:
     - if: $SCHEDULED_JOB_NAME == "clang"
   needs: []
   script:
-    - apt-get update -yqq && apt-get install -y clang
     - mkdir -p clang-build
     - cd clang-build
     - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
