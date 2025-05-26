@@ -32,7 +32,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -59,7 +59,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -86,7 +86,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -137,7 +137,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -164,7 +164,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -191,7 +191,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -218,7 +218,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -245,7 +245,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -297,7 +297,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -324,7 +324,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -351,7 +351,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -378,7 +378,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -430,7 +430,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -457,7 +457,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -484,7 +484,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -511,7 +511,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -563,7 +563,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -590,7 +590,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -617,7 +617,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -644,7 +644,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -671,7 +671,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -723,7 +723,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -750,7 +750,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>
@@ -777,7 +777,7 @@
                     <property name="group">toolsradio</property>
                     <property name="draw-indicator">False</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="action-name">win.tool-switch</property>

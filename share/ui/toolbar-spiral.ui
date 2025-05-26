@@ -130,7 +130,7 @@
     <child>
       <object class="GtkButton" id="reset_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reset shape parameters to defaults (use Inkscape Preferences &gt; Tools to change defaults)</property>
         <property name="relief">none</property>

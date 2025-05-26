@@ -56,7 +56,7 @@
     <child>
       <object class="GtkToggleButton" id="_vp_x_state_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle vanishing point in x-direction between 'finite' and 'infinite' (= parallel)</property>
         <property name="relief">none</property>
@@ -103,7 +103,7 @@
     <child>
       <object class="GtkToggleButton" id="_vp_y_state_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle vanishing point in y-direction between 'finite' and 'infinite' (= parallel)</property>
         <property name="relief">none</property>
@@ -150,7 +150,7 @@
     <child>
       <object class="GtkToggleButton" id="_vp_z_state_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle vanishing point in z-direction between 'finite' and 'infinite' (= parallel)</property>
         <property name="relief">none</property>

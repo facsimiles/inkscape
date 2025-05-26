@@ -45,7 +45,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -172,7 +171,7 @@
     <child>
       <object class="GtkButton" id="reset_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reset paint bucket parameters to defaults (use Inkscape Preferences &gt; Tools to change defaults)</property>
         <property name="relief">none</property>

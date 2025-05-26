@@ -30,7 +30,7 @@
   </object>
   <object class="GtkRadioButton" id="mode_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
@@ -65,7 +65,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Delete objects touched by eraser</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -84,7 +84,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Cut out from paths and shapes</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -103,7 +103,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Clip from objects</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -164,7 +164,7 @@
     <child>
       <object class="GtkToggleButton" id="_usepressure_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the width of the pen</property>
         <property name="relief">none</property>
@@ -210,7 +210,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -340,7 +339,7 @@
     <child>
       <object class="GtkToggleButton" id="_split_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Break apart cut items</property>
         <property name="relief">none</property>

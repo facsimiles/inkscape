@@ -71,7 +71,7 @@
     <child>
       <object class="GtkButton" id="page_new">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make corners sharp</property>
         <property name="action-name">win.page-new</property>
@@ -138,7 +138,7 @@
     <child>
       <object class="GtkButton" id="_btn_page_backward">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make corners sharp</property>
         <property name="action-name">doc.page-move-backward</property>
@@ -166,7 +166,7 @@
     <child>
       <object class="GtkButton" id="_btn_page_foreward">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make corners sharp</property>
         <property name="action-name">doc.page-move-forward</property>
@@ -195,7 +195,7 @@
     <child>
       <object class="GtkButton" id="_btn_page_delete">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make corners sharp</property>
         <property name="action-name">win.page-delete</property>
@@ -222,7 +222,7 @@
     <child>
       <object class="GtkToggleButton" id="_btn_move_toggle">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="action-name">doc.page-move-objects</property>
         <child>
@@ -336,7 +336,7 @@
         <child>
           <object class="GtkExpander">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="margin-start">5</property>
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>

@@ -50,7 +50,7 @@
   </object>
   <object class="GtkRadioButton" id="radio_button_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="receives-default">False</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
@@ -179,7 +179,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -307,7 +306,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn2">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover2</property>
@@ -338,7 +336,7 @@
     <child>
       <object class="GtkRadioButton" id="slice_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">False</property>
         <property name="tooltip-text" translatable="yes">Switch to slice (closed shape with two radii)</property>
         <property name="relief">none</property>
@@ -364,7 +362,7 @@
     <child>
       <object class="GtkRadioButton" id="arc_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">False</property>
         <property name="tooltip-text" translatable="yes">Switch to arc (unclosed shape)</property>
         <property name="relief">none</property>
@@ -390,7 +388,7 @@
     <child>
       <object class="GtkRadioButton" id="chord_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">False</property>
         <property name="tooltip-text" translatable="yes">Switch to chord (closed shape)</property>
         <property name="relief">none</property>
@@ -427,7 +425,7 @@
     <child>
       <object class="GtkButton" id="_make_whole">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make the shape a whole ellipse, not arc or segment</property>
         <property name="relief">none</property>

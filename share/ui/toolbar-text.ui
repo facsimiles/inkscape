@@ -39,13 +39,13 @@
   </object>
   <object class="GtkRadioButton" id="alignment_mode_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
   </object>
   <object class="GtkRadioButton" id="direction_buttons_mode_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="draw-indicator">False</property>
   </object>
   <object class="GtkPopover" id="font_collections_popover">
@@ -80,7 +80,7 @@
           <object class="GtkButton" id="fc_dialog_btn">
             <property name="label" translatable="yes">Open Collections Editor</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Open the Font Collections dialog</property>
             <property name="margin-top">3</property>
@@ -94,7 +94,7 @@
   </object>
   <object class="GtkRadioButton" id="orientation_buttons_mode_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="draw-indicator">False</property>
   </object>
   <object class="GtkPopover" id="popover1">
@@ -159,7 +159,7 @@
   </object>
   <object class="GtkRadioButton" id="writing_buttons_mode_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="draw-indicator">False</property>
   </object>
   <object class="GtkBox" id="text-toolbar">
@@ -171,7 +171,6 @@
     <child>
       <object class="GtkMenuButton">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Select Font Collections</property>
@@ -188,7 +187,6 @@
     <child>
       <object class="GtkButton" id="reset_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Reset the font list (Deselects all the font collections and clears search results)</property>
         <property name="relief">none</property>
@@ -246,7 +244,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -326,7 +323,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn2">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover2</property>
@@ -359,7 +355,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Align left</property>
             <property name="relief">none</property>
@@ -376,7 +371,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Align center</property>
             <property name="relief">none</property>
@@ -396,7 +390,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Align right</property>
             <property name="relief">none</property>
@@ -416,7 +409,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Justify (only flowed text)</property>
             <property name="relief">none</property>
@@ -452,7 +444,7 @@
     <child>
       <object class="GtkToggleButton" id="_superscript_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle superscript</property>
         <property name="relief">none</property>
@@ -470,7 +462,7 @@
     <child>
       <object class="GtkToggleButton" id="_subscript_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle subscript</property>
         <property name="relief">none</property>
@@ -496,7 +488,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn3">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover3</property>
@@ -530,7 +521,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Horizontal text</property>
             <property name="relief">none</property>
@@ -547,7 +537,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Vertical text — lines: right to left</property>
             <property name="relief">none</property>
@@ -567,7 +556,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Vertical text — lines: left to right</property>
             <property name="relief">none</property>
@@ -603,7 +591,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn4">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover4</property>
@@ -637,7 +624,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Auto glyph orientation</property>
             <property name="relief">none</property>
@@ -654,7 +640,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Upright glyph orientation</property>
             <property name="relief">none</property>
@@ -674,7 +659,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Sideways glyph orientation</property>
             <property name="relief">none</property>
@@ -710,7 +694,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn5">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover5</property>
@@ -744,7 +727,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Left to right text</property>
             <property name="relief">none</property>
@@ -761,7 +743,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Right to left text</property>
             <property name="relief">none</property>
@@ -797,7 +778,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn6">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover6</property>

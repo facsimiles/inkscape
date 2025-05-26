@@ -406,6 +406,7 @@ media-check:
   script:
     - python3 buildtools/media-check-icons.py
     - python3 buildtools/media-check-keys.py
+    - python3 buildtools/media-check-ui.py
 
 
 ##################################################

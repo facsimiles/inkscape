@@ -9,14 +9,14 @@
   </object>
   <object class="GtkRadioButton" id="new_fillstroke_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
   </object>
   <object class="GtkRadioButton" id="new_type_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
@@ -52,7 +52,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create linear gradient</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -71,7 +71,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create radial (elliptic or circular) gradient</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -99,7 +99,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the fill</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -118,7 +118,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the stroke</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -150,7 +150,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -190,7 +189,7 @@
     <child>
       <object class="GtkToggleButton" id="_linked_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Link gradients to change all related gradients</property>
         <property name="relief">none</property>
@@ -211,7 +210,7 @@
     <child>
       <object class="GtkButton" id="_stops_reverse_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reverse the direction of the gradient</property>
         <property name="relief">none</property>
@@ -289,7 +288,7 @@
     <child>
       <object class="GtkButton" id="_stops_add_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Insert new stop</property>
         <property name="relief">none</property>
@@ -307,7 +306,7 @@
     <child>
       <object class="GtkButton" id="_stops_delete_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Delete stop</property>
         <property name="relief">none</property>

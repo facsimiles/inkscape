@@ -30,7 +30,7 @@
     <child>
       <object class="GtkRadioButton" id="radio_button_group">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Add to the Shape</property>
         <property name="action-name">win.shape-builder-mode</property>
         <property name="action-target">0</property>
@@ -48,7 +48,7 @@
     <child>
       <object class="GtkRadioButton">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Remove from Shape</property>
         <property name="action-name">win.shape-builder-mode</property>
         <property name="action-target">1</property>
@@ -89,7 +89,7 @@
     <child>
       <object class="GtkButton" id="confirm_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Accept</property>
         <property name="relief">none</property>
@@ -107,7 +107,7 @@
     <child>
       <object class="GtkButton" id="cancel_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Cancel</property>
         <property name="relief">none</property>
@@ -133,7 +133,6 @@
     <child>
       <object class="GtkMenuButton">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="relief">none</property>
@@ -152,6 +151,7 @@
     <child>
       <object class="GtkToggleButton">
         <property name="visible">True</property>
+        <property name="focus-on-click">False</property>
         <property name="action-name">win.shape-builder-replace</property>
         <property name="relief">none</property>
         <property name="use-underline">True</property>

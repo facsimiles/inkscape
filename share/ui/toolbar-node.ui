@@ -61,7 +61,7 @@
     <child>
       <object class="GtkButton" id="insert_node_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="can-default">True</property>
         <property name="tooltip-text" translatable="yes">Insert new nodes into selected segments</property>
         <property name="relief">none</property>
@@ -76,7 +76,6 @@
     <child>
       <object class="GtkMenuButton" id="insert_node_btn_menu">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="relief">none</property>
@@ -95,7 +94,7 @@
     <child>
       <object class="GtkButton" id="delete_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="can-default">True</property>
         <property name="tooltip-text" translatable="yes">Delete selected nodes</property>
         <property name="relief">none</property>
@@ -121,7 +120,7 @@
     <child>
       <object class="GtkButton" id="join_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Join selected nodes</property>
         <property name="relief">none</property>
         <child>
@@ -138,7 +137,7 @@
     <child>
       <object class="GtkButton" id="break_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Break path at selected nodes</property>
         <property name="relief">none</property>
         <child>
@@ -163,7 +162,7 @@
     <child>
       <object class="GtkButton" id="join_segment_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Join selected endnodes with a new segment</property>
         <property name="relief">none</property>
@@ -181,7 +180,7 @@
     <child>
       <object class="GtkButton" id="delete_segment_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Delete segment between two non-endpoint nodes</property>
         <property name="relief">none</property>
@@ -207,7 +206,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -236,7 +234,7 @@
     <child>
       <object class="GtkButton" id="cusp_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Make selected nodes corner</property>
         <property name="relief">none</property>
         <child>
@@ -256,7 +254,7 @@
     <child>
       <object class="GtkButton" id="smooth_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Make selected nodes smooth</property>
         <property name="relief">none</property>
         <child>
@@ -276,7 +274,7 @@
     <child>
       <object class="GtkButton" id="symmetric_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Make selected nodes symmetric</property>
         <property name="relief">none</property>
         <child>
@@ -296,7 +294,7 @@
     <child>
       <object class="GtkButton" id="auto_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Make selected nodes auto-smooth</property>
         <property name="relief">none</property>
         <child>
@@ -324,7 +322,7 @@
     <child>
       <object class="GtkButton" id="line_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Straighten lines</property>
         <property name="relief">none</property>
         <child>
@@ -341,7 +339,7 @@
     <child>
       <object class="GtkButton" id="curve_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Add curve handles</property>
         <property name="relief">none</property>
         <child>
@@ -366,7 +364,7 @@
     <child>
       <object class="GtkButton">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Add corners live path effect</property>
         <property name="action-name">app.object-add-corners-lpe</property>
         <property name="relief">none</property>
@@ -392,7 +390,7 @@
     <child>
       <object class="GtkButton">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Convert selected object to path</property>
         <property name="action-name">app.object-to-path</property>
         <property name="relief">none</property>
@@ -410,7 +408,7 @@
     <child>
       <object class="GtkButton">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Convert selected object's stroke to paths</property>
         <property name="action-name">app.object-stroke-to-path</property>
         <property name="relief">none</property>
@@ -516,7 +514,7 @@
     <child>
       <object class="GtkButton" id="_nodes_lpeedit_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Show next editable path effect parameter</property>
         <property name="action-name">win.path-effect-parameter-next</property>
@@ -543,7 +541,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn2">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
          <property name="popover">popover2</property>
@@ -572,7 +569,7 @@
     <child>
       <object class="GtkToggleButton" id="_show_helper_path_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Show path outline (without path effects)</property>
         <property name="relief">none</property>
         <style>
@@ -592,7 +589,7 @@
     <child>
       <object class="GtkToggleButton" id="_show_handles_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Show Bezier handles of selected nodes</property>
         <property name="relief">none</property>
         <style>
@@ -612,7 +609,7 @@
     <child>
       <object class="GtkToggleButton" id="_show_transform_handles_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Show transformation handles for selected nodes</property>
         <property name="relief">none</property>
         <style>
@@ -632,7 +629,7 @@
     <child>
       <object class="GtkToggleButton" id="_object_edit_mask_path_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Show mask(s) of selected object(s)</property>
         <property name="relief">none</property>
         <style>
@@ -652,7 +649,7 @@
     <child>
       <object class="GtkToggleButton" id="_object_edit_clip_path_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Show clipping path(s) of selected object(s)</property>
         <property name="relief">none</property>
         <style>

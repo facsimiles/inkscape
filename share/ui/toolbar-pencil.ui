@@ -22,7 +22,7 @@
   </object>
   <object class="GtkRadioButton" id="mode_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
@@ -46,7 +46,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -90,7 +89,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create regular Bezier path</property>
             <property name="relief">none</property>
@@ -107,7 +105,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create Spiro path</property>
             <property name="relief">none</property>
@@ -127,7 +124,6 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create BSpline path</property>
             <property name="relief">none</property>
@@ -147,7 +143,6 @@
         <child>
           <object class="GtkRadioButton" id="zigzag_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create a sequence of straight line segments</property>
             <property name="relief">none</property>
@@ -167,7 +162,6 @@
         <child>
           <object class="GtkRadioButton" id="paraxial_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create a sequence of paraxial line segments</property>
             <property name="relief">none</property>
@@ -203,7 +197,6 @@
     <child>
       <object class="GtkButton" id="_flatten_spiro_bspline_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Flatten Spiro or BSpline LPE</property>
@@ -233,7 +226,6 @@
         <child>
           <object class="GtkToggleButton" id="_usepressure_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Use pressure input</property>
@@ -351,7 +343,6 @@
         <child>
           <object class="GtkToggleButton" id="_simplify_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">LPE based interactive simplify</property>
@@ -370,7 +361,6 @@
         <child>
           <object class="GtkButton" id="_flatten_simplify_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
             <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">LPE simplify flatten</property>
             <property name="relief">none</property>

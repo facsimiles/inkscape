@@ -22,7 +22,7 @@
   </object>
   <object class="GtkRadioButton" id="mode_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
@@ -56,7 +56,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -98,7 +97,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_move_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Move objects in any direction</property>
             <property name="relief">none</property>
             <property name="active">True</property>
@@ -118,7 +117,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_inout_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Move objects towards cursor; with Shift from cursor</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -137,7 +136,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_jitter_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Move objects in random directions</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -156,7 +155,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_scale_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Shrink objects, with Shift enlarge</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -175,7 +174,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_rotate_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Rotate objects, with Shift counterclockwise</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -194,7 +193,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_dupdel_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Duplicate objects, with Shift delete</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -213,7 +212,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_push_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Push parts of paths in any direction</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -232,7 +231,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_shrinkgrow_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Shrink (inset) parts of paths; with Shift grow (outset)</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -251,7 +250,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_attrep_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Attract parts of paths towards cursor; with Shift from cursor</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -270,7 +269,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_roughen_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Roughen parts of paths</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -289,7 +288,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_colpaint_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Paint the tool's color upon selected objects</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -308,7 +307,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_coljitter_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Jitter the colors of selected objects</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -327,7 +326,7 @@
         <child>
           <object class="GtkRadioButton" id="mode_blur_btn">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Blur selected objects more; with Shift, blur less</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -420,7 +419,7 @@
     <child>
       <object class="GtkToggleButton" id="_pressure_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the force of tweak action</property>
         <property name="relief">none</property>
@@ -474,7 +473,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn2">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover2</property>
@@ -514,7 +512,7 @@
           <object class="GtkToggleButton" id="_doh_btn">
             <property name="label" translatable="yes" context="Hue">H</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">In color mode, act on object's hue</property>
             <property name="relief">none</property>
@@ -527,7 +525,7 @@
           <object class="GtkToggleButton" id="_dos_btn">
             <property name="label" translatable="yes" context="Saturation">S</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">In color mode, act on object's saturation</property>
             <property name="relief">none</property>
@@ -540,7 +538,7 @@
           <object class="GtkToggleButton" id="_dol_btn">
             <property name="label" translatable="yes" context="Lightness">L</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">In color mode, act on object's lightness</property>
             <property name="relief">none</property>
@@ -553,7 +551,7 @@
           <object class="GtkToggleButton" id="_doo_btn">
             <property name="label" translatable="yes" context="Opacity">O</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">In color mode, act on object's opacity</property>
             <property name="relief">none</property>

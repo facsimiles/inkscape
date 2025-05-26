@@ -27,7 +27,7 @@
   <object class="GtkRadioButton" id="flat_button_group">
     <property name="label" translatable="yes">radiobutton</property>
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
   </object>
@@ -62,7 +62,7 @@
         <child>
           <object class="GtkRadioButton" id="flat_polygon_button">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Regular polygon (with one handle) instead of a star</property>
             <property name="relief">none</property>
             <property name="active">True</property>
@@ -82,7 +82,7 @@
         <child>
           <object class="GtkRadioButton" id="flat_star_button">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Star instead of a regular polygon (with one handle)</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -171,7 +171,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -271,7 +270,7 @@
     <child>
       <object class="GtkButton" id="reset_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reset all parameters to their default values</property>
         <property name="relief">none</property>

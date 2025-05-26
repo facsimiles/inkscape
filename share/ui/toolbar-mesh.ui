@@ -16,14 +16,14 @@
   </object>
   <object class="GtkRadioButton" id="new_fillstroke_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
   </object>
   <object class="GtkRadioButton" id="new_type_buttons_group">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focus-on-click">False</property>
     <property name="always-show-image">True</property>
     <property name="active">True</property>
     <property name="draw-indicator">False</property>
@@ -59,7 +59,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create mesh gradient</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -78,7 +78,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create conical gradient</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -106,7 +106,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the fill</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -125,7 +125,7 @@
         <child>
           <object class="GtkRadioButton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the stroke</property>
             <property name="relief">none</property>
             <property name="draw-indicator">False</property>
@@ -213,7 +213,6 @@
     <child>
       <object class="GtkToggleButton" id="_edit_fill_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Edit fill mesh</property>
@@ -232,7 +231,6 @@
     <child>
       <object class="GtkToggleButton" id="_edit_stroke_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Edit stroke mesh</property>
@@ -259,7 +257,6 @@
     <child>
       <object class="GtkMenuButton" id="menu_btn1">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="popover">popover1</property>
@@ -288,7 +285,6 @@
     <child>
       <object class="GtkToggleButton" id="show_handles_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Show handles</property>
@@ -310,7 +306,7 @@
     <child>
       <object class="GtkButton" id="toggle_sides_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle selected sides between Beziers and lines.</property>
         <property name="relief">none</property>
@@ -331,7 +327,7 @@
     <child>
       <object class="GtkButton" id="make_elliptical_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make selected sides elliptical by changing length of handles. Works best if handles already approximate ellipse.</property>
         <property name="relief">none</property>
@@ -352,7 +348,7 @@
     <child>
       <object class="GtkButton" id="pick_colors_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Pick colors for selected corner nodes from underneath mesh.</property>
         <property name="relief">none</property>
@@ -373,7 +369,7 @@
     <child>
       <object class="GtkButton" id="scale_mesh_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Scale mesh to fit inside bounding box.</property>
         <property name="relief">none</property>
@@ -402,7 +398,7 @@
     <child>
       <object class="GtkButton" id="warning_btn">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">WARNING: Mesh SVG Syntax Subject to Change</property>
         <property name="relief">none</property>
