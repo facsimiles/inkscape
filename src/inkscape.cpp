@@ -91,29 +91,6 @@ static constexpr int SP_INDENT = 8;
  */
 
 
-class InkErrorHandler : public Inkscape::ErrorReporter {
-public:
-    InkErrorHandler(bool useGui) : Inkscape::ErrorReporter(),
-                                   _useGui(useGui)
-    {}
-    ~InkErrorHandler() override = default;
-
-    void handleError( Glib::ustring const& primary, Glib::ustring const& secondary ) const override
-    {
-        if (_useGui) {
-            Gtk::MessageDialog err(primary, false, Gtk::MessageType::WARNING, Gtk::ButtonsType::OK, true);
-            err.set_secondary_text(secondary);
-            Inkscape::UI::dialog_run(err);
-        } else {
-            g_message("%s", primary.data());
-            g_message("%s", secondary.data());
-        }
-    }
-
-private:
-    bool _useGui;
-};
-
 void inkscape_ref(Inkscape::Application & in)
 {
     in.refCount++;
@@ -215,7 +192,7 @@ Application::Application(bool use_gui) :
     _S_inst = this;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    InkErrorHandler* handler = new InkErrorHandler(use_gui);
+    ErrorReporter* handler = new ErrorReporter(use_gui);
     prefs->setErrorHandler(handler);
     {
         Glib::ustring msg;

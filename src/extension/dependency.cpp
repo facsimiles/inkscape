@@ -131,7 +131,7 @@ Dependency::~Dependency ()
     found then a TRUE is returned.  If we get all the way through the
     path then a FALSE is returned, the command could not be found.
 */
-bool Dependency::check ()
+bool Dependency::check()
 {
     if (_string == nullptr) {
         return false;
@@ -182,7 +182,7 @@ bool Dependency::check ()
                 case LOCATION_EXTENSIONS: {
                     // get_filename will warn if the resource isn't found, while returning an empty string.
                     std::string temploc =
-                        Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::EXTENSIONS, location.c_str());
+                        Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::EXTENSIONS, location.c_str(), false, true);
                     if (!temploc.empty()) {
                         location = temploc;
                         _absolute_location = temploc;

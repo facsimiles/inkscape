@@ -303,6 +303,7 @@ set(ui_SRC
 	dialog-run.h
 	drag-and-drop.h
 	draw-anchor.h
+	error-reporter.h
 	filtered-store.h
 	icon-names.h
 	icon-loader.h

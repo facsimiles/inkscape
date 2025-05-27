@@ -287,7 +287,6 @@ public:
     bool get_gui() const { return _gui; }
 
     /* Extension editor dialog stuff */
-    Gtk::Box *get_info_widget();
     Gtk::Box *get_params_widget();
 
 protected:
