@@ -17,6 +17,7 @@ set(util_SRC
 	statics.cpp
     recently-used-fonts.cpp
 	pool.cpp
+	treeify.cpp
 	units.cpp
 	xim_fix.cpp
 	ziptool.cpp
@@ -55,6 +56,7 @@ set(util_SRC
 	share.h
 	signal-blocker.h
 	statics.h
+	treeify.h
 	trim.h
 	units.h
     variant-visitor.h

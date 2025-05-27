@@ -10,14 +10,17 @@
  */
 
 #include <iomanip>
+#include <random>
 #include <2geom/path-sink.h>
 #include <2geom/sbasis-to-bezier.h> // cubicbezierpath_from_sbasis
 #include <2geom/path-intersection.h>
 #include <2geom/circle.h>
+#include <2geom/sweeper.h>
 
 #include "helper/geom-pathstroke.h"
 #include "helper/geom.h"
 #include "path/path-boolop.h"
+#include "util/treeify.h"
 
 namespace Geom {
 
@@ -1159,32 +1162,6 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
     jf(jd);
 }
 
-std::vector<std::vector<int>> connected_components(int size, std::function<bool(int, int)> const &adj_test)
-{
-    auto components = std::vector<std::vector<int>>();
-    auto visited = std::vector<bool>(size, false);
-
-    for (int i = 0; i < size; i++) {
-        if (visited[i]) continue;
-
-        auto component = std::vector<int>({ i });
-        visited[i] = true;
-
-        for (int cur = 0; cur < component.size(); cur++) {
-            for (int j = 0; j < size; j++) {
-                if (!visited[j] && adj_test(component[cur], j)) {
-                    component.emplace_back(j);
-                    visited[j] = true;
-                }
-            }
-        }
-
-        components.emplace_back(std::move(component));
-    }
-
-    return components;
-}
-
 /**
  * Check for an empty path.
  */
@@ -1196,33 +1173,189 @@ bool is_path_empty(Geom::Path const &path)
     return std::abs(area) < 1e-3;
 }
 
-std::vector<Geom::PathVector> split_non_intersecting_paths(Geom::PathVector &&paths, bool remove_empty)
+/// Attempts to find a point in the interior of a filled path.
+static std::optional<Geom::Point> find_interior_point(Geom::Path const &path, FillRule fill_rule, std::default_random_engine &gen)
 {
-    // Get connected components of indices.
-    auto const comps = connected_components(paths.size(), [&] (int i, int j) {
-        return pathvs_have_nonempty_overlap(paths[i], paths[j]);
-    });
+    auto ran = [&] { return std::uniform_real_distribution()(gen); };
 
-    // Split paths into batches.
-    std::vector<Geom::PathVector> result;
-    result.reserve(comps.size());
-
-    for (auto const &comp : comps) {
-        Geom::PathVector pv;
-         // Todo: Fix when 2geom supports reserve.
-
-        for (auto i : comp) {
-            if (remove_empty && is_path_empty(paths[i])) {
-                continue;
-            }
-
-            pv.push_back(std::move(paths[i])); // Todo: Fix when 2geom supports emplace.
-        }
-
-        result.emplace_back(std::move(pv));
+    auto const bounds = path.boundsFast();
+    if (!bounds) {
+        return {};
     }
 
-    return result;
+    constexpr int max_iterations = 10; // arbitrary cutoff, typically one iteration needed
+    for (int i = 0; i < max_iterations; i++) {
+        // Pick a random horizontal line through the path.
+        auto const y = Geom::lerp(ran(), bounds->top(), bounds->bottom());
+        auto const line = Geom::LineSegment{Geom::Point{bounds->left() - bounds->width(), y}, Geom::Point{bounds->right() + bounds->width(), y}};
+
+        // Intersect the line with the path, recording the intersection times on the line.
+        std::vector<double> times;
+        for (auto const &curve : path) {
+            for (auto const &intersection : line.intersect(curve)) {
+                times.emplace_back(intersection.first);
+            }
+        }
+
+        // Interior-test the points exactly halfway between intersections.
+        for (int j = 1; j < times.size(); j++) {
+            auto const t = (times[j - 1] + times[j]) / 2;
+            auto const p = line.pointAt(t);
+            if (is_point_inside(fill_rule, path.winding(p))) {
+                return p;
+            }
+        }
+    }
+
+    return {};
+}
+
+namespace {
+
+/**
+ * Given a pathvector @a pathv and fill rule @a fill_rule, compute pathv_fully_contains(pathv[i], pathv[j], fill_rule)
+ * for all possible i != j. This class must be used with the Geom::Sweeper API to actually compute results. The results
+ * are then available by calling contains(i, j);
+ */
+class PathContainmentSweeper
+{
+public:
+    using ItemIterator = Geom::PathVector::const_iterator;
+
+    PathContainmentSweeper(Geom::PathVector const &pathv, FillRule fill_rule, double precision = Geom::EPSILON)
+        : _pathv{pathv}
+        , _fill_rule{fill_rule}
+        , _precision{precision}
+        , _contains(_pathv.size() * _pathv.size(), false) // allocate space for two-dimensional array
+    {}
+
+    Geom::PathVector const &items() const { return _pathv; }
+
+    Geom::Interval itemBounds(ItemIterator path) const
+    {
+        auto const r = path->boundsFast();
+        return r ? (*r)[Geom::X] : Geom::Interval{};
+    }
+
+    void addActiveItem(ItemIterator incoming)
+    {
+        for (auto const &path : _active) {
+            _checkPair(path, incoming);
+            _checkPair(incoming, path);
+        }
+        _active.push_back(incoming);
+    }
+
+    void removeActiveItem(ItemIterator to_remove)
+    {
+        auto const it = std::find(_active.begin(), _active.end(), to_remove);
+        std::swap(*it, _active.back());
+        _active.pop_back();
+    }
+
+    //// Return the value of pathv_fully_contains(pathv[i], pathv[j], fill_rule).
+    bool contains(int i, int j) const { return _contains[index(i, j)]; }
+
+private:
+    Geom::PathVector const &_pathv;
+    FillRule const _fill_rule;
+    double const _precision;
+
+    std::vector<ItemIterator> _active;
+    std::vector<bool> _contains;
+
+    int index(int i, int j) const { return i * _pathv.size() + j; }
+
+    void _checkPair(ItemIterator a, ItemIterator b)
+    {
+        if (pathv_fully_contains(*a, *b, _fill_rule)) {
+            auto const ia = std::distance(_pathv.begin(), a);
+            auto const ib = std::distance(_pathv.begin(), b);
+            _contains[index(ia, ib)] = true;
+        }
+    }
+};
+
+/**
+ * Given a pathvector and a tree structure on its subpaths representing how they are nested,
+ * split the pathvector into its connected components when filled with the given fill rule.
+ */
+class PathContainmentTraverser
+{
+public:
+    PathContainmentTraverser(Geom::PathVector &paths, Util::TreeifyResult const &tree, FillRule fill_rule)
+        : _paths{paths}
+        , _tree{tree}
+        , _fill_rule{fill_rule}
+    {
+        while (_pos < tree.preorder.size()) {
+            _visit(nullptr, 0, nullptr);
+        }
+    }
+
+    std::vector<Geom::PathVector> &&moveResult() { return std::move(_result); }
+
+private:
+    // Input
+    Geom::PathVector &_paths;
+    Util::TreeifyResult const &_tree;
+    FillRule const _fill_rule;
+
+    // State
+    std::default_random_engine _gen{std::random_device()()};
+    int _pos = 0;
+
+    // Output
+    std::vector<Geom::PathVector> _result;
+
+    void _visit(Geom::Path const *parent, int winding, Geom::PathVector *component)
+    {
+        // Visit the next node in the preorder traversal.
+        int const x = _tree.preorder[_pos];
+        _pos++;
+
+        // Determine winding number at paths[x] of its parents in the tree.
+        // Skip the computation for fill_justDont, as it would be unused.
+        if (parent && _fill_rule != fill_justDont) {
+            if (auto const p = find_interior_point(_paths[x], _fill_rule, _gen)) {
+                winding += parent->winding(*p);
+            }
+        }
+
+        // Determine if paths[x] is inside a hole. If so, we start a new component.
+        bool const boundary = !is_point_inside(_fill_rule, winding);
+
+        std::optional<Geom::PathVector> pathv;
+        if (boundary) {
+            pathv.emplace();
+            component = &*pathv;
+        }
+
+        assert(component);
+        component->push_back(std::move(_paths[x]));
+
+        for (int i = 0; i < _tree.num_children[x]; i++) {
+            _visit(&_paths[x], winding, component);
+        }
+
+        if (boundary) {
+            _result.emplace_back(std::move(*pathv));
+        }
+    }
+};
+
+} // namespace
+
+std::vector<Geom::PathVector> split_non_intersecting_paths(Geom::PathVector &&paths, FillRule fill_rule)
+{
+    auto path_containment = PathContainmentSweeper{paths, fill_nonZero};
+    Geom::Sweeper{path_containment}.process();
+
+    auto const tree = Util::treeify(paths.size(), [&] (int i, int j) {
+        return path_containment.contains(i, j);
+    });
+
+    return PathContainmentTraverser(paths, tree, fill_rule).moveResult();
 }
 
 Geom::PathVector 

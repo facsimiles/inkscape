@@ -19,7 +19,6 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/point.h>
 #include "helper/geom.h"
-#include "helper/geom-pathstroke.h"
 
 /**
  * Routines for SPCurve and for its Geom::PathVector
@@ -44,16 +43,6 @@ SPCurve::SPCurve(Geom::Rect const &rect, bool all_four_sides)
     }
 }
 
-void SPCurve::set_pathvector(Geom::PathVector const &new_pathv)
-{
-    _pathv = new_pathv;
-}
-
-Geom::PathVector const &SPCurve::get_pathvector() const
-{
-    return _pathv;
-}
-
 /**
  * Returns the number of segments of all paths summed.
  * This count includes the closing line segment of a closed path.
@@ -61,38 +50,6 @@ Geom::PathVector const &SPCurve::get_pathvector() const
 size_t SPCurve::get_segment_count() const
 {
     return _pathv.curveCount();
-}
-
-/**
- * Returns a list of curves corresponding to the subpaths in \a curve.
- */
-std::vector<SPCurve> SPCurve::split() const
-{
-    std::vector<SPCurve> result;
-
-    for (auto const &path_it : _pathv) {
-        Geom::PathVector newpathv;
-        newpathv.push_back(path_it);
-        result.emplace_back(std::move(newpathv));
-    }
-
-    return result;
-}
-
-/**
- * Returns a list of curves of non-overlapping subpath in \a curve.
- */
-std::vector<SPCurve> SPCurve::split_non_overlapping() const
-{
-    std::vector<SPCurve> result;
-
-    auto curves = Inkscape::split_non_intersecting_paths(Geom::PathVector(_pathv));
-
-    for (auto &curve : curves) {
-        result.emplace_back(std::move(curve));
-    }
-
-    return result;
 }
 
 /**

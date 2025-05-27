@@ -22,15 +22,18 @@
 
 /**
  * Wrapper around a Geom::PathVector object.
+ * Todo: Remove.
  */
-class SPCurve {
+class SPCurve
+{
 public:
     explicit SPCurve() = default;
-    explicit SPCurve(Geom::PathVector pathv) : _pathv(std::move(pathv)) {}
+    explicit SPCurve(Geom::PathVector pathv) : _pathv{std::move(pathv)} {}
     explicit SPCurve(Geom::Rect const &rect, bool all_four_sides = false);
 
-    void set_pathvector(Geom::PathVector const &new_pathv);
-    Geom::PathVector const &get_pathvector() const;
+    void set_pathvector(Geom::PathVector const &new_pathv) { _pathv = new_pathv; }
+    Geom::PathVector &get_pathvector() { return _pathv; }
+    Geom::PathVector const &get_pathvector() const { return _pathv; }
 
     size_t get_segment_count() const;
     size_t nodes_in_path() const;
@@ -76,9 +79,6 @@ public:
     void reverse();
     SPCurve reversed() const;
 
-    std::vector<SPCurve> split() const;
-    std::vector<SPCurve> split_non_overlapping() const;
-
     template <typename T>
     static std::optional<SPCurve> ptr_to_opt(T const &p)
     {
@@ -93,7 +93,7 @@ protected:
     Geom::PathVector _pathv;
 };
 
-#endif // !SEEN_DISPLAY_CURVE_H
+#endif // SEEN_DISPLAY_CURVE_H
 
 /*
   Local Variables:

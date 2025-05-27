@@ -105,6 +105,7 @@ set(TEST_SOURCES
     2geom-characterization-test
     xml-test
     sp-item-group-test
+    treeify-test
     lpe-test
     ${LPE_TESTS_64bit}
     )
@@ -122,7 +123,6 @@ foreach(test_source ${TEST_SOURCES})
     set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
     add_dependencies(tests ${testname})
 endforeach()
-
 
 ### CLI rendering tests and LPE
 add_subdirectory(cli_tests)

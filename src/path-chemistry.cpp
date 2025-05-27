@@ -23,6 +23,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
+#include "helper/geom-pathstroke.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
 #include "text-editing.h"
@@ -230,12 +231,14 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
         if (!path->curveForEdit()) {
             continue;
         }
-        auto curve = *path->curveForEdit();
+        auto pathv = path->curveForEdit()->get_pathvector();
+
         did = true;
 
         Inkscape::XML::Node *parent = item->getRepr()->parent();
         gint pos = item->getRepr()->position();
         char const *id = item->getRepr()->attribute("id");
+        auto const fill_rule = item->style->fill_rule.computed;
 
         // XML Tree being used directly here while it shouldn't be...
         gchar *style = g_strdup(item->getRepr()->attribute("style"));
@@ -246,7 +249,8 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
         SPDocument *document = item->document;
         item->deleteObject(false);
 
-        auto list = overlapping ? curve.split() : curve.split_non_overlapping();
+        auto list = Inkscape::split_non_intersecting_paths(std::move(pathv),
+                                                           overlapping ? fill_justDont : to_livarot(fill_rule));
 
         std::vector<Inkscape::XML::Node*> reprs;
         for (auto const &curve : list) {
@@ -256,7 +260,7 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
 
             repr->setAttribute("inkscape:path-effect", path_effect);
 
-            auto str = sp_svg_write_path(curve.get_pathvector());
+            auto str = sp_svg_write_path(curve);
             if (path_effect)
                 repr->setAttribute("inkscape:original-d", str);
             else
