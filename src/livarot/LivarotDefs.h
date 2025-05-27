@@ -14,6 +14,7 @@
 #define my_defs
 
 #include <cstdint>
+#include "style-enums.h"
 
 // error codes (mostly obsolete)
 enum
@@ -91,5 +92,34 @@ enum FirstOrLast {
     FIRST = 0,
     LAST = 1
 };
+
+inline FillRule to_livarot(SPWindRule fill_rule)
+{
+    switch (fill_rule) {
+        default:
+        case SP_WIND_RULE_NONZERO:
+            return fill_nonZero;
+        case SP_WIND_RULE_EVENODD:
+            return fill_oddEven;
+        case SP_WIND_RULE_POSITIVE:
+            return fill_positive;
+    }
+}
+
+/// Return whether a point is inside a shape, given the point's winding number and the shape's fill rule.
+inline bool is_point_inside(FillRule fill_rule, int winding)
+{
+    switch (fill_rule) {
+        case fill_oddEven:
+            return winding % 2 != 0;
+        default:
+        case fill_nonZero:
+            return winding != 0;
+        case fill_positive:
+            return winding > 0;
+        case fill_justDont:
+            return false;
+    }
+}
 
 #endif
