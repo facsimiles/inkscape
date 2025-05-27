@@ -5,6 +5,37 @@
 
 namespace Inkscape::UI::Dialog {
 
+constexpr std::string to_string(HistoryKind hk)
+{
+    switch (hk) {
+        // see Illustration 1
+        case HistoryKind::ACTION:
+            return "action";
+        case HistoryKind::IMPORT_FILE:
+            return "import";
+        case HistoryKind::OPEN_FILE:
+            return "open";
+        case HistoryKind::LPE:
+            return "open";
+    }
+}
+
+constexpr std::optional<HistoryKind> from_string(std::string ht_str)
+{
+    constexpr std::array<std::pair<std::string_view, HistoryKind>, 4> map{{{"action", HistoryKind::ACTION},
+                                                                           {"import", HistoryKind::IMPORT_FILE},
+                                                                           {"open", HistoryKind::OPEN_FILE},
+                                                                           {"lpe", HistoryKind::LPE}}};
+
+    for (auto const &[key, val] : map) {
+        if (key == ht_str) {
+            return val;
+        }
+    }
+
+    return std::nullopt; // unknown HistoryKind
+}
+
 CPHistoryXML::CPHistoryXML()
     : _file_path(IO::Resource::profile_path("cphistory.xml"))
 {
@@ -59,17 +90,17 @@ CPHistoryXML::~CPHistoryXML()
 
 void CPHistoryXML::add_action(std::string const &full_action_name)
 {
-    add_operation(HistoryType::ACTION, full_action_name);
+    add_operation(HistoryKind::ACTION, full_action_name);
 }
 
 void CPHistoryXML::add_import(std::string const &uri)
 {
-    add_operation(HistoryType::IMPORT_FILE, uri);
+    add_operation(HistoryKind::IMPORT_FILE, uri);
 }
 
 void CPHistoryXML::add_open(std::string const &uri)
 {
-    add_operation(HistoryType::OPEN_FILE, uri);
+    add_operation(HistoryKind::OPEN_FILE, uri);
 }
 
 void CPHistoryXML::add_action_parameter(std::string const &full_action_name, std::string const &param)
@@ -168,23 +199,9 @@ void CPHistoryXML::save() const
     sp_repr_save_file(_xml_doc, _file_path.c_str());
 }
 
-void CPHistoryXML::add_operation(HistoryType const history_type, std::string const &data)
+void CPHistoryXML::add_operation(HistoryKind const history_type, std::string const &data)
 {
-    std::string operation_type_name;
-    switch (history_type) {
-        // see Illustration 1
-        case HistoryType::ACTION:
-            operation_type_name = "action";
-            break;
-        case HistoryType::IMPORT_FILE:
-            operation_type_name = "import";
-            break;
-        case HistoryType::OPEN_FILE:
-            operation_type_name = "open";
-            break;
-        default:
-            return;
-    }
+    std::string operation_type_name = to_string(history_type);
     auto operation_to_add = _xml_doc->createElement(operation_type_name.c_str()); // action, import, open
     auto operation_data = _xml_doc->createTextNode(data.c_str());
     operation_data->setContent(data.c_str());
@@ -198,20 +215,11 @@ void CPHistoryXML::add_operation(HistoryType const history_type, std::string con
     save();
 }
 
-std::optional<HistoryType> CPHistoryXML::_get_operation_type(Inkscape::XML::Node *operation)
+std::optional<HistoryKind> CPHistoryXML::_get_operation_type(Inkscape::XML::Node *operation)
 {
     std::string const operation_type_name = operation->name();
 
-    if (operation_type_name == "action") {
-        return HistoryType::ACTION;
-    } else if (operation_type_name == "import") {
-        return HistoryType::IMPORT_FILE;
-    } else if (operation_type_name == "open") {
-        return HistoryType::OPEN_FILE;
-    } else {
-        return std::nullopt;
-        // unknown HistoryType
-    }
+    return from_string(operation_type_name);
 }
 
 } // namespace Inkscape::UI::Dialog

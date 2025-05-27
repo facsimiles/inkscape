@@ -19,7 +19,7 @@
 #include "xml/node.h"
 
 namespace Inkscape::UI::Dialog {
-enum class HistoryType
+enum class HistoryKind
 {
     LPE,
     ACTION,
@@ -27,12 +27,15 @@ enum class HistoryType
     IMPORT_FILE,
 };
 
+constexpr std::string to_string(HistoryKind);
+constexpr std::optional<HistoryKind> from_string(std::string);
+
 struct History
 {
-    HistoryType history_type;
+    HistoryKind history_type;
     std::string data;
 
-    History(HistoryType ht, std::string &&data)
+    History(HistoryKind ht, std::string &&data)
         : history_type(ht)
         , data(data)
     {}
@@ -64,9 +67,9 @@ public:
 private:
     void save() const;
 
-    void add_operation(HistoryType const history_type, std::string const &data);
+    void add_operation(HistoryKind const history_type, std::string const &data);
 
-    static std::optional<HistoryType> _get_operation_type(Inkscape::XML::Node *operation);
+    static std::optional<HistoryKind> _get_operation_type(Inkscape::XML::Node *operation);
 
     std::string const _file_path;
 
