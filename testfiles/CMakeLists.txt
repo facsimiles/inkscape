@@ -177,6 +177,8 @@ add_unit_test(xslt-extension-test TEST_SOURCE "xslt-extension-test.cpp"
 add_unit_test(mod360-test TEST_SOURCE "mod360-test.cpp"
                               SOURCES "mod360.cpp"
                            EXTRA_LIBS 2Geom::2geom)
+add_unit_test(treeify-test TEST_SOURCE "treeify-test.cpp"
+                               SOURCES "util/treeify.cpp")
 
 add_dependencies(tests unit_tests)
 

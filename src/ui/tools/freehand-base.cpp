@@ -549,19 +549,18 @@ void FreehandBase::_attachSelection()
 
     SPItem *item = selection ? selection->singleItem() : nullptr;
 
-    if (is<SPPath>(item)) {
+    if (auto path = cast<SPPath>(item)) {
         // Create new white data
         // Item
         white_item = item;
 
         // Curve list
         // We keep it in desktop coordinates to eliminate calculation errors
-        auto path = static_cast<SPPath *>(item);
         if (!path->curveForEdit()) {
             return;
         }
 
-        auto tmp = path->curveForEdit()->transformed(white_item->i2dt_affine()).split();
+        auto tmp = path->curveForEdit()->get_pathvector() * white_item->i2dt_affine();
         white_curves.clear();
         white_curves.reserve(tmp.size());
         for (auto &t : tmp) {

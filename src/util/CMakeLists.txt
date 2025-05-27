@@ -21,6 +21,7 @@ set(util_SRC
 	theme-utils.cpp
     recently-used-fonts.cpp
 	pool.cpp
+	treeify.cpp
 	units.cpp
 	ziptool.cpp
 
@@ -62,6 +63,7 @@ set(util_SRC
 	statics.h
 	static-doc.h
 	theme-utils.h
+	treeify.h
 	trim.h
 	smart_ptr_keys.h
 	units.h
