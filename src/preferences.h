@@ -27,17 +27,12 @@
 
 #include "xml/repr.h"
 #include "util/scope_exit.h"
+#include "ui/error-reporter.h"
 
 class SPCSSAttr;
 typedef unsigned int guint32;
 
 namespace Inkscape {
-
-class ErrorReporter {
-public:
-    virtual ~ErrorReporter() = default;
-    virtual void handleError(Glib::ustring const& primary, Glib::ustring const& secondary ) const = 0;
-};
 
 /**
  * Preference storage class.

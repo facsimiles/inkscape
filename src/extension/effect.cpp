@@ -169,13 +169,6 @@ void Effect::get_menu(Inkscape::XML::Node * pattern, std::list<Glib::ustring>& s
 void
 Effect::deactivate()
 {
-    /* FIXME: https://gitlab.com/inkscape/inkscape/-/issues/4381
-     * Effects don't have actions anymore, so this is not possible:
-    if (action)
-        action->set_enabled(false);
-    if (action_noprefs)
-        action_noprefs->set_enabled(false);
-    */
     Extension::deactivate();
 }
 
@@ -283,12 +276,6 @@ Effect::find_menu (Inkscape::XML::Node * menustruct, const gchar *name)
     return nullptr;
 }
 
-
-Gtk::Box *
-Effect::get_info_widget()
-{
-    return Extension::get_info_widget();
-}
 
 PrefDialog *
 Effect::get_pref_dialog ()

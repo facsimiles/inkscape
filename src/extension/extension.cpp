@@ -271,8 +271,7 @@ Extension::check ()
     bool retval = true;
     for (auto const &dep : _deps) {
         if (dep->check() == false) {
-            printFailure(Glib::ustring(_("a dependency was not met.")));
-            error_file_write(dep->info_string());
+            printFailure(Glib::ustring::compose(_("a dependency was not met. %1"), dep->info_string()));
             retval = false;
         }
     }
@@ -347,10 +346,6 @@ void
 Extension::deactivate ()
 {
     set_state(STATE_DEACTIVATED);
-
-    /* Removing the old implementation, and making this use the default. */
-    /* This should save some memory */
-    imp = ImplementationHolder();
 }
 
 /**
@@ -920,6 +915,7 @@ Extension::error_file_close ()
 {
     if (error_file) {
         fclose(error_file);
+        error_file = nullptr;
     }
 };
 
@@ -999,28 +995,6 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
 };
 
 /* Extension editor dialog stuff */
-
-Gtk::Box *
-Extension::get_info_widget()
-{
-    auto const retval = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
-    retval->property_margin().set_value(4);
-
-    auto const info = Gtk::make_managed<Gtk::Frame>("General Extension Information");
-    UI::pack_start(*retval, *info, true, true, 4);
-
-    auto const table = Gtk::make_managed<Gtk::Grid>();
-    table->property_margin().set_value(4);
-    table->set_column_spacing(4);
-    info->add(*table);
-
-    int row = 0;
-    add_val(_("Name:"), get_translation(_name.c_str()), table, &row);
-    add_val(_("ID:"), _id.c_str(), table, &row);
-    add_val(_("State:"), _state == STATE_LOADED ? _("Loaded") : _state == STATE_UNLOADED ? _("Unloaded") : _("Deactivated"), table, &row);
-
-    return retval;
-}
 
 void Extension::add_val(Glib::ustring const &labelstr, Glib::ustring const &valuestr,
                         Gtk::Grid * table, int * row)
