@@ -113,11 +113,6 @@ static void extract_pathvectors_recursive(SPItem *root, SPItem *item, Pathvector
     }
 }
 
-static FillRule sp_to_livarot(SPWindRule fillrule)
-{
-    return fillrule == SP_WIND_RULE_NONZERO ? fill_nonZero : fill_oddEven;
-}
-
 /**
  * Take a list of items and fracture into a list of SubItems ready for
  * use inside the booleans interactive tool.
@@ -282,7 +277,7 @@ WorkItems SubItem::build_flatten(std::vector<SPItem*> &&items)
 
             // Flatten the remaining pathvector according to its fill rule.
             auto fillrule = subitem->style->fill_rule.computed;
-            flatten(pathv, sp_to_livarot(fillrule));
+            flatten(pathv, to_livarot(fillrule));
 
             // Remove the union so far from the shape, then add the shape to the union so far.
             Geom::PathVector uniq;

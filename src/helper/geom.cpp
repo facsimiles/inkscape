@@ -195,38 +195,39 @@ bool pathv_similar(Geom::PathVector const &apv, Geom::PathVector const &bpv, dou
 /*
 * Checks if the path describes a simple rectangle, returning true and populating rect if it does.
 */
-bool is_simple_rect(Geom::PathVector const &pathv, Geom::OptRect &rect, double precision)
+Geom::OptRect check_simple_rect(Geom::PathVector const &pathv, double precision)
 {
     // "Simple rectangle" is a single path with 4 line segments.
     if (pathv.size() != 1) {
-        return false;
+        return {};
     }
 
     auto const &path = pathv.front();
     // might be a better way to check if all the curves are line segments
     if (!path.closed() || path.size() != 4 ||
-        std::any_of(path.begin(), path.end(), [](auto const &curve) { return !curve.isLineSegment(); })) {
-        return false;
+        std::any_of(path.begin(), path.end(), [](auto const &curve) { return !curve.isLineSegment(); }))
+    {
+        return {};
     }
 
-    auto p0 = path.initialPoint();
+    auto const p0 = path.initialPoint();
     auto start = p0;
     int prev_change = 0;
-    for (auto const &seg : path) {
-        auto end = seg.finalPoint();
+    for (auto const &curve : path) {
+        auto end = curve.finalPoint();
         // define a change in X as 1, change in Y as -1. Both is 0
-        int change = (abs(end[X] - start[X]) < precision ? 0 : 1) + (abs(end[Y] - start[Y]) < precision ? 0 : -1);
+        int const change = !Geom::are_near(start.x(), end.x(), precision) - !Geom::are_near(start.y(), end.y(), precision);
         if (change == 0 || change == prev_change) {
             // Changing in both x and y, or continuing the same direction as the previous segment.
-            return false;
+            return {};
         }
         start = end;
         prev_change = change;
     }
+
     // if we've made it this far, we can assume that the final point of the second segment is the opposite corner
-    auto p1 = path[1].finalPoint();
-    rect = Geom::OptRect(p0, p1);
-    return true;
+    auto const p1 = path[1].finalPoint();
+    return Geom::Rect(p0, p1);
 }
 
 static void
@@ -543,40 +544,37 @@ bool pathvs_have_nonempty_overlap(Geom::PathVector const &a, Geom::PathVector co
     return false;
 }
 
-/*
- * Checks whether pathvector b is completely within the bounds of pathvector a.
+/**
+ * Checks whether the filled region defined by pathvector @a a and fill rule @a fill_rule
+ * completely contains pathvector @a b.
  */
-bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b)
+bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b, FillRule fill_rule, double precision)
 {
-    Geom::OptRect a_bounds;
-    bool a_is_rect = is_simple_rect(a, a_bounds);
-    if (!a_is_rect) {
-        a_bounds = a.boundsExact();
+    // Fast-path the case where a is a rectangle.
+    if (auto const a_rect = check_simple_rect(a, precision)) {
+        return a_rect->contains(b.boundsExact());
     }
 
-    // At minimum, BBox of a must contain bbox of b
-    if (!a_bounds.contains(b.boundsExact())) {
+    // At minimum, bbox of a must contain bbox of b
+    if (!a.boundsExact()->contains(b.boundsExact())) {
         return false;
-    } else if (a_is_rect) {
-        // If a is a rectangle, then it is the same as its bounding box
-        return true;
     }
 
-    // check winding numbers - all nodes of b need to be contained by a to be fully contained.
-    // Non-zero winding is a necessary but not sufficient condition.
-    for (auto &node : b.nodes()) {
-        if (!a.winding(node)) {
+    // There must be no intersections of edges.
+    // Fixme: This condition is too strict.
+    if (!a.intersect(b, precision).empty()) {
+        return false;
+    }
+
+    // Check winding number of first node of each subpath.
+    // Fixme: This condition is also too strict.
+    for (auto const &path : b) {
+        if (!is_point_inside(fill_rule, a.winding(path.initialPoint()))) {
             return false;
         }
     }
 
-    // As in pathvs_have_nonempty_overlap, windings may not account for nodeless Bézier arc intersections.
-    auto intersections = a.intersect(b);
-    if (!intersections.empty()) {
-        return false;
-    }
-
-    // BBox is fully contained, passed the winding test, no intersections, the path must be contained
+    // BBox is fully contained, no intersections, passed the winding test, the path must be contained
     return true;
 }
 

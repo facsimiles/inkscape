@@ -15,8 +15,11 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
-#include "object/sp-path.h"
+#include <2geom/ellipse.h>
 #include <2geom/pathvector.h>
+
+#include "helper/geom.h"
+#include "object/sp-path.h"
 #include "svg/svg.h"
 #include "test-with-svg-object-pairs.h"
 
@@ -80,6 +83,33 @@ TEST_F(GeomPathstrokeTest, BoundedHausdorffDistance)
                                     << std::endl;
         case_index++;
     }
+}
+
+TEST_F(GeomPathstrokeTest, CheckSimpleRect)
+{
+    auto const rect = Geom::Rect::from_xywh(2, 3, 5, 8);
+    ASSERT_EQ(rect, check_simple_rect(Geom::Path{rect}));
+}
+
+TEST_F(GeomPathstrokeTest, PathvFullyContainsTest)
+{
+    ASSERT_TRUE(pathv_fully_contains(Geom::Path{Geom::Rect::from_xywh(2, 3, 5, 9)},
+                                     Geom::Path{Geom::Rect::from_xywh(2, 3, 5, 8)},
+                                     fill_nonZero));
+
+    ASSERT_FALSE(pathv_fully_contains(Geom::Path{Geom::Rect::from_xywh(1, 3, 5, 8)},
+                                      Geom::Path{Geom::Rect::from_xywh(2, 3, 5, 8)},
+                                      fill_nonZero));
+
+    auto const arc = Geom::Ellipse(Geom::Point(0, 0), Geom::Point(2, 2), 2 * M_PI);
+
+    ASSERT_TRUE(pathv_fully_contains(Geom::Path{arc},
+                                     Geom::Path{Geom::Rect::from_xywh(-1, -1, 2, 2)},
+                                     fill_nonZero));
+
+    ASSERT_FALSE(pathv_fully_contains(Geom::Path{arc},
+                                      Geom::Path{Geom::Rect::from_xywh(0, -1, 2, 2)},
+                                      fill_nonZero));
 }
 
 /*

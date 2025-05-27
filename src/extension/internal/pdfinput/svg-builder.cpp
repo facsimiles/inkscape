@@ -865,7 +865,7 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
     node_vec *= node_tr;
     clip_vec *= clip_tr;
 
-    return !pathv_fully_contains(clip_vec, node_vec);
+    return !pathv_fully_contains(clip_vec, node_vec, fill_nonZero);
 }
 
 Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::Affine tr, bool even_odd)
