@@ -699,7 +699,25 @@ void TextToolbar::script_changed(int mode)
     _freeze = false;
 }
 
-void TextToolbar::align_mode_changed(int mode)
+// Any text alignment in, right/center/left/justify out.
+SPCSSTextAlign text_align_to_side(SPCSSTextAlign const &align, SPCSSDirection const &direction)
+{
+    auto new_align = align;
+
+    if ((align == SP_CSS_TEXT_ALIGN_START && direction == SP_CSS_DIRECTION_LTR) ||
+        (align == SP_CSS_TEXT_ALIGN_END   && direction == SP_CSS_DIRECTION_RTL)) {
+        new_align = SP_CSS_TEXT_ALIGN_LEFT;
+    }
+
+    if ((align == SP_CSS_TEXT_ALIGN_START && direction == SP_CSS_DIRECTION_RTL) ||
+        (align == SP_CSS_TEXT_ALIGN_END   && direction == SP_CSS_DIRECTION_LTR)) {
+        new_align = SP_CSS_TEXT_ALIGN_RIGHT;
+    }
+
+    return new_align;
+}
+
+void TextToolbar::align_mode_changed(int align_mode)
 {
     // quit if run by the _changed callbacks
     if (_freeze) {
@@ -707,121 +725,138 @@ void TextToolbar::align_mode_changed(int mode)
     }
     _freeze = true;
 
-    Preferences::get()->setInt("/tools/text/align_mode", mode);
+    Preferences::get()->setInt("/tools/text/align_mode", align_mode);
 
-    // move the x of all texts to preserve the same bbox
+    // Move the alignment point of all texts to preserve the same bbox.
+    bool changed = false;
     Selection *selection = _desktop->getSelection();
     for (auto i : selection->items()) {
         auto text = cast<SPText>(i);
         // auto flowtext = cast<SPFlowtext>(i);
         if (text) {
-            SPItem *item = i;
 
-            unsigned writing_mode = item->style->writing_mode.value;
-            // below, variable names suggest horizontal move, but we check the writing direction
-            // and move in the corresponding axis
+            // Below, variable names suggest horizontal move, but we check the writing direction
+            // and move in the corresponding axis.
             Geom::Dim2 axis;
+            unsigned writing_mode = text->style->writing_mode.value;
             if (writing_mode == SP_CSS_WRITING_MODE_LR_TB || writing_mode == SP_CSS_WRITING_MODE_RL_TB) {
                 axis = Geom::X;
             } else {
                 axis = Geom::Y;
             }
 
-            Geom::OptRect bbox = item->geometricBounds();
-            if (!bbox)
-                continue;
-            double width = bbox->dimensions()[axis];
-            // If you want to align within some frame, other than the text's own bbox, calculate
-            // the left and right (or top and bottom for tb text) slacks of the text inside that
-            // frame (currently unused)
-            double left_slack = 0;
-            double right_slack = 0;
-            unsigned old_align = item->style->text_align.value;
-            double move = 0;
-            if (old_align == SP_CSS_TEXT_ALIGN_START || old_align == SP_CSS_TEXT_ALIGN_LEFT) {
-                switch (mode) {
-                    case 0:
-                        move = -left_slack;
-                        break;
-                    case 1:
-                        move = width/2 + (right_slack - left_slack)/2;
-                        break;
-                    case 2:
-                        move = width + right_slack;
-                        break;
-                }
-            } else if (old_align == SP_CSS_TEXT_ALIGN_CENTER) {
-                switch (mode) {
-                    case 0:
-                        move = -width/2 - left_slack;
-                        break;
-                    case 1:
-                        move = (right_slack - left_slack)/2;
-                        break;
-                    case 2:
-                        move = width/2 + right_slack;
-                        break;
-                }
-            } else if (old_align == SP_CSS_TEXT_ALIGN_END || old_align == SP_CSS_TEXT_ALIGN_RIGHT) {
-                switch (mode) {
-                    case 0:
-                        move = -width - left_slack;
-                        break;
-                    case 1:
-                        move = -width/2 + (right_slack - left_slack)/2;
-                        break;
-                    case 2:
-                        move = right_slack;
-                        break;
-                }
+            // Find current text inline-size (width for horizontal text, height for vertical text.
+            Geom::OptRect bbox = text->get_frame(); // 'inline-size' or rectangle frame.
+            if (!bbox) {
+                bbox = text->geometricBounds();
             }
-            Geom::Point XY = cast<SPText>(item)->attributes.firstXY();
+            if (!bbox) {
+                continue; // No bounding box, no joy!
+            }
+            double width = bbox->dimensions()[axis];
+
+            double move = 0;
+            auto direction = text->style->direction.value;
+
+            // Switch alignment point
+            auto old_side = text_align_to_side(text->style->text_align.value, direction);
+            switch (old_side) {
+                case SP_CSS_TEXT_ALIGN_LEFT:
+                    switch (align_mode) {
+                        case 0:
+                            break;
+                        case 1:
+                            move = width/2;
+                            break;
+                        case 2:
+                            move = width;
+                            break;
+                        case 3:
+                            break; // Justify
+                        default:
+                            std::cerr << "TextToolbar::align_mode_changed() Unexpected value (mode): " << align_mode << std::endl;
+                    }
+                    break;
+                case SP_CSS_TEXT_ALIGN_CENTER:
+                    switch (align_mode) {
+                        case 0:
+                            move = -width/2;
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            move = width/2;
+                            break;
+                        case 3:
+                            break; // Justify
+                        default:
+                            std::cerr << "TextToolbar::align_mode_changed() Unexpected value (mode): " << align_mode << std::endl;
+                    }
+                    break;
+                case SP_CSS_TEXT_ALIGN_RIGHT:
+                    switch (align_mode) {
+                        case 0:
+                            move = -width;
+                            break;
+                        case 1:
+                            move = -width/2;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break; // Justify
+                        default:
+                            std::cerr << "TextToolbar::align_mode_changed() Unexpected value (mode): " << align_mode << std::endl;
+                    }
+                    break;
+                case SP_CSS_TEXT_ALIGN_JUSTIFY:
+                    // Do nothing
+                    break;
+                default:
+                    std::cerr << "TextToolbar::align_mode_changed() Unexpected value (old_side): " << old_side << std::endl;
+            }
+
+            if (std::abs(move) > 0) {
+                changed = true;
+            }
+
+            SPCSSAttr *css = sp_repr_css_attr_new ();
+            if ((align_mode == 0 && direction == SP_CSS_DIRECTION_LTR) ||
+                (align_mode == 2 && direction == SP_CSS_DIRECTION_RTL)) {
+                sp_repr_css_set_property (css, "text-anchor", "start");
+                sp_repr_css_set_property (css, "text-align",  "start");
+            }
+            if ((align_mode == 0 && direction == SP_CSS_DIRECTION_RTL) ||
+                (align_mode == 2 && direction == SP_CSS_DIRECTION_LTR)) {
+                sp_repr_css_set_property (css, "text-anchor", "end");
+                sp_repr_css_set_property (css, "text-align",  "end");
+            }
+            if (align_mode == 1) {
+                sp_repr_css_set_property (css, "text-anchor", "middle");
+                sp_repr_css_set_property (css, "text-align",  "center");
+            }
+            if (align_mode == 3) {
+                sp_repr_css_set_property (css, "text-anchor", "start");
+                sp_repr_css_set_property (css, "text-align",  "justify");
+            }
+            text->changeCSS(css, "style");
+            sp_repr_css_attr_unref(css);
+
+            Geom::Point XY = text->attributes.firstXY();
             if (axis == Geom::X) {
                 XY = XY + Geom::Point (move, 0);
             } else {
                 XY = XY + Geom::Point (0, move);
             }
-            cast<SPText>(item)->attributes.setFirstXY(XY);
-            item->updateRepr();
-            item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        }
+            text->attributes.setFirstXY(XY);
+            text->updateRepr();
+            text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        } // if(text)
     }
 
-    SPCSSAttr *css = sp_repr_css_attr_new ();
-    switch (mode)
-    {
-        case 0:
-        {
-            sp_repr_css_set_property (css, "text-anchor", "start");
-            sp_repr_css_set_property (css, "text-align", "start");
-            break;
-        }
-        case 1:
-        {
-            sp_repr_css_set_property (css, "text-anchor", "middle");
-            sp_repr_css_set_property (css, "text-align", "center");
-            break;
-        }
-
-        case 2:
-        {
-            sp_repr_css_set_property (css, "text-anchor", "end");
-            sp_repr_css_set_property (css, "text-align", "end");
-            break;
-        }
-
-        case 3:
-        {
-            sp_repr_css_set_property (css, "text-anchor", "start");
-            sp_repr_css_set_property (css, "text-align", "justify");
-            break;
-        }
-    }
-
-    if (mergeDefaultStyle(css)) {
+    if (changed) {
         DocumentUndo::done(_desktop->getDocument(), _("Text: Change alignment"), INKSCAPE_ICON("draw-text"));
     }
-    sp_repr_css_attr_unref(css);
 
     onDefocus();
 
@@ -1605,12 +1640,18 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
 
         _alignment_buttons[3]->set_sensitive(isFlow);
 
-        int activeButton = 0;
-        if (query.text_align.computed == SP_CSS_TEXT_ALIGN_START || query.text_align.computed == SP_CSS_TEXT_ALIGN_LEFT) {
+        int activeButton = prefs->getInt("/tools/text/align_mode", 0);
+        bool r2l = (query.direction.computed == SP_CSS_DIRECTION_RTL);
+
+        if ((query.text_align.computed == SP_CSS_TEXT_ALIGN_START && !r2l) ||
+            (query.text_align.computed == SP_CSS_TEXT_ALIGN_END   &&  r2l) ||
+             query.text_align.computed == SP_CSS_TEXT_ALIGN_LEFT) {
             activeButton = 0;
         } else if (query.text_align.computed == SP_CSS_TEXT_ALIGN_CENTER) {
             activeButton = 1;
-        } else if (query.text_align.computed == SP_CSS_TEXT_ALIGN_END || query.text_align.computed == SP_CSS_TEXT_ALIGN_RIGHT) {
+        } else if ((query.text_align.computed == SP_CSS_TEXT_ALIGN_START &&  r2l) ||
+                   (query.text_align.computed == SP_CSS_TEXT_ALIGN_END   && !r2l) ||
+                    query.text_align.computed == SP_CSS_TEXT_ALIGN_RIGHT) {
             activeButton = 2;
         } else if (query.text_align.computed == SP_CSS_TEXT_ALIGN_JUSTIFY) {
             activeButton = 3;
