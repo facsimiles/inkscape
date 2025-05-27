@@ -1,11 +1,19 @@
-Snap
-====
+[Inkscape Developer Documentation](../doc/readme.md) /
 
-This directory is used for building the snap (https://snapcraft.io/) package of Inkscape.
+Snap package
+============
 
-Each commit to master sends a new build to the "edge" version.
+The `snap/` directory is used for building the snap (https://snapcraft.io/) package of Inkscape. Snap is a package format for Ubuntu and some related Linux distributions.
 
-For build status and logs, see https://launchpad.net/~ted/+snap/inkscape-master. That account on launchpad.net is owned by Ted Gould <ted@gould.cx>.
+## Automatic build
+
+The Inkscape snap package is automatically built and uploaded to the Snap store. There are three channels:
+
+- "stable": Stable release - updated manually
+- "candidate": Latest version of stable branch - automatic build - https://launchpad.net/~inkscape.dev/inkscape/+snap/inkscape-1.4.x
+- "edge": Master development branch - automatic build - https://launchpad.net/~inkscape.dev/+snap/inkscape-master
+
+The account on the snap store is owned by Ted Gould <ted@gould.cx> and some others.
 
 If the snap does no longer build or run, the most probable reason is that we added a new dependency. Have a look at the recent changes in https://gitlab.com/inkscape/inkscape-ci-docker, and try to make a similar change to `build-packages` (build dependency) or `stage-packages` (runtime dependency) in `snapcraft.yaml`.
 
@@ -34,7 +42,7 @@ snapcraft
 # Make sure that no apt version of Inkscape is installed
 sudo apt remove inkscape
 # Install the build result locally (Adjust filename accordingly)
-sudo snap install --dangerous inkscape_1.5-dev_amd64.snap
+sudo snap install --dangerous inkscape_XXX.snap
 # Fix access to .config/inkscape directory (TODO why is this needed)
 sudo snap connect inkscape:dot-config-inkscape
 ```

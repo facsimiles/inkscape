@@ -1,4 +1,8 @@
-# Welcome to Inkscape!
+[Inkscape developer documentation](../readme.md) /
+
+# Inkscape at Google Summer of Code
+
+Welcome to Inkscape!
 
 For quite a few years Inkscape has been successfully participating in
 [Google Summer of Code](http://code.google.com/soc/).

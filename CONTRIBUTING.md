@@ -1,24 +1,30 @@
+[Inkscape Developer Documentation](doc/readme.md) /
+
 Contributing to Inkscape
 ========================
 
-Inkscape welcomes your contributions to help turn it into a fully
-SVG-compliant drawing program for the Open Source community.
+Inkscape welcomes your contributions to make it an even better
+drawing program for the Open Source community.
 
-While many developers work on fixing bugs and creating new features, it
-is worth strong emphasis that even non-programmers can help make
-Inkscape more powerful and successful. You probably already have an idea
-of something you'd like to work on. If not, here are just a few ways you
-can help:
+You can help improve Inkscape with and without programming knowledge. We need both to get a good result.
 
-   * Pick a bug, fix it, and send in a merge request on GitLab.
-   * Choose a feature you want to see developed, and make it.
-   * If you speak a language in addition to English, work on your
-     language's i18n file in the po/ directory.
-   * Find a new bug and report it.
-   * Help answer questions for new Inkscapers on IRC, forum, or the
-     mailing lists.
-   * Write an article advocating Inkscape.
-   * Author a HOWTO describing a trick or technique you've figured out.
+As a **non-programmer**, you can e.g. help with support, testing, documentation, translations or outreach.
+Please see our [Contributing page](https://inkscape.org/contribute/).
+
+If you want to help as a **programmer**, then please follow the rest of this page.
+
+Contact
+-------
+
+Feel free to reach out to us.
+
+- Chat: The development team channel is available via [Web Chat](https://chat.inkscape.org/channel/team_devel) or via IRC: irc://irc.libera.chat/#inkscape-devel
+- Mailing list: [inkscape-devel@lists.inkscape.org](mailto:inkscape-devel@lists.inkscape.org). Most of the developers are subscribed to the mailing list.
+- Bug tracker:
+  - Report issues in the [inbox](https://gitlab.com/inkscape/inbox/-/issues).
+  - Once issues are confirmed, the developers move them to the [development issue tracker](https://gitlab.com/inkscape/inkscape/-/issues)
+- Video conference: We regularly meet by video. Please ask in the chat for details.
+- Real life: About once a year there is an Inkscape summit. We also take part in events like Libre Graphics Meeting. This is announced in the chat and mailing list.
 
 Git Access
 ----------
@@ -31,12 +37,10 @@ We give write access out to people with proven interest in helping develop
 the codebase. Proving your interest is straightforward:  Make two
 contributions and request access.
 
-Compiling the Development Version
----------------------------------
+Compiling and Installing
+------------------------
 
-See http://wiki.inkscape.org/wiki/index.php/CompilingInkscape for general
-remarks about compiling, including how to find some of the needed packages for
-your distribution, and suggestions for developers.
+See [INSTALL.md](INSTALL.md).
 
 Patch Decisions
 ---------------
@@ -56,8 +60,7 @@ encourage you to check if everything builds and tests pass on your system first.
 Coding Style
 ------------
 
-Please refer to the Coding Style Guidelines
-(https://inkscape.org/en/develop/coding-style/) if you have specific questions
+Please refer to the [Coding Style Guidelines](https://inkscape.org/en/develop/coding-style/) if you have specific questions
 on the style to use for code. If reading style guidelines doesn't interest
 you, just follow the general style of the surrounding code, so that it is at
 least consistent.
@@ -69,65 +72,64 @@ Code needs to be documented. Future Inkscape developers will really
 appreciate this. New files should have one or two lines describing the
 purpose of the code inside the file.
 
-Building (In Linux distribution)
---------------------------------
-
-This is the best set of instructions for setting up your build directory...
-
-You should install ninja and ccache for the fastest build:
-
-```bash
-sudo apt-get install ninja-build ccache
-```
-
-Next we prepare a build directory with a symlink to Inkscape's share folder, add a profile dir and set the bin folder (optional):
-
-```bash
-ln -s $PWD/share ./share/inkscape
-mkdir -p build/conf
-cd build
-export INKSCAPE_PROFILE_DIR=$PWD/conf
-PATH=$PWD/bin/:$PATH
-```
-
-Now we invoke cmake, letting it know to use our new build directory prefix, ccache and the Ninja compiler:
-
-```bash
-cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
-```
-
-Invoke ninja to build the code. You may also use plain gcc's `make` if you didn't specific `-G` in the command above:
-```bash
-ninja
-```
-
-Now we can run `inkscape` that we have built, with the latest resources and code:
-
-```bash
-./bin/inkscape
-```
-
-To build in Non-Linux Platforms check out `INSTALL.md` (Links to Inkscape Wiki pages are given right below "Basic Installation")
-
 Profiling
 ---------
 
-To run with profiling, add `-DWITH_PROFILING=ON` to the above cmake script. Compiling and running will be slower and the gmon file will appear only after Inkscape quits.
+[Profiling](https://en.wikipedia.org/wiki/Profiling_(computer_programming)) is a technique to find out which parts of the Inkscape sourcecode take very long to run.
 
-See: https://wiki.inkscape.org/wiki/index.php/Profiling
+1. Add `-DWITH_PROFILING=ON` to the CMake command (see [Compiling Inkscape](doc/building/readme.md)).
+2. Compile Inkscape (again).
+3. Run Inkscape and use the parts that you are interested in.
+4. Quit Inkscape. Now a `gmon.out` file is created that contains the profiling measurement.
+5. Process the file with `gprof` to create a human readable summary:
+```
+gprof install_dir/bin/inkscape gmon.out > report.txt
+```
+6. Open the `report.txt` file with a text editor.
 
 Testing
 -------
 
-Before landing a patch, the unit tests should pass.
+Before landing a patch, the unit tests should pass. You can run them with
 
-See: http://wiki.inkscape.org/wiki/index.php/CMake#Using_CMake_to_run_tests
+```bash
+ninja check
+```
+
+GitLab will also check this automatically when you submit a merge request.
+
+If tests fail and you have not changed the relevant parts, please ask in the [chat](#contact).
+
+Extensions
+----------
+
+All Inkscape extensions have been moved into their own repository. They
+can be installed from there and should be packaged into builds directly.
+Report all bugs and ideas to that sub project.
+
+[Inkscape Extensions](https://gitlab.com/inkscape/extensions/)
+
+They are available as a sub-module which can be updated independently:
+
+```sh
+git submodule update --remote
+```
+
+This will update the module to the latest version and you will see the
+extensions directory is now changes in the git status. So be mindful of that.
+
+
+Submodules / Errors with missing folders
+----------------------------------------
+Make sure you got the submodules code when fetching the code 
+(either by using `--recurse-submodules` on the git clone command or by running `git submodule init && git submodule update --recursive`)
+
 
 General Guidelines for developers
 ----------------------------------
 
 * If you are new, fork the inkscape project (https://gitlab.com/inkscape/inkscape) and create a new branch for each bug/feature you want to work on. Try to Set the CI time to a high value like 2 hour (Go to your fork > Settings > CI/CD > General Pipelines > Timeout)
-* Merge requests (MR) are encouraged for the smallest of contributions. This helps other developers review the code you've written and check for the mistakes that may have slipped by you.
+* Merge requests (MR) are mandatory for all contributions, even the smallest ones. This helps other developers review the code you've written and check for the mistakes that may have slipped by you.
 * Before working on anything big, be sure to discuss your idea with us ([IRC](irc://irc.freenode.org/#inkscape) or [RocketChat](https://chat.inkscape.org/)). Someone else might already have plans you can build upon and we will try to guide you !
 * Adopt the coding style (indentation, bracket placement, reference/pointer placement, variable naming etc. - developer's common sense required!) of existing source so that your changes and code doesn't stand out/feel foreign.
 * Carefully explain your ideas and the changes you've made along with their importance in the MR. Feel free to use pictures !

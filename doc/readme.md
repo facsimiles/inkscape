@@ -1,9 +1,14 @@
 # Developer documentation
 
-This directory contains documentation for (future and current) Inkscape
-contibutors. User-facing documentation is available at 
- - the [beginners' guide](https://inkscape-manuals.readthedocs.io/en/latest/)
- - the (partially outdated) [manual](http://tavmjong.free.fr/INKSCAPE/MANUAL/html/)
+Welcome to the documentation for (future and current) Inkscape developers.
 
-This directory was purged after the switch to GTK4 because the documentation was
-outdated. It lives on in the 1.4.x branch (and earlier ones).
+For user-facing documentation, please refer to the [Inkscape website](https://inkscape.org/).
+
+ 
+ <!-- stored outside of docs/ -->
+- [Installing](../INSTALL.md)
+- [Contributing and Developing](../CONTRIBUTING.md)
+<!-- docs/ -->
+- [Compiling Inkscape](./building/readme.md)
+- [Style guide for developer documentation](./documentation_style.md)
+

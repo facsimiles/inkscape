@@ -27,4 +27,8 @@ processes.
 
 [![build status](https://gitlab.com/inkscape/inkscape/badges/master/pipeline.svg)](https://gitlab.com/inkscape/inkscape/-/commits/master)
 
-For installation, please see: [INSTALL.md](INSTALL.md)
+## More information
+
+- [Download](https://inkscape.org/download)
+- User documentation: Please visit out website [https://inkscape.org/](https://inkscape.org/)
+- [Developer Documentation](docs/readme.md)
