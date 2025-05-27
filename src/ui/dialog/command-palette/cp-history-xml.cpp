@@ -1,4 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ * CPHistoryXML: Class providing command history persistence for  command palette
+ */
+/* Author:
+ * Abhay Raj Singh <abhayonlyone@gmail.com>
+ *
+ * Copyright (C) 2025 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 #include "cp-history-xml.h"
+
+#include <optional>
 
 #include "io/resource.h"
 #include "xml/repr.h"
@@ -157,14 +170,20 @@ void CPHistoryXML::add_action_parameter(std::string const &full_action_name, std
 std::optional<History> CPHistoryXML::get_last_operation()
 {
     auto last_child = _operations->lastChild();
-    if (last_child) {
-        if (auto const operation_type = _get_operation_type(last_child); operation_type.has_value()) {
-            // inner text is a text Node thus last child
-            return History{*operation_type, last_child->lastChild()->content()};
-        }
+
+    if (!last_child) {
+        return std::nullopt;
     }
-    return std::nullopt;
+
+    auto const operation_type = _get_operation_type(last_child);
+    if (!operation_type.has_value()) {
+        return std::nullopt;
+    }
+
+    // inner text is a text Node thus last child
+    return History{*operation_type, last_child->lastChild()->content()};
 }
+
 std::vector<History> CPHistoryXML::get_operation_history() const
 {
     // TODO: add max items in history
@@ -179,6 +198,8 @@ std::vector<History> CPHistoryXML::get_operation_history() const
 
 std::vector<std::string> CPHistoryXML::get_action_parameter_history(std::string const &full_action_name) const
 {
+    // PERF: store this using unordered_map of vector or atleast node pointers
+    // PERF: return iterator/iterable kind of pagination that is requested
     std::vector<std::string> params;
     for (auto action_iter = _params->firstChild(); action_iter; action_iter = action_iter->prev()) {
         // If this action's node already exists
@@ -196,6 +217,7 @@ std::vector<std::string> CPHistoryXML::get_action_parameter_history(std::string 
 
 void CPHistoryXML::save() const
 {
+    // TODO: trim using maximum limit, (fetched from preferences)
     sp_repr_save_file(_xml_doc, _file_path.c_str());
 }
 
