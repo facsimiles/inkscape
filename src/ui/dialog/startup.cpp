@@ -14,6 +14,9 @@
 #include <string>
 #include <glibmm/i18n.h>
 #include <glibmm/fileutils.h>
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 #include <gtkmm/combobox.h>
@@ -282,6 +285,18 @@ void StartScreen::setup_welcome()
     set_position(Gtk::WIN_POS_CENTER_ALWAYS);
     property_resizable() = false;
     set_visible(true);
+
+#ifdef GDK_WINDOWING_WAYLAND
+    // Hide the window for a short time so it can be repositioned
+    if (GDK_IS_WAYLAND_DISPLAY(this->get_display()->gobj())) {
+        hide();
+        while (Gtk::Main::events_pending()) {
+            Gtk::Main::iteration(false);
+        }
+    }
+#endif
+
+    show();
 
     // Splash screen is now finished
     timer.stop();
