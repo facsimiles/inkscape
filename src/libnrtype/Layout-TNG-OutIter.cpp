@@ -10,12 +10,17 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "Layout-TNG.h"
-#include "livarot/Path.h"
-#include "font-instance.h"
-#include "svg/svg-length.h"
+
+#include <utility>
+
 #include <2geom/transforms.h>
 #include <2geom/line.h>
+
 #include "style.h"
+#include "font-instance.h"
+
+#include "livarot/Path.h"
+#include "svg/svg-length.h"
 
 namespace Inkscape {
 namespace Text {
@@ -288,7 +293,10 @@ std::optional<Geom::Point> Layout::baselineAnchorPoint() const
     Geom::Point left_pt = this->characterAnchorPoint(pos);
     pos.thisEndOfLine();
     Geom::Point right_pt = this->characterAnchorPoint(pos);
-
+    Direction direction = _spans.begin()->direction;
+    if (direction == RIGHT_TO_LEFT) {
+        std::swap(right_pt, left_pt);
+    }
     switch (this->paragraphAlignment(pos)) {
         case LEFT:
         case FULL:
