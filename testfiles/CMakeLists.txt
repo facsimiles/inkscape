@@ -174,6 +174,9 @@ add_unit_test(css-syntactic-decomposition-test TEST_SOURCE "css-syntactic-decomp
 add_unit_test(xslt-extension-test TEST_SOURCE "xslt-extension-test.cpp"
                                       SOURCES "extension/implementation/xslt.cpp"
                                    EXTRA_LIBS 2Geom::2geom)
+add_unit_test(mod360-test TEST_SOURCE "mod360-test.cpp"
+                              SOURCES "mod360.cpp"
+                           EXTRA_LIBS 2Geom::2geom)
 
 add_dependencies(tests unit_tests)
 
