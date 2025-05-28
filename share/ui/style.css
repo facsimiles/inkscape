@@ -1545,7 +1545,7 @@ listview row.top-separator {
     padding: 0 4px;
 }
 #SimpleTab {
-    min-width: 4em;
+    min-width: 1em;
     min-height: calc(2em + 4px);
 }
 #SimpleTab:hover {

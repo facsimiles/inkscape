@@ -2064,7 +2064,7 @@ void InkscapePreferences::initPageUI()
     _win_dialogs_labels_active.init( _("Active"), "/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_ACTIVE, true, nullptr);
     _win_dialogs_labels_off.init( _("Off"), "/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_OFF, false, &_win_dialogs_labels_auto);
 
-    _win_dialogs_tab_close_btn.init(_("Show close button in tab"), "/options/notebooktabs/closebutton", true);
+    _win_dialogs_tab_close_btn.init(_("Show close button in tab"), "/options/notebooktabs/show-closebutton", false);
 
     {
         Glib::ustring defaultSizeLabels[] = {C_("Window size", "Default"),

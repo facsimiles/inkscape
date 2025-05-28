@@ -43,63 +43,209 @@ std::optional<Geom::Point> get_current_pointer_pos(Glib::RefPtr<Gdk::Device> con
     return Geom::Point{x, y};
 }
 
+constexpr int MARGIN = 4;
+
 } // namespace
 
 
 /// A purely visual version of a Tab that is used as a dummy during drag-and-drop.
-struct SimpleTab : Gtk::Box
+struct SimpleTab : Gtk::Widget
 {
-    Gtk::Label& name;
-    Gtk::Button& close;
-    Gtk::Image& icon;
+    Gtk::Label _name;
+    Gtk::Button _close;
+    Gtk::Image _icon;
+    Gtk::DrawingArea _mask;
     TabStrip::ShowLabels _show_labels = TabStrip::Never;
     bool _show_close_btn = true;
 
-    SimpleTab() : SimpleTab{create_builder("simple-tab.ui")}
-    {}
-
     SimpleTab(const SimpleTab& src) : SimpleTab() {
-        name.set_text(src.name.get_text());
-        name.set_visible(src.name.get_visible());
-        icon.set_from_icon_name(src.icon.property_icon_name());
-        close.set_visible(src.close.get_visible());
+        _name.set_text(src._name.get_text());
+        _name.set_visible(src._name.get_visible());
+        _icon.set_from_icon_name(src._icon.property_icon_name());
+        _close.set_visible(src._close.get_visible());
         _show_labels = src._show_labels;
         _show_close_btn = src._show_close_btn;
     }
 
-    SimpleTab(Glib::RefPtr<Gtk::Builder> const &builder)
-        : BUILD(name) , BUILD(close) , BUILD(icon)
-    {
+    SimpleTab() {
+        _name.set_halign(Gtk::Align::START);
+        _name.set_xalign(0);
+
+        // a fade-out mask for overflowing text
+        _mask.set_draw_func([this](auto& ctx, auto w, auto h) {
+            ctx->rectangle(0, 0, w, h);
+            auto g = Cairo::LinearGradient::create(0, 0, w, 1);
+            auto style = get_style_context();
+            Gdk::RGBA bg(1,1,1);
+            // look up our background color; this is fragile as we need to stay in sync with style.css
+            style->lookup_color(has_css_class("tab-active") ? "theme_base_color" : "theme_bg_color", bg);
+            g->add_color_stop_rgba(0.0, bg.get_red(), bg.get_green(), bg.get_blue(), 0.0);
+            g->add_color_stop_rgba(1.0, bg.get_red(), bg.get_green(), bg.get_blue(), 1.0);
+            ctx->set_source(g);
+            ctx->fill();
+        });
+        _mask.set_can_target(false);
+
+        _close.set_visible(false);
+        _close.set_has_frame(false);
+        _close.add_css_class("close-button");
+        _close.set_focus_on_click(false);
+        _close.set_icon_name("window-close");
+        _close.set_halign(Gtk::Align::CENTER);
+        _close.set_valign(Gtk::Align::CENTER);
+
+        _icon.insert_at_end(*this);
+        _name.insert_at_end(*this);
+        _mask.insert_at_end(*this);
+        _close.insert_at_end(*this);
+        containerize(*this);
         set_name("SimpleTab");
-        append(get_widget<Gtk::Box>(builder, "root"));
+        set_overflow(Gtk::Overflow::HIDDEN);
     }
 
     void set_active() {
         get_style_context()->add_class("tab-active");
         if (_show_close_btn) {
-            close.set_visible();
+            _close.set_visible();
         }
         if (_show_labels == TabStrip::ActiveOnly) {
-            name.set_visible();
+            _name.set_visible();
         }
     }
     void set_inactive() {
         get_style_context()->remove_class("tab-active");
         if (_show_close_btn) {
-            close.set_visible(false);
+            _close.set_visible(false);
         }
         if (_show_labels == TabStrip::ActiveOnly) {
-            name.set_visible(false);
+            _name.set_visible(false);
         }
     }
-    Glib::ustring get_label() const { return name.get_text(); }
+    Glib::ustring get_label() const { return _name.get_text(); }
 
     void update(bool is_active) {
-        close.set_visible(_show_close_btn && is_active);
+        _close.set_visible(_show_close_btn && is_active);
 
-        name.set_visible(
+        _name.set_visible(
             _show_labels != TabStrip::Never && (_show_labels == TabStrip::Always || (_show_labels == TabStrip::ActiveOnly && is_active))
         );
+    }
+
+    void measure_vfunc(Gtk::Orientation orientation, int, int &min, int &nat, int &, int &) const {
+        {
+            auto [sizes, baselines] = _icon.measure(orientation);
+            // normal icon size with margins
+            auto icon_size = sizes.minimum + 2 * MARGIN;
+            // let the tab shrink to roughly half the icon size (if we really open a lot of dialogs)
+            min = icon_size / 2;
+            // more generous natural size: twice the icon size; that's what we use when there is space
+            nat =  orientation == Gtk::Orientation::VERTICAL || _name.get_visible() ? icon_size : icon_size * 2;
+
+            if (orientation == Gtk::Orientation::VERTICAL) return;
+        }
+        // reserve space for the close button if there is one shown
+        if (_close.get_visible()) {
+            auto [sizes, baselines] = _close.measure(orientation);
+            min += sizes.minimum + MARGIN;
+            nat += sizes.natural + MARGIN;
+        }
+        // same for labels
+        if (_name.get_visible()) {
+            auto [sizes, baselines] = _name.measure(orientation);
+            // do not inflate min size, so that labels can collapse to nothing and become hidden
+            nat += sizes.natural + MARGIN;
+        }
+
+        (void)_mask.measure(orientation);
+
+        if (min > nat) {
+            nat = min;
+        }
+    }
+
+    void size_allocate_vfunc(int full_width, int height, int) {
+        auto icon_w = _icon.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
+
+        // size_allocate - position and size all child widgets: icon, label and close button
+
+        bool center_icon = false; // center the icon? we will if there's no text label
+        int width = full_width;
+        // for tracking widgets' position
+        int x = MARGIN, y = 0;
+        width -= 2 * MARGIN;
+        // start with the icon on the left, we can center it later if needed
+        _icon.size_allocate(Gtk::Allocation(x, y, icon_w, height), -1);
+        width -= icon_w;
+        x += icon_w;
+
+        // measure the close button if it's visible, it will go to the right
+        auto close_w = 0;
+        if (_close.get_visible()) {
+            close_w = _close.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
+            if (close_w >= width) {
+                _close.set_opacity(0);
+                close_w = 0;
+            }
+            else {
+                _close.set_opacity(1);
+                width -= close_w + MARGIN;
+            }
+        }
+
+        // hide fade-out mask
+        _mask.size_allocate(Gtk::Allocation(0, 0, 0, 0), -1);
+        _mask.set_opacity(0);
+
+        // text label, if any
+        if (_name.get_visible()) {
+            auto name_w = _name.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
+            auto opacity = _name.get_opacity();
+            auto delta = width - MARGIN - icon_w;
+            bool show_label = true;
+            // do we have enough space to show some text?
+            if (delta == 0 && opacity == 0) { // this is a hysteresis to avoid flickering
+                show_label = false;
+            }
+            else if (delta < 0) {
+                show_label = false;
+            }
+            if (show_label) {
+                _name.set_opacity(1);
+                width -= MARGIN;
+                x += MARGIN;
+                int w = std::min(width, name_w);
+                _name.size_allocate(Gtk::Allocation(x, y, w, height), -1);
+                x += w;
+                width -= w;
+
+                if (w < name_w) {
+                    // text doesn't fit; add a fade-out mask
+                    int mask_size = 20;
+                    _mask.set_opacity(1);
+                    _mask.size_allocate(Gtk::Allocation(full_width - mask_size, y, mask_size, height - 8), -1);
+                }
+            }
+            else {
+                // not enough space - hide text using 0 opacity (cannot use visibility; it would trigger re-alloc)
+                _name.set_opacity(0);
+                // move the label out of the way so it doesn't interfere with the close button;
+                // do not size it to 0, gtk doesn't like that and complains
+                _name.size_allocate(Gtk::Allocation(MARGIN, y, 10, height), -1);
+                center_icon = true;
+            }
+        }
+        else {
+            center_icon = true;
+        }
+
+        if (close_w > 0) {
+            x += MARGIN;
+            _close.size_allocate(Gtk::Allocation(full_width - close_w - MARGIN, y, close_w, height), -1);
+        }
+
+        if (center_icon) {
+            _icon.size_allocate(Gtk::Allocation((full_width - close_w - icon_w) / 2, y, icon_w, height), -1);
+        }
     }
 };
 
@@ -397,28 +543,34 @@ TabStrip::TabStrip() :
         // Find clicked tab.
         auto const [tab_weak, tab_pos] = _tabAtPoint({x, y});
         auto tab = tab_weak.lock();
+        auto btn = click->get_current_button();
 
         // Handle button actions.
-        switch (click->get_current_button()) {
+        switch (btn) {
             case GDK_BUTTON_PRIMARY:
+            case GDK_BUTTON_SECONDARY:
+                // primary and secondary button presses activate a tab
                 if (tab) {
                     double xc, yc;
-                    translate_coordinates(tab->close, x, y, xc, yc);
-                    if (!tab->close.contains(xc, yc)) {
-                        _left_clicked = tab_weak;
-                        _left_click_pos = {x, y};
+                    translate_coordinates(tab->_close, x, y, xc, yc);
+                    if (!tab->_close.contains(xc, yc)) {
+                        if (btn == GDK_BUTTON_PRIMARY) {
+                            // only the primary button can start tab dragging
+                            _left_clicked = tab_weak;
+                            _left_click_pos = {x, y};
+                        }
                         _signal_select_tab.emit(*tab);
                     }
                 }
-                break;
-            case GDK_BUTTON_SECONDARY: {
-                if (tab && _popover && is_tab_active(*tab)) {
-                    auto size = tab->get_allocation();
-                    // center/bottom location for a context menu tip
-                    UI::popup_at(*_popover, *tab, size.get_width() / 2, size.get_height() - 7);
+                if (btn == GDK_BUTTON_SECONDARY) {
+                    // secondary button press pops up contextual menu
+                    if (tab && _popover && is_tab_active(*tab)) {
+                        auto size = tab->get_allocation();
+                        // center/bottom location for a context menu tip
+                        UI::popup_at(*_popover, *tab, size.get_width() / 2, size.get_height() - 7);
+                    }
                 }
                 break;
-            }
             case GDK_BUTTON_MIDDLE:
                 if (tab) {
                     _signal_close_tab.emit(*tab);
@@ -509,14 +661,14 @@ TabStrip::~TabStrip()
 Gtk::Widget* TabStrip::add_tab(const Glib::ustring& label, const Glib::ustring& icon, int pos)
 {
     auto tab = std::make_shared<TabWidget>(this);
-    tab->name.set_text(label);
-    tab->icon.set_from_icon_name(icon);
+    tab->_name.set_text(label);
+    tab->_icon.set_from_icon_name(icon);
     tab->_show_close_btn = _show_close_btn;
     tab->_show_labels = _show_labels;
     tab->update(false);
 
     auto ptr_tab = tab.get();
-    tab->close.signal_clicked().connect([this, ptr_tab] { _signal_close_tab.emit(*ptr_tab); });
+    tab->_close.signal_clicked().connect([this, ptr_tab] { _signal_close_tab.emit(*ptr_tab); });
 
     tab->signal_query_tooltip().connect([this, ptr_tab] (int, int, bool, Glib::RefPtr<Gtk::Tooltip> const &tooltip) {
         _setTooltip(*ptr_tab, tooltip);
@@ -802,10 +954,10 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
     alloc.reserve(_tabs.size() + 1);
     for (int i = 0; i < _tabs.size(); i++) {
         auto const tab = _tabs[i].get();
-        auto [minimum, natural] = tab->measure(Gtk::Orientation::HORIZONTAL, -1).sizes;
+        auto [min, natural] = tab->measure(Gtk::Orientation::HORIZONTAL, -1).sizes;
         total += natural;
-        minimum += minimum;
-        alloc.emplace_back(Size{ .minimum = minimum, .delta = natural - minimum, .index = i });
+        minimum += min;
+        alloc.emplace_back(Size{ .minimum = min, .delta = natural - min, .index = i });
     }
 
     // check available width; restrict tab sizes if space is limited
@@ -877,7 +1029,7 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
 
 void TabStrip::_setTooltip(const TabWidget& tab, Glib::RefPtr<Gtk::Tooltip> const &tooltip)
 {
-    tooltip->set_text(tab.name.get_text());
+    tooltip->set_text(tab._name.get_text());
 }
 
 std::pair<std::weak_ptr<TabWidget>, Geom::Point> TabStrip::_tabAtPoint(Geom::Point const &pos)

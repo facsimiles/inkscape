@@ -90,8 +90,8 @@ DialogNotebook::DialogNotebook(DialogContainer* container) : _container(containe
     });
     _label_pref->call();
 
-    _tabclose_pref = prefs->createObserver("/options/notebooktabs/closebutton", [this](const auto& entry) {
-        _tabs.set_show_close_button(entry.getBool(true));
+    _tabclose_pref = prefs->createObserver("/options/notebooktabs/show-closebutton", [this](const auto& entry) {
+        _tabs.set_show_close_button(entry.getBool());
     });
     _tabclose_pref->call();
 
