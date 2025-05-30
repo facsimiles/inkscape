@@ -78,10 +78,6 @@ SvgBuilder::SvgBuilder(SPDocument *document, gchar *docname, XRef *xref)
     _xml_doc = _doc->getReprDoc();
     _container = _root = _doc->getReprRoot();
     _init();
-
-    // Set default preference settings
-    _preferences = _xml_doc->createElement("svgbuilder:prefs");
-    _preferences->setAttribute("embedImages", "1");
 }
 
 SvgBuilder::SvgBuilder(SvgBuilder *parent, Inkscape::XML::Node *root) {
@@ -90,7 +86,6 @@ SvgBuilder::SvgBuilder(SvgBuilder *parent, Inkscape::XML::Node *root) {
     _docname = parent->_docname;
     _xref = parent->_xref;
     _xml_doc = parent->_xml_doc;
-    _preferences = parent->_preferences;
     _container = this->_root = root;
     _init();
 }
@@ -2030,14 +2025,12 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
         png_destroy_write_struct(&png_ptr, &info_ptr);
         return nullptr;
     }
-    // Decide whether we should embed this image
-    bool embed_image = _preferences->getAttributeBoolean("embedImages", true);
 
     // Set read/write functions
     std::vector<guchar> png_buffer;
     FILE *fp = nullptr;
     gchar *file_name = nullptr;
-    if (embed_image) {
+    if (_embed_images) {
         png_set_write_fn(png_ptr, &png_buffer, png_write_vector, nullptr);
     } else {
         static int counter = 0;
@@ -2162,7 +2155,7 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
 
     } else {    // A colormap must be provided, so quit
         png_destroy_write_struct(&png_ptr, &info_ptr);
-        if (!embed_image) {
+        if (!_embed_images) {
             fclose(fp);
             g_free(file_name);
         }
@@ -2190,7 +2183,7 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     image_node->setAttribute("preserveAspectRatio", "none");
 
     // Create href
-    if (embed_image) {
+    if (_embed_images) {
         // Append format specification to the URI
         auto *base64String = g_base64_encode(png_buffer.data(), png_buffer.size());
         auto png_data = std::string("data:image/png;base64,") + base64String;

@@ -8,27 +8,27 @@
     </columns>
     <data>
       <row>
-        <col id="0">-1</col>
+        <col id="0">none</col>
         <col id="1" translatable="yes">None</col>
       </row>
       <row>
-        <col id="0">0</col>
+        <col id="0">media-box</col>
         <col id="1" translatable="yes">Media Box</col>
       </row>
       <row>
-        <col id="0">1</col>
+        <col id="0">crop-box</col>
         <col id="1" translatable="yes">Crop Box</col>
       </row>
       <row>
-        <col id="0">2</col>
+        <col id="0">trim-box</col>
         <col id="1" translatable="yes">Trim Box</col>
       </row>
       <row>
-        <col id="0">3</col>
+        <col id="0">bleed-box</col>
         <col id="1" translatable="yes">Bleed Box</col>
       </row>
       <row>
-        <col id="0">4</col>
+        <col id="0">art-box</col>
         <col id="1" translatable="yes">Art Box</col>
       </row>
     </data>
@@ -77,27 +77,27 @@
     </columns>
     <data>
       <row>
-        <col id="0">0</col>
+        <col id="0">render-missing</col>
         <col id="1" translatable="yes">Draw missing fonts</col>
       </row>
       <row>
-        <col id="0">2</col>
+        <col id="0">substitute</col>
         <col id="1" translatable="yes">Substitute missing fonts</col>
       </row>
       <row>
-        <col id="0">3</col>
+        <col id="0">keep-missing</col>
         <col id="1" translatable="yes">Keep missing fonts' names</col>
       </row>
       <row>
-        <col id="0">4</col>
+        <col id="0">delete-missing</col>
         <col id="1" translatable="yes">Delete missing font text</col>
       </row>
       <row>
-        <col id="0">1</col>
+        <col id="0">render-all</col>
         <col id="1" translatable="yes">Draw all text</col>
       </row>
       <row>
-        <col id="0">5</col>
+        <col id="0">delete-all</col>
         <col id="1" translatable="yes">Delete all text</col>
       </row>
     </data>

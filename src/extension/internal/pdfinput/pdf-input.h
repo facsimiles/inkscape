@@ -24,6 +24,29 @@
 #include "poppler-utils.h"
 #include "svg-builder.h"
 
+// clang-format off
+#define PDF_COMMON_INPUT_PARAMS \
+            "<param name=\"embedImages\" gui-text=\"" N_("Embed Images") "\" type=\"bool\">true</param>\n" \
+            "<param name=\"importPages\" gui-text=\"" N_("Import Pages") "\" type=\"bool\">true</param>\n" \
+            "<param name=\"approximationPrecision\" gui-text=\"" N_("Approximation Precision:") "\" type=\"float\" min=\"1\" max=\"100\">2.0</param>\n" \
+            "<param name=\"fontRendering\" gui-text=\"" N_("Font Rendering:") "\" type=\"optiongroup\">\n" \
+                "<option value=\"render-missing\">" N_("Render Missing") "</option>\n" \
+                "<option value=\"substitute\">" N_("Substitute missing fonts") "</option>\n" \
+                "<option value=\"keep-missing\">" N_("Keep missing fonts' names") "</option>\n" \
+                "<option value=\"delete-missing\">" N_("Delete missing font text") "</option>\n" \
+                "<option value=\"render-all\">" N_("Draw all text") "</option>\n" \
+                "<option value=\"delete-all\">" N_("Delete all text") "</option>\n" \
+            "</param>\n" \
+            "<param name=\"clipTo\" gui-text=\"" N_("Text output options:") "\" type=\"optiongroup\">\n" \
+                "<option value=\"none\">" N_("None") "</option>\n" \
+                "<option value=\"media-box\">" N_("Media Box") "</option>\n" \
+                "<option value=\"crop-box\">" N_("Crop Box") "</option>\n" \
+                "<option value=\"trim-box\">" N_("Trim Box") "</option>\n" \
+                "<option value=\"bleed-box\">" N_("Bleed Box") "</option>\n" \
+                "<option value=\"art-box\">" N_("Art Box") "</option>\n" \
+            "</param>\n"
+// clang-format on
+
 namespace Gtk {
 class Builder;
 class Button;
@@ -46,6 +69,7 @@ class PDFDoc;
 namespace Gtk {
 class Button;
 class CheckButton;
+class ComboBox;
 class ComboBoxText;
 class DrawingArea;
 class Frame;
@@ -78,31 +102,30 @@ class FontModelColumns;
 class PdfImportDialog : public Gtk::Dialog
 {
 public:
-    PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar *uri);
+    PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar *uri, Input *mod);
     ~PdfImportDialog() override;
 
     bool showDialog();
-    bool getImportPages();
     std::string getSelectedPages();
     PdfImportType getImportMethod();
-    void getImportSettings(Inkscape::XML::Node *prefs);
     FontStrategies getFontStrategies();
     void setFontStrategies(const FontStrategies &fs);
 
 private:
-    void _fontRenderChanged();
     void _setPreviewPage(int page);
     void _setFonts(const FontList &fonts);
 
     // Signal handlers
     void _drawFunc(const Cairo::RefPtr<Cairo::Context>& cr, int width, int height);
     void _onPageNumberChanged();
-    void _onPrecisionChanged();
+
+    Input *_mod; // The input module being used, stores prefs
 
     Glib::RefPtr<Gtk::Builder> _builder;
 
     Gtk::Entry &_page_numbers;
     Gtk::DrawingArea &_preview_area;
+    Gtk::ComboBox &_clip_to;
     Gtk::CheckButton &_embed_images;
     Gtk::CheckButton &_import_pages;
     Gtk::Scale &_mesh_slider;
@@ -138,11 +161,15 @@ public:
     std::unique_ptr<SPDocument> open(Inkscape::Extension::Input *mod, char const *uri, bool is_importing) override;
     static void init();
 
+    bool custom_gui() const override { return true; }
+
 private:
     void add_builder_page(
         std::shared_ptr<PDFDoc> pdf_doc,
         SvgBuilder *builder, SPDocument *doc,
-        int page_num);
+        int page_num,
+        std::string const &crop_to,
+        double color_delta);
 };
 
 } // namespace Inkscape::Extension::Internal
