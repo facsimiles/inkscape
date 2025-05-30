@@ -42,7 +42,7 @@ public:
     bool deleted{false};
     bool isOnClipboard() const { return _isOnClipboard; };
     // dont check values only structure and ID
-    bool is_similar(LivePathEffectObject *that);
+    bool is_similar(LivePathEffectObject *that); ///< @todo: Ensure const correctness, use a reference argument
 
     LivePathEffectObject *fork_private_if_necessary(unsigned int nr_of_allowed_users = 1);
 
@@ -66,6 +66,7 @@ private:
     bool _isOnClipboard = false;
     friend LPENodeObserver; // for static_cast
     LPENodeObserver &nodeObserver() { return *this; }
+    bool _isEquivalent(SPObject const &other) const override;
 };
 
 #endif // INKSCAPE_LIVEPATHEFFECT_OBJECT_H

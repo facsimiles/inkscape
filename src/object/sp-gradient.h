@@ -133,6 +133,7 @@ public:
     SPStop* getFirstStop();
     int getStopCount() const;
 
+    // TODO: Improve const correctness in these two methods
     bool isEquivalent(SPGradient *b);
     bool isAligned(SPGradient *b);
 
@@ -219,6 +220,7 @@ private:
     bool invalidateArray();
     void rebuildVector() const;
     void rebuildArray();
+    bool _isEquivalent(SPObject const &other) const override;
 
 protected:
     void build(SPDocument *document, Inkscape::XML::Node *repr) override;
