@@ -821,8 +821,17 @@ void DialogMultipaned::size_allocate_vfunc(int const width, int const height, in
                 // all other widgets can get smaller than their min size
                 size = _get_size(child_allocation, orientation);
                 auto const min = _get_size(req_minimum, orientation);
-                // enforce some minimum size, so newly inserted panels don't collapse to nothing
-                if (size < min) size = std::min(20, min); // arbitrarily chosen 20px
+                auto natural = _get_size(req_natural, orientation);
+                if (size < min) {
+                    if (size == 0 && natural >= min) {
+                        // initially, widgets don't have their size established yet, so we should
+                        // honor natural size request
+                        size = natural;
+                    }
+                    else {
+                        size = min;
+                    }
+                }
             }
         }
         sizes_current.push_back(size);
