@@ -47,6 +47,8 @@
 #include "ui/icon-names.h"
 #include "ui/widget/events/canvas-event.h"
 
+#include "src/ui/util.h"
+
 using Inkscape::DocumentUndo;
 
 namespace Inkscape {
@@ -887,10 +889,11 @@ void MeshTool::new_default()
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
         int n_objects = (int) boost::distance(selection->items());
+        std::string ctrl_command= get_ctrl_or_command();
         message_context->setF(Inkscape::NORMAL_MESSAGE,
-                                  ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
-                                           "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),
-                                  n_objects);
+                                  ngettext("<b>Gradient</b> for %d object; with <b>%s</b> to snap angle",
+                                           "<b>Gradient</b> for %d objects; with <b>%s</b> to snap angle", n_objects),
+                                  n_objects,ctrl_command.c_str());
     } else {
         _desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> on which to create gradient."));
     }

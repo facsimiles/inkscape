@@ -332,16 +332,20 @@ inline constexpr auto INK_GDK_MODIFIER_MASK = GDK_SHIFT_MASK | GDK_CONTROL_MASK 
 
 inline bool mod_shift(unsigned modifiers) { return modifiers & GDK_SHIFT_MASK; }
 inline bool mod_ctrl(unsigned modifiers) { return modifiers & GDK_CONTROL_MASK; }
+inline bool mod_meta(unsigned modifiers) { return modifiers & GDK_META_MASK; }
 inline bool mod_alt(unsigned modifiers) { return modifiers & GDK_ALT_MASK; }
 inline bool mod_shift_only(unsigned modifiers) { return (modifiers & INK_GDK_MODIFIER_MASK) == GDK_SHIFT_MASK; }
 inline bool mod_ctrl_only(unsigned modifiers) { return (modifiers & INK_GDK_MODIFIER_MASK) == GDK_CONTROL_MASK; }
+inline bool mod_meta_only(unsigned modifiers) { return (modifiers & INK_GDK_MODIFIER_MASK) == GDK_META_MASK; }
 inline bool mod_alt_only(unsigned modifiers) { return (modifiers & INK_GDK_MODIFIER_MASK) == GDK_ALT_MASK; }
 
 inline bool mod_shift(KeyEvent const &event) { return mod_shift(event.modifiers); }
 inline bool mod_ctrl(KeyEvent const &event) { return mod_ctrl(event.modifiers); }
+inline bool mod_meta(KeyEvent const &event) { return mod_meta(event.modifiers); }
 inline bool mod_alt(KeyEvent const &event) { return mod_alt(event.modifiers); }
 inline bool mod_shift_only(KeyEvent const &event) { return mod_shift_only(event.modifiers); }
 inline bool mod_ctrl_only(KeyEvent const &event) { return mod_ctrl_only(event.modifiers); }
+inline bool mod_meta_only(KeyEvent const &event) { return mod_meta_only(event.modifiers); }
 inline bool mod_alt_only(KeyEvent const &event) { return mod_alt_only(event.modifiers); }
 
 /*
@@ -351,9 +355,11 @@ inline bool mod_alt_only(KeyEvent const &event) { return mod_alt_only(event.modi
 
 inline bool state_held_shift(unsigned state) { return state & GDK_SHIFT_MASK; }
 inline bool state_held_ctrl(unsigned state) { return state & GDK_CONTROL_MASK; }
+inline bool state_held_meta(unsigned state) { return state & GDK_META_MASK; }
 inline bool state_held_alt(unsigned state) { return state & GDK_ALT_MASK; }
 inline bool state_held_only_shift(unsigned state) { return (state & INK_GDK_MODIFIER_MASK) == GDK_SHIFT_MASK; }
 inline bool state_held_only_ctrl(unsigned state) { return (state & INK_GDK_MODIFIER_MASK) == GDK_CONTROL_MASK; }
+inline bool state_held_only_meta(unsigned state) { return (state & INK_GDK_MODIFIER_MASK) == GDK_META_MASK; }
 inline bool state_held_only_alt(unsigned state) { return (state & INK_GDK_MODIFIER_MASK) == GDK_ALT_MASK; }
 inline bool state_held_any_modifiers(unsigned state) { return state & INK_GDK_MODIFIER_MASK; }
 inline bool state_held_no_modifiers(unsigned state) { return !state_held_any_modifiers(state); }
@@ -363,9 +369,11 @@ inline bool state_held_button(unsigned state) { return (1 <= button || button <=
 
 inline bool held_shift(CanvasEvent const &event) { return state_held_shift(event.modifiers); }
 inline bool held_ctrl(CanvasEvent const &event) { return state_held_ctrl(event.modifiers); }
+inline bool held_meta(CanvasEvent const &event) { return state_held_meta(event.modifiers); }
 inline bool held_alt(CanvasEvent const &event) { return state_held_alt(event.modifiers); }
 inline bool held_only_shift(CanvasEvent const &event) { return state_held_only_shift(event.modifiers); }
 inline bool held_only_ctrl(CanvasEvent const &event) { return state_held_only_ctrl(event.modifiers); }
+inline bool held_only_meta(CanvasEvent const &event) { return state_held_only_meta(event.modifiers); }
 inline bool held_only_alt(CanvasEvent const &event) { return state_held_only_alt(event.modifiers); }
 inline bool held_any_modifiers(CanvasEvent const &event) { return state_held_any_modifiers(event.modifiers); }
 inline bool held_no_modifiers(CanvasEvent const &event) { return state_held_no_modifiers(event.modifiers); }

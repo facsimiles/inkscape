@@ -258,8 +258,12 @@ std::string generate_label(KeyMask mask, std::string sep)
         ret.append(_("Hyper"));
     }
     if(mask & META) {
+        #ifdef __APPLE__
+        ret.append(_("Command"));
+        #else
         if(!ret.empty()) ret.append(sep);
         ret.append(_("Meta"));
+        #endif
     }
     return ret;
 }
@@ -289,10 +293,15 @@ unsigned long calculate_weight(KeyMask mask)
  */
 void responsive_tooltip(MessageContext *message_context, KeyEvent const &event, int num_args, ...)
 {
+    #ifdef __APPLE__
+    std::string alt_msg = "<b>Option</b>: ";
+    #else
+    std::string alt_msg = "<b>Alt</b>: ";
+    #endif
+    std::string meta_msg = "<b>Command</b>: ";
     std::string ctrl_msg = "<b>Ctrl</b>: ";
     std::string shift_msg = "<b>Shift</b>: ";
-    std::string alt_msg = "<b>Alt</b>: ";
-
+    bool meta_case = false;
     // NOTE: This will hide any keys changed to SUPER or multiple keys such as CTRL+SHIFT
     va_list args;
     va_start(args, num_args);
@@ -300,6 +309,10 @@ void responsive_tooltip(MessageContext *message_context, KeyEvent const &event, 
         auto modifier = Modifier::get(va_arg(args, Type));
         auto name = std::string(_(modifier->get_name()));
         switch (modifier->get_and_mask()) {
+            case META:
+                meta_msg += name + ", ";
+                meta_case = true;
+                break;
             case CTRL:
                 ctrl_msg += name + ", ";
                 break;
@@ -317,9 +330,10 @@ void responsive_tooltip(MessageContext *message_context, KeyEvent const &event, 
     ctrl_msg.erase(ctrl_msg.size() - 2);
     shift_msg.erase(shift_msg.size() - 2);
     alt_msg.erase(alt_msg.size() - 2);
-
+    if(meta_case)
+        meta_msg.erase(meta_msg.size() - 2);
     UI::Tools::sp_event_show_modifier_tip(message_context, event,
-        ctrl_msg.c_str(), shift_msg.c_str(), alt_msg.c_str());
+    ctrl_msg.c_str(), shift_msg.c_str(), alt_msg.c_str(),(meta_case? meta_msg.c_str():nullptr));
 }
 
 /**

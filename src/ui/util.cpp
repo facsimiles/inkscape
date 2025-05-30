@@ -550,6 +550,14 @@ char const *get_text(Gtk::Editable const &editable)
     return gtk_editable_get_text(const_cast<GtkEditable *>(editable.gobj())); // C API is const-incorrect
 }
 
+char const* get_ctrl_or_command()
+{
+    #ifdef __APPLE__
+        return "Command";
+    #else 
+        return "Ctrl";
+    #endif
+}
 /*
   Local Variables:
   mode:c++
