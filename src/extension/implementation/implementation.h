@@ -99,6 +99,9 @@ public:
     virtual bool cancelProcessing () { return true; }
     virtual void commitDocument () {}
 
+    // Indicate if the implementation has it's own GUI replacing prefs
+    virtual bool custom_gui() const { return false; }
+
     // ---- Template and Page functions -----
     virtual SPDocument *new_from_template(Inkscape::Extension::Template *) { return nullptr; }
     virtual void get_template_presets(const Template *tmod, TemplatePresets &presets) const {};

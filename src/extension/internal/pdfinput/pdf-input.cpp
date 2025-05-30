@@ -119,16 +119,37 @@ public:
     Gtk::TreeModelColumn<bool> em;
 };
 
+static FontStrategy pref_to_font_strategy(std::string const &value)
+{
+    if (value == "render-missing") {
+        return FontStrategy::RENDER_MISSING;
+    } else if (value == "substitute") {
+        return FontStrategy::SUBSTITUTE_MISSING;
+    } else if (value == "keep-missing") {
+        return FontStrategy::KEEP_MISSING;
+    } else if (value == "delete-missing") {
+        return FontStrategy::DELETE_MISSING;
+    } else if (value == "render-all") {
+        return FontStrategy::RENDER_ALL;
+    } else if (value == "delete-all") {
+        return FontStrategy::DELETE_ALL;
+    }
+    g_warning("Unknown fontRendering option '%s'", value.c_str());
+    return FontStrategy::SUBSTITUTE_MISSING;
+}
+
 /**
  * \brief The PDF import dialog
  * FIXME: Probably this should be placed into src/ui/dialog
  */
 
-PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*uri*/)
+PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*uri*/, Input *mod)
     : _pdf_doc(std::move(doc))
+    , _mod(mod)
     , _builder(UI::create_builder("extension-pdfinput.glade"))
     , _page_numbers(UI::get_widget<Gtk::Entry>(_builder, "page-numbers"))
     , _preview_area(UI::get_widget<Gtk::DrawingArea>(_builder, "preview-area"))
+    , _clip_to(UI::get_widget<Gtk::ComboBox>(_builder, "clip-to"))
     , _embed_images(UI::get_widget<Gtk::CheckButton>(_builder, "embed-images"))
     , _import_pages(UI::get_widget<Gtk::CheckButton>(_builder, "import-pages"))
     , _mesh_slider(UI::get_widget<Gtk::Scale>(_builder, "mesh-slider"))
@@ -168,8 +189,6 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*ur
     _prev_page.signal_clicked().connect([this] { _setPreviewPage(_preview_page - 1); });
     _preview_area.signal_draw().connect(sigc::mem_fun(*this, &PdfImportDialog::_onDraw));
     _page_numbers.signal_changed().connect(sigc::mem_fun(*this, &PdfImportDialog::_onPageNumberChanged));
-    _mesh_slider.get_adjustment()->signal_value_changed().connect(
-        sigc::mem_fun(*this, &PdfImportDialog::_onPrecisionChanged));
 
 #ifdef HAVE_POPPLER_CAIRO
     _render_thumb = true;
@@ -213,10 +232,48 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*ur
         }
     });
 
+    _mesh_slider.set_value(_mod->get_param_float("approximationPrecision", 2.0));
+    _mesh_slider.get_adjustment()->signal_value_changed().connect([this]() {
+          // Redisplay the comment on the current approximation precision setting
+          // Evenly divides the interval of possible values between the available labels.
+          static Glib::ustring labels[] = {
+              Glib::ustring(C_("PDF input precision", "rough")), Glib::ustring(C_("PDF input precision", "medium")),
+              Glib::ustring(C_("PDF input precision", "fine")), Glib::ustring(C_("PDF input precision", "very fine"))};
+
+          auto adj = _mesh_slider.get_adjustment();
+          double min = adj->get_lower();
+          int comment_idx = (int)floor((adj->get_value() - min) / (adj->get_upper() - min) * 4.0);
+          _mesh_label.set_label(labels[std::min(comment_idx, 3)]);
+          _mod->set_param_float("approximationPrecision", _mesh_slider.get_value());
+      });
+
+    _clip_to.set_active_id(mod->get_param_optiongroup("clipTo"));
+    _clip_to.signal_changed().connect([this]() {
+        _mod->set_param_optiongroup("clipTo", _clip_to.get_active_id().c_str());
+    });
+
+    _embed_images.set_active(mod->get_param_bool("embedImages", true));
+    _embed_images.signal_toggled().connect([this]() {
+        _mod->set_param_bool("embedImages", _embed_images.get_active());
+    });
+
+    _import_pages.set_active(mod->get_param_bool("importPages", true));
+    _import_pages.signal_toggled().connect([this]() {
+        _mod->set_param_bool("importPages", _import_pages.get_active());
+    });
+
     auto &font_render = UI::get_widget<Gtk::ComboBox>(_builder, "font-rendering");
-    font_render.set_active_id(Inkscape::Preferences::get()->getString("/import/pdf-import/font-render").c_str());
-    font_render.signal_changed().connect(sigc::mem_fun(*this, &PdfImportDialog::_fontRenderChanged));
-    _fontRenderChanged();
+    auto render_pref = mod->get_param_optiongroup("fontRendering");
+    font_render.set_active_id(render_pref);
+    // Update the font list with this as the default
+    setFontStrategies(SvgBuilder::autoFontStrategies(pref_to_font_strategy(render_pref), _font_list));
+    font_render.signal_changed().connect([this]() {
+        auto &font_render = UI::get_widget<Gtk::ComboBox>(_builder, "font-rendering");
+        auto active_id = font_render.get_active_id();
+        _mod->set_param_optiongroup("fontRendering", active_id.c_str());
+        // Reset any font specific items with the new global strategy
+        setFontStrategies(SvgBuilder::autoFontStrategies(pref_to_font_strategy(active_id), _font_list));
+    });
 }
 
 PdfImportDialog::~PdfImportDialog() {
@@ -239,11 +296,6 @@ bool PdfImportDialog::showDialog() {
     }
 }
 
-bool PdfImportDialog::getImportPages()
-{
-    return _import_pages.get_active();
-}
-
 std::string PdfImportDialog::getSelectedPages()
 {
     if (_page_numbers.get_sensitive()) {
@@ -256,38 +308,6 @@ PdfImportType PdfImportDialog::getImportMethod()
 {
     auto &import_type = UI::get_widget<Gtk::Notebook>(_builder, "import-type");
     return (PdfImportType)import_type.get_current_page();
-}
-
-/**
- * \brief Retrieves the current settings into a repr which SvgBuilder will use
- *        for determining the behaviour desired by the user
- */
-void PdfImportDialog::getImportSettings(Inkscape::XML::Node *prefs) {
-    prefs->setAttribute("selectedPages", _current_pages);
-
-    auto &clip_to = UI::get_widget<Gtk::ComboBox>(_builder, "clip-to");
-
-    prefs->setAttribute("cropTo", clip_to.get_active_id());
-    prefs->setAttributeSvgDouble("approximationPrecision", _mesh_slider.get_value());
-    prefs->setAttributeBoolean("embedImages", _embed_images.get_active());
-}
-
-/**
- * \brief Redisplay the comment on the current approximation precision setting
- * Evenly divides the interval of possible values between the available labels.
- */
-void PdfImportDialog::_onPrecisionChanged() {
-    static Glib::ustring labels[] = {
-        Glib::ustring(C_("PDF input precision", "rough")), Glib::ustring(C_("PDF input precision", "medium")),
-        Glib::ustring(C_("PDF input precision", "fine")), Glib::ustring(C_("PDF input precision", "very fine"))};
-
-    auto adj = _mesh_slider.get_adjustment();
-    double min = adj->get_lower();
-    double value = adj->get_value() - min;
-    double max = adj->get_upper() - min;
-    double interval_len = max / (double)(sizeof(labels) / sizeof(labels[0]));
-    int comment_idx = (int)floor(value / interval_len);
-    _mesh_label.set_label(labels[comment_idx]);
 }
 
 void PdfImportDialog::_onPageNumberChanged()
@@ -335,15 +355,6 @@ void PdfImportDialog::_setFonts(const FontList &fonts)
             row[_font_col->icon] = Glib::ustring(data.found ? "on" : "off-outline");
         }
     }
-}
-
-void PdfImportDialog::_fontRenderChanged()
-{
-    auto &font_render = UI::get_widget<Gtk::ComboBox>(_builder, "font-rendering");
-    auto active_id = font_render.get_active_id();
-    Inkscape::Preferences::get()->setString("/import/pdf-import/font-render", active_id);
-    FontStrategy choice = (FontStrategy)std::stoi(active_id.c_str());
-    setFontStrategies(SvgBuilder::autoFontStrategies(choice, _font_list));
 }
 
 /**
@@ -591,8 +602,7 @@ static cairo_status_t
  * Parses the selected page of the given PDF document using PdfParser.
  */
 SPDocument *
-PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /*is_importing*/) {
-
+PdfInput::open(::Inkscape::Extension::Input *mod, const gchar * uri, bool /*is_importing*/) {
     // Initialize the globalParams variable for poppler
     if (!globalParams) {
         globalParams = _POPPLER_NEW_GLOBAL_PARAMS();
@@ -639,21 +649,19 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
 
     std::unique_ptr<PdfImportDialog> dlg;
     if (INKSCAPE.use_gui()) {
-        dlg = std::make_unique<PdfImportDialog>(pdf_doc, uri);
+        dlg = std::make_unique<PdfImportDialog>(pdf_doc, uri, mod);
         if (!dlg->showDialog()) {
             throw Input::open_cancelled();
         }
     }
 
     // Get options
-    bool import_pages = true;
     std::string page_nums = "1";
     PdfImportType import_method = PdfImportType::PDF_IMPORT_INTERNAL;
     FontStrategies font_strats;
     int preview_page = 1;
     if (dlg) {
         page_nums = dlg->getSelectedPages();
-        import_pages = dlg->getImportPages();
         import_method = dlg->getImportMethod();
         font_strats = dlg->getFontStrategies();
         preview_page = dlg->getPreviewPage();
@@ -695,16 +703,16 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
         }
         SvgBuilder *builder = new SvgBuilder(doc, docname, pdf_doc->getXRef());
         builder->setFontStrategies(font_strats);
-        builder->setPageMode(import_pages);
 
         // Get preferences
-        Inkscape::XML::Node *prefs = builder->getPreferences();
-        if (dlg)
-            dlg->getImportSettings(prefs);
+        builder->setPageMode(mod->get_param_bool("importPages", true));
+        builder->setEmbedImages(mod->get_param_bool("embedImages", true));
+        std::string crop_to = mod->get_param_optiongroup("clipTo", "none");
+        double color_delta = mod->get_param_float("approximationPrecision", 2.0);
 
         for (auto p : pages) {
             // And then add each of the pages
-            add_builder_page(pdf_doc, builder, doc, p);
+            add_builder_page(pdf_doc, builder, doc, p, crop_to, color_delta);
         }
 
         delete builder;
@@ -787,10 +795,8 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
  * Parses the selected page object of the given PDF document using PdfParser.
  */
 void
-PdfInput::add_builder_page(std::shared_ptr<PDFDoc>pdf_doc, SvgBuilder *builder, SPDocument *doc, int page_num)
+PdfInput::add_builder_page(std::shared_ptr<PDFDoc>pdf_doc, SvgBuilder *builder, SPDocument *doc, int page_num, std::string const &crop_to, double color_delta)
 {
-    Inkscape::XML::Node *prefs = builder->getPreferences();
-
     // Check page exists
     Catalog *catalog = pdf_doc->getCatalog();
     sanitize_page_number(page_num, catalog->getNumPages());
@@ -803,31 +809,22 @@ PdfInput::add_builder_page(std::shared_ptr<PDFDoc>pdf_doc, SvgBuilder *builder, 
     // Apply crop settings
     _POPPLER_CONST PDFRectangle *clipToBox = nullptr;
 
-    switch (prefs->getAttributeInt("cropTo", -1)) {
-        case 0: // Media box
-            clipToBox = page->getMediaBox();
-            break;
-        case 1: // Crop box
-            clipToBox = page->getCropBox();
-            break;
-        case 2: // Trim box
-            clipToBox = page->getTrimBox();
-            break;
-        case 3: // Bleed box
-            clipToBox = page->getBleedBox();
-            break;
-        case 4: // Art box
-            clipToBox = page->getArtBox();
-            break;
-        default:
-            break;
+    if (crop_to == "media-box") {
+        clipToBox = page->getMediaBox();
+    } else if (crop_to == "crop-box") {
+        clipToBox = page->getCropBox();
+    } else if (crop_to == "trim-box") {
+        clipToBox = page->getTrimBox();
+    } else if (crop_to == "bleed-box") {
+        clipToBox = page->getBleedBox();
+    } else if (crop_to == "art-box") {
+        clipToBox = page->getArtBox();
     }
 
     // Create parser  (extension/internal/pdfinput/pdf-parser.h)
     auto pdf_parser = PdfParser(pdf_doc, builder, page, clipToBox);
 
     // Set up approximation precision for parser. Used for converting Mesh Gradients into tiles.
-    double color_delta = prefs->getAttributeDouble("approximationPrecision", 2.0);
     if ( color_delta <= 0.0 ) {
         color_delta = 1.0 / 2.0;
     } else {
@@ -861,6 +858,7 @@ void PdfInput::init() {
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("PDF Input") "</name>\n"
             "<id>org.inkscape.input.pdf</id>\n"
+            PDF_COMMON_INPUT_PARAMS
             "<input>\n"
                 "<extension>.pdf</extension>\n"
                 "<mimetype>application/pdf</mimetype>\n"
@@ -876,6 +874,7 @@ void PdfInput::init() {
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("AI Input") "</name>\n"
             "<id>org.inkscape.input.ai</id>\n"
+            PDF_COMMON_INPUT_PARAMS
             "<input>\n"
                 "<extension>.ai</extension>\n"
                 "<mimetype>image/x-adobe-illustrator</mimetype>\n"

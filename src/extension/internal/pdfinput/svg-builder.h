@@ -110,9 +110,6 @@ public:
     void cropPage(const Geom::Rect &bbox);
     void setAsLayer(const char *layer_name = nullptr, bool visible = true);
     void setGroupOpacity(double opacity);
-    Inkscape::XML::Node *getPreferences() {
-        return _preferences;
-    }
     void pushPage(const std::string &label, GfxState *state);
     void setPageMode(bool as_pages) { _as_pages = as_pages; }
 
@@ -182,6 +179,7 @@ public:
 
     void addColorProfile(unsigned char *profBuf, int length);
 
+    void setEmbedImages(bool embed_images) { _embed_images = embed_images; }
 private:
     void _init();
 
@@ -254,6 +252,9 @@ private:
     Geom::Point _text_position;
     std::vector<SvgGlyph> _glyphs;   // Added characters
 
+    // Image embed
+    bool _embed_images = true;
+
     // The font when drawing the text into vector glyphs instead of text elements.
     std::shared_ptr<CairoFont> _cairo_font;
 
@@ -269,7 +270,6 @@ private:
     Inkscape::XML::Document *_xml_doc;
     Inkscape::XML::Node *_root;  // Root node from the point of view of this SvgBuilder
     Inkscape::XML::Node *_container; // Current container (group/pattern/mask)
-    Inkscape::XML::Node *_preferences;  // Preferences container node
     double _width;       // Document size in px
     double _height;       // Document size in px
 

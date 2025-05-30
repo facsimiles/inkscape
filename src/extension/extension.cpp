@@ -1075,6 +1075,12 @@ bool Extension::prefs()
     if (!loaded())
         return false;
 
+    // Implimentation has it's own prefs GUI
+    if (imp && imp->custom_gui()) {
+        // TODO: In the future we could load the GUI here
+        return true;
+    }
+
     if (auto controls = autogui(nullptr, nullptr)) {
         auto dialog = PrefDialog(get_name(), controls);
         int response = Inkscape::UI::dialog_run(dialog);
