@@ -43,7 +43,7 @@ struct TextNode : public SimpleNode {
     bool is_CData() const { return _is_CData; }
 
 protected:
-    SimpleNode *_duplicate(Document* doc) const override { return new TextNode(*this, doc); }
+    SimpleNode *duplicate(Document *doc) const override { return new TextNode(*this, doc); }
     bool _is_CData;
 };
 

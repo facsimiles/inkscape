@@ -96,6 +96,8 @@ public:
     virtual Node *createPI(char const *target, char const *content)=0;
     /*@}*/
 
+    Document *duplicate(Document *doc) const override = 0;
+
     /**
      * @brief Get the event logger for this document
      *

@@ -45,8 +45,6 @@ public:
         return const_cast<SimpleNode *>(this)->document();
     }
 
-    Node *duplicate(Document* doc) const override { return _duplicate(doc); }
-
     Node *root() override;
     Node const *root() const override {
         return const_cast<SimpleNode *>(this)->root();
@@ -117,7 +115,6 @@ protected:
     SimpleNode(int code, Document *document);
     SimpleNode(SimpleNode const &repr, Document *document);
 
-    virtual SimpleNode *_duplicate(Document *doc) const=0;
     void setAttributeImpl(char const *key, char const *value) override;
 
 private:

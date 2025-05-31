@@ -60,7 +60,6 @@ struct Document
     XML::Node const *lastChild() const override { return Mock::Node::lastChild(); }
     XML::Node *nthChild(unsigned index) override { return Mock::Node::nthChild(index); }
     XML::Node const *nthChild(unsigned index) const override { return Mock::Node::nthChild(index); }
-    XML::Node *duplicate(XML::Document *doc) const override { return Mock::Node::duplicate(doc); }
     void addChild(XML::Node *child, XML::Node *after) override { return Mock::Node::addChild(child, after); }
     void appendChild(XML::Node *child) override { return Mock::Node::appendChild(child); }
     void removeChild(XML::Node *child) override { return Mock::Node::removeChild(child); }
@@ -95,6 +94,7 @@ struct Document
     MOCK_METHOD2(createTextNode, XML::Node *(char const *, bool));
     MOCK_METHOD1(createComment, XML::Node *(char const *));
     MOCK_METHOD2(createPI, XML::Node *(char const *, char const *));
+    MOCK_CONST_METHOD1(duplicate, XML::Document *(XML::Document *));
     MOCK_METHOD0(logger, NodeObserver *());
 };
 } // namespace Inkscape::XML::Mock

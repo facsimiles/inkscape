@@ -122,6 +122,17 @@ void SimpleDocument::notifyElementNameChanged(Node& node, GQuark old_name, GQuar
     }
 }
 
+Document *SimpleDocument::duplicate(Document *) const
+{
+    auto *result = new SimpleDocument;
+    for (auto *child = firstChild(); child; child = child->next()) {
+        auto *new_child = child->duplicate(result);
+        result->appendChild(new_child);
+        GC::release(new_child);
+    }
+    return result;
+}
+
 } // end namespace XML
 } // end namespace Inkscape
 

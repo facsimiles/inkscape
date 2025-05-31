@@ -56,7 +56,7 @@ public:
     NodeType type() const override { return Inkscape::XML::NodeType::ELEMENT_NODE; }
 
 protected:
-    SimpleNode *_duplicate(Document* doc) const override { return new SPCSSAttrImpl(*this, doc); }
+    SimpleNode *duplicate(Document *doc) const override { return new SPCSSAttrImpl(*this, doc); }
 };
 
 static void sp_repr_css_add_components(SPCSSAttr *css, Node const *repr, gchar const *attr);

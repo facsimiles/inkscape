@@ -84,7 +84,6 @@
 #include "util/units.h"
 #include "xml/croco-node-iface.h"
 #include "xml/rebase-hrefs.h"
-#include "xml/simple-document.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::UnitTable;
@@ -507,25 +506,9 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
  */
 std::unique_ptr<SPDocument> SPDocument::copy() const
 {
-    // New SimpleDocument object where we will put all the same data
-    Inkscape::XML::Document *new_rdoc = new Inkscape::XML::SimpleDocument();
-
-    // Duplicate the svg root node AND any PI and COMMENT nodes, this should be put
-    // into xml/simple-document.h at some point to fix it's duplicate implementation.
-    for (Inkscape::XML::Node *child = rdoc->firstChild(); child; child = child->next()) {
-        if (child) {
-            // Get a new xml repr for the svg root node
-            Inkscape::XML::Node *new_child = child->duplicate(new_rdoc);
-
-            // Add the duplicated svg node as the document's rdoc
-            new_rdoc->appendChild(new_child);
-            Inkscape::GC::release(new_child);
-        }
-    }
-
+    auto *new_rdoc = rdoc->duplicate(nullptr);
     auto doc = createDoc(new_rdoc, document_filename, document_base, document_name, keepalive);
     doc->_original_document = this;
-
     return doc;
 }
 
