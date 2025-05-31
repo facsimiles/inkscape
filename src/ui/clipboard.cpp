@@ -497,7 +497,7 @@ void ClipboardManagerImpl::insertSymbol(SPDesktop *desktop, Geom::Point const &s
         return;
     }
 
-    prevent_id_clashes(symbol.get(), desktop->getDocument(), true);
+    prevent_id_clashes(symbol.get(), desktop->getDocument());
     auto *root = symbol->getRoot();
 
     // Synthesize a clipboard position in order to paste the symbol where it got dropped.
@@ -562,7 +562,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place, bool on_page
     }
 
     // copy definitions
-    prevent_id_clashes(tempdoc.get(), desktop->getDocument(), true);
+    prevent_id_clashes(tempdoc.get(), desktop->getDocument());
     sp_import_document(desktop, tempdoc.get(), in_place, on_page);
 
     // _copySelection() has put all items in groups, now ungroup them (preserves transform
