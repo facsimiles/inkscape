@@ -635,7 +635,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
     }
 
     // copy definitions
-    desktop->doc()->importDefs(clipdoc);
+    desktop->doc()->importDefs(*clipdoc);
 
     Inkscape::XML::Node* clipboard = nullptr;
     // copy objects
@@ -818,7 +818,7 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
     prevent_id_clashes(doc.get(), in_doc);
     sp_file_fix_lpe(doc.get());
 
-    in_doc->importDefs(doc.get());
+    in_doc->importDefs(*doc);
 
     // The extension should set it's pages enabled or disabled when opening
     // in order to indicate if pages are being imported or if objects are.

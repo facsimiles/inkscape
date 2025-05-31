@@ -844,7 +844,7 @@ bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
 
     if (pasted) {
         // pasted style might depend on defs from the source
-        set->document()->importDefs(tempdoc.get());
+        set->document()->importDefs(*tempdoc);
     }
 
     return pasted;
@@ -939,7 +939,7 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
         if ( clipnode ) {
             char const *effectstack = clipnode->attribute("inkscape:path-effect");
             if ( effectstack ) {
-                set->document()->importDefs(tempdoc.get());
+                set->document()->importDefs(*tempdoc);
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 set->toLPEItems();
                 auto itemlist= set->items();
