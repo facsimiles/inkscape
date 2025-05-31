@@ -45,6 +45,9 @@ public:
 	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
 	void hide (unsigned int key) override;
 
+private:
+    bool _isEquivalent(SPObject const &other) const override;
+
 public:
     // reference point
     SVGLength refX;

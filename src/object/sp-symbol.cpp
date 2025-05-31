@@ -302,6 +302,25 @@ void SPSymbol::print(SPPrintContext* ctx) {
     }
 }
 
+bool SPSymbol::_isEquivalent(SPObject const &other) const
+{
+    auto const *other_symbol = cast<SPSymbol>(&other);
+    if (!other_symbol) {
+        return false;
+    }
+    if (other_symbol == this) {
+        return true;
+    }
+
+    // Prevent duplication of symbols... could be more clever.
+    // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol().
+    Glib::ustring const other_id = other_symbol->getId();
+    if (size_t const pos = other_id.find("_inkscape_duplicate"); pos != Glib::ustring::npos) {
+        return getId() == other_id.substr(0, pos);
+    }
+    return false;
+}
+
 /*
   Local Variables:
   mode:c++
