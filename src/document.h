@@ -414,7 +414,7 @@ private:
 
     // Find items ----------------------------
     std::map<std::string, SPObject *> iddef;
-    std::map<Inkscape::XML::Node *, SPObject *> reprdef;
+    std::map<Inkscape::XML::Node const *, SPObject *> reprdef;
 
     // Find items by geometry --------------------
     mutable std::map<unsigned long, std::deque<SPItem*>> _node_cache; // Used to speed up search.
