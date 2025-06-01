@@ -223,7 +223,7 @@ inkscape:windows:
     # If we are building the MSI package, install extra build dependencies
     - if (${Env:DIST} -eq "msi") { . "${Env:CI_PROJECT_DIR}\buildtools\windows-deps-install-wix4.ps1" }
     # configure with CMake (if build directory does not exist)
-    - . "C:/${Env:ICW_NAME}/usr/bin/bash.exe" -lc 'if [ ! -d build ]; then cmake -B build -G Ninja -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_INSTALL_PREFIX=$CI_PROJECT_DIR/install; fi'
+    - . "C:/${Env:ICW_NAME}/usr/bin/bash.exe" -lc 'if [ ! -d build ]; then cmake -B build -G Ninja -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_INSTALL_PREFIX=$CI_PROJECT_DIR/inkscape; fi'
     # Kill the job before hitting runner's timeout. This way we can preserve the cache so the next retry
     # will be able to advance the build further and eventually finish (after up to two retries, 3 jobs in total).
     # Calculation is:  85 minutes build (5100 seconds, see 'sleep' below)
@@ -234,7 +234,7 @@ inkscape:windows:
     # build and install with Ninja
     - . "C:/${Env:ICW_NAME}/usr/bin/bash.exe" -lc "ninja -C build install"
     # run dependency checker
-    - . "C:/${Env:ICW_NAME}/usr/bin/bash.exe" -lc 'python3 $CI_PROJECT_DIR/buildtools/msys2checkdeps.py check $CI_PROJECT_DIR/install -w $CI_PROJECT_DIR/install/bin'
+    - . "C:/${Env:ICW_NAME}/usr/bin/bash.exe" -lc 'python3 $CI_PROJECT_DIR/buildtools/msys2checkdeps.py check $CI_PROJECT_DIR/inkscape -w $CI_PROJECT_DIR/inkscape/bin'
     # create distributable
     - . "C:/${Env:ICW_NAME}/usr/bin/bash.exe" -lc "ninja -C build dist-win-${DIST}"
   artifacts:
