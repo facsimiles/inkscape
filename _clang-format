@@ -60,10 +60,21 @@ FixNamespaceComments: true
 ForEachMacros: []
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '^<'
-    Priority:        1
-  - Regex:           '^"'
-    Priority:        2
+  - Regex: '^<[^.]*>$'
+    SortPriority: 1
+    Priority: 1
+  - Regex: '^<boost/'
+    SortPriority: 2
+    Priority: 1
+  - Regex: '^<2geom/'
+    SortPriority: 4
+    Priority: 1
+  - Regex: '^<'
+    SortPriority: 3
+    Priority: 1
+  - Regex: '^"'
+    SortPriority: 5
+    Priority: 2
 IncludeIsMainRegex: '(-test)?$'
 IndentCaseLabels: true
 IndentPPDirectives: None
