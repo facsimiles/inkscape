@@ -30,6 +30,8 @@ constexpr std::string to_string(HistoryKind hk)
             return "open";
         case HistoryKind::LPE:
             return "open";
+        default:
+            __builtin_unreachable();
     }
 }
 

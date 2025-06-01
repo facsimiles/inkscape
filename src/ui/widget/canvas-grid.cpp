@@ -45,7 +45,7 @@
 #include "object/sp-root.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
-#include "ui/dialog/command-palette.h"
+#include "ui/dialog/command-palette/command-palette.h"
 #include "ui/drag-and-drop.h"
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
