@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set(debug_SRC
+	console-output-undo-observer.cpp
 	demangle.cpp
 	heap.cpp
 	logger.cpp
@@ -9,6 +10,7 @@ set(debug_SRC
 
 	# ------
 	# Header
+	console-output-undo-observer.h
 	demangle.h
 	event-tracker.h
 	event.h

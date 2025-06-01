@@ -12,28 +12,16 @@
 #ifndef SEEN_INKSCAPE_CONSOLE_OUTPUT_UNDO_OBSERVER_H
 #define SEEN_INKSCAPE_CONSOLE_OUTPUT_UNDO_OBSERVER_H
 
-#include "undo-stack-observer.h"
+#include <memory>
 
 namespace Inkscape {
+class UndoStackObserver;
 
 /**
- * Inkscape::ConsoleOutputUndoObserver - observer for tracing calls to
+ * Create a Console Output Undo observer - an observer for tracing calls to
  * SPDocumentUndo::undo, SPDocumentUndo::redo, SPDocumentUndo::maybe_done.
- *
  */
-class ConsoleOutputUndoObserver : public UndoStackObserver {
-public:
-    ConsoleOutputUndoObserver() : UndoStackObserver() { }
-    ~ConsoleOutputUndoObserver() override = default;
-
-    void notifyUndoEvent(Event* log) override;
-    void notifyRedoEvent(Event* log) override;
-    void notifyUndoCommitEvent(Event* log) override;
-    void notifyUndoExpired(Event *log) override;
-    void notifyClearUndoEvent() override;
-    void notifyClearRedoEvent() override;
-
-};
+std::unique_ptr<UndoStackObserver> create_console_output_observer();
 }
 
 #endif // SEEN_INKSCAPE_CONSOLE_OUTPUT_UNDO_OBSERVER_H

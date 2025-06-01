@@ -44,8 +44,6 @@
 #include "3rdparty/libcroco/src/cr-cascade.h"  // for CRCascade
 
 #include "composite-undo-stack-observer.h"
-// XXX only for testing!
-#include "console-output-undo-observer.h"
 
 // This variable is introduced with 0.92.1
 // with the introduction of automatic fix 
@@ -438,7 +436,7 @@ private:
     Inkscape::CompositeUndoStackObserver undoStackObservers;
 
     // XXX only for testing!
-    Inkscape::ConsoleOutputUndoObserver console_output_undo_observer;
+    std::unique_ptr<Inkscape::UndoStackObserver> console_output_undo_observer;
 
     bool seeking; // Related to undo/redo/unique id
     unsigned long _serial; // Unique document number (used by undo/redo).

@@ -66,6 +66,7 @@
 #include "actions/actions-pages.h"
 #include "actions/actions-svg-processing.h"
 #include "actions/actions-undo-document.h"
+#include "debug/console-output-undo-observer.h"
 #include "display/control/canvas-item-drawing.h"
 #include "display/drawing.h"
 #include "io/dir-util.h"
@@ -102,22 +103,23 @@ static int doc_mem_count = 0;
 
 static unsigned long next_serial = 0;
 
-SPDocument::SPDocument() :
-    keepalive(false),
-    virgin(true),
-    rdoc(nullptr),
-    rroot(nullptr),
-    root(nullptr),
-    style_cascade(cr_cascade_new(nullptr, nullptr, nullptr)),
-    document_filename(nullptr),
-    document_base(nullptr),
-    document_name(nullptr),
-    actionkey(),
-    object_id_counter(1),
-    _router(std::make_unique<Avoid::Router>(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
-    current_persp3d(nullptr),
-    current_persp3d_impl(nullptr),
-    _activexmltree(nullptr)
+SPDocument::SPDocument()
+    : keepalive(false)
+    , virgin(true)
+    , rdoc(nullptr)
+    , rroot(nullptr)
+    , root(nullptr)
+    , style_cascade(cr_cascade_new(nullptr, nullptr, nullptr))
+    , document_filename(nullptr)
+    , document_base(nullptr)
+    , document_name(nullptr)
+    , console_output_undo_observer{create_console_output_observer()}
+    , actionkey()
+    , object_id_counter(1)
+    , _router(std::make_unique<Avoid::Router>(Avoid::PolyLineRouting | Avoid::OrthogonalRouting))
+    , current_persp3d(nullptr)
+    , current_persp3d_impl(nullptr)
+    , _activexmltree(nullptr)
 {
     // This is kept here so that members are not accessed before they are initialized
 
@@ -142,7 +144,7 @@ SPDocument::SPDocument() :
     undoStackObservers.add(*_event_log);
 
     // XXX only for testing!
-    undoStackObservers.add(console_output_undo_observer);
+    undoStackObservers.add(*console_output_undo_observer);
 
     // Actions
     action_group = Gio::SimpleActionGroup::create();

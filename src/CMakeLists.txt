@@ -15,7 +15,6 @@ set(inkscape_SRC
   composite-undo-stack-observer.cpp
   conditions.cpp
   conn-avoid-ref.cpp
-  console-output-undo-observer.cpp
   context-fns.cpp
   desktop-events.cpp
   desktop-style.cpp
@@ -92,7 +91,6 @@ set(inkscape_SRC
   composite-undo-stack-observer.h
   conditions.h
   conn-avoid-ref.h
-  console-output-undo-observer.h
   context-fns.h
   desktop-events.h
   desktop-style.h
