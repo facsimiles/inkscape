@@ -117,7 +117,8 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
-	dialog/command-palette.cpp
+	dialog/command-palette/cp-history-xml.cpp
+	dialog/command-palette/command-palette.cpp
 	dialog/attrdialog.cpp
 	dialog/choose-file.cpp
 	dialog/debug.cpp
@@ -335,7 +336,8 @@ set(ui_SRC
 	dialog/choose-file-utils.h
 	dialog/clonetiler.h
 	dialog/color-item.h
-	dialog/command-palette.h
+	dialog/command-palette/cp-history-xml.h
+	dialog/command-palette/command-palette.h
 	dialog/attrdialog.h
 	dialog/debug.h
 	dialog/dialog-base.h
