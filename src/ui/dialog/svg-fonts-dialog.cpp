@@ -1460,13 +1460,13 @@ Gtk::Box* SvgFontsDialog::glyphs_tab() {
     // display mode switching buttons
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 4);
     auto const list = Gtk::make_managed<Gtk::ToggleButton>();
-    list->set_icon_name("glyph-list");
+    list->set_icon_name("layout-list");
     list->set_tooltip_text(_("Glyph list view"));
     list->set_valign(Gtk::Align::START);
     list->signal_toggled().connect([this]{ set_glyphs_view_mode(true); });
     auto const grid = Gtk::make_managed<Gtk::ToggleButton>();
     grid->set_group(*list);
-    grid->set_icon_name("glyph-grid");
+    grid->set_icon_name("layout-grid");
     grid->set_tooltip_text(_("Glyph grid view"));
     grid->set_valign(Gtk::Align::START);
     grid->signal_toggled().connect([this] { set_glyphs_view_mode(false); });

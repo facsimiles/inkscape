@@ -121,7 +121,7 @@
             <property name="tooltip-text" translatable="yes">Show colors with names</property>
             <property name="has-frame">False</property>
             <property name="group">grid</property>
-            <property name="icon-name">glyph-list</property>
+            <property name="icon-name">layout-list</property>
           </object>
         </child>
         <child>
@@ -130,7 +130,7 @@
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Show colors in a grid</property>
             <property name="has-frame">False</property>
-            <property name="icon-name">glyph-grid</property>
+            <property name="icon-name">layout-grid</property>
           </object>
         </child>
         <child>

@@ -510,13 +510,14 @@ FontList::FontList(Glib::ustring preferences_path) :
             grid.set_visible();
         }
         _view_mode_list = show_list;
+        get_widget<Gtk::Entry>(_builder, "grid-sample").set_visible(!show_list);
         prefs->setBool(_prefs + "/list-view-mode", show_list);
     };
     auto list_mode = prefs->getBool(_prefs + "/list-view-mode", true);
     if (list_mode) show_list->set_active(); else show_grid->set_active();
     set_list_view_mode(list_mode);
-    show_list->signal_toggled().connect([=]() { set_list_view_mode(true); });
-    show_grid->signal_toggled().connect([=]() { set_list_view_mode(false); });
+    show_list->signal_toggled().connect([=] { set_list_view_mode(true); });
+    show_grid->signal_toggled().connect([=] { set_list_view_mode(false); });
 
     _fonts.clear();
     _initializing = 0;

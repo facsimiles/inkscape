@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="adjustment-font-size">
     <property name="upper">20</property>
     <property name="step-increment">1</property>
@@ -18,7 +18,7 @@
       <item translatable="yes" context="font-sample-text" comments="Sample text consisting of Arabic numerals">1234567890</item>
       <item translatable="yes" context="font-sample-text" comments="Sample text of lowercase Latin letters. Feel free to add diacritics if your language uses Latin script.">abcdefghijklmnopqrstuvwxyz</item>
       <item translatable="yes" context="font-sample-text" comments="Sample text of uppercase Latin letters. Feel free to add diacritics if your language uses Latin script.">ABCDEFGHIJKLMNOPQRSTUVWXYZ</item>
-      <item translatable="yes" context="font-sample-text" comments="Provide a sentence in your language that uses every letter in your alphabet. If your language uses logographs, you may want to include a few to give a glimpse of what selected font looks like.&#10;&#10;https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog">The quick brown fox jumps over the lazy dog.</item>
+      <item translatable="yes" context="font-sample-text" comments="Provide a sentence in your language that uses every letter in your alphabet. If your language uses logographs, you may want to include a few to give a glimpse of what selected font looks like.  https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog">The quick brown fox jumps over the lazy dog.</item>
       <item translatable="yes" context="font-sample-text" comments="Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.">Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây.</item>
     </items>
   </object>
@@ -31,7 +31,7 @@
       </item>
     </section>
     <!-- This submenu is populated at runtime from 'samples-stringlist' !-->
-    <section id="samples-submenu"/>
+    <section id="samples-submenu"></section>
   </menu>
   <object class="GtkPopover" id="filter-popover">
     <property name="child">
@@ -60,15 +60,15 @@
             <property name="tooltip-text" translatable="yes">Show all fonts</property>
             <property name="halign">center</property>
             <child>
-              <object class = "GtkBox">
+              <object class="GtkBox">
                 <property name="spacing">3</property>
                 <child>
-                  <object class = "GtkImage">
+                  <object class="GtkImage">
                     <property name="icon-name">reset-settings-symbolic</property>
                   </object>
                 </child>
                 <child>
-                  <object class = "GtkLabel">
+                  <object class="GtkLabel">
                     <property name="label" translatable="yes">All fonts</property>
                   </object>
                 </child>
@@ -108,18 +108,18 @@
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Edit font collections</property>
             <property name="action-name">win.dialog-open</property>
-            <property name="action-target">'FontCollections'</property>
+            <property name="action-target">&apos;FontCollections&apos;</property>
             <property name="halign">center</property>
             <child>
-              <object class = "GtkBox">
+              <object class="GtkBox">
                 <property name="spacing">3</property>
                 <child>
-                  <object class = "GtkImage">
+                  <object class="GtkImage">
                     <property name="icon-name">edit</property>
                   </object>
                 </child>
                 <child>
-                  <object class = "GtkLabel">
+                  <object class="GtkLabel">
                     <property name="label" translatable="yes">Collections</property>
                   </object>
                 </child>
@@ -152,7 +152,7 @@
             <property name="show-expanders">False</property>
             <property name="enable-grid-lines">horizontal</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection"/>
+              <object class="GtkTreeSelection"></object>
             </child>
           </object>
         </property>
@@ -252,7 +252,7 @@
     </child>
     <child>
       <object class="GtkGrid" id="options-grid">
-        <property name="visible">False</property>
+        <property name="visible">false</property>
         <property name="margin-start">5</property>
         <property name="margin-end">5</property>
         <property name="margin-top">5</property>
@@ -343,17 +343,25 @@
         <child>
           <object class="GtkBox">
             <child>
-              <object class="GtkToggleButton" id="view-list">
-                <property name="receives-default">True</property>
-                <property name="icon-name">glyph-list-symbolic</property>
-                <property name="group">view-grid</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="view-grid">
-                <property name="receives-default">True</property>
-                <property name="margin-start">3</property>
-                <property name="icon-name">glyph-grid-symbolic</property>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkToggleButton" id="view-list">
+                    <property name="receives-default">True</property>
+                    <property name="icon-name">layout-list-symbolic</property>
+                    <property name="group">view-grid</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="view-grid">
+                    <property name="margin-end">0</property>
+                    <property name="receives-default">True</property>
+                    <property name="margin-start">0</property>
+                    <property name="icon-name">layout-grid-symbolic</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="linked"></class>
+                </style>
               </object>
             </child>
             <child>
@@ -372,13 +380,13 @@
           </object>
         </child>
         <child>
-          <placeholder/>
+          <placeholder></placeholder>
         </child>
         <child>
-          <placeholder/>
+          <placeholder></placeholder>
         </child>
         <child>
-          <placeholder/>
+          <placeholder></placeholder>
         </child>
         <layout>
           <property name="column">0</property>
@@ -430,7 +438,7 @@
             <property name="adjustment">adjustment-font-size</property>
             <property name="round-digits">1</property>
             <style>
-              <class name="small-slider"/>
+              <class name="small-slider"></class>
             </style>
           </object>
         </child>
@@ -462,7 +470,7 @@
                 <property name="label" translatable="yes" context="loading-fonts">Initializing</property>
                 <property name="use-markup">True</property>
                 <style>
-                  <class name="secondary"/>
+                  <class name="secondary"></class>
                 </style>
               </object>
             </child>
@@ -516,7 +524,7 @@
                 <property name="label" translatable="yes">&lt;small&gt;256 fonts&lt;/small&gt;</property>
                 <property name="use-markup">True</property>
                 <style>
-                  <class name="secondary"/>
+                  <class name="secondary"></class>
                 </style>
               </object>
             </child>
@@ -560,7 +568,7 @@
         <property name="margin-bottom">2</property>
         <property name="orientation">vertical</property>
         <child>
-          <placeholder/>
+          <placeholder></placeholder>
         </child>
         <layout>
           <property name="column">0</property>
