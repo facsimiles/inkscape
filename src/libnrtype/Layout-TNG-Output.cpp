@@ -237,27 +237,27 @@ void Layout::show(DrawingGroup *parent, StyleAttachments &style_attachments, Geo
 Geom::OptRect Layout::bounds(Geom::Affine const &transform, bool with_stroke, int start, int length) const
 {
     Geom::OptRect bbox;
-    for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; glyph_index++) {
-        if (_glyphs[glyph_index].hidden) continue; // To do: This and the next line should represent the same thing, use on or the other.
-        if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) continue;
-        if (start != -1 && (int) _glyphs[glyph_index].in_character < start) continue;
+    for (auto const &glyph : _glyphs) {
+        if (glyph.hidden) continue; // To do: This and the next line should represent the same thing, use on or the other.
+        if (_characters[glyph.in_character].in_glyph == -1) continue;
+        if (start != -1 && (int) glyph.in_character < start) continue;
         if (length != -1) {
             if (start == -1)
                 start = 0;
-            if ((int) _glyphs[glyph_index].in_character > start + length) continue;
+            if ((int) glyph.in_character > start + length) continue;
         }
         // this could be faster
-        Geom::Affine glyph_matrix = _glyphs[glyph_index].transform(*this);
+        Geom::Affine glyph_matrix = glyph.transform(*this);
         Geom::Affine total_transform = glyph_matrix;
         total_transform *= transform;
-        if(_glyphs[glyph_index].span(this).font) {
-            Geom::OptRect glyph_rect = _glyphs[glyph_index].span(this).font->BBoxExact(_glyphs[glyph_index].glyph);
+        if(glyph.span(this).font) {
+            Geom::OptRect glyph_rect = glyph.span(this).font->BBoxExact(glyph.glyph);
             if (glyph_rect) {
                 auto glyph_box = *glyph_rect * total_transform;
                 // FIXME: Expand rectangle by half stroke width, this doesn't include meters
                 // and so is not the most ideal calculation, we could use the glyph Path here.
                 if (with_stroke) {
-                    Span const &span = _spans[_characters[_glyphs[glyph_index].in_character].in_span];
+                    Span const &span = _spans[_characters[glyph.in_character].in_span];
                     auto text_source = static_cast<InputStreamTextSource const *>(_input_stream[span.in_input_stream_item]);
                     if (!text_source->style->stroke.isNone()) {
                         double scale = transform.descrim();
@@ -286,13 +286,13 @@ Geom::Affine glyph_matrix;
     if (_input_stream.empty()) return;
     if (!_glyphs.size()) return; // yes, this can happen.
     if (text_to_path || _path_fitted) {
-        for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; glyph_index++) {
-            if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1)continue; //invisible glyphs
-            Span const &span = _spans[_characters[_glyphs[glyph_index].in_character].in_span];
-            Geom::PathVector const *pv = span.font->PathVector(_glyphs[glyph_index].glyph);
+        for (auto const &glyph : _glyphs) {
+            if (_characters[glyph.in_character].in_glyph == -1)continue; //invisible glyphs
+            Span const &span = _spans[_characters[glyph.in_character].in_span];
+            Geom::PathVector const *pv = span.font->PathVector(glyph.glyph);
             InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[span.in_input_stream_item]);
             if (pv) {
-                glyph_matrix = _glyphs[glyph_index].transform(*this);
+                glyph_matrix = glyph.transform(*this);
                 Geom::PathVector temp_pv = (*pv) * glyph_matrix;
                 if (!text_source->style->fill.isNone())
                     ctx->fill(temp_pv, ctm, text_source->style, pbox, dbox, bbox);

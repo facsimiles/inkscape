@@ -165,7 +165,7 @@ void GifSwapPixels(uint8_t* image, int pixA, int pixB)
 int GifPartition(uint8_t* image, const int left, const int right, const int elt, int pivotValue)
 {
     int storeIndex = left;
-    bool split = 0;
+    bool split = false;
     for(int ii=left; ii<right; ++ii)
     {
         int arrayVal = image[ii*4+elt];

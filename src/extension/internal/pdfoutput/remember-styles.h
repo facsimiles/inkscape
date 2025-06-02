@@ -38,7 +38,7 @@ public:
     explicit StyleMemory(std::set<SPAttr> remember_attrs)
         : _attrs(std::move(remember_attrs))
     {
-        _changes.push({});
+        _changes.emplace();
     }
 
     /**

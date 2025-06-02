@@ -338,7 +338,7 @@ void Layout::_calculateBaselines()
         pos.thisEndOfLine();
         auto const end_anchor_pt = characterAnchorPoint(pos);
 
-        _baselines.push_back(Geom::LineSegment{start_anchor_pt, end_anchor_pt});
+        _baselines.emplace_back(start_anchor_pt, end_anchor_pt);
         pos.nextCharacter();
     }
 }

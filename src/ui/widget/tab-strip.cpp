@@ -132,7 +132,7 @@ struct SimpleTab : Gtk::Widget
         );
     }
 
-    void measure_vfunc(Gtk::Orientation orientation, int, int &min, int &nat, int &, int &) const {
+    void measure_vfunc(Gtk::Orientation orientation, int, int &min, int &nat, int &, int &) const override {
         {
             auto [sizes, baselines] = _icon.measure(orientation);
             // normal icon size with margins
@@ -164,7 +164,7 @@ struct SimpleTab : Gtk::Widget
         }
     }
 
-    void size_allocate_vfunc(int full_width, int height, int) {
+    void size_allocate_vfunc(int full_width, int height, int) override {
         auto icon_w = _icon.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
 
         // size_allocate - position and size all child widgets: icon, label and close button

@@ -7,14 +7,14 @@
 
 #include <iostream>
 #include <unordered_set>
-
+#include <utility>
 
 namespace Inkscape::UI {
 
 static std::unordered_set<QueryFileInfo*> pending_operations;
 
 QueryFileInfo::QueryFileInfo(const std::string& path_to_test, std::function<void (Glib::RefPtr<Gio::FileInfo>)> on_result):
-    _on_result(on_result) {
+    _on_result(std::move(on_result)) {
 
     _file = Gio::File::create_for_path(path_to_test);
     _operation = Gio::Cancellable::create();
