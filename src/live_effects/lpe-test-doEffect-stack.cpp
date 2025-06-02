@@ -30,8 +30,7 @@ LPEdoEffectStackTest::LPEdoEffectStackTest(LivePathEffectObject *lpeobject) :
 
 LPEdoEffectStackTest::~LPEdoEffectStackTest() = default;
 
-void
-LPEdoEffectStackTest::doEffect (SPCurve * curve)
+void LPEdoEffectStackTest::doEffect(Geom::PathVector &curve)
 {
     if (step >= 1) {
         Effect::doEffect(curve);

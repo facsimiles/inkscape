@@ -16,7 +16,6 @@
 #include "bad-uri-exception.h"
 #include "enums.h"
 
-#include "display/curve.h"
 #include "livarot/Path.h"
 #include "preferences.h"
 #include "sp-shape.h"

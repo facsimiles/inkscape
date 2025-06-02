@@ -142,8 +142,7 @@ bool LPECopyRotate::doOnOpen(SPLPEItem const *lpeitem)
     return fixed;
 }
 
-void
-LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
+void LPECopyRotate::doAfterEffect(SPLPEItem const *lpeitem, Geom::PathVector *)
 {
     if (split_items) {
         SPDocument *document = getSPDoc();
@@ -282,9 +281,8 @@ void LPECopyRotate::cloneD(SPObject *orig, SPObject *dest)
     auto shape = cast<SPShape>(orig);
     auto path = cast<SPPath>(dest);
     if (shape) {
-        SPCurve const *c = shape->curve();
-        if (c) {
-            auto str = sp_svg_write_path(c->get_pathvector());
+        if (auto const *c = shape->curve()) {
+            auto str = sp_svg_write_path(*c);
             if (shape && !path) {
                 const char *id = dest->getAttribute("id");
                 const char *style = dest->getAttribute("style");
@@ -579,12 +577,12 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     divider.appendNew<Geom::LineSegment>(line_end);
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
-    FillRuleBool fillrule = fill_nonZero;
+    FillRule fillrule = fill_nonZero;
     if (current_shape->style && 
         current_shape->style->fill_rule.set &&
         current_shape->style->fill_rule.computed == SP_WIND_RULE_EVENODD) 
     {
-        fillrule = (FillRuleBool)fill_oddEven;
+        fillrule = fill_oddEven;
     }
     if (method != RM_NORMAL) {
         if (method != RM_KALEIDOSCOPE) {
@@ -648,7 +646,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
 }
 
 Geom::PathVector
-LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule)
+LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in, FillRule fillrule)
 {
     if ((split_items || num_copies == 1) && method == RM_NORMAL) {
         if (split_items) {

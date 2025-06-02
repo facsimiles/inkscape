@@ -39,7 +39,6 @@ enum HandlesMethod {
     HM_END
 };
 
-
 class LPERoughen : public Effect {
 
 public:
@@ -47,7 +46,7 @@ public:
     ~LPERoughen() override;
 
     void doOnApply(SPLPEItem const *lpeitem) override;
-    void doEffect(SPCurve *curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     virtual double sign(double randNumber);
     virtual Geom::Point randomize(double max_length, bool is_node = false);
     void doBeforeEffect(SPLPEItem const * lpeitem) override;
@@ -55,9 +54,9 @@ public:
     Gtk::Widget *newWidget() override;
 
 private:
-    SPCurve addNodesAndJitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move,
+    Geom::Path addNodesAndJitter(Geom::Curve const &A, Geom::Point &prev, Geom::Point &last_move,
                               double t, bool last);
-    SPCurve jitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move);
+    Geom::Path jitter(Geom::Curve const &A, Geom::Point &prev, Geom::Point &last_move);
 
     EnumParam<DivisionMethod> method;
     ScalarParam max_segment_size;
@@ -72,9 +71,9 @@ private:
     long seed;
     LPERoughen(const LPERoughen &) = delete;
     LPERoughen &operator=(const LPERoughen &) = delete;
-
 };
 
-}; //namespace LivePathEffect
-}; //namespace Inkscape
+} //namespace LivePathEffect
+} //namespace Inkscape
+
 #endif

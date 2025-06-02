@@ -52,7 +52,6 @@
 #include "document.h"
 #include "style-internal.h"
 #include "display/cairo-utils.h"
-#include "display/curve.h"
 #include "filter-chemistry.h"
 #include "helper/pixbuf-ops.h"
 #include "helper/png-write.h"
@@ -237,7 +236,7 @@ static void sp_shape_render(SPShape const *shape, CairoRenderContext *ctx, SPIte
         return;
     }
 
-    Geom::PathVector const &pathv = shape->curve()->get_pathvector();
+    Geom::PathVector const &pathv = *shape->curve();
     if (pathv.empty()) {
         return;
     }
@@ -642,8 +641,7 @@ void CairoRenderer::renderHatchPath(CairoRenderContext *ctx, SPHatchPath const &
     ctx->setStateForStyle(hatchPath.style);
     ctx->transform(Geom::Translate(hatchPath.offset.computed, 0));
 
-    auto curve = hatchPath.calculateRenderCurve(key);
-    Geom::PathVector const & pathv =curve.get_pathvector();
+    auto const pathv = hatchPath.calculateRenderCurve(key);
     if (!pathv.empty()) {
         ctx->renderPathVector(pathv, hatchPath.style, Geom::OptRect());
     }

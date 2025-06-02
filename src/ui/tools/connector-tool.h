@@ -15,19 +15,16 @@
 
 #include <map>
 #include <optional>
-#include <string>
 
-#include <2geom/point.h>
 #include <sigc++/connection.h>
-
-#include "display/curve.h"
+#include <2geom/pathvector.h>
+#include <2geom/point.h>
 
 #include "ui/tools/tool-base.h"
 
 #include "xml/node-observer.h"
 
 class SPItem;
-class SPCurve;
 class SPKnot;
 
 namespace Avoid {
@@ -94,11 +91,11 @@ public:
 
     // Red curve
     Inkscape::CanvasItemBpath *red_bpath{nullptr};
-    std::optional<SPCurve> red_curve;
-    guint32 red_color{0xff00007f};
+    std::optional<Geom::PathVector> red_curve;
+    uint32_t red_color{0xff00007f};
 
     // Green curve
-    std::optional<SPCurve> green_curve;
+    std::optional<Geom::PathVector> green_curve;
 
     // The new connector
     SPItem *newconn{nullptr};
@@ -155,7 +152,7 @@ private:
     void _resetColors();
     void _finish();
     void _concatColorsAndFlush();
-    void _flushWhite(SPCurve *gc);
+    void _flushWhite(Geom::PathVector &c);
 
     void _activeShapeAddKnot(SPItem* item, SPItem* subitem);
     void _setActiveShape(SPItem *item);

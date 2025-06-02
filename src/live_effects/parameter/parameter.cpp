@@ -91,7 +91,7 @@ void Parameter::param_higlight(bool highlight)
         if (highlight) {
             std::vector<SPLPEItem *> lpeitems = param_effect->getCurrrentLPEItems();
             if (lpeitems.size() == 1 && param_effect->is_visible) {
-                SPCurve c;
+                Geom::PathVector c;
                 std::vector<Geom::PathVector> cs; // = param_effect->getCanvasIndicators(lpeitems[0]);
                 Geom::OptRect bbox = lpeitems[0]->documentVisualBounds();
 
@@ -112,11 +112,11 @@ void Parameter::param_higlight(bool highlight)
                 cs.push_back(out);
                 for (auto &p2 : cs) {
                     p2 *= desktop->dt2doc();
-                    c.append(p2);
+                    pathvector_append(c, p2);
                 }
-                if (!c.is_empty()) {
+                if (!c.empty()) {
                     desktop->remove_temporary_canvasitem(ownerlocator);
-                    auto tmpitem = new Inkscape::CanvasItemBpath(desktop->getCanvasTemp(), c.get_pathvector(), true);
+                    auto tmpitem = new Inkscape::CanvasItemBpath(desktop->getCanvasTemp(), std::move(c), true);
                     tmpitem->set_stroke(0x0000ff9a);
                     tmpitem->set_fill(0x0, SP_WIND_RULE_NONZERO); // No fill
                     ownerlocator = desktop->add_temporary_canvasitem(tmpitem, 0);

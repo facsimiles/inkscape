@@ -23,7 +23,7 @@ public:
     LPESimplify(const LPESimplify &) = delete;
     LPESimplify &operator=(const LPESimplify &) = delete;
 
-    void doEffect(SPCurve *curve) override;
+    void doEffect(Geom::PathVector &curve) override;
 
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
 

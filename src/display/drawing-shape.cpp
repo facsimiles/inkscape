@@ -18,7 +18,6 @@
 
 #include "style.h"
 
-#include "curve.h"
 #include "drawing.h"
 #include "drawing-context.h"
 #include "drawing-shape.h"
@@ -42,7 +41,7 @@ DrawingShape::DrawingShape(Drawing &drawing)
 {
 }
 
-void DrawingShape::setPath(std::shared_ptr<SPCurve const> curve)
+void DrawingShape::setPath(std::shared_ptr<Geom::PathVector const> curve)
 {
     defer([this, curve = std::move(curve)] () mutable {
         _markForRendering();
@@ -104,7 +103,7 @@ unsigned DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext cons
             return {};
         }
 
-        auto rect = bounds_exact_transformed(_curve->get_pathvector(), ctx.ctm);
+        auto rect = bounds_exact_transformed(*_curve, ctx.ctm);
         if (!rect) {
             return {};
         }
@@ -166,7 +165,7 @@ void DrawingShape::_renderFill(DrawingContext &dc, RenderContext &rc, Geom::IntR
     auto has_fill = _nrstyle.prepareFill(dc, rc, area, _item_bbox, _fill_pattern);
 
     if (has_fill) {
-        dc.path(_curve->get_pathvector());
+        dc.path(*_curve);
         _nrstyle.applyFill(dc, has_fill);
         dc.fillPreserve();
         dc.newPath(); // clear path
@@ -185,7 +184,7 @@ void DrawingShape::_renderStroke(DrawingContext &dc, RenderContext &rc, Geom::In
 
     if (has_stroke) {
         // TODO: remove segments outside of bbox when no dashes present
-        dc.path(_curve->get_pathvector());
+        dc.path(*_curve);
         if (style_vector_effect_stroke) {
             dc.restore();
             dc.save();
@@ -232,7 +231,7 @@ unsigned DrawingShape::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::
         {
             Inkscape::DrawingContext::Save save(dc);
             dc.transform(_ctm);
-            dc.path(_curve->get_pathvector());
+            dc.path(*_curve);
         }
         {
             Inkscape::DrawingContext::Save save(dc);
@@ -263,7 +262,7 @@ unsigned DrawingShape::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::
                 has_stroke.reset();
             }
             if (has_fill || has_stroke) {
-                dc.path(_curve->get_pathvector());
+                dc.path(*_curve);
                 // TODO: remove segments outside of bbox when no dashes present
                 if (has_fill) {
                     _nrstyle.applyFill(dc, has_fill);
@@ -329,7 +328,7 @@ void DrawingShape::_clipItem(DrawingContext &dc, RenderContext &rc, Geom::IntRec
         dc.setFillRule(CAIRO_FILL_RULE_WINDING);
     }
     dc.transform(_ctm);
-    dc.path(_curve->get_pathvector());
+    dc.path(*_curve);
     dc.fill();
 }
 
@@ -377,9 +376,9 @@ DrawingItem *DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigne
     if (_drawing.getCanvasItemDrawing()) {
         Geom::Rect viewbox = _drawing.getCanvasItemDrawing()->get_canvas()->get_area_world();
         viewbox.expandBy (width);
-        pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, &viewbox);
+        pathv_matrix_point_bbox_wind_distance(*_curve, _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, &viewbox);
     } else {
-        pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, nullptr);
+        pathv_matrix_point_bbox_wind_distance(*_curve, _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, nullptr);
     }
 
     gint64 tfinish = g_get_monotonic_time();

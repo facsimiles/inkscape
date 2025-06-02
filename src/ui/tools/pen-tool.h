@@ -134,7 +134,7 @@ private:
     bool _undoLastPoint(bool user_undo = false);
     bool _redoLastPoint();
 
-    void _finish(gboolean closed);
+    void _finish(bool closed);
 
     void _resetColors();
 

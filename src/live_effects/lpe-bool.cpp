@@ -26,7 +26,6 @@
 #include "snap.h"
 #include "style.h"
 
-#include "display/curve.h"
 #include "helper/geom.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -433,8 +432,7 @@ void LPEBool::remove_filter(SPObject *operand)
     }
 }
 
-void
-LPEBool::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
+void LPEBool::doAfterEffect(SPLPEItem const *lpeitem, Geom::PathVector *)
 {
     if (onremove) {
         onremove = false;
@@ -588,7 +586,7 @@ Geom::PathVector LPEBool::get_union(SPObject *root, SPObject *object, bool _from
                                    ? clipshape->curveForEdit()
                                    : clipshape->curve();
                         if (curve) {
-                            clippv = curve->get_pathvector();
+                            clippv = *curve;
                         }
                     }
                 }
@@ -612,7 +610,7 @@ Geom::PathVector LPEBool::get_union(SPObject *root, SPObject *object, bool _from
                    ? shape->curveForEdit()
                    : shape->curve();
         if (curve) {
-            auto tmp = curve->get_pathvector() * i2anc_affine(shape, root->parent);
+            auto tmp = *curve * i2anc_affine(shape, root->parent);
             if (res.empty()) {
                 res = std::move(tmp);
             } else {
@@ -622,9 +620,8 @@ Geom::PathVector LPEBool::get_union(SPObject *root, SPObject *object, bool _from
         originfill = GetFillTyp(shape);
     }
     if (auto text = cast<SPText>(object)) {
-        auto curve = text->getNormalizedBpath();
-        curve.transform(i2anc_affine(text, root->parent));
-        Geom::PathVector tmp = curve.get_pathvector();
+        auto tmp = text->getNormalizedBpath();
+        tmp *= i2anc_affine(text, root->parent);
         if (res.empty()) {
             res = std::move(tmp);
         } else {
@@ -637,9 +634,9 @@ Geom::PathVector LPEBool::get_union(SPObject *root, SPObject *object, bool _from
     return res;
 }
 
-void LPEBool::doEffect(SPCurve *curve)
+void LPEBool::doEffect(Geom::PathVector &curve)
 {
-    Geom::PathVector path_in = curve->get_pathvector();
+    Geom::PathVector path_in = curve;
     auto current_operand = cast<SPItem>(operand_item.getObject());
     if (current_operand == current_shape) {
         g_warning("operand and current shape are the same");
@@ -712,7 +709,7 @@ void LPEBool::doEffect(SPCurve *curve)
         } else {
             path_out = sp_pathvector_boolop(path_a, path_b, (BooleanOp) op, fill_a, fill_b);
         }
-        curve->set_pathvector(path_out * current_affine.inverse());
+        curve = std::move(path_out) * current_affine.inverse();
     }
 }
 
@@ -788,8 +785,8 @@ void LPEBool::fractureit(SPObject * operandit, Geom::PathVector unionpv)
     if (operandit_shape) {
         if (auto c = operandit_shape->curve()) {
             auto curve = *c;
-            curve.transform(i2anc_affine(operandit_shape, sp_lpe_item->parent));
-            auto intesect = sp_pathvector_boolop(unionpv, curve.get_pathvector(), bool_op_inters, fill_a, fill_b);
+            curve *= i2anc_affine(operandit_shape, sp_lpe_item->parent);
+            auto intesect = sp_pathvector_boolop(unionpv, curve, bool_op_inters, fill_a, fill_b);
             Inkscape::XML::Node *dest = dupleNode(operandit_shape, "svg:path");
             dest->setAttribute("d", sp_svg_write_path(intesect));
             dest->setAttribute("transform", nullptr);
@@ -802,7 +799,7 @@ void LPEBool::fractureit(SPObject * operandit, Geom::PathVector unionpv)
                 division_other->reorder(divisionitem, divisionit);
                 division_other_id = Glib::ustring(dest->attribute("id"));
             }
-            auto operandit_pathv = sp_pathvector_boolop(unionpv, curve.get_pathvector(), bool_op_diff, fill_a, fill_b);
+            auto operandit_pathv = sp_pathvector_boolop(unionpv, curve, bool_op_diff, fill_a, fill_b);
             Inkscape::XML::Node *dest2 = dupleNode(operandit_shape, "svg:path");
             dest2->setAttribute("transform", nullptr);
             dest2->setAttribute("d", sp_svg_write_path(operandit_pathv));
@@ -850,8 +847,8 @@ void LPEBool::divisionit(SPObject * operand_a, SPObject * operand_b, Geom::PathV
         }
         if (auto c = operand_b_shape->curveForEdit()) {
             auto curve = *c;
-            curve.transform(i2anc_affine(operand_b_shape, sp_lpe_item->parent));
-            auto intesect = sp_pathvector_boolop(unionpv, curve.get_pathvector(), bool_op_inters, fill_a, fill_b);
+            curve *= i2anc_affine(operand_b_shape, sp_lpe_item->parent);
+            auto intesect = sp_pathvector_boolop(unionpv, curve, bool_op_inters, fill_a, fill_b);
             Inkscape::XML::Node *dest = dupleNode(operand_b_shape, "svg:path");
             dest->setAttribute("d", sp_svg_write_path(intesect));
             dest->setAttribute("transform", nullptr);

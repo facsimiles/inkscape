@@ -23,7 +23,6 @@
 #include "preferences.h"
 #include "style.h"
 
-#include "display/curve.h"
 #include "helper/geom.h"
 #include "live_effects/fill-conversion.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
@@ -220,7 +219,7 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         lpeversion.param_setValue("1.3", true);
         SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
         std::vector<Geom::Point> points;
-        Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector());
+        Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(*shape->curve());
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed / 2 : 1.;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
@@ -545,8 +544,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     controlpoints[3].y = (B[i].at0() + tang2_sign*tang2)[Geom::Y];
                     controlpoints[3].ty = '}';
 
-                    Geom::Path spiro;
-                    Spiro::spiro_run(controlpoints, 4, spiro);
+                    auto spiro = Spiro::spiro_run(controlpoints, 4);
                     pb.append(spiro.portion(1, spiro.size_open() - 1));
                     break;
                 }
@@ -911,7 +909,7 @@ void LPEPowerStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*
     }
 }
 
-void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve)
+void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem, Geom::PathVector *)
 {
     if (pathvector_before_effect[0].size() == pathvector_after_effect[0].size()) {
         if (recusion_limit < 6) {

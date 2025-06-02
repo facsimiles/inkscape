@@ -21,8 +21,6 @@
 #include "sp-conn-end-pair.h"
 #include "style-internal.h" // For SPStyleSrc
 
-class SPCurve;
-
 /**
  * SVG <path> implementation
  */

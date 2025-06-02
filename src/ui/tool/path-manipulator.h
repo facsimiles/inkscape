@@ -19,9 +19,7 @@
 #include <2geom/affine.h>
 #include "ui/tool/node.h"
 #include "ui/tool/manipulator.h"
-#include "display/curve.h"
 
-class SPCurve;
 class SPPath;
 
 namespace Inkscape {
@@ -165,7 +163,7 @@ private:
     SubpathList _subpaths;
     MultiPathManipulator &_multi_path_manipulator;
     SPObject *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
-    SPCurve _spcurve; // in item coordinates
+    Geom::PathVector _spcurve; // in item coordinates
     CanvasItemPtr<Inkscape::CanvasItemBpath> _outline;
     CurveDragPoint *_dragpoint; // an invisible control point hovering over curve
     PathManipulatorObserver *_observer;

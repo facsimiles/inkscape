@@ -27,7 +27,6 @@
 #include "path-chemistry.h"     // copy_object_properties()
 #include "path-util.h"
 
-#include "display/curve.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "object/object-set.h"  // This file defines some member functions of ObjectSet.
@@ -479,7 +478,7 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
             return;
         }
 
-        operand.pathv = curve->get_pathvector() * item->i2doc_affine();
+        operand.pathv = *curve * item->i2doc_affine();
     }
 
     // Compute the intersections and self-intersections, and use this information when converting to livarot paths.

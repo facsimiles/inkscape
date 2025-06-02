@@ -49,20 +49,18 @@ LPESkeleton::~LPESkeleton() = default;
  */
 
 /*
-void
-LPESkeleton::doEffect (SPCurve * curve)
+void LPESkeleton::doEffect(Geom::PathVector &curve)
 {
     // spice this up to make the effect actually *do* something!
 }
 
-Geom::PathVector
-LPESkeleton::doEffect_path (Geom::PathVector const & path_in)
+Geom::PathVector LPESkeleton::doEffect_path(Geom::PathVector const &path_in)
 {
-        Geom::PathVector path_out;
+    Geom::PathVector path_out;
 
-        path_out = path_in;   // spice this up to make the effect actually *do* something!
+    path_out = path_in;   // spice this up to make the effect actually *do* something!
 
-        return path_out;
+    return path_out;
 }
 */
 

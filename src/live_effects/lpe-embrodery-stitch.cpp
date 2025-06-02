@@ -212,7 +212,7 @@ PathVector LPEEmbroderyStitch::doEffect_path(PathVector const &path_in)
             info.reverse = false;
             info.used = false;
             info.connect = true;
-            info.begOrig = it->front().initialPoint();
+            info.begOrig = it->initialPoint();
             info.endOrig = it->back().finalPoint();
         }
 

@@ -26,7 +26,7 @@ public:
     LPEAttachPath(LivePathEffectObject *lpeobject);
     ~LPEAttachPath() override;
 
-    void doEffect (SPCurve * curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     void resetDefaults(SPItem const * item) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;

@@ -183,12 +183,10 @@ Geom::Point SPAvoidRef::getConnectionPointPos()
     return (bbox) ? bbox->midpoint() : Geom::Point(0, 0);
 }
 
-static std::vector<Geom::Point> approxCurveWithPoints(SPCurve const *curve)
+static std::vector<Geom::Point> approxCurveWithPoints(Geom::PathVector const &curve_pv)
 {
     // The number of segments to use for not straight curves approximation
-    const unsigned NUM_SEGS = 4;
-    
-    const Geom::PathVector& curve_pv = curve->get_pathvector();
+    constexpr unsigned NUM_SEGS = 4;
    
     // The structure to hold the output
     std::vector<Geom::Point> poly_points;
@@ -248,17 +246,16 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
         shape->set_shape();
         // make sure it has an associated curve
         if (shape->curve()) {
-            auto item_curve = *shape->curve();
+            auto item_pathv = *shape->curve();
             // apply transformations (up to common ancestor)
-            item_curve.transform(item_transform);
-            return approxCurveWithPoints(&item_curve);
+            item_pathv *= item_transform;
+            return approxCurveWithPoints(item_pathv);
         } else {
             return {};
         }
     } else {
         if (auto bbox = item->documentPreferredBounds()) {
-            auto item_curve = SPCurve(*bbox);
-            return approxCurveWithPoints(&item_curve);
+            return approxCurveWithPoints(Geom::Path{*bbox});
         } else {
             return {};
         }

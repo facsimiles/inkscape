@@ -21,7 +21,6 @@
 
 /* fixme: do multidocument safe */
 
-class SPCurve;
 class SPDesktop;
 
 namespace Inkscape {
@@ -83,7 +82,7 @@ private:
     CanvasItemCtrlType _handle = default_handle; // Used for styling through css
     CanvasItemCtrlType _invert_handle = default_invert_handle;
     CanvasItemCtrlType _deselect_handle = default_deselect_handle;
-    SPCurve *_touchpath_curve = nullptr;
+    Geom::Path _touchpath_curve;
 
     CanvasItemCtrlType _get_deselect_handle(CanvasItemCtrlType handle) {
         // use default deselect mechanism unless it's a freehand path

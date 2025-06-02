@@ -48,7 +48,6 @@
 
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-drawing.h" // ctx
-#include "display/curve.h"
 #include "display/drawing.h"
 
 #include "livarot/Path.h"
@@ -368,7 +367,7 @@ void CalligraphicTool::cancel()
     segments.clear();
 
     // Reset accumulated curve.
-    accumulated.reset();
+    accumulated.clear();
     clear_current();
 
     repr = nullptr;
@@ -389,7 +388,7 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
                     return;
                 }
 
-                accumulated.reset();
+                accumulated.clear();
 
                 repr = nullptr;
 
@@ -685,7 +684,7 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
             }
 
             // Reset accumulated curve.
-            accumulated.reset();
+            accumulated.clear();
 
             clear_current();
             repr = nullptr;
@@ -817,19 +816,19 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
 void CalligraphicTool::clear_current()
 {
     // reset bpath
-    currentshape->set_bpath(nullptr);
+    currentshape->set_bpath({});
 
     // reset curve
-    currentcurve.reset();
-    cal1.reset();
-    cal2.reset();
+    currentcurve.clear();
+    cal1.clear();
+    cal2.clear();
 
     // reset points
     npoints = 0;
 }
 
 void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
-    if (!accumulated.is_empty()) {
+    if (!accumulated.empty()) {
         if (!repr) {
             /* Create object */
             Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
@@ -847,7 +846,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
             item->updateRepr();
         }
 
-        Geom::PathVector pathv = accumulated.get_pathvector() * _desktop->dt2doc();
+        auto pathv = accumulated * _desktop->dt2doc();
         repr->setAttribute("d", sp_svg_write_path(pathv));
 
         if (unionize) {
@@ -887,7 +886,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
 }
 
 static void
-add_cap(SPCurve &curve,
+add_cap(Geom::Path &curve,
         Geom::Point const &from,
         Geom::Point const &to,
         double rounding)
@@ -897,52 +896,52 @@ add_cap(SPCurve &curve,
         double mag = Geom::L2(vel);
 
         Geom::Point v = mag * Geom::rot90( to - from ) / Geom::L2( to - from );
-        curve.curveto(from + v, to + v, to);
+        curve.appendNew<Geom::CubicBezier>(from + v, to + v, to);
     }
 }
 
-bool CalligraphicTool::accumulate() {
+bool CalligraphicTool::accumulate()
+{
 	if (
-        cal1.is_empty() ||
-        cal2.is_empty() ||
-        (cal1.get_segment_count() <= 0) ||
-        cal1.first_path()->closed()
-		) {
-
-        cal1.reset();
-        cal2.reset();
+        cal1.empty() ||
+        cal2.empty() ||
+        cal1.size_default() == 0 ||
+        cal1.closed()
+        )
+    {
+        cal1.clear();
+        cal2.clear();
 
 		return false; // failure
 	}
 
         auto rev_cal2 = cal2.reversed();
 
-    if ((rev_cal2.get_segment_count() <= 0) || rev_cal2.first_path()->closed()) {
-        cal1.reset();
-        cal2.reset();
+    if (rev_cal2.size_default() <= 0 || rev_cal2.closed()) {
+        cal1.clear();
+        cal2.clear();
 
 		return false; // failure
 	}
 
-    Geom::Curve const * dc_cal1_firstseg  = cal1.first_segment();
-    Geom::Curve const * rev_cal2_firstseg = rev_cal2.first_segment();
-    Geom::Curve const * dc_cal1_lastseg   = cal1.last_segment();
-    Geom::Curve const * rev_cal2_lastseg  = rev_cal2.last_segment();
+    auto const &dc_cal1_firstseg  = cal1.front();
+    auto const &rev_cal2_firstseg = rev_cal2.front();
+    auto const &dc_cal1_lastseg   = cal1.back_default();
+    auto const &rev_cal2_lastseg  = rev_cal2.back_default();
 
-    accumulated.reset(); /*  Is this required ?? */
+    accumulated = cal1;
 
-    accumulated.append(cal1);
+    add_cap(accumulated, dc_cal1_lastseg.finalPoint(), rev_cal2_firstseg.initialPoint(), cap_rounding);
 
-    add_cap(accumulated, dc_cal1_lastseg->finalPoint(), rev_cal2_firstseg->initialPoint(), cap_rounding);
+    accumulated.setStitching(true);
+    accumulated.append(rev_cal2);
 
-    accumulated.append(rev_cal2, true);
+    add_cap(accumulated, rev_cal2_lastseg.finalPoint(), dc_cal1_firstseg.initialPoint(), cap_rounding);
 
-    add_cap(accumulated, rev_cal2_lastseg->finalPoint(), dc_cal1_firstseg->initialPoint(), cap_rounding);
+    accumulated.close();
 
-    accumulated.closepath();
-
-    cal1.reset();
-    cal2.reset();
+    cal1.clear();
+    cal2.clear();
 
 	return true; // success
 }
@@ -970,14 +969,11 @@ void CalligraphicTool::fit_and_split(bool release)
         }
 
         /* Current calligraphic */
-        if ( cal1.is_empty() || cal2.is_empty() ) {
+        if (cal1.empty() || cal2.empty()) {
             /* dc->npoints > 0 */
             /* g_print("calligraphics(1|2) reset\n"); */
-            cal1.reset();
-            cal2.reset();
-
-            cal1.moveto(this->point1[0]);
-            cal2.moveto(this->point2[0]);
+            cal1.start(point1[0]);
+            cal2.start(point2[0]);
         }
 
         Geom::Point b1[BEZIER_MAX_LENGTH];
@@ -997,29 +993,28 @@ void CalligraphicTool::fit_and_split(bool release)
             }
             /* CanvasShape */
             if (! release) {
-                currentcurve.reset();
-                currentcurve.moveto(b1[0]);
+                currentcurve.start(b1[0]);
                 for (Geom::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
-                    currentcurve.curveto(bp1[1], bp1[2], bp1[3]);
+                    currentcurve.appendNew<Geom::CubicBezier>(bp1[1], bp1[2], bp1[3]);
                 }
-                currentcurve.lineto(b2[BEZIER_SIZE*(nb2-1) + 3]);
+                currentcurve.appendNew<Geom::LineSegment>(b2[BEZIER_SIZE*(nb2-1) + 3]);
                 for (Geom::Point *bp2 = b2 + BEZIER_SIZE * ( nb2 - 1 ); bp2 >= b2; bp2 -= BEZIER_SIZE) {
-                    currentcurve.curveto(bp2[2], bp2[1], bp2[0]);
+                    currentcurve.appendNew<Geom::CubicBezier>(bp2[2], bp2[1], bp2[0]);
                 }
                 // FIXME: dc->segments is always NULL at this point??
                 if (this->segments.empty()) { // first segment
                     add_cap(currentcurve, b2[0], b1[0], cap_rounding);
                 }
-                currentcurve.closepath();
-                currentshape->set_bpath(&currentcurve, true);
+                currentcurve.close();
+                currentshape->set_bpath(currentcurve, true);
             }
 
             /* Current calligraphic */
             for (Geom::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
-                cal1.curveto(bp1[1], bp1[2], bp1[3]);
+                cal1.appendNew<Geom::CubicBezier>(bp1[1], bp1[2], bp1[3]);
             }
             for (Geom::Point *bp2 = b2; bp2 < b2 + BEZIER_SIZE * nb2; bp2 += BEZIER_SIZE) {
-                cal2.curveto(bp2[1], bp2[2], bp2[3]);
+                cal2.appendNew<Geom::CubicBezier>(bp2[1], bp2[2], bp2[3]);
             }
         } else {
             /* fixme: ??? */
@@ -1028,11 +1023,9 @@ void CalligraphicTool::fit_and_split(bool release)
             }
             this->draw_temporary_box();
 
-            for (gint i = 1; i < this->npoints; i++) {
-                cal1.lineto(this->point1[i]);
-            }
-            for (gint i = 1; i < this->npoints; i++) {
-                cal2.lineto(this->point2[i]);
+            for (int i = 1; i < npoints; i++) {
+                cal1.appendNew<Geom::LineSegment>(point1[i]);
+                cal2.appendNew<Geom::LineSegment>(point2[i]);
             }
         }
 
@@ -1041,14 +1034,14 @@ void CalligraphicTool::fit_and_split(bool release)
             g_print("[%d]Yup\n", this->npoints);
         }
         if (!release) {
-            g_assert(!currentcurve.is_empty());
+            g_assert(!currentcurve.empty());
 
             auto fillColor = sp_desktop_get_color_tool(_desktop, "/tools/calligraphic", true);
             double opacity = sp_desktop_get_master_opacity_tool(_desktop, "/tools/calligraphic");
             double fillOpacity = sp_desktop_get_opacity_tool(_desktop, "/tools/calligraphic", true);
 
             // TODO: This removes color space information.
-            auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve.get_pathvector(), true);
+            auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve, true);
             cbp->set_fill(fillColor ? fillColor->toRGBA(opacity * fillOpacity) : 0x0, SP_WIND_RULE_EVENODD);
             cbp->set_stroke(0x0);
 
@@ -1066,25 +1059,24 @@ void CalligraphicTool::fit_and_split(bool release)
     }
 }
 
-void CalligraphicTool::draw_temporary_box() {
-    currentcurve.reset();
+void CalligraphicTool::draw_temporary_box()
+{
+    currentcurve.start(point2[npoints - 1]);
 
-    currentcurve.moveto(this->point2[this->npoints-1]);
-
-    for (gint i = this->npoints-2; i >= 0; i--) {
-        currentcurve.lineto(this->point2[i]);
+    for (int i = npoints - 2; i >= 0; i--) {
+        currentcurve.appendNew<Geom::LineSegment>(point2[i]);
     }
 
-    for (gint i = 0; i < this->npoints; i++) {
-        currentcurve.lineto(this->point1[i]);
+    for (int i = 0; i < npoints; i++) {
+        currentcurve.appendNew<Geom::LineSegment>(point1[i]);
     }
 
-    if (this->npoints >= 2) {
+    if (npoints >= 2) {
         add_cap(currentcurve, point1[npoints - 1], point2[npoints - 1], cap_rounding);
     }
 
-    currentcurve.closepath();
-    currentshape->set_bpath(&currentcurve, true);
+    currentcurve.close();
+    currentshape->set_bpath(currentcurve, true);
 }
 
 } // namespace Inkscape::UI::Tools

@@ -52,7 +52,7 @@ public:
     void doOnApply (SPLPEItem const* lpeitem) final;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) final;
     void doBeforeEffect (SPLPEItem const* lpeitem) final;
-    void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve) final;
+    void doAfterEffect (SPLPEItem const* lpeitem, Geom::PathVector *curve) final;
     void split(Geom::PathVector &path_in, Geom::Path const &divider);
     void resetDefaults(SPItem const* item) final;
     void doOnRemove(SPLPEItem const* /*lpeitem*/) final;

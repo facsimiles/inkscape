@@ -14,7 +14,6 @@
 
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpeobject.h"
-#include "display/curve.h"
 #include "object/sp-shape.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
@@ -323,10 +322,10 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
     if (sp_shape && lpe->original_height) {
         if (auto c = sp_shape->curveForEdit()) {
             auto curve_before = *c;
-            Geom::Path const *path_in = curve_before.first_path();
-            Geom::Point ptA = path_in->pointAt(Geom::PathTime(0, 0.0));
-            Geom::Point B = path_in->pointAt(Geom::PathTime(1, 0.0));
-            Geom::Curve const *first_curve = &path_in->curveAt(Geom::PathTime(0, 0.0));
+            Geom::Path const &path_in = curve_before.front();
+            Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
+            Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
+            Geom::Curve const *first_curve = &path_in.curveAt(Geom::PathTime(0, 0.0));
             Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*first_curve);
             Geom::Ray ray(ptA, B);
             if (cubic) {
@@ -357,10 +356,10 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
     if (auto const sp_shape = cast<SPShape>(cast<SPLPEItem>(item))) {
         if (auto c = sp_shape->curveForEdit()) {
             auto curve_before = *c;
-            Geom::Path const *path_in = curve_before.first_path();
-            Geom::Point ptA = path_in->pointAt(Geom::PathTime(0, 0.0));
-            Geom::Point B = path_in->pointAt(Geom::PathTime(1, 0.0));
-            Geom::Curve const *first_curve = &path_in->curveAt(Geom::PathTime(0, 0.0));
+            Geom::Path const &path_in = curve_before.front();
+            Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
+            Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
+            Geom::Curve const *first_curve = &path_in.curveAt(Geom::PathTime(0, 0.0));
             Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*first_curve);
             Geom::Ray ray(ptA, B);
             if (cubic) {

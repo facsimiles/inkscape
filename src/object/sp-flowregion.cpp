@@ -328,12 +328,12 @@ static std::unique_ptr<Shape> extract_shape(SPItem *item)
         tr_mat = item->transform;
     }
 
-    std::optional<SPCurve> curve;
+    std::optional<Geom::PathVector> curve;
     if (auto shape = cast<SPShape>(shape_source)) {
         if (!shape->curve()) {
             shape->set_shape();
         }
-        curve = SPCurve::ptr_to_opt(shape->curve());
+        curve = ptr_to_opt(shape->curve());
     } else if (auto text = cast<SPText>(shape_source)) {
         curve = text->getNormalizedBpath();
     }
@@ -342,7 +342,7 @@ static std::unique_ptr<Shape> extract_shape(SPItem *item)
         return {};
     }
     Path temp;
-    temp.LoadPathVector(curve->get_pathvector(), tr_mat, true);
+    temp.LoadPathVector(*curve, tr_mat, true);
     temp.Convert(0.25);
 
     Shape n_shp;

@@ -2876,12 +2876,10 @@ void ObjectSet::cloneOriginal()
             Geom::OptRect b = original->desktopVisualBounds();
             if ( a && b && desktop()) {
                 // draw a flashing line between the objects
-                SPCurve curve;
-                curve.moveto(a->midpoint());
-                curve.lineto(b->midpoint());
+                auto line = Geom::LineSegment{a->midpoint(), b->midpoint()};
 
                 // We use a bpath as it supports dashes.
-                auto canvas_item_bpath = new Inkscape::CanvasItemBpath(desktop()->getCanvasTemp(), curve.get_pathvector());
+                auto canvas_item_bpath = new Inkscape::CanvasItemBpath(desktop()->getCanvasTemp(), path_from_curve(line));
                 canvas_item_bpath->set_stroke(0x0000ddff);
                 canvas_item_bpath->set_dashes({5.0, 3.0});
                 canvas_item_bpath->set_visible(true);
@@ -2952,19 +2950,17 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms, bool sync, bool skip
             // create the new path
             clone = xml_doc->createElement("svg:path");
             if (sync && !multiple && shape) {
-                std::optional<SPCurve> c = SPCurve::ptr_to_opt(shape->curveForEdit());
-                if (c) {
+                if (auto c = ptr_to_opt(shape->curveForEdit())) {
                     if (path) {
-                        clone->setAttribute("original-d", sp_svg_write_path(c->get_pathvector()));
+                        clone->setAttribute("original-d", sp_svg_write_path(*c));
                     }
-                    clone->setAttribute("d", sp_svg_write_path(c->get_pathvector()));
+                    clone->setAttribute("d", sp_svg_write_path(*c));
                 } else {
                     clone->setAttribute("d", "M 0 0");
                 }
             } else {
                 clone->setAttribute("d", "M 0 0");
             }
-
         }
         if (clone) {
             // add the new clone to the top of the original's parent
@@ -3697,7 +3693,7 @@ void ObjectSet::chameleonFill()
         if (auto shape = cast<SPShape>(item)) {
             bool evenodd = shape->style->fill_rule.computed == SP_WIND_RULE_EVENODD;
             if (auto curve = shape->curve()) {
-                auto color = drawing.averageColor(curve->get_pathvector() * shape->i2dt_affine(), evenodd);
+                auto color = drawing.averageColor(*curve * shape->i2dt_affine(), evenodd);
                 auto style = sp_repr_css_attr_new();
                 sp_repr_css_set_property_double(style, "fill-opacity", color.stealOpacity());
                 sp_repr_css_set_property_string(style, "fill", color.toString(false));
@@ -4029,7 +4025,6 @@ bool ObjectSet::fitCanvas(bool with_margins, bool skip_undo)
 
 void ObjectSet::swapFillStroke()
 {
-
     SPIPaint *paint;
     SPPaintServer *server;
     Glib::ustring _paintserver_id;

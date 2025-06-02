@@ -42,13 +42,13 @@ protected:
     * @b is in LPE the path with LPE updated in, in integrity is the data in path after save to disk
     * @c the svg file name to compare
     */
-    void pathCompare(char const *a, char const *b, Glib::ustring const &id, std::string const &file, double precision = 0.001)
+    void pathCompare(char const *a, char const *b, Glib::ustring const &id, std::string const &svg, double precision = 0.001)
     {
         bool success = false;
         pathCompareInternal(a, b, precision, success);
         if (!success) {
             #define DIAG(x) "  " << #x << ":\n    " << x << std::endl
-            std::cout << "More information about the failure:\n" << DIAG(file) << DIAG(id) << DIAG(a) << DIAG(b);
+            std::cout << "More information about the failure:\n" << DIAG(svg) << DIAG(id) << DIAG(a) << DIAG(b);
             failed.emplace_back(id);
         }
     }

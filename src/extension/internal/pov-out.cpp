@@ -276,7 +276,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
         return true;
 
     auto shape = cast<SPShape>(item);
-    if (shape->curve()->is_empty()) {
+    if (shape->curve()->empty()) {
         return true;
     }
 
@@ -306,7 +306,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
 
     // convert the path to only lineto's and cubic curveto's:
     Geom::Affine tf = item->i2dt_affine();
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector() * tf);
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(*shape->curve() * tf);
 
     /*
      * We need to know the number of segments (NR_CURVETOs/LINETOs, including
@@ -347,8 +347,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
     /**
      *   at moment of writing, 2geom lacks proper initialization of empty intervals in rect...
      */
-    Geom::Rect cminmax( pathv.front().initialPoint(), pathv.front().initialPoint() );
-
+    Geom::Rect cminmax(pathv.initialPoint(), pathv.initialPoint());
 
     /**
      * For all Subpaths in the <path>

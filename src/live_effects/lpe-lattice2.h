@@ -20,6 +20,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <2geom/path-sink.h>
+
 #include "live_effects/effect.h"
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/point.h"
@@ -46,7 +48,7 @@ public:
 
     Gtk::Widget * newWidget() override;
 
-    void calculateCurve(Geom::Point a,Geom::Point b, SPCurve *c, bool horizontal, bool move);
+    void calculateCurve(Geom::Point a,Geom::Point b, Geom::PathBuilder &c, bool horizontal, bool move);
 
     void vertical(PointParam &paramA,PointParam &paramB, Geom::Line vert);
 

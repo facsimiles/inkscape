@@ -101,7 +101,7 @@ bool pointInTriangle(Geom::Point const &p, std::vector<Geom::Point> points)
     return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
 }
 
-void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
+void LPEPerspectiveEnvelope::doEffect(Geom::PathVector &curve)
 {
     double projmatrix[3][3];
     if(deform_type == DEFORMATION_PERSPECTIVE) {
@@ -159,8 +159,8 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         gsl_permutation_free (p);
         gsl_vector_free (x);
     }
-    Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(curve->get_pathvector());
-    curve->reset();
+    Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(curve);
+    curve.clear();
     Geom::CubicBezier const *cubic = nullptr;
     Geom::Point point_at1(0, 0);
     Geom::Point point_at2(0, 0);
@@ -170,7 +170,6 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         if (path_it.empty())
             continue;
         //Itreadores
-        SPCurve nCurve;
         Geom::Path::const_iterator curve_it1 = path_it.begin();
         Geom::Path::const_iterator curve_endit = path_it.end_default();
 
@@ -180,11 +179,11 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
                 curve_endit = path_it.end_open();
             }
         }
-        if(deform_type == DEFORMATION_PERSPECTIVE) {
-            nCurve.moveto(projectPoint(curve_it1->initialPoint(), projmatrix));
-        } else {
-            nCurve.moveto(projectPoint(curve_it1->initialPoint()));
-        }
+        auto nCurve = Geom::Path{
+            deform_type == DEFORMATION_PERSPECTIVE
+                ? projectPoint(curve_it1->initialPoint(), projmatrix)
+                : projectPoint(curve_it1->initialPoint())
+        };
         while (curve_it1 != curve_endit) {
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
             if (cubic) {
@@ -205,18 +204,18 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
                 point_at3 = projectPoint(point_at3);
             }
             if (cubic) {
-                nCurve.curveto(point_at1, point_at2, point_at3);
+                nCurve.appendNew<Geom::CubicBezier>(point_at1, point_at2, point_at3);
             } else {
-                nCurve.lineto(point_at3);
+                nCurve.appendNew<Geom::LineSegment>(point_at3);
             }
             ++curve_it1;
         }
         //y cerramos la curva
         if (path_it.closed()) {
-            nCurve.move_endpoints(point_at3, point_at3);
-            nCurve.closepath_current();
+            move_endpoints(nCurve, point_at3, point_at3);
+            closepath_current(nCurve);
         }
-        curve->append(std::move(nCurve));
+        curve.push_back(std::move(nCurve));
     }
 }
 
@@ -555,13 +554,13 @@ LPEPerspectiveEnvelope::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::v
 {
     hp_vec.clear();
 
-    SPCurve c;
-    c.moveto(up_left_point);
-    c.lineto(up_right_point);
-    c.lineto(down_right_point);
-    c.lineto(down_left_point);
-    c.lineto(up_left_point);
-    hp_vec.push_back(c.get_pathvector());
+    Geom::Path c;
+    c.start(up_left_point);
+    c.appendNew<Geom::LineSegment>(up_right_point);
+    c.appendNew<Geom::LineSegment>(down_right_point);
+    c.appendNew<Geom::LineSegment>(down_left_point);
+    c.appendNew<Geom::LineSegment>(up_left_point);
+    hp_vec.push_back(std::move(c));
 }
 
 } // namespace Inkscape::LivePathEffect

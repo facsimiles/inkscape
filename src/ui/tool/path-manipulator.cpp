@@ -1135,25 +1135,18 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
             n->front()->setPosition(seg2[1]);
             n->setType(NODE_SMOOTH, false);
         } else {
-            Geom::D2< Geom::SBasis > sbasis_inside_nodes;
-            SPCurve line_inside_nodes;
-            if(second->back()->isDegenerate()){
-                line_inside_nodes.moveto(n->position());
-                line_inside_nodes.lineto(second->position());
-                sbasis_inside_nodes = line_inside_nodes.first_segment()->toSBasis();
-                Geom::Point next = sbasis_inside_nodes.valueAt(DEFAULT_START_POWER);
-                line_inside_nodes.reset();
+            if (second->back()->isDegenerate()) {
+                auto const line_inside_nodes = Geom::LineSegment{n->position(), second->position()};
+                auto const next = line_inside_nodes.pointAt(DEFAULT_START_POWER);
                 n->front()->setPosition(next);
-            }else{
+            } else {
                 n->front()->setPosition(seg2[1]);
             }
-            if(first->front()->isDegenerate()){
-                line_inside_nodes.moveto(n->position());
-                line_inside_nodes.lineto(first->position());
-                sbasis_inside_nodes = line_inside_nodes.first_segment()->toSBasis();
-                Geom::Point previous = sbasis_inside_nodes.valueAt(DEFAULT_START_POWER);
+            if (first->front()->isDegenerate()) {
+                auto const line_inside_nodes = Geom::LineSegment{n->position(), first->position()};
+                auto const previous = line_inside_nodes.pointAt(DEFAULT_START_POWER);
                 n->back()->setPosition(previous);
-            }else{
+            } else {
                 n->back()->setPosition(seg1[2]);
             }
             n->setType(NODE_CUSP, false);
@@ -1269,14 +1262,14 @@ void PathManipulator::_createControlPointsFromGeometry()
     // so that _updateDragPoint doesn't crash on paths with naked movetos
     Geom::PathVector pathv;
     if (_is_bspline) {
-        pathv = pathv_to_cubicbezier(_spcurve.get_pathvector(), false);
+        pathv = pathv_to_cubicbezier(_spcurve, false);
     } else {
-        pathv = pathv_to_linear_and_cubic_beziers(_spcurve.get_pathvector());
+        pathv = pathv_to_linear_and_cubic_beziers(_spcurve);
     }
     for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
         // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
         // When we erase an element, the next one slides into position,
-        // so we do not increment the iterator even though it is theoretically invalidated.
+        // so we do not increment the iterator.
         if (i->empty()) {
             i = pathv.erase(i);
         } else {
@@ -1286,7 +1279,7 @@ void PathManipulator::_createControlPointsFromGeometry()
     if (pathv.empty()) {
         return;
     }
-    _spcurve = SPCurve(pathv);
+    _spcurve = pathv;
 
     pathv *= _getTransform();
 
@@ -1402,21 +1395,14 @@ bool PathManipulator::_isBSpline() const {
 // returns the corresponding strength to the position of the handlers
 double PathManipulator::_bsplineHandlePosition(Handle *h, bool check_other)
 {
-    using Geom::X;
-    using Geom::Y;
     double pos = NO_POWER;
-    Node *n = h->parent();
-    Node * next_node = nullptr;
-    next_node = n->nodeToward(h);
-    if(next_node){
-        SPCurve line_inside_nodes;
-        line_inside_nodes.moveto(n->position());
-        line_inside_nodes.lineto(next_node->position());
-        if(!are_near(h->position(), n->position())){
-            pos = Geom::nearest_time(h->position(), *line_inside_nodes.first_segment());
-        }
+    auto const n = h->parent();
+    auto const next_node = n->nodeToward(h);
+    if (next_node && !Geom::are_near(h->position(), n->position())) {
+        auto const line_inside_nodes = Geom::LineSegment{n->position(), next_node->position()};
+        pos = Geom::nearest_time(h->position(), line_inside_nodes);
     }
-    if (Geom::are_near(pos, NO_POWER, BSPLINE_TOL) && check_other){
+    if (Geom::are_near(pos, NO_POWER, BSPLINE_TOL) && check_other) {
         return _bsplineHandlePosition(h->other(), false);
     }
     return pos;
@@ -1430,22 +1416,16 @@ Geom::Point PathManipulator::_bsplineHandleReposition(Handle *h, bool check_othe
 }
 
 // give the location for the handler to the specified position
-Geom::Point PathManipulator::_bsplineHandleReposition(Handle *h,double pos){
-    using Geom::X;
-    using Geom::Y;
+Geom::Point PathManipulator::_bsplineHandleReposition(Handle *h, double pos)
+{
     Geom::Point ret = h->position();
-    Node *n = h->parent();
-    Geom::D2< Geom::SBasis > sbasis_inside_nodes;
-    SPCurve line_inside_nodes;
-    Node * next_node = nullptr;
-    next_node = n->nodeToward(h);
-    if(next_node && !Geom::are_near(pos, NO_POWER, BSPLINE_TOL)){
-        line_inside_nodes.moveto(n->position());
-        line_inside_nodes.lineto(next_node->position());
-        sbasis_inside_nodes = line_inside_nodes.first_segment()->toSBasis();
-        ret = sbasis_inside_nodes.valueAt(pos);
-    } else{
-        if(Geom::are_near(pos, NO_POWER, BSPLINE_TOL)){
+    auto n = h->parent();
+    auto next_node = n->nodeToward(h);
+    if (next_node && !Geom::are_near(pos, NO_POWER, BSPLINE_TOL)) {
+        auto const line_inside_nodes = Geom::LineSegment{n->position(), next_node->position()};
+        ret = line_inside_nodes.pointAt(pos);
+    } else {
+        if (Geom::are_near(pos, NO_POWER, BSPLINE_TOL)) {
             ret = n->position();
         }
     }
@@ -1500,10 +1480,10 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         return;
     }
 
-    if (_spcurve.get_pathvector() == pathv) {
+    if (_spcurve == pathv) {
         return;
     }
-    _spcurve = SPCurve(pathv);
+    _spcurve = pathv;
     if (alert_LPE) {
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
         auto path = cast<SPPath>(_path);
@@ -1565,8 +1545,7 @@ void PathManipulator::_updateOutline()
         return;
     }
 
-    auto pv = _spcurve.get_pathvector() * _getTransform();
-    // This SPCurve thing has to be killed with extreme prejudice
+    auto pv = _spcurve * _getTransform();
     if (_show_path_direction) {
         // To show the direction, we append additional subpaths which consist of a single
         // linear segment that starts at the time value of 0.5 and extends for 10 pixels
@@ -1587,8 +1566,7 @@ void PathManipulator::_updateOutline()
         }
         pv.insert(pv.end(), arrows.begin(), arrows.end());
     }
-    auto tmp = SPCurve(std::move(pv));
-    _outline->set_bpath(&tmp);
+    _outline->set_bpath(std::move(pv));
     _outline->set_visible(true);
 }
 
@@ -1602,13 +1580,13 @@ void PathManipulator::_getGeometry()
         Effect *lpe = lpeobj->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
-            _spcurve = SPCurve(pathparam->get_pathvector());
+            _spcurve = pathparam->get_pathvector();
         }
     } else if (path) {
         if (path->curveForEdit()) {
             _spcurve = *path->curveForEdit();
         } else {
-            _spcurve = SPCurve();
+            _spcurve = {};
         }
     }
 }
@@ -1626,10 +1604,10 @@ void PathManipulator::_setGeometry()
         Effect *lpe = lpeobj->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
-            if (pathparam->get_pathvector() == _spcurve.get_pathvector()) {
+            if (pathparam->get_pathvector() == _spcurve) {
                 return; //False we dont update LPE
             }
-            pathparam->set_new_value(_spcurve.get_pathvector(), false);
+            pathparam->set_new_value(_spcurve, false);
             lpeobj->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
     } else if (path) {
@@ -1637,12 +1615,12 @@ void PathManipulator::_setGeometry()
         // Maybe the path become empty and we want to update to empty
         if (empty()) return;
         if (path->curveBeforeLPE()) {
-            path->setCurveBeforeLPE(&_spcurve);
+            path->setCurveBeforeLPE(_spcurve);
             if (path->hasPathEffectRecursive()) {
                 sp_lpe_item_update_patheffect(path, true, false);
             }
         } else {
-            path->setCurve(&_spcurve);
+            path->setCurve(_spcurve);
         }
     }
 }
@@ -1813,11 +1791,10 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
     Geom::Coord dist = HUGE_VAL;
 
     Geom::Affine to_desktop = _getTransform();
-    Geom::PathVector pv = _spcurve.get_pathvector();
-    std::optional<Geom::PathVectorTime> pvp = pv.nearestTime(sp.getPoint() * to_desktop.inverse());
+    std::optional<Geom::PathVectorTime> pvp = _spcurve.nearestTime(sp.getPoint() * to_desktop.inverse());
     if (!pvp) return dist;
 
-    Geom::Point nearest_pt_dt = pv.pointAt(*pvp) * to_desktop;
+    Geom::Point nearest_pt_dt = _spcurve.pointAt(*pvp) * to_desktop;
     Geom::Point nearest_pt = _desktop->d2w(nearest_pt_dt);
     dist = Geom::distance(_desktop->d2w(sp.getPoint()), nearest_pt);
     double stroke_tolerance = _getStrokeTolerance();

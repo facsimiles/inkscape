@@ -371,7 +371,7 @@ void refresh_textpath_source(SPTextPath* tp)
 
         auto item = cast<SPItem>(tp->sourcePath->sourceObject);
         tp->originalPath = new Path;
-        tp->originalPath->LoadPathVector(curve_copy.get_pathvector(), item->transform, true);
+        tp->originalPath->LoadPathVector(curve_copy, item->transform, true);
         tp->originalPath->ConvertWithBackData(0.01);
     }
 }

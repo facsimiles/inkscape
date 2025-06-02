@@ -41,7 +41,7 @@
 
 gint SPPath::nodesInPath() const
 {
-    return _curve ? _curve->nodes_in_path() : 0;
+    return _curve ? node_count(*_curve) : 0;
 }
 
 const char* SPPath::typeName() const {
@@ -90,7 +90,7 @@ void SPPath::convert_to_guides() const {
     std::list<std::pair<Geom::Point, Geom::Point> > pts;
 
     Geom::Affine const i2dt(this->i2dt_affine());
-    Geom::PathVector const & pv = this->_curve->get_pathvector();
+    Geom::PathVector const &pv = *_curve;
     
     for(const auto & pit : pv) {
         for(Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit) {
@@ -145,10 +145,10 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
             regex->match(input, matchInfo);
 
             if (matchInfo.matches()) {
-                Glib::ustring  value = matchInfo.fetch(1);
+                Glib::ustring value = matchInfo.fetch(1);
 
                 // Update curve
-                setCurveInsync(SPCurve(sp_svg_read_pathv(value.c_str())));
+                setCurveInsync(sp_svg_read_pathv(value.c_str()));
 
                 // Convert from property to attribute (convert back on write)
                 setAttributeOrRemoveIfEmpty("d", value);
@@ -192,7 +192,7 @@ void SPPath::set(SPAttr key, const gchar* value) {
     switch (key) {
         case SPAttr::INKSCAPE_ORIGINAL_D:
             if (value) {
-                setCurveBeforeLPE(SPCurve(sp_svg_read_pathv(value)));
+                setCurveBeforeLPE(sp_svg_read_pathv(value));
             } else {
                 setCurveBeforeLPE(nullptr);
             }
@@ -200,7 +200,7 @@ void SPPath::set(SPAttr key, const gchar* value) {
 
        case SPAttr::D:
             if (value) {
-                setCurve(SPCurve(sp_svg_read_pathv(value)));
+                setCurve(sp_svg_read_pathv(value));
             } else {
                 setCurve(nullptr);
             }
@@ -247,15 +247,15 @@ Inkscape::XML::Node* SPPath::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 g_message("sp_path_write writes 'd' attribute");
 #endif
 
-    if (this->_curve) {
-        repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
+    if (_curve) {
+        repr->setAttribute("d", sp_svg_write_path(*_curve));
     } else {
         repr->removeAttribute("d");
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         if (_curve_before_lpe) {
-            repr->setAttribute("inkscape:original-d", sp_svg_write_path(_curve_before_lpe->get_pathvector()));
+            repr->setAttribute("inkscape:original-d", sp_svg_write_path(*_curve_before_lpe));
         } else {
             repr->removeAttribute("inkscape:original-d");
         }
@@ -295,11 +295,11 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
             // This fix a issue with calligrapic tool that make a transform just when draw
             setCurveBeforeLPE(_curve.get());
         }
-        _curve_before_lpe->transform(transform);
+        *_curve_before_lpe *= transform;
         // fix issue https://gitlab.com/inkscape/inbox/-/issues/5460
         sp_lpe_item_update_patheffect(this, false, false);
     } else {
-        setCurve(_curve->transformed(transform));
+        setCurve(*_curve * transform);
     }
     // Adjust stroke
     this->adjust_stroke(transform.descrim());
@@ -322,12 +322,12 @@ void SPPath::removeTransformsRecursively(SPObject const *root)
     auto transform = i2i_affine(root, this).inverse();
 
     if (hasPathEffectRecursive() && pathEffectsEnabled()) {
-        _curve_before_lpe->transform(transform);
+        *_curve_before_lpe *= transform;
         sp_lpe_item_update_patheffect(this, false, false);
     } else {
-        setCurve(_curve->transformed(transform));
+        setCurve(*_curve * transform);
     }
-    setAttribute("d", sp_svg_write_path(_curve->get_pathvector()));
+    setAttribute("d", sp_svg_write_path(*_curve));
     adjust_stroke(transform.descrim());
     adjust_pattern(transform);
     adjust_gradient(transform);

@@ -181,7 +181,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
     }
 
     // write that curve to "d"
-    repr->setAttribute("d", sp_svg_write_path(_curve->get_pathvector()));
+    repr->setAttribute("d", sp_svg_write_path(*_curve));
 
     SPShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
@@ -353,7 +353,7 @@ void SPOffset::set_shape() {
         const char *res_d = this->getRepr()->attribute("inkscape:original");
 
         if ( res_d ) {
-            setCurveInsync(SPCurve(sp_svg_read_pathv(res_d)));
+            setCurveInsync(sp_svg_read_pathv(res_d));
             setCurveBeforeLPE(curve());
         }
 
@@ -650,7 +650,7 @@ void SPOffset::set_shape() {
 
         delete orig;
 
-        setCurveInsync(SPCurve(std::move(res_pv)));
+        setCurveInsync(std::move(res_pv));
         setCurveBeforeLPE(curve());
     }
 }
@@ -658,7 +658,6 @@ void SPOffset::set_shape() {
 void SPOffset::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const {
     SPShape::snappoints(p, snapprefs);
 }
-
 
 // utilitaires pour les poignees
 // used to get the distance to the shape: distance to polygon give the fabs(radius), we still need
@@ -908,7 +907,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
         return;
     }
 
-    SPCurve const *curve = offset->curve();
+    auto const *curve = offset->curve();
 
     if (curve == nullptr)
     {
@@ -920,13 +919,12 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
             return;
     }
 
-    if (curve->is_empty())
-    {
+    if (curve->empty()) {
         return;
     }
 
     Path *finalPath = new Path;
-    finalPath->LoadPathVector(curve->get_pathvector());
+    finalPath->LoadPathVector(*curve);
 
     Shape *theShape = new Shape;
 
@@ -1076,7 +1074,7 @@ refresh_offset_source(SPOffset* offset)
     	return;
     }
 
-    SPCurve curve;
+    Geom::PathVector curve;
 
     if (auto shape = cast<SPShape>(item)) {
         if (!shape->curve()) {
@@ -1090,7 +1088,7 @@ refresh_offset_source(SPOffset* offset)
     }
 
     Path *orig = new Path;
-    orig->LoadPathVector(curve.get_pathvector());
+    orig->LoadPathVector(curve);
 
     if (!item->transform.isIdentity()) {
         gchar const *t_attr = item->getRepr()->attribute("transform");

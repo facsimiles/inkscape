@@ -21,7 +21,6 @@
 #include "sp-item.h"
 #include "sp-string.h" // Provides many other headers with is<SPString>
 #include "text-tag-attributes.h"
-#include "display/curve.h"
 
 #include "libnrtype/Layout-TNG.h"
 #include "libnrtype/style-attachments.h"
@@ -42,7 +41,7 @@ public:
     int tag() const override { return tag_of<decltype(*this)>; }
 
     /** Converts the text object to its component curves */
-    SPCurve getNormalizedBpath() const;
+    Geom::PathVector getNormalizedBpath() const;
 
     /** Completely recalculates the layout. */
     void rebuildLayout();

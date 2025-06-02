@@ -41,50 +41,29 @@ class CurveTest : public ::testing::Test {
     }
 };
 
-TEST_F(CurveTest, testMoveSemantics)
-{
-    SPCurve c1;
-    c1.moveto(2, 3);
-    c1.lineto(4, 5);
-
-    // move construction
-    SPCurve c2(std::move(c1));
-
-    ASSERT_EQ(c1.get_segment_count(), 0);
-    ASSERT_EQ(c2.get_segment_count(), 1);
-
-    // move assignment
-    c1 = std::move(c2);
-
-    ASSERT_EQ(c1.get_segment_count(), 1);
-    ASSERT_EQ(c2.get_segment_count(), 0);
-}
-
-TEST_F(CurveTest, testGetSegmentCount)
+TEST_F(CurveTest, testCurveCount)
 {
     { // Zero segments
         Geom::PathVector pv;
-        SPCurve curve(pv);
-        ASSERT_EQ(curve.get_segment_count(), 0u);
+        ASSERT_EQ(pv.curveCount(), 0u);
     }
     { // Zero segments
         Geom::PathVector pv;
         pv.push_back(Geom::Path());
-        SPCurve curve(pv);
-        ASSERT_EQ(curve.get_segment_count(), 0u);
+        ASSERT_EQ(pv.curveCount(), 0u);
     }
     { // Individual paths
         Geom::PathVector pv((Geom::Path()));
         pv[0] = path1;
-        ASSERT_EQ(SPCurve(pv).get_segment_count(), 3u);
+        ASSERT_EQ(pv.curveCount(), 3u);
         pv[0] = path2;
-        ASSERT_EQ(SPCurve(pv).get_segment_count(), 2u);
+        ASSERT_EQ(pv.curveCount(), 2u);
         pv[0] = path3;
-        ASSERT_EQ(SPCurve(pv).get_segment_count(), 4u);
+        ASSERT_EQ(pv.curveCount(), 4u);
         pv[0] = path4;
-        ASSERT_EQ(SPCurve(pv).get_segment_count(), 0u);
+        ASSERT_EQ(pv.curveCount(), 0u);
         pv[0].close();
-        ASSERT_EQ(SPCurve(pv).get_segment_count(), 0u);
+        ASSERT_EQ(pv.curveCount(), 0u);
     }
     { // Combination
         Geom::PathVector pv;
@@ -92,8 +71,7 @@ TEST_F(CurveTest, testGetSegmentCount)
         pv.push_back(path2);
         pv.push_back(path3);
         pv.push_back(path4);
-        SPCurve curve(pv);
-        ASSERT_EQ(curve.get_segment_count(), 9u);
+        ASSERT_EQ(pv.curveCount(), 9u);
     }
 }
 
@@ -101,14 +79,12 @@ TEST_F(CurveTest, testNodesInPathForZeroSegments)
 {
     { // Zero segments
         Geom::PathVector pv;
-        SPCurve curve(pv);
-        ASSERT_EQ(curve.nodes_in_path(), 0u);
+        ASSERT_EQ(node_count(pv), 0u);
     }
     { // Zero segments
         Geom::PathVector pv;
         pv.push_back(Geom::Path());
-        SPCurve curve(pv);
-        ASSERT_EQ(curve.nodes_in_path(), 1u);
+        ASSERT_EQ(node_count(pv), 1u);
     }
 }
 
@@ -116,13 +92,13 @@ TEST_F(CurveTest, testNodesInPathForIndividualPaths)
 {
     Geom::PathVector pv((Geom::Path()));
     pv[0] = path1;
-    ASSERT_EQ(SPCurve(pv).nodes_in_path(), 3u);
+    ASSERT_EQ(node_count(pv), 3u);
     pv[0] = path2;
-    ASSERT_EQ(SPCurve(pv).nodes_in_path(), 2u); // zero length closing segments do not increase the nodecount.
+    ASSERT_EQ(node_count(pv), 2u); // zero length closing segments do not increase the nodecount.
     pv[0] = path3;
-    ASSERT_EQ(SPCurve(pv).nodes_in_path(), 5u);
+    ASSERT_EQ(node_count(pv), 5u);
     pv[0] = path4;
-    ASSERT_EQ(SPCurve(pv).nodes_in_path(), 1u);
+    ASSERT_EQ(node_count(pv), 1u);
 }
 
 TEST_F(CurveTest, testNodesInPathForNakedMoveToClosedPath)
@@ -130,140 +106,54 @@ TEST_F(CurveTest, testNodesInPathForNakedMoveToClosedPath)
     Geom::PathVector pv((Geom::Path()));
     pv[0] = path4; // just a MoveTo
     pv[0].close();
-    ASSERT_EQ(SPCurve(pv).nodes_in_path(), 1u);
+    ASSERT_EQ(node_count(pv), 1u);
 }
-
-/*
-TEST_F(CurveTest, testNodesInPathForPathsCombination)
-{
-    Geom::PathVector pv;
-    pv.push_back(path1);
-    pv.push_back(path2);
-    pv.push_back(path3);
-    pv.push_back(path4);
-    SPCurve curve(pv);
-    ASSERT_EQ(curve.nodes_in_path(), 12u);
-}
-*/
 
 TEST_F(CurveTest, testIsEmpty)
 {
-    ASSERT_TRUE(SPCurve(Geom::PathVector()).is_empty());
-    ASSERT_FALSE(SPCurve(path1).is_empty());
-    ASSERT_FALSE(SPCurve(path2).is_empty());
-    ASSERT_FALSE(SPCurve(path3).is_empty());
-    ASSERT_FALSE(SPCurve(path4).is_empty());
+    ASSERT_TRUE(Geom::PathVector().empty());
+    ASSERT_FALSE(Geom::PathVector{path1}.empty());
+    ASSERT_FALSE(Geom::PathVector{path2}.empty());
+    ASSERT_FALSE(Geom::PathVector{path3}.empty());
+    ASSERT_FALSE(Geom::PathVector{path4}.empty());
 }
 
 TEST_F(CurveTest, testIsClosed)
 {
-    ASSERT_FALSE(SPCurve(Geom::PathVector()).is_closed());
+    ASSERT_FALSE(is_closed(Geom::PathVector()));
     Geom::PathVector pv((Geom::Path()));
-    ASSERT_FALSE(SPCurve(pv).is_closed());
+    ASSERT_FALSE(is_closed(pv));
     pv[0].close();
-    ASSERT_TRUE(SPCurve(pv).is_closed());
-    ASSERT_TRUE(SPCurve(path1).is_closed());
-    ASSERT_TRUE(SPCurve(path2).is_closed());
-    ASSERT_FALSE(SPCurve(path3).is_closed());
-    ASSERT_FALSE(SPCurve(path4).is_closed());
-}
-
-/*
-TEST_F(CurveTest, testLastFirstSegment)
-{
-    Geom::PathVector pv(path4);
-    ASSERT_EQ(SPCurve(pv).first_segment(), (void *)0);
-    ASSERT_EQ(SPCurve(pv).last_segment(), (void *)0);
-    pv[0].close();
-    ASSERT_NE(SPCurve(pv).first_segment(), (void *)0);
-    ASSERT_NE(SPCurve(pv).last_segment(), (void *)0);
-}
-*/
-
-TEST_F(CurveTest, testLastFirstPath)
-{
-    Geom::PathVector pv;
-    ASSERT_EQ(SPCurve(pv).first_path(), (void *)0);
-    ASSERT_EQ(SPCurve(pv).last_path(), (void *)0);
-    pv.push_back(path1);
-    ASSERT_EQ(*SPCurve(pv).first_path(), pv[0]);
-    ASSERT_EQ(*SPCurve(pv).last_path(), pv[0]);
-    pv.push_back(path2);
-    ASSERT_EQ(*SPCurve(pv).first_path(), pv[0]);
-    ASSERT_EQ(*SPCurve(pv).last_path(), pv[1]);
-    pv.push_back(path3);
-    ASSERT_EQ(*SPCurve(pv).first_path(), pv[0]);
-    ASSERT_EQ(*SPCurve(pv).last_path(), pv[2]);
-    pv.push_back(path4);
-    ASSERT_EQ(*SPCurve(pv).first_path(), pv[0]);
-    ASSERT_EQ(*SPCurve(pv).last_path(), pv[3]);
+    ASSERT_TRUE(is_closed(pv));
+    ASSERT_TRUE(is_closed(path1));
+    ASSERT_TRUE(is_closed(path2));
+    ASSERT_FALSE(is_closed(path3));
+    ASSERT_FALSE(is_closed(path4));
 }
 
 TEST_F(CurveTest, testFirstPoint)
 {
-    ASSERT_EQ(*(SPCurve(path1).first_point()), Geom::Point(0, 0));
-    ASSERT_EQ(*(SPCurve(path2).first_point()), Geom::Point(2, 0));
-    ASSERT_EQ(*(SPCurve(path3).first_point()), Geom::Point(4, 0));
-    ASSERT_EQ(*(SPCurve(path4).first_point()), Geom::Point(3, 5));
+    ASSERT_EQ(path1.initialPoint(), Geom::Point(0, 0));
+    ASSERT_EQ(path2.initialPoint(), Geom::Point(2, 0));
+    ASSERT_EQ(path3.initialPoint(), Geom::Point(4, 0));
+    ASSERT_EQ(path4.initialPoint(), Geom::Point(3, 5));
     Geom::PathVector pv;
-    ASSERT_FALSE(SPCurve(pv).first_point());
     pv.push_back(path1);
     pv.push_back(path2);
     pv.push_back(path3);
-    ASSERT_EQ(*(SPCurve(pv).first_point()), Geom::Point(0, 0));
+    ASSERT_EQ(pv.initialPoint(), Geom::Point(0, 0));
     pv.insert(pv.begin(), path4);
-    ASSERT_EQ(*(SPCurve(pv).first_point()), Geom::Point(3, 5));
+    ASSERT_EQ(pv.initialPoint(), Geom::Point(3, 5));
 }
 
-/*
-TEST_F(CurveTest, testLastPoint)
+TEST_F(CurveTest, PathFromCurve)
 {
-    ASSERT_EQ(*(SPCurve(path1).last_point()), Geom::Point(0, 0));
-    ASSERT_EQ(*(SPCurve(path2).last_point()), Geom::Point(2, 0));
-    ASSERT_EQ(*(SPCurve(path3).last_point()), Geom::Point(8, 4));
-    ASSERT_EQ(*(SPCurve(path4).last_point()), Geom::Point(3, 5));
-    Geom::PathVector pv;
-    ASSERT_FALSE(SPCurve(pv).last_point());
-    pv.push_back(path1);
-    pv.push_back(path2);
-    pv.push_back(path3);
-    ASSERT_EQ(*(SPCurve(pv).last_point()), Geom::Point(8, 4));
-    pv.push_back(path4);
-    ASSERT_EQ(*(SPCurve(pv).last_point()), Geom::Point(3, 5));
+    auto const curve = Geom::LineSegment{Geom::Point{}, Geom::Point{1, 0}};
+    auto const path = path_from_curve(curve);
+    ASSERT_EQ(path.size(), 1);
+    ASSERT_FALSE(path.closed());
+    ASSERT_EQ(path.initialCurve(), curve);
 }
-*/
-
-TEST_F(CurveTest, testSecondPoint)
-{
-    ASSERT_EQ(*(SPCurve(path1).second_point()), Geom::Point(1, 0));
-    ASSERT_EQ(*(SPCurve(path2).second_point()), Geom::Point(3, 0));
-    ASSERT_EQ(*(SPCurve(path3).second_point()), Geom::Point(5, 1));
-    ASSERT_EQ(*(SPCurve(path4).second_point()), Geom::Point(3, 5));
-    Geom::PathVector pv;
-    pv.push_back(path1);
-    pv.push_back(path2);
-    pv.push_back(path3);
-    ASSERT_EQ(*(SPCurve(pv).second_point()), Geom::Point(1, 0));
-    pv.insert(pv.begin(), path4);
-    ASSERT_EQ(*SPCurve(pv).second_point(), Geom::Point(0, 0));
-}
-
-/*
-TEST_F(CurveTest, testPenultimatePoint)
-{
-    ASSERT_EQ(*(SPCurve(Geom::PathVector(path1)).penultimate_point()), Geom::Point(1, 1));
-    ASSERT_EQ(*(SPCurve(Geom::PathVector(path2)).penultimate_point()), Geom::Point(3, 0));
-    ASSERT_EQ(*(SPCurve(Geom::PathVector(path3)).penultimate_point()), Geom::Point(6, 4));
-    ASSERT_EQ(*(SPCurve(Geom::PathVector(path4)).penultimate_point()), Geom::Point(3, 5));
-    Geom::PathVector pv;
-    pv.push_back(path1);
-    pv.push_back(path2);
-    pv.push_back(path3);
-    ASSERT_EQ(*(SPCurve(pv).penultimate_point()), Geom::Point(6, 4));
-    pv.push_back(path4);
-    ASSERT_EQ(*(SPCurve(pv).penultimate_point()), Geom::Point(8, 4));
-}
-*/
 
 /*
   Local Variables:

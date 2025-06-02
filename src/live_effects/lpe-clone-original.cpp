@@ -188,9 +188,9 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
         const char *attribute = g_strstrip(*iter);
         if (strlen(attribute) && shape_dest && shape_origin) {
             if (std::strcmp(attribute, "d") == 0) {
-                std::optional<SPCurve> c;
+                std::optional<Geom::PathVector> c;
                 if (method == CLM_BSPLINESPIRO) {
-                    c = SPCurve::ptr_to_opt(shape_origin->curveForEdit());
+                    c = ptr_to_opt(shape_origin->curveForEdit());
                     auto lpe_item = cast<SPLPEItem>(origin);
                     if (lpe_item) {
                         PathEffectList lpelist = lpe_item->getEffectList();
@@ -209,14 +209,12 @@ LPECloneOriginal::cloneAttributes(SPObject *origin, SPObject *dest, const gchar 
                         }
                     }
                 } else if (method == CLM_ORIGINALD) {
-                    c = SPCurve::ptr_to_opt(shape_origin->curveForEdit());
+                    c = ptr_to_opt(shape_origin->curveForEdit());
                 } else if(method == CLM_D){
-                    c = SPCurve::ptr_to_opt(shape_origin->curve());
+                    c = ptr_to_opt(shape_origin->curve());
                 }
                 if (c && method != CLM_NONE) {
-                    Geom::PathVector c_pv = c->get_pathvector();
-                    c->set_pathvector(c_pv);
-                    auto str = sp_svg_write_path(c_pv);
+                    auto str = sp_svg_write_path(*c);
                     if (sync){
                         if (path_dest) {
                             dest->setAttribute("inkscape:original-d", str);
@@ -322,10 +320,10 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         if (text_origin && dest_shape) {
             auto curve = text_origin->getNormalizedBpath();
             if (dest_path) {
-                dest->setAttribute("inkscape:original-d", sp_svg_write_path(curve.get_pathvector()));
+                dest->setAttribute("inkscape:original-d", sp_svg_write_path(curve));
             }
             dest_shape->setCurveInsync(curve);
-            dest_shape->setAttribute("d", sp_svg_write_path(curve.get_pathvector()));
+            dest_shape->setAttribute("d", sp_svg_write_path(curve));
             attr = "";
         }
         if (g_strcmp0(linked.c_str(), id) && !is_load) {
@@ -404,23 +402,22 @@ void LPECloneOriginal::doOnRemove(SPLPEItem const *lpeitem)
     linkeditem.unlink();
 }
 
-void
-LPECloneOriginal::doEffect (SPCurve * curve)
+void LPECloneOriginal::doEffect(Geom::PathVector &curve)
 {
-    SPCurve const *current_curve_before = current_shape->curveBeforeLPE();
+    auto const *current_curve_before = current_shape->curveBeforeLPE();
     if (!current_curve_before) {
         syncOriginal();
     }
     if (method != CLM_NONE) {
-        SPCurve const *current_curve = current_shape->curve();
-        if (current_curve != nullptr) {
-            curve->set_pathvector(current_curve->get_pathvector());
+        auto const *current_curve = current_shape->curve();
+        if (current_curve) {
+            curve = *current_curve;
         }
     }
 }
 
 } // namespace LivePathEffect
-} /* namespace Inkscape */
+} // namespace Inkscape
 
 /*
   Local Variables:

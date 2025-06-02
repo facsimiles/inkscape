@@ -26,11 +26,11 @@ public:
     LPEBool(LivePathEffectObject *lpeobject);
     ~LPEBool() override;
 
-    void doEffect(SPCurve *curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     void doBeforeEffect(SPLPEItem const *lpeitem) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
-    void doAfterEffect(SPLPEItem const* lpeitem, SPCurve *curve) override;
+    void doAfterEffect(SPLPEItem const* lpeitem, Geom::PathVector *curve) override;
     void doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/) override;
     void doOnRemove(SPLPEItem const * /*lpeitem*/) override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;

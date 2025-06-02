@@ -65,15 +65,15 @@ public:
 	void set(SPAttr key, char const* value) override;
 
 	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
-        const char* typeName() const override;
-        const char* displayName() const override;
+    const char* typeName() const override;
+    const char* displayName() const override;
 	char* description() const override;
     void update_patheffect(bool write) override;
 	void set_shape() override;
 
 private:
 	Geom::Point getTangent(double t) const;
-	void fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const;
+    void fitAndDraw(Geom::Path &c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const;
 };
 
 #endif // SEEN_SP_SPIRAL_H

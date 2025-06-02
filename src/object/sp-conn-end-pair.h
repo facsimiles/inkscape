@@ -15,13 +15,12 @@
 
 #include <cstddef>
 #include <sigc++/sigc++.h>
+#include <2geom/pathvector.h>
 
 #include "3rdparty/adaptagrams/libavoid/connector.h"
 #include "attributes.h"
 
-
 class SPConnEnd;
-class SPCurve;
 class SPPath;
 class SPItem;
 class SPObject;
@@ -45,7 +44,7 @@ public:
     double getCurvature() const;
     SPConnEnd **getConnEnds();
     bool isOrthogonal() const;
-    static SPCurve createCurve(Avoid::ConnRef *connRef, double curvature);
+    static Geom::PathVector createCurve(Avoid::ConnRef *connRef, double curvature);
     void tellLibavoidNewEndpoints(bool const processTransaction = false);
     bool reroutePathFromLibavoid();
     void makePathInvalid();

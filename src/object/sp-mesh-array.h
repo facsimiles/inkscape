@@ -134,7 +134,6 @@ public:
 };
 
 class SPMeshGradient;
-class SPCurve;
 
 // An array of mesh nodes.
 class SPMeshNodeArray {
@@ -191,7 +190,7 @@ public:
                       Geom::Point const &old_p, MeshNodeOperation op);
 
   // Return outline path
-  SPCurve outline_path() const;
+  Geom::PathVector outline_path() const;
 
   // Transform array
   void transform(Geom::Affine const &m);

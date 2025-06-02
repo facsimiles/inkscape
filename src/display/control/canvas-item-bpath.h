@@ -25,8 +25,6 @@
 
 #include "style-enums.h" // Fill rule
 
-class SPCurve;
-
 namespace Inkscape {
 
 class CanvasItemBpath final : public CanvasItem
@@ -36,7 +34,6 @@ public:
     CanvasItemBpath(CanvasItemGroup *group, Geom::PathVector path, bool phantom_line = false);
 
     // Geometry
-    void set_bpath(SPCurve const *curve, bool phantom_line = false);
     void set_bpath(Geom::PathVector path, bool phantom_line = false);
 
     double closest_distance_to(Geom::Point const &p) const;

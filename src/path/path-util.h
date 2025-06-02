@@ -18,7 +18,6 @@
 #include <2geom/path.h>
 
 #include "livarot/Path.h"
-#include "display/curve.h"
 
 class SPItem;
 
@@ -71,7 +70,7 @@ std::unique_ptr<Path> Path_for_item_before_LPE(SPItem *item, bool doTransformati
  *
  * @return The Geom::PathVector.
  */
-Geom::PathVector pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool transformFull);
+Geom::PathVector pathvector_for_curve(SPItem *item, Geom::PathVector const &curve, bool doTransformation, bool transformFull);
 
 /**
  * Gets an SPCurve from the SPItem.
@@ -91,7 +90,7 @@ Geom::PathVector pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTrans
  *
  * @returns The extracted SPCurve
  */
-std::optional<SPCurve> curve_for_item(SPItem *item);
+std::optional<Geom::PathVector> curve_for_item(SPItem *item);
 
 /**
  * Gets an SPCurve from the SPItem before any LPE.
@@ -110,7 +109,7 @@ std::optional<SPCurve> curve_for_item(SPItem *item);
  *
  * @returns The extracted SPCurve
  */
-std::optional<SPCurve> curve_for_item_before_LPE(SPItem *item);
+std::optional<Geom::PathVector> curve_for_item_before_LPE(SPItem *item);
 
 /**
  * Get the nearest position given a Livarot Path and a point.

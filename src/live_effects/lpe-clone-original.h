@@ -24,7 +24,7 @@ class LPECloneOriginal : public Effect, GroupBBoxEffect {
 public:
     LPECloneOriginal(LivePathEffectObject *lpeobject);
     ~LPECloneOriginal() override;
-    void doEffect (SPCurve * curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;
     void doOnRemove(SPLPEItem const * /*lpeitem*/) override;

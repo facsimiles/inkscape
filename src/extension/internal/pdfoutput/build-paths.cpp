@@ -28,7 +28,7 @@ bool DrawContext::set_shape(SPShape const *shape)
                 Geom::Rect::from_xywh(rect->x.computed, rect->y.computed, rect->width.computed, rect->height.computed));
         }
     }
-    return set_shape_pathvector(shape->curve()->get_pathvector());
+    return set_shape_pathvector(*shape->curve());
 }
 
 bool DrawContext::set_shape_rectangle(Geom::Rect const &rect)

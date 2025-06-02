@@ -22,7 +22,7 @@ public:
     ~LPEPowerMask() override;
     void doOnApply (SPLPEItem const * lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void doEffect (SPCurve * curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
     void toggleMaskVisibility();

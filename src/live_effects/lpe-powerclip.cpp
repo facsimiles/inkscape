@@ -15,7 +15,6 @@
 #include "style.h"
 
 #include "inkscape.h"
-#include "display/curve.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
 #include "object/sp-clippath.h"
@@ -82,7 +81,7 @@ Geom::PathVector sp_get_recursive_pathvector(SPLPEItem *item, Geom::PathVector r
     }
     auto shape = cast<SPShape>(item);
     if (shape && shape->curve()) {
-        for (auto path : shape->curve()->get_pathvector()) {
+        for (auto path : *shape->curve()) {
             if (!path.empty()) {
                 bool pathdir = Geom::path_direction(path);
                 if (pathdir == dir && inverse) {

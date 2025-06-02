@@ -2648,41 +2648,39 @@ void SPMeshNodeArray::update_handles(unsigned corner,
     //         Geom::Point dsx1 = pnodes[0][1]->p - 
 }
 
-SPCurve SPMeshNodeArray::outline_path() const
+Geom::PathVector SPMeshNodeArray::outline_path() const
 {
-    SPCurve outline;
-
-    if (nodes.empty() ) {
+    if (nodes.empty()) {
         std::cerr << "SPMeshNodeArray::outline_path: empty array!" << std::endl;
-        return outline;
+        return {};
     }
 
-    outline.moveto( nodes[0][0]->p );
+    auto outline = Geom::Path{nodes[0][0]->p};
 
     int ncol = nodes[0].size();
     int nrow = nodes.size();
 
     // Top
     for (int i = 1; i < ncol; i += 3 ) {
-        outline.curveto( nodes[0][i]->p, nodes[0][i+1]->p, nodes[0][i+2]->p);
+        outline.appendNew<Geom::CubicBezier>(nodes[0][i]->p, nodes[0][i+1]->p, nodes[0][i+2]->p);
     }
 
     // Right
     for (int i = 1; i < nrow; i += 3 ) {
-        outline.curveto( nodes[i][ncol-1]->p, nodes[i+1][ncol-1]->p, nodes[i+2][ncol-1]->p);
+        outline.appendNew<Geom::CubicBezier>(nodes[i][ncol-1]->p, nodes[i+1][ncol-1]->p, nodes[i+2][ncol-1]->p);
     }
 
     // Bottom (right to left)
     for (int i = 1; i < ncol; i += 3 ) {
-        outline.curveto( nodes[nrow-1][ncol-i-1]->p, nodes[nrow-1][ncol-i-2]->p, nodes[nrow-1][ncol-i-3]->p);
+        outline.appendNew<Geom::CubicBezier>(nodes[nrow-1][ncol-i-1]->p, nodes[nrow-1][ncol-i-2]->p, nodes[nrow-1][ncol-i-3]->p);
     }
 
     // Left (bottom to top)
     for (int i = 1; i < nrow; i += 3 ) {
-        outline.curveto( nodes[nrow-i-1][0]->p, nodes[nrow-i-2][0]->p, nodes[nrow-i-3][0]->p);
+        outline.appendNew<Geom::CubicBezier>(nodes[nrow-i-1][0]->p, nodes[nrow-i-2][0]->p, nodes[nrow-i-3][0]->p);
     }
 
-    outline.closepath();
+    outline.close();
 
     return outline;
 }
@@ -2708,7 +2706,7 @@ bool SPMeshNodeArray::fill_box(Geom::OptRect &box) {
         mg->gradientTransform.setIdentity();
     }
 
-    auto mesh_bbox = outline_path().get_pathvector().boundsExact();
+    auto mesh_bbox = outline_path().boundsExact();
 
     if (mesh_bbox->width() == 0 || mesh_bbox->height() == 0) {
         return false;

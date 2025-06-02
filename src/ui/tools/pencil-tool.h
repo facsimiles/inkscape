@@ -79,7 +79,7 @@ private:
     void _cancel();
     void _endpointSnap(Geom::Point &p, guint const state);
     std::vector<Geom::Point> _wps;
-    SPCurve _pressure_curve;
+    Geom::PathVector _pressure_curve;
     Geom::Point _req_tangent;
     bool _is_drawing = false;
     PencilState _state = SP_PENCIL_CONTEXT_IDLE;

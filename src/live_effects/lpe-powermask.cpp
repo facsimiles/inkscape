@@ -271,10 +271,7 @@ LPEPowerMask::doOnVisibilityToggled(SPLPEItem const* lpeitem)
     doBeforeEffect(lpeitem);
 }
 
-void
-LPEPowerMask::doEffect (SPCurve * curve)
-{
-}
+void LPEPowerMask::doEffect(Geom::PathVector &curve) {}
 
 void 
 LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)

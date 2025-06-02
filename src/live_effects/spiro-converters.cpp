@@ -9,7 +9,6 @@
 
 #include "spiro-converters.h"
 #include <2geom/path.h>
-#include "display/curve.h"
 #include <glib.h>
 
 #define SPIRO_SHOW_INFINITE_COORDINATE_CALLS
@@ -20,56 +19,6 @@
 #endif
 
 namespace Spiro {
-
-void
-ConverterSPCurve::moveto(double x, double y)
-{
-    if ( std::isfinite(x) && std::isfinite(y) ) {
-        _curve.moveto(x, y);
-    } else {
-        SPIRO_G_MESSAGE("Spiro: moveto not finite");
-    }
-}
-
-void
-ConverterSPCurve::lineto(double x, double y, bool close_last)
-{
-    if ( std::isfinite(x) && std::isfinite(y) ) {
-        _curve.lineto(x, y);
-        if (close_last) {
-            _curve.closepath();
-        }
-    } else {
-        SPIRO_G_MESSAGE("Spiro: lineto not finite");
-    }
-}
-
-void
-ConverterSPCurve::quadto(double xm, double ym, double x3, double y3, bool close_last)
-{
-    if ( std::isfinite(xm) && std::isfinite(ym) && std::isfinite(x3) && std::isfinite(y3) ) {
-        _curve.quadto(xm, ym, x3, y3);
-        if (close_last) {
-            _curve.closepath();
-        }
-    } else {
-        SPIRO_G_MESSAGE("Spiro: quadto not finite");
-    }
-}
-
-void
-ConverterSPCurve::curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last)
-{
-    if ( std::isfinite(x1) && std::isfinite(y1) && std::isfinite(x2) && std::isfinite(y2) ) {
-        _curve.curveto(x1, y1, x2, y2, x3, y3);
-        if (close_last) {
-            _curve.closepath();
-        }
-    } else {
-        SPIRO_G_MESSAGE("Spiro: curveto not finite");
-    }
-}
-
 
 ConverterPath::ConverterPath(Geom::Path &path)
     : _path(path)
@@ -121,8 +70,6 @@ ConverterPath::curveto(double x1, double y1, double x2, double y2, double x3, do
 }
 
 } // namespace Spiro
-
-
 
 /*
   Local Variables:

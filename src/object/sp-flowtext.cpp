@@ -476,7 +476,7 @@ void SPFlowtext::_clearFlow(Inkscape::DrawingGroup *in_arena)
     in_arena->clearChildren();
 }
 
-SPCurve SPFlowtext::getNormalizedBpath() const
+Geom::PathVector SPFlowtext::getNormalizedBpath() const
 {
     return layout.convertToCurves();
 }

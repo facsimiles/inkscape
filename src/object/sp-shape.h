@@ -16,13 +16,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/forward.h>
 #include <cstddef>
 #include <sigc++/connection.h>
+#include <2geom/forward.h>
+#include <2geom/pathvector.h>
 
 #include "sp-lpe-item.h"
 #include "sp-marker-loc.h"
-#include "display/curve.h"
 
 #include <memory>
 
@@ -41,19 +41,19 @@ public:
 	~SPShape() override;
     int tag() const override { return tag_of<decltype(*this)>; }
 
-    SPCurve const *curve() const;
-    SPCurve const *curveBeforeLPE() const;
-    SPCurve const *curveForEdit() const;
+    Geom::PathVector const *curve() const;
+    Geom::PathVector const *curveBeforeLPE() const;
+    Geom::PathVector const *curveForEdit() const;
 
 public:
-    void setCurve(SPCurve const *);
-    void setCurve(SPCurve);
-    void setCurveInsync(SPCurve const *);
-    void setCurveInsync(SPCurve);
-    void setCurveBeforeLPE(SPCurve const *);
-    void setCurveBeforeLPE(SPCurve);
+    void setCurve(Geom::PathVector const *);
+    void setCurve(Geom::PathVector);
+    void setCurveInsync(Geom::PathVector const *);
+    void setCurveInsync(Geom::PathVector);
+    void setCurveBeforeLPE(Geom::PathVector const *);
+    void setCurveBeforeLPE(Geom::PathVector);
     bool checkBrokenPathEffect();
-    bool prepareShapeForLPE(SPCurve const *c);
+    bool prepareShapeForLPE(Geom::PathVector &&c);
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 
@@ -66,8 +66,8 @@ public:
     mutable Geom::OptRect bbox_vis_cache;
 
 protected:
-    std::optional<SPCurve> _curve_before_lpe;
-    std::shared_ptr<SPCurve const> _curve;
+    std::optional<Geom::PathVector> _curve_before_lpe;
+    std::shared_ptr<Geom::PathVector const> _curve;
 
 public:
     SPMarker *_marker[SP_MARKER_LOC_QTY];

@@ -29,7 +29,7 @@ class LPEFillBetweenMany : public Effect {
 public:
     LPEFillBetweenMany(LivePathEffectObject *lpeobject);
     ~LPEFillBetweenMany() override;
-    void doEffect (SPCurve * curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doOnApply (SPLPEItem const* lpeitem) override;

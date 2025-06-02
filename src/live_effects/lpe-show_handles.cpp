@@ -13,7 +13,6 @@
 #include <2geom/svg-path-parser.h>
 #include "helper/geom.h"
 #include "desktop-style.h"
-#include "display/curve.h"
 #include "svg/svg.h"
 
 #include "object/sp-shape.h"
@@ -83,7 +82,7 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
     }
     if (original_d) {
         if (auto const shape_curve = current_shape->curveForEdit()) {
-            Geom::PathVector original_curve = shape_curve->get_pathvector();
+            Geom::PathVector original_curve = *shape_curve;
             if(original_path) {
                 for (const auto & i : original_curve) {
                     path_out.push_back(i);

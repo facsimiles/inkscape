@@ -18,7 +18,6 @@
 
 #include "attributes.h"          // for SPAttr
 #include <2geom/curve.h>         // for Curve
-#include "display/curve.h"       // for SPCurve
 #include "helper/geom-curves.h"  // for is_straight_curve
 #include "object/sp-object.h"    // for SP_OBJECT_WRITE_BUILD
 #include "object/sp-shape.h"     // for SPShape
@@ -48,7 +47,7 @@ void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
  * pathv may only contain paths with only straight line segments
  * Return value: points attribute string.
  */
-static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
+static char *sp_svg_write_polygon(Geom::PathVector const &pathv)
 {
     Inkscape::SVGOStringStream os;
 
@@ -77,8 +76,8 @@ Inkscape::XML::Node* SPPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape
 
     /* We can safely write points here, because all subclasses require it too (Lauris) */
     /* While saving polygon element without points attribute _curve is NULL (see bug 1202753) */
-    if (this->_curve != nullptr) {
-        gchar *str = sp_svg_write_polygon(this->_curve->get_pathvector());
+    if (_curve) {
+        char *str = sp_svg_write_polygon(*_curve);
         repr->setAttribute("points", str);
         g_free(str);
     }
@@ -162,11 +161,10 @@ static void sp_poly_print_warning(char const *points, char const *error_location
  * @param points The points attribute.
  * @return The corresponding polyline curve (open).
  */
-SPCurve sp_poly_parse_curve(char const *points)
+std::optional<Geom::Path> sp_poly_parse_curve(char const *points)
 {
-    SPCurve result;
+    std::optional<Geom::Path> result;
     char const *cptr = points;
-    bool has_pt = false;
 
     while (true) {
         double x, y;
@@ -186,13 +184,13 @@ SPCurve sp_poly_parse_curve(char const *points)
             break;
         }
 
-        if (has_pt) {
-            result.lineto(x, y);
+        if (result) {
+            result->appendNew<Geom::LineSegment>(Geom::Point{x, y});
         } else {
-            result.moveto(x, y);
-            has_pt = true;
+            result.emplace(Geom::Point{x, y});
         }
     }
+
     return result;
 }
 
@@ -205,8 +203,8 @@ void SPPolygon::set(SPAttr key, const gchar* value) {
                 break;
             }
 
-            auto curve = sp_poly_parse_curve(value);
-            curve.closepath();
+            auto curve = sp_poly_parse_curve(value).value_or(Geom::Path{});
+            curve.close();
             setCurve(std::move(curve));
             break;
         }

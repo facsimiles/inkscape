@@ -31,7 +31,6 @@
 #include <cmath>
 #include <cstring>
 #include <string>
-#include <numeric>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -53,7 +52,6 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "style.h"
-#include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 #include "object/sp-clippath.h"
 #include "object/sp-image.h"
@@ -334,7 +332,7 @@ void EraserTool::_cancel()
     segments.clear();
 
     /* reset accumulated curve */
-    accumulated.reset();
+    accumulated.clear();
     _clearCurrent();
     repr = nullptr;
 }
@@ -357,7 +355,7 @@ bool EraserTool::root_handler(CanvasEvent const &event)
                 _reset(button_dt);
                 _extinput(event.extinput);
                 _apply(button_dt);
-                accumulated.reset();
+                accumulated.clear();
 
                 repr = nullptr;
 
@@ -402,7 +400,7 @@ bool EraserTool::root_handler(CanvasEvent const &event)
                 ret = true;
             }
             if (mode == EraserToolMode::DELETE) {
-                accumulated.reset();
+                accumulated.clear();
                 Inkscape::Rubberband::get(_desktop)->move(motion_dt);
             }
         },
@@ -438,7 +436,7 @@ bool EraserTool::root_handler(CanvasEvent const &event)
                 }
 
                 /* reset accumulated curve */
-                accumulated.reset();
+                accumulated.clear();
 
                 _clearCurrent();
                 repr = nullptr;
@@ -569,8 +567,7 @@ SPItem *EraserTool::_insertAcidIntoDocument(SPDocument *document)
     auto *eraser_item = cast<SPItem>(top_layer->appendChildRepr(repr));
     Inkscape::GC::release(repr);
     eraser_item->updateRepr();
-    Geom::PathVector pathv = accumulated.get_pathvector() * _desktop->dt2doc();
-    pathv *= eraser_item->i2doc_affine().inverse();
+    auto pathv = accumulated * (_desktop->dt2doc() * eraser_item->i2doc_affine().inverse());
     repr->setAttribute("d", sp_svg_write_path(pathv));
     return cast<SPItem>(document->getObjectByRepr(repr));
 }
@@ -578,12 +575,12 @@ SPItem *EraserTool::_insertAcidIntoDocument(SPDocument *document)
 void EraserTool::_clearCurrent()
 {
     // reset bpath
-    currentshape->set_bpath(nullptr);
+    currentshape->set_bpath({});
 
     // reset curve
-    currentcurve.reset();
-    cal1.reset();
-    cal2.reset();
+    currentcurve.clear();
+    cal1.clear();
+    cal2.clear();
 
     // reset points
     npoints = 0;
@@ -595,7 +592,7 @@ void EraserTool::_clearCurrent()
  */
 bool EraserTool::_doWork()
 {
-    if (accumulated.is_empty()) {
+    if (accumulated.empty()) {
         if (repr) {
             sp_repr_unparent(repr);
             repr = nullptr;
@@ -949,14 +946,13 @@ bool EraserTool::_isStraightSegment(SPItem *path)
         return false;
     }
 
-    auto const &curve = as_path->curve();
-    if (!curve) {
+    auto pathv = as_path->curve();
+    if (!pathv) {
         return false;
     }
-    auto const &pathvector = curve->get_pathvector();
 
     // Check if all segments are straight and collinear
-    for (auto const &path : pathvector) {
+    for (auto const &path : *pathv) {
         Geom::Point initial_tangent = path.front().unitTangentAt(0.0);
         for (auto const &segment : path) {
             if (!segment.isLineSegment()) {
@@ -969,10 +965,11 @@ bool EraserTool::_isStraightSegment(SPItem *path)
             }
         }
     }
+
     return true;
 }
 
-void EraserTool::_addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
+void EraserTool::_addCap(Geom::Path &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
                          Geom::Point const &post, double rounding)
 {
     Geom::Point vel = rounding * Geom::rot90(to - from) / M_SQRT2;
@@ -997,7 +994,7 @@ void EraserTool::_addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point con
     }
 
     if (Geom::L2(v_in) > epsilon || Geom::L2(v_out) > epsilon) {
-        curve.curveto(from + v_in, to + v_out, to);
+        curve.appendNew<Geom::CubicBezier>(from + v_in, to + v_out, to);
     }
 }
 
@@ -1005,47 +1002,43 @@ void EraserTool::_accumulate()
 {
     // construct a crude outline of the eraser's path.
     // this desperately needs to be rewritten to use the path outliner...
-    if (!cal1.get_segment_count() || !cal2.get_segment_count()) {
+    if (cal1.size_default() == 0 || cal2.size_default() == 0) {
         return;
     }
 
     auto rev_cal2 = cal2.reversed();
 
-    g_assert(!cal1.first_path()->closed());
-    g_assert(!rev_cal2.first_path()->closed());
+    g_assert(!cal1.closed());
+    g_assert(!rev_cal2.closed());
 
-    Geom::BezierCurve const *dc_cal1_firstseg  = dynamic_cast<Geom::BezierCurve const *>(cal1.first_segment());
-    Geom::BezierCurve const *rev_cal2_firstseg = dynamic_cast<Geom::BezierCurve const *>(rev_cal2.first_segment());
-    Geom::BezierCurve const *dc_cal1_lastseg   = dynamic_cast<Geom::BezierCurve const *>(cal1.last_segment());
-    Geom::BezierCurve const *rev_cal2_lastseg  = dynamic_cast<Geom::BezierCurve const *>(rev_cal2.last_segment());
+    auto const &dc_cal1_firstseg  = cal1.front();
+    auto const &rev_cal2_firstseg = rev_cal2.front();
+    auto const &dc_cal1_lastseg   = cal1.back();
+    auto const &rev_cal2_lastseg  = rev_cal2.back();
 
-    g_assert(dc_cal1_firstseg);
-    g_assert(rev_cal2_firstseg);
-    g_assert(dc_cal1_lastseg);
-    g_assert(rev_cal2_lastseg);
-
-    accumulated.append(cal1);
+    accumulated = cal1;
     if (!nowidth) {
         _addCap(accumulated,
-                dc_cal1_lastseg->finalPoint() - dc_cal1_lastseg->unitTangentAt(1),
-                dc_cal1_lastseg->finalPoint(),
-                rev_cal2_firstseg->initialPoint(),
-                rev_cal2_firstseg->initialPoint() + rev_cal2_firstseg->unitTangentAt(0),
+                dc_cal1_lastseg.finalPoint() - dc_cal1_lastseg.unitTangentAt(1),
+                dc_cal1_lastseg.finalPoint(),
+                rev_cal2_firstseg.initialPoint(),
+                rev_cal2_firstseg.initialPoint() + rev_cal2_firstseg.unitTangentAt(0),
                 cap_rounding);
 
-        accumulated.append(rev_cal2, true);
+        accumulated.setStitching(true);
+        accumulated.append(rev_cal2);
 
         _addCap(accumulated,
-                rev_cal2_lastseg->finalPoint() - rev_cal2_lastseg->unitTangentAt(1),
-                rev_cal2_lastseg->finalPoint(),
-                dc_cal1_firstseg->initialPoint(),
-                dc_cal1_firstseg->initialPoint() + dc_cal1_firstseg->unitTangentAt(0),
+                rev_cal2_lastseg.finalPoint() - rev_cal2_lastseg.unitTangentAt(1),
+                rev_cal2_lastseg.finalPoint(),
+                dc_cal1_firstseg.initialPoint(),
+                dc_cal1_firstseg.initialPoint() + dc_cal1_firstseg.unitTangentAt(0),
                 cap_rounding);
 
-        accumulated.closepath();
+        accumulated.close();
     }
-    cal1.reset();
-    cal2.reset();
+    cal1.clear();
+    cal2.clear();
 }
 
 /**
@@ -1246,13 +1239,10 @@ void EraserTool::_fitAndSplit(bool releasing)
 void EraserTool::_completeBezier(double tolerance_sq, bool releasing)
 {
     /* Current eraser */
-    if (cal1.is_empty() || cal2.is_empty()) {
+    if (cal1.empty() || cal2.empty()) {
         /* dc->npoints > 0 */
-        cal1.reset();
-        cal2.reset();
-
-        cal1.moveto(point1[0]);
-        cal2.moveto(point2[0]);
+        cal1.start(point1[0]);
+        cal2.start(point2[0]);
     }
 #ifdef ERASER_VERBOSE
     g_print("[F&S:#] npoints:%d, releasing:%s\n", npoints, releasing ? "TRUE" : "FALSE");
@@ -1282,17 +1272,16 @@ void EraserTool::_completeBezier(double tolerance_sq, bool releasing)
 
     /* CanvasShape */
     if (!releasing) {
-        currentcurve.reset();
-        currentcurve.moveto(b1[0]);
+        currentcurve.start(b1[0]);
 
         for (Geom::Point *bp1 = b1; bp1 < b1 + bezier_size * nb1; bp1 += bezier_size) {
-            currentcurve.curveto(bp1[1], bp1[2], bp1[3]);
+            currentcurve.appendNew<Geom::CubicBezier>(bp1[1], bp1[2], bp1[3]);
         }
 
-        currentcurve.lineto(b2[bezier_size * (nb2 - 1) + 3]);
+        currentcurve.appendNew<Geom::LineSegment>(b2[bezier_size * (nb2 - 1) + 3]);
 
         for (Geom::Point *bp2 = b2 + bezier_size * (nb2 - 1); bp2 >= b2; bp2 -= bezier_size) {
-            currentcurve.curveto(bp2[2], bp2[1], bp2[0]);
+            currentcurve.appendNew<Geom::CubicBezier>(bp2[2], bp2[1], bp2[0]);
         }
 
         // FIXME: segments is always NULL at this point??
@@ -1300,17 +1289,17 @@ void EraserTool::_completeBezier(double tolerance_sq, bool releasing)
             _addCap(currentcurve, b2[1], b2[0], b1[0], b1[1], cap_rounding);
         }
 
-        currentcurve.closepath();
-        currentshape->set_bpath(&currentcurve, true);
+        currentcurve.close();
+        currentshape->set_bpath(currentcurve, true);
     }
 
     /* Current eraser */
     for (Geom::Point *bp1 = b1; bp1 < b1 + bezier_size * nb1; bp1 += bezier_size) {
-        cal1.curveto(bp1[1], bp1[2], bp1[3]);
+        cal1.appendNew<Geom::CubicBezier>(bp1[1], bp1[2], bp1[3]);
     }
 
     for (Geom::Point *bp2 = b2; bp2 < b2 + bezier_size * nb2; bp2 += bezier_size) {
-        cal2.curveto(bp2[1], bp2[2], bp2[3]);
+        cal2.appendNew<Geom::CubicBezier>(bp2[1], bp2[2], bp2[3]);
     }
 }
 
@@ -1322,25 +1311,25 @@ void EraserTool::_failedBezierFallback()
 #endif
     _drawTemporaryBox();
 
-    for (gint i = 1; i < npoints; i++) {
-        cal1.lineto(point1[i]);
+    for (int i = 1; i < npoints; i++) {
+        cal1.appendNew<Geom::LineSegment>(point1[i]);
     }
 
-    for (gint i = 1; i < npoints; i++) {
-        cal2.lineto(point2[i]);
+    for (int i = 1; i < npoints; i++) {
+        cal2.appendNew<Geom::LineSegment>(point2[i]);
     }
 }
 
 void EraserTool::_fitDrawLastPoint()
 {
-    g_assert(!currentcurve.is_empty());
+    g_assert(!currentcurve.empty());
 
     auto fillColor = sp_desktop_get_color_tool(_desktop, "/tools/eraser", true);
     double opacity = sp_desktop_get_master_opacity_tool(_desktop, "/tools/eraser");
     double fillOpacity = sp_desktop_get_opacity_tool(_desktop, "/tools/eraser", true);
 
     // TODO This removes color space information from the color
-    auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve.get_pathvector(), true);
+    auto cbp = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), currentcurve, true);
     cbp->set_fill(fillColor ? fillColor->toRGBA(opacity * fillOpacity) : 0x0, trace_wind_rule);
     cbp->set_stroke(0x0);
 
@@ -1356,16 +1345,14 @@ void EraserTool::_fitDrawLastPoint()
 
 void EraserTool::_drawTemporaryBox()
 {
-    currentcurve.reset();
+    currentcurve.start(point1[npoints - 1]);
 
-    currentcurve.moveto(point1[npoints - 1]);
-
-    for (gint i = npoints - 2; i >= 0; i--) {
-        currentcurve.lineto(point1[i]);
+    for (int i = npoints - 2; i >= 0; i--) {
+        currentcurve.appendNew<Geom::LineSegment>(point1[i]);
     }
 
-    for (gint i = 0; i < npoints; i++) {
-        currentcurve.lineto(point2[i]);
+    for (int i = 0; i < npoints; i++) {
+        currentcurve.appendNew<Geom::LineSegment>(point2[i]);
     }
 
     if (npoints >= 2) {
@@ -1374,8 +1361,8 @@ void EraserTool::_drawTemporaryBox()
                 point1[npoints - 1], point1[npoints - 2], cap_rounding);
     }
 
-    currentcurve.closepath();
-    currentshape->set_bpath(&currentcurve, true);
+    currentcurve.close();
+    currentshape->set_bpath(currentcurve, true);
 }
 
 } // namespace Inkscape::UI::Tools

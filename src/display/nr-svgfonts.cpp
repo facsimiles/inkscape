@@ -22,7 +22,6 @@
 #include "display/cairo-utils.h"
 #include "display/nr-svgfonts.h"
 #include "display/nr-svgfonts.h"
-#include "display/curve.h"
 
 #include "object/sp-path.h"
 #include "object/sp-object-group.h"
@@ -357,7 +356,7 @@ SvgFont::scaled_font_render_glyph (cairo_scaled_font_t  */*scaled_font*/,
             {
                 auto path = cast<SPPath>(&child);
                 if (path) {
-                    pathv = path->curve()->get_pathvector();
+                    pathv = *path->curve();
                     pathv = flip_coordinate_system(spfont, pathv);
                     render_glyph_path(cr, &pathv);
                 }
@@ -372,7 +371,7 @@ SvgFont::scaled_font_render_glyph (cairo_scaled_font_t  */*scaled_font*/,
                 if (path) {
                     auto shape = cast<SPShape>(item);
                     g_assert(shape != nullptr);
-                    pathv = shape->curve()->get_pathvector();
+                    pathv = *shape->curve();
                     pathv = flip_coordinate_system(spfont, pathv);
                     this->render_glyph_path(cr, &pathv);
                 }

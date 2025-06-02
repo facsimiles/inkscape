@@ -19,7 +19,6 @@
 #include "libnrtype/style-attachments.h"
 #include "sp-item.h"
 #include "desktop.h"
-#include "display/curve.h"
 
 #include <memory>
 
@@ -64,7 +63,7 @@ public:
     bool _optimizeScaledText;
 
 	/** Converts the text object to its component curves */
-    SPCurve getNormalizedBpath() const;
+    Geom::PathVector getNormalizedBpath() const;
 
     /** Optimize scaled flow text on next set_transform. */
     void optimizeScaledText() { _optimizeScaledText = true; }

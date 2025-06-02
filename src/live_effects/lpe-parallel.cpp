@@ -62,8 +62,7 @@ LPEParallel::LPEParallel(LivePathEffectObject *lpeobject) :
 
 LPEParallel::~LPEParallel() = default;
 
-void
-LPEParallel::doOnApply (SPLPEItem const* lpeitem)
+void LPEParallel::doOnApply(SPLPEItem const *lpeitem)
 {
     auto shape = cast<SPShape>(lpeitem);
     if (!shape) {
@@ -72,10 +71,10 @@ LPEParallel::doOnApply (SPLPEItem const* lpeitem)
         item->removeCurrentPathEffect(false);
         return;
     }
-    SPCurve const *curve = shape->curve();
+    auto const *curve = shape->curve();
 
-    A = *(curve->first_point());
-    B = *(curve->last_point());
+    A = curve->initialPoint();
+    B = curve->finalPoint();
     dir = unit_vector(B - A);
     Geom::Point offset = (A + B)/2 + dir.ccw() * 100;
     offset_pt.param_update_default(offset);

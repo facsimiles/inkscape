@@ -16,28 +16,19 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "display/curve.h"
-
 #define SPIRO_SHOW_INFINITE_COORDINATE_CALLS
 
 namespace Spiro {
 
-void spiro_run(const spiro_cp *src, int src_len, SPCurve &curve)
+Geom::Path spiro_run(const spiro_cp *src, int src_len)
 {
     spiro_seg *s = Spiro::run_spiro(src, src_len);
-    Spiro::ConverterSPCurve bc(curve);
-    Spiro::spiro_to_otherpath(s, src_len, bc);
-    free(s);
-}
-
-void spiro_run(const spiro_cp *src, int src_len, Geom::Path &path)
-{
-    spiro_seg *s = Spiro::run_spiro(src, src_len);
+    Geom::Path path;
     Spiro::ConverterPath bc(path);
     Spiro::spiro_to_otherpath(s, src_len, bc);
     free(s);
+    return path;
 }
-
 
 /************************************
  * Spiro math
@@ -834,7 +825,7 @@ solve_spiro(spiro_seg *s, const int nseg)
 static void
 spiro_seg_to_otherpath(const double ks[4],
 		   double x0, double y0, double x1, double y1,
-		   ConverterBase &bc, int depth, bool close_last)
+           ConverterPath &bc, int depth, bool close_last)
 {
     double bend = fabs(ks[0]) + fabs(.5 * ks[1]) + fabs(.125 * ks[2]) +
 	fabs((1./48) * ks[3]);
@@ -908,22 +899,21 @@ free_spiro(spiro_seg *s)
 }
 
 void
-spiro_to_otherpath(const spiro_seg *s, int n, ConverterBase &bc)
+spiro_to_otherpath(const spiro_seg *s, int n, ConverterPath &bc)
 {
-    int i;
     int nsegs = s[n - 1].ty == '}' ? n - 1 : n;
 
-    for (i = 0; i < nsegs; i++) {
-	double x0 = s[i].x;
-	double y0 = s[i].y;
-	double x1 = s[i + 1].x;
-	double y1 = s[i + 1].y;
+    for (int i = 0; i < nsegs; i++) {
+        double x0 = s[i].x;
+        double y0 = s[i].y;
+        double x1 = s[i + 1].x;
+        double y1 = s[i + 1].y;
 
         if (i == 0) {
             bc.moveto(x0, y0);
         }
         // on the last segment, set the 'close_last' flag if path is closed
-        spiro_seg_to_otherpath(s[i].ks, x0, y0, x1, y1, bc, 0, (nsegs == n) && (i == n - 1));
+        spiro_seg_to_otherpath(s[i].ks, x0, y0, x1, y1, bc, 0, nsegs == n && i == n - 1);
     }
 }
 

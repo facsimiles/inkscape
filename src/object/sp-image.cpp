@@ -700,7 +700,7 @@ static void sp_image_set_curve( SPImage *image )
         Geom::OptRect rect = image->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
         
         if (rect->isFinite()) {
-            image->curve.emplace(*rect, true);
+            image->curve = rect_to_open_path(*rect);
         }
     }
 }
@@ -708,7 +708,7 @@ static void sp_image_set_curve( SPImage *image )
 /**
  * Return a borrowed pointer to curve (if any exists) or NULL if there is no curve
  */
-SPCurve const *SPImage::get_curve() const
+Geom::PathVector const *SPImage::get_curve() const
 {
     return curve ? &*curve : nullptr;
 }

@@ -19,13 +19,12 @@
 #include <optional>
 
 #include <sigc++/connection.h>
+#include <2geom/pathvector.h>
 
 #include "ui/tools/tool-base.h"
 #include "live_effects/effect-enum.h"
-#include "display/curve.h"
 #include "display/control/canvas-item-ptr.h"
 
-class SPCurve;
 struct SPDrawAnchor;
 
 namespace Inkscape {
@@ -63,26 +62,26 @@ protected:
 public:
     // Red - Last segment as it's drawn.
     CanvasItemPtr<CanvasItemBpath> red_bpath;
-    SPCurve red_curve;
+    Geom::PathVector red_curve;
     std::optional<Geom::Point> red_curve_get_last_point() const;
 
     // Blue - New path after LPE as it's drawn.
     CanvasItemPtr<CanvasItemBpath> blue_bpath;
-    SPCurve blue_curve;
+    Geom::PathVector blue_curve;
 
     // Green - New path as it's drawn.
     std::vector<CanvasItemPtr<CanvasItemBpath>> green_bpaths;
-    std::shared_ptr<SPCurve> green_curve;
+    std::shared_ptr<Geom::PathVector> green_curve;
     std::unique_ptr<SPDrawAnchor> green_anchor;
     bool green_closed = false; // a flag meaning we hit the green anchor, so close the path on itself
 
     // White
     SPItem *white_item = nullptr;
-    std::vector<std::shared_ptr<SPCurve>> white_curves;
+    std::vector<std::shared_ptr<Geom::PathVector>> white_curves;
     std::vector<std::unique_ptr<SPDrawAnchor>> white_anchors;
 
     // Temporary modified curve when start anchor
-    std::shared_ptr<SPCurve> sa_overwrited;
+    std::shared_ptr<Geom::PathVector> sa_overwrited;
 
     // Start anchor
     SPDrawAnchor *sa = nullptr;

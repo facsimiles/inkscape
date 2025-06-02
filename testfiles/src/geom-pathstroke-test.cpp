@@ -75,8 +75,8 @@ TEST_F(GeomPathstrokeTest, BoundedHausdorffDistance)
         auto const comp_curve = comp_item->curve();
         ASSERT_TRUE(test_curve && comp_curve);
 
-        auto const &test_pathvector = test_curve->get_pathvector();
-        auto const &comp_pathvector = comp_curve->get_pathvector();
+        auto const &test_pathvector = *test_curve;
+        auto const &comp_pathvector = *comp_curve;
         ASSERT_EQ(test_pathvector.size(), 1);
         ASSERT_EQ(comp_pathvector.size(), 1);
 

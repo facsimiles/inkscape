@@ -398,14 +398,14 @@ void PathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAn
     if (!to) {
         return;
     }
-    std::optional<SPCurve> curve;
+    std::optional<Geom::PathVector> curve;
     auto text = cast<SPText>(linked_obj);
     if (auto shape = cast<SPShape>(linked_obj)) {
         auto lpe_item = cast<SPLPEItem>(linked_obj);
         if (_from_original_d) {
-            curve = SPCurve::ptr_to_opt(shape->curveForEdit());
+            curve = ptr_to_opt(shape->curveForEdit());
         } else if (_allow_only_bspline_spiro && lpe_item && lpe_item->hasPathEffect()){
-            curve = SPCurve::ptr_to_opt(shape->curveForEdit());
+            curve = ptr_to_opt(shape->curveForEdit());
             PathEffectList lpelist = lpe_item->getEffectList();
             for (auto const &i : lpelist) {
                 if (auto const lpeobj = i->lpeobject) {
@@ -419,7 +419,7 @@ void PathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAn
                 }
             }
         } else {
-            curve = SPCurve::ptr_to_opt(shape->curve());
+            curve = ptr_to_opt(shape->curve());
         }
     } else if (text) {
         bool hidden = text->isHidden();
@@ -432,7 +432,7 @@ void PathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAn
                 if (!curve) {
                     curve.emplace();
                 }
-                curve->set_pathvector(to->_pathvector);
+                curve = to->_pathvector;
             }
         } else {
             curve = text->getNormalizedBpath();
@@ -441,11 +441,10 @@ void PathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAn
 
     if (!curve) {
         // curve invalid, set empty pathvector
-        to->_pathvector = Geom::PathVector();
+        to->_pathvector = {};
     } else {
-        to->_pathvector = curve->get_pathvector();
+        to->_pathvector = *curve;
     }
-    
 }
 
 void PathArrayParam::linked_modified(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible *to)

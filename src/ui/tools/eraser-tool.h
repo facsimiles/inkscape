@@ -132,7 +132,7 @@ private:
     void _updateMode();
 
     static void _generateNormalDist2(double &r1, double &r2);
-    static void _addCap(SPCurve &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
+    static void _addCap(Geom::Path &curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to,
                         Geom::Point const &post, double rounding);
     static bool _isStraightSegment(SPItem *path);
     static Error _uncuttableItemType(SPItem *item);

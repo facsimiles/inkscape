@@ -51,7 +51,6 @@
 #include "style.h"                        // for SPStyle
 #include "text-editing.h"                 // for te_get_layout
 
-#include "display/curve.h"                // for SPCurve
 #include "extension/extension.h"          // for Extension (ptr only), INKSC...
 #include "extension/internal/clear-n_.h"  // for N_
 #include "extension/internal/odf.h"       // for OdfOutput, GradientInfo
@@ -1723,11 +1722,10 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
         return true;
     }
 
-    auto process_curve = [&, this] (SPCurve const &curve) {
+    auto process_curve = [&, this] (Geom::PathVector const &curve) {
         //### Default <path> output
         couts.writeString("<draw:path ");
-        if (!id.empty())
-        {
+        if (!id.empty()) {
             couts.printf("id=\"%s\" ", id.c_str());
         }
 
@@ -1747,8 +1745,7 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
                        bbox_width * 1000.0, bbox_height * 1000.0);
 
         couts.printf(" svg:d=\"");
-        int nrPoints = writePath(couts, curve.get_pathvector(),
-                             tf, bbox_x, bbox_y);
+        int nrPoints = writePath(couts, curve, tf, bbox_x, bbox_y);
         couts.writeString("\"");
 
         couts.writeString(">\n");

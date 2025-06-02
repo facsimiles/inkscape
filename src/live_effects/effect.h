@@ -27,7 +27,6 @@ class  SPLPEItem;
 class  KnotHolder;
 class  KnotHolderEntity;
 class  SPPath;
-class  SPCurve;
 
 namespace Gtk {
     class Widget;
@@ -87,7 +86,7 @@ public:
 
     //basically, to get this method called before the derived classes, a bit
     //of indirection is needed. We first call these methods, then the below.
-    void doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve);
+    void doAfterEffect_impl(SPLPEItem const *lpeitem, Geom::PathVector *curve);
     void doOnApply_impl(SPLPEItem const* lpeitem);
     void doBeforeEffect_impl(SPLPEItem const* lpeitem);
     void doOnOpen_impl();
@@ -121,7 +120,7 @@ public:
     inline bool isReady() const { return is_ready; }
     inline void setReady(bool ready = true) { is_ready = ready; }
 
-    virtual void doEffect (SPCurve * curve);
+    virtual void doEffect(Geom::PathVector &curve);
 
     virtual Gtk::Widget * newWidget();
     /**
@@ -190,7 +189,7 @@ protected:
     // provide a set of doEffect functions so the developer has a choice
     // of what kind of input/output parameters he desires.
     // the order in which they appear is the order in which they are
-    // called by this base class. (i.e. doEffect(SPCurve * curve) defaults to calling
+    // called by this base class. (i.e. doEffect(Geom::PathVector *curve) defaults to calling
     // doEffect(Geom::PathVector )
     virtual Geom::PathVector
             doEffect_path (Geom::PathVector const & path_in);
@@ -220,7 +219,7 @@ private:
     LivePathEffectObject *lpeobj;
     virtual void transform_multiply(Geom::Affine const &postmul, bool set);
     virtual bool doOnOpen(SPLPEItem const *lpeitem);
-    virtual void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve);
+    virtual void doAfterEffect(SPLPEItem const *lpeitem, Geom::PathVector *curve);
     // we want to call always to overrided methods not effect ones
     virtual void doOnRemove(SPLPEItem const* /*lpeitem*/);
     virtual void doOnApply (SPLPEItem const* lpeitem);

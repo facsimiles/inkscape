@@ -14,20 +14,20 @@
 
 //#define DEBUG_TEXTLAYOUT_DUMPASTEXT
 
-#include <2geom/affine.h>
-#include <2geom/d2.h>
 #include <algorithm>
-#include <glibmm/ustring.h>
 #include <memory>
 #include <optional>
-#include <pango/pango-break.h>
-#include <svg/svg-length.h>
 #include <vector>
-
-#include "display/curve.h"
+#include <glibmm/ustring.h>
+#include <pango/pango-break.h>
 #include <sigc++/scoped_connection.h>
+#include <2geom/affine.h>
+#include <2geom/d2.h>
+#include <2geom/pathvector.h>
+
 #include "livarot/Shape.h"
 #include "style-enums.h"
+#include "svg/svg-length.h"
 
 namespace Inkscape::Extension::Internal {
 class CairoRenderContext;
@@ -414,8 +414,8 @@ public:
     /** Convert the specified range of characters into their bezier 
     outlines.
     */
-    SPCurve convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const;
-    SPCurve convertToCurves() const;
+    Geom::PathVector convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const;
+    Geom::PathVector convertToCurves() const;
 
     /** Apply the given transform to all the output presently stored in
     this object. This only transforms the glyph positions, The glyphs

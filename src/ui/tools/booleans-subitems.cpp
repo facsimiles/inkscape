@@ -94,14 +94,14 @@ static void extract_pathvectors_recursive(SPItem *root, SPItem *item, Pathvector
             // This needs to use the clipping region because get_curve is empty in this case
             result.emplace_back(*clip * transform, root, item);
         } else {
-            result.emplace_back(img->get_curve()->get_pathvector() * transform, root, item);
+            result.emplace_back(*img->get_curve() * transform, root, item);
         }
     } else if (auto shape = cast<SPShape>(item)) {
         if (auto curve = shape->curve()) {
-            result.emplace_back(curve->get_pathvector() * transform, root, item);
+            result.emplace_back(*curve * transform, root, item);
         }
     } else if (auto text = cast<SPText>(item)) {
-        result.emplace_back(text->getNormalizedBpath().get_pathvector() * transform, root, item);
+        result.emplace_back(text->getNormalizedBpath() * transform, root, item);
     } else if (auto use = cast<SPUse>(item)) {
         auto clip = use->getClipPathVector(root);
         if (clip && is<SPImage>(use->get_original())) {

@@ -22,7 +22,6 @@
 
 #include "document.h"
 #include "path-chemistry.h" // Should be moved to path directory
-#include "message-stack.h"  // Should be removed.
 #include "selection.h"
 #include "style.h"
 
@@ -60,9 +59,9 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
         return false;
     }
 
-    std::optional<SPCurve> curve;
+    std::optional<Geom::PathVector> curve;
     if (shape) {
-        curve = SPCurve::ptr_to_opt(shape->curve());
+        curve = ptr_to_opt(shape->curve());
     } else if (text) {
         curve = text->getNormalizedBpath();
     } else {
@@ -75,12 +74,12 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
         return false;
     }
 
-    if (curve->get_pathvector().empty()) {
+    if (curve->empty()) {
         std::cerr << "item_find_paths: curve empty!" << std::endl;
         return false;
     }
 
-    fill = curve->get_pathvector();
+    fill = std::move(*curve);
 
     if (!item->style) {
         // Should never happen

@@ -176,14 +176,14 @@ bool sp_has_path_data(SPItem *item, bool originald)
     }
     auto shape = cast<SPShape>(item);
     if (shape) {
-        SPCurve const *c = shape->curve();
-        if (c && !c->is_empty()) {
+        auto const *c = shape->curve();
+        if (c && !c->empty()) {
             return true;
         }
         if (originald) {
             if (shape->hasPathEffectRecursive()) {
-                SPCurve const *c = shape->curveBeforeLPE();
-                if (c && !c->is_empty()) {
+                auto const *c = shape->curveBeforeLPE();
+                if (c && !c->empty()) {
                     return true;
                 }
             }
@@ -195,12 +195,11 @@ bool sp_has_path_data(SPItem *item, bool originald)
  * Allow changing original-d to d to "reset" temporary the LPE
  * when the slice doesn't pass through item till sp_lpe_item is crossed
  */
-void
-LPESlice::originalDtoD(SPShape const *shape, SPCurve *curve)
+void LPESlice::originalDtoD(SPShape const *shape, Geom::PathVector *curve)
 {
-    SPCurve const *c = shape->curveBeforeLPE();
-    if (c && !c->is_empty()) {
-        curve->set_pathvector(c->get_pathvector());
+    auto const *c = shape->curveBeforeLPE();
+    if (c && !c->empty() && curve) {
+        *curve = *c;
     }
 }
 
@@ -222,19 +221,18 @@ LPESlice::originalDtoD(SPItem *item)
     }
     auto shape = cast<SPShape>(item);
     if (shape) {
-        SPCurve const *c = shape->curveBeforeLPE();
-        if (c && !c->is_empty()) {
+        auto const *c = shape->curveBeforeLPE();
+        if (c && !c->empty()) {
             shape->bbox_vis_cache_is_valid = false;
             shape->bbox_geom_cache_is_valid = false;
             shape->setCurveInsync(c);
-            auto str = sp_svg_write_path(c->get_pathvector());
+            auto str = sp_svg_write_path(*c);
             shape->setAttribute("d", str);
         }
     }
 }
 
-void 
-LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
+void LPESlice::doAfterEffect(SPLPEItem const* lpeitem, Geom::PathVector *curve)
 {
     Glib::ustring version = lpeversion.param_getSVGValue();
     // this avoid regenerate fake satellites un undo after open a legacy LPE
@@ -351,8 +349,8 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                                 auto spgrp2 = cast<SPGroup>(link2->getObject());
                                 auto spit2 = cast<SPShape>(link2->getObject());
                                 if (spit && spit2) {
-                                    Geom::OptRect _bbox = spit->curveForEdit()->get_pathvector().boundsFast();
-                                    Geom::OptRect _bbox2 = spit2->curveForEdit()->get_pathvector().boundsFast();
+                                    Geom::OptRect _bbox = spit->curveForEdit()->boundsFast();
+                                    Geom::OptRect _bbox2 = spit2->curveForEdit()->boundsFast();
                                     if (_bbox && _bbox2) {
                                         (*_bbox).expandBy(1);
                                         if ((*_bbox).contains(*_bbox2)) {
@@ -397,8 +395,8 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
     lpesatellites.setUpdating(false);
 }
 
-bool
-LPESlice::split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, size_t> > slicer, size_t splitindex, bool &creation) {
+bool LPESlice::split(SPItem* item, Geom::PathVector *curve, std::vector<std::pair<Geom::Line, size_t> > slicer, size_t splitindex, bool &creation)
+{
     bool splited = false;
     size_t nsplits = slicer.size();
     SPDocument *document = getSPDoc();
@@ -558,9 +556,9 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
     auto shape = cast<SPShape>(orig);
     auto path = cast<SPPath>(dest);
     if (path && shape) {
-        SPCurve const *c = shape->curve();
-        if (c && !c->is_empty()) {
-            auto str = sp_svg_write_path(c->get_pathvector());
+        auto const *c = shape->curve();
+        if (c && !c->empty()) {
+            auto str = sp_svg_write_path(*c);
             if (path->hasPathEffectRecursive()) {
                 sp_lpe_item_enable_path_effects(path, false);
                 dest->setAttribute("inkscape:original-d", str);
@@ -594,7 +592,7 @@ static FillRule GetFillTyp(SPItem *item)
 }
 
 bool
-LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t> slicer, bool toggle, bool is_original, Geom::Affine tpass, bool top) 
+LPESlice::splititem(SPItem* item, Geom::PathVector *curve, std::pair<Geom::Line, size_t> slicer, bool toggle, bool is_original, Geom::Affine tpass, bool top)
 {
     bool splited = false;
     if (!is_original && !g_strcmp0(sp_lpe_item->getId(), item->getId())) {
@@ -624,10 +622,8 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
     auto shape = cast<SPShape>(item);
     auto path = cast<SPPath>(item);
     if (shape) {
-        SPCurve const *c;
-        c = shape->curve();
-        if (c) {
-            Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+        if (auto const *c = shape->curve()) {
+            Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(*c);
             flatten(original_pathv, GetFillTyp(shape));
             Geom::PathVector path_out;
             Geom::Affine t = shape->transform * tpass;
@@ -742,12 +738,12 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
                 tmp_pathvector.clear();
             }
             if (curve && is_original) {
-                curve->set_pathvector(path_out);
+                *curve = path_out;
             }
             if (shape->curve()) {
                 shape->bbox_vis_cache_is_valid = false;
                 shape->bbox_geom_cache_is_valid = false;
-                shape->setCurveInsync(SPCurve(path_out));
+                shape->setCurveInsync(path_out);
                 auto str = sp_svg_write_path(path_out);
                 if (!is_original && shape->hasPathEffectRecursive()) {
                     sp_lpe_item_enable_path_effects(shape, false);

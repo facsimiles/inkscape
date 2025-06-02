@@ -36,23 +36,23 @@ public:
     ~LPESlice() override;
     void doOnApply (SPLPEItem const* lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve) override;
+    void doAfterEffect (SPLPEItem const* lpeitem, Geom::PathVector *curve) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget *newWidget() override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;
     void cloneStyle(SPObject *orig, SPObject *dest);
-    bool split(SPItem *item, SPCurve *curve, std::vector<std::pair<Geom::Line, size_t>> slicer, size_t splitindex,
+    bool split(SPItem *item, Geom::PathVector *curve, std::vector<std::pair<Geom::Line, size_t>> slicer, size_t splitindex,
                bool &creation);
-    bool splititem(SPItem *item, SPCurve *curve, std::pair<Geom::Line, size_t> slicer, bool toggle,
+    bool splititem(SPItem *item, Geom::PathVector *curve, std::pair<Geom::Line, size_t> slicer, bool toggle,
                    bool is_original = false, Geom::Affine tpass = Geom::identity(), bool top = true);
     bool haschildslice(SPItem *item);
     std::vector<std::pair<Geom::Line, size_t> > getSplitLines();
     void cloneD(SPObject *orig, SPObject *dest, bool is_original); 
     Inkscape::XML::Node *createPathBase(SPObject *elemref);
     Geom::PathVector cutter(Geom::PathVector const & path_in);
-    void originalDtoD(SPShape const *shape, SPCurve *curve);
+    void originalDtoD(SPShape const *shape, Geom::PathVector *curve);
     void originalDtoD(SPItem *item);
     void resetStyles();
     void centerVert();

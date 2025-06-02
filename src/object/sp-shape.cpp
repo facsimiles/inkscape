@@ -26,7 +26,6 @@
 #include <sigc++/adaptors/bind.h>
 
 #include "display/drawing-shape.h"
-#include "display/curve.h"
 #include "print.h"
 #include "document.h"
 #include "style.h"
@@ -167,7 +166,7 @@ void SPShape::update(SPCtx* ctx, guint flags) {
         /* But on the other hand - how can we know that parent does not tie style and transform */
         for (auto &v : views) {
             if (flags & SP_OBJECT_MODIFIED_FLAG) {
-                auto sh = static_cast<Inkscape::DrawingShape*>(v.drawingitem.get());
+                auto sh = cast_unsafe<Inkscape::DrawingShape>(v.drawingitem.get());
                 sh->setPath(_curve);
             }
         }
@@ -248,7 +247,7 @@ std::vector<std::tuple<SPMarkerLoc, SPMarker *, Geom::Affine>> SPShape::get_mark
 {
     std::vector<std::tuple<SPMarkerLoc, SPMarker *, Geom::Affine>> markers;
 
-    Geom::PathVector const &pathv = curve()->get_pathvector();
+    Geom::PathVector const &pathv = *_curve;
     if (pathv.empty())
         return markers; // empty list
 
@@ -464,7 +463,7 @@ bool SPShape::checkBrokenPathEffect()
 
         if (this->getRepr()->attribute("d")) {
             // unconditionally read the curve from d, if any, to preserve appearance
-            setCurveInsync(SPCurve(sp_svg_read_pathv(getAttribute("d"))));
+            setCurveInsync(sp_svg_read_pathv(getAttribute("d")));
             setCurveBeforeLPE(curve());
         }
 
@@ -476,23 +475,24 @@ bool SPShape::checkBrokenPathEffect()
 /* Reset the shape's curve to the "original_curve"
  *  This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
 
-bool SPShape::prepareShapeForLPE(SPCurve const *c)
+bool SPShape::prepareShapeForLPE(Geom::PathVector &&c)
 {
     auto const before = curveBeforeLPE();
-    if (before && before->get_pathvector() != c->get_pathvector()) {
-        setCurveBeforeLPE(c);
+    if (before && *before != c) {
+        setCurveBeforeLPE(std::move(c));
         sp_lpe_item_update_patheffect(this, true, false);
         return true;
     }
 
     if (hasPathEffectOnClipOrMaskRecursive(this)) {
-        if (!before && this->getRepr()->attribute("d")) {
-            setCurveInsync(SPCurve(sp_svg_read_pathv(getAttribute("d"))));
+        if (!before && getRepr()->attribute("d")) {
+            setCurveInsync(sp_svg_read_pathv(getAttribute("d")));
         }
-        setCurveBeforeLPE(c);
+        setCurveBeforeLPE(std::move(c));
         return true;
     }
-    setCurveInsync(c);
+
+    setCurveInsync(std::move(c));
     return false;
 }
 
@@ -538,11 +538,11 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
         return *bbox_cache * delta;
     }
 
-    if (!this->_curve || this->_curve->get_pathvector().empty()) {
+    if (!_curve || _curve->empty()) {
     	return bbox;
     }
 
-    bbox = bounds_exact_transformed(this->_curve->get_pathvector(), transform);
+    bbox = bounds_exact_transformed(*_curve, transform);
 
     if (!bbox) {
     	return bbox;
@@ -577,7 +577,7 @@ void SPShape::print(SPPrintContext* ctx) {
     	return;
     }
 
-    Geom::PathVector const & pathv = this->_curve->get_pathvector();
+    Geom::PathVector const &pathv = *_curve;
     
     if (pathv.empty()) {
     	return;
@@ -618,8 +618,6 @@ void SPShape::print(SPPrintContext* ctx) {
         ctx->stroke (pathv, i2dt, style, pbox, dbox, bbox);
     }
 
-    auto linewidth = this->style->stroke_width.computed;
-
     if (new_style) {
         // Clean up temporary context style copy
         delete new_style;
@@ -640,11 +638,10 @@ void SPShape::print(SPPrintContext* ctx) {
 
 std::optional<Geom::PathVector> SPShape::documentExactBounds() const
 {
-    std::optional<Geom::PathVector> result;
-    if (auto const *c = curve()) {
-        result = c->get_pathvector() * i2doc_affine();
+    if (_curve) {
+        return *_curve * i2doc_affine();
     }
-    return result;
+    return {};
 }
 
 void SPShape::update_patheffect(bool write)
@@ -664,19 +661,19 @@ void SPShape::update_patheffect(bool write)
         // must be set also to non effect items (satellites or parents)
         lpe_initialized = true; 
         if (hasPathEffect() && pathEffectsEnabled()) {
-            success = this->performPathEffect(&c_lpe, this);
+            success = this->performPathEffect(c_lpe, this);
             if (success) {
                 if (!document->getRoot()->inkscape_version.isInsideRangeInclusive({0, 1}, {0, 92})) {
                     resetClipPathAndMaskLPE();
                 }
-                setCurveInsync(&c_lpe);
+                setCurveInsync(c_lpe);
                 applyToClipPath(this);
                 applyToMask(this);
             }
         } 
         if (write && success) {
             if (auto repr = getRepr()) {
-                repr->setAttribute("d", sp_svg_write_path(c_lpe.get_pathvector()));
+                repr->setAttribute("d", sp_svg_write_path(c_lpe));
             }
         }
         if (success) {
@@ -772,19 +769,19 @@ int SPShape::hasMarkers() const
         );
 }
 
-
 /**
 * \param shape Shape.
 * \param type Marker type (e.g. SP_MARKER_LOC_START)
 * \return Number of markers that the shape has of this type.
 */
-int SPShape::numberOfMarkers(int type) const {
-    Geom::PathVector const & pathv = this->_curve->get_pathvector();
+int SPShape::numberOfMarkers(int type) const
+{
+    Geom::PathVector const &pathv = *_curve;
 
-    if (pathv.size() == 0) {
+    if (pathv.empty()) {
         return 0;
     }
-    switch(type) {
+    switch (type) {
 
         case SP_MARKER_LOC:
         {
@@ -916,14 +913,14 @@ void SPShape::set_shape() {
  * Any existing curve in the shape will be unreferenced first.
  * This routine also triggers a request to update the display.
  */
-void SPShape::setCurve(SPCurve new_curve)
+void SPShape::setCurve(Geom::PathVector new_curve)
 {
-    _curve = std::make_shared<SPCurve>(std::move(new_curve));
+    _curve = std::make_shared<Geom::PathVector>(std::move(new_curve));
     if (document) {
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
-void SPShape::setCurve(SPCurve const *new_curve)
+void SPShape::setCurve(Geom::PathVector const *new_curve)
 {
     if (new_curve) {
         setCurve(*new_curve);
@@ -935,11 +932,11 @@ void SPShape::setCurve(SPCurve const *new_curve)
 /**
  * Sets _curve_before_lpe to a copy of `new_curve`
  */
-void SPShape::setCurveBeforeLPE(SPCurve new_curve)
+void SPShape::setCurveBeforeLPE(Geom::PathVector new_curve)
 {
     _curve_before_lpe = std::move(new_curve);
 }
-void SPShape::setCurveBeforeLPE(SPCurve const *new_curve)
+void SPShape::setCurveBeforeLPE(Geom::PathVector const *new_curve)
 {
     if (new_curve) {
         setCurveBeforeLPE(*new_curve);
@@ -951,11 +948,11 @@ void SPShape::setCurveBeforeLPE(SPCurve const *new_curve)
 /**
  * Same as setCurve() but without updating the display
  */
-void SPShape::setCurveInsync(SPCurve new_curve)
+void SPShape::setCurveInsync(Geom::PathVector new_curve)
 {
-    _curve = std::make_shared<SPCurve>(std::move(new_curve));
+    _curve = std::make_shared<Geom::PathVector>(std::move(new_curve));
 }
-void SPShape::setCurveInsync(SPCurve const *new_curve)
+void SPShape::setCurveInsync(Geom::PathVector const *new_curve)
 {
     if (new_curve) {
         setCurveInsync(*new_curve);
@@ -967,7 +964,7 @@ void SPShape::setCurveInsync(SPCurve const *new_curve)
 /**
  * Return a borrowed pointer to the curve (if any exists) or NULL if there is no curve
  */
-SPCurve const *SPShape::curve() const
+Geom::PathVector const *SPShape::curve() const
 {
     return _curve.get();
 }
@@ -975,7 +972,7 @@ SPCurve const *SPShape::curve() const
 /**
  * Return a borrowed pointer of the curve *before* LPE (if any exists) or NULL if there is no curve
  */
-SPCurve const *SPShape::curveBeforeLPE() const
+Geom::PathVector const *SPShape::curveBeforeLPE() const
 {
     return _curve_before_lpe ? &*_curve_before_lpe : nullptr;
 }
@@ -983,17 +980,18 @@ SPCurve const *SPShape::curveBeforeLPE() const
 /**
  * Return a borrowed pointer of the curve for edit
  */
-SPCurve const *SPShape::curveForEdit() const
+Geom::PathVector const *SPShape::curveForEdit() const
 {
     return _curve_before_lpe ? &*_curve_before_lpe : curve();
 }
 
-void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const {
+void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
+{
     if (this->_curve == nullptr) {
         return;
     }
 
-    Geom::PathVector const &pathv = this->_curve->get_pathvector();
+    Geom::PathVector const &pathv = *_curve;
 
     if (pathv.empty()) {
         return;

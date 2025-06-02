@@ -23,7 +23,7 @@
 #include "live_effects/parameter/satellitearray.h"
 #include "live_effects/parameter/text.h"
 // this is only to fillrule
-#include "livarot/Shape.h"
+#include "livarot/LivarotDefs.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -35,8 +35,6 @@ enum RotateMethod {
     RM_END
 };
 
-typedef FillRule FillRuleBool;
-
 class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
@@ -44,7 +42,7 @@ public:
     void doOnApply (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve) override;
+    void doAfterEffect(SPLPEItem const* lpeitem, Geom::PathVector *curve) override;
     void split(Geom::PathVector &path_in, Geom::Path const &divider);
     void resetDefaults(SPItem const* item) override;
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
@@ -52,7 +50,7 @@ public:
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
     void cloneStyle(SPObject *orig, SPObject *dest);
-    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule);
+    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in, FillRule fillrule);
     void toItem(Geom::Affine transform, size_t i, bool reset, bool &write);
     void cloneD(SPObject *orig, SPObject *dest);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);

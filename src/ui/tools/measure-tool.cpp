@@ -32,7 +32,6 @@
 #include "selection.h"
 #include "text-editing.h"
 
-#include "display/curve.h"
 #include "display/control/canvas-item-curve.h"
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-group.h"
@@ -459,11 +458,11 @@ void MeasureTool::knotUngrabbedHandler(SPKnot */*knot*/, unsigned state)
 }
 
 static void calculate_intersections(SPDesktop *desktop, SPItem *item, Geom::PathVector const &lineseg,
-                                    SPCurve curve, std::vector<double> &intersections)
+                                    Geom::PathVector curve, std::vector<double> &intersections)
 {
-    curve.transform(item->i2doc_affine());
+    curve *= item->i2doc_affine();
     // Find all intersections of the control-line with this shape
-    Geom::CrossingSet cs = Geom::crossings(lineseg, curve.get_pathvector());
+    Geom::CrossingSet cs = Geom::crossings(lineseg, curve);
     Geom::delete_duplicates(cs[0]);
 
     // Reconstruct and store the points of intersection
@@ -1092,7 +1091,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
             item_y      = Quantity::convert(bbox->top(), "px", unit_name);
 
             if (auto shape = cast<SPShape>(over)) {
-                auto pw = paths_to_pw(shape->curve()->get_pathvector());
+                auto pw = paths_to_pw(*shape->curve());
                 item_length = Quantity::convert(Geom::length(pw * affine), "px", unit_name);
             }
         }
@@ -1226,8 +1225,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
             if (auto e = cast<SPGenericEllipse>(item)) { // this fixes a bug with the calculation of the intersection on
                 e->set_shape();                          // ellipses and circles. If the calculate_intersections(...) is fixed
                                                          // then this if() can be removed
-                Geom::PathVector new_pv = pathv_to_linear_and_cubic_beziers(e->curve()->get_pathvector());
-                calculate_intersections(_desktop, item, lineseg, SPCurve(new_pv), intersection_times);
+                Geom::PathVector new_pv = pathv_to_linear_and_cubic_beziers(*e->curve());
+                calculate_intersections(_desktop, item, lineseg, new_pv, intersection_times);
             } else if (auto shape = cast<SPShape>(item)) {
                 calculate_intersections(_desktop, item, lineseg, *shape->curve(), intersection_times);
             } else {
@@ -1243,7 +1242,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
                         // get path from iter to iter_next:
                         auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
                         iter = iter_next; // shift to next glyph
-                        if (curve.is_empty()) { // whitespace glyph?
+                        if (curve.empty()) { // whitespace glyph?
                             continue;
                         }
 

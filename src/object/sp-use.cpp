@@ -182,19 +182,15 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
         repr->setAttributeOrRemoveIfEmpty(href_key, uri_string);
     }
 
-    auto shape = cast<SPShape>(child);
-    if (shape) {
-        shape->set_shape(); // evaluate SPCurve of child
-    } else {
-        auto text = cast<SPText>(child);
-        if (text) {
-            text->rebuildLayout(); // refresh Layout, LP Bug 1339305
-        } else if (auto flowtext = cast<SPFlowtext>(child)) {
-            if (auto flowregion = cast<SPFlowregion>(flowtext->firstChild())) {
-                flowregion->updateComputed();
-            }
-            flowtext->rebuildLayout();
+    if (auto shape = cast<SPShape>(child)) {
+        shape->set_shape(); // evaluate curve of child
+    } else if (auto text = cast<SPText>(child)) {
+        text->rebuildLayout(); // refresh Layout, LP Bug 1339305
+    } else if (auto flowtext = cast<SPFlowtext>(child)) {
+        if (auto flowregion = cast<SPFlowregion>(flowtext->firstChild())) {
+            flowregion->updateComputed();
         }
+        flowtext->rebuildLayout();
     }
 
     return repr;

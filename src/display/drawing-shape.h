@@ -17,7 +17,6 @@
 #include "display/nr-style.h"
 
 class SPStyle;
-class SPCurve;
 
 namespace Inkscape {
 
@@ -28,7 +27,7 @@ public:
     DrawingShape(Drawing &drawing);
     int tag() const override { return tag_of<decltype(*this)>; }
 
-    void setPath(std::shared_ptr<SPCurve const> curve);
+    void setPath(std::shared_ptr<Geom::PathVector const> curve);
     void setStyle(SPStyle const *style, SPStyle const *context_style = nullptr) override;
     void setChildrenStyle(SPStyle const *context_style) override;
 
@@ -51,7 +50,7 @@ protected:
     SPWindRule style_fill_rule;
     unsigned style_opacity : 24;
 
-    std::shared_ptr<SPCurve const> _curve;
+    std::shared_ptr<Geom::PathVector const> _curve;
     NRStyle _nrstyle;
 
     DrawingItem *_last_pick;

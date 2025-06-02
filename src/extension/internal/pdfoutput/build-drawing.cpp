@@ -117,7 +117,7 @@ void DrawContext::paint_item(SPItem const *item, Geom::Affine const &tr, SPStyle
         // Turn the item into a raster for the PDF
         paint_item_to_raster(item, tr, resolution, true);
     } else if (auto shape = cast<SPShape>(item)) {
-        if (shape->curve() && !shape->curve()->get_pathvector().empty()) {
+        if (shape->curve() && !shape->curve()->empty()) {
             paint_shape(shape, context_style);
         }
     } else if (auto use = cast<SPUse>(item)) {

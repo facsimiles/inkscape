@@ -561,17 +561,17 @@ bool ConnectorTool::_handleMotionNotify(MotionEvent const &mevent)
         auto curve = *path->curve();
         if (clickedhandle == endpt_handle[0]) {
             auto o = endpt_handle[1]->pos;
-            curve.stretch_endpoints(p * d2i, o * d2i);
+            stretch_endpoints(curve, p * d2i, o * d2i);
         } else {
             auto o = endpt_handle[0]->pos;
-            curve.stretch_endpoints(o * d2i, p * d2i);
+            stretch_endpoints(curve, o * d2i, p * d2i);
         }
         path->setCurve(std::move(curve));
         sp_conn_reroute_path_immediate(path);
 
         // Copy this to the temporary visible path
-        red_curve = path->curveForEdit()->transformed(i2d);
-        red_bpath->set_bpath(&*red_curve);
+        red_curve = *path->curveForEdit() * i2d;
+        red_bpath->set_bpath(*red_curve);
 
         ret = true;
         break;
@@ -693,10 +693,10 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
     SPDocument *doc = _desktop->getDocument();
 
     // Clear the temporary path:
-    this->red_curve->reset();
-    red_bpath->set_bpath(nullptr);
+    red_curve->clear();
+    red_bpath->set_bpath({});
 
-    if (p != nullptr) {
+    if (p) {
         // Test whether we clicked on a connection point
         gchar *shape_label;
         gchar *sub_label;
@@ -726,12 +726,11 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
 
 void ConnectorTool::_resetColors()
 {
-    /* Red */
-    this->red_curve->reset();
-    red_bpath->set_bpath(nullptr);
+    red_curve->clear();
+    red_bpath->set_bpath({});
 
-    this->green_curve->reset();
-    this->npoints = 0;
+    green_curve->clear();
+    npoints = 0;
 }
 
 void ConnectorTool::_setInitialPoint(Geom::Point const p)
@@ -741,7 +740,7 @@ void ConnectorTool::_setInitialPoint(Geom::Point const p)
     this->p[0] = p;
     this->p[1] = p;
     this->npoints = 2;
-    red_bpath->set_bpath(nullptr);
+    red_bpath->set_bpath({});
 }
 
 void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
@@ -770,10 +769,9 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     this->newConnRef->router()->processTransaction();
     // Recreate curve from libavoid route.
     red_curve = SPConnEndPair::createCurve(newConnRef, curvature);
-    red_curve->transform(_desktop->doc2dt());
-    red_bpath->set_bpath(&*red_curve, true);
+    *red_curve *= _desktop->doc2dt();
+    red_bpath->set_bpath(*red_curve, true);
 }
-
 
 /**
  * Concats red, blue and green.
@@ -782,19 +780,18 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
  */
 void ConnectorTool::_concatColorsAndFlush()
 {
-    auto c = std::make_optional<SPCurve>();
+    auto c = std::make_optional<Geom::PathVector>();
     std::swap(c, green_curve);
 
-    red_curve->reset();
-    red_bpath->set_bpath(nullptr);
+    red_curve->clear();
+    red_bpath->set_bpath({});
 
-    if (c->is_empty()) {
+    if (c->empty()) {
         return;
     }
 
-    _flushWhite(&*c);
+    _flushWhite(*c);
 }
-
 
 /*
  * Flushes white curve(s) and additional curve into object
@@ -804,22 +801,22 @@ void ConnectorTool::_concatColorsAndFlush()
  *
  */
 
-void ConnectorTool::_flushWhite(SPCurve *c)
+void ConnectorTool::_flushWhite(Geom::PathVector &c)
 {
     /* Now we have to go back to item coordinates at last */
-    c->transform(_desktop->dt2doc());
+    c *= _desktop->dt2doc();
 
     SPDocument *doc = _desktop->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
-    if ( !c->is_empty() ) {
+    if (!c.empty()) {
         /* We actually have something to write */
 
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
         /* Set style */
         sp_desktop_apply_style_tool(_desktop, repr, "/tools/connector", false);
 
-        repr->setAttribute("d", sp_svg_write_path(c->get_pathvector()));
+        repr->setAttribute("d", sp_svg_write_path(c));
 
         /* Attach repr */
         auto layer = currentLayer();
@@ -869,17 +866,16 @@ void ConnectorTool::_flushWhite(SPCurve *c)
     DocumentUndo::done(doc, _("Create connector"), INKSCAPE_ICON("draw-connector"));
 }
 
-
 void ConnectorTool::_finishSegment(Geom::Point const /*p*/)
 {
-    if (!this->red_curve->is_empty()) {
-        green_curve->append_continuous(*red_curve);
+    if (!red_curve->empty()) {
+        pathvector_append_continuous(*green_curve, *red_curve);
 
         this->p[0] = this->p[3];
         this->p[1] = this->p[4];
         this->npoints = 2;
 
-        this->red_curve->reset();
+        this->red_curve->clear();
     }
 }
 
@@ -887,7 +883,7 @@ void ConnectorTool::_finish()
 {
     _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing connector"));
 
-    this->red_curve->reset();
+    this->red_curve->clear();
     this->_concatColorsAndFlush();
 
     this->npoints = 0;
@@ -897,7 +893,6 @@ void ConnectorTool::_finish()
         this->newConnRef = nullptr;
     }
 }
-
 
 static bool cc_generic_knot_handler(CanvasEvent const &event, SPKnot *knot)
 {
@@ -967,8 +962,8 @@ static bool endpt_handler(CanvasEvent const &event, ConnectorTool *cc)
 
             // Show the red path for dragging.
             auto path = static_cast<SPPath const *>(cc->clickeditem);
-            cc->red_curve = path->curveForEdit()->transformed(cc->clickeditem->i2dt_affine());
-            cc->red_bpath->set_bpath(&*cc->red_curve, true);
+            cc->red_curve = *path->curveForEdit() * cc->clickeditem->i2dt_affine();
+            cc->red_bpath->set_bpath(*cc->red_curve, true);
 
             cc->clickeditem->setHidden(true);
 
@@ -1076,21 +1071,21 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
 {
     g_assert( is<SPPath>(item) );
 
-    const SPCurve *curve = cast<SPPath>(item)->curveForEdit();
+    auto curve = cast<SPPath>(item)->curveForEdit();
     Geom::Affine i2dt = item->i2dt_affine();
 
     if (this->active_conn == item) {
-        if (curve->is_empty()) {
+        if (curve->empty()) {
             // Connector is invisible because it is clipped to the boundary of
             // two overlapping shapes.
             this->endpt_handle[0]->hide();
             this->endpt_handle[1]->hide();
         } else {
             // Just adjust handle positions.
-            Geom::Point startpt = *(curve->first_point()) * i2dt;
+            Geom::Point startpt = curve->initialPoint() * i2dt;
             this->endpt_handle[0]->setPosition(startpt, 0);
 
-            Geom::Point endpt = *(curve->last_point()) * i2dt;
+            Geom::Point endpt = curve->finalPoint() * i2dt;
             this->endpt_handle[1]->setPosition(endpt, 0);
         }
 
@@ -1139,16 +1134,16 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
             this->endpt_handle[i]->ctrl->connect_event(sigc::bind(sigc::ptr_fun(endpt_handler), this));
     }
 
-    if (curve->is_empty()) {
+    if (curve->empty()) {
         // Connector is invisible because it is clipped to the boundary
         // of two overlpapping shapes.  So, it doesn't need endpoints.
         return;
     }
 
-    Geom::Point startpt = *(curve->first_point()) * i2dt;
+    Geom::Point startpt = curve->initialPoint() * i2dt;
     this->endpt_handle[0]->setPosition(startpt, 0);
 
-    Geom::Point endpt = *(curve->last_point()) * i2dt;
+    Geom::Point endpt = curve->finalPoint() * i2dt;
     this->endpt_handle[1]->setPosition(endpt, 0);
 
     this->endpt_handle[0]->show();
@@ -1178,8 +1173,8 @@ void cc_create_connection_point(ConnectorTool* cc)
 static bool cc_item_is_shape(SPItem *item)
 {
     if (auto path = cast<SPPath>(item)) {
-        SPCurve const *curve = path->curve();
-        if ( curve && !(curve->is_closed()) ) {
+        auto curve = path->curve();
+        if (curve && !is_closed(*curve)) {
             // Open paths are connectors.
             return false;
         }
@@ -1197,7 +1192,7 @@ static bool cc_item_is_shape(SPItem *item)
 bool cc_item_is_connector(SPItem *item)
 {
     if (auto path = cast<SPPath>(item)) {
-        bool closed = path->curveForEdit()->is_closed();
+        bool closed = is_closed(*path->curveForEdit());
         if (path->connEndPair.isAutoRoutingConn() && !closed) {
             // To be considered a connector, an object must be a non-closed
             // path that is marked with a "inkscape:connector-type" attribute.

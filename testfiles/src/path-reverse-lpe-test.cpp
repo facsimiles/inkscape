@@ -42,9 +42,9 @@ TEST_F(DocPerCaseTest, PathReverse)
     auto oset = ObjectSet(doc.get());
     oset.add(path1);
 
-    ASSERT_EQ(*path1->curve()->first_point(), Geom::Point(5, 5));
+    ASSERT_EQ(path1->curve()->initialPoint(), Geom::Point(5, 5));
 
     oset.pathReverse();
 
-    ASSERT_EQ(*path1->curve()->first_point(), Geom::Point(15, 15));
+    ASSERT_EQ(path1->curve()->initialPoint(), Geom::Point(15, 15));
 }

@@ -260,14 +260,14 @@ void sp_update_helperpath(SPDesktop *desktop)
                 }
                 lpe->setSelectedNodePoints(selectedNodesPositions);
                 lpe->setCurrentZoom(desktop->current_zoom());
-                SPCurve c;
+                Geom::PathVector c;
                 std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(lpeitem);
                 for (auto &p : cs) {
                     p *= desktop->dt2doc();
-                    c.append(p);
+                    pathvector_append(c, p);
                 }
-                if (!c.is_empty()) {
-                    auto helperpath = new Inkscape::CanvasItemBpath(desktop->getCanvasTemp(), c.get_pathvector(), true);
+                if (!c.empty()) {
+                    auto helperpath = new Inkscape::CanvasItemBpath(desktop->getCanvasTemp(), c, true);
                     helperpath->set_stroke(0x0000ff9a);
                     helperpath->set_fill(0x0, SP_WIND_RULE_NONZERO); // No fill
                     nt->_helperpath_tmpitem.emplace_back(desktop->add_temporary_canvasitem(helperpath, 0));
@@ -482,9 +482,9 @@ bool NodeTool::root_handler(CanvasEvent const &event)
                 return; // break out when curve doesn't exist
             }
 
-            auto c = shape->curveForEdit()->transformed(over_item->i2dt_affine());
+            auto c = *shape->curveForEdit() * over_item->i2dt_affine();
 
-            auto flash = new Inkscape::CanvasItemBpath(_desktop->getCanvasTemp(), c.get_pathvector(), true);
+            auto flash = new Inkscape::CanvasItemBpath(_desktop->getCanvasTemp(), c, true);
             flash->set_stroke(over_item->highlight_color().toRGBA());
             flash->set_fill(0x0, SP_WIND_RULE_NONZERO); // No fill.
             flash_tempitem =

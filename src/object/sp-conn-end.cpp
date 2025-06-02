@@ -13,8 +13,6 @@
 
 #include "sp-item-group.h"
 #include "sp-path.h"
-#include "display/curve.h"
-
 
 static void change_endpts(SPPath *path, double endPos[2]);
 
@@ -71,7 +69,7 @@ static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_p
     if (!shape->curve()) return false;
 
     // apply transformations (up to common ancestor)
-    auto const curve_pv = shape->curve()->get_pathvector() * item_transform;
+    auto const curve_pv = *shape->curve() * item_transform;
     Geom::CrossingSet cross = crossings(conn_pv, curve_pv);
     // iterate over all Crossings
     //TODO: check correctness of the following code: inner loop uses loop variable
@@ -96,7 +94,7 @@ static bool try_get_intersect_point_with_item(SPPath* conn, SPItem* item,
         const bool at_start, double& intersect_pos)
 {
     // Copy the curve and apply transformations up to common ancestor.
-    auto conn_pv = conn->curve()->get_pathvector() * conn_transform;
+    auto conn_pv = *conn->curve() * conn_transform;
 
     // If this is not the starting point, use Geom::Path::reverse() to reverse the path
     if (!at_start) {
@@ -140,7 +138,7 @@ static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePa
 
     // Set sensible values in case there the connector ends are not
     // attached to any shapes.
-    Geom::PathVector conn_pv = path->curve()->get_pathvector();
+    Geom::PathVector conn_pv = *path->curve();
     double endPos[2] = { 0.0, static_cast<double>(conn_pv[0].size()) };
 
     for (unsigned h = 0; h < 2; ++h) {
@@ -198,10 +196,10 @@ static void change_endpts(SPPath *path, double endPos[2])
         path->setCurve({});
         return;
     }
-    const Geom::Path& old_path = path->curve()->get_pathvector()[0];
+    const Geom::Path& old_path = path->curve()->front();
     Geom::PathVector new_path_vector;
     new_path_vector.push_back(old_path.portion(endPos[0], endPos[1]));
-    path->setCurve(SPCurve(std::move(new_path_vector)));
+    path->setCurve(std::move(new_path_vector));
 }
 
 static void sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned const handle_ix)

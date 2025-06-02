@@ -23,6 +23,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "enums.h"
+#include "helper/geom.h"
 #include "preferences.h"
 #include "style.h"
 
@@ -40,7 +41,6 @@
 #include "sp-title.h"
 #include "sp-use.h"
 
-#include "display/curve.h"
 #include "display/drawing-group.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpe-clone-original.h"
@@ -480,7 +480,7 @@ Geom::OptRect bbox_on_rect_clip (SPObject *object) {
     if (shape) {
         auto curve = shape->curve();
         if (curve) {
-            Geom::PathVector pv = curve->get_pathvector();
+            Geom::PathVector pv = *curve;
             std::vector<Geom::Point> nodes = pv.nodes();
             if (pv.size() == 1 && nodes.size() == 4) {
                 if (Geom::are_near(nodes[0][Geom::X],nodes[3][Geom::X]) &&
@@ -511,7 +511,7 @@ bool equal_clip (SPItem *item, SPObject *clip) {
             auto curve = shape->curve();
             auto curve_clip = shape_clip->curve();
             if (curve && curve_clip) {
-                equal = curve->is_similar(curve_clip, 0.01);
+                equal = pathv_similar(*curve, *curve_clip, 0.01);
             }
         }
     }
@@ -1071,19 +1071,19 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                 // only run LPEs when the shape has a curve defined
                 if (sub_shape->curve()) {
                     auto c = *sub_shape->curve();
-                    lpe->pathvector_before_effect = c.get_pathvector();
-                    c.transform(i2anc_affine(sub_shape, top_group));
-                    sub_shape->setCurveInsync(&c);
-                    success = top_group->performOnePathEffect(&c, sub_shape, lpe);
-                    c.transform(i2anc_affine(sub_shape, top_group).inverse());
+                    lpe->pathvector_before_effect = c;
+                    c *= i2anc_affine(sub_shape, top_group);
+                    sub_shape->setCurveInsync(c);
+                    success = top_group->performOnePathEffect(c, sub_shape, lpe);
+                    c *= i2anc_affine(sub_shape, top_group).inverse();
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (success) {
-                        sub_shape->setCurveInsync(&c);
+                        sub_shape->setCurveInsync(c);
                         if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
                             sub_shape->bbox_vis_cache_is_valid = false;
                             sub_shape->bbox_geom_cache_is_valid = false;
                         }
-                        lpe->pathvector_after_effect = c.get_pathvector();
+                        lpe->pathvector_after_effect = c;
                         if (write) {
                             repr->setAttribute("d", sp_svg_write_path(lpe->pathvector_after_effect));
 #ifdef GROUP_VERBOSE

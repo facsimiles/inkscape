@@ -184,7 +184,6 @@ bool sp_repr_css_property_is_unset(SPCSSAttr *css, gchar const *name)
     return (attr && !strcmp(attr, "inkscape:unset"));
 }
 
-
 /**
  * Set a style property to a new value (e.g. fill to #ffff00).
  */

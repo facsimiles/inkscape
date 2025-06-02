@@ -819,22 +819,22 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
     _path_fitted = &path;
 }
 
-SPCurve Layout::convertToCurves() const
+Geom::PathVector Layout::convertToCurves() const
 {
     return convertToCurves(begin(), end());
 }
 
-SPCurve Layout::convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const
+Geom::PathVector Layout::convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const
 {
-    SPCurve curve;
+    Geom::PathVector curve;
 
     for (int glyph_index = from_glyph._glyph_index ; glyph_index < to_glyph._glyph_index ; glyph_index++) {
         Span const &span = _glyphs[glyph_index].span(this);
         Geom::Affine glyph_matrix = _glyphs[glyph_index].transform(*this);
         Geom::PathVector const *pathv = span.font->PathVector(_glyphs[glyph_index].glyph);
         if (pathv) {
-            Geom::PathVector pathv_trans = (*pathv) * glyph_matrix;
-            curve.append(SPCurve(std::move(pathv_trans)));
+            Geom::PathVector pathv_trans = *pathv * glyph_matrix;
+            pathvector_append(curve, std::move(pathv_trans));
         }
     }
 

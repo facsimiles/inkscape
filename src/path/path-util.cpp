@@ -37,7 +37,7 @@ std::unique_ptr<Path> Path_for_item(SPItem *item, bool doTransformation, bool tr
         return nullptr;
     }
 
-    auto pathv = pathvector_for_curve(item, &*curve, doTransformation, transformFull);
+    auto pathv = pathvector_for_curve(item, *curve, doTransformation, transformFull);
 
     return Path_for_pathvector(pathv);
 }
@@ -50,14 +50,14 @@ std::unique_ptr<Path> Path_for_item_before_LPE(SPItem *item, bool doTransformati
         return nullptr;
     }
     
-    auto pathv = pathvector_for_curve(item, &*curve, doTransformation, transformFull);
+    auto pathv = pathvector_for_curve(item, *curve, doTransformation, transformFull);
     
     return Path_for_pathvector(pathv);
 }
 
-Geom::PathVector pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool transformFull)
+Geom::PathVector pathvector_for_curve(SPItem *item, Geom::PathVector const &curve, bool doTransformation, bool transformFull)
 {
-    auto result = curve->get_pathvector();
+    auto result = curve;
     
     if (doTransformation) {
         if (transformFull) {
@@ -70,37 +70,37 @@ Geom::PathVector pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTrans
     return result;
 }
 
-std::optional<SPCurve> curve_for_item(SPItem *item)
+std::optional<Geom::PathVector> curve_for_item(SPItem *item)
 {
     if (!item) {
         return {};
     }
     
     if (auto path = cast<SPPath>(item)) {
-        return SPCurve::ptr_to_opt(path->curveForEdit());
+        return ptr_to_opt(path->curveForEdit());
     } else if (auto shape = cast<SPShape>(item)) {
-        return SPCurve::ptr_to_opt(shape->curve());
+        return ptr_to_opt(shape->curve());
     } else if (is<SPText>(item) || is<SPFlowtext>(item)) {
         return te_get_layout(item)->convertToCurves();
     } else if (auto image = cast<SPImage>(item)) {
-        return SPCurve::ptr_to_opt(image->get_curve());
+        return ptr_to_opt(image->get_curve());
     }
     
     return {};
 }
 
-std::optional<SPCurve> curve_for_item_before_LPE(SPItem *item)
+std::optional<Geom::PathVector> curve_for_item_before_LPE(SPItem *item)
 {
     if (!item) {
         return {};
     }
 
     if (auto shape = cast<SPShape>(item)) {
-        return SPCurve::ptr_to_opt(shape->curveForEdit());
+        return ptr_to_opt(shape->curveForEdit());
     } else if (is<SPText>(item) || is<SPFlowtext>(item)) {
         return te_get_layout(item)->convertToCurves();
     } else if (auto image = cast<SPImage>(item)) {
-        return SPCurve::ptr_to_opt(image->get_curve());
+        return ptr_to_opt(image->get_curve());
     }
     
     return {};

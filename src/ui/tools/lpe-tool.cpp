@@ -312,8 +312,8 @@ void LpeTool::create_measuring_items(Selection *selection)
 
     for (auto item : selection->items()) {
         if (auto path = cast<SPPath>(item)) {
-            SPCurve const *curve = path->curve();
-            auto const pwd2 = paths_to_pw(curve->get_pathvector());
+            auto const *curve = path->curve();
+            auto const pwd2 = paths_to_pw(*curve);
 
             double lengthval = Geom::length(pwd2);
             lengthval = Util::Quantity::convert(lengthval, "px", unit);
@@ -352,8 +352,8 @@ void LpeTool::update_measuring_items()
 
     for (auto &i : measuring_items) {
         SPPath *path = i.first;
-        SPCurve const *curve = path->curve();
-        auto const pwd2 = Geom::paths_to_pw(curve->get_pathvector());
+        auto const *curve = path->curve();
+        auto const pwd2 = Geom::paths_to_pw(*curve);
         double lengthval = Geom::length(pwd2);
         lengthval = Util::Quantity::convert(lengthval, "px", unit);
 

@@ -87,7 +87,7 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
             return nullptr;
     }
 
-    repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
+    repr->setAttribute("d", sp_svg_write_path(*_curve));
 
     SPShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
@@ -221,7 +221,8 @@ gchar* SPSpiral::description() const {
  * \pre is_unit_vector(*hat1).
  * \post is_unit_vector(*hat2).
  **/
-void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const {
+void SPSpiral::fitAndDraw(Geom::Path &c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const
+{
 #define BEZIER_SIZE   4
 #define FITTING_MAX_BEZIERS 4
 #define BEZIER_LENGTH (BEZIER_SIZE * FITTING_MAX_BEZIERS)
@@ -283,7 +284,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
 
     if (depth != -1) {
         for (i = 0; i < 4*depth; i += 4) {
-            c->curveto(bezier[i + 1],
+            c.appendNew<Geom::CubicBezier>(bezier[i + 1],
                       bezier[i + 2],
                       bezier[i + 3]);
         }
@@ -292,7 +293,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
         g_print ("cant_fit_cubic: t=%g\n", *t);
 #endif
         for (i = 1; i < SAMPLE_SIZE; i++)
-            c->lineto(darray[i]);
+            c.appendNew<Geom::LineSegment>(darray[i]);
     }
 
     *t = next_t;
@@ -309,7 +310,7 @@ void SPSpiral::set_shape() {
 
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
-    SPCurve c;
+    Geom::Path c;
 
 #ifdef SPIRAL_VERBOSE
     g_print ("cx=%g, cy=%g, exp=%g, revo=%g, rad=%g, arg=%g, t0=%g\n",
@@ -323,7 +324,7 @@ void SPSpiral::set_shape() {
 #endif
 
     /* Initial moveto. */
-    c.moveto(this->getXY(this->t0));
+    c.start(getXY(t0));
 
     double const tstep = SAMPLE_STEP / this->revo;
     double const dstep = tstep / (SAMPLE_SIZE - 1);
@@ -333,17 +334,16 @@ void SPSpiral::set_shape() {
 
     double t;
     for (t = this->t0; t < (1.0 - tstep);) {
-        this->fitAndDraw(&c, dstep, darray, hat1, hat2, &t);
+        fitAndDraw(c, dstep, darray, hat1, hat2, &t);
 
         hat1 = -hat2;
     }
 
-    if ((1.0 - t) > SP_EPSILON) {
-        this->fitAndDraw(&c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
+    if (1.0 - t > SP_EPSILON) {
+        fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
 
-    prepareShapeForLPE(&c);
-
+    prepareShapeForLPE(std::move(c));
 }
 
 /**

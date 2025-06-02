@@ -722,13 +722,13 @@ std::unique_ptr<Shape> SPText::getExclusionShape() const
         if (!shape->curve()) {
             shape->set_shape();
         }
-        SPCurve const *curve = shape->curve();
+        auto const *curve = shape->curve();
         if (!curve) {
             continue;
         }
 
         auto temp = std::make_unique<Path>();
-        temp->LoadPathVector(curve->get_pathvector(), shape->getRelativeTransform(this), true);
+        temp->LoadPathVector(*curve, shape->getRelativeTransform(this), true);
 
         auto margin = std::make_unique<Path>();
         if (shape->style->shape_margin.set) {
@@ -778,7 +778,7 @@ std::unique_ptr<Shape> SPText::getInclusionShape(SPShape *shape) const
         }
     }
 
-    auto pathvector = curve->get_pathvector();
+    auto pathvector = *curve;
     flatten(pathvector, fill_nonZero);
 
     auto temp_path = std::make_unique<Path>();
@@ -875,7 +875,7 @@ SPText::_getFirstYLength()
     return y;
 }
 
-SPCurve SPText::getNormalizedBpath() const
+Geom::PathVector SPText::getNormalizedBpath() const
 {
     return layout.convertToCurves();
 }

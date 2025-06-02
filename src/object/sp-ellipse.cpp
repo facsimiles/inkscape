@@ -28,7 +28,6 @@
 #include "sp-ellipse.h"
 #include "style.h"
 
-#include "display/curve.h"
 #include "svg/svg.h"
 
 #define SP_2PI (2 * M_PI)
@@ -386,7 +385,7 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             std::cerr << "SPGenericEllipse::write: unknown type." << std::endl;
     }
 
-    set_shape(); // evaluate SPCurve
+    set_shape(); // evaluate curve
 
     SPShape::write(xml_doc, repr, flags);
 
@@ -480,7 +479,7 @@ void SPGenericEllipse::set_shape()
         pb.flush();
     }
 
-    auto c = SPCurve(pb.peek());
+    auto c = pb.peek();
 
     // gchar *str = sp_svg_write_path(curve->get_pathvector());
     // std::cout << "  path: " << str << std::endl;
@@ -488,8 +487,8 @@ void SPGenericEllipse::set_shape()
 
     // Stretching / moving the calculated shape to fit the actual dimensions.
     Geom::Affine aff = Geom::Scale(rx.computed, ry.computed) * Geom::Translate(cx.computed, cy.computed);
-    c.transform(aff);
-    prepareShapeForLPE(&c);
+    c *= aff;
+    prepareShapeForLPE(std::move(c));
 }
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
@@ -649,7 +648,7 @@ bool SPGenericEllipse::set_elliptical_path_attribute(Inkscape::XML::Node *repr)
     this->set_shape();
 
     if (_curve) {
-        repr->setAttribute("d", sp_svg_write_path(_curve->get_pathvector()));
+        repr->setAttribute("d", sp_svg_write_path(*_curve));
     } else {
         repr->removeAttribute("d");
     }

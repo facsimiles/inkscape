@@ -33,7 +33,7 @@ public:
 
     ~LPEPerspectiveEnvelope() override;
 
-    void doEffect(SPCurve *curve) override;
+    void doEffect(Geom::PathVector &curve) override;
 
     virtual Geom::Point projectPoint(Geom::Point p);
 

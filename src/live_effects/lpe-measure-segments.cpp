@@ -731,9 +731,8 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape && !bboxonly) {
-        SPCurve const *c = shape->curve();
-        if (c) {
-            current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
+        if (auto const *c = shape->curve()) {
+            current_nodes = transformNodes(c->nodes(), transform);
         }
     } else if ((text || flowtext) && !bboxonly) {
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -746,10 +745,10 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
             // get path from iter to iter_next:
             auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
             iter = iter_next; // shift to next glyph
-            if (curve.is_empty()) { // whitespace glyph?
+            if (curve.empty()) { // whitespace glyph?
                 continue;
             }
-            std::vector< Point > letter_nodes = transformNodes(curve.get_pathvector().nodes(), transform);
+            std::vector<Point> letter_nodes = transformNodes(curve.nodes(), transform);
             current_nodes.insert(current_nodes.end(),letter_nodes.begin(),letter_nodes.end());
             if (iter == te_get_layout(item)->end()) {
                 break;
@@ -788,9 +787,8 @@ static void extractFirstPoint(Geom::Point & dest, const Glib::ustring & lpobjid,
     id += lpobjid;
     auto path = cast<SPPath>(document->getObjectById(id));
     if (path) {
-        SPCurve const *curve = path->curve();
-        if (curve) {
-            dest = *curve->first_point();
+        if (auto const *curve = path->curve()) {
+            dest = curve->initialPoint();
         }
     }
 }
@@ -983,8 +981,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Point end_stored = Geom::Point(0,0); 
         Geom::Point next_stored = Geom::Point(0,0);
         if (!active_projection) {
-            SPCurve const *c = shape->curve();
-            pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+            auto const *c = shape->curve();
+            pathvector = pathv_to_linear_and_cubic_beziers(*c);
             pathvector *= affinetransform;
         }
         auto format_str = format.param_getSVGValue();

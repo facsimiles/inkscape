@@ -116,7 +116,7 @@ void ObjectSet::combine(bool skip_undo, bool silent)
     char const *transform = nullptr;
     char const *path_effect = nullptr;
 
-    SPCurve curve;
+    Geom::PathVector curve;
     SPItem *first = nullptr;
     Inkscape::XML::Node *parent = nullptr; 
 
@@ -146,8 +146,8 @@ void ObjectSet::combine(bool skip_undo, bool silent)
             //c->transform(item->transform);
             curve = std::move(c);
         } else {
-            c.transform(item->getRelativeTransform(first));
-            curve.append(std::move(c));
+            c *= item->getRelativeTransform(first);
+            pathvector_append(curve, std::move(c));
 
             // reduce position only if the same parent
             if (item->getRepr()->parent() == parent) {
@@ -175,7 +175,7 @@ void ObjectSet::combine(bool skip_undo, bool silent)
         repr->setAttribute("inkscape:path-effect", path_effect);
 
         // set path data corresponding to new curve
-        auto dstring = sp_svg_write_path(curve.get_pathvector());
+        auto dstring = sp_svg_write_path(curve);
         if (path_effect) {
             repr->setAttribute("inkscape:original-d", dstring);
         } else {
@@ -231,7 +231,7 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
         if (!path->curveForEdit()) {
             continue;
         }
-        auto pathv = path->curveForEdit()->get_pathvector();
+        auto pathv = *path->curveForEdit();
 
         did = true;
 
@@ -556,7 +556,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             // get path from iter to iter_next:
             auto curve = layout->convertToCurves(iter, iter_next);
             iter = iter_next; // shift to next glyph
-            if (curve.is_empty()) { // whitespace glyph?
+            if (curve.empty()) { // whitespace glyph?
                 continue;
             }
 
@@ -568,9 +568,9 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                 for (auto sp = pos_obj->parent; sp && sp != item; sp = sp->parent) {
                     style->merge(sp->style);
                 }
-                curves.emplace_back(curve.get_pathvector(), style);
+                curves.emplace_back(curve, style);
             } else {
-                for (auto &path : curve.get_pathvector()) {
+                for (auto &path : curve) {
                     curves.back().first.push_back(path);
                 }
             }
@@ -615,7 +615,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         return result;
     }
 
-    SPCurve curve;
+    Geom::PathVector curve;
 
     if (auto shape = cast<SPShape>(item); shape && shape->curveForEdit()) {
         curve = *shape->curveForEdit();
@@ -625,7 +625,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     // Prevent empty paths from being added to the document
     // otherwise we end up with zomby markup in the SVG file
-    if(curve.is_empty()) {
+    if (curve.empty()) {
         return nullptr;
     }
 
@@ -642,7 +642,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
     /* Definition */
-    repr->setAttribute("d", sp_svg_write_path(curve.get_pathvector()));
+    repr->setAttribute("d", sp_svg_write_path(curve));
     return repr;
 }
 
@@ -674,7 +674,7 @@ ObjectSet::pathReverse()
 
         did = true;
 
-        auto str = sp_svg_write_path(path->curveForEdit()->get_pathvector().reversed());
+        auto str = sp_svg_write_path(path->curveForEdit()->reversed());
         if ( path->hasPathEffectRecursive() ) {
             path->setAttribute("inkscape:original-d", str);
         } else {

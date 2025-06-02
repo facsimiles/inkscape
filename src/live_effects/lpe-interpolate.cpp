@@ -164,8 +164,8 @@ void LPEInterpolate::resetDefaults(SPItem const *item)
     if (!is<SPPath>(item))
         return;
 
-    SPCurve const *crv = cast<SPPath>(item)->curveForEdit();
-    Geom::PathVector const &pathv = crv->get_pathvector();
+    auto const *crv = cast<SPPath>(item)->curveForEdit();
+    Geom::PathVector const &pathv = *crv;
     if ((pathv.size() < 2))
         return;
 

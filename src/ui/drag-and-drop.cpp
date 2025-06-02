@@ -259,7 +259,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
         bool fillnotstroke = drop_target->get_current_drop()->get_actions() != Gdk::DragAction::MOVE;
         if (fillnotstroke && (is<SPShape>(item) || is<SPText>(item) || is<SPFlowtext>(item))) {
             if (auto const curve = curve_for_item(item)) {
-                auto const pathv = curve->get_pathvector() * (item->i2dt_affine() * desktop->d2w());
+                auto const pathv = *curve * (item->i2dt_affine() * desktop->d2w());
 
                 double dist;
                 pathv.nearestTime(world_pos, &dist);

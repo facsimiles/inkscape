@@ -897,7 +897,7 @@ public:
         if (!curve) curve = _path->curve();
         size_t node_count = 0;
         if (curve) {
-            node_count = curve->get_segment_count();
+            node_count = curve->curveCount();
         }
         _info.set_text(_("Nodes: ") + std::to_string(node_count));
 

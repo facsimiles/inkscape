@@ -710,13 +710,13 @@ bool ClipboardManagerImpl::_pasteNodes(SPDesktop *desktop, SPDocument *clipdoc, 
             source_to_target *= dt_to_target;
 
             // Finally convert the curve into path item's coordinate system
-            source_curve.transform(source_to_target);
+            source_curve *= source_to_target;
 
             // Add the source curve to the target copy
-            target_curve.append(std::move(source_curve));
+            pathvector_append(target_curve, std::move(source_curve));
 
             // Set the attribute to keep the document up to date (fixes undo)
-            auto str = sp_svg_write_path(target_curve.get_pathvector());
+            auto str = sp_svg_write_path(target_curve);
             target_path->setAttribute("d", str);
 
             if (on_page) {

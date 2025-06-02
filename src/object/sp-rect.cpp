@@ -227,7 +227,7 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
     if (type == SP_GENERIC_PATH) {
         set_rect_path_attribute(repr); // include set_shape()
     } else {
-        this->set_shape(); // evaluate SPCurve
+        set_shape(); // evaluate curve
     }
     SPShape::write(xml_doc, repr, flags);
 
@@ -248,7 +248,8 @@ const char* SPRect::displayName() const {
 
 #define C1 0.554
 
-void SPRect::set_shape() {
+void SPRect::set_shape()
+{
     if (checkBrokenPathEffect()) {
         return;
     }
@@ -258,7 +259,7 @@ void SPRect::set_shape() {
         return;
     }
 
-    SPCurve c;
+    Geom::Path c;
 
     double const x = this->x.computed;
     double const y = this->y.computed;
@@ -286,42 +287,38 @@ void SPRect::set_shape() {
     /* We don't use proper circular/elliptical arcs, but bezier curves can approximate a 90-degree
      * arc fairly well.
      */
-    if ((rx > 1e-18) && (ry > 1e-18)) {
-        c.moveto(x + rx, y);
+    if (rx > 1e-18 && ry > 1e-18) {
+        c.start({x + rx, y});
 
         if (rx < w2) {
-            c.lineto(x + w - rx, y);
+            c.appendNew<Geom::LineSegment>(Geom::Point{x + w - rx, y});
         }
 
-        c.curveto(x + w - rx * (1 - C1), y, x + w, y + ry * (1 - C1), x + w, y + ry);
+        c.appendNew<Geom::CubicBezier>(Geom::Point{x + w - rx * (1 - C1), y}, Geom::Point{x + w, y + ry * (1 - C1)}, Geom::Point{x + w, y + ry});
 
         if (ry < h2) {
-            c.lineto(x + w, y + h - ry);
+            c.appendNew<Geom::LineSegment>(Geom::Point{x + w, y + h - ry});
         }
 
-        c.curveto(x + w, y + h - ry * (1 - C1), x + w - rx * (1 - C1), y + h, x + w - rx, y + h);
+        c.appendNew<Geom::CubicBezier>(Geom::Point{x + w, y + h - ry * (1 - C1)}, Geom::Point{x + w - rx * (1 - C1), y + h}, Geom::Point{x + w - rx, y + h});
 
         if (rx < w2) {
-            c.lineto(x + rx, y + h);
+            c.appendNew<Geom::LineSegment>(Geom::Point{x + rx, y + h});
         }
 
-        c.curveto(x + rx * (1 - C1), y + h, x, y + h - ry * (1 - C1), x, y + h - ry);
+        c.appendNew<Geom::CubicBezier>(Geom::Point{x + rx * (1 - C1), y + h}, Geom::Point{x, y + h - ry * (1 - C1)}, Geom::Point{x, y + h - ry});
 
         if (ry < h2) {
-            c.lineto(x, y + ry);
+            c.appendNew<Geom::LineSegment>(Geom::Point{x, y + ry});
         }
 
-        c.curveto(x, y + ry * (1 - C1), x + rx * (1 - C1), y, x + rx, y);
+        c.appendNew<Geom::CubicBezier>(Geom::Point{x, y + ry * (1 - C1)}, Geom::Point{x + rx * (1 - C1), y}, Geom::Point{x + rx, y});
+        c.close();
     } else {
-        c.moveto(x + 0.0, y + 0.0);
-        c.lineto(x + w, y + 0.0);
-        c.lineto(x + w, y + h);
-        c.lineto(x + 0.0, y + h);
+        c = Geom::Path{Geom::Rect::from_xywh(x, y, w, h)};
     }
 
-    c.closepath();
-
-    prepareShapeForLPE(&c);
+    prepareShapeForLPE(std::move(c));
 }
 
 bool SPRect::set_rect_path_attribute(Inkscape::XML::Node *repr)
@@ -330,7 +327,7 @@ bool SPRect::set_rect_path_attribute(Inkscape::XML::Node *repr)
     this->set_shape();
 
     if (_curve) {
-        repr->setAttribute("d", sp_svg_write_path(_curve->get_pathvector()));
+        repr->setAttribute("d", sp_svg_write_path(*_curve));
     } else {
         repr->removeAttribute("d");
     }

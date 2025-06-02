@@ -1454,9 +1454,9 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
  * @param lpeitem the element that has this LPE
  * @param curve the curve to pass when in mode path or shape
  */
-void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/, SPCurve *curve)
+void Effect::doAfterEffect(SPLPEItem const *, Geom::PathVector *curve)
 {
-    //Do nothing for simple effects
+    // Do nothing for simple effects
     update_satellites();
 }
 
@@ -1480,7 +1480,7 @@ void Effect::adjustForNewPath()
 }
 
 //secret impl methods (shhhh!)
-void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve)
+void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem, Geom::PathVector *curve)
 {
     doAfterEffect(lpeitem, curve);
     is_load = false;
@@ -1612,18 +1612,12 @@ Effect::acceptParamPath (SPPath const*/*param_path*/) {
 /*
  *  Here be the doEffect function chain:
  */
-void
-Effect::doEffect (SPCurve * curve)
+void Effect::doEffect(Geom::PathVector &curve)
 {
-    Geom::PathVector orig_pathv = curve->get_pathvector();
-
-    Geom::PathVector result_pathv = doEffect_path(orig_pathv);
-
-    curve->set_pathvector(result_pathv);
+    curve = doEffect_path(curve);
 }
 
-Geom::PathVector
-Effect::doEffect_path (Geom::PathVector const & path_in)
+Geom::PathVector Effect::doEffect_path(Geom::PathVector const &path_in)
 {
     Geom::PathVector path_out;
 

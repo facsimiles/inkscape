@@ -180,8 +180,6 @@ public:
     ~SpiroInterpolator() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
-        Path fit;
-
         Coord scale_y = 100.;
 
         guint len = points.size();
@@ -196,7 +194,7 @@ public:
         controlpoints[len-2].ty = 'v';
         controlpoints[len-1].ty = '}';
 
-        Spiro::spiro_run(controlpoints, len, fit);
+        auto fit = Spiro::spiro_run(controlpoints, len);
 
         fit *= Scale(1,scale_y);
         g_free(controlpoints);

@@ -20,12 +20,10 @@
 #include <memory>
 
 #include <glibmm/ustring.h>
+#include <2geom/pathvector.h>
 
 #include "sp-dimensions.h"
 #include "viewbox.h"
-
-#include "display/curve.h"
-
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
@@ -42,7 +40,7 @@ public:
     double dpi;
     double prev_width, prev_height;
 
-    std::optional<SPCurve> curve; // This curve is at the image's boundary for snapping
+    std::optional<Geom::PathVector> curve; // This curve is at the image's boundary for snapping
 
     char *href;
     char *color_profile;
@@ -68,7 +66,7 @@ public:
 
     void apply_profile(Inkscape::Pixbuf *pixbuf);
 
-    SPCurve const *get_curve() const;
+    Geom::PathVector const *get_curve() const;
     void refresh_if_outdated();
     bool cropToArea(Geom::Rect area);
     bool cropToArea(const Geom::IntRect &area);

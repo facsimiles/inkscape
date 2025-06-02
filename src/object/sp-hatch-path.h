@@ -26,7 +26,6 @@
 
 #include "svg/svg-length.h"
 #include "object/sp-object.h"
-#include "display/curve.h"
 #include "display/drawing-item-ptr.h"
 
 namespace Inkscape {
@@ -54,7 +53,7 @@ public:
     void setStripExtents(unsigned int key, Geom::OptInterval const &extents);
     Geom::Interval bounds() const;
 
-    SPCurve calculateRenderCurve(unsigned key) const;
+    Geom::PathVector calculateRenderCurve(unsigned key) const;
 
 protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
@@ -74,11 +73,11 @@ private:
 
     gdouble _repeatLength() const;
     void _updateView(View &view);
-    SPCurve _calculateRenderCurve(View const &view) const;
+    Geom::PathVector _calculateRenderCurve(View const &view) const;
 
     void _readHatchPathVector(char const *str, Geom::PathVector &pathv, bool &continous_join);
 
-    std::optional<SPCurve> _curve;
+    std::optional<Geom::PathVector> _curve;
     bool _continuous = false;
 };
 

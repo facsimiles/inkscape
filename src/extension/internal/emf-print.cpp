@@ -43,7 +43,6 @@
 #include "style-enums.h"          // Fill rules
 
 #include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
-#include "display/curve.h"
 
 #include "extension/system.h"
 #include "extension/print.h"
@@ -1091,7 +1090,7 @@ Geom::PathVector PrintEmf::merge_PathVector_with_shape(Geom::PathVector const &c
 
     Geom::Affine tfc = item->transform * transform;
     if (shape->curve()) {
-        Geom::PathVector const &new_vect = shape->curve()->get_pathvector();
+        Geom::PathVector const &new_vect = *shape->curve();
         if(combined_pathvector.empty()){
             new_combined_pathvector = new_vect * tfc;
         }

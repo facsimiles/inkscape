@@ -148,17 +148,15 @@ Geom::Affine SPLine::set_transform(Geom::Affine const &transform) {
     return Geom::identity();
 }
 
-void SPLine::set_shape() {
-    SPCurve c;
-
-    c.moveto(this->x1.computed, this->y1.computed);
-    c.lineto(this->x2.computed, this->y2.computed);
+void SPLine::set_shape()
+{
+    auto c = Geom::LineSegment{Geom::Point{x1.computed, y1.computed}, Geom::Point{x2.computed, y2.computed}};
 
     // *_insync does not call update, avoiding infinite recursion when set_shape is called by update
-    setCurveInsync(std::move(c));
+    setCurveInsync(path_from_curve(c));
     setCurveBeforeLPE(curve());
 
-    // LPE's cannot be applied to lines. (the result can (generally) not be represented as SPLine)
+    // LPEs cannot be applied to lines. (the result can (generally) not be represented as SPLine)
 }
 
 /*

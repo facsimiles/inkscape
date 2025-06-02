@@ -48,14 +48,6 @@ CanvasItemBpath::CanvasItemBpath(CanvasItemGroup *group, Geom::PathVector path, 
 }
 
 /**
- * Set a control bpath. Curve is in document coordinates.
- */
-void CanvasItemBpath::set_bpath(SPCurve const *curve, bool phantom_line)
-{
-    set_bpath(curve ? curve->get_pathvector() : Geom::PathVector(), phantom_line);
-}
-
-/**
  * Set a control bpath. Path is in document coordinates.
  */
 void CanvasItemBpath::set_bpath(Geom::PathVector path, bool phantom_line)

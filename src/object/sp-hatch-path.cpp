@@ -153,12 +153,11 @@ Geom::Interval SPHatchPath::bounds() const
 
     Geom::Affine transform = Geom::Translate(offset.computed, 0);
     if (!_curve) {
-        SPCurve test_curve;
-        test_curve.moveto(Geom::Point(0, 0));
-        test_curve.moveto(Geom::Point(0, 1));
-        bbox = bounds_exact_transformed(test_curve.get_pathvector(), transform);
+        auto test_curve = Geom::LineSegment{Geom::Point(0, 0), Geom::Point(0, 1)};
+        test_curve *= transform;
+        bbox = test_curve.boundsExact();
     } else {
-        bbox = bounds_exact_transformed(_curve->get_pathvector(), transform);
+        bbox = bounds_exact_transformed(*_curve, transform);
     }
 
     double stroke_width = style->stroke_width.computed;
@@ -167,7 +166,7 @@ Geom::Interval SPHatchPath::bounds() const
     return result;
 }
 
-SPCurve SPHatchPath::calculateRenderCurve(unsigned key) const
+Geom::PathVector SPHatchPath::calculateRenderCurve(unsigned key) const
 {
     for (auto const &v : views) {
         if (v.key == key) {
@@ -175,15 +174,15 @@ SPCurve SPHatchPath::calculateRenderCurve(unsigned key) const
         }
     }
     g_assert_not_reached();
-    return SPCurve{};
+    return {};
 }
 
-gdouble SPHatchPath::_repeatLength() const
+double SPHatchPath::_repeatLength() const
 {
-    gdouble val = 0;
+    double val = 0;
 
-    if (_curve && _curve->last_point()) {
-        val = _curve->last_point()->y();
+    if (_curve && !_curve->empty()) {
+        val = _curve->finalPoint().y();
     }
 
     return val;
@@ -197,41 +196,41 @@ void SPHatchPath::_updateView(View &view)
     view.drawingitem->setTransform(offset_transform);
     style->fill.setNone();
     view.drawingitem->setStyle(style);
-    view.drawingitem->setPath(std::make_shared<SPCurve>(std::move(calculated_curve)));
+    view.drawingitem->setPath(std::make_shared<Geom::PathVector>(std::move(calculated_curve)));
 }
 
-SPCurve SPHatchPath::_calculateRenderCurve(View const &view) const
+Geom::PathVector SPHatchPath::_calculateRenderCurve(View const &view) const
 {
-    SPCurve calculated_curve;
-
     if (!view.extents) {
-        return calculated_curve;
+        return {};
     }
 
+    Geom::PathVector calculated_curve;
+
     if (!_curve) {
-        calculated_curve.moveto(0, view.extents->min());
-        calculated_curve.lineto(0, view.extents->max());
+        calculated_curve = path_from_curve(Geom::LineSegment{Geom::Point{0, view.extents->min()}, Geom::Point{0, view.extents->max()}});
         //TODO: if hatch has a dasharray defined, adjust line ends
     } else {
-        gdouble repeatLength = _repeatLength();
+        double repeatLength = _repeatLength();
         if (repeatLength > 0) {
             gdouble initial_y = floor(view.extents->min() / repeatLength) * repeatLength;
             int segment_cnt = ceil((view.extents->extent()) / repeatLength) + 1;
 
             auto segment = *_curve;
-            segment.transform(Geom::Translate(0, initial_y));
+            segment *= Geom::Translate(0, initial_y);
 
             Geom::Affine step_transform = Geom::Translate(0, repeatLength);
             for (int i = 0; i < segment_cnt; ++i) {
                 if (_continuous) {
-                    calculated_curve.append_continuous(segment);
+                    pathvector_append_continuous(calculated_curve, segment);
                 } else {
-                    calculated_curve.append(segment);
+                    pathvector_append(calculated_curve, segment);
                 }
-                segment.transform(step_transform);
+                segment *= step_transform;
             }
         }
     }
+
     return calculated_curve;
 }
 

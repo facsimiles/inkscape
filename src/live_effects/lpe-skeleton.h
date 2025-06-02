@@ -36,8 +36,8 @@ public:
     ~LPESkeleton() override;
 
 //  Choose to implement one of the doEffect functions. You can delete or comment out the others.
-//    virtual void doEffect (SPCurve * curve);
-//    virtual Geom::PathVector doEffect_path (Geom::PathVector const &path_in);
+//    virtual void doEffect(Geom::PathVector &curve);
+//    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const &pwd2_in) override;
 
     /* the knotholder entity classes (if any) can be declared friends */

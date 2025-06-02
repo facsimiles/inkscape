@@ -197,9 +197,9 @@ bool PencilTool::_handleButtonPress(ButtonPressEvent const &event)
                     p = anchor->dp;
                     //Put the start overwrite curve always on the same direction
                     if (anchor->start) {
-                        sa_overwrited = std::make_shared<SPCurve>(anchor->curve->reversed());
+                        sa_overwrited = std::make_shared<Geom::PathVector>(anchor->curve->reversed());
                     } else {
-                        sa_overwrited = std::make_shared<SPCurve>(*anchor->curve);
+                        sa_overwrited = std::make_shared<Geom::PathVector>(*anchor->curve);
                     }
                     _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                 } else {
@@ -436,7 +436,7 @@ bool PencilTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                         Geom::Point p_end = p;
                         if (tablet_enabled) {
                             _addFreehandPoint(p_end, event.modifiers, true);
-                            _pressure_curve.reset();
+                            _pressure_curve.clear();
                         } else {
                             _endpointSnap(p_end, event.modifiers);
                             if (p_end != p) {
@@ -488,18 +488,19 @@ bool PencilTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
     return ret;
 }
 
-void PencilTool::_cancel() {
+void PencilTool::_cancel()
+{
     ungrabCanvasEvents();
 
     _is_drawing = false;
     _state = SP_PENCIL_CONTEXT_IDLE;
     discard_delayed_snap_event();
 
-    red_curve.reset();
-    red_bpath->set_bpath(&red_curve);
+    red_curve.clear();
+    red_bpath->set_bpath({});
 
     green_bpaths.clear();
-    green_curve->reset();
+    green_curve->clear();
     green_anchor.reset();
 
     message_context->clear();
@@ -606,29 +607,27 @@ void PencilTool::_setStartpoint(Geom::Point const &p) {
  * Number of points is (re)set to 2 always, 2nd point is modified.
  * We change RED curve.
  */
-void PencilTool::_setEndpoint(Geom::Point const &p) {
+void PencilTool::_setEndpoint(Geom::Point const &p)
+{
     if (_npoints == 0) {
         return;
         /* May occur if first point wasn't in SVG plane (e.g. weird w2d transform, perhaps from bad
          * zoom setting).
          */
     }
-    g_return_if_fail( this->_npoints > 0 );
+    g_return_if_fail(_npoints > 0);
 
-    red_curve.reset();
-    if ( ( p == p_array[0] )
-         || !in_svg_plane(p) )
-    {
+    red_curve.clear();
+    if (p == p_array[0] || !in_svg_plane(p)) {
         _npoints = 1;
     } else {
         p_array[1] = p;
         _npoints = 2;
 
-        red_curve.moveto(p_array[0]);
-        red_curve.lineto(p_array[1]);
+        red_curve = path_from_curve(Geom::LineSegment{p_array[0], p_array[1]});
         red_curve_is_valid = true;
         if (!tablet_enabled) {
-            red_bpath->set_bpath(&red_curve);
+            red_bpath->set_bpath(red_curve);
         }
     }
 }
@@ -640,141 +639,134 @@ void PencilTool::_setEndpoint(Geom::Point const &p) {
  * fixme: I'd like remove red reset from concat colors (lauris).
  * Still not sure, how it will make most sense.
  */
-void PencilTool::_finishEndpoint() {
-    if (this->red_curve.is_unset() ||
-        this->red_curve.first_point() == this->red_curve.second_point())
+void PencilTool::_finishEndpoint()
+{
+    if (red_curve.empty() ||
+        red_curve.front().initialCurve().isDegenerate())
     {
-        this->red_curve.reset();
+        red_curve.clear();
         if (!tablet_enabled) {
-            red_bpath->set_bpath(nullptr);
+            red_bpath->set_bpath({});
         }
     } else {
         /* Write curves to object. */
         spdc_concat_colors_and_flush(this, false);
-        this->sa = nullptr;
-        this->ea = nullptr;
+        sa = nullptr;
+        ea = nullptr;
     }
 }
 
-static inline double square(double const x) { return x * x; }
-
-
-
 void PencilTool::addPowerStrokePencil()
 {
-    {
-        SPDocument *document = _desktop->doc();
-        if (!document) {
+    auto document = _desktop->doc();
+    if (!document) {
+        return;
+    }
+
+    using namespace Inkscape::LivePathEffect;
+    auto prefs = Inkscape::Preferences::get();
+    double tol = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
+    double tolerance_sq = 0.02 * Geom::sqr(_desktop->w2d().descrim() * tol) * std::exp(0.2 * tol - 2);
+    int n_points = ps.size();
+    // worst case gives us a segment per point
+    int max_segs = 4 * n_points;
+    std::vector<Geom::Point> b(max_segs);
+    int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
+
+    if (n_segs > 0) {
+        /* Fit and draw and reset state */
+        auto path = Geom::Path{b[0]};
+        for (int c = 0; c < n_segs; c++) {
+            path.appendNew<Geom::CubicBezier>(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
+        }
+        path *= currentLayer()->i2dt_affine().inverse();
+
+        Inkscape::XML::Document *xml_doc = document->getReprDoc();
+        Inkscape::XML::Node *pp = nullptr;
+        pp = xml_doc->createElement("svg:path");
+        pp->setAttribute("d", sp_svg_write_path(path));
+        pp->setAttribute("id", "power_stroke_preview");
+        Inkscape::GC::release(pp);
+
+        auto powerpreview = cast<SPShape>(currentLayer()->appendChildRepr(pp));
+        auto lpeitem = powerpreview;
+        if (!lpeitem) {
             return;
         }
-        using namespace Inkscape::LivePathEffect;
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        double tol = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
-        double tolerance_sq = 0.02 * square(_desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
-        int n_points = this->ps.size();
-        // worst case gives us a segment per point
-        int max_segs = 4 * n_points;
-        std::vector<Geom::Point> b(max_segs);
-        SPCurve curvepressure;
-        int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
-        if (n_segs > 0) {
-            /* Fit and draw and reset state */
-            curvepressure.moveto(b[0]);
-            for (int c = 0; c < n_segs; c++) {
-                curvepressure.curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
-            }
-        }
-        curvepressure.transform(currentLayer()->i2dt_affine().inverse());
-        Geom::Path path = curvepressure.get_pathvector()[0];
-
-        if (!path.empty()) {
-            Inkscape::XML::Document *xml_doc = document->getReprDoc();
-            Inkscape::XML::Node *pp = nullptr;
-            pp = xml_doc->createElement("svg:path");
-            pp->setAttribute("d", sp_svg_write_path(path));
-            pp->setAttribute("id", "power_stroke_preview");
-            Inkscape::GC::release(pp);
-
-            auto powerpreview = cast<SPShape>(currentLayer()->appendChildRepr(pp));
-            auto lpeitem = powerpreview;
-            if (!lpeitem) {
-                return;
-            }
-            DocumentUndo::ScopedInsensitive tmp(document);
-            tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
-            if (tol > 30) {
-                tol = tol / (130.0 * (132.0 - tol));
-                Inkscape::SVGOStringStream threshold;
-                threshold << tol;
-                Effect::createAndApply(SIMPLIFY, document, lpeitem);
-                Effect *lpe = lpeitem->getCurrentLPE();
-                Inkscape::LivePathEffect::LPESimplify *simplify =
-                    static_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe);
-                if (simplify) {
-                    sp_lpe_item_enable_path_effects(lpeitem, false);
-                    Glib::ustring pref_path = "/live_effects/simplify/smooth_angles";
-                    bool valid = prefs->getEntry(pref_path).isValidDouble();
-                    if (!valid) {
-                        lpe->getRepr()->setAttribute("smooth_angles", "0");
-                    }
-                    pref_path = "/live_effects/simplify/helper_size";
-                    valid = prefs->getEntry(pref_path).isValidDouble();
-                    if (!valid) {
-                        lpe->getRepr()->setAttribute("helper_size", "0");
-                    }
-                    pref_path = "/live_effects/simplify/step";
-                    valid = prefs->getEntry(pref_path).isValidDouble();
-                    if (!valid) {
-                        lpe->getRepr()->setAttribute("step", "1");
-                    }
-                    lpe->getRepr()->setAttribute("threshold", threshold.str());
-                    lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
-                    lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
-                    sp_lpe_item_enable_path_effects(lpeitem, true);
-                }
-                sp_lpe_item_update_patheffect(lpeitem, false, true);
-                SPCurve const *curvepressure = powerpreview->curve();
-                if (curvepressure->is_empty()) {
-                    return;
-                }
-                path = curvepressure->get_pathvector()[0];
-            }
-            powerStrokeInterpolate(path);
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
-            prefs->setBool(pref_path_pp, true);
-            Effect::createAndApply(POWERSTROKE, document, lpeitem);
+        DocumentUndo::ScopedInsensitive tmp(document);
+        tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
+        if (tol > 30) {
+            tol = tol / (130.0 * (132.0 - tol));
+            Inkscape::SVGOStringStream threshold;
+            threshold << tol;
+            Effect::createAndApply(SIMPLIFY, document, lpeitem);
             Effect *lpe = lpeitem->getCurrentLPE();
-            Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
-            if (pspreview) {
+            Inkscape::LivePathEffect::LPESimplify *simplify =
+                static_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe);
+            if (simplify) {
                 sp_lpe_item_enable_path_effects(lpeitem, false);
-                Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
-                bool valid = prefs->getEntry(pref_path).isValidString();
+                Glib::ustring pref_path = "/live_effects/simplify/smooth_angles";
+                bool valid = prefs->getEntry(pref_path).isValidDouble();
                 if (!valid) {
-                    pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+                    lpe->getRepr()->setAttribute("smooth_angles", "0");
                 }
-                pref_path = "/live_effects/powerstroke/linejoin_type";
-                valid = prefs->getEntry(pref_path).isValidString();
-                if (!valid) {
-                    pspreview->getRepr()->setAttribute("linejoin_type", "spiro");
-                }
-                pref_path = "/live_effects/powerstroke/interpolator_beta";
+                pref_path = "/live_effects/simplify/helper_size";
                 valid = prefs->getEntry(pref_path).isValidDouble();
                 if (!valid) {
-                    pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
+                    lpe->getRepr()->setAttribute("helper_size", "0");
                 }
-                gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 2);
-                pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
-                pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
-                pspreview->getRepr()->setAttribute("sort_points", "true");
-                pspreview->getRepr()->setAttribute("not_jump", "true");
-                pspreview->offset_points.param_set_and_write_new_value(this->points);
+                pref_path = "/live_effects/simplify/step";
+                valid = prefs->getEntry(pref_path).isValidDouble();
+                if (!valid) {
+                    lpe->getRepr()->setAttribute("step", "1");
+                }
+                lpe->getRepr()->setAttribute("threshold", threshold.str());
+                lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
+                lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
                 sp_lpe_item_enable_path_effects(lpeitem, true);
-                sp_lpe_item_update_patheffect(lpeitem, false, true);
-                pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
             }
-            prefs->setBool(pref_path_pp, false);
+            sp_lpe_item_update_patheffect(lpeitem, false, true);
+            auto const *curvepressure = powerpreview->curve();
+            if (curvepressure->empty()) {
+                return;
+            }
+            path = curvepressure->front();
         }
+        powerStrokeInterpolate(path);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
+        prefs->setBool(pref_path_pp, true);
+        Effect::createAndApply(POWERSTROKE, document, lpeitem);
+        Effect *lpe = lpeitem->getCurrentLPE();
+        Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
+        if (pspreview) {
+            sp_lpe_item_enable_path_effects(lpeitem, false);
+            Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
+            bool valid = prefs->getEntry(pref_path).isValidString();
+            if (!valid) {
+                pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+            }
+            pref_path = "/live_effects/powerstroke/linejoin_type";
+            valid = prefs->getEntry(pref_path).isValidString();
+            if (!valid) {
+                pspreview->getRepr()->setAttribute("linejoin_type", "spiro");
+            }
+            pref_path = "/live_effects/powerstroke/interpolator_beta";
+            valid = prefs->getEntry(pref_path).isValidDouble();
+            if (!valid) {
+                pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
+            }
+            gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 2);
+            pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
+            pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
+            pspreview->getRepr()->setAttribute("sort_points", "true");
+            pspreview->getRepr()->setAttribute("not_jump", "true");
+            pspreview->offset_points.param_set_and_write_new_value(this->points);
+            sp_lpe_item_enable_path_effects(lpeitem, true);
+            sp_lpe_item_update_patheffect(lpeitem, false, true);
+            pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
+        }
+        prefs->setBool(pref_path_pp, false);
     }
 }
 
@@ -821,12 +813,12 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
             pressure_piecewise.push_cut(0);
             pressure_piecewise.push(pressure_dot.toSBasis(), 1);
             Geom::PathVector pressure_path = Geom::path_from_piecewise(pressure_piecewise, 0.1);
-            Geom::PathVector previous_presure = _pressure_curve.get_pathvector();
+            Geom::PathVector previous_presure = _pressure_curve;
             if (!pressure_path.empty() && !previous_presure.empty()) {
                 pressure_path = sp_pathvector_boolop(pressure_path, previous_presure, bool_op_union, fill_nonZero, fill_nonZero);
             }
-            _pressure_curve = SPCurve(std::move(pressure_path));
-            red_bpath->set_bpath(&_pressure_curve);
+            _pressure_curve = std::move(pressure_path);
+            red_bpath->set_bpath(_pressure_curve);
         }
         if (last) {
             this->addPowerStrokePencil();
@@ -907,7 +899,8 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     }
 }
 
-void PencilTool::_interpolate() {
+void PencilTool::_interpolate()
+{
     size_t ps_size = this->ps.size();
     if ( ps_size <= 1 ) {
         return;
@@ -921,11 +914,11 @@ void PencilTool::_interpolate() {
         double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
         tol = std::min(tol,tol2);
     }
-    this->green_curve->reset();
-    this->red_curve.reset();
-    this->red_curve_is_valid = false;
+    green_curve->clear();
+    red_curve.clear();
+    red_curve_is_valid = false;
 
-    double tolerance_sq = 0.02 * square(_desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
+    double tolerance_sq = 0.02 * Geom::sqr(_desktop->w2d().descrim() * tol) * std::exp(0.2 * tol - 2);
 
     g_assert(is_zero(this->_req_tangent) || is_unit_vector(this->_req_tangent));
 
@@ -938,74 +931,69 @@ void PencilTool::_interpolate() {
     int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
     if (n_segs > 0) {
         /* Fit and draw and reset state */
-        this->green_curve->moveto(b[0]);
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+        *green_curve = Geom::Path{b[0]};
+        auto prefs = Inkscape::Preferences::get();
+        int mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         for (int c = 0; c < n_segs; c++) {
             // if we are in BSpline we modify the trace to create adhoc nodes 
             if (mode == 2) {
                 Geom::Point point_at1 = b[4 * c + 0] + (1./3) * (b[4 * c + 3] - b[4 * c + 0]);
                 Geom::Point point_at2 = b[4 * c + 3] + (1./3) * (b[4 * c + 0] - b[4 * c + 3]);
-                this->green_curve->curveto(point_at1,point_at2,b[4*c+3]);
+                green_curve->back().appendNew<Geom::CubicBezier>(point_at1, point_at2, b[4*c+3]);
             } else {
                 if (!tablet_enabled || c != n_segs - 1) {
-                    this->green_curve->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
+                    green_curve->back().appendNew<Geom::CubicBezier>(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
                 } else {
-                    std::optional<Geom::Point> finalp = this->green_curve->last_point();
-                    if (this->green_curve->nodes_in_path() > 4 && Geom::are_near(*finalp, b[4 * c + 3], 10.0)) {
-                        this->green_curve->backspace();
-                        this->green_curve->curveto(*finalp, b[4 * c + 3], b[4 * c + 3]);
+                    if (node_count(*green_curve) > 4 && Geom::are_near(green_curve->finalPoint(), b[4 * c + 3], 10.0)) {
+                        backspace(*green_curve);
+                        green_curve->back().appendNew<Geom::CubicBezier>(green_curve->finalPoint(), b[4 * c + 3], b[4 * c + 3]);
                     } else {
-                        this->green_curve->curveto(b[4 * c + 1], b[4 * c + 3], b[4 * c + 3]);
+                        green_curve->back().appendNew<Geom::CubicBezier>(b[4 * c + 1], b[4 * c + 3], b[4 * c + 3]);
                     }
                 }
             }
         }
         if (!tablet_enabled) {
-            red_bpath->set_bpath(green_curve.get());
+            red_bpath->set_bpath(*green_curve);
         }
 
         /* Fit and draw and copy last point */
-        g_assert(!this->green_curve->is_empty());
+        g_assert(!green_curve->empty());
 
         /* Set up direction of next curve. */
-        {
-            Geom::Curve const * last_seg = this->green_curve->last_segment();
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)
-            p_array[0] = last_seg->finalPoint();
-            _npoints = 1;
-            Geom::Curve *last_seg_reverse = last_seg->reverse();
-            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
-            delete last_seg_reverse;
-            _req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
-                             ? Geom::Point(0, 0)
-                             : Geom::unit_vector(req_vec) );
-        }
+        auto last_seg = get_last_segment(*green_curve);
+        g_assert(last_seg);      // Relevance: validity of (*last_seg)
+        p_array[0] = last_seg->finalPoint();
+        _npoints = 1;
+        auto const req_vec = last_seg->unitTangentAt(1);
+        _req_tangent = Geom::is_zero(req_vec) || !in_svg_plane(req_vec)
+                         ? Geom::Point(0, 0)
+                         : Geom::unit_vector(req_vec);
     }
 }
 
-
 /* interpolates the sketched curve and tweaks the current sketch interpolation*/
-void PencilTool::_sketchInterpolate() {
-    if ( this->ps.size() <= 1 ) {
+void PencilTool::_sketchInterpolate()
+{
+    if (ps.size() <= 1) {
         return;
     }
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0) * 0.4;
     bool simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
     if(simplify){
         double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 1.0, 100.0) * 0.4;
         tol = std::min(tol,tol2);
     }
-    double tolerance_sq = 0.02 * square(_desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
+    double tolerance_sq = 0.02 * Geom::sqr(_desktop->w2d().descrim() * tol) * std::exp(0.2 * tol - 2);
 
     bool average_all_sketches = prefs->getBool("/tools/freehand/pencil/average_all_sketches", true);
 
     g_assert(is_zero(this->_req_tangent) || is_unit_vector(this->_req_tangent));
 
-    this->red_curve.reset();
-    this->red_curve_is_valid = false;
+    red_curve.clear();
+    red_curve_is_valid = false;
 
     int n_points = this->ps.size();
 
@@ -1052,89 +1040,77 @@ void PencilTool::_sketchInterpolate() {
 
         this->sketch_n++;
 
-        this->green_curve->reset();
-        this->green_curve->set_pathvector(Geom::path_from_piecewise(this->sketch_interpolation, 0.01));
+        green_curve->clear();
+        *green_curve = Geom::path_from_piecewise(sketch_interpolation, 0.01);
         if (!tablet_enabled) {
-            red_bpath->set_bpath(green_curve.get());
+            red_bpath->set_bpath(*green_curve);
         }
         /* Fit and draw and copy last point */
-        g_assert(!this->green_curve->is_empty());
+        g_assert(!green_curve->empty());
 
         /* Set up direction of next curve. */
-        {
-            Geom::Curve const * last_seg = this->green_curve->last_segment();
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)
-            p_array[0] = last_seg->finalPoint();
-            _npoints = 1;
-            Geom::Curve *last_seg_reverse = last_seg->reverse();
-            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
-            delete last_seg_reverse;
-            _req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
-                             ? Geom::Point(0, 0)
-                             : Geom::unit_vector(req_vec) );
-        }
+        auto last_seg = get_last_segment(*green_curve);
+        g_assert(last_seg);      // Relevance: validity of (*last_seg)
+        p_array[0] = last_seg->finalPoint();
+        _npoints = 1;
+        auto const req_vec = last_seg->unitTangentAt(1);
+        _req_tangent = Geom::is_zero(req_vec) || !in_svg_plane(req_vec)
+                         ? Geom::Point(0, 0)
+                         : Geom::unit_vector(req_vec);
     }
 
-    this->ps.clear();
-    this->points.clear();
-    this->_wps.clear();
+    ps.clear();
+    points.clear();
+    _wps.clear();
 }
 
-void PencilTool::_fitAndSplit() {
-    g_assert(_npoints > 1 );
+void PencilTool::_fitAndSplit()
+{
+    g_assert(_npoints > 1);
 
     double const tolerance_sq = 0;
 
     Geom::Point b[4];
-    g_assert(is_zero(this->_req_tangent)
-             || is_unit_vector(this->_req_tangent));
-    Geom::Point const tHatEnd(0, 0);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    g_assert(is_zero(_req_tangent) || is_unit_vector(_req_tangent));
+    auto prefs = Inkscape::Preferences::get();
     int const n_segs = Geom::bezier_fit_cubic_full(b, nullptr, p_array, _npoints,
-                                                _req_tangent, tHatEnd,
+                                                _req_tangent, Geom::Point{},
                                                 tolerance_sq, 1);
     if ( n_segs > 0
          && unsigned(_npoints) < G_N_ELEMENTS(p_array) )
     {
         /* Fit and draw and reset state */
 
-        this->red_curve.reset();
-        this->red_curve.moveto(b[0]);
-        using Geom::X;
-        using Geom::Y;
+        red_curve = Geom::Path{b[0]};
             // if we are in BSpline we modify the trace to create adhoc nodes
-        guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-        if(mode == 2){
+        int mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+        if (mode == 2){
             Geom::Point point_at1 = b[0] + (1./3)*(b[3] - b[0]);
             Geom::Point point_at2 = b[3] + (1./3)*(b[0] - b[3]);
-            this->red_curve.curveto(point_at1,point_at2,b[3]);
-        }else{
-            this->red_curve.curveto(b[1], b[2], b[3]);
+            red_curve.back().appendNew<Geom::CubicBezier>(point_at1, point_at2, b[3]);
+        } else {
+            red_curve.back().appendNew<Geom::CubicBezier>(b[1], b[2], b[3]);
         }
         if (!tablet_enabled) {
-            red_bpath->set_bpath(&red_curve);
+            red_bpath->set_bpath(red_curve);
         }
-        this->red_curve_is_valid = true;
+        red_curve_is_valid = true;
     } else {
         /* Fit and draw and copy last point */
 
-        g_assert(!this->red_curve.is_empty());
+        g_assert(!red_curve.empty());
 
         /* Set up direction of next curve. */
-        {
-            Geom::Curve const * last_seg = this->red_curve.last_segment();
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)
-            p_array[0] = last_seg->finalPoint();
-            _npoints = 1;
-            Geom::Curve *last_seg_reverse = last_seg->reverse();
-            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
-            delete last_seg_reverse;
-            _req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
-                             ? Geom::Point(0, 0)
-                             : Geom::unit_vector(req_vec) );
-        }
+        auto last_seg = get_last_segment(red_curve);
+        g_assert(last_seg);      // Relevance: validity of (*last_seg)
+        p_array[0] = last_seg->finalPoint();
+        _npoints = 1;
+        auto const req_vec = last_seg->unitTangentAt(1);
+        _req_tangent = Geom::is_zero(req_vec) || !in_svg_plane(req_vec)
+                         ? Geom::Point(0, 0)
+                         : Geom::unit_vector(req_vec);
 
-        green_curve->append_continuous(red_curve);
+        pathvector_append_continuous(*green_curve, red_curve);
 
         /// \todo fixme:
 
@@ -1142,14 +1118,14 @@ void PencilTool::_fitAndSplit() {
         auto highlight = layer->highlight_color();
         auto other = prefs->getColor("/tools/nodes/highlight_color", "#ff0000ff");
 
-        if(other == highlight) {
+        if (other == highlight) {
             green_color = 0x00ff007f;
         } else {
             green_color = highlight.toRGBA();
         }
         highlight_color = highlight.toRGBA();
 
-        auto cshape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), red_curve.get_pathvector(), true);
+        auto cshape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), red_curve, true);
         cshape->set_stroke(green_color);
         cshape->set_fill(0x0, SP_WIND_RULE_NONZERO);
 

@@ -27,7 +27,6 @@
 #include <2geom/sbasis-2d.h>
 #include <2geom/bezier-to-sbasis.h>
 
-#include "display/curve.h"
 #include "helper/geom.h"
 #include "object/sp-lpe-item.h"
 #include "ui/pack.h"
@@ -568,23 +567,25 @@ LPELattice2::resetDefaults(SPItem const* item)
 }
 
 void
-LPELattice2::calculateCurve(Geom::Point a,Geom::Point b, SPCurve* c, bool horizontal, bool move)
+LPELattice2::calculateCurve(Geom::Point a,Geom::Point b, Geom::PathBuilder &c, bool horizontal, bool move)
 {
     using Geom::X;
     using Geom::Y;
-    if(move) c->moveto(a);
+    if(move) c.moveTo(a);
     Geom::Point cubic1 = a + (1./3)* (b - a);
     Geom::Point cubic2 = b + (1./3)* (a - b);
-    if(horizontal) c->curveto(Geom::Point(cubic1[X],a[Y]),Geom::Point(cubic2[X],b[Y]),b);
-    else c->curveto(Geom::Point(a[X],cubic1[Y]),Geom::Point(b[X],cubic2[Y]),b);
+    if (horizontal) {
+        c.curveTo(Geom::Point(cubic1[X],a[Y]),Geom::Point(cubic2[X],b[Y]),b);
+    } else {
+        c.curveTo(Geom::Point(a[X],cubic1[Y]),Geom::Point(b[X],cubic2[Y]),b);
+    }
 }
 
-void
-LPELattice2::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+void LPELattice2::addCanvasIndicators(SPLPEItem const *, std::vector<Geom::PathVector> &hp_vec)
 {
     hp_vec.clear();
 
-    SPCurve *c = new SPCurve();
+    Geom::PathBuilder c;
     if (perimetral) {
         calculateCurve(grid_point_0,grid_point_4, c,true, true);
         calculateCurve(grid_point_4,grid_point_8x9, c,true, false);
@@ -657,17 +658,12 @@ LPELattice2::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom:
         calculateCurve(grid_point_25x27,grid_point_15, c,false, false);
         calculateCurve(grid_point_15,grid_point_3, c, false, false);
     }
-    hp_vec.push_back(c->get_pathvector());
+    c.flush();
+    hp_vec.push_back(c.peek());
 }
-
-
-/* ######################## */
 
 } //namespace LivePathEffect
 } /* namespace Inkscape */
-
-
-
 
 /*
   Local Variables:

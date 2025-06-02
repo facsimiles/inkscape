@@ -9,7 +9,6 @@
 
 #include <glibmm/i18n.h>
 
-#include "display/curve.h"
 #include "object/sp-lpe-item.h"
 
 namespace Inkscape {
@@ -61,34 +60,24 @@ LPEBoundingBox::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-
-void LPEBoundingBox::doEffect (SPCurve * curve)
-{
-    
-    if (curve) {
-        if ( linked_path.linksToItem() && linked_path.getObject() ) {
-            auto item = cast<SPItem>(linked_path.getObject());
-            Glib::ustring version = lpeversion.param_getSVGValue();
-            Geom::OptRect bbox;
-            if (version >= "1.3") {
-                auto trans = item->getRelativeTransform(sp_lpe_item);
-                bbox = visual_bounds.get_value() ? item->visualBounds(trans) : item->geometricBounds(trans);
-            } else {
-                bbox = visual_bounds.get_value() ? item->visualBounds() : item->geometricBounds();
-            }
-            Geom::Path p;
-            Geom::PathVector out;
-            if (bbox) {
-                p = Geom::Path(*bbox);
-                out.push_back(p);
-            }
-            curve->set_pathvector(out);
+void LPEBoundingBox::doEffect(Geom::PathVector &curve)
+{    
+    if ( linked_path.linksToItem() && linked_path.getObject() ) {
+        auto item = cast<SPItem>(linked_path.getObject());
+        Glib::ustring version = lpeversion.param_getSVGValue();
+        Geom::OptRect bbox;
+        if (version >= "1.3") {
+            auto trans = item->getRelativeTransform(sp_lpe_item);
+            bbox = visual_bounds.get_value() ? item->visualBounds(trans) : item->geometricBounds(trans);
+        } else {
+            bbox = visual_bounds.get_value() ? item->visualBounds() : item->geometricBounds();
         }
+        curve = bbox ? Geom::Path{*bbox} : Geom::PathVector{};
     }
 }
 
 } // namespace LivePathEffect
-} /* namespace Inkscape */
+} // namespace Inkscape
 
 /*
   Local Variables:

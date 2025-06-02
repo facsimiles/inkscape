@@ -25,7 +25,6 @@
 #include "preferences.h"
 #include "style.h"
 
-#include "display/curve.h"
 #include "helper/geom.h"
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
@@ -553,9 +552,8 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
             }
         }
     } else if (auto shape = cast<SPShape>(lpeitem)) {
-        SPCurve const *c = shape->curve();
-        if (c) {
-            Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+        if (auto const *c = shape->curve()) {
+            Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(*c);
             for (const auto & subpath : subpaths){
                 paths.push_back(subpath);
                 //FIXME: do we have to be more careful when trying to access stroke width?
@@ -565,15 +563,14 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
     }
 }
 
-
 void
 LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
     
-    if (is<SPPath>(lpeitem)) {
-        supplied_path = cast<SPPath>(lpeitem)->curve()->get_pathvector();
+    if (auto path = cast<SPPath>(lpeitem)) {
+        supplied_path = *path->curve();
     }
 
     gpaths.clear();

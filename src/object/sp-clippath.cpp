@@ -252,7 +252,7 @@ Geom::PathVector SPClipPath::getPathVector(Geom::Affine const &transform) const
             if (!shape->curve()) {
                 return;
             }
-            for (auto &path : shape->curve()->get_pathvector()) {
+            for (auto &path : *shape->curve()) {
                 if (!path.empty()) {
                     ret.push_back(path * (shape->transform * tr));
                 }

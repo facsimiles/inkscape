@@ -17,6 +17,7 @@
 #include <cstring>
 #include <string>
 #include <glibmm/stringutils.h>
+#include <2geom/path-sink.h>
 
 #include "attributes.h"
 #include "document.h"
@@ -27,7 +28,6 @@
 #include "uri.h"
 
 #include "3rdparty/adaptagrams/libavoid/router.h"
-#include "display/curve.h"
 #include "xml/node.h"
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)
@@ -219,7 +219,7 @@ void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
 
 void SPConnEndPair::getEndpoints(Geom::Point endPts[]) const
 {
-    SPCurve const *curve = _path->curveForEdit();
+    auto const *curve = _path->curveForEdit();
     SPItem *h2attItem[2] = {nullptr};
     getAttachedItems(h2attItem);
     Geom::Affine i2d = _path->i2doc_affine();
@@ -227,11 +227,11 @@ void SPConnEndPair::getEndpoints(Geom::Point endPts[]) const
     for (unsigned h = 0; h < 2; ++h) {
         if (h2attItem[h]) {
             endPts[h] = h2attItem[h]->getAvoidRef().getConnectionPointPos();
-        } else if (!curve->is_empty()) {
+        } else if (!curve->empty()) {
             if (h == 0) {
-                endPts[h] = *(curve->first_point()) * i2d;
+                endPts[h] = curve->initialPoint() * i2d;
             } else {
-                endPts[h] = *(curve->last_point()) * i2d;
+                endPts[h] = curve->finalPoint() * i2d;
             }
         }
     }
@@ -307,9 +307,9 @@ void SPConnEndPair::makePathInvalid()
 
 // Redraws the curve along the recalculated route
 // Straight or curved
-SPCurve SPConnEndPair::createCurve(Avoid::ConnRef *connRef, const gdouble curvature)
+Geom::PathVector SPConnEndPair::createCurve(Avoid::ConnRef *connRef, double curvature)
 {
-    g_assert(connRef != nullptr);
+    g_assert(connRef);
 
     bool straight = curvature<1e-3;
 
@@ -317,25 +317,25 @@ SPCurve SPConnEndPair::createCurve(Avoid::ConnRef *connRef, const gdouble curvat
     if (!straight) route = route.curvedPolyline(curvature);
     connRef->calcRouteDist();
 
-    SPCurve curve;
+    Geom::PathBuilder curve;
 
-    curve.moveto(Geom::Point(route.ps[0].x, route.ps[0].y));
+    curve.moveTo(Geom::Point(route.ps[0].x, route.ps[0].y));
     int pn = route.size();
     for (int i = 1; i < pn; ++i) {
         Geom::Point p(route.ps[i].x, route.ps[i].y);
         if (straight) {
-            curve.lineto(p);
+            curve.lineTo(p);
         } else {
             switch (route.ts[i]) {
                 case 'M':
-                    curve.moveto(p);
+                    curve.moveTo(p);
                     break;
                 case 'L':
-                    curve.lineto(p);
+                    curve.lineTo(p);
                     break;
                 case 'C':
                     g_assert(i + 2 < pn);
-                    curve.curveto(p, Geom::Point(route.ps[i+1].x, route.ps[i+1].y),
+                    curve.curveTo(p, Geom::Point(route.ps[i+1].x, route.ps[i+1].y),
                                   Geom::Point(route.ps[i+2].x, route.ps[i+2].y));
                     i+=2;
                     break;
@@ -343,7 +343,8 @@ SPCurve SPConnEndPair::createCurve(Avoid::ConnRef *connRef, const gdouble curvat
         }
     }
 
-    return curve;
+    curve.flush();
+    return std::move(curve.peek());
 }
 
 void SPConnEndPair::tellLibavoidNewEndpoints(bool const processTransaction)
@@ -371,7 +372,7 @@ bool SPConnEndPair::reroutePathFromLibavoid()
     auto curve = createCurve(_connRef, _connCurvature);
 
     auto doc2item = _path->i2doc_affine().inverse();
-    curve.transform(doc2item);
+    curve *= doc2item;
 
     _path->setCurve(std::move(curve));
 

@@ -24,7 +24,7 @@
 /**
  * Creates an anchor object and initializes it.
  */
-SPDrawAnchor::SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc, std::shared_ptr<SPCurve> curve, bool start, Geom::Point delta)
+SPDrawAnchor::SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc, std::shared_ptr<Geom::PathVector> curve, bool start, Geom::Point delta)
     : dc(dc), curve(std::move(curve)), start(start), active(FALSE), dp(delta),
       ctrl(
         make_canvasitem<Inkscape::CanvasItemCtrl>(

@@ -14,84 +14,87 @@
 #ifndef SEEN_DISPLAY_CURVE_H
 #define SEEN_DISPLAY_CURVE_H
 
-#include <2geom/pathvector.h>
 #include <cstddef>
 #include <optional>
-#include <vector>
-#include <utility>
+#include <2geom/pathvector.h>
+
+/// Whether all subpaths are closed. Returns false if the curve is empty.
+bool is_closed(Geom::PathVector const &pathv);
 
 /**
- * Wrapper around a Geom::PathVector object.
- * Todo: Remove.
+ * returns the number of nodes in a path, used for statusbar text when selecting an spcurve.
+ * Sum of nodes in all the paths. When a path is closed, and its closing line segment is of zero-length,
+ * this function will not count the closing knot double (so basically ignores the closing line segment when it has zero length)
  */
-class SPCurve
+size_t node_count(Geom::PathVector const &pathv);
+
+/**
+ * Return last pathsegment (possibly the closing path segment) of the last path in PathVector or null.
+ * If the last path is empty (contains only a moveto), the function returns null.
+ */
+Geom::Curve const *get_last_segment(Geom::PathVector const &pathv);
+Geom::Curve const *get_last_segment(Geom::Path const &) = delete;
+
+/**
+ * Return first pathsegment in PathVector or NULL.
+ * equal in functionality to SPCurve::first_bpath()
+ */
+Geom::Curve const *get_first_segment(Geom::PathVector const &pathv);
+Geom::Curve const *get_first_segment(Geom::Path const &) = delete;
+
+/// ?
+void stretch_endpoints(Geom::PathVector &pathv, Geom::Point const &new_p0, Geom::Point const &new_p1);
+
+/// Sets start of first path to new_p0, and end of first path to new_p1.
+void move_endpoints(Geom::PathVector &pathv, Geom::Point const &new_p0, Geom::Point const &new_p1);
+void move_endpoints(Geom::Path &pathv, Geom::Point const &new_p0, Geom::Point const &new_p1);
+
+/// Add p to the last point (and last handle if present) of the last path.
+void last_point_additive_move(Geom::PathVector &pathv, Geom::Point const &p);
+
+/**
+ * Append \a pathv to \a to.
+ * If \a use_lineto is false, simply add all paths in \a pathv to \a to;
+ * if \a use_lineto is true, combine \a to's last path and \a pathv's first path and add the rest of the paths in \a pathv to \a to.
+ */
+void pathvector_append(Geom::PathVector &to, Geom::PathVector const &pathv, bool use_lineto = false);
+
+/**
+ * Append \a pathv to \a to with possible fusing of close endpoints. If the end of @a to and the start of @a pathv are within tolerance distance,
+ * then the startpoint of @a pathv is moved to the end of @a to and the first subpath of @a pathv is appended to the last subpath of @a to.
+ * When one of the curves is empty, this curves path becomes the non-empty path.
+ *
+ * @param tolerance Tolerance for endpoint fusion (applied to x and y separately)
+ * @return false if one of the curves is closed, true otherwise.
+ */
+bool pathvector_append_continuous(Geom::PathVector &to, Geom::PathVector const &pathv, double tolerance = 0.0625);
+
+/**
+ * Construct an open path from a rectangle. That is, with the fourth side represented by a genuine line segment,
+ * rather than the closing segment.
+ */
+Geom::Path rect_to_open_path(Geom::Rect const &rect);
+
+/**
+ * Close path by setting the end point to the start point instead of adding a new lineto.
+ * Used for freehand drawing when the user draws back to the start point.
+ */
+void closepath_current(Geom::Path &path);
+
+/// Remove last segment of curve.
+void backspace(Geom::PathVector &pathv);
+void backspace(Geom::Path &path);
+
+/// Create a std::optional<T> from a (generalised) pointer to T.
+template <typename T>
+auto ptr_to_opt(T const &p)
 {
-public:
-    explicit SPCurve() = default;
-    explicit SPCurve(Geom::PathVector pathv) : _pathv{std::move(pathv)} {}
-    explicit SPCurve(Geom::Rect const &rect, bool all_four_sides = false);
+    return p ? std::make_optional(*p) : std::nullopt;
+}
 
-    void set_pathvector(Geom::PathVector const &new_pathv) { _pathv = new_pathv; }
-    Geom::PathVector &get_pathvector() { return _pathv; }
-    Geom::PathVector const &get_pathvector() const { return _pathv; }
-
-    size_t get_segment_count() const;
-    size_t nodes_in_path() const;
-
-    bool is_empty() const;
-    bool is_unset() const;
-    bool is_closed() const;
-    bool is_equal(SPCurve const *other) const;
-    bool is_similar(SPCurve const *other, double precision = 0.001) const;
-    Geom::Curve const *last_segment() const;
-    Geom::Path const *last_path() const;
-    Geom::Curve const *first_segment() const;
-    Geom::Path const *first_path() const;
-    std::optional<Geom::Point> first_point() const;
-    std::optional<Geom::Point> last_point() const;
-    std::optional<Geom::Point> second_point() const;
-    std::optional<Geom::Point> penultimate_point() const;
-
-    void reset();
-
-    void moveto(Geom::Point const &p);
-    void moveto(double x, double y);
-    void lineto(Geom::Point const &p);
-    void lineto(double x, double y);
-    void quadto(Geom::Point const &p1, Geom::Point const &p2);
-    void quadto(double x1, double y1, double x2, double y2);
-    void curveto(Geom::Point const &p0, Geom::Point const &p1, Geom::Point const &p2);
-    void curveto(double x0, double y0, double x1, double y1, double x2, double y2);
-    void closepath();
-    void closepath_current();
-    void backspace();
-
-    void transform(Geom::Affine const &m);
-    SPCurve transformed(Geom::Affine const &m) const;
-    void stretch_endpoints(Geom::Point const &, Geom::Point const &);
-    void move_endpoints(Geom::Point const &, Geom::Point const &);
-    void last_point_additive_move(Geom::Point const &p);
-
-    void append(Geom::PathVector const &, bool use_lineto = false);
-    void append(SPCurve const &curve2, bool use_lineto = false);
-    bool append_continuous(SPCurve const &c1, double tolerance = 0.0625);
-
-    void reverse();
-    SPCurve reversed() const;
-
-    template <typename T>
-    static std::optional<SPCurve> ptr_to_opt(T const &p)
-    {
-        if (p) {
-            return *p;
-        } else {
-            return {};
-        }
-    }
-
-protected:
-    Geom::PathVector _pathv;
-};
+/// Construct an open Geom::Path from Geom::Curve. Fixme: Should be in 2geom.
+Geom::Path path_from_curve(std::unique_ptr<Geom::Curve> curve);
+Geom::Path path_from_curve(Geom::Curve const &curve);
 
 #endif // SEEN_DISPLAY_CURVE_H
 

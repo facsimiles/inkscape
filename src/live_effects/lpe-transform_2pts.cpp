@@ -16,7 +16,6 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
 
-#include "display/curve.h"
 #include "helper/geom.h"
 #include "object/sp-path.h"
 #include "svg/svg.h"
@@ -92,9 +91,8 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    auto sp_path = cast<SPPath>(splpeitem);
-    if (sp_path) {
-        pathvector = sp_path->curveForEdit()->get_pathvector();
+    if (auto sp_path = cast<SPPath>(splpeitem)) {
+        pathvector = *sp_path->curveForEdit();
     }
     if(!pathvector.empty()) {
         point_a = pathvector.initialPoint();
@@ -136,9 +134,8 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
 
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    auto sp_path = cast<SPPath>(splpeitem);
-    if (sp_path) {
-        pathvector = sp_path->curveForEdit()->get_pathvector();
+    if (auto sp_path = cast<SPPath>(splpeitem)) {
+        pathvector = *sp_path->curveForEdit();
     }
     if(from_original_width_toggler != from_original_width) {
         from_original_width_toggler = from_original_width;
@@ -192,9 +189,8 @@ void
 LPETransform2Pts::updateIndex()
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(sp_lpe_item);
-    auto sp_path = cast<SPPath>(splpeitem);
-    if (sp_path) {
-        pathvector = sp_path->curveForEdit()->get_pathvector();
+    if (auto sp_path = cast<SPPath>(splpeitem)) {
+        pathvector = *sp_path->curveForEdit();
     }
     if(pathvector.empty()) {
         return;

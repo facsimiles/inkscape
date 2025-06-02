@@ -126,8 +126,7 @@ LPEFillBetweenMany::transform_multiply_nested(Geom::Affine const &postmul)
     }
 }
 
-void 
-LPEFillBetweenMany::doEffect (SPCurve * curve)
+void LPEFillBetweenMany::doEffect(Geom::PathVector &curve)
 {
     if (previous_method != method) {
         if (method == FLM_BSPLINESPIRO) {
@@ -212,7 +211,7 @@ LPEFillBetweenMany::doEffect (SPCurve * curve)
                             counter2++;
                             continue;
                         }
-                        Geom::Point start = iter2->_pathvector.front().initialPoint();
+                        Geom::Point start = iter2->_pathvector.initialPoint();
                         Geom::Point end = iter2->_pathvector.front().finalPoint();
                         if (!legacytest && iter2->reversed) {
                             std::swap(start,end);
@@ -232,7 +231,7 @@ LPEFillBetweenMany::doEffect (SPCurve * curve)
                 }
                 if (nearest != nullptr) {
                     done.push_back(added);
-                    Geom::Point start = nearest->_pathvector.front().initialPoint();
+                    Geom::Point start = nearest->_pathvector.initialPoint();
                     Geom::Point end = nearest->_pathvector.front().finalPoint();
                     if (!legacytest && nearest->reversed) {
                         linked_path = iter->_pathvector.front().reversed();
@@ -280,10 +279,9 @@ LPEFillBetweenMany::doEffect (SPCurve * curve)
         res_pathv.front().close();
         res_pathv.front().snapEnds(0.1);
     }
-    if (res_pathv.empty()) {
-        res_pathv = curve->get_pathvector();
+    if (!res_pathv.empty()) {
+        curve = std::move(res_pathv);
     }
-    curve->set_pathvector(res_pathv);
 }
 
 } // namespace LivePathEffect

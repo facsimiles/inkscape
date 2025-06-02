@@ -10,8 +10,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/curve.h"
-
 #include "desktop.h"
 #include "document.h"
 #include "style.h"
@@ -173,7 +171,7 @@ ShapeRecord MarkerTool::get_marker_transform(SPShape* shape, SPItem *parent_item
         scale *= Geom::Scale(style->stroke_width.computed);
     }
 
-    Geom::PathVector const &pathv = shape->curve()->get_pathvector();
+    Geom::PathVector const &pathv = *shape->curve();
     Geom::Affine ret = Geom::identity(); //edit_transform
     double angle = 0.0; // edit_rotation - tangent angle used for auto orientation
     Geom::Point p;

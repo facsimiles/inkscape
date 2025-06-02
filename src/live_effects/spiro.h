@@ -13,9 +13,7 @@
 #define INKSCAPE_SPIRO_H
 
 #include "live_effects/spiro-converters.h"
-#include <2geom/forward.h>
-
-class SPCurve;
+#include <2geom/path.h>
 
 namespace Spiro {
 
@@ -25,15 +23,13 @@ struct spiro_cp {
     char ty;
 };
 
-
-void spiro_run(const spiro_cp *src, int src_len, SPCurve &curve);
-void spiro_run(const spiro_cp *src, int src_len, Geom::Path &path);
+Geom::Path spiro_run(spiro_cp const *src, int src_len);
 
 /* the following methods are only for expert use: */
 typedef struct spiro_seg_s spiro_seg;
 spiro_seg * run_spiro(const spiro_cp *src, int n);
 void free_spiro(spiro_seg *s);
-void spiro_to_otherpath(const spiro_seg *s, int n, ConverterBase &bc);
+void spiro_to_otherpath(const spiro_seg *s, int n, ConverterPath &bc);
 double get_knot_th(const spiro_seg *s, int i);
 
 

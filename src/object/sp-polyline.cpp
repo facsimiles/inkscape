@@ -40,7 +40,7 @@ void SPPolyLine::set(SPAttr key, const gchar* value) {
     switch (key) {
         case SPAttr::POINTS:
             if (value) {
-                setCurve(sp_poly_parse_curve(value));
+                setCurve(sp_poly_parse_curve(value).value_or(Geom::Path{}));
             }
             break;
         default:

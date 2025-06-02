@@ -10,7 +10,6 @@
 
 #include "live_effects/effect.h"
 
-
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -23,12 +22,12 @@ public:
 
     LPEPathFlashType pathFlashType() const override { return SUPPRESS_FLASH; }
 
-    void doEffect(SPCurve * curve) override;
+    void doEffect(Geom::PathVector & curve) override;
 };
 
-void sp_spiro_do_effect(SPCurve &curve);
+void sp_spiro_do_effect(Geom::PathVector &curve);
 
-}; //namespace LivePathEffect
-}; //namespace Inkscape
+} //namespace LivePathEffect
+} //namespace Inkscape
 
 #endif

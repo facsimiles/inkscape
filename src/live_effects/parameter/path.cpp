@@ -475,12 +475,12 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint flags)
     if (!_updating && flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) 
     {
-        std::optional<SPCurve> curve;
+        std::optional<Geom::PathVector> curve;
         if (auto shape = cast<SPShape>(linked_obj)) {
             if (_from_original_d) {
-                curve = SPCurve::ptr_to_opt(shape->curveForEdit());
+                curve = ptr_to_opt(shape->curveForEdit());
             } else {
-                curve = SPCurve::ptr_to_opt(shape->curve());
+                curve = ptr_to_opt(shape->curve());
             }
         }
 
@@ -496,7 +496,7 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint flags)
                     if (!curve) {
                         curve.emplace();
                     }
-                    curve->set_pathvector(_pathvector);
+                    curve = _pathvector;
                 }
             } else {
                 curve = text->getNormalizedBpath();
@@ -507,7 +507,7 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint flags)
             // curve invalid, set default value
             _pathvector = sp_svg_read_pathv(defvalue);
         } else {
-            _pathvector = curve->get_pathvector();
+            _pathvector = *curve;
         }
 
         must_recalculate_pwd2 = true;

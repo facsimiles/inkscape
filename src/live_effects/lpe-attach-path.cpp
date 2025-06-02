@@ -12,8 +12,6 @@
 #include <2geom/path-sink.h>
 
 #include "object/sp-lpe-item.h"
-#include "display/curve.h"
-
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -94,11 +92,10 @@ LPEAttachPath::doOnOpen(SPLPEItem const *lpeitem)
     return false;
 }
 
-void LPEAttachPath::doEffect (SPCurve * curve)
+void LPEAttachPath::doEffect(Geom::PathVector &curve)
 {
-    Geom::PathVector this_pathv = curve->get_pathvector();
-    if (sp_lpe_item && !this_pathv.empty()) {
-        Geom::Path p = Geom::Path(this_pathv.front().initialPoint());
+    if (sp_lpe_item && !curve.empty()) {
+        auto p = Geom::Path(curve.initialPoint());
         
         bool set_start_end = start_path_curve_end.getOrigin() != curve_start_previous_origin;
         bool set_end_end = end_path_curve_end.getOrigin() != curve_end_previous_origin;
@@ -111,9 +108,9 @@ void LPEAttachPath::doEffect (SPCurve * curve)
             if ( !linked_pathv.empty() )
             {
                 Geom::Path transformedpath = linked_pathv.front() * linkedtransform;
-                start_path_curve_start.setOrigin(this_pathv.front().initialPoint());
+                start_path_curve_start.setOrigin(curve.initialPoint());
 
-                std::vector<Geom::Point> derivs = this_pathv.front().front().pointAndDerivatives(0, 3);
+                std::vector<Geom::Point> derivs = curve.front().front().pointAndDerivatives(0, 3);
                 
                 for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
                     Geom::Coord length = derivs[deriv_n].length();
@@ -143,7 +140,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                                 Geom::Point pt1 = Geom::Point(start_path_curve_start.getVector().length() * cos(startangle + startderiv), start_path_curve_start.getVector().length() * sin(startangle + startderiv));
                                 Geom::Point pt2 = Geom::Point(start_path_curve_end.getVector().length() * cos(endangle + endderiv), start_path_curve_end.getVector().length() * sin(endangle + endderiv));
                                 p = Geom::Path(derivs_2[0]);
-                                p.appendNew<Geom::CubicBezier>(-pt2 + derivs_2[0], -pt1 + this_pathv.front().initialPoint(), this_pathv.front().initialPoint());
+                                p.appendNew<Geom::CubicBezier>(-pt2 + derivs_2[0], -pt1 + curve.initialPoint(), curve.initialPoint());
                                 break;
 
                             }
@@ -154,7 +151,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
             }
         }
         
-        p.append(this_pathv.front());
+        p.append(curve.front());
         
         if (end_path.linksToPath() && end_path.getObject()) {
 
@@ -164,7 +161,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
             if ( !linked_pathv.empty() )
             {
                 Geom::Path transformedpath = linked_pathv.front() * linkedtransform;
-                Geom::Curve * last_seg_reverse = this_pathv.front().back().reverse();
+                Geom::Curve *last_seg_reverse = curve.front().back().reverse();
                 
                 end_path_curve_start.setOrigin(last_seg_reverse->initialPoint());
 
@@ -198,7 +195,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                                 double endderiv = atan2(derivs_2[deriv_n_2].y(), derivs_2[deriv_n_2].x());
                                 Geom::Point pt1 = Geom::Point(end_path_curve_start.getVector().length() * cos(startangle + startderiv), end_path_curve_start.getVector().length() * sin(startangle + startderiv));
                                 Geom::Point pt2 = Geom::Point(end_path_curve_end.getVector().length() * cos(endangle + endderiv), end_path_curve_end.getVector().length() * sin(endangle + endderiv));
-                                p.appendNew<Geom::CubicBezier>(-pt1 + this_pathv.front().finalPoint(), -pt2 + derivs_2[0], derivs_2[0]);
+                                p.appendNew<Geom::CubicBezier>(-pt1 + curve.front().finalPoint(), -pt2 + derivs_2[0], derivs_2[0]);
 
                                 break;
 
@@ -210,9 +207,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                 delete last_seg_reverse;
             }
         }
-        Geom::PathVector outvector;
-        outvector.push_back(p);
-        curve->set_pathvector(outvector);
+        curve = std::move(p);
     }
 }
 

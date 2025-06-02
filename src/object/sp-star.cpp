@@ -83,8 +83,8 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     }
 
     this->set_shape();
-    if (this->_curve) {
-        repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
+    if (_curve) {
+        repr->setAttribute("d", sp_svg_write_path(*_curve));
     } else {
         repr->removeAttribute("d");
     }
@@ -362,7 +362,7 @@ void SPStar::set_shape() {
         return;
     }
 
-    SPCurve c;
+    Geom::Path c;
 
     bool not_rounded = (fabs (this->rounded) < 1e-4);
 
@@ -370,13 +370,13 @@ void SPStar::set_shape() {
     // other places that call that function (e.g. the knotholder) need the exact point
 
     // draw 1st segment
-    c.moveto(sp_star_get_xy (this, SP_STAR_POINT_KNOT1, 0, true));
+    c.start(sp_star_get_xy (this, SP_STAR_POINT_KNOT1, 0, true));
 
     if (this->flatsided == false) {
         if (not_rounded) {
-            c.lineto(sp_star_get_xy (this, SP_STAR_POINT_KNOT2, 0, true));
+            c.appendNew<Geom::LineSegment>(sp_star_get_xy (this, SP_STAR_POINT_KNOT2, 0, true));
         } else {
-            c.curveto(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, 0, NEXT),
+            c.appendNew<Geom::CubicBezier>(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, 0, NEXT),
                 sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT2, 0, PREV),
                 sp_star_get_xy (this, SP_STAR_POINT_KNOT2, 0, true));
         }
@@ -385,14 +385,14 @@ void SPStar::set_shape() {
     // draw all middle segments
     for (gint i = 1; i < sides; i++) {
         if (not_rounded) {
-            c.lineto(sp_star_get_xy (this, SP_STAR_POINT_KNOT1, i, true));
+            c.appendNew<Geom::LineSegment>(sp_star_get_xy (this, SP_STAR_POINT_KNOT1, i, true));
         } else {
             if (this->flatsided == false) {
-                c.curveto(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT2, i - 1, NEXT),
+                c.appendNew<Geom::CubicBezier>(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT2, i - 1, NEXT),
                         sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, i, PREV),
                         sp_star_get_xy (this, SP_STAR_POINT_KNOT1, i, true));
             } else {
-                c.curveto(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, i - 1, NEXT),
+                c.appendNew<Geom::CubicBezier>(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, i - 1, NEXT),
                         sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, i, PREV),
                         sp_star_get_xy (this, SP_STAR_POINT_KNOT1, i, true));
             }
@@ -400,9 +400,9 @@ void SPStar::set_shape() {
 
         if (this->flatsided == false) {
             if (not_rounded) {
-                       c.lineto(sp_star_get_xy (this, SP_STAR_POINT_KNOT2, i, true));
+                c.appendNew<Geom::LineSegment>(sp_star_get_xy (this, SP_STAR_POINT_KNOT2, i, true));
             } else {
-                c.curveto(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, i, NEXT),
+                c.appendNew<Geom::CubicBezier>(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, i, NEXT),
                     sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT2, i, PREV),
                     sp_star_get_xy (this, SP_STAR_POINT_KNOT2, i, true));
             }
@@ -412,20 +412,19 @@ void SPStar::set_shape() {
     // draw last segment
 	if (!not_rounded) {
 		if (this->flatsided == false) {
-            c.curveto(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT2, sides - 1, NEXT),
+            c.appendNew<Geom::CubicBezier>(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT2, sides - 1, NEXT),
 				sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, 0, PREV),
 				sp_star_get_xy (this, SP_STAR_POINT_KNOT1, 0, true));
 		} else {
-            c.curveto(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, sides - 1, NEXT),
+            c.appendNew<Geom::CubicBezier>(sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, sides - 1, NEXT),
 				sp_star_get_curvepoint (this, SP_STAR_POINT_KNOT1, 0, PREV),
 				sp_star_get_xy (this, SP_STAR_POINT_KNOT1, 0, true));
 		}
 	}
 
-    c.closepath();
+    c.close();
 
-    prepareShapeForLPE(&c);
-
+    prepareShapeForLPE(std::move(c));
 }
 
 void

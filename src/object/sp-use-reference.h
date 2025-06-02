@@ -11,10 +11,10 @@
  */
 
 #include <sigc++/sigc++.h>
+#include <2geom/pathvector.h>
 
 #include "sp-item.h"
 #include "uri-references.h"
-#include "display/curve.h"
 
 #include <memory>
 
@@ -41,7 +41,7 @@ protected:
 
 class SPUsePath : public SPUseReference {
 public:
-    std::optional<SPCurve> originalPath;
+    std::optional<Geom::PathVector> originalPath;
     bool sourceDirty{false};
 
     SPObject            *owner;

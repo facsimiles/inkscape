@@ -17,7 +17,6 @@
 #include "svg/svg.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
-#include "ui/tools/node-tool.h"
 #include "ui/util.h"
 #include "ui/widget/spinbutton.h"
 
@@ -142,10 +141,9 @@ LPESimplify::newWidget()
     return vbox;
 }
 
-void
-LPESimplify::doEffect(SPCurve *curve)
+void LPESimplify::doEffect(Geom::PathVector &curve)
 {
-    Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(curve->get_pathvector());
+    Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(curve);
     auto pathliv = Path_for_pathvector(original_pathv);
 
     double size = Geom::L2(bbox->dimensions());
@@ -168,7 +166,7 @@ LPESimplify::doEffect(SPCurve *curve)
 
     auto result = pathliv->MakePathVector();
     generateHelperPathAndSmooth(result);
-    curve->set_pathvector(result);
+    curve = std::move(result);
     update_helperpath();
 }
 
@@ -188,7 +186,6 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
         Geom::Path::iterator curve_it1 = path_it.begin(); // incoming curve
         Geom::Path::iterator curve_it2 = ++(path_it.begin());// outgoing curve
         Geom::Path::iterator curve_endit = path_it.end_default(); // this determines when the loop has to stop
-        SPCurve *nCurve = new SPCurve();
         if (path_it.closed()) {
             // if the path is closed, maybe we have to stop a bit earlier because the
             // closing line segment has zerolength.
@@ -206,7 +203,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
         if(helper_size > 0) {
             drawNode(curve_it1->initialPoint());
         }
-        nCurve->moveto(curve_it1->initialPoint());
+        auto nCurve = Geom::Path{curve_it1->initialPoint()};
         Geom::Point start = Geom::Point(0,0);
         while (curve_it1 != curve_endit) {
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
@@ -243,8 +240,8 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
                 angleFixed -= Geom::Angle::from_degrees(180.0);
                 point_at2 =  Geom::Point::polar(angleFixed, dist) + point_at3;
             }
-            nCurve->curveto(point_at1, point_at2, curve_it1->finalPoint());
-            cubic = dynamic_cast<Geom::CubicBezier const *>(nCurve->last_segment());
+            nCurve.appendNew<Geom::CubicBezier>(point_at1, point_at2, curve_it1->finalPoint());
+            cubic = dynamic_cast<Geom::CubicBezier const *>(&nCurve.finalCurve());
             if (cubic) {
                 point_at1 = (*cubic)[1];
                 point_at2 = (*cubic)[2];
@@ -259,18 +256,16 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
                     }
                 }
             }
-            if(helper_size > 0) {
+            if (helper_size > 0) {
                 drawNode(curve_it1->finalPoint());
             }
             ++curve_it1;
             ++curve_it2;
         }
         if (path_it.closed()) {
-            nCurve->closepath_current();
+            closepath_current(nCurve);
         }
-        tmp_path.push_back(nCurve->get_pathvector()[0]);
-        nCurve->reset();
-        delete nCurve;
+        tmp_path.push_back(std::move(nCurve));
     }
     result = tmp_path;
 }

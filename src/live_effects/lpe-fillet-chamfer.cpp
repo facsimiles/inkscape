@@ -13,7 +13,6 @@
 
 #include <2geom/elliptical-arc.h>
 
-#include "display/curve.h"
 #include "helper/geom-curves.h"
 #include "helper/geom.h"
 #include "helper/geom-nodesatellite.h"
@@ -104,7 +103,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         item->removeCurrentPathEffect(false);
     }
     auto rect = cast<SPRect>(splpeitem);
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector());
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(*shape->curve());
     double power = radius;
     double a = 0;
     if (rect) {

@@ -21,12 +21,10 @@
  */
 
 #include <optional>
+#include <2geom/path.h>
 
 #include "ui/tools/tool-base.h"
-#include "display/curve.h"
 #include "display/control/canvas-item-ptr.h"
-
-class SPCurve;
 
 inline constexpr int SAMPLING_SIZE = 8;
 
@@ -48,7 +46,7 @@ public:
 
 protected:
     /** accumulated shape which ultimately goes in svg:path */
-    SPCurve accumulated;
+    Geom::Path accumulated;
 
     /** canvas items for "committed" segments */
     std::vector<CanvasItemPtr<CanvasItemBpath>> segments;
@@ -57,13 +55,13 @@ protected:
     CanvasItemPtr<CanvasItemBpath> currentshape;
 
     /** shape of red "leading" segment */
-    SPCurve currentcurve;
+    Geom::Path currentcurve;
 
     /** left edge of the stroke; combined to get accumulated */
-    SPCurve cal1;
+    Geom::Path cal1;
 
     /** right edge of the stroke; combined to get accumulated */
-    SPCurve cal2;
+    Geom::Path cal2;
 
     /** left edge points for this segment */
     Geom::Point point1[SAMPLING_SIZE];

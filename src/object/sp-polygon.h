@@ -40,6 +40,6 @@ enum SPPolyParseError : uint8_t
     POLY_NOT_A_NUMBER
 };
 SPPolyParseError sp_poly_get_value(char const **p, double *v);
-SPCurve sp_poly_parse_curve(char const *points);
+std::optional<Geom::Path> sp_poly_parse_curve(char const *points);
 
 #endif

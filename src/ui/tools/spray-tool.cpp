@@ -39,7 +39,6 @@
 #include "message-context.h"
 #include "selection.h"
 
-#include "display/curve.h"
 #include "display/drawing.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-drawing.h"
@@ -112,7 +111,7 @@ static void get_paths(SPItem * item, Geom::PathVector &res, bool root = true) {
             }
         } else if (auto shape = cast<SPShape>(item)) {
             Geom::Affine trans = item->i2doc_affine();
-            for (auto path : shape->curve()->get_pathvector()) {
+            for (auto path : *shape->curve()) {
                 path *= trans;
                 res.insert(res.end(), path);
             }

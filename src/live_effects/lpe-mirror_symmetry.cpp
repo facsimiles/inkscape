@@ -28,7 +28,6 @@
 #include <2geom/path-intersection.h>
 #include <2geom/rect.h>
 
-#include "display/curve.h"
 #include "helper/geom.h"
 #include "object/sp-item-group.h"
 #include "object/sp-lpe-item.h"
@@ -118,8 +117,7 @@ bool LPEMirrorSymmetry::doOnOpen(SPLPEItem const *lpeitem)
     return fixed;
 }
 
-void
-LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
+void LPEMirrorSymmetry::doAfterEffect(SPLPEItem const* lpeitem, Geom::PathVector *)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -130,7 +128,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
     if (split_items && !discard_orig_path) {
         bool active = !lpesatellites.data().size() || is_load;
         for (auto lpereference : lpesatellites.data()) {
-            if (lpereference && lpereference->isAttached() && lpereference.get()->getObject() != nullptr) {
+            if (lpereference && lpereference->isAttached() && lpereference.get()->getObject()) {
                 active = true;
             }
         }
@@ -381,9 +379,8 @@ void LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest)
     auto shape = cast<SPShape>(orig);
     auto path = cast<SPPath>(dest);
     if (shape) {
-        SPCurve const *c = shape->curve();
-        if (c) {
-            auto str = sp_svg_write_path(c->get_pathvector());
+        if (auto const *c = shape->curve()) {
+            auto str = sp_svg_write_path(*c);
             if (shape && !path) {
                 const char *id = dest->getAttribute("id");
                 const char *style = dest->getAttribute("style");

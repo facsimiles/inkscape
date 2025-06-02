@@ -26,7 +26,6 @@
 #include "display/control/canvas-item-rect.h"
 #include "display/control/ctrl-handle-manager.h"
 #include "display/control/ctrl-handle-styling.h"
-#include "display/curve.h"
 #include "preferences.h"
 #include "ui/widget/canvas.h" // autoscroll
 
@@ -34,9 +33,7 @@ Inkscape::Rubberband *Inkscape::Rubberband::_instance = nullptr;
 
 Inkscape::Rubberband::Rubberband(SPDesktop *dt)
     : _desktop(dt)
-{
-    _touchpath_curve = new SPCurve();
-}
+{}
 
 void Inkscape::Rubberband::delete_canvas_items()
 {
@@ -69,8 +66,7 @@ void Inkscape::Rubberband::start(SPDesktop *d, Geom::Point const &p, bool tolera
     auto prefs = Inkscape::Preferences::get();
     _tolerance = tolerance ? prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100) : 0.0;
 
-    _touchpath_curve->reset();
-    _touchpath_curve->moveto(p);
+    _touchpath_curve.start(p);
 
     _path = Geom::Path(_desktop->d2w(p));
 
@@ -86,7 +82,7 @@ void Inkscape::Rubberband::stop()
     _handle = default_handle;
     _deselect_handle = default_deselect_handle;
 
-    _touchpath_curve->reset();
+    _touchpath_curve.clear();
     _path.clear();
 
     delete_canvas_items();
@@ -116,7 +112,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     _end = p;
     _moved = true;
     _desktop->getCanvas()->enable_autoscroll();
-    _touchpath_curve->lineto(p);
+    _touchpath_curve.appendNew<Geom::LineSegment>(p);
 
     Geom::Point next = _desktop->d2w(p);
     // we want the points to be at most 0.5 screen pixels apart,

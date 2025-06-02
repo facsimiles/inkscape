@@ -27,8 +27,8 @@ public:
     LPEdoEffectStackTest(LivePathEffectObject *lpeobject);
     ~LPEdoEffectStackTest() override;
 
-    void                                     doEffect (SPCurve * curve) override;
-    Geom::PathVector                  doEffect_path (Geom::PathVector const & path_in) override;
+    void doEffect(Geom::PathVector &curve) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:

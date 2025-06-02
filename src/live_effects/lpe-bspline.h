@@ -26,9 +26,9 @@ public:
         return SUPPRESS_FLASH;
     }
     void doOnApply(SPLPEItem const* lpeitem) override;
-    void doEffect(SPCurve *curve) override;
+    void doEffect(Geom::PathVector &curve) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void doBSplineFromWidget(SPCurve *curve, double value);
+    void doBSplineFromWidget(Geom::PathVector &curve, double value);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
     Gtk::Widget *newWidget() override;
     void changeWeight(double weightValue);
@@ -48,7 +48,7 @@ private:
     ScalarParam weight;
     Geom::PathVector hp;
 };
-void sp_bspline_do_effect(SPCurve &curve, double helper_size, Geom::PathVector &hp, bool uniform);
+void sp_bspline_do_effect(Geom::PathVector &curve, double helper_size, Geom::PathVector &hp, bool uniform);
 
 } //namespace LivePathEffect
 } //namespace Inkscape

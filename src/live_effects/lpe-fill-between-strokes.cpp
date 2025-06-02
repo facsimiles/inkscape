@@ -134,100 +134,98 @@ LPEFillBetweenStrokes::transform_multiply_nested(Geom::Affine const &postmul)
     }
 }
 
-void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
+void LPEFillBetweenStrokes::doEffect(Geom::PathVector &curve)
 {
-    if (curve) {
-        if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
-            SPItem * linked1 = linked_path.getObject();
-            if (is_load) {
-                linked1->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            }
-            Geom::PathVector linked_pathv = linked_path.get_pathvector();
-            SPItem * linked2 = second_path.getObject();
-            if (is_load) {
-                linked2->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            }
-            Geom::PathVector second_pathv = second_path.get_pathvector();
-            Geom::PathVector result_linked_pathv;
-            Geom::PathVector result_second_pathv;
-            linked_pathv *= linked1->getRelativeTransform(sp_lpe_item);
-            second_pathv *= linked2->getRelativeTransform(sp_lpe_item);
-            for (auto & iter : linked_pathv)
-            {
-                result_linked_pathv.push_back(iter);
-            }
-            
-            for (auto & iter : second_pathv)
-            {
-                result_second_pathv.push_back(iter);
-            }
+    if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
+        SPItem * linked1 = linked_path.getObject();
+        if (is_load) {
+            linked1->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+        Geom::PathVector linked_pathv = linked_path.get_pathvector();
+        SPItem * linked2 = second_path.getObject();
+        if (is_load) {
+            linked2->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+        Geom::PathVector second_pathv = second_path.get_pathvector();
+        Geom::PathVector result_linked_pathv;
+        Geom::PathVector result_second_pathv;
+        linked_pathv *= linked1->getRelativeTransform(sp_lpe_item);
+        second_pathv *= linked2->getRelativeTransform(sp_lpe_item);
+        for (auto & iter : linked_pathv)
+        {
+            result_linked_pathv.push_back(iter);
+        }
 
-            if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
-                if (reverse_second.get_value()) {
-                    result_second_pathv.front() = result_second_pathv.front().reversed();
-                }
-                if (join) {
-                    if (!are_near(result_linked_pathv.front().finalPoint(), result_second_pathv.front().initialPoint(),0.1)) {
-                        result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().initialPoint());
-                    } else {
-                        result_second_pathv.front().setInitial(result_linked_pathv.front().finalPoint());
-                    }
-                    result_linked_pathv.front().append(result_second_pathv.front());
-                    if (close) {
-                        result_linked_pathv.front().close();
-                    }
+        for (auto & iter : second_pathv)
+        {
+            result_second_pathv.push_back(iter);
+        }
+
+        if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
+            if (reverse_second.get_value()) {
+                result_second_pathv.front() = result_second_pathv.front().reversed();
+            }
+            if (join) {
+                if (!are_near(result_linked_pathv.front().finalPoint(), result_second_pathv.initialPoint(),0.1)) {
+                    result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.initialPoint());
                 } else {
-                    if (close) {
-                        result_linked_pathv.front().close();
-                        result_second_pathv.front().close();
-                    }
-                    result_linked_pathv.push_back(result_second_pathv.front());
+                    result_second_pathv.front().setInitial(result_linked_pathv.front().finalPoint());
                 }
-                curve->set_pathvector(result_linked_pathv);
-            } else if ( !result_linked_pathv.empty() ) {
-                curve->set_pathvector(result_linked_pathv);
-            } else if ( !result_second_pathv.empty() ) {
-                curve->set_pathvector(result_second_pathv);
-            }
-        }
-        else if ( linked_path.linksToPath() && linked_path.getObject() ) {
-            SPItem *linked1 = linked_path.getObject();
-            if (is_load) {
-                linked1->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            }
-            Geom::PathVector linked_pathv = linked_path.get_pathvector();
-            linked_pathv *= linked1->getRelativeTransform(sp_lpe_item);
-            Geom::PathVector result_pathv;
-            for (auto & iter : linked_pathv)
-            {
-                result_pathv.push_back(iter);
-            }
-            if ( !result_pathv.empty() ) {
+                result_linked_pathv.front().append(result_second_pathv.front());
                 if (close) {
-                    result_pathv.front().close();
+                    result_linked_pathv.front().close();
                 }
-                curve->set_pathvector(result_pathv);
-            }
-        }
-        else if ( second_path.linksToPath() && second_path.getObject() ) {
-            SPItem *linked2 = second_path.getObject();
-            if (is_load) {
-                linked2->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            }
-            Geom::PathVector second_pathv = second_path.get_pathvector();
-            second_pathv *= linked2->getRelativeTransform(sp_lpe_item);
-            Geom::PathVector result_pathv;
-            for (auto & iter : second_pathv)
-            {
-                result_pathv.push_back(iter);
-            }
-            if ( !result_pathv.empty() ) {
+            } else {
                 if (close) {
-                    result_pathv.front().close();
-                    result_pathv.front().snapEnds(0.1);
+                    result_linked_pathv.front().close();
+                    result_second_pathv.front().close();
                 }
-                curve->set_pathvector(result_pathv);
+                result_linked_pathv.push_back(result_second_pathv.front());
             }
+            curve = std::move(result_linked_pathv);
+        } else if (!result_linked_pathv.empty()) {
+            curve = std::move(result_linked_pathv);
+        } else if (!result_second_pathv.empty()) {
+            curve = std::move(result_second_pathv);
+        }
+    }
+    else if ( linked_path.linksToPath() && linked_path.getObject() ) {
+        SPItem *linked1 = linked_path.getObject();
+        if (is_load) {
+            linked1->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+        Geom::PathVector linked_pathv = linked_path.get_pathvector();
+        linked_pathv *= linked1->getRelativeTransform(sp_lpe_item);
+        Geom::PathVector result_pathv;
+        for (auto & iter : linked_pathv)
+        {
+            result_pathv.push_back(iter);
+        }
+        if ( !result_pathv.empty() ) {
+            if (close) {
+                result_pathv.front().close();
+            }
+            curve = std::move(result_pathv);
+        }
+    }
+    else if ( second_path.linksToPath() && second_path.getObject() ) {
+        SPItem *linked2 = second_path.getObject();
+        if (is_load) {
+            linked2->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+        Geom::PathVector second_pathv = second_path.get_pathvector();
+        second_pathv *= linked2->getRelativeTransform(sp_lpe_item);
+        Geom::PathVector result_pathv;
+        for (auto & iter : second_pathv)
+        {
+            result_pathv.push_back(iter);
+        }
+        if ( !result_pathv.empty() ) {
+            if (close) {
+                result_pathv.front().close();
+                result_pathv.front().snapEnds(0.1);
+            }
+            curve = std::move(result_pathv);
         }
     }
 }

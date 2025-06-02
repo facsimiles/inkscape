@@ -17,7 +17,6 @@
 #include "attributes.h"
 #include "document.h"
 
-#include "display/curve.h"
 #include "object/box3d.h"
 #include "object/persp3d-reference.h"
 #include "svg/svg.h"
@@ -53,15 +52,12 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
 
     this->set_shape();
 
-    /* Duplicate the path */
-    SPCurve const *curve = this->_curve.get();
-
-    //Nulls might be possible if this called iteratively
-    if ( !curve ) {
+    // Nulls might be possible if this called iteratively
+    if (!_curve) {
         return nullptr;
     }
 
-    repr->setAttribute("d", sp_svg_write_path(curve->get_pathvector()));
+    repr->setAttribute("d", sp_svg_write_path(*_curve));
 
     SPPolygon::write(xml_doc, repr, flags);
 
@@ -179,18 +175,18 @@ void Box3DSide::set_shape() {
         return;
     }
 
-    SPCurve c;
-    c.moveto(box->get_corner_screen(corners[0]));
-    c.lineto(box->get_corner_screen(corners[1]));
-    c.lineto(box->get_corner_screen(corners[2]));
-    c.lineto(box->get_corner_screen(corners[3]));
-    c.closepath();
+    Geom::Path c;
+    c.start(box->get_corner_screen(corners[0]));
+    c.appendNew<Geom::LineSegment>(box->get_corner_screen(corners[1]));
+    c.appendNew<Geom::LineSegment>(box->get_corner_screen(corners[2]));
+    c.appendNew<Geom::LineSegment>(box->get_corner_screen(corners[3]));
+    c.close();
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
 
-    SPCurve const *before = curveBeforeLPE();
-    if (before && before->get_pathvector() != c.get_pathvector()) {
+    auto const *before = curveBeforeLPE();
+    if (before && *before != c) {
         setCurveBeforeLPE(std::move(c));
         sp_lpe_item_update_patheffect(this, true, false);
         return;

@@ -369,7 +369,7 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                                     transform *= root_item->i2dt_affine();              // Because all snapping calculations are done in desktop coordinates
                                     transform *= _candidate.additional_affine;          // Only used for snapping to masks or clips; see SnapManager::_findCandidates()
                                     transform *= _snapmanager->getDesktop()->doc2dt();  // Account for inverted y-axis
-                                    auto pv = curve->get_pathvector();
+                                    auto pv = *curve;
                                     pv *= transform;
                                     _paths_to_snap_to->emplace_back(std::move(pv), SNAPTARGET_PATH, Geom::OptRect()); // Perhaps for speed, get a reference to the Geom::pathvector, and store the transformation besides t
                                 }
@@ -421,7 +421,7 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
         if (node_tool_active) {
             // TODO fix the function to be const correct:
             if (auto curve = curve_for_item(const_cast<SPPath *>(selected_path))) {
-                _paths_to_snap_to->emplace_back(curve->get_pathvector() * selected_path->i2doc_affine(),
+                _paths_to_snap_to->emplace_back(*curve * selected_path->i2doc_affine(),
                                                 SNAPTARGET_PATH, Geom::OptRect(), true);
             }
         }
@@ -580,7 +580,7 @@ void Inkscape::ObjectSnapper::_snapPathsConstrained(IntermSnapResults &isr,
         if (node_tool_active) {
             // TODO fix the function to be const correct:
             if (auto curve = curve_for_item(const_cast<SPPath *>(selected_path))) {
-                _paths_to_snap_to->emplace_back(curve->get_pathvector() * selected_path->i2doc_affine(), SNAPTARGET_PATH, Geom::OptRect(), true);
+                _paths_to_snap_to->emplace_back(*curve * selected_path->i2doc_affine(), SNAPTARGET_PATH, Geom::OptRect(), true);
             }
         }
     }
@@ -736,7 +736,7 @@ void Inkscape::ObjectSnapper::_clear_paths() const
 
 Geom::PathVector Inkscape::ObjectSnapper::_getPathvFromRect(Geom::Rect const rect) const
 {
-    return SPCurve(rect, true).get_pathvector();
+    return rect_to_open_path(rect);
 }
 
 /**

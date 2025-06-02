@@ -156,7 +156,7 @@ Geom::OptRect bounds_exact_transformed(Geom::PathVector const &pv, Geom::Affine 
         return {};
     }
 
-    auto const initial = pv.front().initialPoint() * t;
+    auto const initial = pv.initialPoint() * t;
 
     // Obtain non-empty initial bbox to avoid having to deal with OptRect.
     auto bbox = Geom::Rect(initial, initial);

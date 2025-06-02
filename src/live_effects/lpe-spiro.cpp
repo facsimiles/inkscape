@@ -7,7 +7,6 @@
 
 #include "lpe-spiro.h"
 
-#include "display/curve.h"
 #include "helper/geom-nodetype.h"
 #include "helper/geom-curves.h"
 #include "live_effects/spiro.h"
@@ -22,21 +21,21 @@ LPESpiro::LPESpiro(LivePathEffectObject *lpeobject) :
 
 LPESpiro::~LPESpiro() = default;
 
-void LPESpiro::doEffect(SPCurve *curve)
+void LPESpiro::doEffect(Geom::PathVector &curve)
 {
-    sp_spiro_do_effect(*curve);
+    sp_spiro_do_effect(curve);
 }
 
-void sp_spiro_do_effect(SPCurve &curve)
+void sp_spiro_do_effect(Geom::PathVector &curve)
 {
     using Geom::X;
     using Geom::Y;
 
     // Make copy of old path as it is changed during processing
-    Geom::PathVector const original_pathv = curve.get_pathvector();
-    guint len = curve.get_segment_count() + 2;
+    Geom::PathVector const original_pathv = curve;
+    guint len = curve.curveCount() + 2;
 
-    curve.reset();
+    curve.clear();
     Spiro::spiro_cp *path = g_new (Spiro::spiro_cp, len);
     int ip = 0;
 
@@ -120,15 +119,15 @@ void sp_spiro_do_effect(SPCurve &curve)
 
         // run subpath through spiro
         int sp_len = ip;
-        Spiro::spiro_run(path, sp_len, curve);
+        curve = Spiro::spiro_run(path, sp_len);
         ip = 0;
     }
 
     g_free(path);
 }
 
-}; //namespace LivePathEffect
-}; /* namespace Inkscape */
+} // namespace LivePathEffect
+} // namespace Inkscape
 
 /*
   Local Variables:

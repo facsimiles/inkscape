@@ -60,7 +60,7 @@ TEST_F(PathoutlineTest, BoundedHausdorffDistance)
         item_find_paths(test_item, test_fill, test_stroke);
         auto const outline_pathvector = test_stroke;
         auto const comp_curve = comp_item->curve();
-        auto const &comp_pathvector = comp_curve->get_pathvector();
+        auto const &comp_pathvector = *comp_curve;
         ASSERT_EQ(outline_pathvector.size(), comp_pathvector.size());
 
         double error = 0;

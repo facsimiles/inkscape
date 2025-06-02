@@ -238,7 +238,7 @@ LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
     prev_unit = unit.get_abbreviation();
 }
 
-void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
+void LPEOffset::doAfterEffect(SPLPEItem const *, Geom::PathVector *)
 {
     if (offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         if (_knotholder && !_knotholder->entity.empty()) {
@@ -253,7 +253,7 @@ void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
         // we don do this on groups, editing is joining ito so no need to update knot
         auto shape = cast<SPShape>(sp_lpe_item);
         if (shape) {
-            out = cast<SPShape>(sp_lpe_item)->curve()->get_pathvector();
+            out = *cast<SPShape>(sp_lpe_item)->curve();
             offset_pt = get_nearest_point(out, offset_pt);
             _knotholder->entity.front()->knot_get();
         }

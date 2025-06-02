@@ -33,7 +33,6 @@
 #include <gtkmm/togglebutton.h>
 
 #include "desktop.h"
-#include "display/curve.h"
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-patternalongpath.h"
@@ -452,7 +451,7 @@ void PencilToolbar::_flattenLPE()
                     auto const lpe = lpeobj->get_lpe();
                     if ((dynamic_cast<T const *>(lpe) || ...)) { // if lpe is any T
                         auto c = *shape->curveForEdit();
-                        lpe->doEffect(&c);
+                        lpe->doEffect(c);
                         shape->setCurrentPathEffect(i);
                         if (lpelist.size() > 1) {
                             shape->removeCurrentPathEffect(true);
@@ -501,11 +500,11 @@ void PencilToolbar::tolerance_value_changed()
                             lpe_powerstroke->getRepr()->setAttribute("is_visible", "false");
                             sp_lpe_item_update_patheffect(lpeitem, false, false);
                             if (auto const sp_shape = cast<SPShape>(lpeitem)) {
-                                auto const previous_curve_length = sp_shape->curve()->get_segment_count();
+                                auto const previous_curve_length = sp_shape->curve()->curveCount();
                                 lpe_simplify->getRepr()->setAttribute("threshold", tol_str);
                                 sp_lpe_item_update_patheffect(lpeitem, false, false);
                                 simplified = true;
-                                auto const curve_length = sp_shape->curve()->get_segment_count();
+                                auto const curve_length = sp_shape->curve()->curveCount();
                                 auto const factor = (double)curve_length / previous_curve_length;
                                 auto ts = lpe_powerstroke->offset_points.data();
                                 for (auto &t : ts) {

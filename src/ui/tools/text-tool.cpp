@@ -1589,23 +1589,23 @@ void TextTool::_updateCursor(bool scroll_to_see)
             }
         }
 
-        SPCurve curve;
+        Geom::PathVector curve;
         for (auto shape_item : shapes) {
             if (auto shape = cast<SPShape>(shape_item)) {
                 if (shape->curve()) {
-                    curve.append(shape->curve()->transformed(shape->transform));
+                    pathvector_append(curve, *shape->curve() * shape->transform);
                 }
             }
         }
 
-        if (!curve.is_empty()) {
+        if (!curve.empty()) {
             bool has_padding = std::abs(padding) > 1e-12;
 
             if (has_padding || exclusion_shape) {
                 // Should only occur for SVG2 autoflowed text
                 // See sp-text.cpp function _buildLayoutInit()
                 Path temp;
-                temp.LoadPathVector(curve.get_pathvector());
+                temp.LoadPathVector(curve);
 
                 // Get initial shape-inside curve
                 auto uncross = std::make_unique<Shape>();
@@ -1623,7 +1623,7 @@ void TextTool::_updateCursor(bool scroll_to_see)
                         Path padded;
                         Path padt;
                         Shape sh;
-                        padt.LoadPathVector(curve.get_pathvector());
+                        padt.LoadPathVector(curve);
                         padt.Outline(&padded, padding, join_round, butt_straight, 20.0);
                         padded.ConvertWithBackData(1.0); // Convert to polyline
                         padded.Fill(&sh, 0);
@@ -1650,8 +1650,8 @@ void TextTool::_updateCursor(bool scroll_to_see)
             }
 
             // Transform curve after doing padding.
-            curve.transform(text->i2dt_affine());
-            frame->set_bpath(&curve);
+            curve *= text->i2dt_affine();
+            frame->set_bpath(curve);
             frame->set_visible(true);
         } else {
             frame->set_visible(false);
