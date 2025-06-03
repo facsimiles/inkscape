@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-26 11:17+0000\n"
+"PO-Revision-Date: 2025-06-03 19:51+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -33747,7 +33747,7 @@ msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
-"Ajuster le rayon <b>d'arrondi horizontal</b>; <b>Ctrl</b> que le rayon "
+"Ajuster le rayon <b>d'arrondi horizontal</b> ; <b>Ctrl</b> pour que le rayon "
 "vertical soit identique"
 
 #: ../src/ui/shape-editor-knotholders.cpp:580
@@ -33755,7 +33755,7 @@ msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
-"Ajuster le rayon <b>d'arrondi vertical</b>; <b>Ctrl</b> pour que le rayon "
+"Ajuster le rayon <b>d'arrondi vertical</b> ; <b>Ctrl</b> pour que le rayon "
 "horizontal soit identique"
 
 #: ../src/ui/shape-editor-knotholders.cpp:584
@@ -33779,8 +33779,8 @@ msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
-"Redimensionner la boîte suivant les axes X/Y ; avec <b>Maj</b>, suivant "
-"l'axe Z; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
+"Redimensionner la boîte suivant les axes X/Y ; avec <b>Maj</b>, suivant "
+"l'axe Z ; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
 "diagonales"
 
 #: ../src/ui/shape-editor-knotholders.cpp:864
@@ -33791,8 +33791,8 @@ msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
-"Redimensionner la boîte suivant l'axe Z ; avec <b>Maj</b>, suivant les axes "
-"X/Y; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
+"Redimensionner la boîte suivant l'axe Z ; avec <b>Maj</b>, suivant les axes "
+"X/Y ; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
 "diagonales"
 
 #: ../src/ui/shape-editor-knotholders.cpp:880
@@ -33816,12 +33816,12 @@ msgstr "Ajuster la <b>taille</b> du marqueur"
 #: ../src/ui/shape-editor-knotholders.cpp:1649
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajuster la <b>largeur</b> de l'ellipse; <b>Ctrl</b> pour en faire un cercle"
+"Ajuster la <b>largeur</b> de l'ellipse ; <b>Ctrl</b> pour en faire un cercle"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1652
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajuster la <b>hauteur</b> de l'ellipse; <b>Ctrl</b> pour en faire un cercle"
+"Ajuster la <b>hauteur</b> de l'ellipse ; <b>Ctrl</b> pour en faire un cercle"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1655
 msgid ""
@@ -33854,8 +33854,8 @@ msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
 msgstr ""
-"Ajuster le <b>rayon des sommets</b> de l'étoile ou du polygone; <b>Maj</b> "
-"pour arrondir; <b>Alt</b> pour rendre aléatoire"
+"Ajuster le <b>rayon des sommets</b> de l'étoile ou du polygone ; <b>Maj</b> "
+"pour arrondir ; <b>Alt</b> pour rendre aléatoire"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1850
 msgid ""
@@ -33863,9 +33863,9 @@ msgid ""
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
 "randomize"
 msgstr ""
-"Ajuster le <b>rayon de base</b> de l'étoile; <b>Ctrl</b> pour garder "
-"l'étoile parfaitement radiale (pas d'inclinaison); <b>Maj</b> pour arrondir; "
-"<b>Alt</b> pour rendre aléatoire"
+"Ajuster le <b>rayon de base</b> de l'étoile ; <b>Ctrl</b> pour garder "
+"l'étoile parfaitement radiale (pas d'inclinaison) ; <b>Maj</b> pour arrondir "
+"; <b>Alt</b> pour rendre aléatoire"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1857
 msgid "Drag to move the star"
@@ -33880,8 +33880,8 @@ msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
 msgstr ""
-"Enrouler/dérouler la spirale depuis <b>l'intérieur</b>; <b>Ctrl</b> pour "
-"tourner par incréments; <b>Alt</b> pour la faire converger/diverger"
+"Enrouler/dérouler la spirale depuis <b>l'intérieur</b> ; <b>Ctrl</b> pour "
+"tourner par incréments ; <b>Alt</b> pour la faire converger/diverger"
 
 #: ../src/ui/shape-editor-knotholders.cpp:2106
 msgid ""
@@ -34195,8 +34195,8 @@ msgid ""
 "<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to "
 "reset. (more: %s)"
 msgstr ""
-"<b>Poignée de nœud de B-spline</b> (puissance %.3g): Maj pour déplacer, "
-"double-clic pour réinitialiser (plus : %s)"
+"<b>Poignée de nœud de B-spline</b> (puissance %.3g) : Maj pour déplacer, "
+"double-clic pour réinitialiser (plus : %s)"
 
 #: ../src/ui/tool/node.cpp:676
 #, c-format
@@ -34892,7 +34892,7 @@ msgstr "Définir le type de filet"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:129
 msgid "ex.: 100x100cm"
-msgstr "ex.: 100x100cm"
+msgstr "ex. : 100x100cm"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:130
 msgid ""
@@ -35496,7 +35496,7 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Ellipse</b> : %s × %s; (contrainte au ratio du nombre d'or 1,618:1) ; "
+"<b>Ellipse</b> : %s × %s ; (contrainte au ratio du nombre d'or 1,618 :1) ; "
 "<b>Maj</b> dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:381
@@ -35505,7 +35505,7 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Ellipse</b> : %s × %s; (contrainte au ratio du nombre d'or 1:1.618) ; "
+"<b>Ellipse</b> : %s × %s ; (contrainte au ratio du nombre d'or 1 :1,618) ; "
 "<b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:386
@@ -36147,7 +36147,7 @@ msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr ""
-"<b>Poignée de contrôle</b>: angle %3.2f°, longueur %s ; <b>Ctrl</b> pour "
+"<b>Poignée de contrôle</b> : angle %3.2f°, longueur %s ; <b>Ctrl</b> pour "
 "tourner par incréments"
 
 #: ../src/ui/tools/pen-tool.cpp:1755
@@ -36211,7 +36211,7 @@ msgstr ""
 
 #: ../src/ui/tools/rect-tool.cpp:226
 msgid "<b>Alt</b>: use with Ctrl to make square"
-msgstr "<b>Alt</b>: utilisez avec Ctrl pour faire un carré"
+msgstr "<b>Alt</b> : utilisez avec Ctrl pour faire un carré"
 
 #: ../src/ui/tools/rect-tool.cpp:368
 #, c-format
@@ -36228,7 +36228,7 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s; (contraint au ratio du nombre d'or 1,618:1) ; "
+"<b>Rectangle</b> : %s × %s ; (contraint au ratio du nombre d'or 1,618 :1) ; "
 "<b>Maj</b> dessiner autour du point de départ"
 
 #: ../src/ui/tools/rect-tool.cpp:377
@@ -36237,7 +36237,7 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s; (contraint au ratio du nombre d'or 1:1.618) ; "
+"<b>Rectangle</b> : %s × %s ; (contraint au ratio du nombre d'or 1 :1,618) ; "
 "<b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/rect-tool.cpp:383
@@ -36437,7 +36437,7 @@ msgstr "Pulvérisation par union des formes"
 #: ../src/ui/tools/star-tool.cpp:214
 msgid "<b>Ctrl</b>: snap angle; keep rays radial"
 msgstr ""
-"<b>Ctrl</b> pour tourner par incréments; forcer la radialité des branches"
+"<b>Ctrl</b> pour tourner par incréments ; forcer la radialité des branches"
 
 #: ../src/ui/tools/star-tool.cpp:344
 #, c-format
@@ -36901,7 +36901,7 @@ msgstr "Trop d'encre !"
 
 #: ../src/ui/widget/color-notebook.cpp:196
 msgid "RGBA_:"
-msgstr "RVBA _:"
+msgstr "RVBA_ :"
 
 #: ../src/ui/widget/color-palette.cpp:46
 msgid "Configure..."
@@ -36951,15 +36951,15 @@ msgstr "_V :"
 
 #: ../src/ui/widget/color-scales.cpp:716
 msgid "_H*:"
-msgstr "_H*:"
+msgstr "_H* :"
 
 #: ../src/ui/widget/color-scales.cpp:721
 msgid "_S*:"
-msgstr "_S*:"
+msgstr "_S* :"
 
 #: ../src/ui/widget/color-scales.cpp:725
 msgid "_L*:"
-msgstr "_L*:"
+msgstr "_L* :"
 
 #: ../src/ui/widget/color-scales.cpp:756
 msgid "_H<sub>OK</sub>:"
@@ -38187,7 +38187,7 @@ msgid ""
 "evenodd)"
 msgstr ""
 "Toute intersection d'un chemin avec lui-même ou avec un de ses sous-chemins "
-"créera des trous dans le remplissage (fill-rule: evenodd)"
+"créera des trous dans le remplissage (fill-rule : evenodd)"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: ../src/ui/widget/paint-selector.cpp:200
@@ -38195,7 +38195,7 @@ msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
 "Le remplissage est complet à moins qu'un sous-chemin soit en sens inverse "
-"(fill-rule: nonzero)"
+"(fill-rule : nonzero)"
 
 #: ../src/ui/widget/paint-selector.cpp:490
 msgid "<b>No objects</b>"
@@ -43071,12 +43071,12 @@ msgid ""
 "Low fidelity simplifies paths; high fidelity preserves path features but may "
 "generate a lot of new nodes"
 msgstr ""
-"Une basse fidélité simplifie les chemins; Une haute fidélité préserve les "
+"Une fidélité basse simplifie les chemins ; une fidélité haute préserve les "
 "propriétés des chemins mais peut ajouter de nombreux nœuds"
 
 #: ../share/ui/toolbar-tweak.ui:445
 msgid "Fidelity:"
-msgstr "Fidélité:"
+msgstr "Fidélité :"
 
 #: ../share/ui/toolbar-tweak.ui:487 ../share/ui/toolbar-tweak.ui:509
 msgid "Channels:"
@@ -43349,7 +43349,7 @@ msgstr "Erreur en chargeant la police SVG à {}"
 
 #: ../share/extensions/hershey.py:803
 msgid "Font not found; Unable to generate glyph table."
-msgstr "Police non trouvée; impossible de générer la table des glyphes."
+msgstr "Police non trouvée ; impossible de générer la table des glyphes."
 
 #: ../share/extensions/hershey.py:1378
 msgid "Unable to process text. Consider unlinking cloned text."
@@ -43377,7 +43377,9 @@ msgid ""
 "technical support for help."
 msgstr ""
 "Attention : impossible de convertir le texte encadré.\n"
-"Utilisez Texte -> Désencadrer pour le convertir."
+"Utilisez Texte -> Désencadrer pour le convertir.\n"
+"Si vous n'arrivez pas à identifier l'objet en question, veuillez contacter "
+"le support technique pour obtenir de l'aide."
 
 #: ../share/extensions/hpgl2_input.py:98
 msgid "Unsupported commands encountered. The following commands were ignored:"
@@ -45122,6 +45124,8 @@ msgstr ""
 "- Le dessin SVG est supposé être en pixels, à 96 ppp.\n"
 "- Le facteur d'échelle et l'origine ne s'appliquent qu'au redimensionnement "
 "manuel.\n"
+"- Pour déterminer le facteur d'échelle du texte, voir "
+"dxf_input_text_scale_factor.svg\n"
 "- « Redimensionnement automatique » adaptera la largeur à une page A4.\n"
 "- « Lire depuis un fichier » utilise la variable $MEASUREMENT.\n"
 "- Les calques sont préservés avec Fichier > Ouvrir, mais pas avec Import.\n"
@@ -45270,18 +45274,15 @@ msgstr ""
 "- Le paramètre unité de base spécifie dans quelle unité les coordonnées sont "
 "générées (96 px = 1 in).\n"
 "- Types d'éléments acceptés\n"
-"\n"
 "    - chemins (lignes et splines)\n"
-"\n"
 "    - rectangles\n"
-"\n"
 "    - clones (la référence croisée vers l'original est perdue)\n"
 "- L'option ROBO-Master génère une spline spécialisée qui ne peut être "
 "utilisée que par des lecteurs ROBO-Master et AutoDesk, pas Inkscape.\n"
-"- La sortie LWPOLYLINE est une polyligne multi-connectée; désactivez cette "
+"- La sortie LWPOLYLINE est une polyligne multi-connectée ; désactivez cette "
 "option pour utiliser une ancienne version de la sortie LINE.\n"
 "- Vous pouvez choisir d'exporter tous les calques, seulement ceux qui sont "
-"visibles ou bien filtrés par nom (casse ignorée ; utilisez une virgule « , » "
+"visibles ou bien filtrés par nom (casse ignorée ; utilisez une virgule « , » "
 "pour séparer)"
 
 #: ../share/extensions/dxf_outlines.inx:51
@@ -45613,7 +45614,7 @@ msgid ""
 "b); uniform(a, b)."
 msgstr ""
 "Les fonctions de la librairie random peuvent aussi être utilisées, comme "
-"random(); randint(a, b); uniform(a, b)."
+"random() ; randint(a, b) ; uniform(a, b)."
 
 #: ../share/extensions/funcplot.inx:48
 msgid "This extension creates a plot of a function (in variable x)."
@@ -46667,7 +46668,7 @@ msgid ""
 "image id for the file names. The file extension will be appended "
 "automatically."
 msgstr ""
-"Préfixe du nom de fichier de l'image; un compteur sera ajouté. Laisser vide "
+"Préfixe du nom de fichier de l'image ; un compteur sera ajouté. Laisser vide "
 "pour utiliser l'id de l'image comme nom de fichier. L'extension sera ajoutée "
 "automatiquement."
 
@@ -46854,7 +46855,7 @@ msgstr "Valeur initiale :"
 #: ../share/extensions/interp_att_g.inx:32
 #: ../share/extensions/interp_att_g.inx:33
 msgid "Examples: 0.5, 5, #rgb, #rrggbb or r, g, b"
-msgstr "Exemples: 0.5, 5, #rvb, #rrvvbb ou r, v, b"
+msgstr "Exemples : 0.5, 5, #rvb, #rrvvbb ou r, v, b"
 
 #: ../share/extensions/interp_att_g.inx:33
 msgid "End Value:"
@@ -52956,7 +52957,7 @@ msgstr "Créer et éditer des images Scalable Vector Graphics"
 
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "image;editor;vector;drawing;"
-msgstr "image;éditeur;vectoriel;dessin;"
+msgstr "image ;éditeur ;vectoriel ;dessin ;"
 
 #: ../org.inkscape.Inkscape.desktop.template:20
 msgid "Open a New Window"
