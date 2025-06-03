@@ -2,10 +2,7 @@
 /*
  * Inkscape Units
  *
- * Authors:
- *   Matthew Petroff <matthew@mpetroff.net>
- *
- * Copyright (C) 2013 Matthew Petroff
+ * Copyright (C) 2013-2025 AUTHORS
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -128,11 +125,17 @@ protected:
     void on_end_element(Ctx &ctx, Glib::ustring const &name) override;
     void on_text(Ctx &ctx, Glib::ustring const &text) override;
 
+    bool parse_bool(Glib::ustring const &ret) {
+        auto b = ret.lowercase();
+        return b == "y" || b == "true";
+    }
 public:
     UnitTable *tbl;
     bool primary;
     bool skip;
     Unit unit;
+    std::optional<UnitMetric> metric;
+    bool is_div;
 };
 
 UnitParser::UnitParser(UnitTable *table) :
@@ -247,6 +250,10 @@ double Unit::convert(double from_dist, char const *to) const
     return convert(from_dist, UnitTable::get().getUnit(to));
 }
 
+UnitMetric const *Unit::getUnitMetric() const
+{
+    return UnitTable::get().getUnitMetric(metric_name);
+}
 
 
 Unit UnitTable::_empty_unit;
@@ -256,6 +263,10 @@ UnitTable::UnitTable()
     using namespace Inkscape::IO::Resource;
     load(get_filename(UIS, "units.xml", false, true));
 }
+UnitTable::UnitTable(std::string const &filename)
+{
+    load(filename);
+}
 
 UnitTable::~UnitTable()
 {
@@ -263,6 +274,26 @@ UnitTable::~UnitTable()
     {
         delete iter.second;
     }
+}
+
+void UnitTable::addMetric(UnitMetric const &m, bool primary)
+{
+    _metric_map[m.name] = m;
+    if (primary) {
+        _default_metric = m.name;
+    }
+}
+
+UnitMetric const *UnitTable::getUnitMetric(Glib::ustring const &name) const
+{
+    if (auto f = _metric_map.find(name); f != _metric_map.end()) {
+        return &(f->second);
+    }
+    if (name == _default_metric) {
+        g_warning("No default ruler metric found!");
+        return nullptr;
+    }
+    return getUnitMetric(_default_metric);
 }
 
 void UnitTable::addUnit(Unit const &u, bool primary)
@@ -423,14 +454,32 @@ bool UnitTable::save(std::string const &filename) {
 
 void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrMap const &attrs)
 {
+    if (name == "metric") {
+        metric = std::make_optional<UnitMetric>();
+        primary = false;
+
+        if (auto f = attrs.find("name"); f != attrs.end()) {
+            metric->name = f->second;
+        } else {
+            metric.reset();
+            g_warning("Skipping unit metric with no name");
+        }
+        if (auto f = attrs.find("default"); f != attrs.end()) {
+            primary = parse_bool(f->second);
+        }
+    } else if (name == "tic") {
+        is_div = false;
+        if (auto f = attrs.find("div"); f != attrs.end()) {
+            is_div = parse_bool(f->second);
+        }
+    }
     if (name == "unit") {
         // reset for next use
         unit.clear();
         primary = false;
         skip = false;
 
-        AttrMap::const_iterator f;
-        if ((f = attrs.find("type")) != attrs.end()) {
+        if (auto f = attrs.find("type"); f != attrs.end()) {
             Glib::ustring type = f->second;
             TypeMap::const_iterator tf = type_map.find(type);
             if (tf != type_map.end()) {
@@ -440,8 +489,11 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
                 skip = true;
             }
         }
-        if ((f = attrs.find("pri")) != attrs.end()) {
-            primary = (f->second[0] == 'y' || f->second[0] == 'Y');
+        if (auto f = attrs.find("pri"); f != attrs.end()) {
+            primary = parse_bool(f->second);
+        }
+        if (auto f = attrs.find("metric"); f != attrs.end()) {
+            unit.metric_name = f->second;
         }
     }
 }
@@ -457,9 +509,15 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
         unit.abbr = text;
     } else if (element == "factor") {
         // TODO make sure we use the right conversion
-        unit.factor = g_ascii_strtod(text.c_str(), nullptr);
+        unit.factor = std::stod(text.raw());
     } else if (element == "description") {
         unit.description = text;
+    } else if (element == "tic" && metric) {
+        auto tic = std::stod(text.raw());
+        metric->ruler_scale.push_back(tic);
+        if (is_div) {
+            metric->subdivide.push_back(tic);
+        }
     }
 }
 
@@ -467,6 +525,11 @@ void UnitParser::on_end_element(Ctx &/*ctx*/, Glib::ustring const &name)
 {
     if (name == "unit" && !skip) {
         tbl->addUnit(unit, primary);
+    } else if (name == "metric") {
+        if (metric) {
+            tbl->addMetric(*std::move(metric), primary);
+            metric.reset();
+        }
     }
 }
 

@@ -35,30 +35,9 @@
 #include "util/units.h"
 
 namespace Inkscape::UI::Widget {
-namespace {
-
-struct RulerMetric
-{
-    std::array<double, 16> ruler_scale;
-    std::array<int, 5> subdivide;
-};
-
-// Ruler metric for general use.
-constexpr RulerMetric ruler_metric_general = {
-  { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000 },
-  { 1, 5, 10, 50, 100 }
-};
-
-// Ruler metric for inch scales.
-constexpr RulerMetric ruler_metric_inches = {
-  { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 },
-  { 1, 2, 4, 8, 16 }
-};
 
 // Half width of pointer triangle.
 constexpr double half_width = 5.0;
-
-} // namespace
 
 Ruler::Ruler(Gtk::Orientation orientation)
     : Glib::ObjectBase{"InkRuler"}
@@ -232,9 +211,10 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
 
     double const pixels_per_unit = aparallel / abs_size;
 
-    auto ruler_metric = &ruler_metric_general;
-    if (_unit == Util::UnitTable::get().getUnit("in")) {
-        ruler_metric = &ruler_metric_inches;
+    auto ruler_metric = _unit->getUnitMetric();
+    if (!ruler_metric) {
+        // User warning already done in Unit code.
+        return;
     }
 
     unsigned scale_index;

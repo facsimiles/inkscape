@@ -91,6 +91,7 @@ set(TEST_SOURCES
     colors/xml-color-test
     uri-test
     util-test
+    util-units-test
     util-uri-test
     drag-and-drop-svgz
     drawing-pattern-test

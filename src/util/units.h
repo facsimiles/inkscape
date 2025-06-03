@@ -3,10 +3,7 @@
  * Inkscape Units
  * These classes are used for defining different unit systems.
  *
- * Authors:
- *   Matthew Petroff <matthew@mpetroff.net>
- *
- * Copyright (C) 2013 Matthew Petroff
+ * Copyright (C) 2013-2025 AUTHORS
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -15,6 +12,7 @@
 #define INKSCAPE_UTIL_UNITS_H
 
 #include <unordered_map>
+#include <vector>
 #include <boost/operators.hpp>
 #include <glibmm/ustring.h>
 #include <glibmm/ustring_hash.h>
@@ -41,6 +39,13 @@ enum UnitType {
 };
 
 const char DEG[] = "°";
+
+struct UnitMetric
+{
+    Glib::ustring name;
+    std::vector<double> ruler_scale;
+    std::vector<int>    subdivide;
+};
 
 class Unit
     : boost::equality_comparable<Unit>
@@ -75,7 +80,8 @@ public:
     Glib::ustring  name_plural;
     Glib::ustring  abbr;
     Glib::ustring  description;
-    
+    Glib::ustring  metric_name;
+
     /** Check if units are equal. */
     bool operator==(Unit const &other) const;
     
@@ -86,6 +92,9 @@ public:
     double convert(double from_dist, Unit const *to) const;
     double convert(double from_dist, Glib::ustring const &to) const;
     double convert(double from_dist, char const *to) const;
+
+    /** Get the ways this unit is subdivided in rulers **/
+    UnitMetric const *getUnitMetric() const;
 };
 
 class Quantity
@@ -141,10 +150,16 @@ public:
      * The primary unit's conversion factor is required to be 1.00
      */
     UnitTable();
+    UnitTable(std::string const &filename);
     virtual ~UnitTable();
 
+    typedef std::unordered_map<Glib::ustring, UnitMetric> MetricMap;
     typedef std::unordered_map<Glib::ustring, Unit> UnitMap;
     typedef std::unordered_map<unsigned, Unit*> UnitCodeMap;
+
+    /** Unit metrics **/
+    void    addMetric(UnitMetric const &u, bool primary);
+    UnitMetric const *getUnitMetric(Glib::ustring const &name) const;
 
     /** Add a new unit to the table */
     void    addUnit(Unit const &u, bool primary);
@@ -194,8 +209,10 @@ public:
     static UnitTable &get();
 
 protected:
+    MetricMap           _metric_map;
     UnitCodeMap         _unit_map;
     Glib::ustring       _primary_unit[UNIT_TYPE_QTY];
+    Glib::ustring       _default_metric;
 
     double              _linear_scale;
     static Unit         _empty_unit;

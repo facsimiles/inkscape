@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unitdefs>
+<!--Ruler metrics for most scales-->
+<metric name="general" default="true">
+    <tic div="true">1</tic>
+    <tic>2</tic>
+    <tic div="true">5</tic>
+    <tic div="true">10</tic>
+    <tic>25</tic>
+    <tic div="true">50</tic>
+    <tic div="true">100</tic>
+    <tic>250</tic>
+    <tic>500</tic>
+    <tic>1000</tic>
+    <tic>2500</tic>
+    <tic>5000</tic>
+    <tic>10000</tic>
+    <tic>25000</tic>
+    <tic>50000</tic>
+    <tic>100000</tic>
+</metric>
+<!--Ruler metrics for inch scales-->
+<metric name="dyadic">
+    <tic div="true">1</tic>
+    <tic div="true">2</tic>
+    <tic div="true">4</tic>
+    <tic div="true">8</tic>
+    <tic div="true">16</tic>
+    <tic>32</tic>
+    <tic>64</tic>
+    <tic>128</tic>
+    <tic>256</tic>
+    <tic>512</tic>
+    <tic>1024</tic>
+    <tic>2048</tic>
+    <tic>4096</tic>
+    <tic>8192</tic>
+    <tic>16384</tic>
+    <tic>32768</tic>
+</metric>
 <unit type="DIMENSIONLESS" pri="y">
     <name>%</name>
     <plural>%</plural>
@@ -28,14 +66,14 @@
     <factor>16.0</factor>
     <description>12 points</description>
 </unit>
-<unit type="LINEAR" pri="n">
+<unit type="LINEAR" pri="n" metric="dyadic">
     <name>inch</name>
     <plural>inches</plural>
     <abbr>in</abbr>
     <factor>96.0</factor>
     <description>Inches (96 px/in)</description>
 </unit>
-<unit type="LINEAR" pri="n">
+<unit type="LINEAR" pri="n" metric="dyadic">
     <name>foot</name>
     <plural>feet</plural>
     <abbr>ft</abbr>
