@@ -15,6 +15,8 @@ TEST_SCRIPT=$5
 
 get_outputs "$6"
 
+FUZZ=$7
+
 # check if expected files exist
 for file in ${EXPECTED_FILES}; do
     test -f "${file}" || { echo "Error: Expected file '${file}' not found."; exit 1; }
@@ -29,6 +31,11 @@ if [ -n "${REFERENCE_FILENAME}" ]; then
     if [ ! -f "${REFERENCE_FILENAME}" ]; then
         echo "Error: Reference file '${REFERENCE_FILENAME}' not found."
         exit 1
+    fi
+    if [ "${FUZZ}" -ne "0" ]; then
+        FUZZ="-fuzz ${FUZZ}%"
+    else
+        FUZZ=""
     fi
 
     # convert testfile and reference file to PNG format
@@ -52,7 +59,7 @@ if [ -n "${REFERENCE_FILENAME}" ]; then
     fi
 
     # compare files
-    if ! compare -metric AE ${PNG_FILENAME} ${PNG_REFERENCE} ${PNG_COMPARE}; then
+    if ! compare ${FUZZ} -metric AE ${PNG_FILENAME} ${PNG_REFERENCE} ${PNG_COMPARE}; then
         echo && echo "Error: Comparison failed."
         exit 1
     fi

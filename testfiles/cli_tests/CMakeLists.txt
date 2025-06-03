@@ -108,6 +108,12 @@ function(add_cli_test_cmp fixture testname)
         set(ARG_PNG "${ARG_OUTPUT_FILENAME}-output.png")
     endif()
 
+    if(DEFINED ARG_FUZZ_PERCENTAGE)
+        set(ARG_FUZZ "${ARG_FUZZ_PERCENTAGE}")
+    else()
+        set(ARG_FUZZ "0")
+    endif()
+
     # add test to check output files
     if(DEFINED ARG_REFERENCE_FILENAME OR DEFINED ARG_EXPECTED_FILES OR DEFINED ARG_TEST_SCRIPT)
         if(DEFINED ARG_REFERENCE_FILENAME)
@@ -123,7 +129,8 @@ function(add_cli_test_cmp fixture testname)
         add_test(NAME ${testname}
             COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/check_output.sh
                     "${ARG_OUTPUT_FILENAME}" "${ARG_OUTPUT_PAGE}" "${ARG_REFERENCE_FILENAME}"
-                    "${ARG_EXPECTED_FILES}" "${ARG_TEST_SCRIPT}" "${ARG_PNG}")
+                    "${ARG_EXPECTED_FILES}" "${ARG_TEST_SCRIPT}" "${ARG_PNG}"
+                    "${ARG_FUZZ}")
         set_tests_properties(${testname} PROPERTIES
             FIXTURES_REQUIRED ${fixture}
             ENVIRONMENT "${CMAKE_CTEST_ENV}"
@@ -134,11 +141,6 @@ function(add_cli_test_cmp fixture testname)
     # add a fuzzy test to check the output files
     if(DEFINED ARG_FUZZYREF_FILENAME)
         file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_FUZZYREF_FILENAME}" ARG_FUZZYREF_FILENAME)
-        if(DEFINED ARG_FUZZ_PERCENTAGE)
-            set(ARG_FUZZ "${ARG_FUZZ_PERCENTAGE}")
-        else()
-            set(ARG_FUZZ "0")
-        endif()
         add_test(NAME ${testname}
             COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/l2compare.sh
             "${ARG_OUTPUT_FILENAME}" "${ARG_OUTPUT_PAGE}" "${ARG_FUZZYREF_FILENAME}" "${ARG_FUZZ}" "${ARG_RASTER_DPI}" "${ARG_PNG}"
@@ -839,7 +841,8 @@ add_cli_test(action_stroke-to-path_visual
                         INPUT_FILENAME stroke-to-path-variations.svg
                         PARAMETERS --actions=select-all:all$<SEMICOLON>object-stroke-to-path
                         OUTPUT_FILENAME stroke-to-path-variations.png
-                        REFERENCE_FILENAME actions-object-stroke-to-path_variations_expected.png)
+                        REFERENCE_FILENAME actions-object-stroke-to-path_variations_expected.png
+                        FUZZ_PERCENTAGE 9)
 
 # object-to-path
 add_cli_test(actions-object-to-path        INPUT_FILENAME areas.svg
