@@ -3,9 +3,10 @@
 
 #include <cassert>
 #include <numeric>
+
+#include <gdk/gdk.h>
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
-#include <gtk-4.0/gdk/gdkevents.h>
 #include <gtkmm/button.h>
 #include <gtkmm/dragicon.h>
 #include <gtkmm/droptarget.h>
