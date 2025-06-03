@@ -18,9 +18,6 @@
 #include "sp-paint-server.h"
 #include "display/drawing-paintserver.h"
 
-#include "sp-gradient.h"
-#include "xml/node.h"
-
 SPPaintServer *SPPaintServerReference::getObject() const
 {
     return static_cast<SPPaintServer *>(URIReference::getObject());

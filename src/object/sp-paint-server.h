@@ -63,45 +63,6 @@ protected:
     bool swatch = false;
 };
 
-/**
- * Returns the first of {src, src-\>ref-\>getObject(),
- * src-\>ref-\>getObject()-\>ref-\>getObject(),...}
- * for which \a match is true, or NULL if none found.
- *
- * The raison d'être of this routine is that it correctly handles cycles in the href chain (e.g., if
- * a gradient gives itself as its href, or if each of two gradients gives the other as its href).
- *
- * \pre is<SPGradient>(src).
- */
-template <class PaintServer>
-PaintServer *chase_hrefs(PaintServer *src, sigc::slot<bool (PaintServer const *)> match) {
-    /* Use a pair of pointers for detecting loops: p1 advances half as fast as p2.  If there is a
-       loop, then once p1 has entered the loop, we'll detect it the next time the distance between
-       p1 and p2 is a multiple of the loop size. */
-    PaintServer *p1 = src, *p2 = src;
-    bool do1 = false;
-    for (;;) {
-        if (match(p2)) {
-            return p2;
-        }
-
-        p2 = p2->ref->getObject();
-        if (!p2) {
-            return p2;
-        }
-        if (do1) {
-            p1 = p1->ref->getObject();
-        }
-        do1 = !do1;
-
-        if ( p2 == p1 ) {
-            /* We've been here before, so return NULL to indicate that no matching gradient found
-             * in the chain. */
-            return nullptr;
-        }
-    }
-}
-
 #endif // SEEN_SP_PAINT_SERVER_H
 /*
   Local Variables:

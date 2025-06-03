@@ -17,7 +17,6 @@
 #define SEEN_SP_HATCH_H
 
 #include <vector>
-#include <cstddef>
 #include <glibmm/ustring.h>
 #include <sigc++/connection.h>
 
@@ -37,13 +36,23 @@ class DrawingPattern;
 namespace XML { class Node; }
 } // namespace Inkscape
 
+class SPHatchReference : public Inkscape::URIReference
+{
+public:
+    SPHatchReference(SPHatch *obj);
+    SPHatch *getObject() const;
+
+protected:
+    bool _acceptObject(SPObject *obj) const override;
+};
+
 class SPHatch final : public SPPaintServer
 {
 public:
-    enum HatchUnits
+    enum class HatchUnits
     {
-        UNITS_USERSPACEONUSE,
-        UNITS_OBJECTBOUNDINGBOX
+        UserSpaceOnUse,
+        ObjectBoundingBox
     };
 
     struct RenderInfo
@@ -63,22 +72,23 @@ public:
 
     // Reference (href)
     Glib::ustring href;
-    SPHatchReference *ref;
+    SPHatchReference ref;
 
-    gdouble x() const;
-    gdouble y() const;
-    gdouble pitch() const;
-    gdouble rotate() const;
+    double x() const;
+    double y() const;
+    double pitch() const;
+    double rotate() const;
     HatchUnits hatchUnits() const;
     HatchUnits hatchContentUnits() const;
-    Geom::Affine const &hatchTransform() const;
-    SPHatch *rootHatch(); //TODO: const
+    Geom::Affine hatchTransform() const;
+    SPHatch const *rootHatch() const;
+    SPHatch *rootHatch() { return const_cast<SPHatch *>(std::as_const(*this).rootHatch()); }
 
     std::vector<SPHatchPath *> hatchPaths();
     std::vector<SPHatchPath const *> hatchPaths() const;
 
-    SPHatch *clone_if_necessary(SPItem *item, const gchar *property);
-    void transform_multiply(Geom::Affine postmul, bool set);
+    SPHatch *clone_if_necessary(SPItem *item, char const *property);
+    void transform_multiply(Geom::Affine const &postmul, bool set);
 
     bool isValid() const override;
 
@@ -93,7 +103,7 @@ protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
     void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
-    void set(SPAttr key, const gchar* value) override;
+    void set(SPAttr key, char const *value) override;
     void update(SPCtx* ctx, unsigned int flags) override;
     void modified(unsigned int flags) override;
 
@@ -110,7 +120,7 @@ private:
     /**
      * Count how many times hatch is used by the styles of o and its descendants
     */
-    guint _countHrefs(SPObject *o) const;
+    int _countHrefs(SPObject *o) const;
 
     /**
      * Gets called when the hatch is reattached to another <hatch>
@@ -120,17 +130,14 @@ private:
     /**
      * Gets called when the referenced <hatch> is changed
      */
-    void _onRefModified(SPObject *ref, guint flags);
+    void _onRefModified(SPObject *ref, unsigned flags);
 
     // patternUnits and patternContentUnits attribute
-    HatchUnits _hatchUnits : 1;
-    bool _hatchUnits_set : 1;
-    HatchUnits _hatchContentUnits : 1;
-    bool _hatchContentUnits_set : 1;
+    std::optional<HatchUnits> _hatch_units;
+    std::optional<HatchUnits> _hatch_content_units;
 
     // hatchTransform attribute
-    Geom::Affine _hatchTransform;
-    bool _hatchTransform_set : 1;
+    std::optional<Geom::Affine> _hatch_transform;
 
     // Strip
     SVGLength _x;
@@ -139,25 +146,6 @@ private:
     SVGAngle _rotate;
 
     sigc::connection _modified_connection;
-};
-
-class SPHatchReference : public Inkscape::URIReference
-{
-public:
-    SPHatchReference(SPHatch *obj)
-        : URIReference(obj)
-    {}
-
-    SPHatch *getObject() const
-    {
-        return static_cast<SPHatch*>(URIReference::getObject());
-    }
-
-protected:
-    bool _acceptObject(SPObject *obj) const override
-    {
-        return is<SPHatch>(obj) && URIReference::_acceptObject(obj);
-    }
 };
 
 #endif // SEEN_SP_HATCH_H

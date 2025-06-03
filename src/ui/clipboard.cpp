@@ -1457,11 +1457,7 @@ void ClipboardManagerImpl::_copyHatch(SPHatch *hatch)
                 _copyUsedDefs(childItem);
             }
         }
-        if (hatch->ref) {
-            hatch = hatch->ref->getObject();
-        } else {
-            hatch = nullptr;
-        }
+        hatch = hatch->ref.getObject();
     }
 }
 

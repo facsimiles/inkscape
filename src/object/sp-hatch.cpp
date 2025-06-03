@@ -16,7 +16,6 @@
 #include "sp-hatch.h"
 
 #include <cstring>
-#include <string>
 
 #include <2geom/transforms.h>
 #include <sigc++/functors/mem_fun.h>
@@ -36,27 +35,29 @@
 #include "svg/svg.h"
 #include "xml/href-attribute-helper.h"
 
-SPHatch::SPHatch()
-    : ref(nullptr), // avoiding 'this' in initializer list
-      _hatchUnits(UNITS_OBJECTBOUNDINGBOX),
-      _hatchUnits_set(false),
-      _hatchContentUnits(UNITS_USERSPACEONUSE),
-      _hatchContentUnits_set(false),
-      _hatchTransform_set(false)
-{
-    ref = new SPHatchReference(this);
-    ref->changedSignal().connect(sigc::mem_fun(*this, &SPHatch::_onRefChanged));
+SPHatchReference::SPHatchReference(SPHatch *obj)
+    : URIReference(obj)
+{}
 
-    // TODO check that these should start already as unset:
-    _x.unset();
-    _y.unset();
-    _pitch.unset();
-    _rotate.unset();
+SPHatch *SPHatchReference::getObject() const
+{
+    return cast_unsafe<SPHatch>(URIReference::getObject());
+}
+
+bool SPHatchReference::_acceptObject(SPObject *obj) const
+{
+    return is<SPHatch>(obj) && URIReference::_acceptObject(obj);
+}
+
+SPHatch::SPHatch()
+    : ref{this}
+{
+    ref.changedSignal().connect(sigc::mem_fun(*this, &SPHatch::_onRefChanged));
 }
 
 SPHatch::~SPHatch() = default;
 
-void SPHatch::build(SPDocument* doc, Inkscape::XML::Node* repr)
+void SPHatch::build(SPDocument *doc, Inkscape::XML::Node *repr)
 {
     SPPaintServer::build(doc, repr);
 
@@ -90,12 +91,8 @@ void SPHatch::release()
     }
     views.clear();
 
-    if (ref) {
-        _modified_connection.disconnect();
-        ref->detach();
-        delete ref;
-        ref = nullptr;
-    }
+    _modified_connection.disconnect();
+    ref.detach();
 
     SPPaintServer::release();
 }
@@ -120,20 +117,18 @@ void SPHatch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref)
     //FIXME: notify all hatches that refer to this child set
 }
 
-void SPHatch::set(SPAttr key, const gchar* value)
+void SPHatch::set(SPAttr key, char const *value)
 {
     switch (key) {
     case SPAttr::HATCHUNITS:
         if (value) {
             if (!std::strcmp(value, "userSpaceOnUse")) {
-                _hatchUnits = UNITS_USERSPACEONUSE;
+                _hatch_units = HatchUnits::UserSpaceOnUse;
             } else {
-                _hatchUnits = UNITS_OBJECTBOUNDINGBOX;
+                _hatch_units = HatchUnits::ObjectBoundingBox;
             }
-
-            _hatchUnits_set = true;
         } else {
-            _hatchUnits_set = false;
+            _hatch_units = {};
         }
 
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -142,14 +137,12 @@ void SPHatch::set(SPAttr key, const gchar* value)
     case SPAttr::HATCHCONTENTUNITS:
         if (value) {
             if (!std::strcmp(value, "userSpaceOnUse")) {
-                _hatchContentUnits = UNITS_USERSPACEONUSE;
+                _hatch_content_units = HatchUnits::UserSpaceOnUse;
             } else {
-                _hatchContentUnits = UNITS_OBJECTBOUNDINGBOX;
+                _hatch_content_units = HatchUnits::ObjectBoundingBox;
             }
-
-            _hatchContentUnits_set = true;
         } else {
-            _hatchContentUnits_set = false;
+            _hatch_content_units = {};
         }
 
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -157,13 +150,10 @@ void SPHatch::set(SPAttr key, const gchar* value)
 
     case SPAttr::HATCHTRANSFORM: {
         Geom::Affine t;
-
         if (value && sp_svg_transform_read(value, &t)) {
-            _hatchTransform = t;
-            _hatchTransform_set = true;
+            _hatch_transform = t;
         } else {
-            _hatchTransform = Geom::identity();
-            _hatchTransform_set = false;
+            _hatch_transform = {};
         }
 
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -201,13 +191,13 @@ void SPHatch::set(SPAttr key, const gchar* value)
                 // Now do the attaching, which emits the changed signal.
                 if (value) {
                     try {
-                        ref->attach(Inkscape::URI(value));
-                    } catch (Inkscape::BadURIException &e) {
+                        ref.attach(Inkscape::URI(value));
+                    } catch (Inkscape::BadURIException const &e) {
                         g_warning("%s", e.what());
-                        ref->detach();
+                        ref.detach();
                     }
                 } else {
-                    ref->detach();
+                    ref.detach();
                 }
             }
         }
@@ -227,51 +217,50 @@ void SPHatch::set(SPAttr key, const gchar* value)
 
 bool SPHatch::_hasHatchPatchChildren(SPHatch const *hatch)
 {
-    for (auto &child: hatch->children) {
-        SPHatchPath const *hatchPath = cast<SPHatchPath>(&child);
-        if (hatchPath) {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(hatch->children.begin(),
+                       hatch->children.end(),
+                       [] (auto &c) { return is<SPHatchPath>(&c); });
 }
 
-std::vector<SPHatchPath*> SPHatch::hatchPaths()
+std::vector<SPHatchPath *> SPHatch::hatchPaths()
 {
-    std::vector<SPHatchPath*> list;
-    SPHatch *src = chase_hrefs<SPHatch>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
+    auto const src = rootHatch();
+    if (!src) {
+        return {};
+    }
 
-    if (src) {
-        for (auto &child: src->children) {
-            auto hatchPath = cast<SPHatchPath>(&child);
-            if (hatchPath) {
-                list.push_back(hatchPath);
-            }
+    std::vector<SPHatchPath *> list;
+
+    for (auto &child : src->children) {
+        if (auto hatch_path = cast<SPHatchPath>(&child)) {
+            list.push_back(hatch_path);
         }
     }
+
     return list;
 }
 
-std::vector<SPHatchPath const*> SPHatch::hatchPaths() const
+std::vector<SPHatchPath const *> SPHatch::hatchPaths() const
 {
-    std::vector<SPHatchPath const*> list;
-    SPHatch const *src = chase_hrefs<SPHatch const>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
+    auto const src = rootHatch();
+    if (!src) {
+        return {};
+    }
 
-    if (src) {
-        for (auto &child: src->children) {
-            SPHatchPath const *hatchPath = cast<SPHatchPath>(&child);
-            if (hatchPath) {
-                list.push_back(hatchPath);
-            }
+    std::vector<SPHatchPath const *> list;
+
+    for (auto &child : src->children) {
+        if (auto hatch_path = cast<SPHatchPath>(&child)) {
+            list.push_back(hatch_path);
         }
     }
+
     return list;
 }
 
 // TODO: ::remove_child and ::order_changed handles - see SPPattern
 
-
-void SPHatch::update(SPCtx* ctx, unsigned int flags)
+void SPHatch::update(SPCtx* ctx, unsigned flags)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -301,13 +290,9 @@ void SPHatch::update(SPCtx* ctx, unsigned int flags)
     }
 }
 
-void SPHatch::modified(unsigned int flags)
+void SPHatch::modified(unsigned flags)
 {
-    if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
-    }
-
-    flags &= SP_OBJECT_MODIFIED_CASCADE;
+    flags = cascade_flags(flags);
 
     std::vector<SPHatchPath *> children(hatchPaths());
 
@@ -371,128 +356,117 @@ void SPHatch::_onRefChanged(SPObject *old_ref, SPObject *ref)
     _onRefModified(ref, 0);
 }
 
-void SPHatch::_onRefModified(SPObject */*ref*/, guint /*flags*/)
+void SPHatch::_onRefModified(SPObject *, unsigned)
 {
     requestModified(SP_OBJECT_MODIFIED_FLAG);
-    // Conditional to avoid causing infinite loop if there's a cycle in the href chain.
 }
 
-SPHatch *SPHatch::rootHatch()
+SPHatch const *SPHatch::rootHatch() const
 {
-    SPHatch *src = chase_hrefs<SPHatch>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
-    return src ? src : this; // document is broken, we can't get to root; but at least we can return pat which is supposedly a valid hatch
+    for (auto p = this; p; p = p->ref.getObject()) {
+        if (_hasHatchPatchChildren(p)) { // find the first one with hatch patch children
+            return p;
+        }
+    }
+    return this; // document is broken, we can't get to root; but at least we can return ourself which is supposedly a valid hatch
 }
 
 // Access functions that look up fields up the chain of referenced hatchs and return the first one which is set
-// FIXME: all of them must use chase_hrefs as children() and rootHatch()
 
 SPHatch::HatchUnits SPHatch::hatchUnits() const
 {
-    HatchUnits units = _hatchUnits;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_hatchUnits_set) {
-            units = pat_i->_hatchUnits;
-            break;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_hatch_units) {
+            return *hatch->_hatch_units;
         }
     }
-    return units;
+    return HatchUnits::ObjectBoundingBox;
 }
 
 SPHatch::HatchUnits SPHatch::hatchContentUnits() const
 {
-    HatchUnits units = _hatchContentUnits;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_hatchContentUnits_set) {
-            units = pat_i->_hatchContentUnits;
-            break;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_hatch_content_units) {
+            return *hatch->_hatch_content_units;
         }
     }
-    return units;
+    return HatchUnits::UserSpaceOnUse;
 }
 
-Geom::Affine const &SPHatch::hatchTransform() const
+Geom::Affine SPHatch::hatchTransform() const
 {
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_hatchTransform_set) {
-            return pat_i->_hatchTransform;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_hatch_transform) {
+            return *hatch->_hatch_transform;
         }
     }
-    return _hatchTransform;
+    return Geom::identity();
 }
 
-gdouble SPHatch::x() const
+double SPHatch::x() const
 {
-    gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_x._set) {
-            val = pat_i->_x.computed;
-            break;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_x._set) {
+            return hatch->_x.computed;
         }
     }
-    return val;
+    return 0;
 }
 
-gdouble SPHatch::y() const
+double SPHatch::y() const
 {
-    gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_y._set) {
-            val = pat_i->_y.computed;
-            break;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_y._set) {
+            return hatch->_y.computed;
         }
     }
-    return val;
+    return 0;
 }
 
-gdouble SPHatch::pitch() const
+double SPHatch::pitch() const
 {
-    gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_pitch._set) {
-            val = pat_i->_pitch.computed;
-            break;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_pitch._set) {
+            return hatch->_pitch.computed;
         }
     }
-    return val;
+    return 0;
 }
 
-gdouble SPHatch::rotate() const
+double SPHatch::rotate() const
 {
-    gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
-        if (pat_i->_rotate._set) {
-            val = pat_i->_rotate.computed;
-            break;
+    for (auto hatch = this; hatch; hatch = hatch->ref.getObject()) {
+        if (hatch->_rotate._set) {
+            return hatch->_rotate.computed;
         }
     }
-    return val;
+    return 0;
 }
 
-guint SPHatch::_countHrefs(SPObject *o) const
+int SPHatch::_countHrefs(SPObject *obj) const
 {
-    if (!o)
+    if (!obj) {
         return 1;
-
-    guint i = 0;
-
-    SPStyle *style = o->style;
-    if (style && style->fill.isPaintserver() && is<SPHatch>(SP_STYLE_FILL_SERVER(style)) &&
-        cast<SPHatch>(SP_STYLE_FILL_SERVER(style)) == this) {
-        i++;
-    }
-    if (style && style->stroke.isPaintserver() && is<SPHatch>(SP_STYLE_STROKE_SERVER(style)) &&
-        cast<SPHatch>(SP_STYLE_STROKE_SERVER(style)) == this) {
-        i++;
     }
 
-    for (auto &child : o->children) {
+    int i = 0;
+
+    SPStyle *style = obj->style;
+    if (style && style->fill.isPaintserver() && style->getFillPaintServer() == this) {
+        i++;
+    }
+    if (style && style->stroke.isPaintserver() && style->getStrokePaintServer() == this) {
+        i++;
+    }
+
+    for (auto &child : obj->children) {
         i += _countHrefs(&child);
     }
 
     return i;
 }
 
-SPHatch *SPHatch::clone_if_necessary(SPItem *item, const gchar *property)
+SPHatch *SPHatch::clone_if_necessary(SPItem *item, char const *property)
 {
     SPHatch *hatch = this;
     if (hatch->href.empty() || hatch->hrefcount > _countHrefs(item)) {
@@ -505,7 +479,7 @@ SPHatch *SPHatch::clone_if_necessary(SPItem *item, const gchar *property)
         Inkscape::setHrefAttribute(*repr, parent_ref);
 
         defsrepr->addChild(repr, nullptr);
-        const gchar *child_id = repr->attribute("id");
+        char const *child_id = repr->attribute("id");
         SPObject *child = document->getObjectById(child_id);
         g_assert(is<SPHatch>(child));
 
@@ -516,42 +490,32 @@ SPHatch *SPHatch::clone_if_necessary(SPItem *item, const gchar *property)
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property(css, property, href.c_str());
         sp_repr_css_change_recursive(item->getRepr(), css, "style");
+        sp_repr_css_attr_unref(css);
     }
 
     return hatch;
 }
 
-void SPHatch::transform_multiply(Geom::Affine postmul, bool set)
+void SPHatch::transform_multiply(Geom::Affine const &postmul, bool set)
 {
-    if (set) {
-        _hatchTransform = postmul;
-    } else {
-        _hatchTransform = hatchTransform() * postmul;
-    }
-
-    _hatchTransform_set = true;
-
-    setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(_hatchTransform));
+    _hatch_transform = set ? postmul : hatchTransform() * postmul;
+    setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(*_hatch_transform));
 }
 
 bool SPHatch::isValid() const
 {
-    bool valid = false;
-
-    if (pitch() > 0) {
-        auto children = hatchPaths();
-        if (!children.empty()) {
-            valid = true;
-            for (auto c : children) {
-                valid = c->isValid();
-                if (!valid) {
-                    break;
-                }
-            }
-        }
+    if (pitch() <= 0) {
+        return false;
     }
 
-    return valid;
+    auto const children = hatchPaths();
+    if (children.empty()) {
+        return false;
+    }
+
+    return std::all_of(children.begin(),
+                       children.end(),
+                       [] (auto c) { return c->isValid(); });
 }
 
 Inkscape::DrawingPattern *SPHatch::show(Inkscape::Drawing &drawing, unsigned key, Geom::OptRect const &bbox)
@@ -575,9 +539,9 @@ Inkscape::DrawingPattern *SPHatch::show(Inkscape::Drawing &drawing, unsigned key
     return ai;
 }
 
-void SPHatch::hide(unsigned int key)
+void SPHatch::hide(unsigned key)
 {
-    std::vector<SPHatchPath *> children(hatchPaths());
+    auto const children = hatchPaths();
 
     for (auto child : children) {
         child->hide(key);
@@ -612,14 +576,13 @@ Geom::Interval SPHatch::bounds() const
 
 SPHatch::RenderInfo SPHatch::calculateRenderInfo(unsigned key) const
 {
-    RenderInfo info;
     for (auto const &v : views) {
         if (v.key == key) {
             return _calculateRenderInfo(v);
         }
     }
     g_assert_not_reached();
-    return info;
+    return {};
 }
 
 void SPHatch::_updateView(View &view)
@@ -630,7 +593,6 @@ void SPHatch::_updateView(View &view)
     //The movement progresses from right to left. This gives the same result
     //as drawing whole strips in left-to-right order.
 
-
     view.drawingitem->setChildTransform(info.child_transform);
     view.drawingitem->setPatternToUserTransform(info.pattern_to_user_transform);
     view.drawingitem->setTileRect(info.tile_rect);
@@ -640,63 +602,64 @@ void SPHatch::_updateView(View &view)
 
 SPHatch::RenderInfo SPHatch::_calculateRenderInfo(View const &view) const
 {
+    auto const extents = _calculateStripExtents(view.bbox);
+    if (!extents) {
+        return {};
+    }
+
+    double tile_x = x();
+    double tile_y = y();
+    double tile_width = pitch();
+    double tile_height = extents->max() - extents->min();
+    double tile_rotate = rotate();
+    double tile_render_y = extents->min();
+
+    if (view.bbox && hatchUnits() == HatchUnits::ObjectBoundingBox) {
+        tile_x *= view.bbox->width();
+        tile_y *= view.bbox->height();
+        tile_width *= view.bbox->width();
+    }
+
+    // Extent calculated using content units, need to correct.
+    if (view.bbox && hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
+        tile_height *= view.bbox->height();
+        tile_render_y *= view.bbox->height();
+    }
+
+    // Pattern size in hatch space
+    Geom::Rect hatch_tile = Geom::Rect::from_xywh(0, tile_render_y, tile_width, tile_height);
+
+    // Content to bbox
+    Geom::Affine content2ps;
+    if (view.bbox && hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
+        content2ps = Geom::Affine(view.bbox->width(), 0.0, 0.0, view.bbox->height(), 0, 0);
+    }
+
+    // Tile (hatch space) to user.
+    Geom::Affine ps2user = Geom::Translate(tile_x, tile_y) * Geom::Rotate::from_degrees(tile_rotate) * hatchTransform();
+
     RenderInfo info;
+    info.child_transform = content2ps;
+    info.pattern_to_user_transform = ps2user;
+    info.tile_rect = hatch_tile;
 
-    Geom::OptInterval extents = _calculateStripExtents(view.bbox);
-    if (extents) {
-        double tile_x = x();
-        double tile_y = y();
-        double tile_width = pitch();
-        double tile_height = extents->max() - extents->min();
-        double tile_rotate = rotate();
-        double tile_render_y = extents->min();
-
-        if (view.bbox && (hatchUnits() == UNITS_OBJECTBOUNDINGBOX)) {
-            tile_x *= view.bbox->width();
-            tile_y *= view.bbox->height();
-            tile_width *= view.bbox->width();
-        }
-
-        // Extent calculated using content units, need to correct.
-        if (view.bbox && (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX)) {
-            tile_height *= view.bbox->height();
-            tile_render_y *= view.bbox->height();
-        }
-
-        // Pattern size in hatch space
-        Geom::Rect hatch_tile = Geom::Rect::from_xywh(0, tile_render_y, tile_width, tile_height);
-
-        // Content to bbox
-        Geom::Affine content2ps;
-        if (view.bbox && (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX)) {
-            content2ps = Geom::Affine(view.bbox->width(), 0.0, 0.0, view.bbox->height(), 0, 0);
-        }
-
-        // Tile (hatch space) to user.
-        Geom::Affine ps2user = Geom::Translate(tile_x, tile_y) * Geom::Rotate::from_degrees(tile_rotate) * hatchTransform();
-
-        info.child_transform = content2ps;
-        info.pattern_to_user_transform = ps2user;
-        info.tile_rect = hatch_tile;
-
-        if (style->overflow.computed == SP_CSS_OVERFLOW_VISIBLE) {
-            Geom::Interval bounds = this->bounds();
-            gdouble pitch = this->pitch();
-            if (view.bbox) {
-                if (hatchUnits() == UNITS_OBJECTBOUNDINGBOX) {
-                    pitch *= view.bbox->width();
-                }
-                if (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX) {
-                    bounds *= view.bbox->width();
-                }
+    if (style->overflow.computed == SP_CSS_OVERFLOW_VISIBLE) {
+        Geom::Interval bounds = this->bounds();
+        double pitch = this->pitch();
+        if (view.bbox) {
+            if (hatchUnits() == HatchUnits::ObjectBoundingBox) {
+                pitch *= view.bbox->width();
             }
-            gdouble overflow_right_strip = floor(bounds.max() / pitch) * pitch;
-            info.overflow_steps = ceil((overflow_right_strip - bounds.min()) / pitch) + 1;
-            info.overflow_step_transform = Geom::Translate(pitch, 0.0);
-            info.overflow_initial_transform = Geom::Translate(-overflow_right_strip, 0.0);
-        } else {
-            info.overflow_steps = 1;
+            if (hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
+                bounds *= view.bbox->width();
+            }
         }
+        double overflow_right_strip = floor(bounds.max() / pitch) * pitch;
+        info.overflow_steps = ceil((overflow_right_strip - bounds.min()) / pitch) + 1;
+        info.overflow_step_transform = Geom::Translate(pitch, 0.0);
+        info.overflow_initial_transform = Geom::Translate(-overflow_right_strip, 0.0);
+    } else {
+        info.overflow_steps = 1;
     }
 
     return info;
@@ -705,37 +668,37 @@ SPHatch::RenderInfo SPHatch::_calculateRenderInfo(View const &view) const
 //calculates strip extents in content space
 Geom::OptInterval SPHatch::_calculateStripExtents(Geom::OptRect const &bbox) const
 {
-    if (!bbox || (bbox->area() == 0)) {
-        return Geom::OptInterval();
-    } else {
-        double tile_x = x();
-        double tile_y = y();
-        double tile_rotate = rotate();
-
-        Geom::Affine ps2user = Geom::Translate(tile_x, tile_y) * Geom::Rotate::from_degrees(tile_rotate) * hatchTransform();
-        Geom::Affine user2ps = ps2user.inverse();
-
-        Geom::Interval extents;
-        for (int i = 0; i < 4; ++i) {
-            Geom::Point corner = bbox->corner(i);
-            Geom::Point corner_ps  =  corner * user2ps;
-            if (i == 0 || corner_ps.y() < extents.min()) {
-                extents.setMin(corner_ps.y());
-            }
-            if (i == 0 || corner_ps.y() > extents.max()) {
-                extents.setMax(corner_ps.y());
-            }
-        }
-
-        if (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX) {
-            extents /= bbox->height();
-        }
-
-        return extents;
+    if (bbox.hasZeroArea()) {
+        return {};
     }
+
+    double tile_x = x();
+    double tile_y = y();
+    double tile_rotate = rotate();
+
+    Geom::Affine ps2user = Geom::Translate(tile_x, tile_y) * Geom::Rotate::from_degrees(tile_rotate) * hatchTransform();
+    Geom::Affine user2ps = ps2user.inverse();
+
+    Geom::Interval extents;
+    for (int i = 0; i < 4; ++i) {
+        Geom::Point corner = bbox->corner(i);
+        Geom::Point corner_ps  =  corner * user2ps;
+        if (i == 0 || corner_ps.y() < extents.min()) {
+            extents.setMin(corner_ps.y());
+        }
+        if (i == 0 || corner_ps.y() > extents.max()) {
+            extents.setMax(corner_ps.y());
+        }
+    }
+
+    if (hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
+        extents /= bbox->height();
+    }
+
+    return extents;
 }
 
-void SPHatch::setBBox(unsigned int key, Geom::OptRect const &bbox)
+void SPHatch::setBBox(unsigned key, Geom::OptRect const &bbox)
 {
     for (auto &v : views) {
         if (v.key == key) {
