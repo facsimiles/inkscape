@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-06-04 20:59+0000\n"
+"PO-Revision-Date: 2025-06-05 00:15+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hu/>\n"
@@ -45526,44 +45526,44 @@ msgstr "X tengely"
 
 #: ../share/extensions/grid_cartesian.inx:15
 msgid "Major X Divisions:"
-msgstr "X-főcellák száma:"
+msgstr "X-főosztások száma:"
 
 #: ../share/extensions/grid_cartesian.inx:16
 msgid "Major X Division Spacing:"
-msgstr "X-főcellák térköze:"
+msgstr "X-főosztás térköze:"
 
 #: ../share/extensions/grid_cartesian.inx:17
 msgid "Major X Division Spacing Unit:"
-msgstr "X-főcellák méretének mértékegysége:"
+msgstr "X-főosztás méretének mértékegysége:"
 
 #: ../share/extensions/grid_cartesian.inx:23
 msgid "Subdivisions per Major X Division:"
-msgstr "X-főcellánkénti alcellák száma:"
+msgstr "X-főosztásonként alosztások száma:"
 
 #: ../share/extensions/grid_cartesian.inx:24
 msgid "Logarithmic X Subdiv. (Base given by entry above)"
-msgstr "X-alcella: logaritmikus (az alap a fenti bejegyzés)"
+msgstr "X-alosztás: logaritmikus (az alap a fenti bejegyzés)"
 
 #: ../share/extensions/grid_cartesian.inx:25
 msgid "Subsubdivs. per X Subdivision:"
-msgstr "X-alcellánkénti al-alcellák száma:"
+msgstr "X-alosztásonkénti további osztások száma:"
 
 #: ../share/extensions/grid_cartesian.inx:26
 msgid "Halve X Subsubdiv. Frequency after 'n' Subdivs. (log only):"
 msgstr ""
-"X-al-alcellák frekvenciájának felezése „n” alcella után (csak logaritmus):"
+"X-al-alosztás frekvenciájának felezése „n” alosztás után (csak logaritmus):"
 
 #: ../share/extensions/grid_cartesian.inx:27
 msgid "Major X Division Thickness:"
-msgstr "X-főcellák közti vonalvastagság:"
+msgstr "X-főosztás közti vonalvastagság:"
 
 #: ../share/extensions/grid_cartesian.inx:28
 msgid "Minor X Division Thickness:"
-msgstr "X-alcellák közti vonalvastagság:"
+msgstr "X-alosztás közti vonalvastagság:"
 
 #: ../share/extensions/grid_cartesian.inx:29
 msgid "Subminor X Division Thickness:"
-msgstr "X-al-alcellák közti vonalvastagság:"
+msgstr "X-al-alosztás közti vonalvastagság:"
 
 #: ../share/extensions/grid_cartesian.inx:30
 msgid "X Division Thickness Unit:"
@@ -45575,44 +45575,44 @@ msgstr "Y tengely"
 
 #: ../share/extensions/grid_cartesian.inx:38
 msgid "Major Y Divisions:"
-msgstr "Y-főcellák száma:"
+msgstr "Y-főosztás száma:"
 
 #: ../share/extensions/grid_cartesian.inx:39
 msgid "Major Y Division Spacing:"
-msgstr "Y-főcellák mérete:"
+msgstr "Y-főosztás térköze:"
 
 #: ../share/extensions/grid_cartesian.inx:40
 msgid "Major Y Division Spacing Unit:"
-msgstr "Y-főcellák méretének mértékegysége:"
+msgstr "Y-főosztás méretének mértékegysége:"
 
 #: ../share/extensions/grid_cartesian.inx:46
 msgid "Subdivisions per Major Y Division:"
-msgstr "Y-főcellánkénti alcellák száma:"
+msgstr "Y-főosztásonként alosztások száma:"
 
 #: ../share/extensions/grid_cartesian.inx:47
 msgid "Logarithmic Y Subdiv. (Base given by entry above)"
-msgstr "Y-alcella: logaritmikus (az alap a fenti bejegyzés)"
+msgstr "Y-alosztás: logaritmikus (az alap a fenti bejegyzés)"
 
 #: ../share/extensions/grid_cartesian.inx:48
 msgid "Subsubdivs. per Y Subdivision:"
-msgstr "Y-alcellánkénti al-alcellák száma:"
+msgstr "Y-alosztásonkénti további osztások száma:"
 
 #: ../share/extensions/grid_cartesian.inx:49
 msgid "Halve Y Subsubdiv. Frequency after 'n' Subdivs. (log only):"
 msgstr ""
-"Y-al-alcellák frekvenciájának felezése „n” alcella után (csak logaritmus):"
+"Y-al-alosztás frekvenciájának felezése „n” alosztás után (csak logaritmus):"
 
 #: ../share/extensions/grid_cartesian.inx:50
 msgid "Major Y Division Thickness:"
-msgstr "Y-főcellák közti vonalvastagság:"
+msgstr "Y-főosztás közti vonalvastagság:"
 
 #: ../share/extensions/grid_cartesian.inx:51
 msgid "Minor Y Division Thickness:"
-msgstr "Y-alcellák közti vonalvastagság:"
+msgstr "Y-alosztás közti vonalvastagság:"
 
 #: ../share/extensions/grid_cartesian.inx:52
 msgid "Subminor Y Division Thickness:"
-msgstr "Y-al-alcellák közti vonalvastagság:"
+msgstr "Y-al-alosztás közti vonalvastagság:"
 
 #: ../share/extensions/grid_cartesian.inx:53
 msgid "Y Division Thickness Unit:"
