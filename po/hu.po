@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-01 12:06+0000\n"
+"PO-Revision-Date: 2025-06-04 20:59+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hu/>\n"
@@ -16711,7 +16711,7 @@ msgstr "Al-útvonalak összevarrása"
 msgid ""
 "Draw perpendicular lines between subpaths of a path, like rungs of a ladder"
 msgstr ""
-"Merőleges vonalak rajzolása egy útvonal alútvonalai között egy létra "
+"Merőleges vonalak rajzolása egy útvonal részútvonalai között egy létra "
 "fokaihoz hasonlóan"
 
 #: ../src/live_effects/effect.cpp:160
@@ -16771,7 +16771,7 @@ msgstr "Al-útvonalak interpolálása"
 
 #: ../src/live_effects/effect.cpp:233
 msgid "Create a stepwise transition between the 2 subpaths of a path"
-msgstr "Lépcsős átmenet létrehozása az útvonal két alútvonala között"
+msgstr "Lépcsős átmenet létrehozása az útvonal két részútvonala között"
 
 #: ../src/live_effects/effect.cpp:244
 msgctxt "path effect"
@@ -18070,7 +18070,7 @@ msgstr "Rendezési módszer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Method used to order sub paths"
-msgstr "Az alútvonalak rendezésére használatos módszer"
+msgstr "A részútvonalak rendezésére használatos módszer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Connection method"
@@ -18078,7 +18078,7 @@ msgstr "Kapcsolódási módszer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Method to connect end points of sub paths"
-msgstr "Az alútvonalak végpontjainak összekötésére szolgáló módszer"
+msgstr "A részútvonalak végpontjainak összekötésére szolgáló módszer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid "Stitch length"
@@ -20687,11 +20687,11 @@ msgstr "Lecsípett"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:105
 msgid "Select subpath:"
-msgstr "Kijelölt alútvonal:"
+msgstr "Kijelölt részútvonal:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:105
 msgid "Select the subpath you want to modify"
-msgstr "Jelölje ki az alútvonalat, amelyet módosítani szeretne"
+msgstr "Jelölje ki a részútvonalat, amelyet módosítani szeretne"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:106
 #: ../share/extensions/inset_shadow.inx:8 ../share/extensions/nicechart.inx:61
@@ -44145,16 +44145,16 @@ msgstr "Minimális szakaszhossz"
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
 msgstr ""
-"A megadott hosszúságnál kisebb teljes hosszúságú alútvonalak eltávolítása"
+"A megadott hosszúságnál kisebb teljes hosszúságú részútvonalak eltávolítása"
 
 #: ../share/extensions/clean_up_path.inx:15
 msgid "Minimum subpath length"
-msgstr "Minimális alútvonal hossza"
+msgstr "Minimális részútvonal hossza"
 
 #: ../share/extensions/clean_up_path.inx:16
 msgid "Close subpaths where start and end node have a distance of less than"
 msgstr ""
-"Alútvonalak bezárása, ha a kezdő- és a végcsomópont távolsága kisebb, mint"
+"Részútvonalak bezárása, ha a kezdő- és a végcsomópont távolsága kisebb, mint"
 
 #: ../share/extensions/clean_up_path.inx:17
 #: ../share/extensions/clean_up_path.inx:19
@@ -44164,12 +44164,12 @@ msgstr "Határérték"
 #: ../share/extensions/clean_up_path.inx:18
 msgid "Join end nodes of separate subpaths where distance less than"
 msgstr ""
-"Külön alútvonalak végcsomópontjainak összekapcsolása, ha a távolság kisebb, "
-"mint"
+"Külön részútvonalak végcsomópontjainak összekapcsolása, ha a távolság "
+"kisebb, mint"
 
 #: ../share/extensions/clean_up_path.inx:20
 msgid "Allow reversing direction of subpaths"
-msgstr "Alútvonalak irányfordításának engedélyezése"
+msgstr "Részútvonalak irányfordításának engedélyezése"
 
 #: ../share/extensions/clean_up_path.inx:21
 msgid "Join subpaths by"
@@ -44215,9 +44215,9 @@ msgstr ""
 "csomópontok vagy kis hézagok eltávolításával.\n"
 "\n"
 "A valódi duplikált csomópontok (pontosan azonos koordináták) és a nulla "
-"hosszúságú alútvonalak mindig eltávolításra kerülnek.\n"
+"hosszúságú részútvonalak mindig eltávolításra kerülnek.\n"
 "Az útvonalak egyesítéséhez győződjön meg róla, hogy a figyelembe veendő "
-"útvonalak már egyesítettek (ugyanazon útvonal alútvonalai).\n"
+"útvonalak már egyesítettek (ugyanazon útvonal részútvonalai).\n"
 "Az útvonalak egyesítéséhez jelölje ki őket, és nyomja le a Ctrl+K "
 "billentyűkombinációt. \n"
 "            "
@@ -45178,14 +45178,14 @@ msgstr ""
 "összes kijelölt útvonalnak azonos számú csomópontja van. \n"
 "\n"
 "3 fő lehetőség van:\n"
-"- A megfelelő csomópontok között szegmensek jönnek létre. Lehetőség van a "
-"„Vonalak összevonása egyetlen útvonallá” opció kiválasztására, így a "
-"létrehozott szegmensek egyetlen útvonal alútvonalai lesznek; ellenkező "
-"esetben a létrehozott szegmensek különálló, csoportosított útvonalak "
-"lesznek.\n"
+"- A megfelelő csomópontok között szegmensek jönnek létre. Lehetőség van a „"
+"Vonalak összevonása egyetlen útvonallá” opció kiválasztására, így a "
+"létrehozott szegmensek egyetlen útvonal részútvonalai lesznek; ellenkező "
+"esetben a létrehozott szegmensek különálló, csoportosított útvonalak lesznek."
+"\n"
 "- poligonok: Az egyes útvonalak megfelelő csomópontpárjai között egyenes "
-"vonalakkal ellátott sokszögek jönnek létre. A sokszögek csoportosítva "
-"vannak.\n"
+"vonalakkal ellátott sokszögek jönnek létre. A sokszögek csoportosítva vannak."
+"\n"
 "- görbék követése: Ugyanaz, mint a poligonok, de az eredeti útvonalak "
 "tetején fekvő \"szegmensek\" ugyanazokat a görbéket követik, mint az eredeti "
 "ösvényen.\n"
