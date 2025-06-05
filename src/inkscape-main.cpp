@@ -11,6 +11,7 @@
  */
 
 #include <glibmm/miscutils.h>
+#include <gsl/gsl_errno.h>
 
 #ifdef _WIN32
 #include <windows.h> // SetDllDirectoryW, SetConsoleOutputCP
@@ -171,6 +172,9 @@ int main(int argc, char *argv[])
     // Opt into handling EPIPE locally, rather than crashing.
     signal(SIGPIPE, SIG_IGN);
 #endif
+
+    // Opt into handling GSL errors locally, rather than crashing.
+    gsl_set_error_handler_off();
 
     convert_legacy_options(argc, argv);
 

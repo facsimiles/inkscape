@@ -14,16 +14,15 @@
 
 #include <glib.h>
 #include <giomm/init.h>
+#include <gsl/gsl_errno.h>
 
 #include "inkgc/gc-core.h"
 #include "util/statics.h"
 
 int main(int argc, char **argv)
 {
-    // setup general environment
-#if !GLIB_CHECK_VERSION(2,36,0)
-    g_type_init();
-#endif
+    // Opt into handling GSL errors locally, rather than crashing.
+    gsl_set_error_handler_off();
 
     // If possible, unit tests shouldn't require a GUI session
     // since this won't generally be available in auto-builders

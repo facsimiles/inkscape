@@ -19,6 +19,7 @@
 #undef near
 #include <fcntl.h> // _O_BINARY
 #endif
+#include <gsl/gsl_errno.h>
 
 #include "inkview-application.h"
 #include "util/statics.h"
@@ -31,6 +32,9 @@ int main(int argc, char *argv[])
     // Opt into handling EPIPE locally, rather than crashing.
     signal(SIGPIPE, SIG_IGN);
 #endif
+
+    // Opt into handling GSL errors locally, rather than crashing.
+    gsl_set_error_handler_off();
 
 #ifdef _WIN32
     // temporarily switch console encoding to UTF8 while Inkview runs
