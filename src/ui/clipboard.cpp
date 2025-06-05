@@ -23,6 +23,7 @@
 
 #include <2geom/transforms.h>
 #include <2geom/path-sink.h>
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <boost/bimap.hpp>
@@ -176,6 +177,9 @@ private:
 
     Glib::RefPtr<Gtk::Clipboard> _clipboard; ///< Handle to the system wide clipboard - for convenience
     std::list<Glib::ustring> _preferred_targets; ///< List of supported clipboard targets
+
+    // For throttling rogue clipboard managers.
+    std::optional<std::chrono::steady_clock::time_point> last_req;
 };
 
 ClipboardManagerImpl::ClipboardManagerImpl()
@@ -1666,6 +1670,22 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     }
 #endif
 
+    // Refuse to return anything other than svg/text/png if being inundated with requests from a rogue clipboard manager.
+    if (last_req) {
+        constexpr auto magic_timeout = std::chrono::milliseconds{100};
+        if (std::chrono::steady_clock::now() - *last_req < magic_timeout) {
+            // Unbroken chain of rapid clipboard requests since _setClipboardTargets().
+            last_req = std::chrono::steady_clock::now();
+            if (target != "image/svg+xml" && target != "image/x-inkscape-svg" && target != "image/png") {
+                std::cerr << "Denied clipboard request: " << target << std::endl;
+                return;
+            }
+        } else {
+            // Chain has ended.
+            last_req.reset();
+        }
+    }
+
     // FIXME: Temporary hack until we add support for memory output.
     // Save to a temporary file, read it back and then set the clipboard contents
     gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export", nullptr );
@@ -1729,6 +1749,10 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     g_unlink(filename); // delete the temporary file
     g_free(filename);
     g_free(data);
+
+    if (last_req) {
+        last_req = std::chrono::steady_clock::now();
+    }
 }
 
 /**
@@ -1957,6 +1981,8 @@ void ClipboardManagerImpl::_setClipboardTargets()
         CloseClipboard();
     }
 #endif
+
+    last_req = std::chrono::steady_clock::now();
 }
 
 /**
