@@ -17,6 +17,7 @@
 #include "clipboard.h"
 
 #include <cassert>
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <boost/bimap.hpp>
@@ -260,6 +261,9 @@ private:
     SPCSSAttr *_text_style; ///< Style copied along with plain text fragment
 
     Glib::RefPtr<Gdk::Clipboard> _clipboard; ///< Handle to the system wide clipboard - for convenience
+
+    // For throttling rogue clipboard managers.
+    std::optional<std::chrono::steady_clock::time_point> last_req;
 };
 
 ClipboardManagerImpl::ClipboardManagerImpl()
@@ -1769,6 +1773,22 @@ void ClipboardManagerImpl::_onGet(char const *mime_type, Glib::RefPtr<Gio::Outpu
     }
 #endif
 
+    // Refuse to return anything other than svg/text/png if being inundated with requests from a rogue clipboard manager.
+    if (last_req) {
+        constexpr auto magic_timeout = std::chrono::milliseconds{100};
+        if (std::chrono::steady_clock::now() - *last_req < magic_timeout) {
+            // Unbroken chain of rapid clipboard requests since _setClipboardTargets().
+            last_req = std::chrono::steady_clock::now();
+            if (target != "image/svg+xml" && target != "image/x-inkscape-svg" && target != "image/png") {
+                std::cerr << "Denied clipboard request: " << mime_type << std::endl;
+                return;
+            }
+        } else {
+            // Chain has ended.
+            last_req.reset();
+        }
+    }
+
     // FIXME: Temporary hack until we add support for memory output.
     // Save to a temporary file, read it back and then set the clipboard contents
     auto const filename = get_tmp_filename("inkscape-clipboard-export");
@@ -1824,6 +1844,10 @@ void ClipboardManagerImpl::_onGet(char const *mime_type, Glib::RefPtr<Gio::Outpu
 
     INKSCAPE.use_gui(previous_gui);
     unlink(filename.c_str()); // delete the temporary file
+
+    if (last_req) {
+        last_req = std::chrono::steady_clock::now();
+    }
 }
 
 /**
@@ -2049,6 +2073,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
 #endif
 
     _clipboard->set_content(Gdk::ContentProvider::create(GlibValue::create<ClipboardSvg>()));
+    last_req = std::chrono::steady_clock::now();
 }
 
 /**
