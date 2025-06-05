@@ -261,6 +261,11 @@ struct TabWidget : SimpleTab
     }
 };
 
+struct DnDTabWidget {
+    int tab_position = -1;
+    TabStrip* parent = nullptr;
+};
+
 class TabWidgetDrag
 {
 public:
@@ -341,7 +346,7 @@ public:
 
     /// End the drag. This function unsets any _drag_src or _drag_dst references that point to this object,
     /// indirectly destroying this object. It is ensured that this function is called exactly once during
-    /// every 's lifetime. Thus this function is the *only* way that a TabWidgetDrag is destroyed.
+    /// every TabWidgetDrag's lifetime. Thus, this function is the *only* way that a TabWidgetDrag is destroyed.
     void finish(bool cancel = false)
     {
         // Cancel the tick callback if one is being used for motion polling.
@@ -366,16 +371,9 @@ public:
             }
             _dst->queue_resize();
         }
-        //TODO
         _src->parent->_signal_dnd_end.emit(cancel);
-        // TabStrip::Instances::get().removeHighlight();
-
-        if (!_dst && _src->parent->_tabs.size() == 1) {
-            cancel = true; // cancel if detaching lone tab
-        }
 
         if (cancel) {
-            // _src->parent->_desktop_widget->get_window()->present();
             return;
         }
 
@@ -384,8 +382,7 @@ public:
         }
 
         if (!_dst) {
-            // Detach
-            // _src->parent->_signal_float_tab.emit(*_src);
+            // no op: let clients handle tab drop any way they want
         } else if (_dst == _src->parent) {
             // Reorder
             if (_drop_i) {
@@ -402,13 +399,7 @@ public:
         } else {
             // Migrate
             if (_drop_i) {
-                //TODO
                 _dst->_signal_move_tab.emit(*_src, _src->parent->get_tab_position(*_src), *_src->parent, *_drop_i);
-                /*
-                auto const desktop = _src->desktop;
-                _src->desktop->getDesktopWidget()->removeDesktop(desktop); // deletes src
-                _dst->_desktop_widget->addDesktop(desktop, *_drop_i);
-                */
             }
         }
     }
@@ -442,7 +433,11 @@ private:
 
         // Create the Gdk drag.
         assert(_src->parent->_drag_src.get() == this);
-        auto content = Gdk::ContentProvider::create(GlibValue::create<std::weak_ptr<TabWidgetDrag>>(_src->parent->_drag_src));
+        std::vector providers = {
+            Gdk::ContentProvider::create(Util::GlibValue::create<DnDTabWidget>(DnDTabWidget{_src->parent->get_tab_position(*_src), _src->parent})),
+            Gdk::ContentProvider::create(GlibValue::create<std::weak_ptr<TabWidgetDrag>>(_src->parent->_drag_src))
+        };
+        auto content = Gdk::ContentProvider::create(providers);
         _drag = _src->parent->get_native()->get_surface()->drag_begin_from_point(_device, content, Gdk::DragAction::MOVE, _offset.x(), _offset.y());
 
         // Handle drag cancellation.
@@ -461,7 +456,6 @@ private:
 
         // Create a visual replica of the tab.
         _widget = std::make_unique<SimpleTab>(*_src);
-        // _widget->name.set_text(_src->get_label());// get_title(_src->desktop));
         _widget->set_active();
 
         // fire D&D event
@@ -494,13 +488,9 @@ private:
         if (_dst) {
             _widget->insert_before(*_dst, *_dst->_overlay);
             _dst->queue_resize();
-            //TODO
-            // TabStrip::Instances::get().removeHighlight();
         } else {
             drag_icon->set_child(*_widget);
             _drag->set_hotspot(_offset.x(), _offset.y());
-            //TODO
-            // TabStrip::Instances::get().addHighlight();
         }
     }
 };
@@ -584,9 +574,7 @@ TabStrip::TabStrip() :
     click->signal_released().connect([this] (auto&&...) {
         _left_clicked = {};
         if (_drag_src) {
-            // too early to dismiss the drag widget, not read yet
-            // this fixed delay is lame, need to figure out better approach
-            _finish_conn = Glib::signal_timeout().connect([this] { if (_drag_src) _drag_src->finish(); return false; }, 100);
+            _drag_src->finish();
         }
     });
     add_controller(click);
@@ -732,23 +720,16 @@ void TabStrip::set_show_close_button(bool show) {
 }
 
 GType TabStrip::get_dnd_source_type() {
-    return GlibValue::type<std::weak_ptr<TabWidgetDrag>>();
+    return GlibValue::type<DnDTabWidget>();
 }
 
 std::optional<std::pair<TabStrip*, int>> TabStrip::unpack_drop_source(const Glib::ValueBase& value) {
 
     if (G_VALUE_HOLDS(value.gobj(), get_dnd_source_type())) {
-        auto weak = static_cast<const Glib::Value<std::weak_ptr<TabWidgetDrag>>&>(value);
-        auto ptr = weak.get().lock();
-        if (ptr) {
-            return std::make_pair(ptr->src()->parent, ptr->src()->parent->get_tab_position(*ptr->src()));
-        }
-
+        auto val = static_cast<const Glib::Value<DnDTabWidget>&>(value).get();
+        return std::make_pair(val.parent, val.tab_position);
     }
 
-    // if (auto tabdrag = get_tab_drag(droptarget)) {
-    //     return std::make_pair(tabdrag->src()->parent, tabdrag->src()->parent->get_tab_position(*tabdrag->src()));
-    // }
     return {};
 }
 
@@ -830,6 +811,7 @@ void TabStrip::set_show_labels(ShowLabels labels) {
 
 void TabStrip::_updateVisibility()
 {
+    // always visible
     // set_visible(_tabs.size() > 1);
 }
 
@@ -963,7 +945,7 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
 
     // check available width; restrict tab sizes if space is limited
     if (width <= minimum) {
-        // shrink to the minimun size, there's no wiggle room
+        // shrink to the minimum size, there's no wiggle room
         for (int i = 0; i < _tabs.size(); i++) {
             alloc[i].delta = 0;
         }
