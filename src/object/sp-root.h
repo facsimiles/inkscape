@@ -67,6 +67,10 @@ public:
 	void print(SPPrintContext *ctx) override;
         const char* typeName() const override;
         const char* displayName() const override;
+
+    // Copy out the x/y coordinates for editing
+    SVGLength root_x;
+    SVGLength root_y;
 private:
     void unset_x_and_y();
     void setRootDimensions();

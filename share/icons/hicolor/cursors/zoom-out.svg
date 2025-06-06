@@ -3,8 +3,8 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
      width="32" height="32"
-     inkscape:hotspot_x="8"
-     inkscape:hotspot_y="8"
+     x="-8"
+     y="-8"
      style="fill:gray;stroke:black">
 
   <style>@import './cursors.css';</style>

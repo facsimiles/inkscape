@@ -483,6 +483,11 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
         sp_file_fix_feComposite(document->getRoot());
     }
 
+    /** Fix hotspot (pre-1.5 files) **/
+    if (document->root->inkscape.getVersion().isInsideRangeInclusive(lowest_version, {1, 4})) {
+        sp_file_fix_hotspot(document->getRoot());
+    }
+
     /** Fix d missing on shapes (1.3.1 files) **/
     std::string version = document->root->inkscape.getVersion().str();
     if (version.size() > 4) {

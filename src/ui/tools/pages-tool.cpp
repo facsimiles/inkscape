@@ -27,6 +27,7 @@
 #include "display/control/canvas-item-rect.h"
 #include "display/control/snap-indicator.h"
 #include "object/sp-page.h"
+#include "object/sp-root.h"
 #include "path/path-outline.h"
 #include "ui/icon-names.h"
 #include "ui/knot/knot.h"
@@ -51,6 +52,8 @@ PagesTool::PagesTool(SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     drag_tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
+    auto &widget = dynamic_cast<Gtk::Widget &>(*desktop->getCanvas());
+
     if (resize_knots.empty()) {
         for (int i = 0; i < 4; i++) {
             auto knot = new SPKnot(desktop, _("Resize page"), Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "PageTool:Resize");
@@ -69,13 +72,20 @@ PagesTool::PagesTool(SPDesktop *desktop)
             m_knot->ungrabbed_signal.connect(sigc::mem_fun(*this, &PagesTool::marginKnotFinished));
             margin_knots.push_back(m_knot);
 
-            auto &widget = dynamic_cast<Gtk::Widget &>(*desktop->getCanvas());
             knot->setCursor  (SP_KNOT_STATE_DRAGGING , get_cursor(widget, "page-resizing.svg"));
             knot->setCursor  (SP_KNOT_STATE_MOUSEOVER, get_cursor(widget, "page-resize.svg"  ));
             m_knot->setCursor(SP_KNOT_STATE_DRAGGING , get_cursor(widget, "page-resizing.svg"));
             m_knot->setCursor(SP_KNOT_STATE_MOUSEOVER, get_cursor(widget, "page-resize.svg"  ));
         }
     }
+
+    offset_knot = new SPKnot(desktop, _("Root Canvas Offset"), Inkscape::CANVAS_ITEM_CTRL_TYPE_CENTER, "PageTool:RootOffset");
+    offset_knot->setAnchor(SP_ANCHOR_CENTER);
+    offset_knot->updateCtrl();
+    offset_knot->hide();
+    offset_knot->ungrabbed_signal.connect(sigc::mem_fun(*this, &PagesTool::offsetKnotFinished));
+    offset_knot->setCursor(SP_KNOT_STATE_DRAGGING , get_cursor(widget, "node-dragging.svg"));
+    offset_knot->setCursor(SP_KNOT_STATE_MOUSEOVER, get_cursor(widget, "node-mouseover.svg"  ));
 
     if (!visual_box) {
         visual_box = make_canvasitem<CanvasItemRect>(desktop->getCanvasControls());
@@ -120,8 +130,26 @@ PagesTool::~PagesTool()
         drag_shapes.clear(); // Already deleted by group
     }
 
+    delete offset_knot;
+
     _doc_replaced_connection.disconnect();
     _zoom_connection.disconnect();
+}
+
+void PagesTool::updateOfsetKnot()
+{
+    if (auto doc = _desktop->getDocument()) {
+        auto root = doc->getRoot();
+        auto &pm = doc->getPageManager();
+        if (root->root_x && root->root_y && !pm.hasPages()) {
+            offset_knot->moveto(
+                Geom::Point(-root->root_x.computed, -root->root_y.computed)
+                * _desktop->doc2dt());
+            offset_knot->show();
+        } else {
+            offset_knot->hide();
+        }
+    }
 }
 
 void PagesTool::resizeKnotSet(Geom::Rect rect)
@@ -188,6 +216,18 @@ void PagesTool::resizeKnotMoved(SPKnot *knot, Geom::Point const &ppointer, guint
     }
 }
 
+void PagesTool::offsetKnotFinished(SPKnot *knot, guint state)
+{
+    auto document = _desktop->getDocument();
+    auto root = document->getRoot();
+    // The document's left/right are the inverse coordinates.
+    // How *far away* the left and right will be from the 0,0 moving leftward and upwards.
+    auto point = knot->position();
+    root->getRepr()->setAttributeSvgDouble("x", -point[Geom::X]);
+    root->getRepr()->setAttributeSvgDouble("y", -point[Geom::Y]);
+    Inkscape::DocumentUndo::maybeDone(document, "move-offset", _("Move page offset"), INKSCAPE_ICON("tool-pages"));
+}
+
 /**
  * Resize snapping allows knot and tool point snapping consistency.
  */
@@ -211,7 +251,7 @@ void PagesTool::resizeKnotFinished(SPKnot *knot, guint state)
     auto page = document->getPageManager().getSelected();
     if (on_screen_rect) {
         document->getPageManager().fitToRect(*on_screen_rect * document->dt2doc(), page);
-        Inkscape::DocumentUndo::done(document, "Resize page", INKSCAPE_ICON("tool-pages"));
+        Inkscape::DocumentUndo::done(document, _("Resize page"), INKSCAPE_ICON("tool-pages"));
         on_screen_rect = {};
     }
     visual_box->set_visible(false);
@@ -573,12 +613,16 @@ bool PagesTool::viewboxUnder(Geom::Point pt)
 void PagesTool::connectDocument(SPDocument *doc)
 {
     _selector_changed_connection.disconnect();
+    _doc_root_connection.disconnect();
     if (doc) {
         auto &page_manager = doc->getPageManager();
         _selector_changed_connection =
             page_manager.connectPageSelected([doc, this](SPPage *page) {
                 selectionChanged(doc, page);
             });
+        _doc_root_connection = doc->getRoot()->connectModified([doc, this](SPObject* /*root*/, guint /*flags*/) {
+            updateOfsetKnot();
+        });
         selectionChanged(doc, page_manager.getSelected());
     } else {
         selectionChanged(doc, nullptr);
@@ -588,6 +632,8 @@ void PagesTool::connectDocument(SPDocument *doc)
 void PagesTool::selectionChanged(SPDocument *doc, SPPage *page)
 {
     if (_page_modified_connection) {
+        offset_knot->hide();
+
         _page_modified_connection.disconnect();
         for (auto knot : resize_knots) {
             knot->hide();
@@ -615,9 +661,11 @@ void PagesTool::selectionChanged(SPDocument *doc, SPPage *page)
             _page_modified_connection = doc->connectModified([doc, this](guint){
                 resizeKnotSet(*(doc->preferredBounds()));
                 marginKnotSet(*(doc->preferredBounds()));
+                updateOfsetKnot();
             });
             resizeKnotSet(*(doc->preferredBounds()));
             marginKnotSet(*(doc->preferredBounds()));
+            updateOfsetKnot();
         }
     }
 }

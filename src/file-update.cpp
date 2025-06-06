@@ -695,6 +695,18 @@ void sp_file_fix_feComposite(SPObject *o)
         sp_file_fix_feComposite(ci);
 }
 
+void sp_file_fix_hotspot(SPRoot *o)
+{
+    if (auto x = o->getAttribute("inkscape:hotspot-x")) {
+        o->removeAttribute("inkscape:hotspot-x");
+        o->setAttribute("x", "-" + std::string(x));
+    }
+    if (auto y = o->getAttribute("inkscape:hotspot-y")) {
+        o->removeAttribute("inkscape:hotspot-y");
+        o->setAttribute("y", "-" + std::string(y));
+    }
+}
+
 void sp_file_fix_lpe(SPDocument *doc)
 {
     // need document insensitive to avoid problems on last undo

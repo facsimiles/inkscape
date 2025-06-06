@@ -29,6 +29,7 @@
 #include <gtkmm/widget.h>
 
 #include "document.h"
+#include "file.h"
 #include "preferences.h"
 #include "display/cairo-utils.h"
 #include "helper/pixbuf-ops.h"
@@ -208,11 +209,11 @@ load_svg_cursor(Gtk::Widget &widget,
     // display->get_maximal_cursor_size(mwidth, mheight);
     // int normal_size = display->get_default_cursor_size();
 
+    // Some cursors are un-versioned, so always attempt to ajust legacy files.
+    sp_file_fix_hotspot(root);
+
     auto w = root->document->getWidth().value("px");
     auto h = root->document->getHeight().value("px");
-    // Calculate the hotspot.
-    int hotspot_x = root->getIntAttribute("inkscape:hotspot_x", 0); // Do not include surface scale factor!
-    int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
 
     Geom::Rect area(0, 0, cursor_scaling ? w * scale : w, cursor_scaling ? h * scale : h);
     int dpi = 96 * scale;
@@ -229,8 +230,14 @@ load_svg_cursor(Gtk::Widget &widget,
             pixbuf->scale_simple(w * scale, h * scale, Gdk::InterpType::BILINEAR);
         }
 
+        // Calculate the hotspot based on the final size, whatever it turns out to be.
+        auto real_scale = Geom::Scale(pixbuf->get_width() / w, pixbuf->get_height() / h);
+        auto hotspot = Geom::Point(-root->root_x.computed, -root->root_y.computed) * real_scale;
+
         auto texture = Gdk::Texture::create_for_pixbuf(std::move(pixbuf));
-        cursor = Gdk::Cursor::create(std::move(texture), hotspot_x, hotspot_y);
+        cursor = Gdk::Cursor::create(std::move(texture),
+            std::max((int)hotspot[Geom::X], 0),
+            std::max((int)hotspot[Geom::Y], 0));
     } else {
         std::cerr << "load_svg_cursor: failed to create pixbuf for: " << file_name << std::endl;
     }

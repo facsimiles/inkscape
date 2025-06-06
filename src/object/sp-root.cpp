@@ -116,6 +116,7 @@ void SPRoot::set(SPAttr key, const gchar *value)
         if (!this->x.read(value)) {
             this->x.unset(SVGLength::PERCENT, 0.0, 0.0);
         }
+        root_x = x;
 
         /* fixme: I am almost sure these do not require viewport flag (Lauris) */
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
@@ -126,6 +127,7 @@ void SPRoot::set(SPAttr key, const gchar *value)
         if (!this->y.read(value)) {
             this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
         }
+        root_y = y;
 
         /* fixme: I am almost sure these do not require viewport flag (Lauris) */
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
@@ -313,10 +315,16 @@ Inkscape::XML::Node *SPRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (fabs(this->x.computed) > 1e-9) {
         repr->setAttributeSvgDouble("x", this->x.computed);
+    } else if (this->root_x) {
+        // Maintain data for root svgs, even when we don't use it
+        repr->setAttributeSvgDouble("x", this->root_x.computed);
     }
 
     if (fabs(this->y.computed) > 1e-9) {
         repr->setAttributeSvgDouble("y", this->y.computed);
+    } else if (this->root_y) {
+        // Maintain data for root svgs, even when we don't use it
+        repr->setAttributeSvgDouble("y", this->root_y.computed);
     }
 
     /* Unlike all other SPObject, here we want to preserve absolute units too (and only here,

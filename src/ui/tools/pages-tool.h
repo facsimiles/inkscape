@@ -70,12 +70,16 @@ private:
     bool marginKnotMoved(SPKnot *knot, Geom::Point *point, guint state);
     void marginKnotFinished(SPKnot *knot, guint state);
 
+    void updateOfsetKnot();
+    void offsetKnotFinished(SPKnot *knot, guint state);
+
     void grabPage(SPPage *target);
     Geom::Affine moveTo(Geom::Point xy, bool snap);
 
     sigc::connection _selector_changed_connection;
     sigc::connection _page_modified_connection;
     sigc::connection _doc_replaced_connection;
+    sigc::connection _doc_root_connection;
     sigc::connection _zoom_connection;
 
     bool dragging_viewbox = false;
@@ -86,7 +90,7 @@ private:
 
     std::vector<SPKnot *> resize_knots;
     std::vector<SPKnot *> margin_knots;
-    SPKnot *grabbed_knot = nullptr;
+    SPKnot *offset_knot = nullptr;
     SPPage *highlight_item = nullptr;
     SPPage *dragging_item = nullptr;
     std::optional<Geom::Rect> on_screen_rect; ///< On-screen rectangle, in desktop coordinates.
