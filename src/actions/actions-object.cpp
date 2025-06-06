@@ -101,6 +101,44 @@ void object_trace(Glib::VariantBase const &value, InkscapeApplication *app)
     mainloop->run();
 }
 
+
+void
+object_get_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+    auto const attribute = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value).get();
+
+    for (auto obj : selection->objects()) {
+        Inkscape::XML::Node *repr = obj->getRepr();
+        auto value = repr->attribute(attribute.c_str());
+        show_output(value ? Glib::strescape(value) : "", false);
+    }
+}
+
+
+void
+object_get_property(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+    auto const attribute = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value).get();
+
+    for (auto obj : selection->objects()) {
+        Inkscape::XML::Node *repr = obj->getRepr();
+        SPCSSAttr *css = sp_repr_css_attr(repr, "style");
+        auto value = sp_repr_css_property(css, attribute.c_str(), "");
+        show_output(value ? Glib::strescape(value) : "", false);
+        sp_repr_css_attr_unref(css);
+    }
+}
+
 // No sanity checking is done... should probably add.
 void
 object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
@@ -378,6 +416,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
     // clang-format off
     {"app.object-set-attribute",      N_("Set Attribute"),           SECTION, N_("Set or update an attribute of selected objects; usage: object-set-attribute:attribute name, attribute value;")},
     {"app.object-set-property",       N_("Set Property"),            SECTION, N_("Set or update a property on selected objects; usage: object-set-property:property name, property value;")},
+    {"app.object-get-attribute",      N_("Get Attribute"),           SECTION, N_("Get the value of an attribute of selected objects; usage: object-get-attribute:attribute name;")},
+    {"app.object-get-property",       N_("Get Property"),            SECTION, N_("Get the value of a property on selected objects; usage: object-get-property:property name;")},
 
     {"app.object-unlink-clones",      N_("Unlink Clones"),           SECTION, N_("Unlink clones and symbols")},
     {"app.object-to-path",            N_("Object To Path"),          SECTION, N_("Convert shapes to paths")},
@@ -422,6 +462,8 @@ add_actions_object(InkscapeApplication* app)
     // clang-format off
     gapp->add_action_with_parameter( "object-set-attribute",            String, sigc::bind(sigc::ptr_fun(&object_set_attribute),  app));
     gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind(sigc::ptr_fun(&object_set_property),   app));
+    gapp->add_action_with_parameter( "object-get-attribute",            String, sigc::bind(sigc::ptr_fun(&object_get_attribute),  app));
+    gapp->add_action_with_parameter( "object-get-property",             String, sigc::bind(sigc::ptr_fun(&object_get_property),   app));
     gapp->add_action_with_parameter( "object-trace",                    String, sigc::bind(sigc::ptr_fun(&object_trace),          app));
 
     gapp->add_action(                "object-unlink-clones",            sigc::bind(sigc::ptr_fun(&object_unlink_clones),          app));

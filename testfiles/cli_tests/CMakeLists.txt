@@ -813,11 +813,29 @@ add_cli_test(actions-object-set-attribute  INPUT_FILENAME rects.svg
                                            OUTPUT_FILENAME actions-object-set-attribute.png
                                            REFERENCE_FILENAME actions-object-set-attribute_expected.png)
 
+# object-get-attribute
+add_cli_test(actions-object-get-attribute              INPUT_FILENAME rects.svg
+                                                       PARAMETERS --actions=select-by-id:rect1$<SEMICOLON>object-get-attribute:x
+                                                       PASS_FOR_OUTPUT "10\n$")
+
+add_cli_test(actions-object-get-attribute_nonexistant  INPUT_FILENAME rects.svg
+                                                       PARAMETERS --actions=select-by-id:rect1$<SEMICOLON>object-get-attribute:z
+                                                       PASS_FOR_OUTPUT "\n$")
+
 # object-set-property
 add_cli_test(actions-object-set-property   INPUT_FILENAME areas.svg
                                            PARAMETERS --actions=select-by-id:MyRect$<SEMICOLON>object-set-property:fill,gold
                                            OUTPUT_FILENAME actions-object-set-property.svg
                                            TEST_SCRIPT match_regex.sh actions-object-set-property.svg "style=\"fill:gold\"")
+
+# object-get-property
+add_cli_test(actions-object-get-property               INPUT_FILENAME areas.svg
+                                                       PARAMETERS --actions=select-by-id:MyStar$<SEMICOLON>object-get-attribute:fill
+                                                       PASS_FOR_OUTPUT "red\n$")
+
+add_cli_test(actions-object-get-property_nonexistant   INPUT_FILENAME areas.svg
+                                                       PARAMETERS --actions=select-by-id:MyStar$<SEMICOLON>object-get-attribute:full
+                                                       PASS_FOR_OUTPUT "\n$")
 
 # path-simplify
 add_cli_test(actions-path-simplify         INPUT_FILENAME path.svg
