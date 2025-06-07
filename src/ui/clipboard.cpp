@@ -1910,7 +1910,7 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget(SPDesktop *desktop)
 
     // Prioritise text when the text tool is active
     if (desktop && dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool())) {
-        if (formats->contain_mime_type("text/plain")) {
+        if (formats->contain_mime_type("text/plain") || formats->contain_mime_type("text/plain;charset=utf-8")) {
             return CLIPBOARD_TEXT_TARGET;
         }
     }
