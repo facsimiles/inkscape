@@ -31,6 +31,7 @@ ModifierIdToTypeMap const &modifier_type_from_id()
         {"canvas-pan-y", Type::CANVAS_PAN_Y},
         {"canvas-pan-x", Type::CANVAS_PAN_X},
         {"canvas-zoom", Type::CANVAS_ZOOM},
+        {"canvas-drag-zoom", Type::CANVAS_DRAG_ZOOM},
         {"canvas-rotate", Type::CANVAS_ROTATE},
         {"select-add-to", Type::SELECT_ADD_TO},
         {"select-in-groups", Type::SELECT_IN_GROUPS},
@@ -89,6 +90,7 @@ Modifier::Container &Modifier::_modifiers()
         make_modifier("canvas-pan-y", _("Vertical pan"), _("Pan/Scroll up and down"), ALWAYS, CANVAS, SCROLL),
         make_modifier("canvas-pan-x", _("Horizontal pan"), _("Pan/Scroll left and right"), SHIFT, CANVAS, SCROLL),
         make_modifier("canvas-zoom", _("Canvas zoom"), _("Zoom in and out with scroll wheel"), CTRL, CANVAS, SCROLL),
+        make_modifier("canvas-drag-zoom", _("Canvas zoom"), _("Zoom in and out with Ctrl + middle mouse button"), CTRL, CANVAS, DRAG_MCLICK),
         make_modifier("canvas-rotate", _("Canvas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT | CTRL, CANVAS, SCROLL),
 
     // Select tool modifiers (minus transforms)
@@ -143,7 +145,7 @@ Modifier::CategoryNames const &Modifier::_category_names()
  */
 Type Modifier::which(Trigger trigger, int button_state)
 {
-    // Record each active modifier with it's weight
+    // Record each active modifier with its weight
     std::map<Type, unsigned long> scales;
     for (auto const &[key, val] : _modifiers()) {
         if (val.get_trigger() == trigger && val.active(button_state)) {
