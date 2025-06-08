@@ -121,9 +121,9 @@ public:
 	/**
 	 * Constructor.
 	 */
-	CompositeUndoStackObserver();
+	CompositeUndoStackObserver() = default;
 
-    ~CompositeUndoStackObserver() override;
+    ~CompositeUndoStackObserver() override = default;
 
 	/**
 	 * Add an UndoStackObserver.
@@ -178,7 +178,7 @@ private:
 	bool _mark_one(UndoObserverRecordList& list, UndoStackObserver& rec);
 
 	// Keep track of whether or not we are notifying observers
-	unsigned int _iterating;
+	unsigned int _iterating = 0;
 
 	// Observers in the active list
 	UndoObserverRecordList _active;

@@ -17,9 +17,6 @@
 
 namespace Inkscape {
 
-CompositeUndoStackObserver::CompositeUndoStackObserver() : _iterating(0) { }
-CompositeUndoStackObserver::~CompositeUndoStackObserver() = default;
-
 void
 CompositeUndoStackObserver::add(UndoStackObserver& observer)
 {
