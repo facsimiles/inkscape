@@ -7,6 +7,13 @@ For user-facing documentation, please refer to the [Inkscape website](https://in
  <!-- the first two are stored outside of docs/ -->
 - [Installing](../INSTALL.md)
 - [Contributing and Developing](../CONTRIBUTING.md)
+<!-- docs/ -->
 - [Compiling Inkscape](./building/readme.md)
 - [Style guide for developer documentation](./documentation_style.md)
 - [Developing Inkscape with Visual Studio Code on Windows](./vscode/readme.md)
+
+
+
+Some short-lived or historical content can be found in the [Inkscape wiki](https://wiki.inkscape.org/).
+
+TODO: We are currently working on moving content all relevant long-lived developer documentation from the Wiki to here in the Git repository.

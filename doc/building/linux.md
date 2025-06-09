@@ -65,4 +65,4 @@ To compile again after making changes, you can re-run the `ninja install` comman
 ## See also
 - [Contributing and Developing](../../CONTRIBUTING.md)
 - [Advanced Information on Compiling Inkscape](doc/build/general_advanced.md)
-- [Packaging for Ubuntu Snap)](../snap/README.md)
+- [Packaging for Ubuntu Snap](../../snap/README.md)
