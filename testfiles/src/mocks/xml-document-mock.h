@@ -23,8 +23,8 @@
 namespace Inkscape::XML::Mock {
 
 struct Document
-    : Mock::Node
-    , XML::Document
+    : virtual Mock::Node
+    , virtual XML::Document
 {
     Mock::Node &asNode() { return *this; }
 

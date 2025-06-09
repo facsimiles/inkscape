@@ -22,7 +22,7 @@
 
 namespace Inkscape::XML::Mock {
 
-struct Node : public XML::Node
+struct Node : virtual XML::Node
 {
     MOCK_CONST_METHOD0(type, NodeType());
     MOCK_CONST_METHOD0(name, char const *());
