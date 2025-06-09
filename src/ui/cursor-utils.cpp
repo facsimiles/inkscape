@@ -13,9 +13,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
-#include <iomanip>
 #include <memory>
-#include <sstream>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
@@ -26,6 +24,7 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/settings.h>
+#include <gtkmm/version.h>
 #include <gtkmm/widget.h>
 
 #include "document.h"
@@ -38,6 +37,7 @@
 #include "libnrtype/font-factory.h"
 #include "object/sp-object.h"
 #include "object/sp-root.h"
+#include "ui/util.h"
 #include "util/statics.h"
 #include "util/units.h"
 
@@ -45,17 +45,32 @@ using Inkscape::IO::Resource::SYSTEM;
 using Inkscape::IO::Resource::ICONS;
 
 namespace Inkscape {
+namespace {
 
 // SVG cursor unique ID/key
-typedef std::tuple<std::string, std::string, std::string, std::uint32_t, std::uint32_t, bool, int> Key;
+using Key = std::tuple<std::string, std::string, std::string, std::uint32_t, std::uint32_t, bool, double>;
 
 struct KeyHasher {
     std::size_t operator () (const Key& k) const { return boost::hash_value(k); }
 };
 
-
 struct CursorDocCache : public Util::EnableSingleton<CursorDocCache, Util::Depends<FontFactory>> {
     std::unordered_map<std::string, std::unique_ptr<SPDocument>> map;
+};
+
+struct CursorInputParams
+{
+    Glib::RefPtr<Gtk::IconTheme> icon_theme;
+    std::string file_name;
+    Colors::Color fill;
+    Colors::Color stroke;
+};
+
+struct CursorRenderResult
+{
+    Glib::RefPtr<Gdk::Texture> texture;
+    Geom::IntPoint size;
+    Geom::IntPoint hotspot;
 };
 
 /**
@@ -63,21 +78,15 @@ struct CursorDocCache : public Util::EnableSingleton<CursorDocCache, Util::Depen
  *
  * Returns pointer to cursor (or null cursor if we could not load a cursor).
  */
-Glib::RefPtr<Gdk::Cursor>
-load_svg_cursor(Gtk::Widget &widget,
-                std::string const &file_name,
-                std::optional<Colors::Color> maybe_fill,
-                std::optional<Colors::Color> maybe_stroke)
+CursorRenderResult render_svg_cursor(double scale, CursorInputParams const &in)
 {
     // GTK puts cursors in a "cursors" subdirectory of icon themes. We'll do the same... but
     // note that we cannot use the normal GTK method for loading cursors as GTK knows nothing
     // about scalable SVG cursors. We must locate and load the files ourselves. (Even if
     // GTK could handle scalable cursors, we would need to load the files ourselves inorder
     // to modify CSS 'fill' and 'stroke' properties.)
-    Colors::Color fill = maybe_fill.value_or(Colors::Color(0xffffffff));
-    Colors::Color stroke = maybe_stroke.value_or(Colors::Color(0x000000ff));
-
-    Glib::RefPtr<Gdk::Cursor> cursor;
+    auto fill = in.fill;
+    auto stroke = in.stroke;
 
     // Make list of icon themes, highest priority first.
     std::vector<std::string> theme_names;
@@ -103,20 +112,19 @@ load_svg_cursor(Gtk::Widget &widget,
     const auto enable_drop_shadow = prefs->getBool("/options/cursor-drop-shadow", true);
 
     // Find the rendered size of the icon.
-    int scale = 1;
     // cursor scaling? note: true by default - this has to be in sync with inkscape-preferences where it is true
     bool cursor_scaling = prefs->getBool("/options/cursorscaling", true); // Fractional scaling is broken but we can't detect it.
-    if (cursor_scaling) {
-        scale = widget.get_scale_factor(); // Adjust for HiDPI screens.
+    if (!cursor_scaling) {
+        scale = 1;
     }
 
-    static std::unordered_map<Key, Glib::RefPtr<Gdk::Cursor>, KeyHasher> cursor_cache;
+    static std::unordered_map<Key, CursorRenderResult, KeyHasher> cursor_cache;
     Key cursor_key;
 
     const auto cache_enabled = prefs->getBool("/options/cache_svg_cursors", true);
     if (cache_enabled) {
         // construct a key
-        cursor_key = std::tuple{theme_names[0], theme_names[1], file_name,
+        cursor_key = std::tuple{theme_names[0], theme_names[1], in.file_name,
                                 fill.toRGBA(), stroke.toRGBA(),
                                 enable_drop_shadow, scale};
         if (auto const it = cursor_cache.find(cursor_key); it != cursor_cache.end()) {
@@ -125,14 +133,13 @@ load_svg_cursor(Gtk::Widget &widget,
     }
 
     // Find theme paths.
-    auto const icon_theme = Gtk::IconTheme::get_for_display(widget.get_display());
-    auto theme_paths = icon_theme->get_search_path();
+    auto theme_paths = in.icon_theme->get_search_path();
 
     // cache cursor SVG documents too, so we can regenerate cursors (with different colors) quickly
-    auto& cursors = CursorDocCache::get().map;
+    auto &cursor_docs = CursorDocCache::get().map;
     SPRoot* root = nullptr;
     if (cache_enabled) {
-        if (auto it = cursors.find(file_name); it != end(cursors)) {
+        if (auto it = cursor_docs.find(in.file_name); it != end(cursor_docs)) {
             root = it->second->getRoot();
         }
     }
@@ -144,7 +151,7 @@ load_svg_cursor(Gtk::Widget &widget,
         bool file_exists = false;
         for (auto const &theme_name : theme_names) {
             for (auto const &theme_path : theme_paths) {
-                full_file_path = Glib::build_filename(theme_path, theme_name, "cursors", file_name);
+                full_file_path = Glib::build_filename(theme_path, theme_name, "cursors", in.file_name);
                 // std::cout << "Checking: " << full_file_path << std::endl;
                 file = Gio::File::create_for_path(full_file_path);
                 file_exists = file->query_exists();
@@ -154,29 +161,31 @@ load_svg_cursor(Gtk::Widget &widget,
         }
 
         if (!file->query_exists()) {
-            std::cerr << "load_svg_cursor: Cannot locate cursor file: " << file_name << std::endl;
-            return cursor;
+            std::cerr << "load_svg_cursor: Cannot locate cursor file: " << in.file_name << std::endl;
+            return {};
         }
 
         auto document = ink_file_open(file).first;
 
         if (!document) {
             std::cerr << "load_svg_cursor: Could not open document: " << full_file_path << std::endl;
-            return cursor;
+            return {};
         }
 
         root = document->getRoot();
         if (!root) {
             std::cerr << "load_svg_cursor: Could not find SVG element: " << full_file_path << std::endl;
-            return cursor;
+            return {};
         }
 
         if (cache_enabled) {
-            cursors[file_name] = std::move(document);
+            cursor_docs[in.file_name] = std::move(document);
         }
     }
 
-    if (!root) return cursor;
+    if (!root) {
+        return {};
+    }
 
     // Set the CSS 'fill' and 'stroke' properties on the SVG element (for cascading).
     SPCSSAttr *css = sp_repr_css_attr(root->getRepr(), "style");
@@ -203,50 +212,72 @@ load_svg_cursor(Gtk::Widget &widget,
         }
     }
 
-    // Check for maximum size
-    // int mwidth = 0;
-    // int mheight = 0;
-    // display->get_maximal_cursor_size(mwidth, mheight);
-    // int normal_size = display->get_default_cursor_size();
-
-    // Some cursors are un-versioned, so always attempt to ajust legacy files.
+    // Some cursors are un-versioned, so always attempt to adjust legacy files.
     sp_file_fix_hotspot(root);
 
-    auto w = root->document->getWidth().value("px");
-    auto h = root->document->getHeight().value("px");
+    int w = root->document->getWidth().value("px");
+    int h = root->document->getHeight().value("px");
 
-    Geom::Rect area(0, 0, cursor_scaling ? w * scale : w, cursor_scaling ? h * scale : h);
-    int dpi = 96 * scale;
+    Geom::Rect area(0, 0, w, h);
+    int dpi = Inkscape::Util::Quantity::convert(scale, "in", "px");
+
     // render document into internal bitmap; returns null on failure
-    if (auto ink_pixbuf = std::unique_ptr<Inkscape::Pixbuf>(sp_generate_internal_bitmap(root->document, area, dpi))) {
-        auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw(), true);
-
-        if (cursor_scaling) {
-            // creating cursor from Cairo surface rather than pixbuf gives us opportunity to set device scaling;
-            // what that means in practice is we can prepare high-res image and it will be used as-is on
-            // a high-res display; cursors created from pixbuf are up-scaled to device pixels (blurry)
-            // TODO: GTK4: Gdk::Cursor() cannot be created from Cairo::Surface,
-            //             only Gdk::Texture, which has no scaling. What to do?
-            pixbuf->scale_simple(w * scale, h * scale, Gdk::InterpType::BILINEAR);
-        }
-
-        // Calculate the hotspot based on the final size, whatever it turns out to be.
-        auto real_scale = Geom::Scale(pixbuf->get_width() / w, pixbuf->get_height() / h);
-        auto hotspot = Geom::Point(-root->root_x.computed, -root->root_y.computed) * real_scale;
-
-        auto texture = Gdk::Texture::create_for_pixbuf(std::move(pixbuf));
-        cursor = Gdk::Cursor::create(std::move(texture),
-            std::max((int)hotspot[Geom::X], 0),
-            std::max((int)hotspot[Geom::Y], 0));
-    } else {
-        std::cerr << "load_svg_cursor: failed to create pixbuf for: " << file_name << std::endl;
+    auto ink_pixbuf = std::unique_ptr<Inkscape::Pixbuf>(sp_generate_internal_bitmap(root->document, area, dpi));
+    if (!ink_pixbuf) {
+        std::cerr << "load_svg_cursor: failed to create pixbuf for: " << in.file_name << std::endl;
+        return {};
     }
+
+    // Calculate the hotspot
+    auto const root_pos = Geom::Point(-root->root_x.computed, -root->root_y.computed);
+    auto const hotspot = (area.clamp(root_pos) * scale).round();
+
+    auto cursor = CursorRenderResult{
+        .texture = to_texture(ink_pixbuf->getSurface()),
+        .size = {w, h},
+        .hotspot = hotspot
+    };
 
     if (cache_enabled) {
         cursor_cache[std::move(cursor_key)] = cursor;
     }
 
     return cursor;
+}
+
+} // namespace
+
+Glib::RefPtr<Gdk::Cursor>
+load_svg_cursor(Gtk::Widget &widget,
+                std::string const &file_name,
+                std::optional<Colors::Color> maybe_fill,
+                std::optional<Colors::Color> maybe_stroke)
+{
+    auto params = CursorInputParams{
+        .icon_theme = Gtk::IconTheme::get_for_display(widget.get_display()),
+        .file_name = file_name,
+        .fill = maybe_fill.value_or(Colors::Color(0xffffffff)),
+        .stroke = maybe_stroke.value_or(Colors::Color(0x000000ff))
+    };
+
+#if GTKMM_CHECK_VERSION(4, 16, 0) // Use new scaling cursor API if possible.
+    return Gdk::Cursor::create_from_slot([params] (int, double scale, int &width, int &height, int &hotspot_x, int &hotspot_y) {
+        auto res = render_svg_cursor(scale, params);
+        width = res.size.x();
+        height = res.size.y();
+        hotspot_x = res.hotspot.x();
+        hotspot_y = res.hotspot.y();
+        return std::move(res.texture);
+    });
+#else
+    auto res = render_svg_cursor(widget.get_scale_factor(), params);
+
+    if (!res.texture) {
+        return {};
+    }
+
+    return Gdk::Cursor::create(std::move(res.texture), res.hotspot.x(), res.hotspot.y());
+#endif
 }
 
 /**
