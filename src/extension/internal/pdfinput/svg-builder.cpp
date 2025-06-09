@@ -27,27 +27,28 @@
 
 #ifdef HAVE_POPPLER
 
-#include "Function.h"
-#include "GfxFont.h"
-#include "GfxState.h"
-#include "Page.h"
-#include "Stream.h"
+#include <poppler/Function.h>
+#include <poppler/GfxFont.h>
+#include <poppler/GfxState.h>
+#include <poppler/Page.h>
+#include <poppler/Stream.h>
+
 #include "color.h"
+#include "color/cms-util.h"
+#include "display/cairo-utils.h"
+#include "display/nr-filter-utils.h"
 #include "document.h"
 #include "extract-uri.h"
+#include "helper/geom.h"
+#include "object/sp-defs.h"
+#include "object/sp-item-group.h"
+#include "object/sp-namedview.h"
+#include "object/sp-text.h"
 #include "pdf-parser.h"
 #include "pdf-utils.h"
 #include "png.h"
 #include "poppler-cairo-font-engine.h"
 #include "profile-manager.h"
-
-#include "color/cms-util.h"
-#include "display/cairo-utils.h"
-#include "display/nr-filter-utils.h"
-#include "object/sp-defs.h"
-#include "object/sp-item-group.h"
-#include "object/sp-namedview.h"
-#include "object/sp-text.h"
 #include "svg/css-ostringstream.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
@@ -56,7 +57,6 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
-#include "helper/geom.h"
 
 namespace Inkscape {
 namespace Extension {

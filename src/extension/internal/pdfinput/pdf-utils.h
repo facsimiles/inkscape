@@ -11,12 +11,13 @@
 #ifndef PDF_UTILS_H
 #define PDF_UTILS_H
 
+#include <2geom/affine.h>
 #include <2geom/rect.h>
+#include <poppler/Gfx.h>
+#include <poppler/GfxState.h>
+#include <poppler/Page.h>
+
 #include "poppler-transition-api.h"
-#include "2geom/affine.h"
-#include "Gfx.h"
-#include "GfxState.h"
-#include "Page.h"
 
 class ClipHistoryEntry
 {

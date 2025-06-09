@@ -22,42 +22,40 @@
 #pragma implementation
 #endif
 
+#include <2geom/transforms.h>
 #include <cmath>
-#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <glib/poppler-features.h>
+#include <goo/GooString.h>
+#include <goo/gmem.h>
 #include <memory>
 #include <mutex> // std::call_once()
+#include <poppler/Annot.h>
+#include <poppler/Array.h>
+#include <poppler/CharTypes.h>
+#include <poppler/Dict.h>
+#include <poppler/Error.h>
+#include <poppler/Gfx.h>
+#include <poppler/GfxFont.h>
+#include <poppler/GfxState.h>
+#include <poppler/GlobalParams.h>
+#include <poppler/Lexer.h>
+#include <poppler/Object.h>
+#include <poppler/OutputDev.h>
+#include <poppler/PDFDoc.h>
+#include <poppler/Page.h>
+#include <poppler/Parser.h>
+#include <poppler/Stream.h>
 #include <utility>
 #include <vector>
-#include <2geom/transforms.h>
 
-#include "Annot.h"
-#include "Array.h"
-#include "CharTypes.h"
-#include "Dict.h"
-#include "Error.h"
-#include "Gfx.h"
-#include "GfxFont.h"
-#include "GfxState.h"
-#include "GlobalParams.h"
-#include "Lexer.h"
-#include "Object.h"
-#include "OutputDev.h"
-#include "PDFDoc.h"
-#include "Page.h"
-#include "Parser.h"
-#include "Stream.h"
-#include "glib/poppler-features.h"
-#include "goo/GooString.h"
-#include "goo/gmem.h"
 #include "pdf-utils.h"
 #include "poppler-cairo-font-engine.h"
 #include "poppler-transition-api.h"
 #include "poppler-utils.h"
 #include "svg-builder.h"
-#include "util/units.h"
 
 // the MSVC math.h doesn't define this
 #ifndef M_PI

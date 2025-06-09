@@ -27,7 +27,7 @@ namespace Inkscape {
 }
 
 #define Operator Operator_Gfx
-#include <Gfx.h>
+#include <poppler/Gfx.h>
 #undef Operator
 
 #include <2geom/affine.h>
@@ -35,8 +35,8 @@ namespace Inkscape {
 #include <cairo-ft.h>
 #include <glibmm/ustring.h>
 #include <lcms2.h>
+#include <poppler/CharTypes.h>
 
-#include "CharTypes.h"
 #include "enums.h"
 #include "poppler-utils.h"
 class Function;

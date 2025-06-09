@@ -36,11 +36,11 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <poppler/GfxFont.h>
+#include <poppler/PDFDoc.h>
 #include <unordered_map>
 #include <vector>
 
-#include "GfxFont.h"
-#include "PDFDoc.h"
 #include "poppler-config.h"
 #include "poppler-transition-api.h"
 
