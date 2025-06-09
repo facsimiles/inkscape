@@ -46,7 +46,7 @@ void help_open_tutorial(Glib::ustring const &name)
         // the link this way: https://inkscape.org/[lang]/learn/tutorials/
         sp_ui_error_dialog(_("The tutorial files are not installed.\nFor Linux, you may need to install "
                              "'inkscape-tutorials'; for Windows, please re-run the setup and select 'Tutorials'.\nThe "
-                             "tutorials can also be found online at https://inkscape.org/en/learn/tutorials/"));
+                             "tutorials can also be found online at https://inkscape.org/en/learn/tutorials/."));
     }
 }
 

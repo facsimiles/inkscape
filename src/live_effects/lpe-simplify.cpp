@@ -24,7 +24,7 @@ namespace Inkscape::LivePathEffect {
 
 LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
-    , steps(_("Repeat"), _("Change number of repeats of simplifying operation. Useful for complex paths that need to be significantly simplified. "), "steps", &wr, this, 1)
+    , steps(_("Repeat"), _("Change number of repeats of simplifying operation. Useful for complex paths that need to be significantly simplified."), "steps", &wr, this, 1)
     , threshold(_("Complexity"), _("Drag slider to set the amount of simplification"), "threshold", &wr, this, 5)
     , smooth_angles(_("Smoothness"), _("Max degree difference on handles to perform smoothing"), "smooth_angles",
                     &wr, this, 360.)

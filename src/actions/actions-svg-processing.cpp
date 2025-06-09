@@ -715,8 +715,8 @@ std::vector<std::vector<Glib::ustring>> doc_svg_processing_actions =
     {"doc.add-strokes-to-paths",         N_("All Strokes to Paths"),         SECTION, N_("Turn all strokes recursively into fill-only paths") },
     {"doc.normalize-all-paths",          N_("Normalize Path Data"),          SECTION, N_("Make all paths absolute and predictable") },
 
-    {"doc.insert-bounding-boxes",        N_("Annotate all Bounding Boxes"),  SECTION, N_("Annotate every shape and group with its current bounding box (not kept up to date)") },
-    {"doc.insert-path-data",             N_("Annotate all Shape Paths"),     SECTION, N_("Annotate every non-path shape with their equivalent path string (not kept up to date)") },
+    {"doc.insert-bounding-boxes",        N_("Annotate all Bounding Boxes"),  SECTION, N_("Write bounding box data of every shape and group into its attributes for inkscape:visualbox or inkscape:geometricbox. The value will not update automatically.") },
+    {"doc.insert-path-data",             N_("Annotate all Shape Paths"),     SECTION, N_("Write path data for every non-path shape into its inkscape:d attribute. The value will not update automatically.") },
 
     {"doc.vacuum-defs",                  N_("Clean up Document"),            SECTION, N_("Remove unused definitions (gradients, etc.)") },
     // clang-format on

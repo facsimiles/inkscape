@@ -311,7 +311,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_edit = {
     {"app.clone-link",               N_("Relink to Copied"),          SECTION, N_("Relink the selected clones to the object currently on the clipboard")},
     {"app.select-original",          N_("Select Original"),           SECTION, N_("Select the object to which the selected clone is linked")},
     {"app.clone-link-lpe",           N_("Clone original path (LPE)"), SECTION, N_("Creates a new path, applies the Clone original LPE, and refers it to the selected path")},
-    {"app.delete",                   N_("Delete"),                    SECTION, N_("Delete selected items, nodes or text.")},
+    {"app.delete",                   N_("Delete"),                    SECTION, N_("Delete selected items, nodes or text")},
     {"app.delete-selection",         N_("Delete Items"),              SECTION, N_("Delete selected items")},
     {"app.paste-path-effect",        N_("Paste Path Effect"),         SECTION, N_("Apply the path effect of the copied object to selection")},
     {"app.remove-path-effect",       N_("Remove Path Effect"),        SECTION, N_("Remove any path effects from selected objects")},
