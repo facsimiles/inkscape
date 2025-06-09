@@ -230,7 +230,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         NC_("path effect", "Interpolate Sub-Paths") ,//label
         "interpolate" ,//key
         "interpolate" ,//icon
-        N_("Create a stepwise transition between the 2 subpaths of a path") ,//description
+        N_("Create a smooth transition between the two subpaths of a path, blending their shapes together in steps.") ,//description
         LPECategory::Generate ,//category
         true  ,//on_path
         false ,//on_shape
@@ -358,7 +358,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         NC_("path effect", "Interpolate points") ,//label
         "interpolate_points" ,//key
         "interpolate-points" ,//icon
-        N_("Connect the nodes of the object (e.g. corresponding to data points) by different types of lines.") ,//description
+        N_("Change the type of all nodes on the path. Useful for smoothing the shape or making it sharp.") ,//description 
         LPECategory::Convert ,//category
         true  ,//on_path
         true  ,//on_shape
