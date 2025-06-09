@@ -89,6 +89,7 @@ set(TEST_SOURCES
     colors/spaces-xyz-test
     colors/utils-test
     colors/xml-color-test
+    document-import-defs-test
     uri-test
     util-test
     util-units-test
