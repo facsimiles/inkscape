@@ -639,8 +639,8 @@ Inkscape::Pixbuf *SPImage::getBrokenImage(double width, double height)
     // Limit the size of the broken image raster. smaller than the size in cairo-utils.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
-    width = std::min(width, dpi * 20);
-    height = std::min(height, dpi * 20);
+    width = std::max(std::min(width, dpi * 20), 1.0);
+    height = std::max(std::min(height, dpi * 20), 1.0);
 
     // Cheap templating for size allows for dynamic sized svg
     std::string copy = broken_image_svg;
