@@ -30,6 +30,7 @@
 #include "selection-chemistry.h"
 #include "text-editing.h"
 #include "display/control/canvas-item-rect.h"
+#include "display/control/canvas-item-squiggle.h"
 #include "object/sp-defs.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-object.h"
@@ -407,10 +408,16 @@ bool SpellCheck::nextWord()
             area.expandBy(std::max(0.05 * mindim, 1.0));
 
             // Create canvas item rect with red stroke. (TODO: a quad could allow non-axis aligned rects.)
-            auto rect = new Inkscape::CanvasItemRect(desktop->getCanvasSketch(), area);
-            rect->set_stroke(0xff0000ff);
-            rect->set_visible(true);
-            _rects.emplace_back(rect);
+            // auto rect = new Inkscape::CanvasItemRect(desktop->getCanvasSketch(), area);
+            // rect->set_stroke(0xff0000ff);
+            // rect->set_visible(true);
+            // _rects.emplace_back(rect);
+
+            auto squiggle = new Inkscape::CanvasItemSquiggle(desktop->getCanvasSketch(), area.corner(3), area.corner(2));
+            squiggle->set_stroke(0xff0000ff);
+            squiggle->set_visible(true);
+            _rects.emplace_back(squiggle);
+
 
             // scroll to make it all visible
             Geom::Point const center = desktop->current_center();

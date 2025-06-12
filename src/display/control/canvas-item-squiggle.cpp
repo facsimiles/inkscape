@@ -12,6 +12,7 @@ CanvasItemSquiggle::CanvasItemSquiggle(CanvasItemGroup *group, Geom::Point start
     , _end(end)
     , _color(color)
 {
+    std::cout << "CanvasItemSquiggle created" << std::endl;
     _name = "CanvasItemSquiggle";
     _pickable = false;
     request_update();
@@ -28,6 +29,7 @@ void CanvasItemSquiggle::set_points(Geom::Point start, Geom::Point end)
 
 void CanvasItemSquiggle::set_color(uint32_t color)
 {
+    std::cout << "CanvasItemSquiggle set_color: " << std::hex << color << std::dec << std::endl;
     if (_color != color) {
         _color = color;
         request_redraw();
@@ -36,14 +38,19 @@ void CanvasItemSquiggle::set_color(uint32_t color)
 
 void CanvasItemSquiggle::_rebuild_squiggle()
 {
+    std::cout << "CanvasItemSquiggle _rebuild_squiggle" << std::endl;
     // Transform start and end from document to canvas units
     Geom::Affine aff = affine();
     Geom::Point s = _start * aff;
     Geom::Point e = _end * aff;
 
+    std::cout << "CanvasItemSquiggle _rebuild_squiggle: start = " << s << ", end = " << e << std::endl;
+
     // Minimum length in canvas units to draw squiggle
     constexpr double min_canvas_len = 20.0;
     double len = Geom::L2(e - s);
+
+    std::cout << "CanvasItemSquiggle _rebuild_squiggle: length = " << len << std::endl;
 
     _squiggle_path.clear();
 
@@ -56,6 +63,8 @@ void CanvasItemSquiggle::_rebuild_squiggle()
     double wavelength = 8.0;
     int n = std::max(1, int(len / wavelength));
     double step = len / n;
+
+    std::cout << "CanvasItemSquiggle _rebuild_squiggle: n = " << n << ", step = " << step << std::endl;
 
     Geom::Point dir = (e - s) / len;
     Geom::Point perp(-dir[1], dir[0]);
@@ -74,6 +83,7 @@ void CanvasItemSquiggle::_rebuild_squiggle()
 
 void CanvasItemSquiggle::_update(bool)
 {
+    std::cout << "CanvasItemSquiggle _update" << std::endl;
     _rebuild_squiggle();
 
     // Set bounds (just a box around the squiggle)
@@ -88,9 +98,12 @@ void CanvasItemSquiggle::_update(bool)
 
 void CanvasItemSquiggle::_render(CanvasItemBuffer &buf) const
 {
+    std::cout << "CanvasItemSquiggle _render" << std::endl;
     if (_squiggle_path.empty()) {
         return;
     }
+
+    std::cout << "CanvasItemSquiggle _render: _squiggle_path not empty" << std::endl;
 
     buf.cr->save();
 

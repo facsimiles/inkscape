@@ -41,6 +41,7 @@ class SPCanvasItem;
 namespace Inkscape {
 class Preferences;
 class CanvasItemRect;
+class CanvasItemSquiggle;
 } // namespace Inkscape {
 
 namespace Inkscape::UI::Dialog {
@@ -166,7 +167,7 @@ private:
     /**
      * list of canvasitems (currently just rects) that mark misspelled things on canvas
      */
-    std::vector<CanvasItemPtr<CanvasItemRect>> _rects;
+    std::vector<CanvasItemPtr<CanvasItemSquiggle>> _rects;
 
     /**
      * list of text objects we have already checked in this session
