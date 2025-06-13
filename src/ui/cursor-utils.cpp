@@ -12,12 +12,11 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstddef>
 #include <memory>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
-#include <boost/functional/hash.hpp>
+#include <boost/compute/detail/lru_cache.hpp>
 #include <glibmm/miscutils.h>
 #include <giomm/file.h>
 #include <gdkmm/cursor.h>
@@ -49,10 +48,6 @@ namespace {
 
 // SVG cursor unique ID/key
 using Key = std::tuple<std::string, std::string, std::string, std::uint32_t, std::uint32_t, bool, double>;
-
-struct KeyHasher {
-    std::size_t operator () (const Key& k) const { return boost::hash_value(k); }
-};
 
 struct CursorDocCache : public Util::EnableSingleton<CursorDocCache, Util::Depends<FontFactory>> {
     std::unordered_map<std::string, std::unique_ptr<SPDocument>> map;
@@ -118,18 +113,15 @@ CursorRenderResult render_svg_cursor(double scale, CursorInputParams const &in)
         scale = 1;
     }
 
-    static std::unordered_map<Key, CursorRenderResult, KeyHasher> cursor_cache;
-    Key cursor_key;
+    constexpr int max_cached_cursors = 100;
+    static boost::compute::detail::lru_cache<Key, CursorRenderResult> cursor_cache(max_cached_cursors);
 
-    const auto cache_enabled = prefs->getBool("/options/cache_svg_cursors", true);
-    if (cache_enabled) {
-        // construct a key
-        cursor_key = std::tuple{theme_names[0], theme_names[1], in.file_name,
-                                fill.toRGBA(), stroke.toRGBA(),
-                                enable_drop_shadow, scale};
-        if (auto const it = cursor_cache.find(cursor_key); it != cursor_cache.end()) {
-            return it->second;
-        }
+    // construct a key
+    Key cursor_key = {theme_names[0], theme_names[1], in.file_name,
+                            fill.toRGBA(), stroke.toRGBA(),
+                            enable_drop_shadow, scale};
+    if (auto const it = cursor_cache.get(cursor_key)) {
+        return *it;
     }
 
     // Find theme paths.
@@ -138,10 +130,9 @@ CursorRenderResult render_svg_cursor(double scale, CursorInputParams const &in)
     // cache cursor SVG documents too, so we can regenerate cursors (with different colors) quickly
     auto &cursor_docs = CursorDocCache::get().map;
     SPRoot* root = nullptr;
-    if (cache_enabled) {
-        if (auto it = cursor_docs.find(in.file_name); it != end(cursor_docs)) {
-            root = it->second->getRoot();
-        }
+
+    if (auto it = cursor_docs.find(in.file_name); it != end(cursor_docs)) {
+        root = it->second->getRoot();
     }
 
     if (!root) {
@@ -178,9 +169,7 @@ CursorRenderResult render_svg_cursor(double scale, CursorInputParams const &in)
             return {};
         }
 
-        if (cache_enabled) {
-            cursor_docs[in.file_name] = std::move(document);
-        }
+        cursor_docs[in.file_name] = std::move(document);
     }
 
     if (!root) {
@@ -238,9 +227,7 @@ CursorRenderResult render_svg_cursor(double scale, CursorInputParams const &in)
         .hotspot = hotspot
     };
 
-    if (cache_enabled) {
-        cursor_cache[std::move(cursor_key)] = cursor;
-    }
+    cursor_cache.insert(std::move(cursor_key), cursor);
 
     return cursor;
 }
