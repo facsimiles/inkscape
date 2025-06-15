@@ -295,8 +295,6 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     }
     gtk_snapshot_append_node(snapshot->gobj(), _shadow_node.get());
 
-    snapshot->push_clip(geom_to_gtk(Geom::IntRect{{}, dims}));
-
     // Build a single scale tile, i.e. one major tick.
     if (!_scale_tile_node) {
         auto scale_tile = gtk_snapshot_new();
@@ -452,8 +450,6 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
             snapshot->restore();
         }
     }
-
-    snapshot->pop();
 }
 
 // Draw position marker, we use doubles here.
@@ -482,6 +478,8 @@ void Ruler::draw_marker(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
 
 void Ruler::snapshot_vfunc(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
 {
+    auto const dims = Geom::IntPoint{get_width(), get_height()};
+    snapshot->push_clip(geom_to_gtk(Geom::IntRect{{}, dims}));
     if (!_ruler_node) {
         auto ruler = gtk_snapshot_new();
         draw_ruler(Glib::wrap_gtk_snapshot(ruler, true));
@@ -489,6 +487,7 @@ void Ruler::snapshot_vfunc(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     }
     gtk_snapshot_append_node(snapshot->gobj(), _ruler_node.get());
     draw_marker(snapshot);
+    snapshot->pop();
 }
 
 // Update ruler on style change (font-size, etc.)
