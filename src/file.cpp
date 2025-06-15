@@ -43,7 +43,6 @@
 #include "file.h"
 #include "id-clash.h"
 #include "inkscape-application.h"
-#include "inkscape-version.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
 #include "io/file.h"
@@ -209,8 +208,6 @@ file_save(Gtk::Window &parentWindow,
     auto path = file->get_path();
     auto display_name = file->get_parse_name();
 
-    Inkscape::Version const saved_version = doc->getRoot()->inkscape.getVersion();
-    doc->getReprRoot()->setAttribute("inkscape:version", Inkscape::version_string);
     try {
         Inkscape::Extension::save(key, doc, file->get_path().c_str(),
                                   checkoverwrite, official,
@@ -219,30 +216,24 @@ file_save(Gtk::Window &parentWindow,
         const auto text = Glib::ustring::compose(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown or missing filename extension."), display_name);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text.c_str());
-        // Restore Inkscape version
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     } catch (Inkscape::Extension::Output::file_read_only &e) {
         const auto text = Glib::ustring::compose(_("File %s is write protected. Please remove write protection and try again."), display_name);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text.c_str());
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     } catch (Inkscape::Extension::Output::save_failed &e) {
         const auto text = Glib::ustring::compose(_("File %s could not be saved."), display_name);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text.c_str());
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     } catch (Inkscape::Extension::Output::save_cancelled &e) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     } catch (Inkscape::Extension::Output::export_id_not_found &e) {
         const auto text = Glib::ustring::compose(_("File could not be saved:\nNo object with ID '%s' found."), e.id);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text.c_str());
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(parentWindow, doc, save_method);
@@ -252,14 +243,12 @@ file_save(Gtk::Window &parentWindow,
                                         "'%s'"), display_name, e.what());
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text.c_str());
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     } catch (...) {
         g_critical("Extension '%s' threw an unspecified exception.", key ? key->get_id() : nullptr);
         const auto text = Glib::ustring::compose(_("File %s could not be saved."), display_name);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text.c_str());
-        doc->getReprRoot()->setAttribute("inkscape:version", saved_version.str());
         return false;
     }
 

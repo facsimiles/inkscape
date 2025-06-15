@@ -360,7 +360,7 @@ void InkscapeApplication::document_fix(SPDesktop *desktop)
         }
 
         // Fix dpi (pre-92 files).
-        if (document->getRoot()->inkscape.getVersion().isInsideRangeInclusive({0, 1}, {0, 92})) {
+        if (document->getRoot()->inkscape_version.isInsideRangeInclusive({0, 1}, {0, 92})) {
             sp_file_convert_dpi(document);
         }
 

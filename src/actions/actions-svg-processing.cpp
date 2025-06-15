@@ -20,6 +20,7 @@
 
 #include "document.h"
 #include "inkscape-application.h"
+#include "inkscape-version.h"
 #include "style.h"
 
 #include "object/object-set.h"
@@ -699,6 +700,7 @@ std::vector<std::vector<Glib::ustring>> doc_svg_processing_actions =
     // clang-format off
     {"doc.set-svg-version-1",            N_("Set SVG Version to 1.1"),       SECTION, N_("Set the document's SVG version to 1.1") },
     {"doc.set-svg-version-2",            N_("Set SVG Version to 2.0"),       SECTION, N_("Set the document's SVG version to 2.0") },
+    {"doc.set-inkscape-version",         N_("Set Inkscape Version"),         SECTION, N_("Add the Inkscape version to the document") },
     {"doc.prune-inkscape-namespaces",    N_("Prune Inkscape Namespaces"),    SECTION, N_("Remove any Inkscape-specific SVG data") },
     {"doc.prune-proprietary-namespaces", N_("Prune Proprietary Namespaces"), SECTION, N_("Remove any known proprietary SVG data") },
 
@@ -735,6 +737,10 @@ void add_actions_processing(SPDocument* doc)
     group->add_action("set-svg-version-1",            [doc]() {
         auto rdoc = doc->getReprDoc();
         rdoc->setAttribute("version", "1.1");
+    });
+    group->add_action("set-inkscape-version",         [doc]() {
+        auto rdoc = doc->getReprDoc();
+        rdoc->setAttribute("inkscape:version", Inkscape::version_string);
     });
     group->add_action("prune-inkscape-namespaces",    [doc]() { prune_inkscape_from_node(doc->getReprRoot()); });
     group->add_action("prune-proprietary-namespaces", [doc]() { prune_proprietary_from_node(doc->getReprRoot()); });

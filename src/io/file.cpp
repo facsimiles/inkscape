@@ -54,19 +54,6 @@ std::unique_ptr<SPDocument> ink_file_new(std::string const &Template)
     return doc;
 }
 
-namespace {
-void set_inkscape_and_svg_versions(SPRoot *root)
-{
-    // This is the only place original values should be set.
-    if (root->inkscape.version) {
-        root->inkscape.original = *root->inkscape.version;
-    }
-    if (root->svg.version) {
-        root->svg.original = *root->svg.version;
-    }
-}
-} // namespace
-
 /**
  * Open a document from memory.
  */
@@ -78,7 +65,6 @@ std::unique_ptr<SPDocument> ink_file_open(std::span<char const> buffer)
         std::cerr << "ink_file_open: cannot open file in memory (pipe?)" << std::endl;
         return nullptr;
     }
-    set_inkscape_and_svg_versions(doc->getRoot());
     return doc;
 }
 
@@ -117,7 +103,6 @@ std::pair<std::unique_ptr<SPDocument>, bool> ink_file_open(Glib::RefPtr<Gio::Fil
         return {nullptr, false};
     }
 
-    set_inkscape_and_svg_versions(doc->getRoot());
     return {std::move(doc), false};
 }
 

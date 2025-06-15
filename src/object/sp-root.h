@@ -15,8 +15,6 @@
 #ifndef SP_ROOT_H_SEEN
 #define SP_ROOT_H_SEEN
 
-#include <optional>
-
 #include "display/drawing-item.h" // for DrawingItem
 #include "sp-dimensions.h"        // for SPDimensions
 #include "sp-item-group.h"        // for SPGroup
@@ -35,13 +33,6 @@ public:
 	SPRoot();
 	~SPRoot() override;
     int tag() const override { return tag_of<decltype(*this)>; }
-
-    struct
-    {
-        std::optional<Inkscape::Version> version;
-        Inkscape::Version original;
-        Inkscape::Version const &getVersion() const { return version ? *version : original; }
-    } inkscape, svg;
 
     char *onload;
 
@@ -71,6 +62,10 @@ public:
     // Copy out the x/y coordinates for editing
     SVGLength root_x;
     SVGLength root_y;
+
+    // Version information
+    Inkscape::Version svg_version;
+    Inkscape::Version inkscape_version;
 private:
     void unset_x_and_y();
     void setRootDimensions();

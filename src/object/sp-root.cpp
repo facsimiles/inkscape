@@ -104,11 +104,17 @@ void SPRoot::set(SPAttr key, const gchar *value)
 {
     switch (key) {
     case SPAttr::VERSION:
-        svg.version = Inkscape::Version::from_string(value);
+        if (auto version = Inkscape::Version::from_string(value)) {
+            svg_version = *version;
+        } else {
+            svg_version = *Inkscape::Version::from_string(SVG_VERSION);
+        }
         break;
 
     case SPAttr::INKSCAPE_VERSION:
-        inkscape.version = Inkscape::Version::from_string(value);
+        if (auto version = Inkscape::Version::from_string(value)) {
+            inkscape_version = *version;
+        }
         break;
 
     case SPAttr::X:
@@ -310,8 +316,11 @@ Inkscape::XML::Node *SPRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     }
 
     if (!repr->attribute("version")) {
-        repr->setAttribute("version", svg.getVersion().str());
+        repr->setAttribute("version", svg_version.str());
     }
+
+    // Inkscape_version doesn't need to be written as it's always
+    // replaced by the SVG output extension.
 
     if (fabs(this->x.computed) > 1e-9) {
         repr->setAttributeSvgDouble("x", this->x.computed);

@@ -1641,8 +1641,8 @@ std::string SPObject::generate_unique_id(char const *default_id) const
 void SPObject::_requireSVGVersion(Inkscape::Version version) {
     for (SPObject::ParentIterator iter = this; iter; ++iter) {
         if (auto root = cast<SPRoot>(static_cast<SPObject *>(iter))) {
-            if (root->svg.getVersion() < version) {
-                root->svg.version = version;
+            if (root->svg_version < version) {
+                root->svg_version = version;
             }
         }
     }

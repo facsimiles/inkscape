@@ -87,6 +87,7 @@ Svg::init()
             "</output>\n"
             "<action>prune-proprietary-namespaces</action>\n"
             "<action>set-svg-version-2</action>\n"
+            "<action>set-inkscape-version</action>\n"
             "<action pref='!/dialogs/save_as/enable_svgexport'>reverse-auto-start-markers</action>\n"
             "<action pref='!/dialogs/save_as/enable_svgexport'>remove-marker-context-paint</action>\n"
             "<action pref='!/dialogs/save_as/enable_svgexport'>set-svg-version-1</action>\n"
