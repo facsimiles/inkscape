@@ -389,7 +389,7 @@ public:
                 if (_src->parent->_can_rearrange) {
                     int const from = _src->parent->get_tab_position(*_src);
                     if (_src->parent->_reorderTab(from, *_drop_i)) {
-                        _src->parent->_signal_tab_rearranged(from, *_drop_i);
+                        _src->parent->_signal_tab_rearranged(from, *_drop_i - ( *_drop_i > from ));
                     }
                     else {
                         _src->parent->queue_resize();
