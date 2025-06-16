@@ -22,10 +22,10 @@ set(inkscape_SRC
   distribution-snapper.cpp
   document-subset.cpp
   document-undo.cpp
+  document-update.cpp
   document.cpp
   event-log.cpp
   file.cpp
-  file-update.cpp
   filter-chemistry.cpp
   filter-enums.cpp
   gc-anchored.cpp
@@ -97,6 +97,7 @@ set(inkscape_SRC
   distribution-snapper.h
   document-subset.h
   document-undo.h
+  document-update.h
   document.h
   enums.h
   event-log.h

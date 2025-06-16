@@ -20,6 +20,7 @@
 #include "inkscape-application.h"
 
 #include "document.h"             // SPDocument
+#include "document-update.h"
 #include "file.h"                 // dpi convert method
 #include "inkscape-version-info.h"// Inkscape version
 #include "inkscape.h"             // Inkscape::Application

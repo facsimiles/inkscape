@@ -27,7 +27,7 @@
 #include <gtkmm/widget.h>
 
 #include "document.h"
-#include "file.h"
+#include "document-update.h"
 #include "preferences.h"
 #include "display/cairo-utils.h"
 #include "helper/pixbuf-ops.h"

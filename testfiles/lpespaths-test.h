@@ -14,7 +14,7 @@
 #include <2geom/pathvector.h>
 
 #include "document.h"
-#include "file.h"
+#include "document-update.h"
 #include "inkscape.h"
 #include "inkscape-application.h"
 

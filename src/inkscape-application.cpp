@@ -57,6 +57,7 @@
 #include "auto-save.h"              // Auto-save
 #include "desktop.h"                // Access to window
 #include "document.h"
+#include "document-update.h"
 #include "file.h"                   // sp_file_convert_dpi
 #include "inkscape.h"               // Inkscape::Application
 #include "object/sp-namedview.h"

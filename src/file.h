@@ -127,50 +127,6 @@ void file_import_pages(SPDocument *this_doc, SPDocument *that_doc);
 SPObject* file_import(SPDocument *in_doc, const std::string &path,
                  Inkscape::Extension::Extension *key);
 
-/*######################
-## E X P O R T
-######################*/
-
-/**
- * Displays a FileExportDialog for the user, with an
- * additional type selection, to allow the user to export
- * the a document as a given type.
- */
-//bool sp_file_export_dialog (Gtk::Window &parentWindow);
-
-
-/*######################
-## P R I N T
-######################*/
-
-/* These functions are redundant now, but
-would be useful as instance methods
-*/
-
-/**
- *
- */
-void sp_file_print (Gtk::Window& parentWindow);
-
-/*#####################
-## U T I L I T Y
-#####################*/
-
-/**
- * clean unused defs out of file
- */
-void sp_file_vacuum (SPDocument *doc);
-void sp_file_convert_text_baseline_spacing(SPDocument *doc);
-void sp_file_convert_font_name(SPDocument *doc);
-void sp_file_convert_dpi(SPDocument *doc);
-void sp_file_fix_empty_lines(SPDocument *doc);
-void sp_file_fix_osb(SPObject *doc);
-void sp_file_fix_feComposite(SPObject *doc);
-void sp_file_fix_hotspot(SPRoot *o);
-void sp_file_fix_lpe(SPDocument *doc);
-enum File_DPI_Fix { FILE_DPI_UNCHANGED = 0, FILE_DPI_VIEWBOX_SCALED, FILE_DPI_DOCUMENT_SCALED };
-extern int sp_file_convert_dpi_method_commandline;
-
 #endif // SEEN_SP_FILE_H
 
 

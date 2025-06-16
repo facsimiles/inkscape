@@ -35,6 +35,7 @@
 
 #include "desktop.h"
 #include "document-undo.h"
+#include "document-update.h"
 #include "event-log.h"
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -59,7 +60,6 @@
 #include "object/sp-use.h"
 #include "page-manager.h"
 #include "path-prefix.h"
-#include "print.h"
 #include "rdf.h"
 #include "selection.h"
 #include "style.h"
@@ -153,34 +153,6 @@ void sp_file_revert_dialog()
     }
 }
 
-
-/*######################
-## V A C U U M
-######################*/
-
-/**
- * Remove unreferenced defs from the defs section of the document.
- */
-void sp_file_vacuum(SPDocument *doc)
-{
-    unsigned int diff = doc->vacuumDocument();
-
-    DocumentUndo::done(doc, _("Clean up document"), INKSCAPE_ICON("document-cleanup"));
-
-    SPDesktop *dt = SP_ACTIVE_DESKTOP;
-    if (dt != nullptr) {
-        // Show status messages when in GUI mode
-        if (diff > 0) {
-            dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
-                    ngettext("Removed <b>%i</b> unused definition in &lt;defs&gt;.",
-                            "Removed <b>%i</b> unused definitions in &lt;defs&gt;.",
-                            diff),
-                    diff);
-        } else {
-            dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE,  _("No unused definitions in &lt;defs&gt;."));
-        }
-    }
-}
 
 /*######################
 ## S A V E
@@ -957,22 +929,6 @@ void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
         }
     }
     set.applyAffine(tr, true, false, true);
-}
-
-/*######################
-## P R I N T
-######################*/
-
-/**
- *  Print the current document, if any.
- */
-void
-sp_file_print(Gtk::Window& parentWindow)
-{
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    if (doc) {
-        sp_print_document(parentWindow, doc);
-    }
 }
 
 /*

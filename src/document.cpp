@@ -47,6 +47,7 @@
 
 #include "desktop.h"
 #include "document-undo.h"
+#include "document-update.h"
 #include "event-log.h"
 #include "file.h"
 #include "id-clash.h"

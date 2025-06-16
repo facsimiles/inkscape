@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * TODO: insert short description here
+ * A collection of conversions and clean up functions for SVG documents
  *//*
  * Authors: see git history
  *
@@ -28,7 +28,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "file.h"
+#include "document-update.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
 #include "io/sys.h"

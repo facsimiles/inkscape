@@ -21,11 +21,15 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "desktop.h"
+#include "document.h"
+#include "document-undo.h"
 #include "file.h"
+#include "print.h"
 #include "preferences.h"
 #include "ui/dialog/choose-file.h"
 #include "ui/dialog/save-template-dialog.h"
 #include "ui/dialog/new-from-template.h"
+#include "ui/icon-names.h"
 
 void
 document_new(InkscapeWindow* win)
@@ -101,14 +105,30 @@ void
 document_print(InkscapeWindow* win)
 {
     // Print File
-    sp_file_print(*win);
+    if (auto doc = win->get_document()) {
+        sp_print_document(*win, doc);
+    }
 }
 
 void
 document_cleanup(InkscapeWindow* win)
 {
     // Cleanup Up Document
-    sp_file_vacuum(win->get_document());
+    auto doc = win->get_document();
+    unsigned int diff = doc->vacuumDocument();
+
+    Inkscape::DocumentUndo::done(doc, _("Clean up document"), INKSCAPE_ICON("document-cleanup"));
+
+    // Show status messages when in GUI mode
+    if (diff > 0) {
+        win->get_desktop()->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
+                ngettext("Removed <b>%i</b> unused definition in &lt;defs&gt;.",
+                        "Removed <b>%i</b> unused definitions in &lt;defs&gt;.",
+                        diff),
+                diff);
+    } else {
+        win->get_desktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE,  _("No unused definitions in &lt;defs&gt;."));
+    }
 }
 
 // Close window, checking for data loss. If it's the last window, keep open with new document.

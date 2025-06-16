@@ -49,6 +49,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/display/control/ctrl-handle-manager.cpp
 ../src/display/control/ctrl-handle-styling.cpp
 ../src/display/control/snap-indicator.cpp
+../src/document-update.cpp
 ../src/document.cpp
 ../src/event-log.cpp
 ../src/extension/dependency.cpp
@@ -141,7 +142,6 @@ ${_build_dir}/share/templates/templates.h
 ../src/extension/prefdialog/prefdialog.cpp
 ../src/extension/system.cpp
 ../src/extension/template.cpp
-../src/file-update.cpp
 ../src/file.cpp
 ../src/filter-enums.cpp
 ../src/gradient-chemistry.cpp
