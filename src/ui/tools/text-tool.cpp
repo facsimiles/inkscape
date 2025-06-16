@@ -48,6 +48,8 @@
 #include "ui/widget/events/debug.h"
 #include "util/callback-converter.h"
 #include "util/units.h"
+#include "xml/sp-css-attr.h"
+#include "ui/on-canvas-spellcheck.h"
 
 using Inkscape::DocumentUndo;
 
@@ -139,6 +141,8 @@ TextTool::TextTool(SPDesktop *desktop)
     if (prefs->getBool("/tools/text/gradientdrag")) {
         enableGrDrag();
     }
+
+    _spellcheck = std::make_unique<Inkscape::UI::OnCanvasSpellCheck>();
 }
 
 TextTool::~TextTool()
