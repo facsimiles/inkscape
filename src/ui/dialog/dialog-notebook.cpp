@@ -714,6 +714,10 @@ void DialogNotebook::set_requested_height(int height) {
     _natural_height = height;
 }
 
+int DialogNotebook::get_requested_height() const {
+    return _natural_height;
+}
+
 } // namespace Inkscape::UI::Dialog
 
 /*

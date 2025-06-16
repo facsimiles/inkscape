@@ -794,6 +794,14 @@ void DialogMultipaned::size_allocate_vfunc(int const width, int const height, in
         Gtk::Requisition req_minimum;
         Gtk::Requisition req_natural;
         child->get_preferred_size(req_minimum, req_natural);
+        if (auto nb = dynamic_cast<DialogNotebook*>(child.get()); nb && orientation == Gtk::Orientation::VERTICAL) {
+            // natural height request from our DialogNotebook is not always reported by get_preferred_size() call;
+            // it appears that overridden measure_vfunc is not always invoked, so we read height explicitly:
+            int natural = nb->get_requested_height();
+            if (natural > req_natural.get_height()) {
+                req_natural.set_height(natural);
+            }
+        }
         if (child.get() == _resizing_widget1 || child.get() == _resizing_widget2) {
             // ignore limits for widget being resized interactively and use their current size
             req_minimum.set_width (0);

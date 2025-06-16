@@ -82,6 +82,7 @@ public:
     Gtk::ScrolledWindow * get_scrolledwindow(Gtk::Widget &page);
     Gtk::ScrolledWindow * get_current_scrolledwindow(bool skip_scroll_provider);
     void set_requested_height(int height);
+    int get_requested_height() const;
     DialogWindow* float_tab(Gtk::Widget& page);
 
 private:
@@ -123,7 +124,7 @@ private:
     bool provide_scroll(Gtk::Widget &page);
     void change_page(size_t pagenum);
     void measure_vfunc(Gtk::Orientation orientation, int for_size, int &min, int &nat, int &min_baseline, int &nat_baseline) const override;
-    // helper to correctly restore height of vertically stacked dialogs
+    // helper to correctly restore the height of vertically stacked dialogs
     int _natural_height = 0;
 };
 
