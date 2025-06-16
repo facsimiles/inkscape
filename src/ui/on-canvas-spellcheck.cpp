@@ -10,6 +10,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-text.h"
 #include "object/sp-flowtext.h"
+#include "display/control/canvas-item-squiggle.h"
 
 
 
@@ -94,10 +95,37 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
         Glib::ustring _word = sp_te_get_string_multiline(item, begin, end);
         if (!_word.empty() && !spelling_checker_check_word(_checker.get(), _word.c_str(), _word.length())) {
             std::cout<<"Misspelled word: " << _word << std::endl;
-            _misspelled_words.push_back({item, _word, begin, end});
+            // auto squiggle = createSquiggle(item, _word, begin, end);
+            // _misspelled_words.push_back({item, _word, begin, end, std::move(squiggle)});
+            _misspelled_words.push_back({item, _word, begin, end, nullptr});
+            createSquiggle(_misspelled_words.back());
         }
         it = end;
     }
+}
+
+void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled)
+{
+    auto layout = te_get_layout(misspelled.item);
+    if (!layout) {
+        return; // No layout available
+    }
+    // Get the selection shape (bounding box) for the word
+    auto points = layout->createSelectionShape(misspelled.begin, misspelled.end, misspelled.item->i2dt_affine());
+    if (points.size() < 4) {
+        return; // Not enough points to draw a squiggle
+    }
+
+    // Use the bottom left and bottom right corners for the squiggle
+    Geom::Point start_doc = points[3]; // bottom left
+    Geom::Point end_doc   = points[2]; // bottom right
+
+    // Create the squiggle (in document coordinates)
+    misspelled.squiggle = CanvasItemPtr<CanvasItemSquiggle>(
+        new Inkscape::CanvasItemSquiggle(_desktop->getCanvasSketch(), start_doc, end_doc)
+    );
+    misspelled.squiggle->set_color(0xff0000ff);
+    misspelled.squiggle->set_visible(true);
 }
 
 

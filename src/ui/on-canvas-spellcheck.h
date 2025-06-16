@@ -11,12 +11,14 @@
 
 #include "text-editing.h"
 #include "util/gobjectptr.h"
+#include "display/control/canvas-item-ptr.h"
 
 class SPObject;
 class SPItem;
 
 namespace Inkscape {
 class Preferences;
+class CanvasItemSquiggle;
 } //namespace Inkscape
 
 
@@ -27,6 +29,7 @@ struct MisspelledWord {
     Glib::ustring word;
     Text::Layout::iterator begin;
     Text::Layout::iterator end;
+    CanvasItemPtr<CanvasItemSquiggle> squiggle;
 };
 
 class OnCanvasSpellCheck
@@ -52,6 +55,8 @@ private:
     void allTextItems(SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked);
     void scanDocument();
     void checkTextItem(SPItem* item);
+
+    void createSquiggle(MisspelledWord& misspelled);
 };
 
 } // namespace Inkscape::UI
