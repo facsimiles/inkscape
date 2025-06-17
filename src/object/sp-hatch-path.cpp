@@ -241,9 +241,19 @@ void SPHatchPath::_readHatchPathVector(char const *str, Geom::PathVector &pathv,
         return;
     }
 
-    pathv = sp_svg_read_pathv(str);
+    // Find first non-space character:
+    const char* str_ptr = str;
+    while (*str_ptr == ' ') {
+        str_ptr++;
+    }
 
-    if (!pathv.empty()) {
+    if (*str_ptr == 'M' ||
+        *str_ptr == 'm') {
+        // Hatch path is not continuous.
+        pathv = sp_svg_read_pathv(str);
+        if (pathv.empty()) {
+            return;
+        }
         continous_join = false;
     } else {
         Glib::ustring str2 = Glib::ustring::compose("M0,0 %1", str);
