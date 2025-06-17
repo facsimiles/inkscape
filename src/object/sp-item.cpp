@@ -415,18 +415,10 @@ SPItem::scaleCenter(Geom::Scale const &sc) {
     transform_center_y *= sc[Geom::Y];
 }
 
-namespace {
-
-bool is_item(SPObject const &object) {
-    return cast<SPItem>(&object) != nullptr;
-}
-
-}
-
 void SPItem::raiseToTop() {
     auto& list = parent->children;
     auto end = SPObject::ChildrenList::reverse_iterator(list.iterator_to(*this));
-    auto topmost = std::find_if(list.rbegin(), end, &is_item);
+    auto topmost = std::find_if(list.rbegin(), end, is<SPItem>);
     // auto topmost = find_last_if(++parent->children.iterator_to(*this), parent->children.end(), &is_item);
     if (topmost != list.rend()) {
         getRepr()->parent()->changeOrder(getRepr(), topmost->getRepr());
@@ -434,7 +426,7 @@ void SPItem::raiseToTop() {
 }
 
 bool SPItem::raiseOne() {
-    auto next_higher = std::find_if(++parent->children.iterator_to(*this), parent->children.end(), &is_item);
+    auto next_higher = std::find_if(++parent->children.iterator_to(*this), parent->children.end(), is<SPItem>);
     if (next_higher != parent->children.end()) {
         Inkscape::XML::Node *ref = next_higher->getRepr();
         getRepr()->parent()->changeOrder(getRepr(), ref);
@@ -447,7 +439,7 @@ bool SPItem::lowerOne() {
     auto& list = parent->children;
     auto self = list.iterator_to(*this);
     auto start = SPObject::ChildrenList::reverse_iterator(self);
-    auto next_lower = std::find_if(start, list.rend(), &is_item);
+    auto next_lower = std::find_if(start, list.rend(), is<SPItem>);
     if (next_lower != list.rend()) {
         auto next = list.iterator_to(*next_lower);
         if (next == list.begin()) {
@@ -463,7 +455,7 @@ bool SPItem::lowerOne() {
 }
 
 void SPItem::lowerToBottom() {
-    auto bottom = std::find_if(parent->children.begin(), parent->children.iterator_to(*this), &is_item);
+    auto bottom = std::find_if(parent->children.begin(), parent->children.iterator_to(*this), is<SPItem>);
     if (bottom != parent->children.iterator_to(*this)) {
         Inkscape::XML::Node *ref = nullptr;
         if (bottom != parent->children.begin()) {

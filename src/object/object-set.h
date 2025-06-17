@@ -14,8 +14,8 @@
 #ifndef INKSCAPE_PROTOTYPE_OBJECTSET_H
 #define INKSCAPE_PROTOTYPE_OBJECTSET_H
 
-#include <string>
 #include <unordered_map>
+#include <vector>
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/identity.hpp>
@@ -66,38 +66,13 @@ class Node;
 struct hashed{};
 struct random_access{};
 
-struct is_item {
-    bool operator()(SPObject* obj) {
-        return is<SPItem>(obj);
-    }
+namespace {
+
+inline constexpr auto object_to_node = [] (SPObject *obj) {
+    return obj->getRepr();
 };
 
-struct is_group {
-    bool operator()(SPObject* obj) {
-        return is<SPGroup>(obj);
-    }
-};
-
-struct object_to_item {
-    typedef SPItem* result_type;
-    SPItem* operator()(SPObject* obj) const {
-        return cast<SPItem>(obj);
-    }
-};
-
-struct object_to_node {
-    typedef XML::Node* result_type;
-    XML::Node* operator()(SPObject* obj) const {
-        return obj->getRepr();
-    }
-};
-
-struct object_to_group {
-    typedef SPGroup* result_type;
-    SPGroup* operator()(SPObject* obj) const {
-        return cast<SPGroup>(obj);
-    }
-};
+}
 
 typedef boost::multi_index_container<
         SPObject*,
@@ -119,9 +94,9 @@ typedef boost::any_range<
 class ObjectSet {
 public:
     enum CompareSize {HORIZONTAL, VERTICAL, AREA};
-    typedef decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_item())) SPItemRange;
-    typedef decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is_group()) | boost::adaptors::transformed(object_to_group())) SPGroupRange;
-    typedef decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_node())) XMLNodeRange;
+    using SPItemRange = decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is<SPItem>) | boost::adaptors::transformed(cast_unsafe<SPItem>));
+    using SPGroupRange = decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is<SPGroup>) | boost::adaptors::transformed(cast_unsafe<SPGroup>));
+    using XMLNodeRange = decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is<SPItem>) | boost::adaptors::transformed(object_to_node));
 
     ObjectSet(SPDesktop* desktop);
     ObjectSet(SPDocument* doc): _desktop(nullptr), _document(doc) {};
@@ -130,11 +105,11 @@ public:
 
     ObjectSet(ObjectSet const &) = delete;
     ObjectSet &operator=(ObjectSet const &) = delete;
-    
+
     void setDocument(SPDocument* doc){
         _document = doc;
     }
-    
+
 
     /**
      * Add an SPObject to the set of selected objects.
@@ -254,8 +229,8 @@ public:
     /** Returns a range of selected SPItems. */
     SPItemRange items() {
         return SPItemRange(_container.get<random_access>()
-           | boost::adaptors::filtered(is_item())
-           | boost::adaptors::transformed(object_to_item()));
+           | boost::adaptors::filtered(is<SPItem>)
+           | boost::adaptors::transformed(cast_unsafe<SPItem>));
     };
 
     std::vector<SPItem*> items_vector() {
@@ -266,15 +241,15 @@ public:
     /** Returns a range of selected groups. */
     SPGroupRange groups() {
         return SPGroupRange (_container.get<random_access>()
-            | boost::adaptors::filtered(is_group())
-            | boost::adaptors::transformed(object_to_group()));
+            | boost::adaptors::filtered(is<SPGroup>)
+            | boost::adaptors::transformed(cast_unsafe<SPGroup>));
     }
 
     /** Returns a range of the xml nodes of all selected objects. */
     XMLNodeRange xmlNodes() {
         return XMLNodeRange(_container.get<random_access>()
-                            | boost::adaptors::filtered(is_item())
-                            | boost::adaptors::transformed(object_to_node()));
+                            | boost::adaptors::filtered(is<SPItem>)
+                            | boost::adaptors::transformed(object_to_node));
     }
 
     /**
@@ -422,7 +397,7 @@ public:
     void popFromGroup();
     void ungroup(bool skip_undo = false);
     void ungroup_all(bool skip_undo = false);
-    
+
     //z-order management
     //in selection-chemistry.cpp
     void stackUp(bool skip_undo = false);
@@ -444,7 +419,7 @@ public:
     void pasteSize(bool apply_x, bool apply_y);
     void pasteSizeSeparately(bool apply_x, bool apply_y);
     void pastePathEffect();
-    
+
     //path operations
     //in path-chemistry.cpp
     void combine(bool skip_undo = false, bool silent = false);
@@ -480,7 +455,7 @@ public:
     void unsetMask(const bool apply_clip_path, const bool delete_helper_group, bool remove_original);
     void setClipGroup();
     void chameleonFill();
-    
+
     // moves
     // in selection-chemistry.cpp
     void removeLPE();
@@ -501,7 +476,7 @@ public:
     void move(double dx, double dy, bool rotated);
     void move(double dx, double dy, bool rotated, bool screen);
     void moveScreen(double dx, double dy, bool rotated);
-    
+
     // various
     bool fitCanvas(bool with_margins, bool skip_undo = false);
     void swapFillStroke();

@@ -138,7 +138,7 @@ std::unique_ptr<KnotHolder> create_knot_holder(SPItem *item, SPDesktop *desktop,
         // Do not allow conversion to 'inline-size' wrapped text if on path!
         // <textPath> might not be first child if <title> or <desc> is present.
         auto const text_children = text->childList(false);
-        bool const is_on_path = std::any_of(text_children.begin(), text_children.end(), is<SPTextPath, SPObject>);
+        bool const is_on_path = std::any_of(text_children.begin(), text_children.end(), is<SPTextPath>);
         if (!is_on_path) {
             knotholder = std::make_unique<TextKnotHolder>(desktop, item);
         }

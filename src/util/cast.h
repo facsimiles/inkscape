@@ -26,54 +26,62 @@ template <typename T> inline constexpr int last_tag  = std::enable_if<!sizeof(T)
 template <typename T> inline constexpr int tag_of = first_tag<std::remove_cv_t<std::remove_reference_t<T>>>;
 
 /**
- * Equivalent to the boolean value of dynamic_cast<T const*>(...).
+ * Equivalent to the boolean value of dynamic_cast<T const *>(...).
  *
  * If the supplied pointer is null, the check fails.
+ *
+ * The function can also be called with an object or reference,
+ * where it is equivalent to the boolean value of dynamic_cast<T const *>(& ...).
  *
  * To help catch redundant checks, checks that are known at compile time currently generate
  * a compile error. Please feel free to remove these static_asserts if they become unhelpful.
  */
-template<typename T, typename S>
-bool is(S const *s)
+template <typename T>
+inline constexpr auto is = [] <typename P> (P const &p)
 {
-    if (!s) return false;
-    if constexpr (std::is_base_of_v<T, S>) {
-        static_assert(!sizeof(T), "check is always true");
-        return true;
-    } else if constexpr (std::is_base_of_v<S, T>) {
-        auto const s_tag = s->tag();
-        return first_tag<T> <= s_tag && s_tag <= last_tag<T>;
+    auto object_is = [] <typename S> (S const &s) {
+        if constexpr (std::is_base_of_v<T, S>) {
+            static_assert(!sizeof(T), "check is always true");
+            return true;
+        } else if constexpr (std::is_base_of_v<S, T>) {
+            auto const s_tag = s.tag();
+            return first_tag<T> <= s_tag && s_tag <= last_tag<T>;
+        } else {
+            static_assert(!sizeof(T), "check is always false");
+            return false;
+        }
+    };
+
+    if constexpr (std::is_pointer_v<P>) {
+        return p && object_is(*p);
     } else {
-        static_assert(!sizeof(T), "check is always false");
-        return false;
+        return object_is(p);
     }
-}
+};
 
 /**
- * Equivalent to static_cast<T [const]*>(...) where the const is deduced.
+ * Equivalent to static_cast<T [const] *>(...) where the const is deduced.
  */
-template<typename T, typename S>
-auto cast_unsafe(S *s)
+template <typename T>
+inline constexpr auto cast_unsafe = [] <typename S> (S *s)
 {
-    return static_cast<T*>(s);
-}
-
-template<typename T, typename S>
-auto cast_unsafe(S const *s)
-{
-    return static_cast<T const*>(s);
-}
+    if constexpr (std::is_const_v<S>) {
+        return static_cast<T const *>(s);
+    } else {
+        return static_cast<T *>(s);
+    }
+};
 
 /**
- * Equivalent to dynamic_cast<T [const]*>(...) where the const is deduced.
+ * Equivalent to dynamic_cast<T [const] *>(...) where the const is deduced.
  *
  * If the supplied pointer is null, the result is null.
  *
  * To help catch redundant casts, casts that are known at compile time currently generate
  * a compile error. Please feel free to remove these static_asserts if they become unhelpful.
  */
-template<typename T, typename S>
-auto cast(S *s)
+template <typename T>
+inline constexpr auto cast = [] <typename S> (S *s)
 {
     if constexpr (std::is_base_of_v<T, S>) {
         // Removed static assert; it complicates template "collect_items"
@@ -85,7 +93,7 @@ auto cast(S *s)
         static_assert(!sizeof(T), "cast is impossible");
         return nullptr;
     }
-}
+};
 
 #endif // INKSCAPE_UTIL_CAST_H
 
