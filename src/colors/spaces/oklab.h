@@ -18,7 +18,9 @@ namespace Inkscape::Colors::Space {
 
 class OkLab : public RGB {
 public:
-    OkLab(): RGB(Type::OKLAB, 3, "OkLab", "OkLab", "color-selector-oklab", true) {}
+    OkLab(): RGB(Type::OKLAB, 3, "OkLab", "OkLab", "color-selector-oklab", true) {
+        _svgNames.emplace_back("oklab");
+    }
     ~OkLab() override = default;
 
 protected:

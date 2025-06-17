@@ -35,6 +35,8 @@
 #include "style.h"
 
 #include "colors/color.h"
+#include "colors/manager.h"
+#include "colors/spaces/base.h"
 #include "colors/document-cms.h"
 
 #include "document.h"
@@ -730,7 +732,6 @@ SPIFontVariationSettings::toString() const {
 template <typename T> static SPStyleEnum const *get_enums() { g_assert_not_reached(); return nullptr; }
 
 template <> SPStyleEnum const *get_enums<SPBlendMode>() { return enum_blend_mode; }
-template <> SPStyleEnum const *get_enums<SPColorInterpolation>() { return enum_color_interpolation; }
 template <> SPStyleEnum const *get_enums<SPColorRendering>() { return enum_color_rendering; }
 template <> SPStyleEnum const *get_enums<SPCSSBaseline>() { return enum_baseline; }
 template <> SPStyleEnum const *get_enums<SPCSSDirection>() { return enum_direction; }
@@ -1591,7 +1592,55 @@ SPIColor::equals(const SPIBase& rhs) const {
     }
 }
 
+// SPIColorInterpolation -------------------------------------------------------------
 
+bool SPIColorInterpolation::canHaveCMS() const
+{
+    return style && style->document;
+}
+
+Colors::DocumentCMS const &SPIColorInterpolation::getCMS() const
+{
+    if (!style || !style->document) {
+        g_error("Can not get Document CMS manager.");
+    }
+    return style->document->getDocumentCMS();
+}
+
+void SPIColorInterpolation::read(gchar const *str)
+{
+    set = (bool)str;
+    if (str) {
+        if (canHaveCMS()) {
+            _color_space = getCMS().findSvgColorSpace(str);
+        } else {
+            _color_space = Colors::Manager::get().findSvgColorSpace(str);
+        }
+    }
+}
+
+const Glib::ustring SPIColorInterpolation::get_value() const
+{
+    return _color_space ? _color_space->getSvgName() : "";
+}
+
+void SPIColorInterpolation::cascade(const SPIBase* const parent)
+{
+    if(auto p = dynamic_cast<const SPIColorInterpolation*>(parent)) {
+        if(!set || inherit) {
+            _color_space = p->_color_space;
+        }
+    }
+}
+
+void SPIColorInterpolation::merge(const SPIBase* const parent)
+{
+    if(auto p = dynamic_cast<const SPIColorInterpolation*>(parent)) {
+        set           = p->set;
+        inherit       = p->inherit;
+        _color_space  = p->_color_space;
+    }
+}
 
 // SPIPaint -------------------------------------------------------------
 
@@ -3374,7 +3423,6 @@ SPIStrokeExtensions::equals(const SPIBase& rhs) const {
 
 // template instantiation
 template class SPIEnum<SPBlendMode>;
-template class SPIEnum<SPColorInterpolation>;
 template class SPIEnum<SPColorRendering>;
 template class SPIEnum<SPCSSBaseline>;
 template class SPIEnum<SPCSSDirection>;

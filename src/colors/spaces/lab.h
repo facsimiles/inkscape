@@ -19,6 +19,7 @@ class Lab : public AnySpace
 {
 public:
     Lab(): AnySpace(Type::LAB, 3, "Lab", "Lab", "color-selector-lab", true) {
+        _svgNames.emplace_back("lab");
         _intent = RenderingIntent::ABSOLUTE_COLORIMETRIC;
         _intent_priority = 10;
     }

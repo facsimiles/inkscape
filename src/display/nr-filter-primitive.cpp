@@ -20,6 +20,8 @@
 #include "object/sp-filter-units.h"   // for SPFilterUnits
 #include "svg/svg-length.h"           // for SVGLength
 
+#include "colors/spaces/base.h"
+
 namespace Inkscape {
 namespace Filters {
 
@@ -171,10 +173,21 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units) cons
 
 void FilterPrimitive::setStyle(SPStyle const *style)
 {
+    // Default filter interpolation is linearRGB, no AUTO beyond this point
+    color_interpolation = SP_CSS_COLOR_INTERPOLATION_LINEARRGB;
     if (style) {
-        color_interpolation = style->color_interpolation_filters.computed;
-    } else {
-        color_interpolation = SP_CSS_COLOR_INTERPOLATION_AUTO;
+        if (auto space = style->color_interpolation_filters.getInterpolationSpace()) {
+            switch (space->getType()) {
+                case Colors::Space::Type::RGB:
+                    color_interpolation = SP_CSS_COLOR_INTERPOLATION_SRGB;
+                    break;
+                case Colors::Space::Type::linearRGB:
+                    color_interpolation = SP_CSS_COLOR_INTERPOLATION_LINEARRGB;
+                    break;
+                default:
+                    std::cerr << "Can't use color interpolation space: '" << space->getName().c_str() << "'\n";
+            }
+        }
     }
 }
 

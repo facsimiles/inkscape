@@ -33,9 +33,6 @@
 
 #include "object/uri.h"
 
-// TODO: Remove include when we figure out how to store Color without the full class
-#include "colors/color.h"
-
 #include "xml/repr.h"
 
 namespace Inkscape {
@@ -43,6 +40,9 @@ class ObjectSet;
 namespace Colors {
 class Color;
 class DocumentCMS;
+namespace Space {
+class AnySpace;
+}
 }
 };
 
@@ -800,6 +800,29 @@ private:
     std::optional<Colors::Color> _color;
 };
 
+class SPIColorInterpolation : public SPIBase
+{
+public:
+    SPIColorInterpolation() = default;
+    ~SPIColorInterpolation() = default;
+    SPIColorInterpolation(const SPIColorInterpolation &rhs) = default;
+
+    void read( gchar const *str ) override;
+    const Glib::ustring get_value() const override;
+    void clear() override {
+        _color_space.reset();
+    }
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
+
+    std::shared_ptr<Colors::Space::AnySpace> const getInterpolationSpace() const { return _color_space; }
+    void setInterpolationSpace(std::shared_ptr<Colors::Space::AnySpace> space) { _color_space = space; }
+
+    bool canHaveCMS() const;
+    Colors::DocumentCMS const &getCMS() const;
+private:
+    std::shared_ptr<Colors::Space::AnySpace> _color_space;
+};
 
 // Normal maybe should be moved out as is done in other classes.
 // This could be replaced by a generic enum class where multiple keywords are allowed and

@@ -137,6 +137,65 @@ TEST(ColorManagerTest, getSpaces)
     ASSERT_EQ(mix.size(), internal.size() + pickers.size());
 }
 
+TEST(ColorsParser, findSvgColorSpace)
+{
+    auto _pass = [](std::string svgName, std::string resultSpaceId)
+    {
+        auto space = Manager::get().findSvgColorSpace(svgName);
+        EXPECT_TRUE(space) << "Svg value '" + svgName + "' parsing failed.";
+        if (space) {
+            EXPECT_EQ(space->getName(), resultSpaceId);
+        }
+    };
+    auto _fail = [](std::string interpolationName)
+    {
+        EXPECT_FALSE(Manager::get().findSvgColorSpace(interpolationName))
+            << "Interpolation value '" + interpolationName + "' should not have parsed, yet it did.";
+    };
+    // SVG 2.0 specification interpolations
+    _pass("sRGB", "RGB");
+    _pass("linearRGB", "linearRGB");
+    // CSS Color Module 4 interpolations
+    _pass("srgb", "RGB");
+    _pass("srgb-linear", "linearRGB");
+    _fail("display-p3");
+    _fail("a98-rgb");
+    _fail("prophoto-rgb");
+    _fail("rec2020");
+    _pass("lab", "Lab");
+    _pass("oklab", "OkLab");
+    _pass("xyz", "XYZ"); // D65
+    _pass("xyz-d50", "XYZ D50");
+    _pass("xyz-d65", "XYZ");
+    // CSS Color Module 4 Polar
+    _pass("hsl", "HSL");
+    _fail("hwb");
+    _pass("lch", "Lch");
+    _pass("oklch", "OkLch");
+    // Extra values for other interpolations not in SVG spec
+    _pass("device-cmyk", "DeviceCMYK");
+    // Things we want to protect against
+    _fail("");
+    _fail("rgb");
+    _fail("cmyk");
+    _fail("icc-color");
+    // Valid css value 'auto' is handled by SPStyle
+    _fail("auto");
+}
+
+
+TEST(ColorsParser, printSvgColorSpace)
+{
+    auto _test = [](std::shared_ptr<Space::AnySpace> const &space, std::string svgName)
+    {
+        EXPECT_EQ(space->getSvgName(), svgName);
+    };
+    _test(Manager::get().find(Space::Type::RGB), "sRGB");
+    _test(Manager::get().find(Space::Type::linearRGB), "linearRGB");
+    _test(Manager::get().find(Space::Type::XYZ), "xyz-d65");
+    _test(Manager::get().find(Space::Type::XYZ50), "xyz-d50");
+    _test(Manager::get().find(Space::Type::CMYK), "device-cmyk");
+}
 
 } // namespace
 

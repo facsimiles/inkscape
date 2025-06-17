@@ -24,9 +24,26 @@
 
 namespace Inkscape::Colors::Space {
 
-AnySpace::AnySpace(Type type, int components, std::string name, std::string shortName, std::string icon, bool spaceIsUnbounded):
-    _name(std::move(name)), _shortName(std::move(shortName)), _icon(std::move(icon)), _type(type), _components(components), _spaceIsUnbounded(spaceIsUnbounded) {
-}
+/**
+ * Construct a Color Space with all required data for display and use.
+ *
+ * @arg type       - The type of space, this will be the same as the end class
+ * @arg components - The number of component channels in this color space
+ * @arg name       - The common name for this color space
+ * @arg shortName  - A shorter name used in drop down selections and other tight spaces
+ * @arg icon       - An icon name which is used in many UI locations as a short hand for this space.
+ * @arg spaceIsUnbounded - If true, this color space can have values larger and smaller than 0.0 to 1.0
+ *
+ * Further information about the components themselves are contained within components.cpp
+ */
+AnySpace::AnySpace(Type type, int components, std::string name, std::string shortName, std::string icon, bool spaceIsUnbounded)
+    : _type(type)
+    , _components(components)
+    , _name(std::move(name))
+    , _shortName(std::move(shortName))
+    , _icon(std::move(icon))
+    , _spaceIsUnbounded(spaceIsUnbounded)
+{}
 
 /**
  * Return true if the given data would be valid for this color space.

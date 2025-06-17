@@ -78,6 +78,7 @@ public:
     std::vector<std::shared_ptr<Space::CMS>> getSpaces() const;
     std::vector<ColorProfile *> getObjects() const;
 
+    std::shared_ptr<Space::AnySpace> findSvgColorSpace(std::string const &input) const;
 private:
     void refreshResources();
 

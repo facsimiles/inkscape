@@ -18,7 +18,9 @@ namespace Inkscape::Colors::Space {
 class OkLch : public RGB
 {
 public:
-    OkLch(): RGB(Type::OKLCH, 3, "OkLch", "OkLch", "color-selector-oklch") {}
+    OkLch(): RGB(Type::OKLCH, 3, "OkLch", "OkLch", "color-selector-oklch") {
+        _svgNames.emplace_back("oklch");
+    }
     ~OkLch() override = default;
 
 protected:

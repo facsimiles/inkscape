@@ -10,6 +10,7 @@
 #ifndef SEEN_COLORS_MANAGER_H
 #define SEEN_COLORS_MANAGER_H
 
+#include <cstring>
 #include <map>
 #include <memory>
 #include <optional>
@@ -44,6 +45,7 @@ public:
 
     std::shared_ptr<Space::AnySpace> find(Space::Type type) const;
     std::shared_ptr<Space::AnySpace> find(std::string const &name) const;
+    std::shared_ptr<Space::AnySpace> findSvgColorSpace(std::string const &input) const;
 
 protected:
     Manager();
@@ -54,6 +56,13 @@ protected:
 
 private:
     std::vector<std::shared_ptr<Space::AnySpace>> _spaces;
+
+    struct cmpCaseInsensitive {
+        bool operator()(const std::string& a, const std::string& b) const {
+            return strcasecmp(a.c_str(), b.c_str()) < 0;
+        }
+    };
+    std::map<std::string, std::shared_ptr<Space::AnySpace>, cmpCaseInsensitive> _svg_names_lookup;
 };
 
 } // namespace Inkscape::Colors

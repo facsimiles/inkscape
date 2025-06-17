@@ -18,6 +18,7 @@
 
 #include <glibmm/ustring.h>
 
+#include "display/cairo-utils.h" // Interpolation enums
 #include "display/nr-filter-types.h"
 #include "svg/svg-length.h"
 #include "style-enums.h"

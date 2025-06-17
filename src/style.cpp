@@ -336,8 +336,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
     // Color properties
     color(                  ),  // SPIColor
-    color_interpolation(    SP_CSS_COLOR_INTERPOLATION_SRGB),
-    color_interpolation_filters(SP_CSS_COLOR_INTERPOLATION_LINEARRGB),
+    color_interpolation(    ),
+    color_interpolation_filters(),
 
     // Solid color properties
     solid_color(            ), // SPIColor
@@ -458,7 +458,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     marker_ptrs[SP_MARKER_LOC_START] = &marker_start;
     marker_ptrs[SP_MARKER_LOC_MID]   = &marker_mid;
     marker_ptrs[SP_MARKER_LOC_END]   = &marker_end;
-
 
     // This might be too resource hungary... but for now it possible to loop over properties
     _properties = _prop_helper.get_vector(this);
@@ -693,13 +692,6 @@ SPStyle::readIfUnset(SPAttr id, gchar const *val, SPStyleSrc const &source ) {
         case SPAttr::FILTER:
             if( !filter.inherit ) filter.readIfUnset( val, source );
             return;
-        case SPAttr::COLOR_INTERPOLATION:
-            // We read it but issue warning
-            color_interpolation.readIfUnset( val, source );
-            if( color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
-                g_warning("Inkscape currently only supports color-interpolation = sRGB");
-            }
-            return;
     }
 
     auto p = _prop_helper.get(this, id);
@@ -723,9 +715,6 @@ bool SPStyle::isSet(SPAttr id)
             if (!filter.inherit)
                 set = filter.set;
             return set;
-        case SPAttr::COLOR_INTERPOLATION:
-            // We read it but issue warning
-            return color_interpolation.set;
     }
 
     auto p = _prop_helper.get(this, id);

@@ -26,6 +26,13 @@ namespace Colors {
 class Color;
 }
 
+// DELETE ME when the display code is updated for interpolation values
+enum SPColorInterpolation : std::uint_least8_t {
+    SP_CSS_COLOR_INTERPOLATION_AUTO,
+    SP_CSS_COLOR_INTERPOLATION_SRGB,
+    SP_CSS_COLOR_INTERPOLATION_LINEARRGB
+};
+
 /** Class to hold image data for raster images.
  * Allows easy interoperation with GdkPixbuf and Cairo. */
 class Pixbuf {

@@ -21,7 +21,9 @@ namespace Inkscape::Colors::Space {
 class DeviceCMYK : public RGB
 {
 public:
-    DeviceCMYK(): RGB(Type::CMYK, 4, "DeviceCMYK", "CMYK", "color-selector-cmyk") {}
+    DeviceCMYK(): RGB(Type::CMYK, 4, "DeviceCMYK", "CMYK", "color-selector-cmyk") {
+        _svgNames.emplace_back("device-cmyk");
+    }
     ~DeviceCMYK() override = default;
 
     void spaceToProfile(std::vector<double> &output) const override;

@@ -11,6 +11,7 @@
 
 #include "colors/cms/profile.h"
 #include "colors/color.h"
+#include "colors/manager.h"
 #include "colors/parser.h"
 #include "colors/spaces/cms.h"
 
@@ -38,6 +39,15 @@ public:
         return outOfGamut(values, space);
     }
 };
+
+TEST(ColorsSpacesCms, getNames)
+{
+    auto cmyk_profile = Inkscape::Colors::CMS::Profile::create_from_uri(cmyk_icc);
+    auto cmyk = std::make_shared<CMS>(cmyk_profile);
+    ASSERT_EQ(cmyk->getName(), "Artifex-CMYK-SWOP-Profile");
+    ASSERT_EQ(cmyk->getShortName(), "Artifex-CMYK-SWOP-Profile");
+    ASSERT_EQ(cmyk->getSvgName(), "Artifex-CMYK-SWOP-Profile");
+}
 
 TEST(ColorsSpacesCms, parseColor)
 {

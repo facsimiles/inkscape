@@ -377,6 +377,19 @@ std::vector<std::shared_ptr<Space::CMS>> DocumentCMS::getSpaces() const
 }
 
 /**
+ * Find the color space indicated by a stand alone svg attribute, e.g. interpolation.
+ *
+ * Will return a CMS color space if the input matches the name for in use icc profiles.
+ */
+std::shared_ptr<Space::AnySpace> DocumentCMS::findSvgColorSpace(std::string const &input) const
+{
+    if (auto space = getSpace(input)) {
+        return space;
+    }
+    return Manager::get().findSvgColorSpace(input);
+}
+
+/**
  * Generate a list of SP-objects linked in this tracker
  */
 std::vector<ColorProfile *> DocumentCMS::getObjects() const

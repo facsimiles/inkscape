@@ -224,9 +224,9 @@ public:
     /** color */
     T<SPAttr::COLOR, SPIColor> color;
     /** color-interpolation */
-    T<SPAttr::COLOR_INTERPOLATION, SPIEnum<SPColorInterpolation>> color_interpolation;
+    T<SPAttr::COLOR_INTERPOLATION, SPIColorInterpolation> color_interpolation;
     /** color-interpolation-filters */
-    T<SPAttr::COLOR_INTERPOLATION_FILTERS, SPIEnum<SPColorInterpolation>> color_interpolation_filters;
+    T<SPAttr::COLOR_INTERPOLATION_FILTERS, SPIColorInterpolation> color_interpolation_filters;
 
     /** solid-color */
     T<SPAttr::SOLID_COLOR, SPIColor> solid_color;

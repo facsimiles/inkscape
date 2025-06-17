@@ -32,11 +32,15 @@ static std::map<cmsUInt32Number, Space::Type> _lcmssig_to_space = {
 };
 
 CMS::CMS(std::shared_ptr<Inkscape::Colors::CMS::Profile> profile, std::string name)
-    : AnySpace(Type::CMS, 0, name.empty() ? profile->getName(true) : name, name.empty() ? profile->getName(true) : name, "color-selector-cms")
+    : AnySpace(Type::CMS, 0,
+            name.empty() ? profile->getName(true) : name,
+            name.empty() ? profile->getName(true) : name,
+            "color-selector-cms")
     , _profile_size(profile->getSize())
     , _profile_type(_lcmssig_to_space[profile->getColorSpace()])
     , _profile(profile)
 {
+    _svgNames.emplace_back(getName());
     _intent_priority = 100;
 }
 
@@ -44,7 +48,7 @@ CMS::CMS(std::shared_ptr<Inkscape::Colors::CMS::Profile> profile, std::string na
  * Naked CMS space for testing and data retention where the profile is unavailable.
  */
 CMS::CMS(std::string profile_name, unsigned profile_size, Space::Type profile_type)
-    : AnySpace(Type::CMS, 0, profile_name, profile_name, "color-selector-cms")
+    : AnySpace(Type::CMS, 0, profile_name, profile_name, {profile_name}, "color-selector-cms")
     , _profile_size(profile_size)
     , _profile_type(profile_type)
     , _profile(nullptr)

@@ -19,6 +19,8 @@ class LinearRGB : public AnySpace
 {
 public:
     LinearRGB(): AnySpace(Type::linearRGB, 3, "linearRGB", "linearRGB", "color-selector-linear-rgb") {
+        _svgNames.emplace_back("linearRGB");
+        _svgNames.emplace_back("srgb-linear");
         _intent = RenderingIntent::RELATIVE_COLORIMETRIC;
         _intent_priority = 10;
     }

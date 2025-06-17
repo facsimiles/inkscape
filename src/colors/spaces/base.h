@@ -57,14 +57,18 @@ public:
     bool operator!=(Type type) const { return type != _type; }
 
     Type getType() const { return _type; }
-    std::string const& getName() const { return _name; };
-    std::string const& getShortName() const { return _shortName; };
+    std::string const& getName() const { return _name; }
+    std::string const& getShortName() const { return _shortName; }
+    std::string getSvgName() const { return _svgNames.empty() ? "" : _svgNames[0]; }
+    std::vector<std::string> const& getSvgNames() const { return _svgNames; }
     std::string const& getIcon() const { return _icon; }
     virtual Type getComponentType() const { return getType(); }
     virtual unsigned int getComponentCount() const { return _components; }
     virtual std::shared_ptr<Colors::CMS::Profile> const getProfile() const = 0;
     RenderingIntent getIntent() const { return _intent; }
-    // Some color spaces (like XYZ or LAB) to not put restrictions on valid ranges of values;
+    // Specifies if this color space can be used for color interpolation in the render engine.
+    virtual bool canInterpolateColors() const { return true; }
+    // Some color spaces (like XYZ or LAB) do not put restrictions on valid ranges of values;
     // others (like sRGB) do, which means that channels outside those bounds represent colors out of gamut.
     bool isUnbounded() const { return _spaceIsUnbounded; }
     // Check if 'color' is out of gamut in '*this' color space;
@@ -101,14 +105,15 @@ protected:
 
     RenderingIntent _intent = RenderingIntent::UNKNOWN;
     int _intent_priority = 0;
+    std::vector<std::string> _svgNames;
 private:
     mutable std::map<std::string, std::shared_ptr<Colors::CMS::TransformColor>> _transforms;
     mutable std::map<std::string, std::shared_ptr<Colors::CMS::GamutChecker>> _gamut_checkers;
+    Type _type;
+    int _components;
     std::string _name;
     std::string _shortName;
     std::string _icon;
-    Type _type;
-    int _components;
     bool _spaceIsUnbounded;
 };
 

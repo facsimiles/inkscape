@@ -50,7 +50,7 @@ std::string print_values(const std::vector<double> &v)
     return oo.str();
 }
 
-::testing::AssertionResult IsNear(double a, double b, double epsilon = 0.01)
+inline static ::testing::AssertionResult IsNear(double a, double b, double epsilon = 0.01)
 {
     if (std::fabs(a - b) < epsilon) {
         return ::testing::AssertionSuccess();
@@ -61,7 +61,7 @@ std::string print_values(const std::vector<double> &v)
 /**
  * Test each value in a values list is within a certain distance from each other.
  */
-::testing::AssertionResult VectorIsNear(std::vector<double> const &A, std::vector<double> const &B, double epsilon)
+inline static ::testing::AssertionResult VectorIsNear(std::vector<double> const &A, std::vector<double> const &B, double epsilon)
 {
     bool is_same = A.size() == B.size();
     for (size_t i = 0; is_same && i < A.size(); i++) {

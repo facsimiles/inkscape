@@ -1152,8 +1152,6 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
             _setAutocompletion(entry, enum_color_rendering);
         } else if (name == "clip-rule") {
             _setAutocompletion(entry, enum_clip_rule);
-        } else if (name == "color-interpolation") {
-            _setAutocompletion(entry, enum_color_interpolation);
         }
 
         _setEditingEntry(entry, ";");

@@ -18,7 +18,9 @@ namespace Inkscape::Colors::Space {
 class HSL : public RGB
 {
 public:
-    HSL(): RGB(Type::HSL, 3, "HSL", "HSL", "color-selector-hsx") {}
+    HSL(): RGB(Type::HSL, 3, "HSL", "HSL", "color-selector-hsx") {
+        _svgNames.emplace_back("hsl");
+    }
     ~HSL() override = default;
 
 protected:

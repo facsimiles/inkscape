@@ -280,6 +280,18 @@ TEST_F(ColorDocumentCMSObjsTest, applyConversion)
     EXPECT_EQ(color.converted(acm)->toString(), "#cf2c2d icc-color(cmyk-acm, 0, 1, 1, 0)");
 }
 
+TEST_F(ColorDocumentCMSObjsTest, findSvgAttribute)
+{
+    auto &tr = doc->getDocumentCMS();
+    // ICC color profile spaces
+    EXPECT_TRUE(tr.findSvgColorSpace("grb"));
+    EXPECT_TRUE(tr.findSvgColorSpace("cmyk-rcm"));
+    EXPECT_FALSE(tr.findSvgColorSpace("cmyk-nope"));
+    // Non ICC profile color spaces
+    EXPECT_TRUE(tr.findSvgColorSpace("sRGB"));
+    EXPECT_TRUE(tr.findSvgColorSpace("linearRGB"));
+}
+
 class ColorDocumentCMSDefsTest : public ColorDocumentCMSObjsTest
 {
     std::string const &getDocFilename() const override

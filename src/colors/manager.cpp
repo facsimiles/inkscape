@@ -16,7 +16,6 @@
 #include "colors/parser.h"
 
 // Each Internal space should be imported here.
-#include "spaces/cms.h"
 #include "spaces/cmyk.h"
 #include "spaces/gray.h"
 #include "spaces/hsl.h"
@@ -63,6 +62,11 @@ Manager::Manager()
 
 /**
  * Add the given space and assume ownership over it.
+ *
+ * @arg space - A pointer to the new Color Space object.
+ * @arg svg_matches - A list of matching strings for looking up this space as an attribute, first item is used in output.
+ *
+ * @returns The shared ptr which is now a global that can be used everywhere.
  */
 std::shared_ptr<Space::AnySpace> Manager::addSpace(Space::AnySpace *space)
 {
@@ -70,6 +74,12 @@ std::shared_ptr<Space::AnySpace> Manager::addSpace(Space::AnySpace *space)
         throw ColorError("Can not add the same color space twice.");
     }
     _spaces.emplace_back(space);
+    for (auto &match : space->getSvgNames()) {
+        if (_svg_names_lookup.find(match) != _svg_names_lookup.end()) {
+            throw ColorError("Can not add the same svg attribute name twice.");
+        }
+        _svg_names_lookup[match] = _spaces.back();
+    }
     return _spaces.back();
 }
 
@@ -78,6 +88,10 @@ std::shared_ptr<Space::AnySpace> Manager::addSpace(Space::AnySpace *space)
  */
 bool Manager::removeSpace(std::shared_ptr<Space::AnySpace> space)
 {
+    std::erase_if(_svg_names_lookup, [space](const auto& item)
+    {
+        return item.second == space;
+    });
     return std::erase(_spaces, space);
 }
 
@@ -110,6 +124,23 @@ std::shared_ptr<Space::AnySpace> Manager::find(std::string const &name) const
     auto it = std::find_if(_spaces.begin(), _spaces.end(), [name](auto &v) { return v->getName() == name; });
     return it != _spaces.end() ? *it : nullptr;
 }
+
+/**
+ * Find a global space matching the svg color space name used in attributes that
+ * specify just the color space without a color, we support more than just
+ * the standard set for SVG interpolation values for this field.
+ *
+ * @arg input - The color space string to find/match, case insensitive
+ */
+std::shared_ptr<Space::AnySpace> Manager::findSvgColorSpace(std::string const &input) const
+{
+    auto it = _svg_names_lookup.find(input);
+    if (it != _svg_names_lookup.end()) {
+        return it->second;
+    }
+    return {};
+}
+
 } // namespace Inkscape::Colors
 
 /*

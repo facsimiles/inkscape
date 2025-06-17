@@ -18,7 +18,9 @@ namespace Inkscape::Colors::Space {
 class Lch : public Lab
 {
 public:
-    Lch(): Lab(Type::LCH, 3, "Lch", "Lch", "color-selector-lch", true) {}
+    Lch(): Lab(Type::LCH, 3, "Lch", "Lch", "color-selector-lch", true) {
+        _svgNames.emplace_back("lch");
+    }
     ~Lch() override = default;
 
 protected:

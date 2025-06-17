@@ -301,12 +301,6 @@ enum SPEnableBackground : std::uint_least8_t {
     SP_CSS_BACKGROUND_NEW
 };
 
-enum SPColorInterpolation : std::uint_least8_t {
-    SP_CSS_COLOR_INTERPOLATION_AUTO,
-    SP_CSS_COLOR_INTERPOLATION_SRGB,
-    SP_CSS_COLOR_INTERPOLATION_LINEARRGB
-};
-
 enum SPColorRendering : std::uint_least8_t {
     SP_CSS_COLOR_RENDERING_AUTO,
     SP_CSS_COLOR_RENDERING_OPTIMIZESPEED,
@@ -713,13 +707,6 @@ static SPStyleEnum const enum_enable_background[] = {
 static SPStyleEnum const enum_clip_rule[] = {
     {"nonzero", SP_WIND_RULE_NONZERO},
     {"evenodd", SP_WIND_RULE_EVENODD},
-    {nullptr, -1}
-};
-
-static SPStyleEnum const enum_color_interpolation[] = {
-    {"auto", SP_CSS_COLOR_INTERPOLATION_AUTO},
-    {"sRGB", SP_CSS_COLOR_INTERPOLATION_SRGB},
-    {"linearRGB", SP_CSS_COLOR_INTERPOLATION_LINEARRGB},
     {nullptr, -1}
 };
 

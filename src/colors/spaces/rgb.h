@@ -18,7 +18,9 @@ namespace Inkscape::Colors::Space {
 class RGB : public AnySpace
 {
 public:
-    RGB(): AnySpace(Type::RGB, 3, "RGB", "RGB", "color-selector-rgb") {}
+    RGB(): AnySpace(Type::RGB, 3, "RGB", "RGB", "color-selector-rgb") {
+        _svgNames.emplace_back("sRGB");
+    }
     ~RGB() override = default;
 
     std::shared_ptr<Colors::CMS::Profile> const getProfile() const override;
