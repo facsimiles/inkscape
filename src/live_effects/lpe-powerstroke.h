@@ -47,8 +47,7 @@ public:
     void doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void applyStyle(SPLPEItem *lpeitem);
-    // methods called by path-manipulator upon edits
-    void adjustForNewPath() override;
+    void adjustForNewPath(bool removed = false) override;
 
     PowerStrokePointArrayParam offset_points;
     BoolParam not_jump;

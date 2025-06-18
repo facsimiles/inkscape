@@ -14,6 +14,7 @@
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
 #include <2geom/point.h>
+#include <glibmm/i18n.h>
 
 #include <utility>
 #include <vector>
@@ -25,7 +26,6 @@
 #include "helper/geom.h"
 
 #include "live_effects/lpeobject.h"
-#include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
 
@@ -1496,7 +1496,13 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             ++i;
         }
     }
+    auto path = cast<SPPath>(_path);
     if (pathv.empty()) {
+        if (alert_LPE && path) {
+            for (auto lpe : path->getPathEffects()) { // first notify erased elements to on writeXML update remaining
+                lpe->adjustForNewPath(true);
+            }
+        }
         return;
     }
 
@@ -1504,16 +1510,9 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         return;
     }
     _spcurve = SPCurve(pathv);
-    if (alert_LPE) {
-        /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
-        auto path = cast<SPPath>(_path);
-        if (path && path->hasPathEffect()) {
-            Inkscape::LivePathEffect::Effect *this_effect = 
-                path->getFirstPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
-            LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>(this_effect);
-            if (lpe_pwr) {
-               lpe_pwr->adjustForNewPath();
-            }
+    if (alert_LPE && path) {
+        for (auto lpe : path->getPathEffects()) { // notify created elements outside multipath manipulator
+            lpe->adjustForNewPath(false);
         }
     }
     if (_live_outline) {
