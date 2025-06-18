@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <mutex>
-#include <boost/filesystem.hpp> // Using boost::filesystem instead of std::filesystem due to broken C++17 on MacOS.
 #include "framecheck.h"
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace Inkscape::FrameCheck {
 

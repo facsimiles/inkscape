@@ -15,6 +15,7 @@
 #include "io/resource.h"
 
 #include <algorithm>
+#include <filesystem>
 #include <cairo-ft.h>
 #include <cairomm/surface.h>
 #include <glibmm/ustring.h>
@@ -31,14 +32,7 @@
 #include <unordered_map>
 #include <vector>
 
-#ifdef G_OS_WIN32
-#include <filesystem>
 namespace filesystem = std::filesystem;
-#else
-// Waiting for compiler on MacOS to catch up to C++x17
-#include <boost/filesystem.hpp>
-namespace filesystem = boost::filesystem;
-#endif // G_OS_WIN32
 
 namespace Inkscape {
 

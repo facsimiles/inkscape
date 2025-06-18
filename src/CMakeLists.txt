@@ -416,8 +416,6 @@ else()
     set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "@loader_path/..")
 endif()
 
-target_link_libraries(inkscape_base PUBLIC Boost::filesystem)
-
 # Link the inkscape_base library against all external dependencies
 target_link_libraries(inkscape_base
     PRIVATE

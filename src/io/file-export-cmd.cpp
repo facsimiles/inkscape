@@ -14,6 +14,7 @@
 
 #include "file-export-cmd.h"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <boost/algorithm/string.hpp>
@@ -45,16 +46,7 @@
 #include "util/parse-int-range.h"
 #include "io/sys.h"
 
-// Temporary dependency : once all compilers we want to support have support for
-// C++17 std::filesystem (with #include <filesystem> ) then we drop this dep
-// (Dev meeting, 2020-09-25)
-#ifdef G_OS_WIN32
-#include <filesystem>
 namespace filesystem = std::filesystem;
-#else
-#include <boost/filesystem.hpp>
-namespace filesystem = boost::filesystem;
-#endif
 
 InkFileExportCmd::InkFileExportCmd()
     : export_overwrite(false)

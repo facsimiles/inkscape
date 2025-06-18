@@ -367,15 +367,15 @@ endif()
 
 # stacktrace print on crash
 if(WIN32)
-    find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem stacktrace_windbg)
+    find_package(Boost 1.19.0 REQUIRED COMPONENTS stacktrace_windbg)
     list(APPEND INKSCAPE_LIBS "-lole32")
     list(APPEND INKSCAPE_LIBS "-ldbgeng")
     add_definitions("-DBOOST_STACKTRACE_USE_WINDBG")
 elseif(APPLE)
-    find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem stacktrace_basic)
+    find_package(Boost 1.19.0 REQUIRED COMPONENTS stacktrace_basic)
     list(APPEND INKSCAPE_CXX_FLAGS "-D_GNU_SOURCE")
 else()
-    find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem)
+    find_package(Boost 1.19.0 REQUIRED)
     # The package stacktrace_backtrace may not be available on all distros.
     find_package(Boost 1.19.0 COMPONENTS stacktrace_backtrace)
     if (BOOST_FOUND)

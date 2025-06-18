@@ -2,6 +2,7 @@
 
 #include "dialog-manager.h"
 
+#include <filesystem>
 #include <limits>
 #include <glibmm/keyfile.h>
 #include <glibmm/fileutils.h>
@@ -10,14 +11,7 @@
 #include <gdkmm/monitor.h>
 #include <gtkmm/window.h>
 
-#ifdef G_OS_WIN32
-#include <filesystem>
 namespace filesystem = std::filesystem;
-#else
-// Waiting for compiler on MacOS to catch up to C++x17
-#include <boost/filesystem.hpp>
-namespace filesystem = boost::filesystem;
-#endif // G_OS_WIN32
 
 #include "io/resource.h"
 #include "inkscape-application.h"
