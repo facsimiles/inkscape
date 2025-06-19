@@ -49,6 +49,7 @@ public:
     void show_welcome();
 
     static int get_start_mode();
+    enum { NOTHING, SPLASH_ONLY, WELCOME_SCREEN };
 protected:
     void on_response(int response_id) override;
 
