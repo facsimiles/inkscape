@@ -131,16 +131,11 @@ inkscape:macos:
     # restricted to that group. ("dehesselle" namespace has its own runner)
     - if: $CI_PROJECT_NAMESPACE != "inkscape" && $CI_PROJECT_NAMESPACE != "dehesselle"
       when: never
-    - if: $ARCHITECTURE == "x86_64"
-      variables:
-        MACOSX_DEPLOYMENT_TARGET: "10.13"
-    - if: $ARCHITECTURE == "arm64"
-      variables:
-        SDKROOT: /opt/sdks/MacOSX11.3.sdk
+    - *run_otherwise
   cache:
-    - key: $CI_JOB_NAME_SLUG-$CI_COMMIT_REF_SLUG
+    - key: ccache-$CI_JOB_NAME_SLUG-$CI_COMMIT_REF_SLUG
       fallback_keys:
-        - $CI_JOB_NAME_SLUG-master
+        - ccache-$CI_JOB_NAME_SLUG-master
       paths:
         - ccache
   tags:
@@ -148,24 +143,46 @@ inkscape:macos:
     - ${ARCHITECTURE}
   variables:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
-    CCACHE_MAXSIZE: "300Mi"
-    INK_BUILD: $CI_PIPELINE_IID
-    WRK_DIR: /Users/Shared/work
+    CCACHE_MAXSIZE: "800Mi"
     # ICM = inkscape ci macos
     # https://gitlab.com/inkscape/infra/inkscape-ci-macos
-    ICM_VERSION: 1.3
-  before_script:
-    - |
-      git clone https://gitlab.com/inkscape/infra/inkscape-ci-macos icm
-      git -C icm checkout v$ICM_VERSION
-      git -C icm submodule update --init --recursive
-    # persistent runner only: for more robustness in case a previous job failed
-    # - icm/jhb/usr/bin/archive uninstall_dmg
+    ICM_REPO_REF: 2a5ec82fc1f59b8ad29c4cecc8ff1d9f34aa41c2
+    ICM_REPO_URL: https://gitlab.com/inkscape/infra/inkscape-ci-macos.git
+    # build number
+    INK_BUILD: $CI_PIPELINE_IID
+    # package registry to upload dependencies
+    PACKAGE_REGISTRY_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic
+    PACKAGE_URL_PREFIX: ${PACKAGE_REGISTRY_URL}/icm/${ICM_REPO_REF}
+    # directory and SDK settings for ICM
+    REP_DIR: $CI_PROJECT_DIR
+    SDKROOT: /opt/sdks/MacOSX11.3.sdk
+    WRK_DIR: /Users/Shared/work
   script:
+    # Clone the repo containing all the build scripts.
+    - |
+      git clone $ICM_REPO_URL icm
+      git -C icm checkout $ICM_REPO_REF
+      git -C icm submodule update --init --recursive
+    # Build the dependencies and then Inkscape. Dependencies are uploaded to the
+    # package registry so they don't have to be rebuilt every time if there
+    # haven't been any changes.
+    - |
+      VER_DIR=$(icm/jhb/usr/bin/config get VER_DIR)
+      PACKAGE_URL=${PACKAGE_URL_PREFIX}/$(basename $VER_DIR)_${ARCHITECTURE}.dmg
+      if ! curl -H "JOB-TOKEN: $CI_JOB_TOKEN" -fLO $PACKAGE_URL; then
+        icm/build_toolset.sh
+        rm $VER_DIR/var/cache/pkg/.skip
+        icm/jhb/usr/bin/jhb run rustup self uninstall -y || true
+        icm/jhb/usr/bin/archive remove_nonessentials
+        icm/jhb/usr/bin/archive create_dmg
+        curl --fail-with-body -H "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file $(basename $PACKAGE_URL) $PACKAGE_URL
+        rm -rf ${VER_DIR:?}
+      fi
     - icm/jhb/usr/bin/archive install_dmg
     - icm/build_inkscape.sh
     - icm/jhb/usr/bin/archive uninstall_dmg
     # Replace the command above with this one to keep the shadow file.
+    # This will be used in the test job.
     #- icm/jhb/usr/bin/archive uninstall_dmg archive
   artifacts:
     expire_in: 1 year
