@@ -55,19 +55,19 @@ const char* SPPath::displayName() const {
 gchar* SPPath::description() const {
     int count = this->nodesInPath();
     char *lpe_desc = g_strdup("");
-    
+
     if (hasPathEffect()) {
         Glib::ustring s;
         PathEffectList effect_list =  this->getEffectList();
-        
+
         for (auto & it : effect_list)
         {
             LivePathEffectObject *lpeobj = it->lpeobject;
-            
+
             if (!lpeobj || !lpeobj->get_lpe()) {
                 break;
             }
-            
+
             if (s.empty()) {
                 s = lpeobj->get_lpe()->getName();
             } else {
@@ -91,7 +91,7 @@ void SPPath::convert_to_guides() const {
 
     Geom::Affine const i2dt(this->i2dt_affine());
     Geom::PathVector const & pv = this->_curve->get_pathvector();
-    
+
     for(const auto & pit : pv) {
         for(Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit) {
             // only add curves for straight line segments
@@ -177,7 +177,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
         // I guess that didn't work, now we have nothing useful to write ("")
         if (d == nullptr) {
-            this->setKeyValue( sp_attribute_lookup("d"), "");
+            this->set( sp_attribute_lookup("d"), "");
         }
     }
 }
@@ -290,8 +290,8 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     }
     if (hasPathEffectRecursive() && pathEffectsEnabled()) {
         if (!_curve_before_lpe) {
-            // we are inside a LPE group creating a new element 
-            // and the original-d curve is not defined, 
+            // we are inside a LPE group creating a new element
+            // and the original-d curve is not defined,
             // This fix a issue with calligrapic tool that make a transform just when draw
             setCurveBeforeLPE(_curve.get());
         }

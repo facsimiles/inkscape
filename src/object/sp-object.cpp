@@ -506,7 +506,7 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
     if (propagate_descendants) {
         this->_sendDeleteSignalRecursive();
     }
-    
+
     Inkscape::XML::Node *repr = getRepr();
     if (repr && repr->parent()) {
         sp_repr_unparent(repr);
@@ -794,7 +794,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     if(object->cloned && (repr->attribute("id")) ) // The cases where this happens are when the "original" has no id. This happens
                                                    // if it is a SPString (a TextNode, e.g. in a <title>), or when importing
-                                                   // stuff externally modified to have no id. 
+                                                   // stuff externally modified to have no id.
         object->clone_original = document->getObjectById(repr->attribute("id"));
 
     for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != nullptr; rchild = rchild->next()) {
@@ -1114,16 +1114,11 @@ void SPObject::set(SPAttr key, gchar const* value) {
 #endif
 }
 
-void SPObject::setKeyValue(SPAttr key, gchar const *value)
-{
-    this->set(key, value);
-}
-
 void SPObject::readAttr(SPAttr keyid)
 {
     if (keyid == SPAttr::XLINK_HREF) {
         auto value = Inkscape::getHrefAttribute(*getRepr()).second;
-        setKeyValue(keyid, value);
+        set(keyid, value);
         return;
     }
 
@@ -1134,7 +1129,7 @@ void SPObject::readAttr(SPAttr keyid)
 
     char const *value = getRepr()->attribute(key);
 
-    setKeyValue(keyid, value);
+    set(keyid, value);
 }
 
 void SPObject::readAttr(gchar const *key)
@@ -1149,7 +1144,7 @@ void SPObject::readAttr(gchar const *key)
         /* Retrieve the 'key' attribute from the object's XML representation */
         gchar const *value = getRepr()->attribute(key);
 
-        setKeyValue(keyid, value);
+        set(keyid, value);
     }
 }
 
@@ -1269,7 +1264,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
 * Indicates that another object supercedes this one.
 * Used by duple and stamp to keep references of LPE
 */
-void 
+void
 SPObject::setTmpSuccessor(SPObject *tmpsuccessor) {
     assert(tmpsuccessor != NULL);
     assert(_tmpsuccessor == NULL);
@@ -1299,7 +1294,7 @@ SPObject::setTmpSuccessor(SPObject *tmpsuccessor) {
 /**
 * Fix temporary successors in duple stamp.
 */
-void 
+void
 SPObject::fixTmpSuccessors() {
     for (auto &obj : children) {
         obj.fixTmpSuccessors();
@@ -1315,7 +1310,7 @@ SPObject::fixTmpSuccessors() {
     }
 }
 
-void 
+void
 SPObject::unsetTmpSuccessor() {
     for (auto &object : children) {
         object.unsetTmpSuccessor();
@@ -1688,8 +1683,8 @@ char * SPObject::getTitleOrDesc(gchar const *svg_tagname) const
     char *result = nullptr;
     SPObject *elem = findFirstChild(svg_tagname);
     if ( elem ) {
-        //This string copy could be avoided by changing 
-        //the return type of SPObject::getTitleOrDesc 
+        //This string copy could be avoided by changing
+        //the return type of SPObject::getTitleOrDesc
         //to std::unique_ptr<Glib::ustring>
         result = g_strdup(elem->textualContent().c_str());
     }
