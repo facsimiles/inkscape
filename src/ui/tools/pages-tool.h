@@ -71,6 +71,7 @@ private:
     void marginKnotFinished(SPKnot *knot, guint state);
 
     void updateOfsetKnot();
+    bool offsetKnotMoved(SPKnot *knot, Geom::Point *point, guint state);
     void offsetKnotFinished(SPKnot *knot, guint state);
 
     void grabPage(SPPage *target);

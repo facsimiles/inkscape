@@ -83,6 +83,7 @@ PagesTool::PagesTool(SPDesktop *desktop)
     offset_knot->setAnchor(SP_ANCHOR_CENTER);
     offset_knot->updateCtrl();
     offset_knot->hide();
+    offset_knot->request_signal.connect(sigc::mem_fun(*this, &PagesTool::offsetKnotMoved));
     offset_knot->ungrabbed_signal.connect(sigc::mem_fun(*this, &PagesTool::offsetKnotFinished));
     offset_knot->setCursor(SP_KNOT_STATE_DRAGGING , get_cursor(widget, "node-dragging.svg"));
     offset_knot->setCursor(SP_KNOT_STATE_MOUSEOVER, get_cursor(widget, "node-mouseover.svg"  ));
@@ -214,6 +215,16 @@ void PagesTool::resizeKnotMoved(SPKnot *knot, Geom::Point const &ppointer, guint
         on_screen_rect = rect;
         mouse_is_pressed = true;
     }
+}
+
+bool PagesTool::offsetKnotMoved(SPKnot *knot, Geom::Point *point, guint state)
+{
+    if (!Modifiers::Modifier::get(Modifiers::Type::MOVE_SNAPPING)->active(state)) {
+        knot->setPosition(
+            getSnappedResizePoint(*point, state, knot->position()), state);
+        return true;
+    }
+    return false;
 }
 
 void PagesTool::offsetKnotFinished(SPKnot *knot, guint state)
