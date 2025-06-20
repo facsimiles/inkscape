@@ -547,7 +547,7 @@ Glib::ustring BatchExport::getBatchPath() const
     return "";
 }
 
-void BatchExport::setBatchPath(Glib::ustring const &path)
+Glib::ustring BatchExport::setBatchPath(Glib::ustring const &path)
 {
     Glib::ustring new_path = path;
     if (const char *doc_filename = _document->getDocumentFilename()) {
@@ -555,7 +555,7 @@ void BatchExport::setBatchPath(Glib::ustring const &path)
         new_path = Inkscape::optimizePath(path, doc_path, 2);
     }
     prefs->setString("/dialogs/export/batch/path", new_path);
-    _document->getRoot()->setAttribute("inkscape:export-batch-path", new_path);
+    return new_path;
 }
 
 /**
@@ -659,9 +659,8 @@ void BatchExport::onExport()
         g_mkdir_with_parents(path.c_str(), S_IRWXU);
     }
 
-    setBatchPath(path);
+    auto const new_path = setBatchPath(path);
     setBatchName(name);
-    DocumentUndo::done(_document, _("Set Batch Export Options"), INKSCAPE_ICON("export"));
 
     // create vector of exports
     int num_rows = export_list.get_rows();
@@ -798,6 +797,9 @@ void BatchExport::onExport()
             }
         }
     }
+    // Save the export batch path only on successful export
+    _document->getRoot()->setAttribute("inkscape:export-batch-path", new_path);
+    DocumentUndo::done(_document, _("Set Batch Export Options"), INKSCAPE_ICON("export"));
     // Do this right at the end to finish up
     setExporting(false);
 }

@@ -171,7 +171,7 @@ private:
     void loadExportHints(bool rename_file);
 
     Glib::ustring getBatchPath() const;
-    void setBatchPath(Glib::ustring const &path);
+    Glib::ustring setBatchPath(Glib::ustring const &path);
     Glib::ustring getBatchName(bool fallback) const;
     void setBatchName(Glib::ustring const &name);
     void setExporting(bool exporting, Glib::ustring const &text = "", Glib::ustring const &test_batch = "");
