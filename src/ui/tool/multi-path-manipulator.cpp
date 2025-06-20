@@ -753,6 +753,7 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *tool, CanvasEven
                 ret = true;
                 return;
             }
+            break;
         case GDK_KEY_u:
         case GDK_KEY_U:
             if (mod_shift_only(event)) {
@@ -761,6 +762,7 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *tool, CanvasEven
                 ret = true;
                 return;
             }
+            break;
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
