@@ -1,59 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="32"
-   height="32"
-   x="-3.0309267"
-   y="-2.0234916"
-   style="fill:gray;stroke:black"
-   version="1.1"
-   id="svg3"
-   sodipodi:docname="page-resize.svg"
-   inkscape:version="1.5-dev (7a2d775d99, 2025-06-06, custom)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs3" />
-  <sodipodi:namedview
-     id="namedview3"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="36.25"
-     inkscape:cx="16"
-     inkscape:cy="16"
-     inkscape:window-width="2560"
-     inkscape:window-height="1408"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg3" />
-  <style
-     id="style1">@import './cursors.css';</style>
-  <g
-     id="cursor"
-     class="drop-shadow"
-     style="">
-    <path
-       d="M3.5 14.4V15.9L4.4 14.7L6.31454 12.1472L8.35276 16.2236L8.57636 16.6708L9.02357 16.4472L10.6236 15.6472L11.0708 15.4236L10.8472 14.9764L8.80898 10.9H12H13.4256L12.3123 10.0095L4.31232 3.61055L3.5 2.9608V4.00101V14.4Z"
-       fill="black"
-       stroke="white"
-       id="path1" />
-    <path
-       d="M12.5 11C12.5 10.7239 12.7239 10.5 13 10.5H18.7929L23.5 15.2071V25C23.5 25.2761 23.2761 25.5 23 25.5H13C12.7239 25.5 12.5 25.2761 12.5 25V11Z"
-       fill="white"
-       stroke="black"
-       id="path2" />
-    <path
-       d="M19 15H23.5L19 10.5V15Z"
-       fill="black"
-       fill-opacity="0.3"
-       stroke="black"
-       stroke-linejoin="round"
-       id="path3" />
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="32" height="32" x="-3.0309267" y="-2.0234916" style="fill:gray;stroke:black" version="1.1" id="svg3" sodipodi:docname="page-resize.svg">
+  <style id="style1">@import './cursors.css';</style>
+  <g id="cursor" class="drop-shadow" style="">
+    <path d="M3.5 14.4V15.9L4.4 14.7L6.31454 12.1472L8.35276 16.2236L8.57636 16.6708L9.02357 16.4472L10.6236 15.6472L11.0708 15.4236L10.8472 14.9764L8.80898 10.9H12H13.4256L12.3123 10.0095L4.31232 3.61055L3.5 2.9608V4.00101V14.4Z" fill="black" stroke="white" id="path1"/>
+    <path d="M12.5 11C12.5 10.7239 12.7239 10.5 13 10.5H18.7929L23.5 15.2071V25C23.5 25.2761 23.2761 25.5 23 25.5H13C12.7239 25.5 12.5 25.2761 12.5 25V11Z" fill="white" stroke="black" id="path2"/>
+    <path d="M19 15H23.5L19 10.5V15Z" fill="black" fill-opacity="0.3" stroke="black" stroke-linejoin="round" id="path3"/>
   </g>
 </svg>
