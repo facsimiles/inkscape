@@ -626,7 +626,6 @@ void BatchExport::setBatchPath(std::optional<Glib::RefPtr<Gio::File const>> path
         }
     }
     prefs->setString("/dialogs/export/batch/path", path_utf8);
-    _document->getRoot()->setAttribute("inkscape:export-batch-path", path_utf8);
 
     path_chooser.set_label(path_label);
 }
@@ -748,7 +747,6 @@ void BatchExport::onExport()
 
     setBatchPath(path);
     setBatchName(name);
-    DocumentUndo::done(_document, _("Set Batch Export Options"), INKSCAPE_ICON("export"));
 
     // create vector of exports
     int num_rows = export_list.get_rows();
@@ -886,6 +884,9 @@ void BatchExport::onExport()
             }
         }
     }
+    // Save the export batch path only on successful export
+    _document->getRoot()->setAttribute("inkscape:export-batch-path", path.value()->get_parse_name());
+    DocumentUndo::done(_document, _("Set Batch Export Options"), INKSCAPE_ICON("export"));
     // Do this right at the end to finish up
     setExporting(false);
 }
