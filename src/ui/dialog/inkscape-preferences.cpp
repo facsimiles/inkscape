@@ -3963,9 +3963,7 @@ void InkscapePreferences::on_reset_open_recent_clicked()
         if (e->has_application(g_get_prgname())
             || e->has_application("org.inkscape.Inkscape")
             || e->has_application("inkscape")
-#ifdef _WIN32
             || e->has_application("inkscape.exe")
-#endif
            ) {
             manager->remove_item(e->get_uri());
         }

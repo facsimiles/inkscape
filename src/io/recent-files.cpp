@@ -28,7 +28,7 @@ std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_f
     std::vector<std::pair<std::string, Glib::ustring>> output;
 
     auto recent_manager = Gtk::RecentManager::get_default();
-    // all recent files not necessarily inkscape only (std::vector)
+    // All recent files, not necessarily inkscape only (std::vector)
     auto recent_files = recent_manager->get_items();
 
     // Remove non-inkscape files.
@@ -37,18 +37,10 @@ std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_f
         bool valid_file =
             recent_file->has_application(g_get_prgname())         ||
             recent_file->has_application("org.inkscape.Inkscape") ||
-            recent_file->has_application("inkscape")
-#ifdef _WIN32
-            || recent_file->has_application("inkscape.exe")
-#endif
-;
+            recent_file->has_application("inkscape")              ||
+            recent_file->has_application("inkscape.exe");
         return !valid_file;
     });
-  
-    // Truncate to user specified max_files.
-    if (max_files && recent_files.size() > max_files) {
-        recent_files.resize(max_files);
-    }
 
     // Ensure that display uri's are unique. It is possible that an XBEL file
     // has multiple entries for the same file as a path can be written in equivalent
@@ -69,6 +61,11 @@ std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_f
         // a should precede b if a->get_modified() is later than b->get_modified()
         return a->get_modified().compare(b->get_modified()) > 0;
     });
+
+    // Truncate to user-specified max_files.
+    if (max_files && recent_files.size() > max_files) {
+        recent_files.resize(max_files);
+    }
 
     return recent_files;
 }
@@ -165,7 +162,6 @@ std::map<Glib::ustring, std::string> getShortenedPathMap(std::vector<Glib::RefPt
 
     return shortened_path_map;
 }
-
 
 } // namespace Inkscape
 
