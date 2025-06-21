@@ -118,10 +118,6 @@ namespace Inkscape::UI::Dialog {
  */
 void GridArrangeTab::arrange()
 {
-    // check for correct numbers in the row- and col-spinners
-    on_row_spinbutton_changed();
-    on_col_spinbutton_changed();
-
     // set padding to manual values
     double paddingx = XPadding.getValue("px");
     double paddingy = YPadding.getValue("px");
@@ -140,6 +136,13 @@ void GridArrangeTab::arrange()
 
     // require the sorting done before we can calculate row heights etc.
     auto sorted = grid_item_sort(selection);
+
+    if (NoOfRows * NoOfCols < sorted.size()) {
+        NoOfRows = (sorted.size() + NoOfCols - 1) / NoOfCols;
+        _rows_changed_connection.block();
+        NoOfRowsSpinner.set_value(NoOfRows);
+        _rows_changed_connection.unblock();
+    }
 
     // Calculate individual Row and Column sizes if necessary
     auto row_heights = std::vector<double>(NoOfRows, 0.0);
@@ -273,6 +276,9 @@ void GridArrangeTab::on_col_spinbutton_changed()
     if (!selection) return;
 
     int selcount = (int) boost::distance(selection->items());
+    if (selcount == 0) {
+        return;
+    }
 
     double NoOfRows = ceil(selcount / NoOfColsSpinner.get_value());
 
@@ -291,6 +297,9 @@ void GridArrangeTab::on_row_spinbutton_changed()
     if (!selection) return;
 
     int selcount = (int) boost::distance(selection->items());
+    if (selcount == 0) {
+        return;
+    }
 
     double NoOfCols = ceil(selcount / NoOfRowsSpinner.get_value());
 
@@ -500,7 +509,8 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     NoOfRowsSpinner.set_digits(0);
     NoOfRowsSpinner.set_increments(1, 0);
     NoOfRowsSpinner.set_range(1.0, 10000.0);
-    _rows_changed_connection = NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_row_spinbutton_changed));
+    _rows_changed_connection = NoOfRowsSpinner.signal_value_changed().connect(
+        sigc::mem_fun(*this, &GridArrangeTab::on_row_spinbutton_changed));
     NoOfRowsSpinner.set_tooltip_text(_("Number of rows"));
     UI::pack_start(NoOfRowsBox, NoOfRowsSpinner, false, false, MARGIN);
     _col1->add_widget(NoOfRowsBox);
@@ -537,7 +547,8 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     NoOfColsSpinner.set_digits(0);
     NoOfColsSpinner.set_increments(1, 0);
     NoOfColsSpinner.set_range(1.0, 10000.0);
-    _cols_changed_connection = NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_col_spinbutton_changed));
+    _cols_changed_connection = NoOfColsSpinner.signal_value_changed().connect(
+        sigc::mem_fun(*this, &GridArrangeTab::on_col_spinbutton_changed));
     NoOfColsSpinner.set_tooltip_text(_("Number of columns"));
     UI::pack_start(NoOfColsBox, NoOfColsSpinner, false, false, MARGIN);
     _col3->add_widget(NoOfColsBox);
