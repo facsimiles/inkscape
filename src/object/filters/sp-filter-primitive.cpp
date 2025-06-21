@@ -138,15 +138,19 @@ void SPFilterPrimitive::resolve_slots(SlotResolver &resolver)
 void SPFilterPrimitive::build_renderer_common(Inkscape::Filters::FilterPrimitive *primitive) const
 {
     g_assert(primitive);
-    
+
     primitive->set_input(in_slot);
     primitive->set_output(out_slot);
 
-    /* TODO: place here code to handle input images, filter area etc. */
-    // We don't know current viewport or bounding box, this is wrong approach.
-    primitive->set_subregion(x, y, width, height);
+    // Handle feDropShadow-specific logic
+    if (auto drop_shadow = dynamic_cast<Inkscape::Filters::FilterDropShadow *>(primitive)) {
+        drop_shadow->set_dx(dx);
+        drop_shadow->set_dy(dy);
+        drop_shadow->set_std_deviation(stdDeviation);
+        drop_shadow->set_flood_color(floodColor);
+    }
 
-    // Give renderer access to filter properties
+    primitive->set_subregion(x, y, width, height);
     primitive->setStyle(style);
 }
 
