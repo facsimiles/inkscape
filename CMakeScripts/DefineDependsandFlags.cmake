@@ -176,25 +176,36 @@ if(WITH_INTERNAL_2GEOM)
   set(2Geom_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src/3rdparty/2geom/include)
 endif()
 
-if(APPLE)
-    message(STATUS "New CMYK PDF exporter disabled on macOSX")
-elseif(WITH_CAPYPDF)
-    set(CAPY_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
-    set(CAPY_LIBDIR ${CAPY_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-    include(ExternalProject)
-    ExternalProject_Add(capypdf
-        URL https://github.com/jpakkane/capypdf/archive/refs/tags/0.16.0.zip
-        URL_HASH SHA512=24b80a384ee2a78c17b3591a8c78a4677867bc3474771ad8e9dc245dfc960959689f0b19a9dbae3cf78d8b4aaaa66f5e7c924e5650341de0af74f654e3259027
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-        CONFIGURE_COMMAND meson setup . ../capypdf --libdir=${CAPY_LIBDIR} --prefix=${CAPY_PREFIX}
-        BUILD_COMMAND meson compile
-        INSTALL_COMMAND meson install
-    )
-    include_directories("${CAPY_PREFIX}/include/capypdf-0")
-    link_directories("${CAPY_LIBDIR}")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}:${CAPY_LIBDIR}")
-    list(APPEND INKSCAPE_LIBS -lcapypdf)
+if(WITH_CAPYPDF)
+  pkg_check_modules(CAPYPDF capypdf>=0.16)
+  if(CAPYPDF_FOUND)
+    sanitize_ldflags_for_libs(CAPYPDF_LDFLAGS)
+    list(APPEND INKSCAPE_INCS_SYS ${CAPYPDF_INCLUDE_DIRS})
+    list(APPEND INKSCAPE_LIBS     ${CAPYPDF_LDFLAGS})
     add_definitions(-DWITH_CAPYPDF)
+  else()
+    if(APPLE)
+      message(STATUS "New CMYK PDF exporter disabled on macOS")
+      set(WITH_CAPYPDF OFF)
+    else()
+      set(CAPY_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
+      set(CAPY_LIBDIR ${CAPY_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+      include(ExternalProject)
+      ExternalProject_Add(capypdf
+          URL https://github.com/jpakkane/capypdf/archive/refs/tags/0.16.0.zip
+          URL_HASH SHA512=24b80a384ee2a78c17b3591a8c78a4677867bc3474771ad8e9dc245dfc960959689f0b19a9dbae3cf78d8b4aaaa66f5e7c924e5650341de0af74f654e3259027
+          DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+          CONFIGURE_COMMAND meson setup . ../capypdf --libdir=${CAPY_LIBDIR} --prefix=${CAPY_PREFIX}
+          BUILD_COMMAND meson compile
+          INSTALL_COMMAND meson install
+      )
+      include_directories("${CAPY_PREFIX}/include/capypdf-0")
+      link_directories("${CAPY_LIBDIR}")
+      set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}:${CAPY_LIBDIR}")
+      list(APPEND INKSCAPE_LIBS -lcapypdf)
+      add_definitions(-DWITH_CAPYPDF)
+    endif()
+  endif()
 endif()
 
 if(WITH_POPPLER)

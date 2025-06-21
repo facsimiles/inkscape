@@ -406,7 +406,9 @@ if(NOT GTKMM4_FOUND)
 endif()
 
 if(WITH_CAPYPDF)
+  if(TARGET capypdf)
     add_dependencies(inkscape_base capypdf)
+  endif()
 endif()
 
 # added so that locally installed inkscape can find lib2geom if it's not installed systemwide
