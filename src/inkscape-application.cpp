@@ -952,7 +952,6 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
  */
 void InkscapeApplication::on_startup()
 {
-    start_mode = Inkscape::UI::Dialog::StartScreen::get_start_mode();
     // Autosave
     Inkscape::AutoSave::getInstance().init(this);
 
@@ -1007,43 +1006,34 @@ void InkscapeApplication::on_activate()
     */
     Glib::MainContext::get_default()->iteration(false);
 #endif
-    if ( _use_pipe ) {
+
+    if (_use_pipe) {
         // Create document from pipe in.
         std::istreambuf_iterator<char> begin(std::cin), end;
         std::string s(begin, end);
         document = document_open(s);
         output = "-";
-     } else if ( _with_gui && !_use_command_line_argument && gtk_app() && !INKSCAPE.active_document() )  {
-        switch ( start_mode ) {
-            case StartScreen::SPLASH_ONLY:
-                _splash_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-                _splash_screen->show_now();
-                gtk_app()->add_window(*_splash_screen);
+     } else if (_with_gui && gtk_app() && !INKSCAPE.active_document())  {
+        if (Inkscape::UI::Dialog::StartScreen::get_start_mode()) {
+            auto start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+            start_screen->show_welcome();
+            Inkscape::UI::dialog_run(*start_screen);
+            document = start_screen->get_document();
+            //In case the welcome screen gets closed before a file was picked
+            if (!document)
                 document = document_new();
-            break;
-            case StartScreen::WELCOME_SCREEN:
-                _welcome_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-                _welcome_screen->show_welcome();
-                Inkscape::UI::dialog_run(*_welcome_screen);
-                document = _welcome_screen->get_document();
-            break;
-            default:
-                // Create a blank document from template if none is already active
-                document = document_new();
-            break;
+        } else {
+            document = document_new();
         }
-     }
-
-    else  {
+     } else if (_use_command_line_argument) {
+         document = document_new();
+     } else {
         std::cerr << "InkscapeApplication::on_activate: failed to create document!" << std::endl;
         return;
-    }
+     }
 
     // Process document (command line actions, shell, create window)
     process_document (document, output);
-
-    //_welcome_screen dialog needs to be closed properly before being freed else it crashes the app
-    _splash_screen.reset();
 
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
@@ -1066,16 +1056,6 @@ void InkscapeApplication::windowClose(InkscapeWindow *window)
 void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files, Glib::ustring const &hint)
 {
     // on_activate isn't called in this instance
-    // Add the start/splash screen to the app as soon as possible
-    using Inkscape::UI::Dialog::StartScreen;
-    if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app() && start_mode == StartScreen::SPLASH_ONLY) {
-        if( !_splash_screen )
-            _splash_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-        _splash_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-        _splash_screen->show_now();
-        gtk_app()->add_window(*_splash_screen);
-    }
-
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
     if(!_pages.empty())
@@ -1109,8 +1089,6 @@ void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files,
         // Process document (command line actions, shell, create window)
         process_document(document, file->get_path());
     }
-
-    _splash_screen.reset();
 
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.

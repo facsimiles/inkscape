@@ -2044,11 +2044,10 @@ void InkscapePreferences::initPageUI()
 
     {
         Glib::ustring startModeLabels[] = {C_("Start mode", "Nothing"),
-                                             C_("Start mode", "Splash screen only"),
                                              C_("Start mode", "Welcome screen")};
-        int startModeValues[] = {0, 1, 2};
+        int startModeValues[] = {0, 1};
 
-        _win_start_mode.init( "/options/boot/mode", startModeLabels, startModeValues, 2);
+        _win_start_mode.init( "/options/boot/mode", startModeLabels, startModeValues, 1);
         _page_windows.add_line( false, _("Show when starting:"),  _win_start_mode, "",
                            _("Set what shows when loading the program normally."), false);
     }

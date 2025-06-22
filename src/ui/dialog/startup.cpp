@@ -321,21 +321,6 @@ void StartScreen::show_welcome()
     refresh_keys_warning();
 
     show();
-
-    // Splash screen is now finished
-    _timer.stop();
-}
-
-StartScreen::~StartScreen()
-{
-    // Let than a second, we'll hide the splash if needed.
-    if (_timer.elapsed() < 1.0) {
-        auto prefs = Inkscape::Preferences::get();
-        // But only if the welcome screen is disabled
-        if (prefs->getInt("/options/boot/mode", 2) == 1) {
-            prefs->setInt("/options/boot/mode", 0);
-        }
-    }
 }
 
 /**
@@ -503,7 +488,11 @@ StartScreen::load_document()
             _document = app->document_open(file).first;
 
             if (_document) {
-                // We're done, hand back to app.
+                // We're done, hand back to app but first flush conflicting signals
+                // like signal_row_activated which blocks if the dialog is destroyed
+                auto main_context = Glib::MainContext::get_default();
+                while (main_context->iteration(false)) {}
+
                 response(GTK_RESPONSE_OK);
             }
         }
@@ -573,14 +562,13 @@ StartScreen::on_response(int response_id)
  *
  * @returns
  *    0 - Show nothing
- *    1 - Show only the splash screen
- *    2 = Show the splash and startup screens
+ *    1 = Show the splash and startup screens
  */
 int StartScreen::get_start_mode()
 {
     auto prefs = Inkscape::Preferences::get();
     auto old_enabled = prefs->getBool("/options/boot/enabled", true);
-    return prefs->getInt("/options/boot/mode", old_enabled ? 2 : 1);
+    return prefs->getInt("/options/boot/mode", old_enabled ? 1 : 0);
 }
 
 void
@@ -588,7 +576,7 @@ StartScreen::show_toggle()
 {
     auto &button = get_widget<Gtk::CheckButton>(build_welcome, "show_toggle");
     auto prefs = Inkscape::Preferences::get();
-    prefs->setInt("/options/boot/mode", button.get_active() ? 2 : 1);
+    prefs->setInt("/options/boot/mode", button.get_active() ? 1 : 0);
 }
 
 /**

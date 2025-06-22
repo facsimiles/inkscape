@@ -191,8 +191,6 @@ protected:
 private:
     void init_extension_action_data();
     std::vector<Glib::RefPtr<Gio::SimpleAction>> _effect_actions;
-    std::unique_ptr<Inkscape::UI::Dialog::StartScreen> _splash_screen, _welcome_screen;
-    int start_mode;
 };
 
 #endif // INKSCAPE_APPLICATION_H

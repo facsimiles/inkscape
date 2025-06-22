@@ -41,7 +41,7 @@ namespace Inkscape::UI::Dialog {
 class StartScreen : public Gtk::Dialog {
 public:
     StartScreen();
-    ~StartScreen() override;
+    ~StartScreen() = default;
 
     SPDocument* get_document() { return _document; }
 
@@ -49,7 +49,6 @@ public:
     void show_welcome();
 
     static int get_start_mode();
-    enum { NOTHING, SPLASH_ONLY, WELCOME_SCREEN };
 protected:
     void on_response(int response_id) override;
 
