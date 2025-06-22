@@ -171,30 +171,29 @@ void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, char const
 
     xmlDocPtr svgdoc = xmlParseFile(tempfilename_out.c_str());
     close(tempfd_out);
-    if (svgdoc == nullptr) {
+    if (!svgdoc) {
         return;
     }
 
     std::list<std::string> params;
     module->paramListString(params);
-    auto const max_parameters = params.size() * 2;
-    char const *xslt_params[max_parameters + 1];
+    std::vector<char const *> xslt_params;
+    xslt_params.reserve(params.size() * 2 + 1);
 
-    std::size_t count = 0;
     for (auto const &param : params) {
         std::size_t pos = param.find("=");
         auto const parameter = param.substr(2, pos - 2);
         auto const value     = param.substr(pos + 1   );
-        xslt_params[count++] = g_strdup       (        parameter.c_str());
-        xslt_params[count++] = g_strdup_printf("'%s'", value    .c_str());
+        xslt_params.push_back(g_strdup       (        parameter.c_str()));
+        xslt_params.push_back(g_strdup_printf("'%s'", value    .c_str()));
     }
-    xslt_params[count] = nullptr;
+    xslt_params.push_back(nullptr);
 
     // workaround for inbox#2208
     std::string const oldlocale = std::setlocale(LC_NUMERIC, nullptr);
     std::setlocale(LC_NUMERIC, "C");
 
-    xmlDocPtr newdoc = xsltApplyStylesheet(_stylesheet, svgdoc, xslt_params);
+    xmlDocPtr newdoc = xsltApplyStylesheet(_stylesheet, svgdoc, xslt_params.data());
     int success = xsltSaveResultToFilename(filename, newdoc, _stylesheet, 0);
 
     std::setlocale(LC_NUMERIC, oldlocale.c_str());

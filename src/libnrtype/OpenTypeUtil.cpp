@@ -32,13 +32,11 @@
 #include "io/stream/bufferstream.h"
 
 #include "display/cairo-utils.h"
+#include "util/delete-with.h"
 
 // Utilities used in this file
 
-struct HbSetDeleter {
-    void operator()(hb_set_t* x) { hb_set_destroy(x); }
-};
-using HbSet = std::unique_ptr<hb_set_t, HbSetDeleter>;
+using HbSet = std::unique_ptr<hb_set_t, Inkscape::Util::Deleter<hb_set_destroy>>;
 
 void dump_tag( guint32 *tag, Glib::ustring prefix = "", bool lf=true ) {
     std::cout << prefix
@@ -309,8 +307,8 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
         FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
         FT_Get_Multi_Master( ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
 
-        FT_Fixed coords[mmvar->num_axis];
-        FT_Get_Var_Design_Coordinates( ft_face, mmvar->num_axis, coords );
+        std::vector<FT_Fixed> coords(mmvar->num_axis);
+        FT_Get_Var_Design_Coordinates(ft_face, mmvar->num_axis, coords.data());
 
         for (size_t i = 0; i < mmvar->num_axis; ++i) {
             FT_Var_Axis* axis = &mmvar->axis[i];

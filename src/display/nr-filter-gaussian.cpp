@@ -12,13 +12,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/affine.h>
 #include <algorithm>
 #include <cmath>
 #include <complex>
 #include <cstdlib>
-#include <glib.h>
 #include <limits>
+#include <boost/container/small_vector.hpp>
+#include <glib.h>
+#include <2geom/affine.h>
 
 #include "display/cairo-utils.h"
 #include "display/dispatch-pool.h"
@@ -44,7 +45,7 @@
 // "Recursive Gaussian Derivative Filters" says this is enough though (and
 // some testing indeed shows that the quality doesn't improve much if larger
 // filters are used).
-static size_t const N = 3;
+constexpr size_t N = 3;
 
 template<typename InIt, typename OutIt, typename Size>
 inline void copy_n(InIt beg_in, Size N, OutIt beg_out) {
@@ -118,9 +119,7 @@ FilterGaussian::FilterGaussian()
     _deviation_x = _deviation_y = 0.0;
 }
 
-FilterGaussian::~FilterGaussian()
-{
-}
+FilterGaussian::~FilterGaussian() = default;
 
 static int
 _effect_area_scr(double const deviation)
@@ -134,7 +133,7 @@ _make_kernel(FIRValue *const kernel, double const deviation)
     int const scr_len = _effect_area_scr(deviation);
     g_assert(scr_len >= 0);
     double const d_sq = sqr(deviation) * 2;
-    double k[scr_len+1]; // This is only called for small kernel sizes (above approximately 10 coefficients the IIR filter is used)
+    boost::container::small_vector<double, 10> k(scr_len + 1); // This is only called for small kernel sizes (above approximately 10 coefficients the IIR filter is used)
 
     // Compute kernel and sum of coefficients
     // Note that actually only half the kernel is computed, as it is symmetric
@@ -354,7 +353,7 @@ filter2D_FIR(PT *const dst, int const dstr1, int const dstr2,
 
     pool.dispatch(n2, [&](int c2, int) {
         // Past pixels seen (to enable in-place operation)
-        PT history[scr_len + 1][PC];
+        boost::container::small_vector<std::array<PT, PC>, 10> history(scr_len + 1);
 
         // corresponding line in the source buffer
         int const src_line = c2 * sstr2;
@@ -366,7 +365,7 @@ filter2D_FIR(PT *const dst, int const dstr1, int const dstr2,
 
         // history initialization
         PT imin[PC]; copy_n(src + src_line, PC, imin);
-        for(int i=0; i<scr_len; i++) copy_n(imin, PC, history[i]);
+        for(int i=0; i<scr_len; i++) copy_n(imin, PC, history[i].data());
 
         for ( int c1 = 0 ; c1 < n1 ; c1++ ) {
 
@@ -374,8 +373,8 @@ filter2D_FIR(PT *const dst, int const dstr1, int const dstr2,
             int const dst_disp = dst_line + c1 * dstr1;
 
             // update history
-            for(int i=scr_len; i>0; i--) copy_n(history[i-1], PC, history[i]);
-            copy_n(src + src_disp, PC, history[0]);
+            for(int i=scr_len; i>0; i--) copy_n(history[i-1].data(), PC, history[i].data());
+            copy_n(src + src_disp, PC, history[0].data());
 
             // for all bytes of the pixel
             for ( unsigned int byte = 0 ; byte < PC ; byte++) {
@@ -598,11 +597,10 @@ void FilterGaussian::render_cairo(FilterSlot &slot) const
 
     // Temporary storage for IIR filter
     // NOTE: This can be eliminated, but it reduces the precision a bit
-    IIRValue * tmpdata[threads];
-    std::fill_n(tmpdata, threads, (IIRValue*)0);
-    if ( use_IIR_x || use_IIR_y ) {
-        for(int i = 0; i < threads; ++i) {
-            tmpdata[i] = new IIRValue[std::max(w_downsampled,h_downsampled)*bytes_per_pixel];
+    std::vector<IIRValue *> tmpdata(threads, nullptr);
+    if (use_IIR_x || use_IIR_y) {
+        for (int i = 0; i < threads; ++i) {
+            tmpdata[i] = new IIRValue[std::max(w_downsampled, h_downsampled) * bytes_per_pixel];
         }
     }
 
@@ -624,7 +622,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot) const
 
     if (scr_len_x > 0) {
         if (use_IIR_x) {
-            gaussian_pass_IIR(Geom::X, deviation_x, downsampled, downsampled, tmpdata, *pool);
+            gaussian_pass_IIR(Geom::X, deviation_x, downsampled, downsampled, tmpdata.data(), *pool);
         } else {
             gaussian_pass_FIR(Geom::X, deviation_x, downsampled, downsampled, *pool);
         }
@@ -632,7 +630,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot) const
 
     if (scr_len_y > 0) {
         if (use_IIR_y) {
-            gaussian_pass_IIR(Geom::Y, deviation_y, downsampled, downsampled, tmpdata, *pool);
+            gaussian_pass_IIR(Geom::Y, deviation_y, downsampled, downsampled, tmpdata.data(), *pool);
         } else {
             gaussian_pass_FIR(Geom::Y, deviation_y, downsampled, downsampled, *pool);
         }

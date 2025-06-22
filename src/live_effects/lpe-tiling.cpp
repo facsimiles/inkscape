@@ -256,8 +256,8 @@ void LPETiling::doAfterEffect(SPLPEItem const* lpeitem, Geom::PathVector *)
         double maxheight = 0;
         double maxwidth = 0;
         double minheight = std::numeric_limits<double>::max();
-        double y[(int)num_cols]; 
-        double ygap[(int)num_cols]; 
+        std::vector<double> y((int)num_cols);
+        std::vector<double> ygap((int)num_cols);
         double yset = 0;
         Geom::OptRect prev_bbox;
         Geom::OptRect bbox = sp_lpe_item->geometricBounds();
@@ -1327,9 +1327,9 @@ LPETiling::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fi
     double posx = ((*gap_bbox).left() - (*bbox).left()) / (*gap_bbox).width();
     double factorx = original_width/(*bbox).width();
     double factory = original_height/(*bbox).height();
-    double y[(int)num_cols]; 
+    std::vector<double> y((int)num_cols);
     double yset = 0;
-    double gap[(int)num_cols]; 
+    std::vector<double> gap((int)num_cols);
     for (int i = 0; i < num_rows; ++i) {
         double fracy = 1;
         if (num_rows != 1) {
