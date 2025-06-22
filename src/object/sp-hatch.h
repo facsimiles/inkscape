@@ -57,6 +57,15 @@ public:
 
     struct RenderInfo
     {
+        // NEW
+        Geom::Rect hatch_bbox;
+        double strip_width = 0;
+        Geom::Point hatch_origin;
+        Geom::Affine hatch_to_user;
+        int overflow_right = 0;
+        int overflow_left = 0;
+
+        // OLD
         Geom::Affine child_transform;
         Geom::Affine pattern_to_user_transform;
         Geom::Rect tile_rect;
@@ -95,7 +104,11 @@ public:
     Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned key, Geom::OptRect const &bbox) override;
     void hide(unsigned key) override;
 
+    RenderInfo calculateRenderInfo(Geom::OptRect const &bbox) const;
     RenderInfo calculateRenderInfo(unsigned key) const;
+
+    bool toPaths(SPShape &shape);
+
     Geom::Interval bounds() const;
     void setBBox(unsigned int key, Geom::OptRect const &bbox) override;
 
@@ -114,7 +127,7 @@ private:
     static bool _hasHatchPatchChildren(SPHatch const *hatch);
 
     void _updateView(View &view);
-    RenderInfo _calculateRenderInfo(View const &view) const;
+    RenderInfo _calculateRenderInfo(Geom::OptRect const &bbox) const;
     Geom::OptInterval _calculateStripExtents(Geom::OptRect const &bbox) const;
 
     /**
