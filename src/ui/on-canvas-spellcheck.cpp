@@ -82,6 +82,21 @@ void OnCanvasSpellCheck::scanDocument()
 
 void OnCanvasSpellCheck::checkTextItem(SPItem* item)
 {
+    //Delete Item from TrackedTextItems if it exists
+    auto it_item = std::find_if(_tracked_items.begin(), _tracked_items.end(),
+                             [item](const TrackedTextItem& tracked) { return tracked.item == item; });
+    if (it_item != _tracked_items.end()) {
+        // Disconnect connections for the item
+        it_item->modified_connection.disconnect();
+        it_item->release_connection.disconnect();
+        _tracked_items.erase(it_item);
+    }
+    // Create a new tracked item
+    TrackedTextItem tracked_item;
+    tracked_item.item = item;
+
+    // Scaning the item for misspelled words
+    std::vector <MisspelledWord> misspelled_words;
     auto layout = te_get_layout(item);
     auto it = layout->begin();
     while (it != layout->end()) {
@@ -97,21 +112,48 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
             std::cout<<"Misspelled word: " << _word << std::endl;
             // auto squiggle = createSquiggle(item, _word, begin, end);
             // _misspelled_words.push_back({item, _word, begin, end, std::move(squiggle)});
-            _misspelled_words.push_back({item, _word, begin, end, nullptr});
-            createSquiggle(_misspelled_words.back());
+            misspelled_words.push_back({_word, begin, end, nullptr});
+            createSquiggle(misspelled_words.back(), item);
         }
         it = end;
     }
+
+    // Add the misspelled words to the tracked item
+    tracked_item.misspelled_words = std::move(misspelled_words);
+
+    // Add signals for the item
+    tracked_item.modified_connection = item->connectModified(
+        [this, item] (auto, auto) { 
+            auto it = std::find_if(_tracked_items.begin(), _tracked_items.end(),
+                               [item](const TrackedTextItem& tracked) { return tracked.item == item; });
+            if (it != _tracked_items.end()) {
+                onObjModified(*it);
+            }
+        }
+    );
+    tracked_item.release_connection = item->connectRelease(
+        [this, item] (auto) {
+            auto it = std::find_if(_tracked_items.begin(), _tracked_items.end(),
+                               [item](const TrackedTextItem& tracked) { return tracked.item == item; });
+            if (it != _tracked_items.end()) {
+                onObjReleased(*it);
+            }
+        }
+    );
+
+    // Add the tracked item to the list of tracked items
+    _tracked_items.push_back(std::move(tracked_item));
+
 }
 
-void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled)
+void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled, SPItem* item)
 {
-    auto layout = te_get_layout(misspelled.item);
+    auto layout = te_get_layout(item);
     if (!layout) {
         return; // No layout available
     }
     // Get the selection shape (bounding box) for the word
-    auto points = layout->createSelectionShape(misspelled.begin, misspelled.end, misspelled.item->i2dt_affine());
+    auto points = layout->createSelectionShape(misspelled.begin, misspelled.end, item->i2dt_affine());
     if (points.size() < 4) {
         return; // Not enough points to draw a squiggle
     }
@@ -126,6 +168,26 @@ void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled)
     );
     misspelled.squiggle->set_color(0xff0000ff);
     misspelled.squiggle->set_visible(true);
+}
+
+void OnCanvasSpellCheck::onObjModified(TrackedTextItem &tracked_item)
+{
+    // When an object is modified, we need to re-check it for misspelled words
+    // This will remove the old squiggles and create new ones if necessary
+    checkTextItem(tracked_item.item);
+}
+
+void OnCanvasSpellCheck::onObjReleased(TrackedTextItem &tracked_item)
+{
+    // When an object is released, we can remove it from the tracked items
+    auto it = std::find_if(_tracked_items.begin(), _tracked_items.end(),
+                             [&tracked_item](const TrackedTextItem& tracked) { return tracked.item == tracked_item.item; });
+    if (it != _tracked_items.end()) {
+        // Disconnect connections for the item
+        it->modified_connection.disconnect();
+        it->release_connection.disconnect();
+        _tracked_items.erase(it);
+    }
 }
 
 
