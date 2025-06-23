@@ -1,5 +1,5 @@
 {
-  "fill" : "system-light",
+  "fill" : "automatic",
   "groups" : [
     {
       "blend-mode" : "normal",
@@ -8,8 +8,33 @@
         {
           "blend-mode" : "normal",
           "fill" : "none",
-          "glass" : true,
-          "image-name" : "inkscape-no-shadow.png",
+          "glass-specializations" : [
+            {
+              "value" : true
+            },
+            {
+              "appearance" : "dark",
+              "value" : false
+            },
+            {
+              "appearance" : "tinted",
+              "value" : false
+            }
+          ],
+          "hidden" : false,
+          "image-name-specializations" : [
+            {
+              "value" : "inkscape-no-shadow.png"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "inkscape-shading.png"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "inkscape-shading.png"
+            }
+          ],
           "name" : "inkscape-no-shadow",
           "position" : {
             "scale" : 0.5,
