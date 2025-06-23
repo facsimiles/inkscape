@@ -190,6 +190,11 @@ void OnCanvasSpellCheck::onObjReleased(TrackedTextItem &tracked_item)
     }
 }
 
+void OnCanvasSpellCheck::addTrackedItem(SPItem* item)
+{
+    checkTextItem(item);
+}
+
 
 OnCanvasSpellCheck::~OnCanvasSpellCheck() = default;
 

@@ -275,6 +275,11 @@ void TextTool::_setupText()
     text_item->updateRepr();
     text_item->doWriteTransform(text_item->transform, nullptr, true);
     DocumentUndo::done(_desktop->getDocument(), _("Create text"), INKSCAPE_ICON("draw-text"));
+
+    if(_spellcheck)
+    {
+        _spellcheck->addTrackedItem(text_item);
+    }
 }
 
 /**

@@ -77,6 +77,9 @@ private:
     // Object Released handler
     void onObjReleased(TrackedTextItem &tracked_item);
 
+public:
+    void addTrackedItem(SPItem* item);
+
 };
 
 } // namespace Inkscape::UI
