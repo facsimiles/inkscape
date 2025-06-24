@@ -69,6 +69,7 @@ private:
     void marginSideEdited(int side, const Glib::ustring &value);
     void sizeChoose(const std::string &preset_key);
     void sizeChanged();
+    void setLabelText(SPPage *page = nullptr);
     void setSizeText(SPPage *page = nullptr, bool display_only = true);
     void setMarginText(SPPage *page = nullptr);
 
@@ -77,14 +78,13 @@ private:
     void toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *tool);
     void pagesChanged();
     void selectionChanged(SPPage *page);
+    void selectionModified(SPPage *page);
     void populate_sizes();
 
     sigc::scoped_connection _doc_connection;
     sigc::scoped_connection _pages_changed;
     sigc::scoped_connection _page_selected;
     sigc::scoped_connection _page_modified;
-    sigc::scoped_connection _label_edited;
-    sigc::scoped_connection _size_edited;
 
     Gtk::ComboBoxText &_combo_page_sizes;
     Gtk::Entry *_entry_page_sizes;

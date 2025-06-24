@@ -86,7 +86,6 @@ PageToolbar::PageToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 {
     set_name("PageToolbar");
 
-    _text_page_label.signal_changed().connect(sigc::mem_fun(*this, &PageToolbar::labelEdited));
 
     get_object<Gtk::EntryCompletion>(builder, "_sizes_searcher")
         ->signal_match_selected()
@@ -100,6 +99,7 @@ PageToolbar::PageToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
             },
             false);
 
+    _text_page_label.signal_activate().connect(sigc::mem_fun(*this, &PageToolbar::labelEdited));
     _text_page_bleeds.signal_activate().connect(sigc::mem_fun(*this, &PageToolbar::bleedsEdited));
     _text_page_margins.signal_activate().connect(sigc::mem_fun(*this, &PageToolbar::marginsEdited));
 
@@ -392,11 +392,21 @@ void PageToolbar::sizeChanged()
 }
 
 /**
+ * Sets the label of the page to the text box
+ */
+void PageToolbar::setLabelText(SPPage *page)
+{
+    Glib::ustring label = page && page->label() ? page->label() : "";
+    if (_text_page_label.get_text() != label) {
+        _text_page_label.set_text(label);
+    }
+}
+
+/**
  * Sets the size of the current page into the entry page size.
  */
 void PageToolbar::setSizeText(SPPage *page, bool display_only)
 {
-    _size_edited.block();
     SearchCols cols;
 
     if (!page)
@@ -429,7 +439,6 @@ void PageToolbar::setSizeText(SPPage *page, bool display_only)
             _entry_page_sizes->select_region(0, -1);
         }
     }
-    _size_edited.unblock();
 }
 
 void PageToolbar::setMarginText(SPPage *page)
@@ -445,24 +454,14 @@ void PageToolbar::pagesChanged()
 
 void PageToolbar::selectionChanged(SPPage *page)
 {
-    _label_edited.block();
     _page_modified.disconnect();
     auto &page_manager = _document->getPageManager();
     _text_page_label.set_tooltip_text(_("Page label"));
-
-    setMarginText(page);
 
     // Set label widget content with page label.
     if (page) {
         _text_page_label.set_sensitive(true);
         _text_page_label.set_placeholder_text(page->getDefaultLabel());
-
-        if (auto label = page->label()) {
-            _text_page_label.set_text(label);
-        } else {
-            _text_page_label.set_text("");
-        }
-
 
         // TRANSLATORS: "%1" is replaced with the page we are on, and "%2" is the total number of pages.
         auto label = Glib::ustring::compose(_("%1/%2"), page->getPagePosition(), page_manager.getPageCount());
@@ -472,7 +471,7 @@ void PageToolbar::selectionChanged(SPPage *page)
             if (auto page = cast<SPPage>(obj)) {
                 // Make sure we don't 'select' on removal of the page
                 if (flags & SP_OBJECT_MODIFIED_FLAG) {
-                    selectionChanged(page);
+                    selectionModified(page);
                 }
             }
         });
@@ -483,7 +482,7 @@ void PageToolbar::selectionChanged(SPPage *page)
         _label_page_pos.set_label(_("1/-"));
 
         _page_modified = _document->connectModified([this] (unsigned) {
-            selectionChanged(nullptr);
+            selectionModified(nullptr);
         });
     }
     if (!page_manager.hasPrevPage() && !page_manager.hasNextPage()) {
@@ -504,8 +503,17 @@ void PageToolbar::selectionChanged(SPPage *page)
         _btn_page_delete.set_visible(true);
         _btn_move_toggle.set_sensitive(true);
     }
+    selectionModified(page);
+}
+
+/**
+ * Update all the elements that might have changed within a page
+ */
+void PageToolbar::selectionModified(SPPage *page)
+{
+    setLabelText(page);
+    setMarginText(page);
     setSizeText(page);
-    _label_edited.unblock();
 }
 
 } // namespace Inkscape::UI::Toolbar

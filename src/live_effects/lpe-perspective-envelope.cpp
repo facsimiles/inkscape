@@ -560,7 +560,7 @@ LPEPerspectiveEnvelope::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::v
     c.appendNew<Geom::LineSegment>(down_right_point);
     c.appendNew<Geom::LineSegment>(down_left_point);
     c.appendNew<Geom::LineSegment>(up_left_point);
-    hp_vec.push_back(std::move(c));
+    hp_vec.emplace_back(std::move(c));
 }
 
 } // namespace Inkscape::LivePathEffect
