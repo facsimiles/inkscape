@@ -203,7 +203,7 @@ void SvgBuilder::cropPage(const Geom::Rect &bbox)
     val << "M" << box.left() << " " << box.top()
         << "H" << box.right() << "V" << box.bottom()
         << "H" << box.left() << "Z";
-    auto clip_path = _createClip(val.str(), Geom::identity(), false);
+    auto clip_path = _createClip(val.str(), false);
     gchar *urltext = g_strdup_printf("url(#%s)", clip_path->attribute("id"));
     _container->setAttribute("clip-path", urltext);
     g_free(urltext);
@@ -708,6 +708,7 @@ void SvgBuilder::addPath(GfxState *state, bool fill, bool stroke, bool even_odd)
 
 void SvgBuilder::addClippedFill(GfxShading *shading, const Geom::Affine shading_tr)
 {
+    // Don't change to hasClipPath as it messes up gradient fills
     if (_clip_history->getClipPath()) {
         addShadedFill(shading, shading_tr, _clip_history->getClipPath(), _clip_history->getAffine(),
                       _clip_history->getClipType() == clipEO);
@@ -792,6 +793,8 @@ Inkscape::XML::Node *SvgBuilder::_getClip(const Inkscape::XML::Node *node)
     // In SVG the path-clip transforms are compounded, so we have to do extra work to
     // pull transforms back out of the clipping object and set them. Otherwise this
     // would all be a lot simpler.
+
+    // node_tr includes _page_affine
     Geom::Affine node_tr = Geom::identity();
     if (auto attr = node->attribute("transform")) {
         sp_svg_transform_read(attr, &node_tr);
@@ -814,18 +817,29 @@ Inkscape::XML::Node *SvgBuilder::_getClip(const Inkscape::XML::Node *node)
         _clip_text = nullptr;
         return clip_node;
     }
-    if (_shouldClip(node)) {
-        std::string clip_d = svgInterpretPath(_clip_history->getClipPath());
-        Geom::Affine tr = _clip_history->getAffine() * _page_affine * node_tr.inverse();
-        return _createClip(clip_d, tr, _clip_history->evenOdd());
+    auto clip_pathv = _checkClip(node, node_tr);
+    if (!clip_pathv.empty()) {
+        // page and clip transforms are applied in _createClip, but we need to apply the
+        // node inverse so that it compounds properly when clipping in SVG
+        auto clip_d = sp_svg_write_path(clip_pathv * node_tr.inverse());
+        return _createClip(clip_d, _clip_history->evenOdd());
     }
     return nullptr;
 }
 
-bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
+Geom::PathVector SvgBuilder::_checkClip(const Inkscape::XML::Node *node, const Geom::Affine &node_tr) const
 {
+    Geom::PathVector empty_path;
     if (!_clip_history->hasClipPath()) {
-        return false;
+        return empty_path;
+    }
+
+    // node_tr includes _page_affine, so we need to apply it to the clipping path
+    Geom::PathVector clip_pathv = getPathV(_clip_history->getClipPath()) * _clip_history->getAffine() * _page_affine;
+
+    // if this is a clipping or masking group situation, just return the clip
+    if (strcmp(node->name(), "svg:g") == 0 || _clip_groups > 0 || _mask_groups.size() > 0) {
+        return clip_pathv;
     }
 
     // Calculate bounding boxes for both the node and the clip path
@@ -843,41 +857,31 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
         if (!bounds.empty()) {
             node_vec.push_back(Geom::Path(*bounds));
         } else {
-            // not sure what this is, default to clipping it
-            return true;
+            // what could this be?? clip it just in case
+            return clip_pathv;
         }
     }
 
-    Geom::PathVector clip_vec = sp_svg_read_pathv(svgInterpretPath(_clip_history->getClipPath()));
-
-    // Clip transform is compounded with page, node inverse, and node transforms
-    // Skip the node inverse * node part as it's just identity.
-    // Also skip the page transform as it should be applied equally to both.
-    Geom::Affine clip_tr = _clip_history->getAffine();
-    Geom::Affine node_tr = Geom::identity();
-    if (auto attr = node->attribute("transform")) {
-        sp_svg_transform_read(attr, &node_tr);
-    }
-
     node_vec *= node_tr;
-    clip_vec *= clip_tr;
 
-    return !pathv_fully_contains(clip_vec, node_vec, fill_nonZero);
+    if (pathv_fully_contains(clip_pathv, node_vec, _clip_history->fillRule())) {
+        return empty_path;
+    } else {
+        return clip_pathv;
+    }
 }
 
-Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::Affine tr, bool even_odd)
+Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, bool even_odd)
 {
     if (_prev_clip) {
         // Check if the previous clipping path would be identical to the new one.
         auto prev_path = _prev_clip->firstChild();
-        std::string prev_d = prev_path->attribute("d");
-        std::string prev_tr = prev_path->attribute("transform") ? prev_path->attribute("transform")
-                                                                : sp_svg_transform_write(Geom::identity());
-        bool prev_even_odd =
+        auto prev_d = prev_path->attribute("d");
+        auto prev_even_odd =
             prev_path->attribute("clip-rule") ? std::string(prev_path->attribute("clip-rule")) == "evenodd" : false;
 
         // Don't create an identical new clipping path
-        if (prev_d == d && prev_tr == sp_svg_transform_write(tr) && prev_even_odd == even_odd) {
+        if (prev_d == d && prev_even_odd == even_odd) {
             return _prev_clip;
         }
     }
@@ -888,7 +892,6 @@ Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::A
     // Create the path
     Inkscape::XML::Node *path = _xml_doc->createElement("svg:path");
     path->setAttribute("d", d);
-    svgSetTransform(path, tr);
 
     if (even_odd) {
         path->setAttribute("clip-rule", "evenodd");

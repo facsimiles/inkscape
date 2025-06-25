@@ -11,11 +11,15 @@
 #ifndef PDF_UTILS_H
 #define PDF_UTILS_H
 
+#include <2geom/rect.h>
+#include <2geom/pathvector.h>
+#include "poppler-transition-api.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
 #include <poppler/Gfx.h>
 #include <poppler/GfxState.h>
 #include <poppler/Page.h>
+#include "livarot/LivarotDefs.h"
 
 #include "poppler-transition-api.h"
 
@@ -39,6 +43,8 @@ public:
     bool evenOdd() { return clipType != clipNormal; }
     void clear() { cleared = true; }
 
+    FillRule fillRule();
+
 private:
     ClipHistoryEntry *saved; // next clip path on stack
 
@@ -53,5 +59,6 @@ private:
 };
 
 Geom::Rect getRect(_POPPLER_CONST PDFRectangle *box);
+Geom::PathVector getPathV(GfxPath *gPath);
 
 #endif /* PDF_UTILS_H */

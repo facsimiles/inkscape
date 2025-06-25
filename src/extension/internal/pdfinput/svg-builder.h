@@ -141,7 +141,7 @@ public:
                    bool for_softmask);
     void finishGroup(GfxState *state, bool for_softmask);
     void popGroup(GfxState *state);
-
+    
     // Text handling
     void beginString(GfxState *state, int len);
     void endString(GfxState *state);
@@ -198,7 +198,7 @@ private:
                                       int *mask_colors, bool alpha_only=false,
                                       bool invert_alpha=false);
     Inkscape::XML::Node *_createMask(double width, double height);
-    Inkscape::XML::Node *_createClip(const std::string &d, const Geom::Affine tr, bool even_odd);
+    Inkscape::XML::Node *_createClip(const std::string &d, bool even_odd);
 
     // Style setting
     SPCSSAttr *_setStyle(GfxState *state, bool fill, bool stroke, bool even_odd=false);
@@ -226,7 +226,7 @@ private:
     int _clip_groups = 0;
 
     Inkscape::XML::Node *_getClip(const Inkscape::XML::Node *node);
-    bool _shouldClip(const Inkscape::XML::Node *node) const;
+    Geom::PathVector _checkClip(const Inkscape::XML::Node *node, const Geom::Affine &node_tr) const;
     Inkscape::XML::Node *_addToContainer(const char *name);
     Inkscape::XML::Node *_renderText(std::shared_ptr<CairoFont> cairo_font, double font_size,
                                      const Geom::Affine &transform,

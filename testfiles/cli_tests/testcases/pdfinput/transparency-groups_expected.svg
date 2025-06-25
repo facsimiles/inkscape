@@ -18,8 +18,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath1">
       <path
-         d="M 0,0 H 212 V 275 H 0 Z"
-         transform="scale(1.3333333)"
+         d="M 0,0 H 282.66667 V 366.66667 H 0 Z"
          id="path1" />
     </clipPath>
   </defs>
