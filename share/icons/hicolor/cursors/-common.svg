@@ -2,7 +2,7 @@
 <svg width="32" height="32" fill="gray" stroke="black" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <!-- Drop shadow filter used by mouse cursors -->
-    <filter id="def-drop-shadow" x="-.5" y="-.5" width="2" height="2">
+    <filter id="def-drop-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">
       <feOffset dx="1" dy="1" in="SourceAlpha" result="offOut"/>
       <feComponentTransfer>
         <feFuncR type="identity"/>
