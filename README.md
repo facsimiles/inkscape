@@ -31,4 +31,4 @@ processes.
 
 - [Download](https://inkscape.org/download)
 - User documentation: Please visit out website [https://inkscape.org/](https://inkscape.org/)
-- [Developer Documentation](docs/readme.md)
+- [Developer Documentation](doc/readme.md)
