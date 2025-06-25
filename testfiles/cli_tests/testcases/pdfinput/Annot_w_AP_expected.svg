@@ -21,56 +21,49 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath9">
       <path
-         d="m 204.28,347.104 h 56.67 v 42 h -56.67 z"
-         transform="matrix(1,0,0,-1,-215.10901,354.49801)"
+         d="M -10.829,7.3940027 H 45.841001 V -34.605998 H -10.829 Z"
          id="path9" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath15">
       <path
-         d="m 158.293,319.409 h 42 v 59.504 h -42 z"
-         transform="matrix(0,-1,-1,0,366.66731,187.6869)"
+         d="M 47.258301,29.393901 V -12.6061 H -12.2457 v 42.000001 z"
          id="path15" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath21">
       <path
-         d="M 17.3507,631.97 H 411.028 v 45 H 17.3507 Z"
-         transform="matrix(1,0,0,-1,-191.67801,663.86402)"
+         d="M -174.32731,31.894001 H 219.35 V -13.106 h -393.67731 z"
          id="path21" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath28">
       <path
-         d="M 3.46414,36.1024 H 61.4642 V 662.22 H 3.46414 Z"
-         transform="matrix(0,-1,-1,0,371.67241,11.357901)"
+         d="M 335.57001,7.8937604 V -50.106301 H -290.5476 V 7.8937604 Z"
          id="path28" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath35">
       <path
-         d="m 229.95,586.786 h 181.078 v 31 H 229.95 Z"
-         transform="matrix(1,0,0,-1,-300.48101,604.68002)"
+         d="M -70.530999,17.894003 H 110.54701 V -13.105998 H -70.530999 Z"
          id="path35" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath42">
       <path
-         d="M 17.3507,595.456 H 235.28 v 30.5 H 17.3507 Z"
-         transform="matrix(1,0,0,-1,-122.307,613.35002)"
+         d="M -104.9563,17.894003 H 112.973 v -30.500001 h -217.9293 z"
          id="path42" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath49">
       <path
-         d="m 341.045,347.913 h 31 V 662.22 h -31 z"
-         transform="matrix(0,-1,-1,0,527.57822,348.93901)"
+         d="M 179.66521,7.8940002 V -23.106001 H -134.6418 V 7.8940002 Z"
          id="path49" />
     </clipPath>
   </defs>

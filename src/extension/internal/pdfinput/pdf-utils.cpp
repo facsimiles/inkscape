@@ -12,6 +12,7 @@
 
 #include "pdf-utils.h"
 #include "poppler-utils.h"
+#include <2geom/path-sink.h>
 
 //------------------------------------------------------------------------
 // ClipHistoryEntry
@@ -108,7 +109,62 @@ ClipHistoryEntry::ClipHistoryEntry(ClipHistoryEntry *other, bool cleared)
     saved = nullptr;
 }
 
+
+FillRule ClipHistoryEntry::fillRule() {
+    // convert winding rule to fill rule
+    switch (clipType) {
+        case clipNone:
+            // I don't know why this would happen
+            return FillRule::fill_justDont;
+        case clipNormal:
+            return FillRule::fill_nonZero;
+        case clipEO:
+            return FillRule::fill_oddEven;
+        default:
+            // I don't think this one aligns with any PDF type
+            return FillRule::fill_positive;
+    }
+}
+
+/*************** Conversion functions *****************/
+
 Geom::Rect getRect(_POPPLER_CONST PDFRectangle *box)
 {
     return Geom::Rect(box->x1, box->y1, box->x2, box->y2);
+}
+
+Geom::PathVector getPathV(GfxPath *path) 
+{
+    if (!path) {
+        // empty path
+        return Geom::PathVector();
+    }
+
+    // copied from svgInterpretPath, but with a PathBuilder instead of string
+    Geom::PathBuilder res;
+    for (int i = 0 ; i < path->getNumSubpaths() ; ++i ) {
+        _POPPLER_CONST_83 GfxSubpath *subpath = path->getSubpath(i);
+        if (subpath->getNumPoints() > 0) {
+            res.moveTo(Geom::Point(subpath->getX(0), subpath->getY(0)));
+            int j = 1;
+            while (j < subpath->getNumPoints()) {
+                if (subpath->getCurve(j)) {
+                    res.curveTo(Geom::Point(subpath->getX(j), subpath->getY(j)),
+                                Geom::Point(subpath->getX(j+1), subpath->getY(j+1)),
+                                Geom::Point(subpath->getX(j+2), subpath->getY(j+2)));
+
+                    j += 3;
+                } else {
+                    res.lineTo(Geom::Point(subpath->getX(j), subpath->getY(j)));
+                    ++j;
+                }
+            }
+            if (subpath->isClosed()) {
+                res.closePath();
+            }
+        }
+    }
+
+    res.flush();
+    return res.peek();
 }

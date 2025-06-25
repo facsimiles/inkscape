@@ -18,28 +18,28 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath2">
       <path
-         d="M 100,100 H 200 V 200 H 100 Z"
+         d="M 100,100 H 200.00001 V 200.00001 H 100 Z"
          id="path2" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath4">
       <path
-         d="M 300,300 H 400 V 400 H 300 Z"
+         d="m 300.00001,300.00001 h 100 v 100 h -100 z"
          id="path4" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath6">
       <path
-         d="M 100,100 H 200 V 200 H 100 Z"
+         d="M 100,100 H 200.00001 V 200.00001 H 100 Z"
          id="path6" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath8">
       <path
-         d="M 300,300 H 400 V 400 H 300 Z"
+         d="m 300.00001,300.00001 h 100 v 100 h -100 z"
          id="path8" />
     </clipPath>
   </defs>
