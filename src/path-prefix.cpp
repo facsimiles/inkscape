@@ -49,12 +49,7 @@ static std::string _get_bundle_prefix_dir()
     char const *program_dir = get_program_dir();
     auto prefix = Glib::path_get_dirname(program_dir);
 
-#if defined(__APPLE__)
-    if (g_str_has_suffix(program_dir, "Contents/MacOS")) {
-        // macOS
-        prefix += "/Resources";
-    }
-#elif defined(__linux__)
+#if defined(__linux__)
     if (g_str_has_suffix(program_dir, "/lib64")) {
         // AppImage
         // program_dir=appdir/lib64
@@ -83,7 +78,7 @@ char const *get_inkscape_datadir()
         static std::string datadir = Glib::getenv("INKSCAPE_DATADIR");
 
         if (datadir.empty()) {
-            datadir = Glib::build_filename(_get_bundle_prefix_dir(), "share");
+            datadir = Glib::build_filename(_get_bundle_prefix_dir(), "Resources", "share");
 
             if (!Glib::file_test(Glib::build_filename(datadir, "inkscape"), Glib::FileTest::IS_DIR)) {
                 datadir = INKSCAPE_DATADIR;
@@ -120,20 +115,20 @@ void set_xdg_env()
     // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/MacOSXDirectories/MacOSXDirectories.html
     auto app_support_dir = Glib::getenv("HOME") + "/Library/Application Support/org.inkscape.Inkscape";
 
-    auto bundle_resources_dir       = Glib::path_get_dirname(get_inkscape_datadir());
+    auto bundle_frameworks_dir      = _get_bundle_prefix_dir() + "/Frameworks";
+    auto bundle_resources_dir       = _get_bundle_prefix_dir() + "/Resources";
     auto bundle_resources_etc_dir   = bundle_resources_dir + "/etc";
-    auto bundle_resources_bin_dir   = bundle_resources_dir + "/bin";
     auto bundle_resources_lib_dir   = bundle_resources_dir + "/lib";
     auto bundle_resources_share_dir = bundle_resources_dir + "/share";
 
-    // failsafe: Check if the expected content is really there, using GIO modules
+    // failsafe: Check if the expected content is really there, using GI repository
     // as an indicator.
     // This is also helpful to developers as it enables the possibility to
     //      1. cmake -DCMAKE_INSTALL_PREFIX=Inkscape.app/Contents/Resources
     //      2. move binary to Inkscape.app/Contents/MacOS and set rpath
     //      3. copy Info.plist
     // to ease up on testing and get correct application behavior (like dock icon).
-    if (!Glib::file_test(bundle_resources_lib_dir + "/gio/modules", Glib::FileTest::EXISTS)) {
+    if (!Glib::file_test(bundle_resources_lib_dir + "/girepository-1.0", Glib::FileTest::EXISTS)) {
         // doesn't look like a standalone bundle
         return;
     }
@@ -148,13 +143,13 @@ void set_xdg_env()
 
     // GdkPixbuf
     // https://gitlab.gnome.org/GNOME/gdk-pixbuf
-    Glib::setenv("GDK_PIXBUF_MODULE_FILE", bundle_resources_lib_dir + "/gdk-pixbuf-2.0/2.10.0/loaders.cache");
+    Glib::setenv("GDK_PIXBUF_MODULE_FILE", bundle_resources_etc_dir + "/loaders.cache");
 
     // fontconfig
     Glib::setenv("FONTCONFIG_PATH", bundle_resources_etc_dir + "/fonts");
 
     // GIO
-    Glib::setenv("GIO_MODULE_DIR", bundle_resources_lib_dir + "/gio/modules");
+    Glib::setenv("GIO_MODULE_DIR", bundle_frameworks_dir);
 
     // GObject Introspection
     Glib::setenv("GI_TYPELIB_PATH", bundle_resources_lib_dir + "/girepository-1.0");
@@ -164,13 +159,12 @@ void set_xdg_env()
     Glib::setenv("ENCHANT_PREFIX", bundle_resources_dir);
 
     // PATH
-    Glib::setenv("PATH", bundle_resources_bin_dir + ":" + Glib::getenv("PATH"));
+    Glib::setenv("PATH", std::string(get_program_dir()) + ":" + Glib::getenv("PATH"));
 
     // DYLD_LIBRARY_PATH
     // This is required to make Python GTK bindings work as they use dlopen()
     // to load libraries.
-    Glib::setenv("DYLD_LIBRARY_PATH", bundle_resources_lib_dir + ":"
-            + bundle_resources_lib_dir + "/gdk-pixbuf-2.0/2.10.0/loaders");
+    Glib::setenv("DYLD_LIBRARY_PATH", bundle_frameworks_dir);
 #endif
 }
 
