@@ -146,7 +146,7 @@ inkscape:macos:
     CCACHE_MAXSIZE: "800Mi"
     # ICM = inkscape ci macos
     # https://gitlab.com/inkscape/infra/inkscape-ci-macos
-    ICM_REPO_REF: 2a5ec82fc1f59b8ad29c4cecc8ff1d9f34aa41c2
+    ICM_REPO_REF: 31c47ddd1bcc210405754c7bccdfdd6fcf41f177
     ICM_REPO_URL: https://gitlab.com/inkscape/infra/inkscape-ci-macos.git
     # build number
     INK_BUILD: $CI_PIPELINE_IID
