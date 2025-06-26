@@ -42,6 +42,9 @@
 #include "selection.h"
 #include "ui/desktop/menu-set-tooltips-shift-icons.h"
 #include "ui/util.h"
+#include "ui/widget/desktop-widget.h"
+#include "ui/tools/text-tool.h"
+#include "ui/on-canvas-spellcheck.h"
 
 static void
 AppendItemFromAction(Glib::RefPtr<Gio::Menu> const &gmenu,
@@ -257,6 +260,33 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
             if (is<SPText>(item)) {
                 AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Text')",                      _("_Text and Font..."),     "dialog-text-and-font"  );
                 AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Spellcheck')",                _("Check Spellin_g..."),    "tools-check-spelling"  );
+
+                auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool());
+
+                if(text_tool)
+                {
+                    auto sel_start = text_tool->text_sel_start;
+                    auto sel_end   = text_tool->text_sel_end;
+
+                    auto spellcheck = text_tool->getSpellcheck();
+
+                    if(spellcheck && spellcheck->isMisspelled(item, sel_start, sel_end))
+                    {
+                        auto corrections = spellcheck->getCorrections(item, sel_start, sel_end);
+
+                        if (!corrections.empty()) {
+                            int count = 0;
+                            for (auto const &correction : corrections) {
+                                count++;
+                                if(count > 5) break;
+                                auto label = Glib::ustring::compose(_("Replace with '%1'"), correction);
+                                auto action_name = Glib::ustring::compose("spellcheck-replace-%1", correction);
+                                action_group->add_action(action_name, sigc::bind(sigc::mem_fun(*spellcheck, &Inkscape::UI::OnCanvasSpellCheck::replaceWord), item, sel_start, sel_end, correction));
+                                AppendItemFromAction(gmenu_dialogs, "ctx." + action_name, label);
+                            }
+                        }
+                    }
+                }
             }
             gmenu->append_section(gmenu_dialogs); // We might add to it later...
 

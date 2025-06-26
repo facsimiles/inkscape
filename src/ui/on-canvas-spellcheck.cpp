@@ -195,6 +195,45 @@ void OnCanvasSpellCheck::addTrackedItem(SPItem* item)
     checkTextItem(item);
 }
 
+bool OnCanvasSpellCheck::isMisspelled(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end) const
+{
+    // Check if the word is misspelled in the tracked items
+    auto it = std::find_if(_tracked_items.begin(), _tracked_items.end(),
+                           [item](const TrackedTextItem& tracked) { return tracked.item == item; });
+    if (it != _tracked_items.end()) {
+        for (const auto& misspelled : it->misspelled_words) {
+            if (misspelled.begin == begin && misspelled.end == end) {
+                return true; // Found a match
+            }
+        }
+    }
+    return false; // Not found
+}
+
+std::vector<Glib::ustring> OnCanvasSpellCheck::getCorrections(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end) const
+{
+    if(!isMisspelled(item, begin, end))
+    {
+        return {}; // No corrections if the word is not misspelled
+    }
+
+    auto word = sp_te_get_string_multiline(item, begin, end);
+
+    auto corrections = list_corrections(_checker.get(), word.c_str());
+
+    return corrections;
+    
+}
+
+void OnCanvasSpellCheck::replaceWord(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end, const Glib::ustring &replacement)
+{
+    // Replace the word in the text item
+    sp_te_replace(item, begin, end, replacement.c_str());
+
+    // After replacing, we need to re-check the item for misspelled words
+    checkTextItem(item);
+}
+
 
 OnCanvasSpellCheck::~OnCanvasSpellCheck() = default;
 

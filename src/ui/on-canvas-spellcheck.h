@@ -80,6 +80,15 @@ private:
 public:
     void addTrackedItem(SPItem* item);
 
+    // Check is passed word exists in our MispelledWords vector
+    bool isMisspelled(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end) const;
+
+    // Get List of Correct Words for SpellCheck
+    std::vector<Glib::ustring> getCorrections(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end) const;
+
+    void replaceWord(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end, const Glib::ustring &replacement);
+
+
 };
 
 } // namespace Inkscape::UI

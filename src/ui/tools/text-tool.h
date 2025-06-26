@@ -49,6 +49,8 @@ public:
     bool deleteSelection();
     void deleteSelected();
 
+    Inkscape::UI::OnCanvasSpellCheck* getSpellcheck() { return _spellcheck.get();}
+
     SPItem *textItem() const { return text; }
 
     // Insertion point position
