@@ -156,6 +156,51 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
     // Save the items in context
     items_under_cursor = items;
 
+    //SpellCheck
+    bool spellcheck_enabled = false;
+    if(item && is<SPText>(item)) {
+
+        auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool());
+
+        if(text_tool)
+        {
+            auto sel_start = text_tool->text_sel_start;
+            auto sel_end   = text_tool->text_sel_end;
+
+            auto spellcheck = text_tool->getSpellcheck();
+
+            if(spellcheck && spellcheck->isMisspelled(item, sel_start, sel_end))
+            {
+                auto corrections = spellcheck->getCorrections(item, sel_start, sel_end);
+
+                if (!corrections.empty()) {
+                    spellcheck_enabled = true;
+                    gmenu_section = Gio::Menu::create();
+                    int count = 0;
+                    for (auto const &correction : corrections) {
+                        count++;
+                        if(count > 5) break;
+                        auto label = Glib::ustring::compose(_("%1"), correction);
+                        auto action_name = Glib::ustring::compose("spellcheck-replace-%1", correction);
+                        action_group->add_action(action_name, sigc::bind(sigc::mem_fun(*spellcheck, &Inkscape::UI::OnCanvasSpellCheck::replaceWord), item, sel_start, sel_end, correction));
+                        AppendItemFromAction(gmenu_section, "ctx." + action_name, label);
+                    }
+                    gmenu->append_section(gmenu_section);
+                }
+
+                gmenu->append_section(create_clipboard_actions());
+
+                gmenu_section = Gio::Menu::create();
+                AppendItemFromAction(gmenu_section, "app.duplicate", _("Duplic_ate"), "edit-duplicate");
+                AppendItemFromAction(gmenu_section, "app.clone", _("_Clone"), "edit-clone");
+                AppendItemFromAction(gmenu_section, "app.delete-selection", _("_Delete"), "edit-delete");
+                gmenu->append_section(gmenu_section);
+            }
+        }
+    }
+
+    std::cout<<spellcheck_enabled << std::endl;
+
     bool has_hidden_below_cursor = false;
     bool has_locked_below_cursor = false;
     for (auto item : items_under_cursor) {
@@ -193,7 +238,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
         AppendItemFromAction(gmenu_section, "doc.page-move-forward", _("Move Page _Forward"), "pages-order-forwards");
         gmenu->append_section(gmenu_section);
 
-    } else if (!layer || desktop->getSelection()->includes(layer)) {
+    } else if (!spellcheck_enabled && !layer || desktop->getSelection()->includes(layer)) {
         // "item" is the object that was under the mouse when right-clicked. It determines what is shown
         // in the menu thus it makes the most sense that it is either selected or part of the current
         // selection.
@@ -260,33 +305,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
             if (is<SPText>(item)) {
                 AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Text')",                      _("_Text and Font..."),     "dialog-text-and-font"  );
                 AppendItemFromAction(     gmenu_dialogs, "win.dialog-open('Spellcheck')",                _("Check Spellin_g..."),    "tools-check-spelling"  );
-
-                auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool());
-
-                if(text_tool)
-                {
-                    auto sel_start = text_tool->text_sel_start;
-                    auto sel_end   = text_tool->text_sel_end;
-
-                    auto spellcheck = text_tool->getSpellcheck();
-
-                    if(spellcheck && spellcheck->isMisspelled(item, sel_start, sel_end))
-                    {
-                        auto corrections = spellcheck->getCorrections(item, sel_start, sel_end);
-
-                        if (!corrections.empty()) {
-                            int count = 0;
-                            for (auto const &correction : corrections) {
-                                count++;
-                                if(count > 5) break;
-                                auto label = Glib::ustring::compose(_("Replace with '%1'"), correction);
-                                auto action_name = Glib::ustring::compose("spellcheck-replace-%1", correction);
-                                action_group->add_action(action_name, sigc::bind(sigc::mem_fun(*spellcheck, &Inkscape::UI::OnCanvasSpellCheck::replaceWord), item, sel_start, sel_end, correction));
-                                AppendItemFromAction(gmenu_dialogs, "ctx." + action_name, label);
-                            }
-                        }
-                    }
-                }
             }
             gmenu->append_section(gmenu_dialogs); // We might add to it later...
 
@@ -368,7 +386,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
             AppendItemFromAction( gmenu_section, "ctx.unlock-objects-below-cursor",     _("Unlock Objects Below Cursor"),  ""                         );
         }
         gmenu->append_section(gmenu_section);
-    } else {
+    } else if(!spellcheck_enabled){
         // Layers: Only used in "Layers and Objects" dialog.
 
         gmenu_section = Gio::Menu::create();
