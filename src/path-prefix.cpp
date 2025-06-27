@@ -78,8 +78,15 @@ char const *get_inkscape_datadir()
         static std::string datadir = Glib::getenv("INKSCAPE_DATADIR");
 
         if (datadir.empty()) {
-            datadir = Glib::build_filename(_get_bundle_prefix_dir(), "Resources", "share");
-
+#ifdef __APPLE__
+            if (g_str_has_suffix(get_program_dir(), "Contents/MacOS")) {
+                datadir = Glib::build_filename(_get_bundle_prefix_dir(), "Resources", "share");
+            } else {
+                datadir = Glib::build_filename(_get_bundle_prefix_dir(), "share");
+            }
+#else
+            datadir = Glib::build_filename(_get_bundle_prefix_dir(), "share");
+#endif
             if (!Glib::file_test(Glib::build_filename(datadir, "inkscape"), Glib::FileTest::IS_DIR)) {
                 datadir = INKSCAPE_DATADIR;
             }
