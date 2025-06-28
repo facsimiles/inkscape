@@ -212,7 +212,7 @@ inkscape:macos:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     CCACHE_MAXSIZE: "250M"
     # ICW = inkscape-ci-windows, https://gitlab.com/inkscape/infra/inkscape-ci-windows
-    ICW_VERSION: 118
+    ICW_VERSION: 126
     ICW_NAME: ink$ICW_VERSION
     ICW_RELEASE_URL: $CI_API_V4_URL/projects/46863172/packages/generic/windows/r$ICW_VERSION/${ICW_NAME}_$MSYSTEM.7z
   before_script:

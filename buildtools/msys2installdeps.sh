@@ -85,7 +85,8 @@ $ARCH-libvisio \
 $ARCH-libwpg \
 $ARCH-gtksourceview5 \
 $ARCH-libjxl \
-$ARCH-enchant
+$ARCH-enchant \
+$ARCH-libspelling
 
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \

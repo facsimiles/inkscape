@@ -15,7 +15,6 @@ if(WIN32)
     ${MINGW_BIN}/libaom.dll
     ${MINGW_BIN}/libaspell-[0-9]*.dll
     ${MINGW_BIN}/libavif-[0-9]*.dll
-    ${MINGW_BIN}/libboost_filesystem-mt.dll
     ${MINGW_BIN}/libbrotlicommon.dll
     ${MINGW_BIN}/libbrotlidec.dll
     ${MINGW_BIN}/libbz2-[0-9]*.dll
@@ -27,6 +26,8 @@ if(WIN32)
     ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcrypto-3*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
+    ${MINGW_BIN}/libngtcp2-[0-9]*.dll
+    ${MINGW_BIN}/libngtcp2_crypto_ossl.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
     ${MINGW_BIN}/libdav1d.dll
     ${MINGW_BIN}/libdav1d-[0-9]*.dll
