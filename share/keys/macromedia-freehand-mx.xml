@@ -117,9 +117,9 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   Fireworks uses "Window, Hide Panels  F4" to hide both Panels and Toolbox --> 
   <bind gaction="win.dialog-toggle"     keys="F4, &lt;ctrl&gt;&lt;shift&gt;h, &lt;ctrl&gt;&lt;shift&gt;H" />
 
-  <!-- No menu items in Freehand but these do cycle through Windows as expected -->
-  <bind gaction="win.window-next"       keys="&lt;ctrl&gt;Tab, &lt;ctrl&gt;&lt;shift&gt;ISO_Left_Tab" />
-  <bind gaction="win.window-previous"   keys="&lt;ctrl&gt;&lt;shift&gt;Tab, &lt;ctrl&gt;ISO_Left_Tab" />
+  <!-- No menu items in Freehand but these do cycle through tabs as expected -->
+  <bind gaction="win.tab-next"       keys="&lt;ctrl&gt;Tab" />
+  <bind gaction="win.tab-previous"   keys="&lt;ctrl&gt;&lt;shift&gt;Tab" />
 
   <!-- Rulers off by default.  Looks better and cleaner that way, less busy.  -->
   <bind gaction="win.canvas-rulers"     keys="&lt;ctrl&gt;&lt;alt&gt;r, &lt;ctrl&gt;&lt;alt&gt;R" />

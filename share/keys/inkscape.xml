@@ -236,8 +236,10 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-palette"                     keys="&lt;shift&gt;&lt;alt&gt;p" />
   <bind gaction="win.canvas-statusbar" />
   <bind gaction="win.canvas-command-palette"             keys="question" />
-  <bind gaction="win.window-previous"                    keys="&lt;ctrl&gt;ISO_Left_Tab" />
-  <bind gaction="win.window-next"                        keys="&lt;ctrl&gt;Tab, &lt;meta&gt;grave" />
+  <bind gaction="win.window-previous" />
+  <bind gaction="win.window-next"                        keys="&lt;meta&gt;grave" />
+  <bind gaction="win.tab-previous"                       keys="&lt;ctrl&gt;&lt;shift&gt;Tab" />
+  <bind gaction="win.tab-next"                           keys="&lt;ctrl&gt;Tab" />
   <bind gaction="win.window-new" />
   <bind gaction="win.view-fullscreen"                    keys="F11, &lt;ctrl&gt;&lt;meta&gt;f" />
   <bind gaction="win.view-full-screen-focus"             keys="&lt;primary&gt;F11" />

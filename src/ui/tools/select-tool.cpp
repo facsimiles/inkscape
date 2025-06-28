@@ -279,20 +279,24 @@ bool SelectTool::item_handler(SPItem *local_item, CanvasEvent const &event)
                     }
                     break;
                 case GDK_KEY_Tab:
-                    if (dragging && grabbed) {
-                        _seltrans->getNextClosestPoint(false);
-                    } else {
-                        sp_selection_item_next(_desktop);
+                    if (!mod_ctrl(event)) {
+                        if (dragging && grabbed) {
+                            _seltrans->getNextClosestPoint(false);
+                        } else {
+                            sp_selection_item_next(_desktop);
+                        }
+                        ret = true;
                     }
-                    ret = true;
                     break;
                 case GDK_KEY_ISO_Left_Tab:
-                    if (dragging && grabbed) {
-                        _seltrans->getNextClosestPoint(true);
-                    } else {
-                        sp_selection_item_prev(_desktop);
+                    if (!mod_ctrl(event)) {
+                        if (dragging && grabbed) {
+                            _seltrans->getNextClosestPoint(true);
+                        } else {
+                            sp_selection_item_prev(_desktop);
+                        }
+                        ret = true;
                     }
-                    ret = true;
                     break;
             }
         },
