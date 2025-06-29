@@ -14,7 +14,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <utility>   // std::pair
+#include <utility> // std::pair
+
 #include "libnrtype/Layout-TNG.h"
 #include "text-tag-attributes.h"
 
@@ -65,6 +66,8 @@ void sp_te_set_repr_text_multiline(SPItem *text, char const *str);
 
 TextTagAttributes*
 text_tag_attributes_at_position(SPItem *item, Inkscape::Text::Layout::iterator const &position, unsigned *char_index);
+
+bool is_kerning_supported(SPItem const *text);
 
 void sp_te_adjust_kerning_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop const *desktop, Geom::Point by);
 void sp_te_adjust_dx (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double delta);

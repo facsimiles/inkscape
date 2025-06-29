@@ -17,27 +17,15 @@
 
 #include "text-tool.h"
 
-#include <algorithm>
-#include <cmath>
-#include <iomanip>
-#include <memory>
-#include <sstream>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/regex.h>
-#include <gdk/gdkkeysyms.h>
-#include <gdkmm/clipboard.h>
 #include <gtkmm/settings.h>
-#include <gtkmm/window.h>
 
 #include "context-fns.h"
 #include "desktop-style.h"
-#include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape-window.h"
 #include "message-context.h"
-#include "message-stack.h"
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
@@ -49,21 +37,16 @@
 #include "display/control/canvas-item-bpath.h"
 #include "display/curve.h"
 #include "livarot/Path.h"
-#include "livarot/Shape.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
-#include "object/sp-text.h"
 #include "object/sp-textpath.h"
-#include "object/sp-shape.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/icon-names.h"
 #include "ui/shape-editor.h"
 #include "ui/widget/canvas.h"
-#include "ui/widget/events/canvas-event.h"
 #include "ui/widget/events/debug.h"
 #include "util/callback-converter.h"
 #include "util/units.h"
-#include "xml/sp-css-attr.h"
 
 using Inkscape::DocumentUndo;
 
@@ -585,6 +568,7 @@ bool TextTool::root_handler(CanvasEvent const &event)
             ret = true;
         },
         [&] (KeyPressEvent const &event) {
+            auto const kerning_not_supported_message = _("Text spacing modification is not supported in SVG Flowtext");
             auto const group0_keyval = get_latin_keyval(event);
 
             if (group0_keyval == GDK_KEY_KP_Add || group0_keyval == GDK_KEY_KP_Subtract) {
@@ -908,15 +892,16 @@ bool TextTool::root_handler(CanvasEvent const &event)
                         case GDK_KEY_KP_4:
                             if (this->text) {
                                 if (mod_alt(event)) {
-                                    int mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
-                                    if (mod_shift(event)) {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(mul * -10, 0));
+                                    if (is_kerning_supported(text)) {
+                                        int const mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
+                                        auto const multiplier = mod_shift(event) ? -10 : -1;
+                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(mul * multiplier, 0));
+                                        _updateCursor();
+                                        _updateTextSelection();
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:left",  _("Kern to the left"), INKSCAPE_ICON("draw-text"));
                                     } else {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(mul * -1, 0));
+                                        message_context->set(NORMAL_MESSAGE, kerning_not_supported_message);
                                     }
-                                    _updateCursor();
-                                    _updateTextSelection();
-                                    DocumentUndo::maybeDone(_desktop->getDocument(), "kern:left",  _("Kern to the left"), INKSCAPE_ICON("draw-text"));
                                 } else {
                                     if (mod_ctrl(event)) {
                                         text_sel_end.cursorLeftWithControl();
@@ -934,15 +919,16 @@ bool TextTool::root_handler(CanvasEvent const &event)
                         case GDK_KEY_KP_6:
                             if (text) {
                                 if (mod_alt(event)) {
-                                    int mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
-                                    if (mod_shift(event)) {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(mul * 10, 0));
+                                    if (is_kerning_supported(text)) {
+                                        int const mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
+                                        auto const multiplier = mod_shift(event) ? 10 : 1;
+                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(mul * multiplier, 0));
+                                        _updateCursor();
+                                        _updateTextSelection();
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:right",  _("Kern to the right"), INKSCAPE_ICON("draw-text"));
                                     } else {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(mul * 1, 0));
+                                        message_context->set(NORMAL_MESSAGE, kerning_not_supported_message);
                                     }
-                                    _updateCursor();
-                                    _updateTextSelection();
-                                    DocumentUndo::maybeDone(_desktop->getDocument(), "kern:right",  _("Kern to the right"), INKSCAPE_ICON("draw-text"));
                                 } else {
                                     if (mod_ctrl(event)) {
                                         text_sel_end.cursorRightWithControl();
@@ -960,15 +946,16 @@ bool TextTool::root_handler(CanvasEvent const &event)
                         case GDK_KEY_KP_8:
                             if (text) {
                                 if (mod_alt(event)) {
-                                    int mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
-                                    if (mod_shift(event)) {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(0, mul * -10));
+                                    if (is_kerning_supported(text)) {
+                                        int const mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
+                                        auto const multiplier = mod_shift(event) ? -10 : -1;
+                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(0, mul * multiplier));
+                                        _updateCursor();
+                                        _updateTextSelection();
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:up",  _("Kern up"), INKSCAPE_ICON("draw-text"));
                                     } else {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(0, mul * -1));
+                                        message_context->set(NORMAL_MESSAGE, kerning_not_supported_message);
                                     }
-                                    _updateCursor();
-                                    _updateTextSelection();
-                                    DocumentUndo::maybeDone(_desktop->getDocument(), "kern:up",  _("Kern up"), INKSCAPE_ICON("draw-text"));
                                 } else {
                                     if (mod_ctrl(event)) {
                                         text_sel_end.cursorUpWithControl();
@@ -986,15 +973,16 @@ bool TextTool::root_handler(CanvasEvent const &event)
                         case GDK_KEY_KP_2:
                             if (text) {
                                 if (mod_alt(event)) {
-                                    int mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
-                                    if (mod_shift(event)) {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(0, mul * 10));
+                                    if (is_kerning_supported(text)) {
+                                        int const mul = 1 + gobble_key_events(get_latin_keyval(event), 0); // with any mask
+                                        auto const multiplier = mod_shift(event) ? 10 : 1;
+                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(0, mul * multiplier));
+                                        _updateCursor();
+                                        _updateTextSelection();
+                                        DocumentUndo::maybeDone(_desktop->getDocument(), "kern:down",  _("Kern down"), INKSCAPE_ICON("draw-text"));
                                     } else {
-                                        sp_te_adjust_kerning_screen(text, text_sel_start, text_sel_end, _desktop, Geom::Point(0, mul * 1));
+                                        message_context->set(NORMAL_MESSAGE, kerning_not_supported_message);
                                     }
-                                    _updateCursor();
-                                    _updateTextSelection();
-                                    DocumentUndo::maybeDone(_desktop->getDocument(), "kern:down",  _("Kern down"), INKSCAPE_ICON("draw-text"));
                                 } else {
                                     if (mod_ctrl(event)) {
                                         text_sel_end.cursorDownWithControl();

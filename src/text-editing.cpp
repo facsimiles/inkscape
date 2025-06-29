@@ -1061,6 +1061,16 @@ TextTagAttributes *text_tag_attributes_at_position(SPItem *item, Text::Layout::i
     return attributes_for_object(source_item->parent);
 }
 
+bool is_kerning_supported(SPItem const *text)
+{
+    if (!text || (text->style && text->style->shape_inside.set)) {
+        // Text spacing modification is not supported in SVG Flowtext
+        return false;
+    }
+
+    return true;
+}
+
 void sp_te_adjust_kerning_screen(SPItem *text, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
                                  SPDesktop const *desktop, Geom::Point by)
 {

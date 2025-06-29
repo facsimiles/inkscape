@@ -29,19 +29,11 @@
 #include "text-toolbar.h"
 
 #include <boost/range/adaptor/reversed.hpp>
-#include <glibmm/i18n.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/listbox.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop-style.h"
-#include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
@@ -49,7 +41,6 @@
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-root.h"
-#include "object/sp-string.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
 #include "selection-chemistry.h"
@@ -58,7 +49,6 @@
 #include "ui/builder-utils.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/icon-names.h"
-#include "ui/tools/select-tool.h"
 #include "ui/tools/text-tool.h"
 #include "ui/util.h"
 #include "ui/widget/combo-box-entry-tool-item.h"
@@ -1474,7 +1464,7 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
             to_work.push_back(i);
         }
         if (flowtext ||
-            (text && text->style && text->style->shape_inside.set)) {
+            !is_kerning_supported(text)) {
             isFlow = true;
         }
     }
