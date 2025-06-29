@@ -48,7 +48,7 @@ void ColorTagRenderer::snapshot_vfunc(Glib::RefPtr<Gtk::Snapshot> const &snapsho
     auto const cr = snapshot->append_cairo(background_area);
     cr->rectangle(background_area.get_x() + 0.5, background_area.get_y() + 0.5, background_area.get_width() - 1.0, background_area.get_height() -1.0);
     auto  color = Colors::Color(_property_color.get_value()); // RGBA
-    ink_cairo_set_source_color(cr, color);
+    ink_cairo_set_source_color(cr->cobj(), color);
     cr->fill();
 
     if (_property_hover.get_value()) {

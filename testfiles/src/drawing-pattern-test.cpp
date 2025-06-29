@@ -133,7 +133,9 @@ struct TestDrawingPattern : public DrawingPattern
 /// Regression test for https://gitlab.com/inkscape/inkscape/-/issues/5677
 TEST(DrawingPatternTest, ZeroRankPatternMatrix)
 {
-    RenderContext fakeContext;
+    RenderContext fakeContext{
+        .outline_color = Colors::Color(0xff),
+    };
 
     TestDrawingPattern testPattern;
     testPattern.setTileRect(Geom::Rect::from_xywh(0, 0, 1, 1));

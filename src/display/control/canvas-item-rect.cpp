@@ -168,14 +168,14 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
 
     // Do outline
     if (SP_RGBA32_A_U(_outline) > 0 && _outline_width > 0) {
-        ink_cairo_set_source_rgba32(buf.cr, _outline);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_outline));
         buf.cr->set_line_width(get_effective_outline());
         buf.cr->stroke_preserve();
     }
 
     // Do stroke
     if (SP_RGBA32_A_U(_stroke) > 0 && _stroke_width > 0) {
-        ink_cairo_set_source_rgba32(buf.cr, _stroke);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_stroke));
         buf.cr->set_line_width(_stroke_width);
         buf.cr->stroke_preserve();
     }
@@ -188,14 +188,14 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
 
     // Draw fill
     if (SP_RGBA32_A_U(_fill) > 0 && !buf.outline_pass) {
-        ink_cairo_set_source_rgba32(buf.cr, _fill);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_fill));
         buf.cr->fill_preserve();
     }
 
     // Highlight the border by drawing it in _shadow_color.
     if (_shadow_width == 1 && _dashed) {
         buf.cr->set_dash(dashes, 3.5); // Dash offset by dash length.
-        ink_cairo_set_source_rgba32(buf.cr, _shadow_color);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_shadow_color));
         buf.cr->stroke_preserve();
     }
 

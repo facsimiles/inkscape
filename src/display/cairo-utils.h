@@ -96,13 +96,10 @@ void set_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation cif);
 void copy_cairo_surface_ci(cairo_surface_t *in, cairo_surface_t *out);
 void convert_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation cif);
 
-cairo_pattern_t *ink_cairo_pattern_create(Inkscape::Colors::Color const &color, double opacity = 1.0);
-void ink_cairo_pattern_add_color_stop(cairo_pattern_t *ptn, double offset, Inkscape::Colors::Color const &color, double opacity = 1.0);
-void ink_cairo_set_source_color(Cairo::RefPtr<Cairo::Context> ctx, Inkscape::Colors::Color const &color, double opacity = 1.0);
-void ink_cairo_set_source_color(cairo_t *ctx, Inkscape::Colors::Color const &c, double opacity = 1.0);
-void ink_cairo_set_source_rgba32(Cairo::RefPtr<Cairo::Context> ctx, guint32 rgba);
-void ink_cairo_set_source_rgba32(Cairo::Context &ctx, guint32 rgba);
-void ink_cairo_set_source_rgba32(cairo_t *ctx, guint32 rgba);
+void ink_cairo_set_source_color(cairo_t *ctx, Colors::Color const &c, bool to_srgb = true);
+void ink_cairo_set_source_color(Cairo::RefPtr<Cairo::Context> &ctx, Colors::Color const &c, bool to_srgb = true);
+void ink_cairo_pattern_add_color_stop(cairo_pattern_t *ptn, double offset, Colors::Color const &color, bool to_srgb = true);
+cairo_pattern_t *ink_cairo_pattern_create(Colors::Color const &color, bool to_srgb = true);
 void ink_cairo_transform(cairo_t *ct, Geom::Affine const &m);
 void ink_cairo_pattern_set_matrix(cairo_pattern_t *cp, Geom::Affine const &m);
 void ink_cairo_set_hairline(cairo_t *ct);

@@ -25,6 +25,7 @@
 #include <2geom/rect.h>
 #include <2geom/affine.h>
 
+#include "colors/color.h"
 #include "style-enums.h"
 #include "tags.h"
 
@@ -50,7 +51,7 @@ enum class Antialiasing : unsigned char
 
 struct RenderContext
 {
-    std::uint32_t outline_color;
+    Colors::Color outline_color;
     std::optional<Antialiasing> antialiasing_override;
     bool dithering = false;
 };

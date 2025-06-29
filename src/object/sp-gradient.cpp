@@ -1168,7 +1168,7 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
     if (!is<SPMeshGradient>(gr)) {
         for (auto & stop : gr->vector.stops) {
             // multiply stop opacity by paint opacity
-            ink_cairo_pattern_add_color_stop(cp, stop.offset, *stop.color, opacity);
+            ink_cairo_pattern_add_color_stop(cp, stop.offset, stop.color->withOpacity(opacity));
         }
     }
 

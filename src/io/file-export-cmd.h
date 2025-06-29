@@ -21,9 +21,14 @@
 
 class SPDocument;
 class SPItem;
-namespace Inkscape::Extension {
+namespace Inkscape {
+namespace Extension {
 class Output;
-} // namespace Inkscape::Extension
+} // namespace Extension
+namespace Colors {
+class Color;
+}
+} // namespace Inkscape
 
 enum class ExportAreaType
 {
@@ -42,7 +47,7 @@ public:
 private:
     ExportAreaType export_area_type{ExportAreaType::Unset};
     Glib::ustring export_area{};
-    guint32 get_bgcolor(SPDocument *doc);
+    Inkscape::Colors::Color get_bgcolor(SPDocument *doc);
     std::string get_filename_out(std::string filename_in = "", std::string object_id = "");
     int do_export_svg(SPDocument *doc, std::string const &filename_in);
     int do_export_vector(SPDocument *doc, std::string const &filename_in, Inkscape::Extension::Output &extension);

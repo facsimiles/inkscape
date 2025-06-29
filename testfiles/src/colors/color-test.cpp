@@ -142,6 +142,15 @@ TEST(ColorsColor, Opacity)
     ASSERT_EQ(color.getOpacity(), 0.5);
     ASSERT_EQ(color.stealOpacity(), 0.5);
     ASSERT_FALSE(color.hasOpacity());
+
+    auto copy = color.withOpacity(0.5);
+    ASSERT_TRUE(copy.hasOpacity());
+    ASSERT_FALSE(color.hasOpacity());
+    ASSERT_EQ(copy.getOpacity(), 0.5);
+    ASSERT_EQ(copy.toString(), "#ff000080");
+    auto copy2 = copy.withOpacity(0.5);
+    ASSERT_EQ(copy2.getOpacity(), 0.25);
+    ASSERT_EQ(copy2.toString(), "#ff000040");
 }
 
 TEST(ColorsColor, colorOpacityPin)

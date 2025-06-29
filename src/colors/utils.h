@@ -90,6 +90,7 @@ std::string desc_to_id(std::string const &desc);
 
 Color make_contrasted_color(Color const &orig, double amount);
 Color make_theme_color(Color const &orig, bool dark);
+Color make_disabled_color(Color const &orig, bool dark);
 
 double lightness(Color color);
 double perceptual_lightness(double l);

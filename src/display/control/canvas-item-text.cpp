@@ -149,7 +149,7 @@ void CanvasItemText::_render(Inkscape::CanvasItemBuffer &buf) const
             buf.cr->arc(x + radius, y + radius, radius, M_PI, 3*M_PI_2);
         }
         buf.cr->set_line_width(2);
-        ink_cairo_set_source_rgba32(buf.cr, _background);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_background));
         buf.cr->fill();
     }
 
@@ -163,7 +163,7 @@ void CanvasItemText::_render(Inkscape::CanvasItemBuffer &buf) const
     buf.cr->set_font_size(_fontsize);
     buf.cr->text_path(_text);
 
-    ink_cairo_set_source_rgba32(buf.cr, _fill);
+    ink_cairo_set_source_color(buf.cr, Colors::Color(_fill));
     buf.cr->fill();
     buf.cr->restore();
 }

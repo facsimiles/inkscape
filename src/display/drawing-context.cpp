@@ -130,8 +130,8 @@ void DrawingContext::setHairline() {
     ink_cairo_set_hairline(_ct);
 }
 
-void DrawingContext::setSource(guint32 rgba) {
-    ink_cairo_set_source_rgba32(_ct, rgba);
+void DrawingContext::setSource(Colors::Color const &color) {
+    ink_cairo_set_source_color(_ct, color);
 }
 void DrawingContext::setSource(DrawingSurface *s) {
     Geom::Point origin = s->origin();

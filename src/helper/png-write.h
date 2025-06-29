@@ -23,6 +23,10 @@
 class SPDocument;
 class SPItem;
 
+namespace Inkscape::Colors {
+class Color;
+}
+
 enum ExportResult {
     EXPORT_ERROR = 0,
     EXPORT_OK,
@@ -41,7 +45,7 @@ ExportResult sp_export_png_file(SPDocument *doc,
                                 unsigned long int height,
                                 double xdpi,
                                 double ydpi,
-                                unsigned long bgcolor,
+                                Inkscape::Colors::Color const &bgcolor,
                                 unsigned int (*status) (float, void *),
                                 void *data,
                                 bool force_overwrite = false,
@@ -59,7 +63,7 @@ ExportResult sp_export_png_file(SPDocument *doc,
                                 unsigned long int height,
                                 double xdpi,
                                 double ydpi,
-                                unsigned long bgcolor,
+                                Inkscape::Colors::Color const &bgcolor,
                                 unsigned int (*status) (float, void *),
                                 void *data,
                                 bool force_overwrite = false,

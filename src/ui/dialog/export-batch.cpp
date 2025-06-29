@@ -854,7 +854,7 @@ void BatchExport::onExport()
                 unsigned long int width = (int)(area.width() * dpi / DPI_BASE + 0.5);
                 unsigned long int height = (int)(area.height() * dpi / DPI_BASE + 0.5);
 
-                Export::exportRaster(area, width, height, dpi, _background_color.get_current_color().toRGBA(),
+                Export::exportRaster(area, width, height, dpi, _background_color.get_current_color(),
                                      item_filename_utf8, true, onProgressCallback, this, ext, &show_only);
             } else if (page || !show_only.empty()) {
                 auto copy_doc = _document->copy();

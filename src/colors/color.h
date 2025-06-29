@@ -54,6 +54,7 @@ public:
     double stealOpacity();
     bool setOpacity(double opacity);
     bool addOpacity(double opacity = 1.0) { return setOpacity(opacity * getOpacity()); }
+    Color withOpacity(double opacity) const;
 
     unsigned int getPin(unsigned int channel) const;
 

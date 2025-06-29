@@ -22,6 +22,7 @@
 #include <2geom/pathvector.h>
 #include <sigc++/sigc++.h>
 
+#include "colors/color.h"
 #include "display/drawing-item.h"
 #include "display/rendermode.h"
 #include "nr-filter-colormatrix.h"
@@ -50,9 +51,9 @@ public:
     void setColorMode(ColorMode);
     void setOutlineOverlay(bool);
     void setGrayscaleMatrix(double[20]);
-    void setClipOutlineColor(uint32_t);
-    void setMaskOutlineColor(uint32_t);
-    void setImageOutlineColor(uint32_t);
+    void setClipOutlineColor(Colors::Color);
+    void setMaskOutlineColor(Colors::Color);
+    void setImageOutlineColor(Colors::Color);
     void setImageOutlineMode(bool);
     void setFilterQuality(int);
     void setBlurQuality(int);
@@ -68,9 +69,9 @@ public:
     ColorMode colorMode() const { return _colormode; }
     bool outlineOverlay() const { return _outlineoverlay; }
     auto &grayscaleMatrix() const { return _grayscale_matrix; }
-    uint32_t clipOutlineColor() const { return _clip_outline_color; }
-    uint32_t maskOutlineColor() const { return _mask_outline_color; }
-    uint32_t imageOutlineColor() const { return _image_outline_color; }
+    Colors::Color const &clipOutlineColor() const { return _clip_outline_color; }
+    Colors::Color const &maskOutlineColor() const { return _mask_outline_color; }
+    Colors::Color const &imageOutlineColor() const { return _image_outline_color; }
     bool imageOutlineMode() const { return _image_outline_mode; }
     int filterQuality() const { return _filter_quality; }
     int blurQuality() const { return _blur_quality; }
@@ -107,9 +108,9 @@ private:
     ColorMode _colormode = ColorMode::NORMAL;
     bool _outlineoverlay = false;
     Filters::FilterColorMatrix::ColorMatrixMatrix _grayscale_matrix;
-    uint32_t _clip_outline_color;
-    uint32_t _mask_outline_color;
-    uint32_t _image_outline_color;
+    Colors::Color _clip_outline_color;
+    Colors::Color _mask_outline_color;
+    Colors::Color _image_outline_color;
     bool _image_outline_mode; ///< Always draw images as images, even in outline mode.
     int _filter_quality;
     int _blur_quality;

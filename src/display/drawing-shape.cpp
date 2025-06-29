@@ -225,7 +225,7 @@ unsigned DrawingShape::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::
     bool outline = flags & RENDER_OUTLINE;
 
     if (outline) {
-        auto rgba = rc.outline_color;
+        auto rgba = Colors::Color(rc.outline_color);
 
         // paint-order doesn't matter
         {

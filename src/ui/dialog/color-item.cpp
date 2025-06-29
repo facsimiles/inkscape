@@ -183,7 +183,7 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
         }
     },
     [&] (Colors::Color const &color) {
-        ink_cairo_set_source_color(cr, color);
+        ink_cairo_set_source_color(cr->cobj(), color);
         cr->paint();
         // there's no way to query background color to check if color item stands out,
         // so we apply faint outline to let users make out color shapes blending with background

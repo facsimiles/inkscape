@@ -161,7 +161,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
 
     // Do fill
     if (do_fill) {
-        ink_cairo_set_source_rgba32(buf.cr, _fill);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_fill));
         buf.cr->set_fill_rule(_fill_rule == SP_WIND_RULE_EVENODD ?
                                Cairo::Context::FillRule::EVEN_ODD : Cairo::Context::FillRule::WINDING);
         buf.cr->fill_preserve();
@@ -178,7 +178,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
 
     // Do outline
     if (SP_RGBA32_A_U(_outline) > 0 && _outline_width > 0) {
-        ink_cairo_set_source_rgba32(buf.cr, _outline);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_outline));
         buf.cr->set_line_width(get_effective_outline());
         buf.cr->stroke_preserve();
     }
@@ -196,7 +196,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
             buf.cr->stroke_preserve();
         }
 
-        ink_cairo_set_source_rgba32(buf.cr, _stroke);
+        ink_cairo_set_source_color(buf.cr, Colors::Color(_stroke));
         buf.cr->set_line_width(_stroke_width);
         buf.cr->stroke();
 

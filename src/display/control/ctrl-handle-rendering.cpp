@@ -10,6 +10,7 @@
 #include <cairomm/context.h>
 #include <2geom/point.h>
 
+#include "colors/color.h"
 #include "display/control/canvas-item-enums.h"
 #include "display/cairo-utils.h"
 
@@ -463,16 +464,16 @@ std::shared_ptr<Cairo::ImageSurface const> draw_uncached(RenderParams const &p)
     draw_cairo_path(p.shape, cr, p.size * scale, grid_fit);
 
     // Outline.
-    ink_cairo_set_source_rgba32(cr, p.outline);
+    ink_cairo_set_source_color(cr.cobj(), Colors::Color(p.outline));
     cr.set_line_width(effective_outline * scale);
     cr.stroke_preserve();
 
     // Fill.
-    ink_cairo_set_source_rgba32(cr, p.fill);;
+    ink_cairo_set_source_color(cr.cobj(), Colors::Color(p.fill));;
     cr.fill_preserve();
 
     // Stroke.
-    ink_cairo_set_source_rgba32(cr, p.stroke);
+    ink_cairo_set_source_color(cr.cobj(), Colors::Color(p.stroke));
     cr.set_line_width(p.stroke_width * scale);
     cr.stroke();
 

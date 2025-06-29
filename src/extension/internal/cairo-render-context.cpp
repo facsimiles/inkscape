@@ -1348,7 +1348,7 @@ void CairoRenderContext::_setFillStyle(SPStyle const *const style, Geom::OptRect
             cairo_pattern_destroy(pattern);
         }
     } else if (style->fill.isColor()) {
-        ink_cairo_set_source_color(_cr, style->fill.getColor(), alpha);
+        ink_cairo_set_source_color(_cr, style->fill.getColor().withOpacity(alpha));
     } else { // unset fill is black
         g_assert(!style->fill.set
                 || (paint_server && !paint_server->isValid()));
@@ -1363,7 +1363,7 @@ void CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect con
     if (style->stroke.isContext()) {
         // Do nothing. These are valid values but if not inside a <use> or <marker> element do nothing.
     } else if (style->stroke.isColor() || (style->stroke.isPaintserver() && !style->getStrokePaintServer()->isValid())) {
-        ink_cairo_set_source_color(_cr, style->stroke.getColor(), alpha);
+        ink_cairo_set_source_color(_cr, style->stroke.getColor().withOpacity(alpha));
     } else {
         g_assert( style->stroke.isPaintserver()
                   || is<SPGradient>(SP_STYLE_STROKE_SERVER(style))

@@ -20,6 +20,7 @@
 
 #include <png.h>
 
+#include "colors/color.h"
 #include "document.h"
 #include "png-write.h"
 #include "rdf.h"
@@ -51,7 +52,7 @@
 
 struct SPEBP {
     unsigned long int width, height, sheight;
-    guint32 background;
+    std::optional<Colors::Color> background;
     Inkscape::Drawing *drawing; // it is assumed that all unneeded items are hidden
     guchar *px;
     unsigned (*status)(float, void *);
@@ -333,6 +334,9 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
     if (ebp->status) {
         if (!ebp->status((float) row / ebp->height, ebp->data)) return 0;
     }
+    if (!ebp->background) {
+        return 0;
+    }
 
     num_rows = MIN(num_rows, static_cast<int>(ebp->sheight));
     num_rows = MIN(num_rows, static_cast<int>(ebp->height - row));
@@ -352,7 +356,7 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
     cairo_surface_t *s = cairo_image_surface_create_for_data(
         px, CAIRO_FORMAT_ARGB32, ebp->width, num_rows, stride);
     Inkscape::DrawingContext dc(s, bbox.min());
-    dc.setSource(ebp->background);
+    dc.setSource(*ebp->background);
     dc.setOperator(CAIRO_OPERATOR_SOURCE);
     dc.paint();
     dc.setOperator(CAIRO_OPERATOR_OVER);
@@ -363,8 +367,7 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
 
     // PNG stores data as unpremultiplied big-endian RGBA, which means
     // it's identical to the GdkPixbuf format.
-    convert_pixels_argb32_to_pixbuf(px, ebp->width, num_rows, stride,
-                                    /* RGBA to ARGB with A=0 */ ebp->background >> 8);
+    convert_pixels_argb32_to_pixbuf(px, ebp->width, num_rows, stride, ebp->background->toARGB());
     
     // If a custom bit depth or color type is asked, then convert rgb to grayscale, etc.
     const guchar* new_data = pixbuf_to_png(rows, px, num_rows, ebp->width, stride, color_type, bit_depth);
@@ -377,7 +380,7 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
 ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 double x0, double y0, double x1, double y1,
                                 unsigned long int width, unsigned long int height, double xdpi, double ydpi,
-                                unsigned long bgcolor,
+                                Colors::Color const &bgcolor,
                                 unsigned int (*status) (float, void *),
                                 void *data, bool force_overwrite,
                                 const std::vector<SPItem const *> &items_only, bool interlace, int color_type, int bit_depth, int zlib, int antialiasing)
@@ -395,7 +398,7 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
 ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 Geom::Rect const &area,
                                 unsigned long width, unsigned long height, double xdpi, double ydpi,
-                                unsigned long bgcolor,
+                                Colors::Color const &bgcolor,
                                 unsigned (*status)(float, void *),
                                 void *data, bool force_overwrite,
                                 const std::vector<SPItem const *> &items_only, bool interlace, int color_type, int bit_depth, int zlib, int antialiasing)

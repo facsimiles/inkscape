@@ -441,7 +441,7 @@ int InkFileExportCmd::do_export_vector(SPDocument *doc, std::string const &expor
     return 0;
 }
 
-guint32 InkFileExportCmd::get_bgcolor(SPDocument *doc) {
+Inkscape::Colors::Color InkFileExportCmd::get_bgcolor(SPDocument *doc) {
     Inkscape::Colors::Color bgcolor(0xffffffff);
     if (!export_background.empty()) {
         // override the page color
@@ -476,7 +476,7 @@ guint32 InkFileExportCmd::get_bgcolor(SPDocument *doc) {
             bgcolor.addOpacity(nv->getAttributeDouble("inkscape:pageopacity", 1.0));
         } // else it's transparent
     }
-    return bgcolor.toRGBA();
+    return bgcolor;
 }
 
 /**
@@ -776,10 +776,10 @@ InkFileExportCmd::do_export_png_now(SPDocument *doc, std::string const &filename
             }
         }
 
-        guint32 bgcolor = get_bgcolor(doc);
+        auto bgcolor = get_bgcolor(doc);
         // ----------------------  Generate the PNG -------------------------------
 #ifdef DEBUG
-        std::cerr << "Background RRGGBBAA: " << std::hex << bgcolor << std::dec << std::endl;
+        std::cerr << "Background: " << bgcolor.toString() << std::endl;
         std::cerr << "Area "
                   << area[Geom::X][0] << ":" << area[Geom::Y][0] << ":"
                   << area[Geom::X][1] << ":" << area[Geom::Y][1] << " exported to "

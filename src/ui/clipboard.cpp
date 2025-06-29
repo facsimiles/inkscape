@@ -1807,7 +1807,7 @@ void ClipboardManagerImpl::_onGet(char const *mime_type, Glib::RefPtr<Gio::Outpu
 
         if ((*out)->is_raster()) {
             double dpi = Inkscape::Util::Quantity::convert(1, "in", "px");
-            uint32_t bgcolor = 0x00000000;
+            Inkscape::Colors::Color bgcolor{0x00000000};
 
             auto origin = Geom::Point(_clipboardSPDoc->getRoot()->x.computed, _clipboardSPDoc->getRoot()->y.computed);
             auto area = Geom::Rect(origin, origin + _clipboardSPDoc->getDimensions());

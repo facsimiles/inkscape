@@ -163,6 +163,25 @@ Color make_theme_color(Color const &orig, bool dark)
     return *color.converted(Colors::Space::Type::RGB);
 }
 
+/**
+ * Make a disabled color, a desaturated version of the given color.
+ */
+Color make_disabled_color(Color const &orig, bool dark)
+{
+    auto hsl = *orig.converted(Colors::Space::Type::HSLUV);
+    // reduce saturation and lightness/darkness (on dark/light theme)
+    static double lf = 0.35; // lightness factor - 35% of lightness
+    static double sf = 0.30; // saturation factor - 30% of saturation
+    // for both light and dark themes the idea it to compress full range of color lightness (0..1)
+    // to a narrower range to convey subdued look of disabled widget (that's the lf * l part);
+    // then we move the lightness floor to 0.70 for light theme and 0.20 for dark theme:
+    auto saturation = hsl.get(1) * sf;
+    auto lightness = lf * hsl.get(2) + (dark ? 0.20 : 0.70); // new lightness in 0..1 range
+    hsl.set(1, saturation);
+    hsl.set(2, lightness);
+    return *hsl.converted(Colors::Space::Type::RGB);
+}
+
 double perceptual_lightness(double l)
 {
     return l <= 0.885645168 ? l * 0.09032962963 : std::cbrt(l) * 0.249914424 - 0.16;

@@ -161,7 +161,7 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::
 
     } else { // outline; draw a rect instead
 
-        auto rgba = _drawing.imageOutlineColor();
+        auto rgba = Colors::Color(_drawing.imageOutlineColor());
 
         {   Inkscape::DrawingContext::Save save(dc);
             dc.transform(_ctm);

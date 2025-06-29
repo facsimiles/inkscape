@@ -35,6 +35,7 @@
 
 #include "cairo-templates.h"
 #include "colors/manager.h"
+#include "colors/spaces/rgb.h"
 #include "colors/utils.h"
 #include "document.h"
 #include "helper/pixbuf-ops.h"
@@ -949,45 +950,44 @@ copy_cairo_surface_ci(cairo_surface_t *in, cairo_surface_t *out) {
     cairo_surface_set_user_data(out, &ink_color_interpolation_key, cairo_surface_get_user_data(in, &ink_color_interpolation_key), nullptr);
 }
 
-void
-ink_cairo_set_source_rgba32(cairo_t *ct, guint32 rgba)
-{
-    cairo_set_source_rgba(ct, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba), SP_RGBA32_A_F(rgba));
-}
-
-void
-ink_cairo_set_source_rgba32(Cairo::RefPtr<Cairo::Context> ctx, guint32 rgba)
-{
-    ctx->set_source_rgba(SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba), SP_RGBA32_A_F(rgba));
-}
-
-void
-ink_cairo_set_source_rgba32(Cairo::Context &ctx, guint32 rgba)
-{
-    ctx.set_source_rgba(SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba), SP_RGBA32_A_F(rgba));
-}
-
 /**
- * The following functions interact between Inkscape color model, and cairo surface rendering.
- * for compatability we only convert to RGB and use that directly.
+ * Set the source color of the Cairo context.
+ *
+ * @arg ctx - The cairo context C pointer, must exist.
+ * @arg color - The Color object containing floating point channel values.
+ * @arg to_srgb - Default true, does a conversion to sRGB if needed, force no conversion
+ *                to hack the data of the Cairo surface to non sRGB spaces.
  */
-void ink_cairo_set_source_color(Cairo::RefPtr<Cairo::Context> ctx, Inkscape::Colors::Color const &color, double opacity)
+void ink_cairo_set_source_color(Cairo::RefPtr<Cairo::Context> &ctx, Colors::Color const &color, bool to_srgb)
 {
-    ink_cairo_set_source_rgba32(ctx, color.toRGBA(opacity));
+    ink_cairo_set_source_color(ctx->cobj(), color, to_srgb);
 }
-void ink_cairo_set_source_color(cairo_t *ctx, Inkscape::Colors::Color const &color, double opacity)
+void ink_cairo_set_source_color(cairo_t *ctx, Colors::Color const &color, bool to_srgb)
 {
-    ink_cairo_set_source_rgba32(ctx, color.toRGBA(opacity));
+    if (!to_srgb || *color.getSpace() == Colors::Space::Type::RGB) {
+        // Do not copy the color if we don't need to.
+        // This sets floats so if the Surface is RGB96F or RGBA128F your surface will have more color data.
+        cairo_set_source_rgba(ctx, color[0], color[1], color[2], color.getOpacity());
+    } else if (auto copy = color.converted(Colors::Space::Type::RGB)) {
+        ink_cairo_set_source_color(ctx, *copy, false); // Callback
+    }
 }
-void ink_cairo_pattern_add_color_stop(cairo_pattern_t *ptn, double offset, Inkscape::Colors::Color const &color, double opacity)
+void ink_cairo_pattern_add_color_stop(cairo_pattern_t *ptn, double offset, Colors::Color const &color, bool to_srgb)
 {
-    auto c = color.toRGBA(opacity);
-    cairo_pattern_add_color_stop_rgba(ptn, offset, SP_RGBA32_R_F(c), SP_RGBA32_G_F(c), SP_RGBA32_B_F(c), SP_RGBA32_A_F(c));
+    if (!to_srgb || *color.getSpace() == Colors::Space::Type::RGB) {
+        cairo_pattern_add_color_stop_rgba(ptn, offset, color[0], color[1], color[2], color.getOpacity());
+    } else if (auto copy = color.converted(Colors::Space::Type::RGB)) {
+        ink_cairo_pattern_add_color_stop(ptn, offset, *copy, false); // Callback
+    }
 }
-cairo_pattern_t *ink_cairo_pattern_create(Inkscape::Colors::Color const &color, double opacity)
+cairo_pattern_t *ink_cairo_pattern_create(Colors::Color const &color, bool to_srgb)
 {
-    auto c = color.toRGBA(opacity);
-    return cairo_pattern_create_rgba(SP_RGBA32_R_F(c), SP_RGBA32_G_F(c), SP_RGBA32_B_F(c), SP_RGBA32_A_F(c));
+    if (!to_srgb || *color.getSpace() == Colors::Space::Type::RGB) {
+        return cairo_pattern_create_rgba(color[0], color[1], color[2], color.getOpacity());
+    } else if (auto copy = color.converted(Colors::Space::Type::RGB)) {
+        return ink_cairo_pattern_create(*copy, false);
+    }
+    return nullptr;
 }
 
 
@@ -1474,7 +1474,7 @@ Cairo::RefPtr<Cairo::Pattern> ink_cairo_pattern_create_slanting_stripes(uint32_t
     auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, 1);
     auto context = Cairo::Context::create(surface);
     context->rectangle(0, 0, line_width / 2.0, 1);
-    ink_cairo_set_source_rgba32(context, color);
+    ink_cairo_set_source_color(context, Colors::Color(color));
     context->fill();
     context->paint();
 

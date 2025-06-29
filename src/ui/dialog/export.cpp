@@ -202,7 +202,7 @@ bool Export::checkOrCreateDirectory(std::string const &filename)
  */
 bool Export::exportRaster(
         Geom::Rect const &area, unsigned long int const &width, unsigned long int const &height,
-        float const &dpi, guint32 bg_color, Glib::ustring const &filename, bool overwrite,
+        float const &dpi, Inkscape::Colors::Color const &bgcolor, Glib::ustring const &filename, bool overwrite,
         unsigned (*callback)(float, void *), void *data,
         Inkscape::Extension::Output *extension, std::vector<SPItem const *> *items)
 {
@@ -265,7 +265,7 @@ bool Export::exportRaster(
     ExportResult result = sp_export_png_file(
         desktop->getDocument(), Glib::filename_to_utf8(png_filename).c_str(), area, width, height, pHYs,
         pHYs, // previously xdpi, ydpi.
-        bg_color, callback, data, true, selected, use_interlacing, color_type, bit_depth, zlib, antialiasing);
+        bgcolor, callback, data, true, selected, use_interlacing, color_type, bit_depth, zlib, antialiasing);
 
     bool failed = result == EXPORT_ERROR; // || prog_dialog->get_stopped();
 

@@ -104,12 +104,12 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         rect = round_rect(cr, rect, radius--);
         // opacity of outside outline is reduced
         int alpha = disabled || backdrop ? 0x2f : 0x5f;
-        ink_cairo_set_source_rgba32(cr->cobj(), outline_color | alpha);
+        ink_cairo_set_source_color(cr->cobj(), Colors::Color(outline_color | alpha));
         cr->fill();
 
         // inside border
         rect = round_rect(cr, rect, radius--);
-        ink_cairo_set_source_rgba32(cr->cobj(), border_color | 0xff);
+        ink_cairo_set_source_color(cr->cobj(), Colors::Color(border_color, false));
         cr->fill();
     }
 
@@ -127,24 +127,11 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     }
     else {
         // color itself
-        auto rgba = _rgba;
-        auto alpha = rgba & 0xff;
+        auto color = Colors::Color(_rgba);
+        auto opacity = color.stealOpacity();
         // if preview is disabled, render colors with reduced saturation and intensity
         if (disabled) {
-            auto color = Colors::Color(_rgba);
-            auto hsl = *color.converted(Colors::Space::Type::HSLUV);
-            // reduce saturation and lightness/darkness (on dark/light theme)
-            double lf = 0.35; // lightness factor - 35% of lightness
-            double sf = 0.30; // saturation factor - 30% of saturation
-            // for both light and dark themes the idea it to compress full range of color lightness (0..1)
-            // to a narrower range to convey subdued look of disabled widget (that's the lf * l part);
-            // then we move the lightness floor to 0.70 for light theme and 0.20 for dark theme:
-            auto saturation = hsl.get(1) * sf;
-            auto lightness = lf * hsl.get(2) + (dark_theme ? 0.20 : 0.70); // new lightness in 0..1 range
-            hsl.set(1, saturation);
-            hsl.set(2, lightness);
-            auto rgb = *hsl.converted(Colors::Space::Type::RGB);
-            rgba = rgb.toRGBA();
+            color = make_disabled_color(color, dark_theme);
         }
 
         width = rect.width() / 2;
@@ -153,14 +140,13 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         y = rect.min().y();
 
         // solid on the right
-        auto solid = rgba | 0xff;
         cairo_new_sub_path(cr->cobj());
         cairo_line_to(cr->cobj(), x + width, y);
         cairo_line_to(cr->cobj(), x + width, y + height);
         cairo_arc(cr->cobj(), x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
         cairo_arc(cr->cobj(), x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
         cairo_close_path(cr->cobj());
-        ink_cairo_set_source_rgba32(cr->cobj(), solid);
+        ink_cairo_set_source_color(cr->cobj(), color);
         cr->fill();
 
         // semi-transparent on the left
@@ -171,12 +157,13 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         cairo_line_to(cr->cobj(), x, y + height);
         cairo_line_to(cr->cobj(), x, y);
         cairo_close_path(cr->cobj());
-        if (alpha < 0xff) {
+        if (opacity < 1.0) {
             auto checkers = create_checkerboard_pattern(-x, -y);
             cr->set_source(checkers);
             cr->fill_preserve();
         }
-        ink_cairo_set_source_rgba32(cr->cobj(), rgba);
+        color.setOpacity(opacity);
+        ink_cairo_set_source_color(cr->cobj(), color);
         cr->fill();
     }
 

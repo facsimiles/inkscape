@@ -414,9 +414,8 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
     bool outline = flags & RENDER_OUTLINE;
 
     if (outline) {
-        auto rgba = rc.outline_color;
         Inkscape::DrawingContext::Save save(dc);
-        dc.setSource(rgba);
+        dc.setSource(rc.outline_color);
         dc.setTolerance(0.5); // low quality, but good enough for outline mode
 
         for (auto & i : _children) {

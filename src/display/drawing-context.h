@@ -21,6 +21,9 @@
 typedef unsigned int guint32;
 
 namespace Inkscape {
+namespace Colors {
+class Color;
+}
 
 class DrawingSurface;
 
@@ -112,7 +115,7 @@ public:
     void setSource(double r, double g, double b, double a = 1.0) {
         cairo_set_source_rgba(_ct, r, g, b, a);
     }
-    void setSource(guint32 rgba);
+    void setSource(Colors::Color const &rgba);
     void setSource(DrawingSurface *s);
 
     void patternSetFilter(cairo_filter_t filter) {

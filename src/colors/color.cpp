@@ -455,6 +455,16 @@ bool Color::setOpacity(double opacity)
 }
 
 /**
+ * Make a copy and add the given opacity on top.
+ */
+Color Color::withOpacity(double opacity) const
+{
+    Color copy = *this;
+    copy.addOpacity(opacity);
+    return copy;
+}
+
+/**
  * Make sure the values for this color are within acceptable ranges.
  */
 void Color::normalize()

@@ -230,7 +230,7 @@ Cairo::RefPtr<Cairo::Surface> draw_gradient(SPGradient* gradient, double width, 
             double py = h + 2 * radius;
             double px = std::round(stop.offset * width);
             ctx->arc(px, py, radius, 0, 2 * M_PI);
-            ink_cairo_set_source_color(ctx, *stop.color);
+            ink_cairo_set_source_color(ctx->cobj(), *stop.color);
             ctx->fill_preserve();
             ctx->set_source_rgb(0.5, 0.5, 0.5);
             ctx->stroke();

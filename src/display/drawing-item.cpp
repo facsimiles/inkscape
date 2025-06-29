@@ -944,7 +944,7 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
 unsigned DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags) const
 {
     auto rc = RenderContext{
-        .outline_color = 0xff,
+        .outline_color = Colors::Color(0xff),
         .antialiasing_override = _drawing._antialiasing_override,
         .dithering = _drawing._use_dithering
     };
@@ -963,7 +963,7 @@ void DrawingItem::_renderOutline(DrawingContext &dc, RenderContext &rc, Geom::In
     _renderItem(dc, rc, *carea, flags, nullptr);
 
     // render clip and mask, if any
-    auto saved_rgba = rc.outline_color; // save current outline color
+    auto saved = rc.outline_color; // save current outline color
     // render clippath as an object, using a different color
     if (_clip) {
         rc.outline_color = _drawing.clipOutlineColor();
@@ -974,7 +974,7 @@ void DrawingItem::_renderOutline(DrawingContext &dc, RenderContext &rc, Geom::In
         rc.outline_color = _drawing.maskOutlineColor();
         _mask->render(dc, rc, *carea, flags);
     }
-    rc.outline_color = saved_rgba; // restore outline color
+    rc.outline_color = saved; // restore outline color
 }
 
 /**

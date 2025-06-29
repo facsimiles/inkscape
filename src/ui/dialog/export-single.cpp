@@ -716,7 +716,7 @@ void SingleExport::onExport()
         std::vector<SPItem const *> selected(selection->items().begin(), selection->items().end());
 
         exportSuccessful = Export::exportRaster(area, width, height, dpi,
-                                                _background_color.get_current_color().toRGBA(), filename_utf8, false,
+                                                _background_color.get_current_color(), filename_utf8, false,
                                                 onProgressCallback, this, omod, selected_only ? &selected : nullptr);
 
     } else {

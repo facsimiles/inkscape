@@ -171,17 +171,16 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int page_n
         if ( (tmp_fd = Glib::file_open_tmp(tmp_png, tmp_base)) >= 0) {
             close(tmp_fd);
 
-            guint32 bgcolor = 0x00000000;
+            Inkscape::Colors::Color bgcolor{0x00000000};
             Inkscape::XML::Node *nv = _workaround._doc->getReprNamedView();
             if (nv && nv->attribute("pagecolor")){
                 if (auto c = Colors::Color::parse(nv->attribute("pagecolor"))) {
-                    // TODO allow page color to be any color space, not just RGB
-                    bgcolor = c->toRGBA();
+                    bgcolor = *c;
                 }
             }
             if (nv && nv->attribute("inkscape:pageopacity")){
                 double opacity = nv->getAttributeDouble("inkscape:pageopacity", 1.0);
-                bgcolor |= SP_COLOR_F_TO_U(opacity);
+                bgcolor.addOpacity(opacity);
             }
 
             sp_export_png_file(_workaround._doc, Glib::filename_to_utf8(tmp_png).c_str(), rect,

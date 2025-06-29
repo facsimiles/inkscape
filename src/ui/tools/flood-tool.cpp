@@ -733,7 +733,7 @@ static void sp_flood_do_flood_fill(SPDesktop *desktop, Geom::Point const &cursor
         auto bgcolor = document->getPageManager().getBackgroundColor();
         bgcolor.setOpacity(0.0);
 
-        dc.setSource(bgcolor.toARGB());
+        dc.setSource(bgcolor);
         dc.setOperator(CAIRO_OPERATOR_SOURCE);
         dc.paint();
         dc.setOperator(CAIRO_OPERATOR_OVER);

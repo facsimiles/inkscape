@@ -97,6 +97,16 @@ TEST(ColorUtils, make_theme_color)
     EXPECT_EQ(make_theme_color(*Color::parse("black"), true).toRGBA(), 0x000000ff);
 }
 
+TEST(ColorUtils, make_disabled_color)
+{
+    EXPECT_EQ(make_disabled_color(*Color::parse("red"), false).toRGBA(), 0xe9dcdcff);
+    EXPECT_EQ(make_disabled_color(*Color::parse("red"), true).toRGBA(), 0x844b4bff);
+    EXPECT_EQ(make_disabled_color(*Color::parse("white"), false).toRGBA(), 0xffffffff);
+    EXPECT_EQ(make_disabled_color(*Color::parse("white"), true).toRGBA(), 0x848484ff);
+    EXPECT_EQ(make_disabled_color(*Color::parse("black"), false).toRGBA(), 0xabababff);
+    EXPECT_EQ(make_disabled_color(*Color::parse("black"), true).toRGBA(), 0x303030ff);
+}
+
 } // namespace
 
 /*

@@ -125,7 +125,7 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
     }
     
     fill.set(style_fill);
-    fill.opacity = SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
+    fill.opacity = style->fill_opacity;
 
     switch (style->fill_rule.computed) {
         case SP_WIND_RULE_EVENODD:
@@ -324,7 +324,7 @@ auto NRStyle::preparePaint(Inkscape::DrawingContext &dc, Inkscape::RenderContext
                 }
                 break;
             case NRStyleData::PaintType::COLOR: {
-                cp.pattern = CairoPatternUniqPtr(ink_cairo_pattern_create(*paint.color, paint.opacity));
+                cp.pattern = CairoPatternUniqPtr(ink_cairo_pattern_create(paint.color->withOpacity(paint.opacity)));
                 break;
             }
             default:

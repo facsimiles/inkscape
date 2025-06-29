@@ -34,9 +34,9 @@ Cairo::RefPtr<Cairo::Pattern> rgba_to_pattern(std::uint32_t const rgba)
 
     auto cr = Cairo::Context::create(surface);
     cr->set_operator(Cairo::Context::Operator::SOURCE);
-    ink_cairo_set_source_color(cr, color);
+    ink_cairo_set_source_color(cr->cobj(), color);
     cr->paint();
-    ink_cairo_set_source_color(cr, dark);
+    ink_cairo_set_source_color(cr->cobj(), dark);
     cr->rectangle(0, 0, w, h);
     cr->rectangle(w, h, w, h);
     cr->fill();

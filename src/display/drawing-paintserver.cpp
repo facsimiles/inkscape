@@ -15,7 +15,7 @@ DrawingSolidColor::DrawingSolidColor(Colors::Color color)
 
 cairo_pattern_t *DrawingSolidColor::create_pattern(cairo_t *, Geom::OptRect const &, double opacity) const
 {
-    return ink_cairo_pattern_create(color, opacity);
+    return ink_cairo_pattern_create(color.withOpacity(opacity));
 }
 
 void DrawingGradient::common_setup(cairo_pattern_t *pat, Geom::OptRect const &bbox, double opacity) const
@@ -53,7 +53,7 @@ cairo_pattern_t *DrawingLinearGradient::create_pattern(cairo_t *, Geom::OptRect 
     for (auto &stop : stops) {
         // multiply stop opacity by paint opacity
         if (stop.color.has_value()) {
-            ink_cairo_pattern_add_color_stop(pat, stop.offset, *stop.color, opacity);
+            ink_cairo_pattern_add_color_stop(pat, stop.offset, stop.color->withOpacity(opacity));
         }
     }
 
