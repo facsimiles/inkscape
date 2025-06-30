@@ -368,7 +368,7 @@ bool Color::set(unsigned int index, double value)
  */
 bool Color::set(uint32_t rgba, bool opacity)
 {
-    if (_space->getType() != Space::Type::RGB) {
+    if (*_space != Space::Type::RGB) {
         // Ensure we are in RGB
         _space = assert_nonnull(Manager::get().find(Space::Type::RGB));
     } else if (rgba == toRGBA(opacity)) {

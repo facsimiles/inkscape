@@ -129,8 +129,10 @@ TEST_F(ColorDocumentCMSObjsTest, deleteColorProfile)
 TEST_F(ColorDocumentCMSObjsTest, cmsAddMultiple)
 {
     auto &tr = doc->getDocumentCMS();
-    ASSERT_TRUE(tr.getSpace("grb"));
-    ASSERT_EQ(tr.getSpace("grb")->getType(), Space::Type::RGB);
+    auto space = tr.getSpace("grb");
+    ASSERT_TRUE(space);
+    EXPECT_EQ(space->getType(), Space::Type::CMS);
+    ASSERT_EQ(space->getComponentType(), Space::Type::RGB);
     EXPECT_THROW(tr.addProfileURI(grb_profile, "grb", RenderingIntent::RELATIVE_COLORIMETRIC), ColorError);
 }
 
@@ -141,7 +143,8 @@ TEST_F(ColorDocumentCMSObjsTest, cmsParsingRGB)
     auto space = tr.getSpace("grb");
     ASSERT_TRUE(space);
     EXPECT_TRUE(space->isValid());
-    EXPECT_EQ(space->getType(), Space::Type::RGB);
+    EXPECT_EQ(space->getType(), Space::Type::CMS);
+    EXPECT_EQ(space->getComponentType(), Space::Type::RGB);
 
     auto color = *tr.parse("#000001 icc-color(grb, 1, 0.8, 0.6)");
     EXPECT_EQ(color.toString(), "#ccff99 icc-color(grb, 1, 0.8, 0.6)");
@@ -156,7 +159,8 @@ TEST_F(ColorDocumentCMSObjsTest, cmsParsingCMYK1)
     auto space = tr.getSpace("cmyk-rcm");
     ASSERT_TRUE(space);
     EXPECT_TRUE(space->isValid());
-    EXPECT_EQ(space->getType(), Space::Type::CMYK);
+    EXPECT_EQ(space->getType(), Space::Type::CMS);
+    EXPECT_EQ(space->getComponentType(), Space::Type::CMYK);
 
     auto color = *tr.parse("#000002 icc-color(cmyk-rcm, 0.5, 0, 0, 0)");
     EXPECT_EQ(color.toString(), "#6dcff6 icc-color(cmyk-rcm, 0.5, 0, 0, 0)");
@@ -171,7 +175,8 @@ TEST_F(ColorDocumentCMSObjsTest, cmsParsingCMYK2)
     auto space = tr.getSpace("cmyk-acm");
     ASSERT_TRUE(space);
     EXPECT_TRUE(space->isValid());
-    EXPECT_EQ(space->getType(), Space::Type::CMYK);
+    EXPECT_EQ(space->getType(), Space::Type::CMS);
+    EXPECT_EQ(space->getComponentType(), Space::Type::CMYK);
 
     auto color = *tr.parse("#000003 icc-color(cmyk-acm, 0.5, 0, 0, 0)");
     EXPECT_EQ(color.toString(), "#69b6d1 icc-color(cmyk-acm, 0.5, 0, 0, 0)");

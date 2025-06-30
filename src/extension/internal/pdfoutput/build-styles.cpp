@@ -391,9 +391,9 @@ CapyPDF_Device_Colorspace Document::get_default_colorspace() const
 
 CapyPDF_Device_Colorspace Document::get_colorspace(std::shared_ptr<Colors::Space::AnySpace> const &space) const
 {
-    if (std::dynamic_pointer_cast<Colors::Space::DeviceCMYK>(space)) {
+    if (*space == Colors::Space::Type::CMYK) {
         return CAPY_DEVICE_CS_CMYK;
-    } else if (std::dynamic_pointer_cast<Colors::Space::RGB>(space)) {
+    } else if (*space == Colors::Space::Type::RGB) {
         return CAPY_DEVICE_CS_RGB;
     } else if (auto cms = std::dynamic_pointer_cast<Colors::Space::CMS>(space)) {
         // TODO: Support icc profiles here, which are missing from capypdf atm

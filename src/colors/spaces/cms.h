@@ -27,6 +27,7 @@ public:
     CMS(std::string profile_name, unsigned profile_size, Type profile_type = Type::NONE);
     ~CMS() override = default;
 
+    Type getComponentType() const override { return _profile_type; }
     unsigned int getComponentCount() const override;
 
     std::shared_ptr<Colors::CMS::Profile> const getProfile() const override;

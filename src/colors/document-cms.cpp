@@ -217,7 +217,6 @@ std::shared_ptr<Space::CMS> DocumentCMS::addProfile(std::shared_ptr<CMS::Profile
     auto space = std::make_shared<Space::CMS>(profile, name);
 
     name = space->getName();
-  printf("prof: '%s'\n",name.c_str());
     if (_spaces.contains(name))
         throw ColorError("Color profile with that name already exists.");
 

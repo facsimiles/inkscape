@@ -32,7 +32,7 @@ static std::map<cmsUInt32Number, Space::Type> _lcmssig_to_space = {
 };
 
 CMS::CMS(std::shared_ptr<Inkscape::Colors::CMS::Profile> profile, std::string name)
-    : AnySpace(_lcmssig_to_space[profile->getColorSpace()], 0, name.empty() ? profile->getName(true) : name, name.empty() ? profile->getName(true) : name, "color-selector-cms")
+    : AnySpace(Type::CMS, 0, name.empty() ? profile->getName(true) : name, name.empty() ? profile->getName(true) : name, "color-selector-cms")
     , _profile_size(profile->getSize())
     , _profile_type(_lcmssig_to_space[profile->getColorSpace()])
     , _profile(profile)
@@ -42,7 +42,7 @@ CMS::CMS(std::shared_ptr<Inkscape::Colors::CMS::Profile> profile, std::string na
  * Naked CMS space for testing and data retention where the profile is unavailable.
  */
 CMS::CMS(std::string profile_name, unsigned profile_size, Space::Type profile_type)
-    : AnySpace(profile_type, 0, profile_name, profile_name, "color-selector-cms")
+    : AnySpace(Type::CMS, 0, profile_name, profile_name, "color-selector-cms")
     , _profile_size(profile_size)
     , _profile_type(profile_type)
     , _profile(nullptr)
@@ -195,7 +195,7 @@ uint32_t CMS::toRGBA(std::vector<double> const &values, double opacity) const
  */
 bool CMS::overInk(std::vector<double> const &input) const
 {
-    if (!input.size() || getType() != Type::CMYK)
+    if (input.empty() || _profile_type != Type::CMYK)
         return false;
 
     /* Some literature states that when the sum of paint values exceed 320%, it is considered to be a satured color,

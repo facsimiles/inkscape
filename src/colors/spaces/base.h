@@ -50,6 +50,11 @@ public:
     bool operator==(AnySpace const &other) const { return other.getName() == getName(); }
     bool operator!=(AnySpace const &other) const { return !(*this == other); };
 
+    // Each space has a unique type enum for easier static use, use getComponentType
+    // for seeing the internal type of the space, for example in the CMS space.
+    bool operator==(Type type) const { return type == _type; }
+    bool operator!=(Type type) const { return type != _type; }
+
     Type getType() const { return _type; }
     std::string const& getName() const { return _name; };
     std::string const& getShortName() const { return _shortName; };

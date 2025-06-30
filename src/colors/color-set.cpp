@@ -281,7 +281,7 @@ unsigned ColorSet::setAll(Space::Component const &c, double value)
  */
 void ColorSet::setAverage(Space::Component const &c, double value)
 {
-    if (!_space_constraint || _space_constraint->getType() != c.type)
+    if (!_space_constraint || _space_constraint->getComponentType() != c.type)
         throw ColorError("Incompatible color component used in ColorSet::moveAverageTo.");
     auto delta = value - getAverage(c);
     for (auto &[id, color] : _colors) {
@@ -349,7 +349,7 @@ std::shared_ptr<Space::AnySpace> ColorSet::getBestSpace() const
 }
 
 bool ColorSet::isValid(const Space::Component& component) const {
-    return _space_constraint && _space_constraint->getType() == component.type;
+    return _space_constraint && _space_constraint->getComponentType() == component.type;
 }
 
 /**

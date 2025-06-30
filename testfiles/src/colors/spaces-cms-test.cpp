@@ -58,6 +58,16 @@ TEST(ColorsSpacesCms, parseColor)
     ASSERT_EQ(output[4], 0.05);
 }
 
+TEST(ColorsSpaceCms, getType)
+{
+    auto cmyk_profile = Inkscape::Colors::CMS::Profile::create_from_uri(cmyk_icc);
+    auto cmyk = std::make_shared<CMS>(cmyk_profile);
+
+    EXPECT_EQ(cmyk->getType(), Space::Type::CMS);
+    EXPECT_TRUE(*cmyk == Space::Type::CMS);
+    EXPECT_EQ(cmyk->getComponentType(), Space::Type::CMYK);
+}
+
 TEST(ColorsSpacesCms, realColor)
 {
     auto cmyk_profile = Inkscape::Colors::CMS::Profile::create_from_uri(cmyk_icc);
