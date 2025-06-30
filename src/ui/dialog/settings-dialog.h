@@ -14,6 +14,10 @@
 #include "preferences.h"
 
 
+namespace Gtk {
+class Builder;
+}
+
 namespace Inkscape::XML {
 class Node;
 struct Document;
@@ -36,6 +40,7 @@ public:
     ~SettingsDialog() override;
 
 private:
+    Glib::RefPtr<Gtk::Builder> _builder;
     // map of all UI templates (with heterogeneous lookup)
     using Templates = std::map<std::string, XML::Node*, std::less<>>;
     void collect_templates(XML::Node* node, Templates& templates);
@@ -46,12 +51,12 @@ private:
     std::unique_ptr<std::map<std::string, std::vector<Gtk::Widget*>>> _visibility = std::make_unique<std::map<std::string, std::vector<Gtk::Widget*>>>();
 
     std::unique_ptr<ReadWrite::IO> _io;
-    Gtk::Box _hbox{Gtk::Orientation::HORIZONTAL, 0};
-    Gtk::Box _page_selector{Gtk::Orientation::VERTICAL, 8};
-    Gtk::SearchEntry2 _search;
-    Gtk::ListBox _pages;
-    Gtk::ScrolledWindow _wnd;
-    Gtk::Box _content{Gtk::Orientation::VERTICAL, 4};
+    // Gtk::Box _hbox{Gtk::Orientation::HORIZONTAL, 0};
+    // Gtk::Box& _page_selector;//{Gtk::Orientation::VERTICAL, 8};
+    Gtk::SearchEntry2& _search;
+    Gtk::ListBox& _pages;
+    // Gtk::ScrolledWindow _wnd;
+    Gtk::Box& _content;//{Gtk::Orientation::VERTICAL, 4};
     XML::Document* _ui;
     Templates _templates;
 };

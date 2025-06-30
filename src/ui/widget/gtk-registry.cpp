@@ -11,6 +11,7 @@
 #include "generic/spin-button.h"
 #include "generic/tab-strip.h"
 #include "style/paint-order.h"
+#include "property-widget.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -20,6 +21,7 @@ void register_all()
     InkSpinButton::register_type();
     TabStrip::register_type();
     ReorderableStack::register_type();
+    PropertyWidget::register_type();
 
     // Specific widgets
     PaintOrderWidget::register_type();

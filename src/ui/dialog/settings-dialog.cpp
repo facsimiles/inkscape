@@ -43,6 +43,7 @@
 #include "io/resource.h"
 #include "preferences.h"
 #include "settings-helpers.h"
+#include "ui/builder-utils.h"
 #include "ui/containerize.h"
 #include "ui/modifiers.h"
 #include "ui/popup-menu.h"
@@ -112,7 +113,7 @@ struct PreferencesIO : ReadWrite::IO {
                 return Util::format_accel_keys(_display, accel.getKeys());
             }
         }
-        else if (auto entry = Preferences::get()->getEntry(path); entry.isValid()) {
+        else if (auto entry = Preferences::get()->getEntry(path); entry.isSet()) {
             return {entry.getString()};
         }
         return {};
@@ -957,6 +958,8 @@ struct Section : Gtk::ListBoxRow {
 
     Section(Context& ctx, XML::Node* node): _root(node) {
         _box.add_css_class("section");
+        if (!node) return;
+
         auto& content = get_content(false);
         build_ui(ctx, &content, node);
 
@@ -1032,6 +1035,9 @@ struct Section : Gtk::ListBoxRow {
     Gtk::Widget& get_content(bool create) {
         //TODO: create on first use?
         return _box;
+    }
+    void set_content(Gtk::Widget& content) {
+        _box.append(content);
     }
 private:
     Gtk::Box _box{Gtk::Orientation::VERTICAL, 0};
@@ -1429,12 +1435,17 @@ Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node) {
     }
 }
 
-Section* create_section(Context& ctx, XML::Node* node) {
+Section* create_section(Context& ctx, XML::Node* node, Gtk::Widget* page, const Glib::ustring& page_title) {
     auto section = Gtk::make_managed<Section>(ctx, node);
     auto title = element_attr(node, "label");
     auto label = Gtk::make_managed<Gtk::Label>(Glib::ustring(title.data(), title.size()));
+    if (page) {
+        label->set_text(page_title);
+        section->set_content(*page);
+    }
     label->set_xalign(0);
     label->set_margin_start(4);
+    // label->set_margin(5);
     section->set_child(*label);
     section->set_visible();
     section->set_data(NODE_KEY, node);
@@ -1461,29 +1472,37 @@ void SettingsDialog::collect_templates(XML::Node* node, Templates& templates) {
 
 SettingsDialog::SettingsDialog(Gtk::Window& parent):
     Dialog(_("Inkscape Settings"), true),
+    _builder(create_builder("settings-dialog.ui")),
+    _content(get_widget<Gtk::Box>(_builder, "page-content")),
+    _search(get_widget<Gtk::SearchEntry2>(_builder, "global-search")),
+    _pages(get_widget<Gtk::ListBox>(_builder, "page-list")),
     _ui(get_ui_xml())
 {
     set_default_size(800, 600);
     set_name("Settings");
 
-    _page_selector.append(_search);
-    _search.set_max_width_chars(6);
+    auto objects = _builder->get_objects();
+
+    // _page_selector.append(_search);
+    // _search.set_max_width_chars(6);
     _search.set_placeholder_text(_("Search"));
     _search.signal_search_changed().connect([this]() {
         // filter
     });
-    _page_selector.append(_pages);
-    _page_selector.set_name("PageSelector");
-    _pages.set_vexpand();
-    _pages.set_name("Pages");
-    _hbox.append(_page_selector);
-    _hbox.append(_wnd);
-    _wnd.set_expand();
-    _wnd.set_has_frame(false);
-    _wnd.set_child(_content);
-    _content.set_margin_start(8);
-    _content.set_margin_end(8);
-    _content.set_expand();
+    // _page_selector.append(_pages);
+    // _page_selector.set_name("PageSelector");
+    // _pages.set_vexpand();
+    // _pages.set_name("Pages");
+    // _hbox.append(_page_selector);
+    // _hbox.append(*Gtk::make_managed<Gtk::Separator>(Gtk::Orientation::VERTICAL));
+    // _hbox.append(_wnd);
+    // _wnd.set_expand();
+    // _wnd.set_has_frame(false);
+    // _wnd.set_child(_content);
+    // _page_selector.set_margin_end(8);
+    // _content.set_margin_start(8);
+    // _content.set_margin_end(8);
+    // _content.set_expand();
 
     // access to preferences
     _io = std::make_unique<PreferencesIO>(get_root()->get_display());
@@ -1502,7 +1521,7 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
             else if (name == "section") {
                 // sections (or pages)
                 ctx.first_col = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
-                auto section = create_section(ctx, node);
+                auto section = create_section(ctx, node, 0, "");
                 _pages.append(*section);
                 pages++;
                 _content.append(section->get_content(false));
@@ -1519,6 +1538,24 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
         std::cerr << "Error creating settings dialog: " << ex.what() << std::endl;
         return;
     }
+
+    Context ctx(*_ui, _templates, _io.get(), *_observers, *_visibility, get_scale_factor());
+    for (auto obj : objects) {
+        auto widget = dynamic_cast<Gtk::Grid*>(obj.get());
+        if (widget && widget->get_name() == "Page") {
+            auto title = dynamic_cast<Gtk::Label*>(widget->get_child_at(1, 0));
+            if (title) title->set_visible(false);
+            auto page = create_section(ctx, nullptr, widget, title->get_text());
+            _pages.append(*page);
+            pages++;
+        }
+    }
+
+    // auto test = create_section(ctx, 0, &get_widget<Gtk::Grid>(_builder, "ui-page"), "User Interface");
+    // _pages.append(*test);
+    // pages++;
+    // _content.append(test->get_content(false));
+
 
     auto selected_page = Preferences::get()->getString(settings_path + "selectedPage");
 
@@ -1564,10 +1601,20 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
         }
     }
 
-    get_content_area()->append(_hbox);
+    get_content_area()->append(get_widget<Gtk::Box>(_builder, "main-box"));
     set_transient_for(parent);
     set_visible();
     _pages.grab_focus();
+
+    auto& s = get_widget<UI::Widget::InkSpinButton>(_builder, "ui-text-scale");
+    s.signal_value_changed().connect([](auto value) {
+        // set text scale
+        if (auto const settings = Gtk::Settings::get_default()) {
+            auto normal = 72 * 1024;
+            auto adjusted = static_cast<int>(value / 100 * normal);
+            settings->property_gtk_xft_dpi().set_value(adjusted);
+        }
+    });
 }
 
 SettingsDialog::~SettingsDialog() {

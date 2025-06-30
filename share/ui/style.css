@@ -1759,7 +1759,10 @@ listview row.top-separator {
     margin-left: 26px;
 }
 #Settings #PageSelector {
-    margin: 8px 0 0 8px;
+    margin: 16px;
+}
+#Settings #PageContent {
+    margin-top: 16px;
 }
 #Settings #Pages {
     background-color: @theme_bg_color;
@@ -1790,6 +1793,15 @@ listview row.top-separator {
 }
 #Settings .ruler {
     opacity: 0.7;
+}
+#Settings .subheader {
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 0;
+    margin: 2px 0 2px 0;
+}
+#Settings .settings-separator {
+    margin: 0.75em 0;
 }
 
 .key-pillbox {
