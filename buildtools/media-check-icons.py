@@ -13,7 +13,6 @@ from collections import defaultdict
 THEME_PATH = os.path.join('.', 'share', 'icons')
 IGNORE_THEMES = [
     'application',
-    'Tango',
 ]
 FALLBACK_THEME = 'hicolor'
 IGNORE_ICONS = [

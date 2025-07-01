@@ -152,7 +152,7 @@ Description: vector-based drawing program - themes
  combine lines, shapes and text of different types and styles to build
  up a picture.
  .
- This package contains the Minwaita theme and the Dash, Tango and
+ This package contains the Minwaita theme and the Dash and
  multicolor icon sets.
 
 Package: inkscape-translations
