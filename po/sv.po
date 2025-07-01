@@ -23,8 +23,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -43167,9 +43167,19 @@ msgstr ""
 "\n"
 "Glid {0!s}:"
 
+#: ../share/extensions/jessyink_summary.py:67
+#, python-brace-format
+msgid "{prefix}Layer name: {node.label}"
+msgstr "{prefix}Lagernamn: {node.label}"
+
 #: ../share/extensions/jessyink_summary.py:82
 msgid "{0}Transition {1}: {2} ({3!s} s)"
 msgstr "{0}Övergång {1}: {2} ({3!s} s)"
+
+#: ../share/extensions/jessyink_summary.py:88
+#, python-brace-format
+msgid "{prefix}Transition {transition}: {name}"
+msgstr "{prefix}Övergång {transition}: {name}"
 
 #: ../share/extensions/jessyink_summary.py:95
 #, python-brace-format
@@ -43628,6 +43638,11 @@ msgstr "Ett undantag inträffade under typst-kompileringen: "
 msgid "No svg has been produced by compilation: "
 msgstr "Ingen svg har producerats genom kompilering: "
 
+#: ../share/extensions/typst_formula.py:69
+#, python-brace-format
+msgid "Expected file name was: {svg_file}."
+msgstr "Förväntat filnamn var: {svg_file}."
+
 #: ../share/extensions/voronoi_diagram.py:163
 msgid "Please select objects!"
 msgstr "Välj objekt!"
@@ -43650,6 +43665,11 @@ msgid ""
 "You must to select some \"Slicer rectangles\" or other \"Layout groups\"."
 msgstr ""
 "Du måste välja några \"Slicer-rektanglar\" eller andra \"Layout-grupper\"."
+
+#: ../share/extensions/webslicer_create_group.py:50
+#, python-brace-format
+msgid "The element \"{key}\" is not in the Web Slicer layer"
+msgstr "Elementet \"{key}\" finns inte i Web Slicer-lagret"
 
 #: ../share/extensions/webslicer_export.py:44
 msgid "You must give a directory to export the slices."
@@ -51914,14 +51934,6 @@ msgstr "Hälften av typsnittshöjden"
 
 #~ msgid "Fidelity:"
 #~ msgstr "Noggrannhet:"
-
-#, fuzzy, python-brace-format
-#~ msgid "{prefix}Layer name: {node.label}"
-#~ msgstr "Lagrets namn:"
-
-#, fuzzy, python-brace-format
-#~ msgid "{prefix}Transition {transition}: {name}"
-#~ msgstr "Övergång i effekt"
 
 #, fuzzy
 #~ msgid "Import Web Image..."
