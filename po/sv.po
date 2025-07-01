@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-01 16:43+0000\n"
+"PO-Revision-Date: 2025-07-01 18:09+0000\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sv/>\n"
@@ -3644,7 +3644,7 @@ msgstr "Vertikala linjer skuggning"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
-msgstr ""
+msgstr "Halvcirkelsskuggning för linjer "
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 5"
@@ -6495,11 +6495,11 @@ msgstr "A4 broschyr 3-faldig"
 
 #: ../../build/share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
-msgstr ""
+msgstr "CD-etikett 120mmx120mm "
 
 #: ../../build/share/templates/templates.h:1
 msgid "Simple CD Label template with disc's pattern."
-msgstr ""
+msgstr "Enkel cd-etikettsmall med skivans mönster."
 
 #: ../../build/share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
@@ -7344,12 +7344,12 @@ msgid "Open Fill and Stroke"
 msgstr "Öppna fyllning och streck"
 
 #: ../src/actions/actions-dialogs.cpp:40
-#, fuzzy
 msgid ""
 "Edit objects' colors, gradients, arrowheads, and other fill and stroke "
 "properties..."
 msgstr ""
-"Redigera objekts färger, gradienter, linjebredd, linjeslut och linjestil..."
+"Redigera objektets färger, gradienter, pilhuvuden och andra fyllnings- och "
+"streckegenskaper..."
 
 #: ../src/actions/actions-dialogs.cpp:41
 msgid "Open Filter Effects"
@@ -7436,9 +7436,8 @@ msgid "Open Object Properties"
 msgstr "Öppna objektegenskaper"
 
 #: ../src/actions/actions-dialogs.cpp:51
-#, fuzzy
 msgid "Edit the object attributes (context dependent)..."
-msgstr "Sätt attribut"
+msgstr "Redigera objektets attribut (sammanhangsberoende)..."
 
 #: ../src/actions/actions-dialogs.cpp:52
 msgid "Open Objects"
@@ -7865,9 +7864,8 @@ msgid "Delete"
 msgstr "Ta bort"
 
 #: ../src/actions/actions-edit.cpp:312
-#, fuzzy
 msgid "Delete selected items, nodes or text."
-msgstr "Radera markerade noder"
+msgstr "Ta bort markerade objekt, noder eller text."
 
 #: ../src/actions/actions-edit.cpp:313
 msgid "Delete Items"
@@ -7938,9 +7936,8 @@ msgid "Open link"
 msgstr "Öppna länk"
 
 #: ../src/actions/actions-element-a.cpp:63
-#, fuzzy
 msgid "Add an anchor to an object."
-msgstr "En fri-form etikett för objektet"
+msgstr "Lägg till ett ankare till ett objekt."
 
 #: ../src/actions/actions-element-image.cpp:117
 msgid ""
@@ -10191,6 +10188,8 @@ msgid ""
 "Annotate every shape and group with its current bounding box (not kept up to "
 "date)"
 msgstr ""
+"Anteckna varje form och grupp med dess aktuella avgränsningsruta (hålls inte "
+"uppdaterad)"
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid "Annotate all Shape Paths"
@@ -10201,6 +10200,8 @@ msgid ""
 "Annotate every non-path shape with their equivalent path string (not kept up "
 "to date)"
 msgstr ""
+"Anteckna varje icke-slingform med dess motsvarande slingsträng (hålls inte "
+"uppdaterad)"
 
 #: ../src/actions/actions-svg-processing.cpp:719
 msgid "Clean up Document"
@@ -10825,6 +10826,11 @@ msgid ""
 "The tutorials can also be found online at https://inkscape.org/en/learn/"
 "tutorials/"
 msgstr ""
+"Handledningsfilerna är inte installerade.\n"
+"För Linux kan du behöva installera \"inkscape-tutorials\"; för Windows, kör "
+"installationen igen och välj “Handledningar”.\n"
+"Handledningarna kan också hittas online på https://inkscape.org/sv/learn/"
+"tutorials/"
 
 #: ../src/actions/actions-tutorial.cpp:56
 msgid "Inkscape: Basic"
@@ -15677,13 +15683,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Inga oanvända definitioner i &lt;defs&gt;."
 
 #: ../src/file.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Inget Inkscapetillägg hittat för att spara dokumentet (%s). Detta kan ha "
-"orsakats av en okänd filändelse."
+"Inget Inkscape-tillägg hittades för att spara dokumentet (%s).  Detta kan ha "
+"orsakats av en okänd eller saknad filändelse."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
@@ -17822,9 +17828,8 @@ msgid "N_umber of paths:"
 msgstr "A_ntal slingor:"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:33
-#, fuzzy
 msgid "The number of paths that will be generated."
-msgstr "Antalet slingor som kommer skapas."
+msgstr "Antalet slingor som kommer att genereras."
 
 #: ../src/live_effects/lpe-curvestitch.cpp:34
 msgid "Sta_rt edge variance:"
@@ -20389,6 +20394,8 @@ msgid ""
 "Change number of repeats of simplifying operation. Useful for complex paths "
 "that need to be significantly simplified. "
 msgstr ""
+"Ändra antalet upprepningar av förenklingsoperationen. Användbar för komplexa "
+"slingor som behöver förenklas avsevärt. "
 
 #: ../src/live_effects/lpe-simplify.cpp:28
 msgid "Drag slider to set the amount of simplification"
@@ -52602,6 +52609,8 @@ msgid ""
 "Variable fonts support (only if compiled with pango library version >= "
 "1.41.1)"
 msgstr ""
+"Stöd för variabla typsnitt (endast om kompilerad med pango-biblioteksversion "
+"&gt;= 1.41.1)"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:154
 msgid "Browser-compatible flowed text"
