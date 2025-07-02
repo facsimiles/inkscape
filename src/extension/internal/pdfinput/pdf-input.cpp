@@ -148,6 +148,7 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*ur
     , _preview_area(UI::get_widget<Gtk::DrawingArea>(_builder, "preview-area"))
     , _clip_to(UI::get_widget<Gtk::ComboBox>(_builder, "clip-to"))
     , _embed_images(UI::get_widget<Gtk::CheckButton>(_builder, "embed-images"))
+    , _convert_colors(UI::get_widget<Gtk::CheckButton>(_builder, "convert-colors"))
     , _import_pages(UI::get_widget<Gtk::CheckButton>(_builder, "import-pages"))
     , _mesh_slider(UI::get_widget<Gtk::Scale>(_builder, "mesh-slider"))
     , _mesh_label(UI::get_widget<Gtk::Label>(_builder, "mesh-label"))
@@ -248,6 +249,10 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*ur
     _embed_images.set_active(mod->get_param_bool("embedImages", true));
     _embed_images.signal_toggled().connect([this]() {
         _mod->set_param_bool("embedImages", _embed_images.get_active());
+    });
+    _convert_colors.set_active(mod->get_param_bool("convertColors", true));
+    _convert_colors.signal_toggled().connect([this]() {
+        _mod->set_param_bool("convertColors", _convert_colors.get_active());
     });
 
     _import_pages.set_active(mod->get_param_bool("importPages", true));
@@ -651,6 +656,7 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
     std::string page_nums = "1";
     PdfImportType import_method = PdfImportType::PDF_IMPORT_INTERNAL;
     FontStrategies font_strats;
+    bool convert_colors = true;
     if (dlg) {
         page_nums = dlg->getSelectedPages();
         import_method = dlg->getImportMethod();
@@ -662,6 +668,7 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
 #ifdef HAVE_POPPLER_CAIRO
         import_method = (PdfImportType)INKSCAPE.get_pdf_poppler();
 #endif
+        convert_colors = INKSCAPE.get_pdf_convert_colors();
     }
     // Both poppler and poppler+cairo can get page num info from poppler.
     auto pages = parseIntRange(page_nums, 1, pdf_doc->getCatalog()->getNumPages());
@@ -692,6 +699,7 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
         // Get preferences
         builder->setPageMode(mod->get_param_bool("importPages", true));
         builder->setEmbedImages(mod->get_param_bool("embedImages", true));
+        builder->setConvertColors(dlg ? mod->get_param_bool("convertColors", true) : convert_colors);
         std::string crop_to = mod->get_param_optiongroup("clipTo", "none");
         double color_delta = mod->get_param_float("approximationPrecision", 2.0);
 

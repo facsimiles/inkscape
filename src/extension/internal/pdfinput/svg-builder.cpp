@@ -29,6 +29,9 @@
 #include <poppler/GfxState.h>
 #include <poppler/Page.h>
 #include <poppler/Stream.h>
+
+#undef near
+
 #include "document.h"
 #include "pdf-parser.h"
 #include "pdf-utils.h"
@@ -38,8 +41,11 @@
 
 #include "colors/cms/profile.h"
 #include "colors/document-cms.h"
+#include "colors/manager.h"
+#include "colors/spaces/cms.h"
 #include "display/cairo-utils.h"
 #include "display/nr-filter-utils.h"
+#include "object/color-profile.h"
 #include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 #include "object/sp-text.h"
@@ -63,6 +69,23 @@ namespace Internal {
 
 #define TRACE(_args) IFTRACE(g_print _args)
 
+
+static Colors::RenderingIntent _getIntent(GfxState *state)
+{
+    if (auto c = state->getRenderingIntent()) {
+        auto intent = std::string(c);
+        if (intent == "AbsoluteColorimetric") {
+            return Colors::RenderingIntent::ABSOLUTE_COLORIMETRIC;
+        } else if(intent == "RelativeColorimetric") {
+            return Colors::RenderingIntent::RELATIVE_COLORIMETRIC;
+        } else if(intent == "Saturation") {
+            return Colors::RenderingIntent::SATURATION;
+        } else if(intent == "Perceptual") {
+            return Colors::RenderingIntent::PERCEPTUAL;
+        }
+    }
+    return Colors::RenderingIntent::RELATIVE_COLORIMETRIC;
+}
 
 /**
  * \class SvgBuilder
@@ -375,59 +398,76 @@ Inkscape::XML::Node *SvgBuilder::_popGroup()
     return _container;
 }
 
-static gchar *svgConvertRGBToText(double r, double g, double b) {
-    using Inkscape::Filters::clamp;
-    static gchar tmp[1023] = {0};
-    snprintf(tmp, 1023,
-             "#%02x%02x%02x",
-             clamp(SP_COLOR_F_TO_U(r)),
-             clamp(SP_COLOR_F_TO_U(g)),
-             clamp(SP_COLOR_F_TO_U(b)));
-    return (gchar *)&tmp;
-}
-
-static std::string svgConvertGfxRGB(GfxRGB *color)
+std::string SvgBuilder::convertGfxColor(const GfxColor *color, GfxColorSpace *space, Colors::RenderingIntent intent)
 {
-    double r = (double)color->r / 65535.0;
-    double g = (double)color->g / 65535.0;
-    double b = (double)color->b / 65535.0;
-    return svgConvertRGBToText(r, g, b);
-}
+    using Colors::Space::Type;
+    auto icc_space = _icc_profile ? _icc_profile->getColorSpace() : cmsSigXYZData;
+    auto &cm = Colors::Manager::get();
 
-std::string SvgBuilder::convertGfxColor(const GfxColor *color, GfxColorSpace *space)
-{
-    std::string icc = "";
-    switch (space->getMode()) {
-        case csDeviceGray:
-        case csDeviceRGB:
-        case csDeviceCMYK:
-            icc = _icc_profile;
-            break;
-        case csICCBased:
+    // Each space can either be an icc profile applies to the whole PDF or
+    // if there's no icc profile, we use the inkscape CSS color spaces.
+    // Which might not always be correct for the PDFs color models.
+    auto get_space = [this, intent, icc_space, &cm](int cmsSig, Type type) {
+        return icc_space == cmsSig ? _getColorSpace(_icc_profile, intent) : cm.find(type);
+    };
+
+    if (!_convert_colors) {
+        switch (space->getMode()) {
+            case csDeviceGray:
+            case csCalGray:
+                GfxGray gray;
+                space->getGray(color, &gray);
+                return Colors::Color(get_space(cmsSigGrayData, Type::Gray), {colToDbl(gray)}).toString();
+            case csDeviceRGB:
+            case csCalRGB:
+                GfxRGB rgb;
+                space->getRGB(color, &rgb);
+                return Colors::Color(get_space(cmsSigRgbData, Type::RGB), 
+                    {colToDbl(rgb.r), colToDbl(rgb.g), colToDbl(rgb.b)}).toString();
+            case csDeviceN:
+                g_warning("DeviceN color unsupported, falling back to CMYK");
+            case csDeviceCMYK:
+                GfxCMYK cmyk;
+                space->getCMYK(color, &cmyk);
+                return Colors::Color(get_space(cmsSigCmykData, Type::CMYK),
+                    {colToDbl(cmyk.c), colToDbl(cmyk.m), colToDbl(cmyk.y), colToDbl(cmyk.k)}).toString();
+            case csLab:
+                g_warning("Lab color unsupported, falling back to sRGB");
+                break;
+            case csSeparation:
+                g_warning("Separation color unsupported, falling back to sRGB");
+                break;
+            case csPattern:
+                g_warning("Pattern color unsupported, falling back to sRGB");
+                break;
+            case csIndexed:
+                g_warning("Indexed color unsupported, falling back to sRGB");
+                break;
+            case csICCBased:
 #if POPPLER_CHECK_VERSION(0, 90, 0)
-            auto icc_space = dynamic_cast<GfxICCBasedColorSpace *>(space);
-            icc = _getColorProfile(icc_space->getProfile().get());
+                if (auto gfx_space = dynamic_cast<GfxICCBasedColorSpace *>(space)) {
+                    if (auto profile = Colors::CMS::Profile::create_from_copy(gfx_space->getProfile().get())) {
+                        if (auto space = _getColorSpace(profile, intent)) {
+                            // Then the rest of the components after sRGB backup (see above)
+                            std::vector<double> comps;
+                            for (int i = 0; i < gfx_space->getNComps(); ++i) {
+                                comps.emplace_back(colToDbl((*color).c[i]));
+                            }
+                            return Colors::Color(std::move(space), std::move(comps)).toString();
+                        }
+                    }
+                }
 #else
-            g_warning("ICC profile ignored; libpoppler >= 0.90.0 required.");
+                g_warning("ICC profile ignored; libpoppler >= 0.90.0 required.");
 #endif
-            break;
+                break;
+        }
     }
-
+    // sRGB is the default and poppler will generate one for us
     GfxRGB rgb;
     space->getRGB(color, &rgb);
-    auto rgb_color = svgConvertGfxRGB(&rgb);
-
-    if (!icc.empty()) {
-        Inkscape::CSSOStringStream icc_color;
-        icc_color << rgb_color << " icc-color(" << icc;
-        for (int i = 0; i < space->getNComps(); ++i) {
-            icc_color << ", " << colToDbl((*color).c[i]);
-        }
-        icc_color << ");";
-        return icc_color.str();
-    }
-
-    return rgb_color;
+    return Colors::Color(cm.find(Colors::Space::Type::RGB),
+         {colToDbl(rgb.r), colToDbl(rgb.g), colToDbl(rgb.b)}).toString();
 }
 
 static void svgSetTransform(Inkscape::XML::Node *node, Geom::Affine matrix) {
@@ -482,7 +522,8 @@ void SvgBuilder::_setStrokeStyle(SPCSSAttr *css, GfxState *state) {
             g_free(urltext);
         }
     } else {
-        sp_repr_css_set_property(css, "stroke", convertGfxColor(state->getStrokeColor(), space).c_str());
+        sp_repr_css_set_property(css, "stroke", convertGfxColor(state->getStrokeColor(), space,
+                                                                _getIntent(state)).c_str());
     }
 
     // Opacity
@@ -574,7 +615,7 @@ void SvgBuilder::_setFillStyle(SPCSSAttr *css, GfxState *state, bool even_odd) {
             g_free(urltext);
         }
     } else {
-        sp_repr_css_set_property(css, "fill", convertGfxColor(state->getFillColor(), space).c_str());
+        sp_repr_css_set_property(css, "fill", convertGfxColor(state->getFillColor(), space, _getIntent(state)).c_str());
     }
 
     // Opacity
@@ -709,11 +750,11 @@ void SvgBuilder::addPath(GfxState *state, bool fill, bool stroke, bool even_odd)
     _setClipPath(path);
 }
 
-void SvgBuilder::addClippedFill(GfxShading *shading, const Geom::Affine shading_tr)
+void SvgBuilder::addClippedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr)
 {
     // Don't change to hasClipPath as it messes up gradient fills
     if (_clip_history->getClipPath()) {
-        addShadedFill(shading, shading_tr, _clip_history->getClipPath(), _clip_history->getAffine(),
+        addShadedFill(state, shading, shading_tr, _clip_history->getClipPath(), _clip_history->getAffine(),
                       _clip_history->getClipType() == clipEO);
     }
 }
@@ -722,8 +763,8 @@ void SvgBuilder::addClippedFill(GfxShading *shading, const Geom::Affine shading_
  * \brief Emits the current path in poppler's GfxState data structure
  * The path is set to be filled with the given shading.
  */
-void SvgBuilder::addShadedFill(GfxShading *shading, const Geom::Affine shading_tr, GfxPath *path, const Geom::Affine tr,
-                               bool even_odd)
+void SvgBuilder::addShadedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr, GfxPath *path,
+                               const Geom::Affine tr, bool even_odd)
 {
     auto prev = _container->lastChild();
     gchar *pathtext = svgInterpretPath(path);
@@ -732,7 +773,7 @@ void SvgBuilder::addShadedFill(GfxShading *shading, const Geom::Affine shading_t
     // And package it into a css bundle which can be applied
     SPCSSAttr *css = sp_repr_css_attr_new();
     // We remove the shape's affine to adjust the gradient back into place
-    gchar *id = _createGradient(shading, shading_tr * tr.inverse(), true);
+    gchar *id = _createGradient(state, shading, shading_tr * tr.inverse(), true);
     if (id) {
         gchar *urltext = g_strdup_printf ("url(#%s)", id);
         sp_repr_css_set_property(css, "fill", urltext);
@@ -981,40 +1022,21 @@ void SvgBuilder::addColorProfile(unsigned char *profBuf, int length)
         g_warning("Failed to read ICCBased color space profile from PDF file.");
         return;
     }
-    _icc_profile = _getColorProfile(hp);
+    _icc_profile = Colors::CMS::Profile::create(hp);
 }
 
 /**
- * Return the color profile name if it's already been added
+ * Return the color profile as an Inkscape color space or none if it can't be constructed.
  */
-std::string SvgBuilder::_getColorProfile(cmsHPROFILE hp)
+std::shared_ptr<Colors::Space::AnySpace> SvgBuilder::_getColorSpace(std::shared_ptr<Colors::CMS::Profile> const &profile, Colors::RenderingIntent intent)
 {
-    if (!hp)
-        return "";
+    if (!profile)
+        return {};
 
-    // Cached name of this profile by reference
-    if (_icc_profiles.find(hp) != _icc_profiles.end())
-        return _icc_profiles[hp];
-
-    auto profile = Colors::CMS::Profile::create(hp);
-    std::string name = validateString(profile->getName());
-
-    // Find the named profile in the document (if already added)
-    if (_doc->getDocumentCMS().getSpace(name))
-        return name;
-
-    // Add the profile, we've never seen it before.
-    Inkscape::XML::Node *icc_node = _xml_doc->createElement("svg:color-profile");
-    icc_node->setAttribute("inkscape:label", name);
-    icc_node->setAttribute("name", name);
-
-    auto icc_data = std::string("data:application/vnd.iccprofile;base64,") + profile->dumpBase64();
-    icc_node->setAttributeOrRemoveIfEmpty("xlink:href", icc_data);
-    _doc->getDefs()->getRepr()->appendChild(icc_node);
-    Inkscape::GC::release(icc_node);
-
-    _icc_profiles[hp] = name;
-    return name;
+    auto &cms = _doc->getDocumentCMS();
+    // Attempts to attach the profile to the document, if it already exists returns the name
+    auto name = cms.attachProfileToDoc(*profile, ColorProfileStorage::HREF_DATA, intent);
+    return cms.getSpace(name);
 }
 
 /**
@@ -1058,7 +1080,7 @@ gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_
             // SVG applies the object's affine on top of the gradient's affine,
             // So we must remove the object affine to move it back into place.
             auto affine = (grad_affine * pt * flip) * obj_affine.inverse();
-            id = _createGradient(shading_pattern->getShading(), affine, !is_stroke);
+            id = _createGradient(state, shading_pattern->getShading(), affine, !is_stroke);
         } else if ( pattern->getType() == 1 ) {   // Tiling pattern
             id = _createTilingPattern(static_cast<GfxTilingPattern*>(pattern), state, is_stroke);
         }
@@ -1136,7 +1158,7 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
  * \param for_shading true if we're creating this for a shading operator; false otherwise
  * \return id of the created object
  */
-gchar *SvgBuilder::_createGradient(GfxShading *shading, const Geom::Affine pat_matrix, bool for_shading)
+gchar *SvgBuilder::_createGradient(GfxState *state, GfxShading *shading, const Geom::Affine pat_matrix, bool for_shading)
 {
     Inkscape::XML::Node *gradient;
     _POPPLER_CONST Function *func;
@@ -1184,7 +1206,7 @@ gchar *SvgBuilder::_createGradient(GfxShading *shading, const Geom::Affine pat_m
         gradient->setAttribute("spreadMethod", "pad");
     }
 
-    if ( num_funcs > 1 || !_addGradientStops(gradient, shading, func) ) {
+    if ( num_funcs > 1 || !_addGradientStops(gradient, state, shading, func) ) {
         Inkscape::GC::release(gradient);
         return nullptr;
     }
@@ -1201,7 +1223,7 @@ gchar *SvgBuilder::_createGradient(GfxShading *shading, const Geom::Affine pat_m
  * \brief Adds a stop with the given properties to the gradient's representation
  */
 void SvgBuilder::_addStopToGradient(Inkscape::XML::Node *gradient, double offset, GfxColor *color, GfxColorSpace *space,
-                                    double opacity)
+                                    Colors::RenderingIntent intent, double opacity)
 {
     Inkscape::XML::Node *stop = _xml_doc->createElement("svg:stop");
     SPCSSAttr *css = sp_repr_css_attr_new();
@@ -1216,7 +1238,7 @@ void SvgBuilder::_addStopToGradient(Inkscape::XML::Node *gradient, double offset
         os_opacity << gray;
     } else {
         os_opacity << opacity;
-        color_text = convertGfxColor(color, space);
+        color_text = convertGfxColor(color, space, intent);
     }
     sp_repr_css_set_property(css, "stop-opacity", os_opacity.str().c_str());
     sp_repr_css_set_property(css, "stop-color", color_text.c_str());
@@ -1241,18 +1263,20 @@ static bool svgGetShadingColor(GfxShading *shading, double offset, GfxColor *res
     return true;
 }
 
+
 #define INT_EPSILON 8
-bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *shading,
+bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxState *state, GfxShading *shading,
                                    _POPPLER_CONST Function *func) {
     auto type = func->getType();
     auto space = shading->getColorSpace();
+    auto intent = _getIntent(state);
     if (type == _POPPLER_FUNCTION_TYPE_SAMPLED || type == _POPPLER_FUNCTION_TYPE_EXPONENTIAL) {
         GfxColor stop1, stop2;
         if (!svgGetShadingColor(shading, 0.0, &stop1) || !svgGetShadingColor(shading, 1.0, &stop2)) {
             return false;
         } else {
-            _addStopToGradient(gradient, 0.0, &stop1, space, 1.0);
-            _addStopToGradient(gradient, 1.0, &stop2, space, 1.0);
+            _addStopToGradient(gradient, 0.0, &stop1, space, intent, 1.0);
+            _addStopToGradient(gradient, 1.0, &stop2, space, intent, 1.0);
         }
     } else if (type == _POPPLER_FUNCTION_TYPE_STITCHING) {
         auto stitchingFunc = static_cast<_POPPLER_CONST StitchingFunction*>(func);
@@ -1265,7 +1289,7 @@ bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *sh
         // Add stops from all the stitched functions
         GfxColor prev_color, color;
         svgGetShadingColor(shading, bounds[0], &prev_color);
-        _addStopToGradient(gradient, bounds[0], &prev_color, space, 1.0);
+        _addStopToGradient(gradient, bounds[0], &prev_color, space, intent, 1.0);
         for ( int i = 0 ; i < num_funcs ; i++ ) {
             svgGetShadingColor(shading, bounds[i + 1], &color);
             // Add stops
@@ -1275,14 +1299,14 @@ bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *sh
                     expE = (bounds[i + 1] - bounds[i])/expE;    // approximate exponential as a single straight line at x=1
                     if (encode[2*i] == 0) {    // normal sequence
                         auto offset = (bounds[i + 1] - expE) / max_bound;
-                        _addStopToGradient(gradient, offset, &prev_color, space, 1.0);
+                        _addStopToGradient(gradient, offset, &prev_color, space, intent, 1.0);
                     } else {                   // reflected sequence
                         auto offset = (bounds[i] + expE) / max_bound;
-                        _addStopToGradient(gradient, offset, &color, space, 1.0);
+                        _addStopToGradient(gradient, offset, &color, space, intent, 1.0);
                     }
                 }
             }
-            _addStopToGradient(gradient, bounds[i + 1] / max_bound, &color, space, 1.0);
+            _addStopToGradient(gradient, bounds[i + 1] / max_bound, &color, space, intent, 1.0);
             prev_color = color;
         }
     } else { // Unsupported function type

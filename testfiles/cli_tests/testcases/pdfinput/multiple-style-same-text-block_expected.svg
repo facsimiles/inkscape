@@ -61,14 +61,14 @@
     <path
        id="path2"
        d="M 0,0 H 83.34 V 4.606 H 0 Z"
-       style="fill:#3873b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="fill:#3873b2;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,79.369333,196.44267)" />
     <text
        id="text3"
        xml:space="preserve"
        transform="matrix(1.3333333,0,0,1.3333333,206.36,198.728)"><tspan
          id="tspan3"
-         style="font-variant:normal;font-weight:normal;font-size:14.3462px;font-family:'Latin Modern Sans';writing-mode:lr-tb;fill:#3873b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="font-variant:normal;font-weight:normal;font-size:14.3462px;font-family:'Latin Modern Sans';writing-mode:lr-tb;fill:#3873b2;fill-opacity:1;fill-rule:nonzero;stroke:none"
          x="0"
          y="0">Education</tspan></text>
     <text

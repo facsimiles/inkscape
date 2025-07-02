@@ -147,6 +147,12 @@ public:
     int get_pdf_font_strategy() {
         return _pdf_font_strategy;
     }
+    void set_pdf_convert_colors(bool convert) {
+        _pdf_convert_colors = convert;
+    }
+    bool get_pdf_convert_colors() const {
+        return _pdf_convert_colors;
+    }
     void set_pages(const std::string &pages) {
         _pages = pages;
     }
@@ -174,6 +180,7 @@ public:
     bool _use_gui = false;
     bool _pdf_poppler = false;
     int _pdf_font_strategy = 0;
+    bool _pdf_convert_colors = false;
 };
 
 } // namespace Inkscape

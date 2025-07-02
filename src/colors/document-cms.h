@@ -63,8 +63,11 @@ public:
         return _modified_signal.connect(slot);
     }
 
-    void attachProfileToDoc(std::string const &lookup, ColorProfileStorage storage, RenderingIntent intent,
-                            std::string name = "");
+    std::pair<std::string, bool> checkProfileName(Colors::CMS::Profile const &profile, RenderingIntent intent, std::optional<std::string> name = {}) const;
+    std::optional<std::string> attachProfileToDoc(std::string const &lookup, ColorProfileStorage storage,
+                                                  RenderingIntent intent);
+    std::string attachProfileToDoc(Colors::CMS::Profile const &profile, ColorProfileStorage storage,
+                                   RenderingIntent intent);
     void setRenderingIntent(std::string const &name, RenderingIntent intent);
 
     std::shared_ptr<Space::CMS> getSpace(std::string const &name) const;

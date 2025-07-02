@@ -237,28 +237,79 @@ void DocumentCMS::removeProfile(std::shared_ptr<Space::CMS> space)
 }
 
 /**
+ * Generate a valid profile name based on the profile name, the name of the intent is
+ * added on if the document already contains this profile using a different intent.
+ *
+ * @arg profile - The profile who's name will be used if name isn't specified.
+ * @arg intent - The rendering intent which will be used in the case of a collision.
+ * @arg name - The requested name, which will be compared to make sure it's not being used already.
+ *             DO NOT pass in an unsanitized profile name here.
+ *
+ * @returns The sanitized name checked against the document's existing profiles, and true if the profile exists.
+ */
+std::pair<std::string, bool> DocumentCMS::checkProfileName(Colors::CMS::Profile const &profile, RenderingIntent intent, std::optional<std::string> name) const
+{
+    if (name && !name->empty()) {
+        if (auto space = getSpace(*name)) {
+            if (*space->getProfile() == profile && space->getIntent() == intent) {
+                // This document already contains this exact profile and intent
+                return std::make_pair(*name, true);
+            }
+        }
+    }
+    // Get a sanitized name from the profile
+    auto new_name = profile.getName(true);
+    if (auto space = getSpace(new_name)) {
+        if (space->getIntent() == intent) {
+            // Profile is already in use
+            return std::make_pair(std::move(new_name), true);
+        } else {
+            // Append intent when it's used but not the same intent
+            new_name += "-" + Colors::intentIds[intent];
+        }
+    }
+    return std::make_pair(std::move(new_name), (bool)getSpace(new_name));
+}
+
+/**
  * Attach the named profile to the document. The name is used as a look-up in
  * the CMS::System database then attached to the manager's document using the
  * given storage mechanism.
  *
  * @args lookup - The string name, Id or path to look up in the systems database.
  * @args storage - The mechanism to use when storing the profile in the document.
- * @args name - The new name to use, if empty the name from the profile is used.
  * @args intent - The rendering intent to use when transforming colors in this profile.
+ *
+ * @returns The new sanitized name for the color space in the document.
  */
-void DocumentCMS::attachProfileToDoc(std::string const &lookup, ColorProfileStorage storage, RenderingIntent intent,
-                                     std::string name)
+std::optional<std::string> DocumentCMS::attachProfileToDoc(std::string const &lookup, ColorProfileStorage storage,
+                                                           RenderingIntent intent)
 {
     auto &cms = Inkscape::Colors::CMS::System::get();
     if (auto profile = cms.getProfile(lookup)) {
-        std::string new_name = name.empty() ? profile->getName() : std::move(name);
-        if (auto cp = Inkscape::ColorProfile::createFromProfile(_document, *profile, std::move(new_name), storage)) {
-            cp->setRenderingIntent(intent);
-            _document->ensureUpToDate();
-        }
-    } else {
-        g_error("Couldn't get the icc profile '%s'", lookup.c_str());
+        return attachProfileToDoc(*profile, storage, intent);
     }
+    g_error("Couldn't get the icc profile '%s'", lookup.c_str());
+    return {};
+}
+
+/**
+ * Attach the given profile to the document using the storage mechanism.
+ *
+ * @args lookup - The string name, Id or path to look up in the systems database.
+ * @args storage - The mechanism to use when storing the profile in the document.
+ * @args intent - The rendering intent to use when transforming colors in this profile.
+ *
+ * @returns The new sanitized name for the color space in the document.
+ */
+std::string DocumentCMS::attachProfileToDoc(Colors::CMS::Profile const &profile, ColorProfileStorage storage,
+                                            RenderingIntent intent)
+{
+    auto [new_name, exists] = checkProfileName(profile, intent);
+    if (!exists) {
+        Inkscape::ColorProfile::createFromProfile(_document, profile, std::move(new_name), storage, intent);
+    }
+    return new_name;
 }
 
 /**

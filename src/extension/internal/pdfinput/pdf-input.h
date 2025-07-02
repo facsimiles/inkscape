@@ -27,6 +27,7 @@
 // clang-format off
 #define PDF_COMMON_INPUT_PARAMS \
             "<param name=\"embedImages\" gui-text=\"" N_("Embed Images") "\" type=\"bool\">true</param>\n" \
+            "<param name=\"convertColors\" gui-text=\"" N_("Convert Colors to sRGB") "\" type=\"bool\">true</param>\n" \
             "<param name=\"importPages\" gui-text=\"" N_("Import Pages") "\" type=\"bool\">true</param>\n" \
             "<param name=\"approximationPrecision\" gui-text=\"" N_("Approximation Precision:") "\" type=\"float\" min=\"1\" max=\"100\">2.0</param>\n" \
             "<param name=\"fontRendering\" gui-text=\"" N_("Font Rendering:") "\" type=\"optiongroup\">\n" \
@@ -127,6 +128,7 @@ private:
     Gtk::DrawingArea &_preview_area;
     Gtk::ComboBox &_clip_to;
     Gtk::CheckButton &_embed_images;
+    Gtk::CheckButton &_convert_colors;
     Gtk::CheckButton &_import_pages;
     Gtk::Scale &_mesh_slider;
     Gtk::Label &_mesh_label;

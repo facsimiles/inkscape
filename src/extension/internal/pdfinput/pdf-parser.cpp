@@ -1620,7 +1620,7 @@ void PdfParser::opShFill(Object args[], int /*numArgs*/)
     break;
   case 2: // Axial shading
   case 3: // Radial shading
-      builder->addClippedFill(shading.get(), stateToAffine(state));
+      builder->addClippedFill(state, shading.get(), stateToAffine(state));
       break;
   case 4: // Free-form Gouraud-shaded triangle mesh
   case 5: // Lattice-form Gouraud-shaded triangle mesh

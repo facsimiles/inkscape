@@ -32,6 +32,18 @@ std::shared_ptr<Profile> Profile::create(cmsHPROFILE handle, std::string path, b
 }
 
 /**
+ * Copy the cmsHPROFILE object before creating a Profile
+ */
+std::shared_ptr<Profile> Profile::create_from_copy(cmsHPROFILE handle)
+{
+    auto data = dumpData(handle);
+    if (cmsHPROFILE profile = cmsOpenProfileFromMem(data.data(), data.size())) {
+        return Profile::create(profile, "", false);
+    }
+    return nullptr;
+}
+
+/**
  * Construct a color profile object from a uri. Ownership of the lcms2 object is contained
  * within the Profile object and will be destroyed when it is.
  */
@@ -269,14 +281,14 @@ std::string Profile::dumpBase64() const
 /**
  * Dump the entire profile as raw data. Used in dumpBase64 and generateId
  */
-std::vector<unsigned char> Profile::dumpData() const
+std::vector<unsigned char> Profile::dumpData(cmsHPROFILE profile)
 {
     cmsUInt32Number len = 0;
-    if (!cmsSaveProfileToMem(_handle, nullptr, &len)) {
+    if (!cmsSaveProfileToMem(profile, nullptr, &len)) {
         throw CmsError("Can't extract profile data");
     }
     auto buf = std::vector<unsigned char>(len);
-    cmsSaveProfileToMem(_handle, &buf.front(), &len);
+    cmsSaveProfileToMem(profile, &buf.front(), &len);
     return buf;
 }
 

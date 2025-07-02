@@ -1012,10 +1012,12 @@ add_cli_test(actions-sequential-export-id-only_svg
 ###########################
 
 function(add_pdfinput_test name pages font_strategy)
+    set(oneValueArgs EXTRA)
+    cmake_parse_arguments(ARG "" "${oneValueArgs}" "" ${ARGN})
 
     add_cli_test(pdfinput-${name}
         INPUT_FILENAME pdfinput/${name}.pdf
-        PARAMETERS --pages=${pages} --pdf-font-strategy=${font_strategy} --actions=export-filename:${name}.svg$<SEMICOLON>export-do
+        PARAMETERS --pages=${pages} --pdf-font-strategy=${font_strategy} ${ARG_EXTRA} --actions=export-filename:${name}.svg$<SEMICOLON>export-do
         EXPECTED_FILES "${name}.svg"
         TEST_SCRIPT compare.sh ${name}.svg "${CMAKE_CURRENT_SOURCE_DIR}/testcases/pdfinput/${name}_expected.svg")
 
@@ -1034,7 +1036,7 @@ add_pdfinput_test(multi-page-sample all draw-all)
 add_pdfinput_test(multiple-style-same-text-block 1 keep)
 add_pdfinput_test(gs_linewidth all draw-all)
 add_pdfinput_test(XObj_layer all draw-all)
-add_pdfinput_test(Annot_w_AP all draw-all)
+add_pdfinput_test(Annot_w_AP all draw-all EXTRA "--pdf-convert-colors")
 add_pdfinput_test(clipping_shift 1 keep)
 
 function(add_pdfoutput_test name)

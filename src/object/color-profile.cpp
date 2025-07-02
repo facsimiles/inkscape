@@ -161,9 +161,11 @@ void ColorProfile::setRenderingIntent(Colors::RenderingIntent intent)
  *                 the profile MUST be a file. If the document has a file and the path is close
  *                 to the icc profile, it will be relative.
  *   - LOCAL_ID  - The profile's unique id will be stored, no href will be added.
+ * @args intent  - Optional, The rendering intent to store in this profile.
  */
 ColorProfile *ColorProfile::createFromProfile(SPDocument *doc, Colors::CMS::Profile const &profile,
-                                              std::string const &name, ColorProfileStorage storage)
+                                              std::string const &name, ColorProfileStorage storage,
+                                              std::optional<Colors::RenderingIntent> intent)
 {
     if (name.empty()) {
         g_error("Refusing to create a color profile with an empty name!");
@@ -191,6 +193,9 @@ ColorProfile *ColorProfile::createFromProfile(SPDocument *doc, Colors::CMS::Prof
             auto fn = doc->getDocumentFilename();
             Inkscape::setHrefAttribute(*repr, uri.str(fn ? (std::string("file://") + fn).c_str() : nullptr));
         } break;
+    }
+    if (intent) {
+        repr->setAttributeOrRemoveIfEmpty("rendering-intent", Colors::intentIds[*intent]);
     }
     // Complete the creation by appending to the defs. This must be done last.
     return cast<ColorProfile>(doc->getDefs()->appendChildRepr(repr));

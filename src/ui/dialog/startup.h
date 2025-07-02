@@ -41,7 +41,7 @@ namespace Inkscape::UI::Dialog {
 class StartScreen : public Gtk::Dialog {
 public:
     StartScreen();
-    ~StartScreen() = default;
+    ~StartScreen() override = default;
 
     SPDocument* get_document() { return _document; }
 

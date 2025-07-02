@@ -33,7 +33,8 @@ public:
     int tag() const override { return tag_of<decltype(*this)>; }
 
     static ColorProfile *createFromProfile(SPDocument *doc, Colors::CMS::Profile const &profile,
-                                           std::string const &name, ColorProfileStorage storage);
+                                           std::string const &name, ColorProfileStorage storage,
+                                           std::optional<Colors::RenderingIntent> intent);
 
     std::string getName() const { return _name; }
     std::string getLocalProfileId() const { return _local; }

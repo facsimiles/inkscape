@@ -21,6 +21,7 @@ class Profile
 {
 public:
     static std::shared_ptr<Profile> create(cmsHPROFILE handle, std::string path = "", bool in_home = false);
+    static std::shared_ptr<Profile> create_from_copy(cmsHPROFILE handle);
     static std::shared_ptr<Profile> create_from_uri(std::string path, bool in_home = false);
     static std::shared_ptr<Profile> create_from_data(std::string const &contents);
     static std::shared_ptr<Profile> create_srgb();
@@ -54,7 +55,8 @@ public:
 
     static bool isIccFile(std::string const &filepath);
     std::string dumpBase64() const;
-    std::vector<unsigned char> dumpData() const;
+    std::vector<unsigned char> dumpData() const { return dumpData(_handle); }
+    static std::vector<unsigned char> dumpData(cmsHPROFILE profile);
 
 private:
     cmsHPROFILE _handle;

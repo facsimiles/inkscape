@@ -23,6 +23,15 @@ namespace Inkscape {
         struct Document;
         class Node;
     }
+namespace Colors {
+enum class RenderingIntent;
+namespace CMS {
+class Profile;
+}
+namespace Space {
+class AnySpace;
+}
+}
 }
 
 #define Operator Operator_Gfx
@@ -118,9 +127,9 @@ public:
     bool shouldMergePath(bool is_fill, const std::string &path);
     bool mergePath(GfxState *state, bool is_fill, const std::string &path, bool even_odd = false);
     void addPath(GfxState *state, bool fill, bool stroke, bool even_odd=false);
-    void addClippedFill(GfxShading *shading, const Geom::Affine shading_tr);
-    void addShadedFill(GfxShading *shading, const Geom::Affine shading_tr, GfxPath *path, const Geom::Affine tr,
-                       bool even_odd = false);
+    void addClippedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr);
+    void addShadedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr, GfxPath *path,
+                       const Geom::Affine tr, bool even_odd = false);
 
     // Image handling
     void addImage(GfxState *state, Stream *str, int width, int height,
@@ -181,15 +190,16 @@ public:
     void addColorProfile(unsigned char *profBuf, int length);
 
     void setEmbedImages(bool embed_images) { _embed_images = embed_images; }
+    void setConvertColors(bool convert_colors) { _convert_colors = convert_colors; }
 private:
     void _init();
 
     // Pattern creation
     gchar *_createPattern(GfxPattern *pattern, GfxState *state, bool is_stroke=false);
-    gchar *_createGradient(GfxShading *shading, const Geom::Affine pat_matrix, bool for_shading = false);
+    gchar *_createGradient(GfxState *state, GfxShading *shading, const Geom::Affine pat_matrix, bool for_shading = false);
     void _addStopToGradient(Inkscape::XML::Node *gradient, double offset, GfxColor *color, GfxColorSpace *space,
-                            double opacity);
-    bool _addGradientStops(Inkscape::XML::Node *gradient, GfxShading *shading,
+                            Colors::RenderingIntent intent, double opacity);
+    bool _addGradientStops(Inkscape::XML::Node *gradient, GfxState *state, GfxShading *shading,
                            _POPPLER_CONST Function *func);
     gchar *_createTilingPattern(GfxTilingPattern *tiling_pattern, GfxState *state,
                                 bool is_stroke=false);
@@ -240,8 +250,9 @@ private:
     static bool _attrEqual(Inkscape::XML::Node *a, Inkscape::XML::Node *b, char const *attr);
 
     // Colors
-    std::string convertGfxColor(const GfxColor *color, GfxColorSpace *space);
-    std::string _getColorProfile(cmsHPROFILE hp);
+    std::string convertGfxColor(const GfxColor *color, GfxColorSpace *space, Colors::RenderingIntent intent);
+    std::string _getColorSpace(cmsHPROFILE hp, Colors::RenderingIntent intent);
+    std::shared_ptr<Colors::Space::AnySpace> _getColorSpace(std::shared_ptr<Colors::CMS::Profile> const &profile, Colors::RenderingIntent intent);
 
     // The calculated font style, if not set, the text must be rendered with cairo instead.
     FontStrategies _font_strategies;
@@ -253,8 +264,8 @@ private:
     Geom::Point _text_position;
     std::vector<SvgGlyph> _glyphs;   // Added characters
 
-    // Image embed
     bool _embed_images = true;
+    bool _convert_colors = true;
 
     // The font when drawing the text into vector glyphs instead of text elements.
     std::shared_ptr<CairoFont> _cairo_font;
@@ -284,8 +295,7 @@ private:
 
     std::map<std::string, std::pair<std::string, bool>> _ocgs;
 
-    std::string _icc_profile;
-    std::map<cmsHPROFILE, std::string> _icc_profiles;
+    std::shared_ptr<Colors::CMS::Profile> _icc_profile;
 
     ClipHistoryEntry *_clip_history; // clip path stack
     Inkscape::XML::Node *_clip_text = nullptr;

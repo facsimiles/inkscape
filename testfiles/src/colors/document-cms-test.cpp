@@ -100,6 +100,50 @@ TEST_F(ColorDocumentCMSObjsTest, updateIntent)
     ASSERT_EQ(space->getIntent(), RenderingIntent::RELATIVE_COLORIMETRIC);
 }
 
+TEST_F(ColorDocumentCMSObjsTest, checkProfileName)
+{
+    auto &tr = doc->getDocumentCMS();
+    auto space = tr.getSpace("grb");
+    auto profile = space->getProfile();
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::PERCEPTUAL, "grb");
+        EXPECT_TRUE(exists);
+        EXPECT_EQ(name, "grb");
+    }
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::PERCEPTUAL);
+        EXPECT_FALSE(exists);
+        EXPECT_EQ(name, "Swapped-Red-and-Green");
+    }
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::AUTO, "grb");
+        EXPECT_FALSE(exists);
+        EXPECT_EQ(name, "Swapped-Red-and-Green");
+    }
+    auto old = tr.attachProfileToDoc(*profile, ColorProfileStorage::LOCAL_ID, RenderingIntent::PERCEPTUAL);
+    ASSERT_TRUE(tr.getSpace(old));
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::PERCEPTUAL);
+        EXPECT_TRUE(exists);
+        EXPECT_EQ(name, old);
+    }
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::PERCEPTUAL, old);
+        EXPECT_TRUE(exists);
+        EXPECT_EQ(name, old);
+    }
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::AUTO);
+        EXPECT_FALSE(exists);
+        EXPECT_EQ(name, "Swapped-Red-and-Green-auto");
+    }
+    {
+        auto [name, exists] = tr.checkProfileName(*profile, RenderingIntent::AUTO, old);
+        EXPECT_FALSE(exists);
+        EXPECT_EQ(name, "Swapped-Red-and-Green-auto");
+    }
+}
+
 TEST_F(ColorDocumentCMSObjsTest, createColorProfile)
 {
     auto &tr = doc->getDocumentCMS();
