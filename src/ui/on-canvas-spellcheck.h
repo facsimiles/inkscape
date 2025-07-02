@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 #ifndef INKSCAPE_UI_ON_CANVAS_SPELLCHECK_H
 #define INKSCAPE_UI_ON_CANVAS_SPELLCHECK_H
@@ -42,7 +43,7 @@ struct TrackedTextItem {
 class OnCanvasSpellCheck
 {
 public:
-    OnCanvasSpellCheck();
+    OnCanvasSpellCheck(SPDesktop *desktop);
     ~OnCanvasSpellCheck();
 
 private:
@@ -58,6 +59,10 @@ private:
     std::string _lang_code;
 
     std::vector<TrackedTextItem> _tracked_items;
+
+    std::vector<Glib::ustring> _ignored_words;
+
+    std::vector<Glib::ustring> _added_words;
 
     // Get all text items in the document
     void allTextItems(SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked);
@@ -88,6 +93,11 @@ public:
 
     void replaceWord(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end, const Glib::ustring &replacement);
 
+    void ignoreOnce(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end);
+
+    void ignore(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end);
+
+    void addToDictionary(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end);
 
 };
 

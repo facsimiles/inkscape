@@ -142,7 +142,7 @@ TextTool::TextTool(SPDesktop *desktop)
         enableGrDrag();
     }
 
-    _spellcheck = std::make_unique<Inkscape::UI::OnCanvasSpellCheck>();
+    _spellcheck = std::make_unique<Inkscape::UI::OnCanvasSpellCheck>(_desktop);
 }
 
 TextTool::~TextTool()

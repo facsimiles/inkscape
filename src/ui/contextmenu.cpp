@@ -188,6 +188,18 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
                     gmenu->append_section(gmenu_section);
                 }
 
+                gmenu_section = Gio::Menu::create();
+                action_group->add_action("spellcheck-ignore-once", sigc::bind(sigc::mem_fun(*spellcheck, &Inkscape::UI::OnCanvasSpellCheck::ignoreOnce), item, sel_start, sel_end));
+                AppendItemFromAction(gmenu_section, "ctx.spellcheck-ignore-once", _("Ignore Once"), "edit-ignore-once");
+
+                action_group->add_action("spellcheck-ignore", sigc::bind(sigc::mem_fun(*spellcheck, &Inkscape::UI::OnCanvasSpellCheck::ignore), item, sel_start, sel_end));
+                AppendItemFromAction(gmenu_section, "ctx.spellcheck-ignore", _("Ignore"), "edit-ignore");
+
+                action_group->add_action("spellcheck-add-to-dictionary", sigc::bind(sigc::mem_fun(*spellcheck, &Inkscape::UI::OnCanvasSpellCheck::addToDictionary), item, sel_start, sel_end));
+                AppendItemFromAction(gmenu_section, "ctx.spellcheck-add-to-dictionary", _("Add to Dictionary"), "edit-add-to-dictionary");
+
+                gmenu->append_section(gmenu_section);
+
                 gmenu->append_section(create_clipboard_actions());
 
                 gmenu_section = Gio::Menu::create();

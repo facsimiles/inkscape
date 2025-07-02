@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#include <glibmm.h>
+#include <fstream>
+
 #include "on-canvas-spellcheck.h"
 #include "inkscape.h"
 #include "document.h"
@@ -16,19 +21,34 @@
 
 namespace Inkscape::UI {
 
+namespace {
 
-OnCanvasSpellCheck::OnCanvasSpellCheck()
-    : _prefs{*Preferences::get()}
+std::string get_user_ignore_path()
+{
+    return Glib::build_filename(Glib::get_user_config_dir(), "inkscape/ignored-words.txt");
+}
+
+std::string get_user_dict_path()
+{
+    return Glib::build_filename(Glib::get_user_config_dir(), "inkscape/accepted-words.txt");
+}
+
+void ensure_file_exists(const std::string& path)
+{
+    std::ofstream f(path, std::ios::app);
+}
+
+}
+
+
+OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
+    : _prefs{*Preferences::get()},
+      _desktop(desktop)
 {
     // Get the current document root
-    auto doc = SP_ACTIVE_DOCUMENT;
+    auto doc = desktop->getDocument();
     if (!doc) return;
     _root = static_cast<SPObject*>(doc->getRoot());
-
-    // Get the active desktop
-    auto desktop = SP_ACTIVE_DESKTOP;
-    if (!desktop) return;
-    _desktop = desktop;
 
     // Get the default spelling provider
     _provider = spelling_provider_get_default();
@@ -39,6 +59,34 @@ OnCanvasSpellCheck::OnCanvasSpellCheck()
 
     // Create the checker
     _checker = GObjectPtr(spelling_checker_new(_provider, _lang_code.c_str()));
+
+    // Open Ignored Words File and add ignored words to checker
+    ensure_file_exists(get_user_ignore_path());
+    std::ifstream ignore_file(get_user_ignore_path());
+    if (ignore_file.is_open()) {
+        std::string word;
+        while (std::getline(ignore_file, word)) {
+            if (!word.empty()) {
+                _ignored_words.push_back(word);
+                spelling_checker_ignore_word(_checker.get(), word.c_str());
+            }
+        }
+        ignore_file.close();
+    }
+
+    // Open Accepted Words File and add accepted words to checker
+    ensure_file_exists(get_user_dict_path());
+    std::ifstream dict_file(get_user_dict_path());
+    if (dict_file.is_open()) {
+        std::string word;
+        while (std::getline(dict_file, word)) {
+            if (!word.empty()) {
+                _added_words.push_back(word);
+                spelling_checker_add_word(_checker.get(), word.c_str());
+            }
+        }
+        dict_file.close();
+    }
 
     scanDocument();
 }
@@ -71,6 +119,9 @@ void OnCanvasSpellCheck::allTextItems(SPObject *r, std::vector<SPItem *> &l, boo
 
 void OnCanvasSpellCheck::scanDocument()
 {
+    // Clear any previously tracked items
+    _tracked_items.clear();
+
     std::vector<SPItem*> items;
     // Uses similar logic as SpellCheck::allTextItems to collect all SPText/SPFlowText
     allTextItems(_root, items, false, true);
@@ -234,6 +285,66 @@ void OnCanvasSpellCheck::replaceWord(SPItem *item, Text::Layout::iterator begin,
     checkTextItem(item);
 }
 
+void OnCanvasSpellCheck::ignoreOnce(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end)
+{
+    // Ignore the word once
+    auto it = std::find_if(_tracked_items.begin(), _tracked_items.end(),
+                           [item](const TrackedTextItem& tracked) { return tracked.item == item; });
+    if (it != _tracked_items.end()) {
+
+        auto mispelled_it = std::find_if(it->misspelled_words.begin(), it->misspelled_words.end(),
+                                 [begin, end](const MisspelledWord& misspelled) {
+                                     return misspelled.begin == begin && misspelled.end == end;
+                                 });
+        if (mispelled_it != it->misspelled_words.end()) {
+            // Remove the squiggle
+            if (mispelled_it->squiggle) {
+                mispelled_it->squiggle->set_visible(false);
+                mispelled_it->squiggle.reset();
+            }
+            // Remove the misspelled word from the list
+            it->misspelled_words.erase(mispelled_it);
+        }
+    }
+}
+
+void OnCanvasSpellCheck::ignore(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end)
+{
+    // Ignore the word permanently
+    auto word = sp_te_get_string_multiline(item, begin, end);
+    if (std::find(_ignored_words.begin(), _ignored_words.end(), word) == _ignored_words.end()) {
+        _ignored_words.push_back(word);
+        spelling_checker_ignore_word(_checker.get(), word.c_str());
+
+        // Save the ignored word to the file
+        std::ofstream ignore_file(get_user_ignore_path(), std::ios::app);
+        if (ignore_file.is_open()) {
+            ignore_file << word << std::endl;
+            ignore_file.close();
+        }
+    }
+
+    scanDocument(); // Re-scan the document to update the squiggles
+}
+
+void OnCanvasSpellCheck::addToDictionary(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end)
+{
+    // Add the word to the dictionary
+    auto word = sp_te_get_string_multiline(item, begin, end);
+    if (std::find(_added_words.begin(), _added_words.end(), word) == _added_words.end()) {
+        _added_words.push_back(word);
+        spelling_checker_add_word(_checker.get(), word.c_str());
+
+        // Save the accepted word to the file
+        std::ofstream dict_file(get_user_dict_path(), std::ios::app);
+        if (dict_file.is_open()) {
+            dict_file << word << std::endl;
+            dict_file.close();
+        }
+    }
+
+    scanDocument();
+}
 
 OnCanvasSpellCheck::~OnCanvasSpellCheck() = default;
 
