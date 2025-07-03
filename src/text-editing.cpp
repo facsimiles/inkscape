@@ -26,6 +26,7 @@
 #include "object/sp-flowregion.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-group.h"
+#include "object/sp-path.h"
 #include "object/sp-textpath.h"
 #include "object/sp-tref.h"
 #include "object/sp-tspan.h"
@@ -2032,7 +2033,7 @@ static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration)
     bool changes = false;
 
     for (SPObject *child = root->firstChild() ; child != nullptr ; ) {
-        if (is<SPFlowregion>(child) || is<SPFlowregionExclude>(child) || is<SPTRef>(child)) {
+        if (is<SPFlowregion>(child) || is<SPFlowregionExclude>(child) || is<SPTRef>(child) || is<SPPath>(child)) {
             child = child->getNext();
             continue;
         }
