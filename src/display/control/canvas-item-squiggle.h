@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 #ifndef SEEN_CANVAS_ITEM_SQUIGGLE_H
 #define SEEN_CANVAS_ITEM_SQUIGGLE_H
 
