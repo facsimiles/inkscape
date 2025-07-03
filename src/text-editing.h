@@ -46,40 +46,40 @@ unsigned sp_text_get_length(SPObject const *item);
 \a item, before and not including \a upto. Also adds 1 for each line break encountered. */
 unsigned sp_text_get_length_upto(SPObject const *item, SPObject const *upto);
 
-std::vector<Geom::Point> sp_te_create_selection_quads(SPItem const *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, Geom::Affine const &transform);
+std::vector<Geom::Point> sp_te_create_selection_quads(SPItem const *item, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, Geom::Affine const &transform);
 
 Inkscape::Text::Layout::iterator sp_te_get_position_by_coords (SPItem const *item, Geom::Point const &i_p);
-void sp_te_get_cursor_coords (SPItem const *item, Inkscape::Text::Layout::iterator const &position, Geom::Point &p0, Geom::Point &p1);
-double sp_te_get_average_linespacing (SPItem *text);
+void sp_te_get_cursor_coords (SPItem const *item, Inkscape::Text::Layout::iterator position, Geom::Point &p0, Geom::Point &p1);
+double sp_te_get_average_linespacing (SPItem const *text);
 
-SPStyle const * sp_te_style_at_position(SPItem const *text, Inkscape::Text::Layout::iterator const &position);
-SPObject const * sp_te_object_at_position(SPItem const *text, Inkscape::Text::Layout::iterator const &position);
+SPStyle const * sp_te_style_at_position(SPItem const *text, Inkscape::Text::Layout::iterator position);
+SPObject const * sp_te_object_at_position(SPItem const *text, Inkscape::Text::Layout::iterator position);
 
-Inkscape::Text::Layout::iterator sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, char const *utf8);
-Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, char const *utf8);
+Inkscape::Text::Layout::iterator sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator position, char const *utf8);
+Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, char const *utf8);
 Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *text, Inkscape::Text::Layout::iterator &position);
-bool sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, iterator_pair &iter_pair);
+bool sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, iterator_pair &iter_pair);
 
 Glib::ustring sp_te_get_string_multiline(SPItem const *text);
-Glib::ustring sp_te_get_string_multiline(SPItem const *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end);
+Glib::ustring sp_te_get_string_multiline(SPItem const *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end);
 void sp_te_set_repr_text_multiline(SPItem *text, char const *str);
 
 TextTagAttributes*
-text_tag_attributes_at_position(SPItem *item, Inkscape::Text::Layout::iterator const &position, unsigned *char_index);
+text_tag_attributes_at_position(SPItem *item, Inkscape::Text::Layout::iterator position, unsigned *char_index);
 
 bool is_kerning_supported(SPItem const *text);
 
-void sp_te_adjust_kerning_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop const *desktop, Geom::Point by);
-void sp_te_adjust_dx (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double delta);
-void sp_te_adjust_dy (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double delta);
+void sp_te_adjust_kerning_screen(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop const *desktop, Geom::Point by);
+void sp_te_adjust_dx (SPItem *item, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop *desktop, double delta);
+void sp_te_adjust_dy (SPItem *item, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop *desktop, double delta);
 
-void sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double pixels);
-void sp_te_adjust_rotation(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double degrees);
-void sp_te_set_rotation(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double degrees);
+void sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop *desktop, double pixels);
+void sp_te_adjust_rotation(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop *desktop, double degrees);
+void sp_te_set_rotation(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop *desktop, double degrees);
 
-void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double by);
-void sp_te_adjust_linespacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, double by);
-void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPCSSAttr const *css);
+void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop const *desktop, double by);
+void sp_te_adjust_linespacing_screen(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPDesktop const *desktop, double by);
+void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator start, Inkscape::Text::Layout::iterator end, SPCSSAttr const *css);
 
 bool is_part_of_text_subtree (SPObject const *obj);
 bool is_top_level_text_object (SPObject const *obj);

@@ -104,8 +104,8 @@ Text::Layout::iterator sp_te_get_position_by_coords(SPItem const *item, Geom::Po
     return layout->getNearestCursorPositionTo(p);
 }
 
-std::vector<Geom::Point> sp_te_create_selection_quads(SPItem const *item, Text::Layout::iterator const &start,
-                                                      Text::Layout::iterator const &end, Geom::Affine const &transform)
+std::vector<Geom::Point> sp_te_create_selection_quads(SPItem const *item, Text::Layout::iterator start,
+                                                      Text::Layout::iterator end, Geom::Affine const &transform)
 {
     if (start == end)
         return std::vector<Geom::Point>();
@@ -116,7 +116,7 @@ std::vector<Geom::Point> sp_te_create_selection_quads(SPItem const *item, Text::
     return layout->createSelectionShape(start, end, transform);
 }
 
-void sp_te_get_cursor_coords(SPItem const *item, Text::Layout::iterator const &position, Geom::Point &p0,
+void sp_te_get_cursor_coords(SPItem const *item, Text::Layout::iterator position, Geom::Point &p0,
                              Geom::Point &p1)
 {
     Text::Layout const *layout = te_get_layout(item);
@@ -125,14 +125,14 @@ void sp_te_get_cursor_coords(SPItem const *item, Text::Layout::iterator const &p
     p1 = Geom::Point(p0[Geom::X] + height * sin(rotation), p0[Geom::Y] - height * cos(rotation)); // valgrind warns that rotation is not initialized here. Why is to be seen in queryCursorShape
 }
 
-SPStyle const *sp_te_style_at_position(SPItem const *text, Text::Layout::iterator const &position)
+SPStyle const *sp_te_style_at_position(SPItem const *text, Text::Layout::iterator position)
 {
     SPObject const *pos_obj = sp_te_object_at_position(text, position);
     SPStyle *result = (pos_obj) ? pos_obj->style : nullptr;
     return result;
 }
 
-SPObject const *sp_te_object_at_position(SPItem const *text, Text::Layout::iterator const &position)
+SPObject const *sp_te_object_at_position(SPItem const *text, Text::Layout::iterator position)
 {
     Text::Layout const *layout = te_get_layout(text);
     if (layout == nullptr) {
@@ -165,8 +165,8 @@ char * dump_hexy(const gchar * utf8)
 }
 */
 
-Text::Layout::iterator sp_te_replace(SPItem *item, Text::Layout::iterator const &start,
-                                     Text::Layout::iterator const &end, gchar const *utf8)
+Text::Layout::iterator sp_te_replace(SPItem *item, Text::Layout::iterator start,
+                                     Text::Layout::iterator end, gchar const *utf8)
 {
     iterator_pair pair;
     sp_te_delete(item, start, end, pair);
@@ -503,8 +503,7 @@ static SPString* sp_te_seek_next_string_recursive(SPObject *start_obj)
 {
     while (start_obj) {
         if (start_obj->hasChildren()) {
-            SPString *found_string = sp_te_seek_next_string_recursive(start_obj->firstChild());
-            if (found_string) {
+            if (SPString *found_string = sp_te_seek_next_string_recursive(start_obj->firstChild())) {
                 return found_string;
             }
         }
@@ -544,7 +543,7 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
 /** Inserts the given text into a text or flowroot object. Line breaks
 cannot be inserted using this function, see sp_te_insert_line(). Returns
 an iterator pointing just after the inserted text. */
-Text::Layout::iterator sp_te_insert(SPItem *item, Text::Layout::iterator const &position, gchar const *utf8)
+Text::Layout::iterator sp_te_insert(SPItem *item, Text::Layout::iterator position, gchar const *utf8)
 {
     if (!g_utf8_validate(utf8,-1,nullptr)) {
         g_warning("Trying to insert invalid utf8");
@@ -646,7 +645,7 @@ static void move_child_nodes(XML::Node *from_repr, XML::Node *to_repr, bool prep
 
 /** returns the object in the tree which is the closest ancestor of both
 \a one and \a two. It will never return anything higher than \a text. */
-static SPObject* get_common_ancestor(SPObject *text, SPObject *one, SPObject *two)
+static SPObject* get_common_ancestor(SPObject *text, SPObject *one, SPObject const *two)
 {
     if (one == nullptr || two == nullptr)
         return text;
@@ -674,7 +673,7 @@ static void move_to_end_of_paragraph(SPObject **para_obj, Glib::ustring::iterato
 /** delete the line break pointed to by \a item by merging its children into
 the next suitable object and deleting \a item. Returns the object after the
 ones that have just been moved and sets \a next_is_sibling accordingly. */
-static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is_sibling)
+static SPObject* delete_line_break(SPObject const *root, SPObject *item, bool *next_is_sibling)
 {
     XML::Node *this_repr = item->getRepr();
     SPObject *next_item = nullptr;
@@ -733,8 +732,7 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     sp_repr_css_attr_unref(dest_node_attrs);
     sp_repr_css_change(new_span_repr, this_node_attrs, "style");
 
-    TextTagAttributes *attributes = attributes_for_object(new_parent_item);
-    if (attributes)
+    if (TextTagAttributes *attributes = attributes_for_object(new_parent_item))
         attributes->insert(0, moved_char_count);
     move_child_nodes(this_repr, new_span_repr);
     this_repr->parent()->removeChild(this_repr);
@@ -777,7 +775,7 @@ quite a complicated operation, partly due to the cleanup that is done if all
 the text in a subobject has been deleted, and partly due to the difficulty
 of figuring out what is a line break and how to delete one. Returns the
 real start and ending iterators based on the situation. */
-bool sp_te_delete(SPItem *item, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+bool sp_te_delete(SPItem *item, Text::Layout::iterator start, Text::Layout::iterator end,
                   iterator_pair &iter_pair)
 {
     bool success = false;
@@ -859,10 +857,9 @@ bool sp_te_delete(SPItem *item, Text::Layout::iterator const &start, Text::Layou
             if (sub_item->hasChildren())
                 sub_item = sub_item->firstChild();
             else {
-                SPObject *next_item;
                 do {
                     bool is_sibling = true;
-                    next_item = sub_item->getNext();
+                    SPObject *next_item = sub_item->getNext();
                     if (next_item == nullptr) {
                         next_item = sub_item->parent;
                         is_sibling = false;
@@ -927,8 +924,8 @@ Glib::ustring sp_te_get_string_multiline(SPItem const *text)
 /** Gets a text-only representation of the characters in a text or flowroot
 object from \a start to \a end only. Line break elements are replaced with
 '\n'. */
-Glib::ustring sp_te_get_string_multiline(SPItem const *text, Text::Layout::iterator const &start,
-                                         Text::Layout::iterator const &end)
+Glib::ustring sp_te_get_string_multiline(SPItem const *text, Text::Layout::iterator start,
+                                         Text::Layout::iterator end)
 {
     if (start == end) return "";
     Text::Layout::iterator first, last;
@@ -1035,7 +1032,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
 
 /** Returns the attributes block and the character index within that block
 which represents the iterator \a position. */
-TextTagAttributes *text_tag_attributes_at_position(SPItem *item, Text::Layout::iterator const &position,
+TextTagAttributes *text_tag_attributes_at_position(SPItem *item, Text::Layout::iterator position,
                                                    unsigned *char_index)
 {
     if (item == nullptr || char_index == nullptr || !is<SPText>(item)) {
@@ -1071,7 +1068,7 @@ bool is_kerning_supported(SPItem const *text)
     return true;
 }
 
-void sp_te_adjust_kerning_screen(SPItem *text, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_adjust_kerning_screen(SPItem *text, Text::Layout::iterator start, Text::Layout::iterator end,
                                  SPDesktop const *desktop, Geom::Point by)
 {
     // divide increment by zoom
@@ -1093,7 +1090,7 @@ void sp_te_adjust_kerning_screen(SPItem *text, Text::Layout::iterator const &sta
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void sp_te_adjust_dx(SPItem *item, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_adjust_dx(SPItem *item, Text::Layout::iterator start, Text::Layout::iterator end,
                      SPDesktop * /*desktop*/, double delta)
 {
     unsigned char_index = 0;
@@ -1112,7 +1109,7 @@ void sp_te_adjust_dx(SPItem *item, Text::Layout::iterator const &start, Text::La
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void sp_te_adjust_dy(SPItem *item, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_adjust_dy(SPItem *item, Text::Layout::iterator start, Text::Layout::iterator end,
                      SPDesktop * /*desktop*/, double delta)
 {
     unsigned char_index = 0;
@@ -1131,7 +1128,7 @@ void sp_te_adjust_dy(SPItem *item, Text::Layout::iterator const &start, Text::La
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void sp_te_adjust_rotation_screen(SPItem *text, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_adjust_rotation_screen(SPItem *text, Text::Layout::iterator start, Text::Layout::iterator end,
                                   SPDesktop *desktop, gdouble pixels)
 {
     // divide increment by zoom
@@ -1151,7 +1148,7 @@ void sp_te_adjust_rotation_screen(SPItem *text, Text::Layout::iterator const &st
     sp_te_adjust_rotation(text, start, end, desktop, degrees);
 }
 
-void sp_te_adjust_rotation(SPItem *text, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_adjust_rotation(SPItem *text, Text::Layout::iterator start, Text::Layout::iterator end,
                            SPDesktop * /*desktop*/, gdouble degrees)
 {
     unsigned char_index;
@@ -1170,7 +1167,7 @@ void sp_te_adjust_rotation(SPItem *text, Text::Layout::iterator const &start, Te
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void sp_te_set_rotation(SPItem *text, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_set_rotation(SPItem *text, Text::Layout::iterator start, Text::Layout::iterator end,
                         SPDesktop * /*desktop*/, gdouble degrees)
 {
     unsigned char_index = 0;
@@ -1192,8 +1189,8 @@ void sp_te_set_rotation(SPItem *text, Text::Layout::iterator const &start, Text:
     }
 }
 
-void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Text::Layout::iterator const &start,
-                                             Text::Layout::iterator const &end, SPDesktop *desktop, gdouble by)
+void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Text::Layout::iterator start,
+                                             Text::Layout::iterator end, SPDesktop const *desktop, gdouble by)
 {
     g_return_if_fail (text != nullptr);
     g_return_if_fail (is<SPText>(text) || is<SPFlowtext>(text));
@@ -1275,7 +1272,7 @@ void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Text::Layout::iterato
 }
 
 // Only used for page-up and page-down and sp_te_adjust_linespacing_screen
-double sp_te_get_average_linespacing(SPItem *text)
+double sp_te_get_average_linespacing(SPItem const *text)
 {
     Text::Layout const *layout = te_get_layout(text);
     if (!layout)
@@ -1378,8 +1375,8 @@ sp_te_adjust_line_height (SPObject *object, double amount, double average, bool 
     }
 }
 
-void sp_te_adjust_linespacing_screen(SPItem *text, Text::Layout::iterator const & /*start*/,
-                                     Text::Layout::iterator const & /*end*/, SPDesktop *desktop, gdouble by)
+void sp_te_adjust_linespacing_screen(SPItem *text, Text::Layout::iterator /*start*/,
+                                     Text::Layout::iterator /*end*/, SPDesktop const *desktop, gdouble by)
 {
     // TODO: use start and end iterators to delineate the area to be affected
     g_return_if_fail (text != nullptr);
@@ -1411,7 +1408,7 @@ void sp_te_adjust_linespacing_screen(SPItem *text, Text::Layout::iterator const 
 
 /** converts an iterator to a character index, mainly because ustring::substr()
 doesn't have a version that takes iterators as parameters. */
-static unsigned char_index_of_iterator(Glib::ustring const &string, Glib::ustring::const_iterator text_iter)
+static unsigned char_index_of_iterator(Glib::ustring string, Glib::ustring::const_iterator text_iter)
 {
     unsigned n = 0;
     for (Glib::ustring::const_iterator it = string.begin() ; it != string.end() && it != text_iter ; ++it)
@@ -1635,7 +1632,8 @@ a string can never be an ancestor.
 eg: <span><span>*ABC</span>DEFghi</span> where * is the \a item. We would
 like * to point to the inner span because we can apply style to that whole
 span. */
-static SPObject* ascend_while_first(SPObject *item, Glib::ustring::iterator text_iter, SPObject *common_ancestor)
+static SPObject* ascend_while_first(SPObject *item, Glib::ustring::iterator text_iter,
+                                    SPObject const *common_ancestor)
 {
     if (item == common_ancestor)
         return item;
@@ -2023,7 +2021,7 @@ static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration)
 {
     gchar const *root_style = (root)->getRepr()->attribute("style");
     if(root_style && strstr(root_style,"text-decoration"))has_text_decoration = true;
-    static bool (* const tidy_operators[])(SPObject**, bool) = {
+    static constexpr bool (* const tidy_operators[])(SPObject**, bool) = {
         tidy_operator_empty_spans,
         tidy_operator_inexplicable_spans,
         tidy_operator_repeated_spans,
@@ -2043,13 +2041,13 @@ static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration)
         }
 
         unsigned i;
-        for (i = 0 ; i < sizeof(tidy_operators) / sizeof(tidy_operators[0]) ; i++) {
+        for (i = 0 ; i < std::size(tidy_operators) ; i++) {
             if (tidy_operators[i](&child, has_text_decoration)) {
                 changes = true;
                 break;
             }
         }
-        if (i == sizeof(tidy_operators) / sizeof(tidy_operators[0])) {
+        if (i == std::size(tidy_operators)) {
             child = child->getNext();
         }
     }
@@ -2059,7 +2057,7 @@ static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration)
 /** Applies the given CSS fragment to the characters of the given text or
 flowtext object between \a start and \a end, creating or removing span
 elements as necessary and optimal. */
-void sp_te_apply_style(SPItem *text, Text::Layout::iterator const &start, Text::Layout::iterator const &end,
+void sp_te_apply_style(SPItem *text, Text::Layout::iterator start, Text::Layout::iterator end,
                        SPCSSAttr const *css)
 {
     // in the comments in the code below, capital letters are inside the application region, lowercase are outside
