@@ -57,20 +57,19 @@ public:
 
     struct RenderInfo
     {
-        // NEW
         Geom::Rect hatch_bbox;
+        Geom::Rect hatch_tile;
         double strip_width = 0;
         Geom::Point hatch_origin;
         Geom::Affine hatch_to_user;
+        Geom::Affine content_to_hatch;
+
+        // Used by toPath()
         int overflow_right = 0;
-        int overflow_left = 0;
+        int overflow_left = 1;
 
-        // OLD
-        Geom::Affine child_transform;
-        Geom::Affine pattern_to_user_transform;
-        Geom::Rect tile_rect;
-
-        int overflow_steps = 0;
+        // Used by rendering to screen
+        int overflow_steps = 1;
         Geom::Affine overflow_step_transform;
         Geom::Affine overflow_initial_transform;
     };

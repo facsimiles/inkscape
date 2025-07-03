@@ -177,9 +177,8 @@ Geom::PathVector SPHatchPath::calculateRenderCurve(unsigned key) const
     return {};
 }
 
-// Hatch bounding box is box in hatch space that will completely cover
-// object. We only use height here.
-// Note: Offset not taken into account!
+// We construct a curve that will completely cover the height of the hatch bbox
+// (scaling for hatchContentUnits happens in SPHatch).
 Geom::PathVector SPHatchPath::calculateRenderCurve(Geom::Rect const &hatch_bbox,
                                                    Geom::Point const &hatch_origin)
 {
@@ -214,7 +213,8 @@ Geom::PathVector SPHatchPath::calculateRenderCurve(Geom::Rect const &hatch_bbox,
             }
         }
     }
-    std::cout << "SPHatchPath::calculateRenderCurve: " << calculated_curve << std::endl;
+
+    calculated_curve *= Geom::Translate(offset.computed, 0);
     return calculated_curve;
 }
 

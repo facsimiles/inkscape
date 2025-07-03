@@ -604,9 +604,9 @@ void SPHatch::_updateView(View &view)
     //The movement progresses from right to left. This gives the same result
     //as drawing whole strips in left-to-right order.
 
-    view.drawingitem->setChildTransform(info.child_transform);
-    view.drawingitem->setPatternToUserTransform(info.pattern_to_user_transform);
-    view.drawingitem->setTileRect(info.tile_rect);
+    view.drawingitem->setChildTransform(info.content_to_hatch);
+    view.drawingitem->setPatternToUserTransform(info.hatch_to_user);
+    view.drawingitem->setTileRect(info.hatch_tile);
     view.drawingitem->setStyle(style);
     view.drawingitem->setOverflow(info.overflow_initial_transform, info.overflow_steps, info.overflow_step_transform);
 }
@@ -620,7 +620,6 @@ SPHatch::RenderInfo SPHatch::_calculateRenderInfo(Geom::OptRect const &bbox) con
         std::cerr << "SPHatch::RenderInfo: no bounding box!" << std::endl;
         return {};
     }
-    std::cout << "\nSPHatch::_calculateRenderInfo(): bbox: " << bbox << std::endl;
 
     // Calculate hatch transformation to user space.
     double hatch_x = x(); // tile refers to "base" tile.
@@ -640,90 +639,47 @@ SPHatch::RenderInfo SPHatch::_calculateRenderInfo(Geom::OptRect const &bbox) con
     Geom::Affine hatch2user = Geom::Rotate::from_degrees(hatch_rotate) * Geom::Translate(hatch_x, hatch_y) * hatchTransform();
     Geom::Affine user2hatch = hatch2user.inverse();
 
+    Geom::Affine content2hatch;
+    if (hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
+        content2hatch = Geom::Scale(bbox->width(), bbox->height());
+    }
+    Geom::Affine hatch2content = content2hatch.inverse();
+
     // Rotate/translate object bounding box to hatch space, find axis-aligned bounding box, this
     // ensures the hatch will cover the object. Hatch origin is now at (0, 0).
     RenderInfo info;
     info.hatch_bbox = *bbox * user2hatch;
+    info.hatch_tile = Geom::Rect(Geom::Interval(0, strip_width), info.hatch_bbox[Geom::Y]);
     info.hatch_origin = Geom::Point(hatch_x, hatch_y);
     info.strip_width = strip_width;
     info.hatch_to_user = hatch2user;
+    info.content_to_hatch = content2hatch;
 
     // Overflow (uses union of all hatch-path base tiles).
-    info.overflow_right = 0;
-    info.overflow_left  = 0;
     if (style->overflow.computed == SP_CSS_OVERFLOW_VISIBLE) {
         Geom::Interval bounds = this->bounds();
         if (hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
             bounds *= bbox->width();
         }
-        info.overflow_right = ceil( bounds.min() / strip_width);
-        info.overflow_left  = floor(bounds.max() / strip_width);
+        info.overflow_right = floor(bounds.min() / strip_width); // Number of extra strips on right (negative)
+        info.overflow_left  = ceil (bounds.max() / strip_width); // Number of extra strips on left + 1
+
+        info.overflow_steps = info.overflow_left - info.overflow_right; // Includes base strip.
+        info.overflow_step_transform = Geom::Translate(strip_width, 0.0);
+        info.overflow_initial_transform = Geom::Translate((-info.overflow_left + 1) * strip_width, 0.0);
+
     }
 
     std::cout << "SPHatch::RenderInfo:" << std::endl;
     std::cout << "  hatch_bbox: " << info.hatch_bbox << std::endl;
     std::cout << "  hatch_origin: " << info.hatch_origin << std::endl;
+    std::cout << "  hatch_to_user: " << info.hatch_to_user << std::endl;
+    std::cout << "  content_to_hatch: " << info.content_to_hatch << std::endl;
     std::cout << "  overflow_right: " << info.overflow_right << std::endl;
     std::cout << "  overflow_left: " << info.overflow_left << std::endl;
-
-    // OLD OLD
-    Geom::OptInterval extents = _calculateStripExtents(bbox);
-    if (extents) {
-        double tile_x = x();
-        double tile_y = y();
-        double tile_width = pitch();
-        double tile_height = extents->max() - extents->min();
-        double tile_rotate = rotate();
-        double tile_render_y = extents->min();
-
-        if (bbox && (hatchUnits() == HatchUnits::ObjectBoundingBox)) {
-            tile_x *= bbox->width();
-            tile_y *= bbox->height();
-            tile_width *= bbox->width();
-        }
-
-        // Extent calculated using content units, need to correct.
-        if (bbox && (hatchContentUnits() == HatchUnits::ObjectBoundingBox)) {
-            tile_height *= bbox->height();
-            tile_render_y *= bbox->height();
-        }
-
-        // Pattern size in hatch space
-        Geom::Rect hatch_tile = Geom::Rect::from_xywh(0, tile_render_y, tile_width, tile_height);
-
-        // Content to bbox
-        Geom::Affine content2ps;
-        if (bbox && (hatchContentUnits() == HatchUnits::ObjectBoundingBox)) {
-            content2ps = Geom::Affine(bbox->width(), 0.0, 0.0, bbox->height(), 0, 0);
-        }
-
-        // Tile (hatch space) to user.
-        Geom::Affine ps2user = Geom::Translate(tile_x, tile_y) * Geom::Rotate::from_degrees(tile_rotate) * hatchTransform();
-
-        info.child_transform = content2ps;
-        info.pattern_to_user_transform = ps2user;
-        info.tile_rect = hatch_tile;
-
-        if (style->overflow.computed == SP_CSS_OVERFLOW_VISIBLE) {
-            Geom::Interval bounds = this->bounds();
-            double pitch = this->pitch();
-            if (bbox) {
-                if (hatchUnits() == HatchUnits::ObjectBoundingBox) {
-                    pitch *= bbox->width();
-                }
-                if (hatchContentUnits() == HatchUnits::ObjectBoundingBox) {
-                    bounds *= bbox->width();
-                }
-            }
-            double overflow_right_strip = floor(bounds.max() / pitch) * pitch;
-            info.overflow_steps = ceil((overflow_right_strip - bounds.min()) / pitch) + 1;
-            info.overflow_step_transform = Geom::Translate(pitch, 0.0);
-            info.overflow_initial_transform = Geom::Translate(-overflow_right_strip, 0.0);
-        }
-    } else {
-        info.overflow_steps = 1;
-    }
-
+    std::cout << "  overflow_steps: " << info.overflow_steps << std::endl;
+    std::cout << "  overflow_steps: " << info.overflow_step_transform << std::endl;
+    std::cout << "  overflow_init: " << info.overflow_initial_transform << std::endl;
     return info;
 }
 
@@ -741,6 +697,7 @@ bool is_inside(int winding, SPWindRule wind_rule) {
 
 // Convert a hatch to pathvectors (one for each hatch-path).
 // This is particularily useful for creating SVG's for plotters and cutters.
+// Note: This does not handle CSS visible="none" (which isn't that useful).
 bool SPHatch::toPaths(SPShape &shape)
 {
     auto shape_bbox = shape.geometricBounds();
@@ -749,8 +706,10 @@ bool SPHatch::toPaths(SPShape &shape)
     auto xml_doc = shape.getRepr()->document();
 
     for (auto hatch_path : hatchPaths()) {
-        auto curve = hatch_path->calculateRenderCurve(render_info.hatch_bbox, render_info.hatch_origin);
-        std::cout << "toPaths: curve: " << curve << std::endl;
+        auto curve = hatch_path->calculateRenderCurve(
+            render_info.hatch_bbox   * render_info.content_to_hatch.inverse(),
+            render_info.hatch_origin * render_info.content_to_hatch.inverse());
+        curve *= render_info.content_to_hatch;
 
         // Calculate maximum, minimum strip. Overflow is handled by adding strips to the left and right.
         auto x_interval   = render_info.hatch_bbox[Geom::X];
@@ -760,6 +719,7 @@ bool SPHatch::toPaths(SPShape &shape)
         int strip_max = ceil( x_interval.max()/strip_width);
         strip_min -= render_info.overflow_left;
         strip_max -= render_info.overflow_right;
+        strip_min++; // overflow_left includes base strip
 
         Geom::PathVector new_curve;
         for (int i = strip_min; i < strip_max; ++i) {
@@ -794,7 +754,7 @@ bool SPHatch::toPaths(SPShape &shape)
 
         // Find style
         auto style = hatch_path->style;
-        Glib::ustring style_string = "fill:none;stroke:purple;";// + style->write();
+        Glib::ustring style_string = "fill:none;stroke:purple;stroke-width:3";// + style->write();
         new_path->setAttribute("style", style_string);
 
         parent->addChildAtPos(new_path, shape.getRepr()->position());
@@ -814,7 +774,13 @@ Geom::OptInterval SPHatch::_calculateStripExtents(Geom::OptRect const &bbox) con
     double tile_y = y();
     double tile_rotate = rotate();
 
-    Geom::Affine ps2user = Geom::Translate(tile_x, tile_y) * Geom::Rotate::from_degrees(tile_rotate) * hatchTransform();
+    // Correct for units:
+    if (hatchUnits() == HatchUnits::ObjectBoundingBox) {
+        tile_x = tile_x * bbox->width()  + bbox->min()[Geom::X];
+        tile_y = tile_y * bbox->height() + bbox->min()[Geom::Y];
+    }
+
+    Geom::Affine ps2user = Geom::Rotate::from_degrees(tile_rotate) * Geom::Translate(tile_x, tile_y) * hatchTransform();
     Geom::Affine user2ps = ps2user.inverse();
 
     Geom::Interval extents;
