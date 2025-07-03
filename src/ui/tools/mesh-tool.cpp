@@ -20,23 +20,17 @@
 #include "mesh-tool.h"
 
 // Libraries
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 // General
-#include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "gradient-drag.h"
 #include "gradient-chemistry.h"
 #include "message-context.h"
-#include "message-stack.h"
 #include "rubberband.h"
 #include "selection.h"
-#include "snap.h"
 
 #include "display/control/canvas-item-curve.h"
-#include "display/curve.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-mesh-gradient.h"

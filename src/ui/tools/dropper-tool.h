@@ -13,9 +13,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/point.h>
-
-#include "colors/color.h"
 #include "display/control/canvas-item-ptr.h"
 #include "ui/tools/tool-base.h"
 

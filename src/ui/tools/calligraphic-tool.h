@@ -19,13 +19,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <list>
-#include <string>
-#include <memory>
-
-#include <2geom/point.h>
-
-#include "display/control/canvas-item-ptr.h"
 #include "ui/tools/dynamic-base.h"
 
 class SPItem;

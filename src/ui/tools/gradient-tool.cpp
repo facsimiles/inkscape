@@ -15,18 +15,15 @@
 
 #include <unordered_set>
 #include <glibmm/i18n.h>
-#include <gdk/gdkkeysyms.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 #include "message-context.h"
-#include "message-stack.h"
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "snap.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-stop.h"

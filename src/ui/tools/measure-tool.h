@@ -13,14 +13,8 @@
 #ifndef INKSCAPE_UI_TOOLS_MEASURE_TOOL_H
 #define INKSCAPE_UI_TOOLS_MEASURE_TOOL_H
 
-#include <cstddef>
-#include <optional>
-#include <2geom/point.h>
-
-#include "display/control/canvas-temporary-item.h"
 #include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/tools/tool-base.h"
 #include <glibmm/i18n.h>
 

@@ -15,10 +15,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <string>
-
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include "context-fns.h"
@@ -27,7 +23,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "message-context.h"
-#include "selection-chemistry.h"
 #include "selection.h"
 
 #include "object/sp-rect.h"

@@ -3,14 +3,7 @@
 #include "object-picker-tool.h"
 #include "actions/actions-tools.h"
 #include "desktop.h"
-#include "display/control/canvas-item-context.h"
-#include "display/control/canvas-item-text.h"
-#include "document.h"
-#include <2geom/point.h>
-#include <2geom/rect.h>
 #include "object/sp-page.h"
-#include "page-manager.h"
-#include "ui/tools/tool-base.h"
 #include "ui/widget/events/canvas-event.h"
 
 namespace Inkscape::UI::Tools {

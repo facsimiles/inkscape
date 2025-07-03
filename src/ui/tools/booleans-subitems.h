@@ -13,8 +13,6 @@
 #define INKSCAPE_UI_TOOLS_BOOLEANS_SUBITEMS_H
 
 #include <2geom/pathvector.h>
-#include <vector>
-#include <functional>
 
 class SPItem;
 class SPStyle;

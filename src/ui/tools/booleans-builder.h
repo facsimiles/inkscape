@@ -11,10 +11,6 @@
 #ifndef INKSCAPE_UI_TOOLS_BOOLEANS_BUILDER_H
 #define INKSCAPE_UI_TOOLS_BOOLEANS_BUILDER_H
 
-#include <vector>
-#include <optional>
-#include <sigc++/scoped_connection.h>
-
 #include "booleans-subitems.h"
 #include <sigc++/scoped_connection.h>
 #include "display/control/canvas-item-ptr.h"

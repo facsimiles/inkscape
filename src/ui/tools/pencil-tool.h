@@ -11,13 +11,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <memory>
-
-#include <2geom/piecewise.h>
-#include <2geom/d2.h>
-#include <2geom/sbasis.h>
-#include <2geom/pathvector.h>
-
 #include "freehand-base.h"
 
 class SPShape;

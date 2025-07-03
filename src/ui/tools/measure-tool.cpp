@@ -16,25 +16,17 @@
 
 #include <iomanip>
 
-#include <gtkmm.h>
-#include <glibmm/i18n.h>
-
-#include <2geom/line.h>
 #include <2geom/path-intersection.h>
 
-#include "colors/utils.h"
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "layer-manager.h"
 #include "page-manager.h"
-#include "path-chemistry.h"
 #include "selection.h"
 #include "text-editing.h"
 
 #include "display/control/canvas-item-curve.h"
-#include "display/control/canvas-item-ctrl.h"
-#include "display/control/canvas-item-group.h"
 #include "display/control/canvas-item-text.h"
 
 #include "helper/geom.h"
@@ -42,9 +34,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-flowtext.h"
-#include "object/sp-namedview.h"
 #include "object/sp-root.h"
-#include "object/sp-shape.h"
 #include "object/sp-text.h"
 
 #include "svg/svg.h"

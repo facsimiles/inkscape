@@ -20,7 +20,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <optional>
 #include <2geom/path.h>
 
 #include "ui/tools/tool-base.h"

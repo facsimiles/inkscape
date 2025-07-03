@@ -12,27 +12,17 @@
  */
 
 #include <iomanip>
-#include <set>
-#include <utility>
 #include <glib/gi18n.h>
-#include <glibmm/ustring.h>
-#include <gdk/gdkkeysyms.h>
 
-#include "desktop.h"
-#include "document.h"
-#include "message-context.h"
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "snap.h"
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-group.h"
 #include "live_effects/effect.h"
 #include "object/sp-clippath.h"
-#include "object/sp-item-group.h"
 #include "object/sp-mask.h"
-#include "object/sp-namedview.h"
 #include "object/sp-shape.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/modifiers.h"
@@ -40,7 +30,6 @@
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/events/canvas-event.h"
 #include "util-string/ustring-format.h"

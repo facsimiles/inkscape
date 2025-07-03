@@ -11,9 +11,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <array>
-#include <sigc++/sigc++.h>
-
 #include "display/control/canvas-item-enums.h"
 #include "live_effects/effect.h"
 #include "ui/tools/freehand-base.h"

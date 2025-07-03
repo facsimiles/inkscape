@@ -16,9 +16,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstddef>
-#include <sigc++/sigc++.h>
-#include <2geom/point.h>
 #include "ui/tools/tool-base.h"
 #include "object/weakptr.h"
 

@@ -17,15 +17,8 @@
 
 #include "ui/tools/tool-base.h"
 
-#include <set>
-#include <utility>
-#include <gdk/gdkkeysyms.h>
-#include <gdkmm/device.h>
-#include <gdkmm/display.h>
 #include <gdkmm/seat.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/window.h>
-#include <glibmm/i18n.h>
 
 #include "desktop-events.h"
 #include "desktop-style.h"
@@ -33,19 +26,15 @@
 #include "gradient-drag.h"
 #include "inkscape-application.h"
 #include "layer-manager.h"
-#include "message-context.h"
-#include "rubberband.h"
 #include "selcue.h"
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "actions/actions-tools.h"
 #include "display/control/canvas-item-catchall.h" // Grab/Ungrab
 #include "display/control/snap-indicator.h"
-#include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 #include "ui/contextmenu.h"
 #include "ui/cursor-utils.h"
-#include "ui/interface.h"
 #include "ui/knot/knot.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-ptr.h"
@@ -61,7 +50,6 @@
 #include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/desktop-widget.h"
-#include "ui/widget/events/canvas-event.h"
 #include "ui/widget/events/debug.h"
 
 // globals for temporary switching to selector by space

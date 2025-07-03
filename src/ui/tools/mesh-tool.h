@@ -18,12 +18,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstddef>
-#include <sigc++/sigc++.h>
 #include "gradient-drag.h"
 #include "ui/tools/tool-base.h"
-
-#include "object/sp-mesh-array.h"
 
 namespace Inkscape {
 class Selection;

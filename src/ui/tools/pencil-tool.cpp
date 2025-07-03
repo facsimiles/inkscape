@@ -19,27 +19,14 @@
 
 #include "pencil-tool.h"
 
-#include <cmath>   // std::lerp
 #include <numeric> // std::accumulate
 
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
-
-#include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/svg-path-parser.h>
-
 
 #include "context-fns.h"
-#include "desktop.h"
-#include "desktop-style.h"
 #include "layer-manager.h"
 #include "message-context.h"
-#include "message-stack.h"
-#include "selection-chemistry.h"
 #include "selection.h"
-#include "snap.h"
 
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
@@ -50,9 +37,7 @@
 #include "live_effects/lpe-powerstroke-interpolators.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-simplify.h"
-#include "live_effects/lpeobject.h"
 
-#include "object/sp-lpe-item.h"
 #include "object/sp-path.h"
 #include "path/path-boolop.h"
 #include "style.h"
@@ -61,9 +46,6 @@
 
 #include "ui/draw-anchor.h"
 #include "ui/widget/events/canvas-event.h"
-
-#include "xml/node.h"
-#include "xml/sp-css-attr.h"
 
 #define DDC_MIN_PRESSURE      0.0
 #define DDC_MAX_PRESSURE      1.0

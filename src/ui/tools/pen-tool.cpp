@@ -17,17 +17,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <string>
-
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include "context-fns.h"
-#include "desktop.h"
 #include "message-context.h"
-#include "message-stack.h"
-#include "selection-chemistry.h"
 #include "selection.h"
 
 #include "display/curve.h"
@@ -40,10 +33,6 @@
 #include "ui/draw-anchor.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/widget/events/canvas-event.h"
-
-// we include the necessary files for BSpline & Spiro
-#include "live_effects/effect.h"                // for Effect
-#include "live_effects/lpeobject.h"             // for LivePathEffectObject
 
 #define INKSCAPE_LPE_SPIRO_C
 #include "live_effects/lpe-spiro.h"             // for sp_spiro_do_effect

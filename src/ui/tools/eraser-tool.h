@@ -20,8 +20,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/point.h>
-
 #include "message.h"
 #include "style-enums.h"
 #include "ui/tools/dynamic-base.h"

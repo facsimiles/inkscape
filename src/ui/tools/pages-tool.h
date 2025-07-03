@@ -14,10 +14,8 @@
  */
 
 #include <2geom/rect.h>
-#include <memory>
 
 #include "display/control/canvas-item-ptr.h"
-#include "selection.h"
 #include "ui/tools/tool-base.h"
 
 #define SP_PAGES_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::PagesTool *>((Inkscape::UI::Tools::ToolBase *)obj))
@@ -31,6 +29,7 @@ class SPKnot;
 class SnapManager;
 
 namespace Inkscape {
+struct SelectionState;
 class SnapCandidatePoint;
 class CanvasItemGroup;
 class CanvasItemRect;

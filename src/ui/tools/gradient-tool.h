@@ -17,8 +17,6 @@
 #ifndef INKSCAPE_UI_TOOLS_GRADIENT_TOOL_H
 #define INKSCAPE_UI_TOOLS_GRADIENT_TOOL_H
 
-#include <cstddef>
-#include <sigc++/sigc++.h>
 #include "ui/tools/tool-base.h"
 
 namespace Inkscape { class Selection; }

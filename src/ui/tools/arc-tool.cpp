@@ -20,17 +20,13 @@
 #include "arc-tool.h"
 
 #include <glibmm/i18n.h>
-#include <gdk/gdkkeysyms.h>
 
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "message-context.h"
-#include "preferences.h"
 #include "selection.h"
-#include "snap.h"
 
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
@@ -38,7 +34,6 @@
 #include "ui/icon-names.h"
 #include "ui/modifiers.h"
 #include "ui/shape-editor.h"
-#include "ui/tools/tool-base.h"
 #include "ui/widget/events/canvas-event.h"
 
 #include "util/units.h"

@@ -16,9 +16,6 @@
 #ifndef INKSCAPE_UI_TOOLS_LPE_TOOL_H
 #define INKSCAPE_UI_TOOLS_LPE_TOOL_H
 
-#include <unordered_map>
-#include <utility>
-#include <2geom/point.h>
 #include "ui/tools/pen-tool.h"
 
 // This is the list of subtools from which the toolbar of the LPETool is built automatically.

@@ -28,14 +28,8 @@
 
 #include "eraser-tool.h"
 
-#include <cmath>
-#include <cstring>
-#include <string>
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 #include <2geom/bezier-utils.h>
-#include <2geom/pathvector.h>
 
 #include "context-fns.h"
 #include "desktop-events.h"
@@ -45,21 +39,15 @@
 #include "document.h"
 #include "layer-manager.h"
 #include "message-context.h"
-#include "message-stack.h"
 #include "path-chemistry.h"
-#include "preferences.h"
 #include "rubberband.h"
-#include "selection-chemistry.h"
 #include "selection.h"
 #include "style.h"
 #include "display/control/canvas-item-bpath.h"
 #include "object/sp-clippath.h"
 #include "object/sp-image.h"
-#include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
-#include "object/sp-shape.h"
-#include "object/sp-use.h"
 #include "ui/icon-names.h"
 #include "ui/widget/events/canvas-event.h"
 #include "svg/svg.h"

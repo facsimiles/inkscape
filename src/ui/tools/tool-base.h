@@ -13,20 +13,8 @@
 #ifndef INKSCAPE_UI_TOOLS_TOOL_BASE_H
 #define INKSCAPE_UI_TOOLS_TOOL_BASE_H
 
-#include <cstddef>
-#include <string>
-#include <memory>
-#include <optional>
 #include <boost/noncopyable.hpp>
 
-#include <2geom/point.h>
-
-#include <sigc++/trackable.h>
-#include <gdk/gdk.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
-#include <gdkmm/cursor.h>
-
-#include <sigc++/scoped_connection.h>
 #include "preferences.h"
 #include "ui/widget/events/enums.h"
 #include "util/action-accel.h"

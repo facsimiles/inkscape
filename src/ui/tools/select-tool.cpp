@@ -19,19 +19,10 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <cstring>
-#include <string>
-
-#include <gtkmm/widget.h>
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
-
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "layer-manager.h"
-#include "message-stack.h"
-#include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection-describer.h"
 #include "selection.h"

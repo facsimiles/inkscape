@@ -18,22 +18,14 @@
 #include <iomanip>
 
 #include <glibmm/i18n.h>
-#include <gtk/gtk.h>
 
-#include <2geom/sbasis-geometric.h>
-
-#include "desktop.h"
-#include "document.h"
-#include "message-stack.h"
 #include "selection.h"
 
-#include "display/curve.h"
 #include "display/control/canvas-item-rect.h"
 #include "display/control/canvas-item-text.h"
 
 #include "object/sp-path.h"
 
-#include "util/units.h"
 #include "util-string/ustring-format.h"
 
 #include "ui/toolbar/lpe-toolbar.h"

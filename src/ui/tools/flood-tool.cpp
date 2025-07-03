@@ -20,24 +20,15 @@
 
 #include "flood-tool.h"
 
-#include <cmath>
-#include <cstdint>
-#include <queue>
-
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-
-#include <2geom/pathvector.h>
 
 #include "async/progress.h"
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "layer-manager.h"
 #include "message-context.h"
-#include "message-stack.h"
 #include "rubberband.h"
 #include "selection.h"
 #include "page-manager.h"
@@ -49,13 +40,11 @@
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
-#include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 
 #include "svg/svg.h"
 
-#include "trace/imagemap.h"
 #include "trace/potrace/inkscape-potrace.h"
 
 #include "ui/icon-names.h"

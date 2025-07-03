@@ -12,11 +12,6 @@
 #ifndef INKSCAPE_UI_TOOLS_NODE_TOOL_H
 #define INKSCAPE_UI_TOOLS_NODE_TOOL_H
 
-#include <map>
-#include <memory>
-#include <vector>
-#include <sigc++/connection.h>
-
 #include "ui/tools/tool-base.h"
 
 namespace Inkscape {

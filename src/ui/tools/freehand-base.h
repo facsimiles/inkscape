@@ -15,10 +15,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <memory>
-#include <optional>
-
-#include <sigc++/connection.h>
 #include <2geom/pathvector.h>
 
 #include "ui/tools/tool-base.h"

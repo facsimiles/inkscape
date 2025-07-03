@@ -14,16 +14,13 @@
 
 #include "tweak-tool.h"
 
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include <2geom/circle.h>
 
 #include "context-fns.h"
 #include "desktop-style.h"
-#include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "filter-chemistry.h"
 #include "gradient-chemistry.h"
 #include "message-context.h"
@@ -32,9 +29,6 @@
 #include "style.h"
 
 #include "display/control/canvas-item-bpath.h"
-
-#include "livarot/Path.h"
-#include "livarot/Shape.h"
 
 #include "object/box3d.h"
 #include "object/filters/gaussian-blur.h"

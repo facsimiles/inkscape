@@ -16,16 +16,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include "context-fns.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "message-context.h"
 #include "perspective-line.h"
-#include "selection.h"
 
 #include "object/box3d-side.h"
 #include "object/box3d.h"

@@ -13,17 +13,12 @@
  */
 
 #include <glibmm/i18n.h>
-#include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
-
-#include <2geom/transforms.h>
 #include <2geom/circle.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "message-context.h"
-#include "preferences.h"
 #include "selection.h"
 #include "style.h"
 #include "page-manager.h"
@@ -31,8 +26,6 @@
 #include "display/drawing.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-drawing.h"
-
-#include "object/sp-namedview.h"
 
 #include "ui/cursor-utils.h"
 #include "ui/icon-names.h"

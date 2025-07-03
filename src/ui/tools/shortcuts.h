@@ -12,8 +12,6 @@
 #ifndef UI_TOOLS_SHORTCUTS
 #define UI_TOOLS_SHORTCUTS
 
-#include <string>
-
 class InkscapeApplication;
 
 void init_tool_shortcuts(InkscapeApplication* app);

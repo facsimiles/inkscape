@@ -13,20 +13,14 @@
 
 #include "booleans-subitems.h"
 
-#include <numeric>
-#include <utility>
 #include <random>
 
 #include <boost/range/adaptor/reversed.hpp>
 
 #include "style.h"
 #include "helper/geom-pathstroke.h"
-#include "livarot/LivarotDefs.h"
-#include "livarot/Shape.h"
-#include "object/sp-clippath.h"
 #include "object/sp-item-group.h"
 #include "object/sp-image.h"
-#include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
 #include "path/path-boolop.h"

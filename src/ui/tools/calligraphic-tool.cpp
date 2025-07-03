@@ -24,33 +24,23 @@
 
 #include "ui/tools/calligraphic-tool.h"
 
-#include <cstring>
-#include <numeric>
-#include <string>
 #include <random>
 
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include <gtk/gtk.h>
 
 #include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
-#include <2geom/pathvector.h>
 
 #include "context-fns.h"
 #include "desktop-events.h"
 #include "desktop-style.h"
-#include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "message-context.h"
 #include "selection.h"
-
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-drawing.h" // ctx
 #include "display/drawing.h"
-
-#include "livarot/Path.h"
 
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
@@ -61,7 +51,6 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/freehand-base.h"
-#include "ui/widget/canvas.h"
 #include "ui/widget/events/canvas-event.h"
 
 #include "util/units.h"

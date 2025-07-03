@@ -15,10 +15,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <string>
-
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include "star-tool.h"

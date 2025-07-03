@@ -23,14 +23,10 @@
 
 #include "spray-tool.h"
 
-#include <vector>
-
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include <2geom/circle.h>
 
-#include "colors/utils.h"
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"

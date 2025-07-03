@@ -22,7 +22,6 @@
  */
 
 #include <2geom/pathvector.h>
-#include <2geom/point.h>
 
 #include "display/control/canvas-item-ptr.h"
 #include "object/object-set.h"

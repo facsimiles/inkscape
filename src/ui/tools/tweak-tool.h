@@ -13,10 +13,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/point.h>
 #include "ui/tools/tool-base.h"
 #include "display/control/canvas-item-ptr.h"
-#include <sigc++/scoped_connection.h>
 
 #define TC_MIN_PRESSURE      0.0
 #define TC_MAX_PRESSURE      1.0

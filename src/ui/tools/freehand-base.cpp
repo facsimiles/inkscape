@@ -19,9 +19,7 @@
 
 #include "desktop-style.h"
 #include "id-clash.h"
-#include "message-stack.h"
 #include "selection.h"
-#include "selection-chemistry.h"
 #include "style.h"
 
 #include "display/curve.h"
@@ -31,7 +29,6 @@
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpe-powerstroke.h"
 
-#include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-use.h"
@@ -40,7 +37,6 @@
 
 #include "ui/clipboard.h"
 #include "ui/draw-anchor.h"
-#include "ui/icon-names.h"
 #include "ui/tools/lpe-tool.h" // TODO: Remove in the future
 #include "ui/tools/pencil-tool.h" // TODO: Remove in the future
 #include "ui/widget/events/canvas-event.h"

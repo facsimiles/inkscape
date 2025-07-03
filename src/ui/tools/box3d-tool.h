@@ -16,12 +16,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstddef>
-#include <memory>
-
-#include <2geom/point.h>
-#include <sigc++/connection.h>
-
 #include "object/weakptr.h"
 #include "proj_pt.h"
 #include "vanishing-point.h"

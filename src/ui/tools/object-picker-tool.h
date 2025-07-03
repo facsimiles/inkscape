@@ -2,12 +2,9 @@
 #ifndef SEEN_OBJECT_PICKER_TOOL_H
 #define SEEN_OBJECT_PICKER_TOOL_H
 
-#include <sigc++/signal.h>
 #include "display/control/canvas-item-ptr.h"
 #include "display/control/canvas-item-rect.h"
 #include "display/control/canvas-item-text.h"
-#include <sigc++/scoped_connection.h>
-#include "object/sp-object.h"
 #include "ui/tools/tool-base.h"
 
 namespace Inkscape::UI::Tools {

@@ -13,7 +13,6 @@
 #include "actions/actions-tools.h" // set_active_tool()
 #include "ui/tools/booleans-tool.h"
 #include "ui/tools/booleans-builder.h"
-#include "display/control/canvas-item-group.h"
 #include "display/control/canvas-item-drawing.h"
 #include "display/drawing.h"
 

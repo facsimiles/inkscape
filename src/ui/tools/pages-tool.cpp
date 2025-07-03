@@ -12,15 +12,10 @@
 
 #include "pages-tool.h"
 
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
-
 #include "desktop.h"
 #include "document-undo.h"
 #include "pure-transform.h"
 #include "selection.h"
-#include "snap-preferences.h"
-#include "snap.h"
 
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-group.h"

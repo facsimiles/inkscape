@@ -13,12 +13,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstddef>
-#include <sigc++/sigc++.h>
-#include <2geom/point.h>
-
-#include "object/sp-marker.h"
-#include "object/sp-marker-loc.h"
 
 #include "ui/tools/tool-base.h"
 #include "ui/tool/shape-record.h"

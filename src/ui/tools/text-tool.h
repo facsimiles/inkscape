@@ -18,12 +18,7 @@
 #ifndef INKSCAPE_UI_TOOLS_TEXT_TOOL_H
 #define INKSCAPE_UI_TOOLS_TEXT_TOOL_H
 
-#include <string>
-#include <vector>
-#include <2geom/point.h>
-
 #include "display/control/canvas-item-ptr.h"
-#include <sigc++/scoped_connection.h>
 #include "libnrtype/Layout-TNG.h"
 #include "ui/tools/tool-base.h"
 

@@ -13,8 +13,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/control/canvas-item-enums.h"
-#include "display/control/canvas-item.h"
 #include "rubberband.h"
 #include "ui/tools/tool-base.h"
 
