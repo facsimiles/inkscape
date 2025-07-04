@@ -649,6 +649,7 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OptionType::BOOL,     "user-data-directory",    '\0', N_("Print user data directory"),                                               "");
     gapp->add_main_option_entry(T::OptionType::BOOL,     "list-input-types",       '\0', N_("List all available input file extensions"),                                               "");
     gapp->add_main_option_entry(T::OptionType::STRING,   "app-id-tag",             '\0', N_("Create a unique instance of Inkscape with the application ID 'org.inkscape.Inkscape.TAG'"), "");
+    gapp->add_main_option_entry(T::OptionType::BOOL,     "no-extensions",          '\0', N_("Don't load any extensions"), "");
 
     // Open/Import
     _start_main_option_section(_("File import"));
@@ -960,7 +961,11 @@ void InkscapeApplication::on_startup()
     Inkscape::Application::create(_with_gui);
 
     // Extensions
-    Inkscape::Extension::init();
+    if (_no_extensions) {
+        Inkscape::Extension::shallow_init();
+    } else {
+        Inkscape::Extension::init();
+    }
 
     // After extensions are loaded query effects to construct action data
     init_extension_action_data();
@@ -1435,6 +1440,8 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         std::cout << Inkscape::IO::Resource::profile_path() << std::endl;
         return EXIT_SUCCESS;
     }
+
+    _no_extensions = options->contains("no-extensions");
 
     // Can't do this until after app is registered!
     // if (options->contains("action-list")) {
@@ -1926,6 +1933,9 @@ std::string action_menu_name(std::string menu) {
 }
 
 void InkscapeApplication::init_extension_action_data() {
+    if (_no_extensions) {
+        return;
+    }
     for (auto effect : Inkscape::Extension::db.get_effect_list()) {
 
         std::string aid = effect->get_sanitized_id();

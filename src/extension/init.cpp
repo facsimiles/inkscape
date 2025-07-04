@@ -151,6 +151,15 @@ static std::vector<std::string> user_extensions;
 static std::vector<std::string> shared_extensions;
 
 /**
+ * Initalise the smallest number of modules for Inkscape to function
+ */
+void shallow_init()
+{
+    Internal::Svg::init();
+    Internal::PngOutput::init();
+}
+
+/**
  * Invokes the init routines for internal modules.
  *
  * This should be a list of all the internal modules that need to initialized.  This is just a

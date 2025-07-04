@@ -19,6 +19,7 @@
 namespace Inkscape {
 namespace Extension {
 
+void shallow_init();
 void init ();
 void load_user_extensions();
 void load_shared_extensions();

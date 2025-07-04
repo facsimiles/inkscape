@@ -192,6 +192,7 @@ protected:
 private:
     void init_extension_action_data();
     std::vector<Glib::RefPtr<Gio::SimpleAction>> _effect_actions;
+    bool _no_extensions = false;
 };
 
 #endif // INKSCAPE_APPLICATION_H
