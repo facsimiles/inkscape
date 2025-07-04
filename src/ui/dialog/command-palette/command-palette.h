@@ -12,17 +12,15 @@
 #ifndef INKSCAPE_DIALOG_COMMAND_PALETTE_H
 #define INKSCAPE_DIALOG_COMMAND_PALETTE_H
 
-#include <optional>
-#include <string>
-#include <utility>
-#include <vector>
-#include <sigc++/connection.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
+#include <gtk/gtk.h>     // GtkEventControllerKey
 #include <gtkmm/enums.h> // Gtk::DirectionType
+#include <optional>
+#include <sigc++/connection.h>
+#include <utility>
 
-#include "xml/document.h"
+#include "cp-history-xml.h"
 
 namespace Gdk {
 enum class ModifierType;
@@ -65,63 +63,6 @@ enum class CPMode
     HISTORY
 };
 
-enum class HistoryType
-{
-    LPE,
-    ACTION,
-    OPEN_FILE,
-    IMPORT_FILE,
-};
-
-struct History
-{
-    HistoryType history_type;
-    std::string data;
-
-    History(HistoryType ht, std::string &&data)
-        : history_type(ht)
-        , data(data)
-    {}
-};
-
-class CPHistoryXML
-{
-public:
-    // constructors, asssignment, destructor
-    CPHistoryXML();
-    ~CPHistoryXML();
-
-    // Handy wrappers for code clearity
-    void add_action(const std::string &full_action_name);
-
-    void add_import(const std::string &uri);
-    void add_open(const std::string &uri);
-
-    /// Remember parameter for action
-    void add_action_parameter(const std::string &full_action_name, const std::string &param);
-
-    std::optional<History> get_last_operation();
-
-    /// To construct _CPHistory
-    std::vector<History> get_operation_history() const;
-    /// To get parameter history when an action is selected, LIFO stack like so more recent first
-    std::vector<std::string> get_action_parameter_history(const std::string &full_action_name) const;
-
-private:
-    void save() const;
-
-    void add_operation(const HistoryType history_type, const std::string &data);
-
-    static std::optional<HistoryType> _get_operation_type(Inkscape::XML::Node *operation);
-
-    const std::string _file_path;
-
-    Inkscape::XML::Document *_xml_doc;
-    // handy for xml doc child
-    Inkscape::XML::Node *_operations;
-    Inkscape::XML::Node *_params;
-};
-
 class CommandPalette
 {
 public:
@@ -145,8 +86,8 @@ private:
     void load_app_actions();
     void load_win_doc_actions();
 
-    void append_recent_file_operation(const Glib::ustring &path, bool is_suggestion, bool is_import = true);
-    bool generate_action_operation(const ActionPtrName &action_ptr_name, const bool is_suggestion);
+    void append_recent_file_operation(Glib::ustring const &path, bool is_suggestion, bool is_import = true);
+    bool generate_action_operation(ActionPtrName const &action_ptr_name, bool const is_suggestion);
 
     void on_search();
 
@@ -170,14 +111,14 @@ private:
 
     bool operate_recent_file(Glib::ustring const &uri, bool const import);
 
-    void on_action_fullname_clicked(const Glib::ustring &action_fullname);
+    void on_action_fullname_clicked(Glib::ustring const &action_fullname);
 
     /// Implements text matching logic
-    static bool fuzzy_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static bool normal_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static bool fuzzy_tolerance_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_points(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_tolerance_points(const Glib::ustring &subject, const Glib::ustring &search);
+    static bool fuzzy_search(Glib::ustring const &subject, Glib::ustring const &search);
+    static bool normal_search(Glib::ustring const &subject, Glib::ustring const &search);
+    static bool fuzzy_tolerance_search(Glib::ustring const &subject, Glib::ustring const &search);
+    static int fuzzy_points(Glib::ustring const &subject, Glib::ustring const &search);
+    static int fuzzy_tolerance_points(Glib::ustring const &subject, Glib::ustring const &search);
     static int fuzzy_points_compare(int fuzzy_points_count_1, int fuzzy_points_count_2, int text_len_1, int text_len_2);
 
     static void test_sort();
@@ -185,16 +126,16 @@ private:
     void set_mode(CPMode mode);
 
     // Color addition in searched character
-    void add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject, bool tooltip=false);
-    void remove_color(Gtk::Label *label, const Glib::ustring &subject, bool tooltip=false);
-    static void add_color_description(Gtk::Label *label, const Glib::ustring &search);
+    void add_color(Gtk::Label *label, Glib::ustring const &search, Glib::ustring const &subject, bool tooltip = false);
+    void remove_color(Gtk::Label *label, Glib::ustring const &subject, bool tooltip = false);
+    static void add_color_description(Gtk::Label *label, Glib::ustring const &search);
 
     // Executes Action
-    bool ask_action_parameter(const ActionPtrName &action);
+    bool ask_action_parameter(ActionPtrName const &action);
     static ActionPtrName get_action_ptr_name(Glib::ustring full_action_name);
-    bool execute_action(const ActionPtrName &action, const Glib::ustring &value);
+    bool execute_action(ActionPtrName const &action, Glib::ustring const &value);
 
-    static TypeOfVariant get_action_variant_type(const ActionPtr &action_ptr);
+    static TypeOfVariant get_action_variant_type(ActionPtr const &action_ptr);
 
     static std::pair<Gtk::Label *, Gtk::Label *> get_name_desc(Gtk::ListBoxRow *child);
     Gtk::Label *get_full_action_name(Gtk::ListBoxRow *child);
@@ -210,7 +151,7 @@ private:
     Gtk::ScrolledWindow &_CPHistoryScroll;
 
     // Data
-    const int _max_height_requestable = 360;
+    int const _max_height_requestable = 360;
     Glib::ustring _search_text;
 
     // States

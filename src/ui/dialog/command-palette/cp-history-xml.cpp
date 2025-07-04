@@ -1,0 +1,249 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ * CPHistoryXML: Class providing command history persistence for  command palette
+ */
+/* Author:
+ * Abhay Raj Singh <abhayonlyone@gmail.com>
+ *
+ * Copyright (C) 2025 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
+#include "cp-history-xml.h"
+
+#include <optional>
+
+#include "io/resource.h"
+#include "xml/repr.h"
+
+namespace Inkscape::UI::Dialog {
+
+constexpr std::string to_string(HistoryKind hk)
+{
+    switch (hk) {
+        // see Illustration 1
+        case HistoryKind::ACTION:
+            return "action";
+        case HistoryKind::IMPORT_FILE:
+            return "import";
+        case HistoryKind::OPEN_FILE:
+            return "open";
+        case HistoryKind::LPE:
+            return "open";
+        default:
+            __builtin_unreachable();
+    }
+}
+
+constexpr std::optional<HistoryKind> from_string(std::string ht_str)
+{
+    constexpr std::array<std::pair<std::string_view, HistoryKind>, 4> map{{{"action", HistoryKind::ACTION},
+                                                                           {"import", HistoryKind::IMPORT_FILE},
+                                                                           {"open", HistoryKind::OPEN_FILE},
+                                                                           {"lpe", HistoryKind::LPE}}};
+
+    for (auto const &[key, val] : map) {
+        if (key == ht_str) {
+            return val;
+        }
+    }
+
+    return std::nullopt; // unknown HistoryKind
+}
+
+CPHistoryXML::CPHistoryXML()
+    : _file_path(IO::Resource::profile_path("cphistory.xml"))
+{
+    _xml_doc = sp_repr_read_file(_file_path.c_str(), nullptr);
+    if (!_xml_doc) {
+        _xml_doc = sp_repr_document_new("cphistory");
+
+        /* STRUCTURE EXAMPLE ------------------ Illustration 1
+        <cphistory>
+            <operations>
+                <action> full.action_name </action>
+                <import> uri </import>
+                <export> uri </export>
+            </operations>
+            <params>
+                <action name="app.transfor-rotate">
+                    <param> 30 </param>
+                    <param> 23.5 </param>
+                </action>
+            </params>
+        </cphistory>
+        */
+
+        // Just a pointer, we don't own it, don't free/release/delete
+        auto root = _xml_doc->root();
+
+        // add operation history in this element
+        auto operations = _xml_doc->createElement("operations");
+        root->appendChild(operations);
+
+        // add param history in this element
+        auto params = _xml_doc->createElement("params");
+        root->appendChild(params);
+
+        // This was created by allocated
+        Inkscape::GC::release(operations);
+        Inkscape::GC::release(params);
+
+        // only save if created new
+        save();
+    }
+
+    // Only two children :) check and ensure Illustration 1
+    _operations = _xml_doc->root()->firstChild();
+    _params = _xml_doc->root()->lastChild();
+}
+
+CPHistoryXML::~CPHistoryXML()
+{
+    Inkscape::GC::release(_xml_doc);
+}
+
+void CPHistoryXML::add_action(std::string const &full_action_name)
+{
+    add_operation(HistoryKind::ACTION, full_action_name);
+}
+
+void CPHistoryXML::add_import(std::string const &uri)
+{
+    add_operation(HistoryKind::IMPORT_FILE, uri);
+}
+
+void CPHistoryXML::add_open(std::string const &uri)
+{
+    add_operation(HistoryKind::OPEN_FILE, uri);
+}
+
+void CPHistoryXML::add_action_parameter(std::string const &full_action_name, std::string const &param)
+{
+    /* Creates
+     *  <params>
+     * +1 <action name="full.action-name">
+     * +    <param>30</param>
+     * +    <param>60</param>
+     * +    <param>90</param>
+     * +1 <action name="full.action-name">
+     *   <params>
+     *
+     * + : generally creates
+     * +1: creates once
+     */
+    auto const parameter_node = _xml_doc->createElement("param");
+    auto const parameter_text = _xml_doc->createTextNode(param.c_str());
+
+    parameter_node->appendChild(parameter_text);
+    Inkscape::GC::release(parameter_text);
+
+    for (auto action_iter = _params->firstChild(); action_iter; action_iter = action_iter->next()) {
+        // If this action's node already exists
+        if (full_action_name == action_iter->attribute("name")) {
+            // If the last parameter was the same don't do anything, inner text is also a node hence 2 times last
+            // child
+            if (action_iter->lastChild()->lastChild() && action_iter->lastChild()->lastChild()->content() == param) {
+                Inkscape::GC::release(parameter_node);
+                return;
+            }
+
+            // If last current than parameter is different, add current
+            action_iter->appendChild(parameter_node);
+            Inkscape::GC::release(parameter_node);
+
+            save();
+            return;
+        }
+    }
+
+    // only encountered when the actions element doesn't already exists,so we create that action's element
+    auto const action_node = _xml_doc->createElement("action");
+    action_node->setAttribute("name", full_action_name.c_str());
+    action_node->appendChild(parameter_node);
+
+    _params->appendChild(action_node);
+    save();
+
+    Inkscape::GC::release(action_node);
+    Inkscape::GC::release(parameter_node);
+}
+
+std::optional<History> CPHistoryXML::get_last_operation()
+{
+    auto last_child = _operations->lastChild();
+
+    if (!last_child) {
+        return std::nullopt;
+    }
+
+    auto const operation_type = _get_operation_type(last_child);
+    if (!operation_type.has_value()) {
+        return std::nullopt;
+    }
+
+    // inner text is a text Node thus last child
+    return History{*operation_type, last_child->lastChild()->content()};
+}
+
+std::vector<History> CPHistoryXML::get_operation_history() const
+{
+    // TODO: add max items in history
+    std::vector<History> history;
+    for (auto operation_iter = _operations->firstChild(); operation_iter; operation_iter = operation_iter->next()) {
+        if (auto const operation_type = _get_operation_type(operation_iter); operation_type.has_value()) {
+            history.emplace_back(*operation_type, operation_iter->firstChild()->content());
+        }
+    }
+    return history;
+}
+
+std::vector<std::string> CPHistoryXML::get_action_parameter_history(std::string const &full_action_name) const
+{
+    // PERF: store this using unordered_map of vector or atleast node pointers
+    // PERF: return iterator/iterable kind of pagination that is requested
+    std::vector<std::string> params;
+    for (auto action_iter = _params->firstChild(); action_iter; action_iter = action_iter->prev()) {
+        // If this action's node already exists
+        if (full_action_name == action_iter->attribute("name")) {
+            // lastChild and prev for LIFO order
+            for (auto param_iter = _params->lastChild(); param_iter; param_iter = param_iter->prev()) {
+                params.emplace_back(param_iter->content());
+            }
+            return params;
+        }
+    }
+    // action not used previously so no params;
+    return {};
+}
+
+void CPHistoryXML::save() const
+{
+    // TODO: trim using maximum limit, (fetched from preferences)
+    sp_repr_save_file(_xml_doc, _file_path.c_str());
+}
+
+void CPHistoryXML::add_operation(HistoryKind const history_type, std::string const &data)
+{
+    std::string operation_type_name = to_string(history_type);
+    auto operation_to_add = _xml_doc->createElement(operation_type_name.c_str()); // action, import, open
+    auto operation_data = _xml_doc->createTextNode(data.c_str());
+    operation_data->setContent(data.c_str());
+
+    operation_to_add->appendChild(operation_data);
+    _operations->appendChild(operation_to_add);
+
+    Inkscape::GC::release(operation_data);
+    Inkscape::GC::release(operation_to_add);
+
+    save();
+}
+
+std::optional<HistoryKind> CPHistoryXML::_get_operation_type(Inkscape::XML::Node *operation)
+{
+    std::string const operation_type_name = operation->name();
+
+    return from_string(operation_type_name);
+}
+
+} // namespace Inkscape::UI::Dialog
