@@ -3,11 +3,9 @@
 #ifndef SEEN_CHOOSE_FILE_H
 #define SEEN_CHOOSE_FILE_H
 
-#include <string>
-#include <utility>
-#include <vector>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
+#include <vector>
 
 namespace Gio {
 template <typename> class ListStore;

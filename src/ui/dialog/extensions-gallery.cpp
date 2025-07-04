@@ -2,55 +2,13 @@
 
 #include "extensions-gallery.h"
 
-#include <algorithm>
-#include <cmath>
-#include <gdkmm/paintable.h>
-#include <gdkmm/texture.h>
 #include <giomm/liststore.h>
-#include <glibmm/objectbase.h>
-#include <gtkmm/boolfilter.h>
-#include <gtkmm/centerbox.h>
-#include <gtkmm/filter.h>
-#include <gtkmm/filterlistmodel.h>
-#include <gtkmm/fixed.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/gridview.h>
-#include <gtkmm/listitemfactory.h>
-#include <gtkmm/object.h>
-#include <gtkmm/overlay.h>
-#include <gtkmm/picture.h>
-#include <gtkmm/scrollinfo.h>
-#include <gtkmm/signallistitemfactory.h>
-#include <gtkmm/singleselection.h>
-#include <gtkmm/tooltip.h>
-#include <gtkmm/widgetpaintable.h>
-#include <initializer_list>
-#include <iterator>
-#include <list>
-#include <memory>
-#include <set>
-#include <sstream>
-#include <string>
-#include <utility>
-#include <2geom/point.h>
-#include <2geom/rect.h>
-#include <cairo.h>
-#include <glibmm/markup.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/iconview.h>
-#include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodelfilter.h>
-#include <gtkmm/treemodelsort.h>
 #include <gtkmm/treeview.h>
-#include <libintl.h>
 
 #include "document.h"
 #include "preferences.h"
@@ -61,9 +19,7 @@
 #include "io/file.h"
 #include "io/resource.h"
 #include "io/sys.h"
-#include "object/sp-item.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog/dialog-base.h"
 #include "ui/svg-renderer.h"
 #include "ui/util.h"
 

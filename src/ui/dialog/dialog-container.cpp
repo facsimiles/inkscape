@@ -12,28 +12,13 @@
 
 #include "dialog-container.h"
 
-#include <cassert>
-#include <iostream>
-#include <glibmm/i18n.h>
-#include <glibmm/keyfile.h>
-#include <glibmm/value.h>
-#include <giomm/file.h>
-#include <gtkmm/accelerator.h>
-#include <gtkmm/box.h>
-#include <gtkmm/image.h>
-#include <gtkmm/viewport.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
-
 #include "enums.h"
 #include "inkscape.h"
-#include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/debug.h"
 #include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-multipaned.h"
-#include "ui/dialog/dialog-notebook.h"
 #include "ui/dialog/dialog-window.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/document-resources.h"

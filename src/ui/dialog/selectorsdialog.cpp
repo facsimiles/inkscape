@@ -15,22 +15,12 @@
 
 #include "selectorsdialog.h"
 
-#include <algorithm>
 #include <glibmm/i18n.h>
-#include <glibmm/regex.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/gestureclick.h>
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodelfilter.h>
-#include <map>
-#include <string>
-#include <utility>
 
 #include "attribute-rel-svg.h"
-#include "css/syntactic-decomposition.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
@@ -38,7 +28,6 @@
 #include "preferences.h"
 #include "selection.h"
 #include "style.h"
-#include "ui/dialog-run.h"
 #include "ui/dialog/styledialog.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"

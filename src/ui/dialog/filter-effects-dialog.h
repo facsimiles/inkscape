@@ -18,28 +18,12 @@
 #ifndef INKSCAPE_UI_DIALOG_FILTER_EFFECTS_H
 #define INKSCAPE_UI_DIALOG_FILTER_EFFECTS_H
 
-#include <memory>
-#include <2geom/point.h>
-#include <sigc++/connection.h>
-#include <sigc++/signal.h>
 #include <glibmm/property.h>
-#include <glibmm/propertyproxy.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerMotion
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/cellrenderertoggle.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/label.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/treeview.h>
 
-#include "attributes.h"
 #include "display/nr-filter-types.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/bin.h"
 #include "ui/widget/combo-enums.h"

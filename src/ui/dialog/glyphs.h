@@ -9,11 +9,8 @@
 #ifndef SEEN_DIALOGS_GLYPHS_H
 #define SEEN_DIALOGS_GLYPHS_H
 
-#include <vector>
-#include <glibmm/refptr.h>
 #include <gtkmm/treemodel.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 
 namespace Gtk {

@@ -3,8 +3,7 @@
 #ifndef SEEN_SAVE_IMAGE_H
 #define SEEN_SAVE_IMAGE_H
 
-#include <gtkmm/window.h>
-#include <string>
+#include <gtkmm/image.h>
 
 class SPImage;
 

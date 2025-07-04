@@ -13,12 +13,9 @@
 #ifndef INKSCAPE_UI_DIALOG_FIND_H
 #define INKSCAPE_UI_DIALOG_FIND_H
 
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/expander.h>
-#include <gtkmm/label.h>
 
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/entry.h"

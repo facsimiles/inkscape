@@ -13,15 +13,9 @@
 
 #include "paint-servers.h"
 
-#include <algorithm>
-#include <cstddef>
-#include <stdexcept>
 using namespace std::literals;
 
-#include <giomm/listmodel.h>
 #include <glibmm/i18n.h>
-#include <glibmm/regex.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/iconview.h>
@@ -30,11 +24,8 @@ using namespace std::literals;
 #include "document.h"
 #include "selection.h"
 #include "style.h"
-#include "style-internal.h"
 #include "io/resource.h"
 #include "object/sp-defs.h"
-#include "object/sp-item.h"
-#include "object/sp-object.h"
 #include "object/sp-paint-server.h"
 #include "object/sp-root.h"
 #include "ui/builder-utils.h"

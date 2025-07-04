@@ -10,11 +10,6 @@
 
 #include "font-collections-manager.h"
 
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/label.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/searchentry2.h>
 
@@ -22,7 +17,6 @@
 #include "libnrtype/font-lister.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
-#include "ui/pack.h"
 #include "util/font-collections.h"
 
 namespace Inkscape::UI::Dialog {

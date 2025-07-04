@@ -14,21 +14,12 @@
 #ifndef SP_EXPORT_BATCH_H
 #define SP_EXPORT_BATCH_H
 
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/flowboxchild.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
-#include <map>
-#include <memory>
-#include <optional>
-#include <sigc++/scoped_connection.h>
-#include <string>
 
 #include "ui/widget/export-preview.h"
 

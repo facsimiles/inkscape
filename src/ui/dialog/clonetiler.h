@@ -17,9 +17,6 @@
 #ifndef SEEN_INKSCAPE_CLONE_TILER_H
 #define SEEN_INKSCAPE_CLONE_TILER_H
 
-#include <vector>
-#include <glibmm/refptr.h>
-
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/color-picker.h"
 

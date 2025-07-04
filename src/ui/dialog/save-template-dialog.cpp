@@ -10,13 +10,7 @@
 
 #include "save-template-dialog.h"
 
-#include <glibmm/i18n.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/window.h>
-
 #include "file.h"
-#include "io/resource.h"
 #include "ui/dialog-run.h"
 
 namespace Inkscape::UI::Dialog {

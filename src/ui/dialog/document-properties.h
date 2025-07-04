@@ -26,31 +26,19 @@
 #include "config.h" // only include where actually required!
 #endif
 
-#include <memory>
-#include <vector>
 #include <gtkmm/listbox.h>
 #include <gtkmm/sizegroup.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/combobox.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/label.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/treeview.h>
-#include <sigc++/scoped_connection.h>
 #include "object/sp-grid.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/popover-bin.h"
 #include "ui/widget/icon-combobox.h"
 #include "ui/widget/licensor.h"
 #include "ui/widget/registered-widget.h"
-#include "ui/widget/registry.h"
 #include "xml/helper-observer.h"
-#include "xml/node-observer.h"
 
 
 namespace Glib {

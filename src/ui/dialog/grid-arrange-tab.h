@@ -19,7 +19,6 @@
 #define INKSCAPE_UI_DIALOG_GRID_ARRANGE_TAB_H
 
 #include <gtkmm/box.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/label.h>
 #include <gtkmm/checkbutton.h>
 

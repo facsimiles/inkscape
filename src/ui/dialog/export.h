@@ -14,13 +14,6 @@
 #ifndef SP_EXPORT_H
 #define SP_EXPORT_H
 
-#include <map>
-#include <string>
-#include <vector>
-
-#include <glibmm/refptr.h>
-
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 
 namespace Gtk {

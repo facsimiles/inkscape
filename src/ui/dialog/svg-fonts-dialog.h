@@ -12,16 +12,7 @@
 #ifndef INKSCAPE_UI_DIALOG_SVG_FONTS_H
 #define INKSCAPE_UI_DIALOG_SVG_FONTS_H
 
-#include <memory>
-#include <vector>
-#include <2geom/pathvector.h>
 #include <glibmm/property.h>
-#include <glibmm/propertyproxy.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/cellrenderer.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/entry.h>
@@ -30,12 +21,9 @@
 #include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
-#include <sigc++/signal.h>
 
 #include "attributes.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/operation-blocker.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/spinbutton.h"

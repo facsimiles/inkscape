@@ -18,13 +18,10 @@
 
 #include "fill-and-stroke.h"
 
-#include <gtkmm/box.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
 
 #include "desktop.h"
-#include "desktop-style.h"
 #include "preferences.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"

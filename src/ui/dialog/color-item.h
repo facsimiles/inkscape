@@ -10,15 +10,9 @@
 #ifndef INKSCAPE_UI_DIALOG_COLOR_ITEM_H
 #define INKSCAPE_UI_DIALOG_COLOR_ITEM_H
 
-#include <array>
-#include <string>
-#include <variant>
-#include <cairomm/refptr.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerMotion
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
+#include <variant>
 
 #include "colors/color.h"
 

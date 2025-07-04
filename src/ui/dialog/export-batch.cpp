@@ -13,48 +13,29 @@
 
 #include "ui/dialog/export-batch.h"
 
-#include <glibmm/convert.h>
-#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/miscutils.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/error.h>
 #include <gtkmm/filedialog.h>
 #include <gtkmm/flowbox.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/progressbar.h>
-#include <gtkmm/widget.h>
-#include <png.h>
 #include <regex>
-#include <sigc++/scoped_connection.h>
-#include <utility>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
-#include "export-batch.h"
 #include "extension/output.h"
 #include "inkscape-window.h"
 #include "io/fix-broken-links.h"
 #include "io/sandbox.h"
 #include "io/sys.h"
 #include "layer-manager.h"
-#include "message-stack.h"
-#include "object/sp-namedview.h"
 #include "object/sp-page.h"
 #include "object/sp-root.h"
-#include "page-manager.h"
-#include "preferences.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog-run.h"
 #include "ui/dialog/export.h"
 #include "ui/icon-names.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/export-lists.h"
-#include "ui/widget/export-preview.h"
 #include "util/units.h"
 
 namespace Inkscape::UI::Dialog {

@@ -2,19 +2,10 @@
 
 #include "choose-file.h"
 
-#include <cassert>
-#include <iostream>
-
 #include <glib/gi18n.h>
-#include <glibmm/main.h>
-#include <glibmm/ustring.h>
-#include <giomm/asyncresult.h>
-#include <giomm/file.h>
 #include <giomm/liststore.h>
 #include <gtkmm/error.h>
 #include <gtkmm/filedialog.h>
-#include <gtkmm/filefilter.h>
-#include <glibmm/miscutils.h>
 
 #include "preferences.h"
 #include "choose-file-utils.h"

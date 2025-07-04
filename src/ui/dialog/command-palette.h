@@ -12,14 +12,6 @@
 #ifndef INKSCAPE_DIALOG_COMMAND_PALETTE_H
 #define INKSCAPE_DIALOG_COMMAND_PALETTE_H
 
-#include <optional>
-#include <string>
-#include <utility>
-#include <vector>
-#include <sigc++/connection.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
 #include <gtkmm/enums.h> // Gtk::DirectionType
 
 #include "xml/document.h"

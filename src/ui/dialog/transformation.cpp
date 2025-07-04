@@ -14,26 +14,19 @@
 
 #include "transformation.h"
 
-#include <sigc++/functors/mem_fun.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/entry.h>
+#include <glibmm/i18n.h>
+#include <gtkmm/image.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
 #include <gtkmm/version.h>
-
-#include <2geom/transforms.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "message-stack.h"
 #include "preferences.h"
 #include "selection.h"
 
 #include "object/algorithms/bboxsort.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"

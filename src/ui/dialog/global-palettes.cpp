@@ -9,15 +9,8 @@
 
 #include "global-palettes.h"
 
-#include <iomanip>
 #include <giomm/file.h>
-#include <giomm/fileinputstream.h>
-#include <giomm/inputstream.h>
-#include <glib/gi18n.h>
 #include <glibmm/convert.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/window.h>
 
 // Using Glib::regex because
 //  - std::regex is too slow in debug mode.
@@ -25,23 +18,15 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
-#include <iostream>
-#include <lcms2.h>
-#include <ostream>
-#include <sstream>
-#include <string>
-#include <utility>
-#include <vector>
 
 #include "colors/manager.h"
-#include "colors/spaces/enum.h"
 
 #include "colors/spaces/lab.h"
 #include "io/resource.h"
 #include "io/sys.h"
 #include "ui/dialog/choose-file.h"
 #include "util/delete-with.h"
-#include "util-string/ustring-format.h"
+
 using Inkscape::Util::delete_with;
 using namespace Inkscape::Colors;
 

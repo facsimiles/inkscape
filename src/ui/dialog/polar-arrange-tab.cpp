@@ -11,9 +11,6 @@
 #include "polar-arrange-tab.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/messagedialog.h>
-
-#include <2geom/transforms.h>
 
 #include "desktop.h"
 #include "document-undo.h"

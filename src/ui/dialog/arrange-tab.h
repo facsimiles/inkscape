@@ -12,8 +12,6 @@
 #ifndef INKSCAPE_UI_DIALOG_ARRANGE_TAB_H
 #define INKSCAPE_UI_DIALOG_ARRANGE_TAB_H
 
-#include <gtkmm/box.h>
-
 namespace Inkscape {
 namespace UI {
 namespace Dialog {

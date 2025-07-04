@@ -7,16 +7,7 @@
 
 #include "lpe-fillet-chamfer-properties.h"
 
-#include <string>
-#include <boost/lexical_cast.hpp>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <gtkmm/box.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/adaptors/hide.h>
-#include <sigc++/functors/mem_fun.h>
-
-#include "desktop.h"
 
 namespace Inkscape::UI::Dialog {
 

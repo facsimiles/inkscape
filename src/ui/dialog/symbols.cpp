@@ -11,57 +11,12 @@
 
 #include "symbols.h"
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
 #include <fstream>
-#include <glibmm/refptr.h>
-#include <gtkmm/gridview.h>
-#include <gtkmm/object.h>
-#include <gtkmm/widget.h>
-#include <iostream>
-#include <locale>
-#include <memory>
 #include <regex>
-#include <sstream>
 #include "libnrtype/font-factory.h"
 using namespace std::literals;
 
-#include <2geom/point.h>
-#include <cairo.h>
-#include <cairomm/refptr.h>
-#include <cairomm/surface.h>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/markup.h>
-#include <glibmm/priorities.h>
-#include <glibmm/regex.h>
-#include <glibmm/stringutils.h>
-#include <gdkmm/pixbuf.h>
-#include <gdkmm/rgba.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/cellrenderertext.h>
-#include <gtkmm/checkbutton.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/dragsource.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/iconview.h>
-#include <gtkmm/label.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/overlay.h>
-#include <gtkmm/popover.h>
-#include <gtkmm/scale.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/searchentry2.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treemodelfilter.h>
-#include <gtkmm/treemodelsort.h>
-#include <gtkmm/treepath.h>
-#include <gtkmm/treeiter.h>
-#include <pangomm/layout.h>
-#include <2geom/point.h>
-#include "ui/controller.h"
 #include "ui/util.h"
 
 #ifdef HAVE_CONFIG_H
@@ -71,7 +26,6 @@ using namespace std::literals;
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
-#include "preferences.h"
 #include "selection.h"
 #include "include/gtkmm_version.h"
 
@@ -86,7 +40,6 @@ using namespace std::literals;
 #include "ui/drag-and-drop.h"
 #include "ui/icon-loader.h"
 #include "ui/pack.h"
-#include "util/statics.h"
 #include "util/value-utils.h"
 #include "xml/href-attribute-helper.h"
 

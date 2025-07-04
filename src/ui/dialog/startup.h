@@ -11,15 +11,9 @@
 #ifndef STARTSCREEN_H
 #define STARTSCREEN_H
 
-#include <string>             // for string
-#include <gdk/gdk.h>          // for GdkModifierType
-#include <glibmm/refptr.h>    // for RefPtr
 #include <glibmm/timer.h>     // for Timer
-#include <glibmm/ustring.h>   // for ustring
-#include <gtk/gtk.h>          // for GtkEventControllerKey
 #include <gtkmm/dialog.h>     // for Dialog
 #include <gtkmm/treemodel.h>  // for TreeModel
-#include <sigc++/scoped_connection.h>
 
 #include "ui/widget/template-list.h"
 

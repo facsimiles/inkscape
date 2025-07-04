@@ -12,57 +12,32 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cmath>
-#include <string>
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/ustring.h>
-#include <pango/pango-utils.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
-#include <gtkmm/cellrenderer.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/droptarget.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/icontheme.h>
-#include <gtkmm/popover.h>
-#include <gtkmm/scale.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/separator.h>
-#include <gtkmm/togglebutton.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 
 #include "objects.h"
-#include "actions/actions-tools.h"
 #include "desktop.h"
-#include "desktop-style.h"
 #include "display/translucency-group.h"
 #include "document.h"
 #include "document-undo.h"
 #include "filter-chemistry.h"
-#include "inkscape.h"
 #include "inkscape-window.h"
 #include "layer-manager.h"
-#include "message-stack.h"
 #include "object/sp-root.h"
-#include "object/sp-shape.h"
-#include "style-enums.h"
 #include "style.h"
 #include "svg/css-ostringstream.h"
 #include "ui/builder-utils.h"
 #include "ui/contextmenu.h"
 #include "ui/controller.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/pack.h"
-#include "ui/popup-menu.h"
 #include "ui/shortcuts.h"
-#include "ui/tools/node-tool.h"
 #include "ui/util.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/widget-vfuncs-class-init.h"

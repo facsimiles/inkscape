@@ -13,19 +13,13 @@
 #ifndef INKSCAPE_UI_DIALOG_XML_TREE_H
 #define INKSCAPE_UI_DIALOG_XML_TREE_H
 
-#include <memory>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/label.h>
 #include <gtkmm/switch.h>
-#include <gtkmm/widget.h>
 
 #include "attrdialog.h"
-#include "dialog-base.h"
 #include "message.h"
 #include "preferences.h"
 
-#include "ui/syntax.h"
 #include "ui/widget/bin.h"
 
 namespace Gtk {

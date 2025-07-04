@@ -13,22 +13,8 @@
 #ifndef SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 #define SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 
-#include <glibmm/ustring.h>
-#include <gtkmm/expander.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/widget.h>
-#include <memory>
-#include <string>
-#include <map>
-
-#include "desktop.h"
-#include "object/sp-object.h"
-#include "ui/dialog/dialog-base.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/operation-blocker.h"
-#include "ui/widget/spinbutton.h"
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/unit-tracker.h"
 

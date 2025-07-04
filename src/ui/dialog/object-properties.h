@@ -31,7 +31,6 @@
 #define SEEN_INKSCAPE_UI_DIALOG_OBJECTPROPERTIES_H
 
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>

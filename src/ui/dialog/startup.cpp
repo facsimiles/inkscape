@@ -10,18 +10,10 @@
 
 #include "startup.h"
 
-#include <limits>
-#include <string>
-#include <glibmm.h>
 #include <glibmm/i18n.h>
-#include <glibmm/convert.h>
-#include <glibmm/fileutils.h>
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
-#include <gdkmm/display.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/cssprovider.h>
@@ -29,14 +21,8 @@
 #include <gtkmm/filefilter.h>
 #include <gtkmm/infobar.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/notebook.h>
-#include <gtkmm/picture.h>
 #include <gtkmm/settings.h>
-#include <gtkmm/stack.h>
-#include <gtkmm/styleprovider.h>
 #include <gtkmm/switch.h>
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/treeview.h>
 #include <gtkmm/windowhandle.h>
 
 #include "inkscape-application.h"
@@ -45,16 +31,12 @@
 #include "inkscape-version-info.h"
 #include "io/recent-files.h"
 #include "io/resource.h"
-#include "preferences.h"
 #include "ui/builder-utils.h"
-#include "ui/controller.h"
 #include "ui/dialog/choose-file.h"
 #include "ui/dialog/choose-file-utils.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"
 #include "ui/util.h"
-#include "ui/widget/template-list.h"
-#include "util/units.h"
 
 using namespace Inkscape::IO;
 using namespace Inkscape::UI::View;

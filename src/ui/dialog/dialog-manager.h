@@ -5,10 +5,8 @@
 
 #include <glibmm/keyfile.h>
 #include <map>
-#include <set>
-#include <memory>
 #include <optional>
-#include <vector>
+#include <set>
 
 namespace Glib {
 class Keyfile;

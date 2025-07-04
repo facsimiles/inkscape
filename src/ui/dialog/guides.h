@@ -12,7 +12,6 @@
 #ifndef INKSCAPE_DIALOG_GUIDELINE_H
 #define INKSCAPE_DIALOG_GUIDELINE_H
 
-#include <glibmm/refptr.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/grid.h>
@@ -22,7 +21,6 @@
 
 #include <2geom/point.h>
 
-#include "ui/widget/unit-menu.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/entry.h"
 

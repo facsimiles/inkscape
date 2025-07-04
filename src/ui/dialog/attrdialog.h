@@ -13,11 +13,8 @@
 #ifndef SEEN_UI_DIALOGS_ATTRDIALOG_H
 #define SEEN_UI_DIALOGS_ATTRDIALOG_H
 
-#include <memory>
-#include <gtk/gtk.h> // GtkEventControllerKey
 #include <gtkmm/treemodel.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/syntax.h"
 #include "xml/node-observer.h"

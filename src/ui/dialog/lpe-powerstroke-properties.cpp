@@ -17,12 +17,6 @@
 #include "lpe-powerstroke-properties.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/adaptors/hide.h>
-#include <sigc++/functors/mem_fun.h>
-
-#include "desktop.h"
 
 namespace Inkscape::UI::Dialog {
 

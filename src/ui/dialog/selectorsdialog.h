@@ -16,17 +16,10 @@
 #ifndef SELECTORSDIALOG_H
 #define SELECTORSDIALOG_H
 
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
-#include <memory>
-#include <vector>
 
 #include "css/syntactic-decomposition.h"
 #include "ui/dialog/dialog-base.h"

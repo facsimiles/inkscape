@@ -18,10 +18,7 @@
 #include "tile.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include <gtkmm/notebook.h>
 
 #include "ui/dialog/grid-arrange-tab.h"

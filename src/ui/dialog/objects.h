@@ -15,30 +15,15 @@
 #ifndef SEEN_OBJECTS_PANEL_H
 #define SEEN_OBJECTS_PANEL_H
 
-#include <optional>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <gdkmm/enums.h> // Gdk::DragAction
-#include <gtk/gtk.h> // GtkEventControllerKey
-#include <gtkmm/box.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treerowreference.h>
-#include <gtkmm/treeview.h>
 
-#include <sigc++/scoped_connection.h>
 #include "object/weakptr.h"
-#include "preferences.h"
 #include "selection.h"
 #include "style-enums.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/popover-bin.h"
 #include "ui/widget/preferences-widget.h"
-#include "xml/node-observer.h"
 
 namespace Glib {
 class ValueBase;

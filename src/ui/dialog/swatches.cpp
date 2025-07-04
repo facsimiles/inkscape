@@ -14,50 +14,27 @@
 
 #include "swatches.h"
 
-#include <algorithm>
-#include <iterator>
-#include <optional>
-#include <utility>
-#include <string>
-#include <variant>
-#include <vector>
-#include <giomm/file.h>
-#include <giomm/inputstream.h>
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-#include <glibmm/ustring.h>
-#include <glibmm/utility.h>
 #include <gtkmm/accelerator.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
-#include <gtkmm/cellrenderertext.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/window.h>
-#include <pangomm/layout.h>
 
 #include "desktop.h"
 #include "desktop-style.h"
 #include "document.h"
-#include "preferences.h"
 #include "style.h"
 #include "object/sp-defs.h"
-#include "object/sp-gradient.h"
 #include "object/sp-gradient-reference.h"
 #include "ui/builder-utils.h"
 #include "ui/column-menu-builder.h"
 #include "ui/controller.h"
 #include "ui/dialog/color-item.h"
-#include "ui/dialog/global-palettes.h"
 #include "ui/util.h" // ellipsize()
 #include "ui/widget/color-palette.h"
 #include "ui/widget/color-palette-preview.h"
-#include "ui/widget/popover-menu-item.h"
 #include "util/variant-visitor.h"
 
 namespace Inkscape::Colors {

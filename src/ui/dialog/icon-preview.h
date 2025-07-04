@@ -16,15 +16,9 @@
 #ifndef SEEN_ICON_PREVIEW_H
 #define SEEN_ICON_PREVIEW_H
 
-#include <memory>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/paned.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 
 class SPObject;

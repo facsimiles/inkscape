@@ -7,35 +7,23 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <set>
-#include <vector>
 #include <glibmm/i18n.h>
-#include <glibmm/regex.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
 #include <libnrtype/font-factory.h>
-#include <libnrtype/font-instance.h>
 
-#include "font-substitution.h"
-
-#include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
+#include "object/sp-flowdiv.h"
+#include "object/sp-root.h"
+#include "object/sp-textpath.h"
+#include "object/sp-tspan.h"
 #include "preferences.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "text-editing.h"
-#include "object/sp-item.h"
-#include "object/sp-root.h"
-#include "object/sp-text.h"
-#include "object/sp-textpath.h"
-#include "object/sp-flowdiv.h"
-#include "object/sp-tspan.h"
 #include "ui/dialog-events.h"
-#include "ui/dialog-run.h"
 #include "ui/pack.h"
 
 namespace Inkscape::UI::Dialog {

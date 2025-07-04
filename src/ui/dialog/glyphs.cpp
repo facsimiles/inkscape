@@ -10,19 +10,10 @@
 
 #include "glyphs.h"
 
-#include <map>
-#include <utility>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/button.h>
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/iconview.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/scrolledwindow.h>
-#include <sigc++/adaptors/hide.h>
-#include <sigc++/functors/mem_fun.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
 #include <libnrtype/font-factory.h>

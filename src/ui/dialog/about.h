@@ -10,10 +10,6 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include <glibmm/main.h>
-#include <gtkmm.h>
-#include <gtkmm/builder.h>
-
 namespace Inkscape::UI::Dialog {
 
 void show_about();

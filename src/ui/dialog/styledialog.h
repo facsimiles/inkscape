@@ -16,16 +16,7 @@
 #ifndef SEEN_UI_DIALOG_STYLEDIALOG_H
 #define SEEN_UI_DIALOG_STYLEDIALOG_H
 
-#include <map>
-#include <memory>
-#include <vector>
-
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
-#include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treepath.h>
 
 #include "ui/dialog/dialog-base.h"

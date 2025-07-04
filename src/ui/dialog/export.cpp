@@ -17,39 +17,21 @@
 
 #include "export.h"
 
-#include <set>
-
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/miscutils.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/notebook.h>
 
 #include "desktop.h"
-#include "document.h"
 #include "inkscape.h"
-#include "preferences.h"
-#include "message.h"                        // for MessageType
-#include "message-stack.h"
-
-#include "colors/utils.h"
-#include "colors/color.h"
-#include "colors/manager.h"
 
 #include "extension/output.h"
 #include "helper/png-write.h"
 #include "io/resource.h"
 #include "io/sys.h"                         // for sanitizeString, file_test
 #include "object/object-set.h"              // for ObjectSet
-#include "object/sp-item.h"                 // for SPItem
-#include "object/sp-object.h"               // for SPObject
 #include "object/sp-page.h"                 // for SPPage
 #include "object/sp-root.h"                 // for SPRoot
 #include "object/weakptr.h"                 // for SPWeakPtr
 #include "ui/builder-utils.h"
-#include "ui/dialog/export-batch.h"
 #include "ui/dialog/export-single.h"
 #include "ui/interface.h"
 

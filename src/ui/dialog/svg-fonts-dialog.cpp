@@ -14,29 +14,21 @@
 
 #include "svg-fonts-dialog.h"
 
-#include <algorithm>
-#include <exception>
 #include <iomanip>
-#include <sstream>
-#include <utility>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/stringutils.h>
 #include <giomm/themedicon.h>
 #include <gtkmm/expander.h>
-#include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/togglebutton.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
 #include "layer-manager.h"
-#include "message-stack.h"
 #include "selection.h"
 #include "display/nr-svgfonts.h"
 #include "object/sp-defs.h"
@@ -46,15 +38,11 @@
 #include "object/sp-glyph.h"
 #include "object/sp-guide.h"
 #include "object/sp-missing-glyph.h"
-#include "object/sp-path.h"
 #include "svg/svg.h"
 #include "ui/column-menu-builder.h"
 #include "ui/pack.h"
 #include "ui/util.h"
-#include "ui/widget/popover-menu.h"
-#include "ui/widget/popover-menu-item.h"
 #include "util/units.h"
-#include "xml/repr.h"
 
 SvgFontDrawingArea::SvgFontDrawingArea()
 {

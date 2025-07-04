@@ -13,40 +13,22 @@
 
 #include "export-single.h"
 
-#include <cassert>
-#include <png.h>
-
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/filefilter.h>
 #include <gtkmm/flowbox.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/progressbar.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/togglebutton.h>
 #include <png.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "extension/output.h"
 #include "inkscape-window.h"
 #include "io/sandbox.h"
-#include "object/sp-namedview.h"
 #include "object/sp-page.h"
 #include "object/sp-root.h"
-#include "page-manager.h"
-#include "preferences.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog/export.h"
@@ -56,7 +38,6 @@
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/export-lists.h"
-#include "ui/widget/export-preview.h"
 #include "ui/widget/unit-menu.h"
 
 using Inkscape::Util::UnitTable;

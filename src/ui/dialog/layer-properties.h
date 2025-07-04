@@ -13,17 +13,12 @@
 #ifndef INKSCAPE_DIALOG_LAYER_PROPERTIES_H
 #define INKSCAPE_DIALOG_LAYER_PROPERTIES_H
 
-#include <gdk/gdk.h> // GdkModifierType
-#include <gtk/gtk.h> // GtkEventControllerKey
-#include <glibmm/refptr.h>
 #include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/combobox.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
-#include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>

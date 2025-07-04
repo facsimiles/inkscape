@@ -11,47 +11,17 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cmath>
-#include <cstddef>
-#include <cstdio>
-#include <gtkmm/entry.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/textview.h>
-#include <memory>
-#include <optional>
-#include <string>
-#include <tuple>
 #include <glibmm/i18n.h>
-#include <glibmm/markup.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/button.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/spinbutton.h>
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodel.h>
-#include <2geom/rect.h>
 
-#include "desktop.h"
-#include "document-undo.h"
 #include "mod360.h"
-#include "preferences.h"
 #include "selection.h"
 #include "actions/actions-tools.h"
-#include "live_effects/effect-enum.h"
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
 #include "object/sp-anchor.h"
 #include "object/sp-ellipse.h"
-#include "object/sp-image.h"
-#include "object/sp-item.h"
-#include "object/sp-lpe-item.h"
-#include "object/sp-namedview.h"
-#include "object/sp-object.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-star.h"
@@ -61,13 +31,10 @@
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/tools/object-picker-tool.h"
-#include "ui/syntax.h"
 #include "ui/util.h"
 #include "ui/widget/image-properties.h"
 #include "ui/widget/spinbutton.h"
-#include "ui/widget/style-swatch.h"
 #include "widgets/sp-attribute-widget.h"
-#include "xml/href-attribute-helper.h"
 
 namespace Inkscape::UI::Dialog {
 

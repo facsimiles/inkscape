@@ -14,17 +14,9 @@
 #ifndef INKSCAPE_UI_DIALOG_PAINT_SERVERS_H
 #define INKSCAPE_UI_DIALOG_PAINT_SERVERS_H
 
-#include <map>
-#include <memory>
-#include <optional>
-#include <tuple>
-#include <vector>
-#include <glibmm/ustring.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/treemodel.h>
 
 #include "display/drawing.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 
 namespace Gtk {

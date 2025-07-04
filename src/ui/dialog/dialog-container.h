@@ -13,20 +13,10 @@
 #ifndef INKSCAPE_UI_DIALOG_CONTAINER_H
 #define INKSCAPE_UI_DIALOG_CONTAINER_H
 
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <glibmm/keyfile.h>
-#include <gtkmm/accelkey.h>
 #include <gtkmm/box.h>
 
 #include "dialog-manager.h"
 #include "desktop.h"
-#include <sigc++/scoped_connection.h>
 
 namespace Glib {
 class ValueBase;

@@ -13,18 +13,12 @@
 #include "measure-tool-settings.h"
 #include "ui/tools/measure-tool.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/button.h>
 
 #include "desktop.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/builder-utils.h"
-
-#include "preferences.h"
 
 namespace Inkscape::UI::Dialog {
 

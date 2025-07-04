@@ -8,16 +8,10 @@
 #ifndef INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 #define INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/treemodel.h>
-#include <gtkmm/window.h>
-
-#include <2geom/point.h>
 
 #include "live_effects/parameter/nodesatellitesarray.h"
 

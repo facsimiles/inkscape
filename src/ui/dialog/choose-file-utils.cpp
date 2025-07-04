@@ -2,12 +2,8 @@
 
 #include "choose-file-utils.h"
 
-#include <iostream>
-
 #include <giomm/liststore.h>
-#include <glibmm/fileutils.h>  // Glib::FileTest
 #include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>  // Glib::get_home_dir(), etc.
 #include <gtkmm/filefilter.h>
 
 #include "preferences.h"

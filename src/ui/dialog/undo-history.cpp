@@ -14,11 +14,8 @@
 
 #include "undo-history.h"
 
-#include <gtkmm/cellrendererpixbuf.h>
-
 #include "document-undo.h"
 #include "document.h"
-#include "inkscape.h"
 #include "ui/pack.h"
 #include "util/signal-blocker.h"
 

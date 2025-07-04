@@ -12,12 +12,10 @@
 #ifndef INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 #define INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 
-#include <glibmm/i18n.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/togglebutton.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"

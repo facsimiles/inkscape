@@ -15,8 +15,6 @@
  */
 
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <gtkmm/eventcontroller.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/gestureclick.h>
 
@@ -24,10 +22,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "layer-manager.h"
-#include "message-stack.h"
 #include "object/sp-root.h"
-#include "preferences.h"
 #include "selection.h"
 #include "ui/controller.h"
 #include "ui/icon-names.h"

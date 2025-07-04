@@ -2,8 +2,6 @@
 
 #include "save-image.h"
 
-#include <string>
-
 #include <giomm/file.h>
 #include <glib/gi18n.h>
 

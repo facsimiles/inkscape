@@ -12,37 +12,15 @@
 
 #include "attrdialog.h"
 
-#include <algorithm>
-#include <cstddef>
-#include <memory>
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/regex.h>
-#include <glibmm/timer.h>
-#include <glibmm/ustring.h>
-#include <glibmm/varianttype.h>
 #include <giomm/simpleactiongroup.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/object.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/textview.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
-#include "config.h"
 #include "ui/util.h"
 #if WITH_GSOURCEVIEW
 #   include <gtksourceview/gtksource.h>
@@ -58,9 +36,7 @@
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/popup-menu.h"
-#include "ui/syntax.h"
 #include "ui/widget/iconrenderer.h"
-#include "util/numeric/converters.h"
 
 /**
  * Return true if `node` is a text or comment node

@@ -21,36 +21,19 @@
 #include "xml-tree.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/ustring.h>
-#include <glibmm/variant.h>
-#include <giomm/simpleactiongroup.h>
-#include <gtkmm/button.h>
-#include <gtkmm/box.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/image.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/object.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treeview.h>
 
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "inkscape.h"
 #include "layer-manager.h"
 #include "selection.h"
-#include "preferences.h"
 #include "object/sp-root.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog-events.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/pack.h"
-#include "ui/syntax.h"
-#include "ui/tools/tool-base.h"
-#include "ui/util.h"
 #include "ui/widget/xml-treeview.h"
 #include "util/trim.h"
 

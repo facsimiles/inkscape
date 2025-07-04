@@ -12,26 +12,13 @@
 
 #include "dialog-window.h"
 
-#include <algorithm>
-#include <iostream>
 #include <glibmm/i18n.h>
-#include <giomm/actiongroup.h>
-#include <gtkmm/application.h>
-#include <gtkmm/box.h>
-#include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/shortcutcontroller.h>
 
 #include "document.h"
 #include "inkscape.h"
-#include "inkscape-application.h"
 #include "inkscape-window.h"
-#include "preferences.h"
-#include "ui/controller.h"
 #include "ui/dialog/dialog-base.h"
-#include "ui/dialog/dialog-container.h"
-#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-multipaned.h"
-#include "ui/dialog/dialog-notebook.h"
 #include "ui/pack.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"

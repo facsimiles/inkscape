@@ -13,24 +13,13 @@
 #ifndef INKSCAPE_UI_DIALOG_EXTENSIONS_H
 #define INKSCAPE_UI_DIALOG_EXTENSIONS_H
 
-#include <gdkmm/texture.h>
-#include <giomm/liststore.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/boolfilter.h>
-#include <gtkmm/cellrendererpixbuf.h>
 #include <gtkmm/filterlistmodel.h>
 #include <gtkmm/gridview.h>
-#include <gtkmm/iconview.h>
-#include <gtkmm/label.h>
-#include <gtkmm/multiselection.h>
-#include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/singleselection.h>
-#include <gtkmm/treemodel.h>
+#include <gtkmm/treerowreference.h>
 #include <boost/compute/detail/lru_cache.hpp>
-#include <memory>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/iconview-item-factory.h"
 

@@ -19,14 +19,8 @@
 #ifndef INKSCAPE_UI_DIALOG_TEXT_EDIT_H
 #define INKSCAPE_UI_DIALOG_TEXT_EDIT_H
 
-#include <glibmm/refptr.h>              // for RefPtr
-#include <gtk/gtk.h>                    // for GtkEventControllerKey
-
-#include <sigc++/scoped_connection.h>     // for sigc::scoped_connection
 #include "ui/dialog/dialog-base.h"      // for DialogBase
-#include "ui/widget/font-selector.h"    // for FontSelector
 #include "ui/widget/font-variants.h"    // for FontVariants
-#include "ui/widget/font-variations.h"  // for FontVariations
 #include "util/action-accel.h"          // for ActionAccel
 #include "ui/widget/font-list.h"
 

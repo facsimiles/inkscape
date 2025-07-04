@@ -13,9 +13,6 @@
 #ifndef INKSCAPE_UI_DIALOG_WINDOW_H
 #define INKSCAPE_UI_DIALOG_WINDOW_H
 
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/window.h>
 #include "inkscape-application.h"
 
 class InkscapeWindow;

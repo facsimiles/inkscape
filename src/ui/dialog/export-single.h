@@ -14,14 +14,6 @@
 #ifndef SP_EXPORT_SINGLE_H
 #define SP_EXPORT_SINGLE_H
 
-#include <map>
-#include <memory>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <gtkmm/entry.h>
-
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/export-batch.h"
 
 namespace Gtk {

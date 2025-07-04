@@ -10,15 +10,10 @@
 #ifndef INKSCAPE_UI_DIALOG_GLOBAL_PALETTES_H
 #define INKSCAPE_UI_DIALOG_GLOBAL_PALETTES_H
 
-#include <array>
-#include <cstdint>
-#include <optional>
-#include <string>
-#include <unordered_map>
-#include <variant>
-#include <vector>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
+#include <unordered_map>
+#include <variant>
 
 #include "colors/color.h"
 

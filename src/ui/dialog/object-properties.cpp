@@ -30,26 +30,17 @@
 #include "object-properties.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/expander.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/object.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/version.h>
 
 #include "document-undo.h"
 #include "document.h"
-#include "inkscape.h"
-#include "object/sp-item.h"
 #include "preferences.h"
 #include "selection.h"
 #include "object/sp-image.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
-#include "ui/syntax.h"
 #include "ui/widget/frame.h"
 #include "util-string/ustring-format.h"
 #include "widgets/sp-attribute-widget.h"

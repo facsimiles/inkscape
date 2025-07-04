@@ -16,32 +16,20 @@
 #ifndef INKSCAPE_UI_DIALOG_SYMBOLS_H
 #define INKSCAPE_UI_DIALOG_SYMBOLS_H
 
-#include <cstddef>
 #include <giomm/liststore.h>
 #include <gtkmm/boolfilter.h>
 #include <gtkmm/filterlistmodel.h>
 #include <gtkmm/gridview.h>
 #include <gtkmm/singleselection.h>
-#include <memory>
-#include <optional>
-#include <string>
-#include <vector>
 
 #include <boost/compute/detail/lru_cache.hpp>  // for lru_cache
 
-#include <glibmm/refptr.h>                     // for RefPtr
-#include <glibmm/ustring.h>                    // for ustring
-#include <gtkmm/builder.h>                     // for Builder
 #include <gtkmm/cellrendererpixbuf.h>          // for CellRendererPixbuf
 #include <gtkmm/liststore.h>                   // for ListStore
-#include <gtkmm/treeiter.h>                    // for TreeIter
-#include <gtkmm/treemodel.h>                   // for TreeModel
 #include <gtkmm/treemodelfilter.h>             // for TreeModelFilter
 #include <gtkmm/treemodelsort.h>               // for TreeModelSort
-#include <gtkmm/treepath.h>                    // for TreePath
 
 #include "display/drawing.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/iconview-item-factory.h"
 #include "ui/operation-blocker.h"

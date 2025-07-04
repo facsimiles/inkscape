@@ -12,36 +12,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <algorithm>
-#include <iostream>
-#include <optional>
-#include <tuple>
-#include <utility>
-#include <glibmm/i18n.h>
-#include <glibmm/value.h>
-#include <gdkmm/contentprovider.h>
-#include <gtkmm/button.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/gestureclick.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/eventcontrollerscroll.h>
-#include <gtkmm/grid.h>
-
-#include "dialog-notebook.h"
-
 #include "enums.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
-#include "preferences.h"
 #include "ui/column-menu-builder.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-data.h"
-#include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
-#include "ui/icon-loader.h"
 #include "ui/util.h"
-#include "ui/widget/popover-menu-item.h"
 
 namespace Inkscape::UI::Dialog {
 

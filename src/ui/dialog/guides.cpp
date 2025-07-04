@@ -17,13 +17,10 @@
 #include "guides.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/button.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "object/sp-guide.h"
-#include "object/sp-namedview.h"
 #include "page-manager.h"
 #include "preferences.h"
 #include "ui/widget/spinbutton.h"

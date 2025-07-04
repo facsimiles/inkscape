@@ -17,8 +17,6 @@
 
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/label.h>
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/grid.h>
 
 namespace Inkscape::UI::Dialog {
 

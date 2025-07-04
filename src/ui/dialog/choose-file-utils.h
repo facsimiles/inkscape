@@ -3,9 +3,6 @@
 #ifndef SEEN_CHOOSE_FILE_FILTER_H
 #define SEEN_CHOOSE_FILE_FILTER_H
 
-#include <string>
-#include <utility>
-#include <vector>
 #include <glibmm/refptr.h>
 
 namespace Gio {

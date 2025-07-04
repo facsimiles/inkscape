@@ -13,8 +13,6 @@
 #ifndef INK_DIALOG_BASE_H
 #define INK_DIALOG_BASE_H
 
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
 #include <gtkmm/box.h>
 
 #include "inkscape-application.h"

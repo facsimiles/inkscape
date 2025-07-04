@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <glibmm/i18n.h>
-#include <glibmm/ustring.h>
-#include <vector>
-
 #include "config.h" // Needed for WITH_LIBSPELLING
+
+#include <vector>
 
 #include "ui/dialog/dialog-data.h"
 #include "ui/icon-names.h"  // INKSCAPE_ICON macro

@@ -15,16 +15,12 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/sizegroup.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "inkscape.h"
 #include "layer-manager.h"
-#include "message-stack.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "text-editing.h"
@@ -45,11 +41,9 @@
 #include "object/sp-tref.h"
 #include "object/sp-tspan.h"
 #include "object/sp-use.h"
-#include "ui/dialog-events.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "xml/attribute-record.h"
-#include "xml/node-iterators.h"
 
 namespace Inkscape::UI::Dialog {
 

@@ -13,24 +13,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cmath>
-
-#include <gtkmm.h>
-
-#include "inkscape.h"
 #include "preferences.h"
 #include "print.h"
 
 #include "extension/internal/cairo-render-context.h"
 #include "extension/internal/cairo-renderer.h"
-#include "document.h"
 #include "object/sp-page.h"
 
-#include "colors/manager.h"
-#include "colors/color.h"
 #include "util/units.h"
 #include "helper/png-write.h"
-#include "page-manager.h"
 
 #include <glibmm/i18n.h>
 

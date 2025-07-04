@@ -14,16 +14,6 @@
 #ifndef INKSCAPE_UI_DIALOG_MULTIPANED_H
 #define INKSCAPE_UI_DIALOG_MULTIPANED_H
 
-#include <vector>
-#include <glibmm/refptr.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <gtkmm/box.h>
-#include <gtkmm/orientable.h>
-#include <gtkmm/widget.h>
-
-#include <sigc++/scoped_connection.h>
-
-#include "dialog-container.h"
 #include "dialog-notebook.h"
 
 namespace Glib {

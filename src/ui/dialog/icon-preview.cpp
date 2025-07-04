@@ -18,18 +18,12 @@
 #include "icon-preview.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/timer.h>
-#include <glibmm/main.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/frame.h>
 #include <gtkmm/image.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/togglebutton.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
-#include "document.h"
 #include "page-manager.h"
 #include "selection.h"
 #include "display/drawing-context.h"

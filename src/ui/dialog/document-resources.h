@@ -8,23 +8,13 @@
 #ifndef SEEN_DOC_RESOURCES_H
 #define SEEN_DOC_RESOURCES_H
 
-#include <cstddef>
 #include <giomm/liststore.h>
-#include <gtkmm/boolfilter.h>
-#include <gtkmm/columnview.h>
 #include <gtkmm/gridview.h>
 #include <gtkmm/listview.h>
 #include <gtkmm/singleselection.h>
-#include <memory>
-#include <string>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/cellrendererpixbuf.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/iconview-item-factory.h"
 #include "ui/text_filter.h"

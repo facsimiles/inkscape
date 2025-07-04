@@ -9,32 +9,13 @@
 
 #include "color-item.h"
 
-#include <algorithm>
-#include <cassert>
-#include <cstdint>
-#include <utility>
-#include <vector>
-#include <cairomm/context.h>
-#include <cairomm/pattern.h>
-#include <cairomm/surface.h>
-#include <glibmm/bytes.h>
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-#include <giomm/menu.h>
-#include <giomm/menuitem.h>
-#include <giomm/simpleaction.h>
-#include <giomm/simpleactiongroup.h>
-#include <gdkmm/contentprovider.h>
 #include <gdkmm/general.h>
-#include <gdkmm/pixbuf.h>
-#include <gdkmm/texture.h>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/popovermenu.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "colors/dragndrop.h"
 #include "desktop-style.h"
@@ -46,14 +27,11 @@
 #include "actions/actions-tools.h"
 #include "display/cairo-utils.h"
 #include "io/resource.h"
-#include "object/sp-gradient.h"
-#include "object/tags.h"
 #include "ui/containerize.h"
 #include "ui/controller.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/icon-names.h"
-#include "ui/util.h"
 #include "util/value-utils.h"
 #include "util/variant-visitor.h"
 

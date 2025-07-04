@@ -15,57 +15,29 @@
 
 #include "styledialog.h"
 
-#include <algorithm>
-#include <cstddef>
-#include <iostream>
 #include <regex>
-#include <string>
-#include <utility>
 
 #include <glibmm/i18n.h>
-#include <glibmm/regex.h>
-#include <gdk/gdkkeysyms.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/cellrenderertext.h>
-#include <gtkmm/cellrenderertoggle.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treestore.h>
-#include <gtkmm/treeviewcolumn.h>
 #include <gtkmm/treeview.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
-#include "colors/manager.h"
-#include "colors/color.h"
-#include "attribute-rel-svg.h"
-#include "attributes.h"
 #include "document.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "selection.h"
 #include "style.h"
-#include "style-enums.h"
-#include "style-internal.h"
 
-#include "io/resource.h"
-#include "object/sp-object.h"
 #include "ui/builder-utils.h"
-#include "ui/controller.h"
-#include "ui/icon-loader.h"
 #include "ui/pack.h"
 #include "ui/util.h"
 #include "ui/widget/iconrenderer.h"
 #include "util/trim.h"
-#include "xml/attribute-record.h"
-#include "xml/node-observer.h"
 #include "xml/sp-css-attr.h"
 
 // G_MESSAGES_DEBUG=DEBUG_STYLEDIALOG  gdb ./inkscape

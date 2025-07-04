@@ -11,48 +11,25 @@
 
 #include "command-palette.h"
 
-#include <cassert>
-#include <iostream>
-#include <map>
-#include <stdexcept>
-#include <string_view>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
-
-#include <glibmm/error.h>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/regex.h>
-#include <glibmm/variant.h>
-#include <giomm/action.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/label.h>
 #include <gtkmm/listbox.h>
-#include <gtkmm/listboxrow.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/searchbar.h>
 #include <gtkmm/searchentry2.h>
-#include <gtkmm/window.h>
 
 #include "desktop.h"
 #include "document.h"
 #include "file.h"
 #include "inkscape.h"
-#include "message-stack.h"
 #include "preferences.h"
-#include "selection.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
-#include "ui/controller.h"
 #include "ui/shortcuts.h"
 #include "ui/util.h"
 

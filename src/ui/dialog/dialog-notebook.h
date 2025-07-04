@@ -15,21 +15,9 @@
 #ifndef INKSCAPE_UI_DIALOG_NOTEBOOK_H
 #define INKSCAPE_UI_DIALOG_NOTEBOOK_H
 
-#include <map>
-#include <variant>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <gtkmm/notebook.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/widget.h>
-
-#include <sigc++/scoped_connection.h>
-
 #include "dialog-container.h"
 #include "preferences.h"
 #include "ui/widget/popover-menu.h"
-#include "ui/widget/popover-bin.h"
 #include "ui/widget/tab-strip.h"
 
 namespace Glib {

@@ -3,19 +3,10 @@
 #include "dialog-manager.h"
 
 #include <filesystem>
-#include <limits>
-#include <glibmm/keyfile.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/miscutils.h>
-#include <glibmm/ustring.h>
-#include <gdkmm/monitor.h>
-#include <gtkmm/window.h>
 
 namespace filesystem = std::filesystem;
 
 #include "io/resource.h"
-#include "inkscape-application.h"
-#include "dialog-base.h"
 #include "dialog-container.h"
 #include "dialog-window.h"
 #include "enums.h"

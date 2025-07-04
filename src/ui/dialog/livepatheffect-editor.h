@@ -12,14 +12,6 @@
 #ifndef LIVEPATHEFFECTEDITOR_H
 #define LIVEPATHEFFECTEDITOR_H
 
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-
-#include "preferences.h"
 #include "live_effects/effect-enum.h"
 #include "object/sp-lpe-item.h"       // PathEffectList
 #include "ui/dialog/dialog-base.h"

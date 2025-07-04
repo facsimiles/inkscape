@@ -10,10 +10,7 @@
 #ifndef INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 #define INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 
-#include <gtkmm/dialog.h>
 #include <glibmm/i18n.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/sizegroup.h>
 #include <ui/operation-blocker.h>
 
 #include "ui/widget/document-templates.h"

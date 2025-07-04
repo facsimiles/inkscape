@@ -20,47 +20,24 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <algorithm>
 #include <fstream>
-#include <iomanip>
-#include <string>
-#include <gio/gio.h>
-#include <glibmm/error.h>
 #include <glibmm/i18n.h>
-#include <glibmm/markup.h>
-#include <glibmm/miscutils.h>
-#include <glibmm/convert.h>
-#include <glibmm/regex.h>
-#include <glibmm/ustring.h>
 #include <giomm/themedicon.h>
 #include <gtkmm/binlayout.h>
-#include <gdkmm/display.h>
+#include <gtkmm/treemodelsort.h>
+#include <gtkmm/treemodelfilter.h>
 #include <gtkmm/accelerator.h>
-#include <gtkmm/box.h>
 #include <gtkmm/cssprovider.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/fontchooserdialog.h>
 #include <gtkmm/icontheme.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/picture.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/revealer.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/settings.h>
-#include <gtkmm/styleprovider.h>
-#include <gtkmm/togglebutton.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
-#include <cairomm/matrix.h>
-#include <cairomm/surface.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/object.h>
+#include <iomanip>
+
 #include "display/control/ctrl-handle-manager.h"
 #include "ui/widget/icon-combobox.h"
 #include "ui/widget/handle-preview.h"
@@ -70,28 +47,19 @@
 #endif
 
 #include "auto-save.h"
-#include "document.h"
-#include "enums.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
-#include "message-stack.h"
 #include "path-prefix.h"
-#include "preferences.h"
 #include "selcue.h"
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "style.h"
 
 #include "colors/cms/system.h"
-#include "colors/cms/profile.h"
 #include "colors/manager.h"
 #include "colors/spaces/base.h"
 #include "display/nr-filter-gaussian.h"
-#include <sigc++/scoped_connection.h>
-#include "io/resource.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog-run.h"
-#include "ui/interface.h"
 #include "ui/modifiers.h"
 #include "ui/pack.h"
 #include "ui/shortcuts.h"
@@ -100,7 +68,6 @@
 #include "ui/toolbar/tool-toolbar.h"
 #include "ui/toolbar/toolbar-constants.h"
 #include "ui/util.h"
-#include "ui/widget/preferences-widget.h"
 #include "ui/widget/style-swatch.h"
 #include "util/recently-used-fonts.h"
 #include "util/trim.h"

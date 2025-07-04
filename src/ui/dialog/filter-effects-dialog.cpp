@@ -17,50 +17,22 @@
 
 #include "filter-effects-dialog.h"
 
-#include <map>
-#include <set>
-#include <string>
-#include <sstream>
-#include <utility>
-#include <vector>
-#include <glibmm/convert.h>
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/refptr.h>
-#include <glibmm/stringutils.h>
-#include <glibmm/ustring.h>
-#include <gdkmm/display.h>
 #include <gdkmm/general.h>
-#include <gdkmm/rgba.h>
 #include <gdkmm/seat.h>
-#include <gtkmm/button.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/searchentry2.h>
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/treeviewcolumn.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/widget.h>
-#include <pangomm/layout.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "filter-chemistry.h"
 #include "filter-enums.h"
 #include "inkscape-window.h"
@@ -68,7 +40,6 @@
 #include "preferences.h"
 #include "selection.h"
 #include "style.h"
-#include "display/nr-filter-types.h"
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
 #include "object/filters/componenttransfer-funcnode.h"
@@ -89,12 +60,8 @@
 #include "ui/pack.h"
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
-#include "ui/widget/completion-popup.h"
 #include "ui/widget/custom-tooltip.h"
 #include "ui/widget/filter-effect-chooser.h"
-#include "ui/widget/popover-menu-item.h"
-#include "ui/widget/popover-menu.h"
-#include "ui/widget/spin-scale.h"
 #include "ui/widget/spinbutton.h"
 
 using namespace Inkscape::Filters;

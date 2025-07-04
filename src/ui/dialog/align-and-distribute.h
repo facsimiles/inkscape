@@ -19,11 +19,8 @@
 #ifndef INKSCAPE_UI_WIDGET_ALIGN_AND_DISTRIBUTE_H
 #define INKSCAPE_UI_WIDGET_ALIGN_AND_DISTRIBUTE_H
 
-#include <gtkmm/box.h>
 #include <set>
-#include <sigc++/connection.h>
 
-#include <sigc++/scoped_connection.h>
 #include "preferences.h"
 
 namespace Gtk {

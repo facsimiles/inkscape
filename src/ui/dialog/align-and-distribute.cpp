@@ -18,21 +18,14 @@
 
 #include "align-and-distribute.h" // Widget
 
-#include <giomm/application.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/treemodelfilter.h>
-#include <iostream>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "actions/actions-tools.h" // Tool switching.
 #include "desktop.h"               // Tool switching.
-#include "inkscape-application.h"  // Access window.
 #include "inkscape-window.h"       // Activate window action.
 #include "io/resource.h"
 #include "selection.h"

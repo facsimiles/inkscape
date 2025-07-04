@@ -16,28 +16,14 @@
 #ifndef INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 
-#include <map>
-#include <vector>
-
-#include <glibmm/refptr.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/notebook.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/sizegroup.h>
-#include <gtkmm/textview.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treemodelfilter.h>
-#include <gtkmm/treemodelsort.h>
-#include <gtkmm/treepath.h>
-#include <gtkmm/treerowreference.h>
 #include <gtkmm/treestore.h>
-#include <gtkmm/treeview.h>
 
 #include "preferences.h"
 #include "ui/dialog/dialog-base.h"

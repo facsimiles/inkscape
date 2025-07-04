@@ -25,48 +25,30 @@
 
 #include "text-edit.h"
 
-#include <algorithm>
-#include <memory>
-#include <string>
-
-#include <glibmm/i18n.h>
-#include <glibmm/markup.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
-#include <gtkmm/label.h>
-#include <gtkmm/listbox.h>
-#include <gtkmm/listboxrow.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/notebook.h>
+#include <gtkmm/popover.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/separator.h>
-#include <gtkmm/textbuffer.h>
 #include <gtkmm/textview.h>
 #ifdef WITH_LIBSPELLING
 #include "ui/libspelling-wrapper.h"
 #endif
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop-style.h"
-#include "desktop.h"
 #include "dialog-container.h"
 #include "document-undo.h"
 #include "inkscape.h"
-#include "libnrtype/font-factory.h"
 #include "libnrtype/font-lister.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-text.h"
 #include "selection.h"
-#include "style.h"
 #include "svg/css-ostringstream.h"
 #include "text-editing.h"
 #include "ui/builder-utils.h"
-#include "ui/controller.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/util.h"
+#include "ui/widget/font-selector.h"    // for FontSelector
 #include "util/font-collections.h"
 #include "util/recently-used-fonts.h"
 #include "util/units.h"

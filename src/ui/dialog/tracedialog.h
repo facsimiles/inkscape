@@ -17,7 +17,6 @@
 #ifndef INKSCAPE_UI_DIALOG_TRACE_H
 #define INKSCAPE_UI_DIALOG_TRACE_H
 
-#include <memory>
 #include "ui/dialog/dialog-base.h"
 
 namespace Inkscape::UI::Dialog  {

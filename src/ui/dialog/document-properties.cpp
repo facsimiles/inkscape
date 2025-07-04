@@ -21,51 +21,18 @@
 
 #include "document-properties.h"
 
-#include <algorithm>
-#include <array>
-#include <cmath>
-#include <iterator>
-#include <optional>
-#include <set>
-#include <string>
-#include <tuple>
-
 #include <giomm/themedicon.h>
-#include <glibmm/main.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/listboxrow.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/object.h>
-#include <gtkmm/popover.h>
-#include <gtkmm/popovermenu.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/widget.h>
-#include <glibmm/convert.h>
-#include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/sizegroup.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
-#include <2geom/angle.h>
 #include "inkscape-window.h"
-#include "preferences.h"
 #include "rdf.h"
 #include "page-manager.h"
 #include "selection.h"
 
 #include "colors/cms/profile.h"
 #include "colors/document-cms.h"
-#include <sigc++/scoped_connection.h>
 #include "object/color-profile.h"
-#include "object/sp-grid.h"
 #include "object/sp-guide.h"
 #include "object/sp-root.h"
 #include "object/sp-script.h"
@@ -79,14 +46,11 @@
 #include "ui/dialog/choose-file-utils.h"
 #include "ui/widget/alignment-selector.h"
 #include "ui/widget/entity-entry.h"
-#include "ui/widget/labelled.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/page-properties.h"
 #include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
-#include "ui/widget/scalar.h"
 #include "util/expression-evaluator.h"
-#include "ui/widget/icon-combobox.h"
 
 namespace Inkscape::UI {
 

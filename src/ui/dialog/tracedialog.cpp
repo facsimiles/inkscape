@@ -16,29 +16,18 @@
 
 #include "tracedialog.h"
 
-#include <algorithm>
-#include <map>
-#include <string>
-#include <utility>
-#include <glibmm/i18n.h>
-#include <gdkmm/general.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/dropdown.h>
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/picture.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/progressbar.h>
 #include <gtkmm/stack.h>
 
 #include "desktop.h"
 #include "preferences.h"
-#include "selection.h"
 #include "trace/autotrace/inkscape-autotrace.h"
 #include "trace/depixelize/inkscape-depixelize.h"
 #include "trace/potrace/inkscape-potrace.h"

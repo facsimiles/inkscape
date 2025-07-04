@@ -11,27 +11,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <algorithm>
-#include <cassert>
-#include <iostream>
 #include <numeric>
 #include <glibmm/i18n.h>
-#include <glibmm/value.h>
-#include <gtkmm/box.h>
-#include <gtkmm/drawingarea.h>
-#include <gtkmm/droptarget.h>
-#include <gtkmm/eventcontrollermotion.h>
-#include <gtkmm/gestureclick.h>
-#include <gtkmm/gesturedrag.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
-#include <gtkmm/overlay.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "dialog-multipaned.h"
 #include "dialog-window.h"
 #include "ui/controller.h"
-#include "ui/dialog/dialog-notebook.h"
 #include "ui/util.h"
 #include "ui/widget/canvas-grid.h"
 

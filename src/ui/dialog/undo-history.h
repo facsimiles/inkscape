@@ -13,15 +13,8 @@
 #ifndef INKSCAPE_UI_DIALOG_UNDO_HISTORY_H
 #define INKSCAPE_UI_DIALOG_UNDO_HISTORY_H
 
-#include <string>
-#include <utility>
 #include <glibmm/property.h>
-#include <glibmm/propertyproxy.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/cellrenderertext.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treeselection.h>
 
 #include "event-log.h"
 #include "ui/dialog/dialog-base.h"

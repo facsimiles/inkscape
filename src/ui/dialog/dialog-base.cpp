@@ -12,21 +12,12 @@
 
 #include "dialog-base.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/cssprovider.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollerscroll.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/viewport.h>
-#include <gtkmm/window.h>
-#include <utility>
 
 #include "desktop.h"
-#include "inkscape-window.h"
 #include "inkscape.h"
 #include "selection.h"
 #include "ui/dialog-events.h"

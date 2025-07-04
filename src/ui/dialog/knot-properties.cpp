@@ -17,9 +17,6 @@
 
 #include "knot-properties.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
-
 #include "desktop.h"
 #include "ui/knot/knot.h"
 #include "util/units.h"

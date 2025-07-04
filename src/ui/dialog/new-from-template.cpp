@@ -12,16 +12,11 @@
 
 #include "new-from-template.h"
 
-#include <gtkmm/separator.h>
-
 #include "desktop.h"
 #include "inkscape-application.h"
-#include "inkscape-window.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "object/sp-namedview.h"
-#include "ui/dialog-run.h"
-#include "ui/widget/template-list.h"
 
 namespace Inkscape::UI {
 

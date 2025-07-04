@@ -3,7 +3,7 @@
  * @brief Text-edit
  */
 /* Authors:
- *   Vaihav Malik <vaibhavmalik2018@gmail.com>
+ *   Vaibhav Malik <vaibhavmalik2018@gmail.com>
  *
  * Copyright (C) 1999-2013 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
@@ -14,7 +14,6 @@
 #ifndef INKSCAPE_UI_DIALOG_FONT_COLLECTIONS_MANAGER_H
 #define INKSCAPE_UI_DIALOG_FONT_COLLECTIONS_MANAGER_H
 
-#include <sigc++/scoped_connection.h>
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/font-selector.h"
 #include "ui/widget/font-collection-selector.h"
