@@ -552,7 +552,7 @@ bool SwatchesPanel::load_swatches() {
     auto window = dynamic_cast<Gtk::Window *>(get_root());
     auto file = choose_palette_file(window);
     auto loaded = false;
-    if (load_swatches(file->get_path())) {
+    if (file && load_swatches(file->get_path())) {
         auto prefs = Preferences::get();
         prefs->setString(_prefs_path + "/palette", _loaded_palette.id);
         prefs->setString(_prefs_path + "/palette-path", file->get_path());
