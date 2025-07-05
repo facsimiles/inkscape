@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-05 20:25+0000\n"
+"PO-Revision-Date: 2025-07-05 20:29+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -21658,13 +21658,13 @@ msgid "Deleted"
 msgstr "Șters"
 
 #: ../src/object/sp-guide.cpp:489
-#, fuzzy
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
-"<b>Shift+trage</b> pentru a roti, <b>Ctrl+trage</b> pentru a muta originea, "
-"<b>Del</b> pentru a șterge"
+"<b>Shift+tragere</b> pentru a roti, <b>Ctrl+tragere</b> pentru a muta "
+"originea, <b>Del</b> pentru a șterge; <b>dublu clic</b> pentru a edita acest "
+"ghidaj"
 
 #: ../src/object/sp-guide.cpp:494
 #, c-format
@@ -24724,7 +24724,7 @@ msgstr "<b>Conținut:</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:1091
 msgid "<b>Dublin Core Entities</b>"
-msgstr "Entități Dublin Core"
+msgstr "<b>Entități Dublin Core</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:1122
 msgid "_Save as default"
@@ -32393,10 +32393,9 @@ msgid "Starting angle"
 msgstr "Unghiul de pornire"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "<b>Anchor point:</b>"
-msgstr "Punct de ancoră:"
+msgstr "<b>Punct de ancorare:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:49
 msgctxt "Polar arrange tab"
@@ -38385,9 +38384,8 @@ msgstr "Elimină conturul"
 
 # tooltip
 #: ../src/ui/widget/selected-style.cpp:740
-#, fuzzy
 msgid "<b>Stroke Width</b>"
-msgstr "Lățimea conturului"
+msgstr "<b>Lățimea conturului</b>"
 
 #: ../src/ui/widget/selected-style.cpp:793
 msgid "Change stroke width"
