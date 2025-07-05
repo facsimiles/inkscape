@@ -9,24 +9,22 @@
 
 #ifndef INKSCAPE_UI_DIALOG_COLOR_ITEM_H
 #define INKSCAPE_UI_DIALOG_COLOR_ITEM_H
-
+#include <graphene-gobject.h>
+#include <gdk/gdk.h>  
 #include <array>
 #include <string>
 #include <variant>
-#include <cairomm/refptr.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
 #include <gtk/gtk.h> // GtkEventControllerMotion
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
-
+#include <gsk/gsk.h>
+#include <graphene.h>
+#include <gtkmm/snapshot.h>
 #include "colors/color.h"
-
-namespace Cairo {
-class Context;
-class ImageSurface;
-} // namespace Cairo
-
+#include <graphene-gobject.h>
+#include "object/sp-style.h"
 namespace Gdk {
 class Drag;
 } // namespace Gdk
@@ -48,7 +46,7 @@ class DialogBase;
  *
  * Note: This widget must be outlived by its parent dialog, passed in the constructor.
  */
-class ColorItem : public Gtk::DrawingArea
+class ColorItem : public Gtk::Widget
 {
 public:
     // No fill option
@@ -88,7 +86,6 @@ public:
     sigc::signal<void ()>& signal_pinned() { return _signal_pinned; };
 
 private:
-    void draw_func(Cairo::RefPtr<Cairo::Context> const&, int width, int height);
     void size_allocate_vfunc(int width, int height, int baseline) override;
 
     Glib::RefPtr<Gdk::ContentProvider> on_drag_prepare();
@@ -117,11 +114,9 @@ private:
     void action_toggle_pin();
     void action_convert(Glib::ustring const &name);
 
-    // Draw the color only (i.e. no indicators) to a Cairo context. Used for drawing both the widget and the drag/drop icon.
-    void draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h) const;
 
     // Return the color (or average if a gradient), for choosing the color of the fill/stroke indicators.
-    Colors::Color getColor() const;
+    Gdk::RGBA getColor() const;
 
     // Description of the color, shown in help text.
     Glib::ustring description;
@@ -146,7 +141,7 @@ private:
     bool is_stroke = false;
 
     // A cache of the widget contents, if necessary.
-    Cairo::RefPtr<Cairo::ImageSurface> cache;
+    Glib::RefPtr<Gdk::Texture> cache;
     bool cache_dirty = true;
 
     bool was_grad_pinned = false;
@@ -158,7 +153,19 @@ private:
     sigc::signal<void ()> _signal_pinned;
 
     std::unique_ptr<Gtk::Popover> _popover;
-};
+    void snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) override;
+    
+    // Helper methods:
+    void draw_color_swatch(const Glib::RefPtr<Gtk::Snapshot>& snapshot,
+                          const graphene_rect_t& rect,
+                          const Gdk::RGBA& color);
+    void draw_no_color_indicator(const Glib::RefPtr<Gtk::Snapshot>& snapshot,
+                              const graphene_rect_t& rect,);
+    void draw_selection_indicator(const Glib::RefPtr<Gtk::Snapshot>& snapshot,
+                                const graphene_rect_t& rect,);
+    void draw_fill_stroke_indicators(const Glib::RefPtr<Gtk::Snapshot>& snapshot,
+                                  const graphene_rect_t& rect,);
+    };
 
 } // namespace Inkscape::UI::Dialog
 
