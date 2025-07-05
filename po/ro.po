@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-05 20:29+0000\n"
+"PO-Revision-Date: 2025-07-05 20:44+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -9649,8 +9649,7 @@ msgstr "Diviziune"
 
 #: ../src/actions/actions-paths.cpp:251
 msgid "Cut the bottom path into pieces"
-msgstr ""
-"Taie în bucăți traseul de dedesubt pastrând intersecția cu cu cea de deasupra"
+msgstr "Taie în bucăți traseul de dedesubt"
 
 #: ../src/actions/actions-paths.cpp:252
 msgid "Cut Path"
