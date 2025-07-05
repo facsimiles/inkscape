@@ -10,14 +10,9 @@
 #ifndef SP_EXPORT_HELPER_H
 #define SP_EXPORT_HELPER_H
 
-#include <map>
-#include <string>
-#include <2geom/rect.h>
-#include <glibmm/refptr.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/grid.h>
 
-#include <sigc++/scoped_connection.h>
 #include "preferences.h"
 
 namespace Gtk {

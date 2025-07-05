@@ -16,14 +16,16 @@
 #ifndef SEEN_DIALOGS_STROKE_STYLE_H
 #define SEEN_DIALOGS_STROKE_STYLE_H
 
-#include <vector>
-#include <glibmm/refptr.h>
 #include <gtkmm/box.h>
 #include <gtkmm/togglebutton.h>
 
-#include "style.h"
+#include "object/sp-marker-loc.h"
 #include "ui/widget/spinbutton.h"
 
+class SPItem;
+class SPStyle;
+class SPCSSAttr;
+class SPDesktop;
 namespace Gtk {
 class Adjustment;
 class Entry;

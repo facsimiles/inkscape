@@ -11,7 +11,6 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_ENTITY_ENTRY_H
 #define SEEN_INKSCAPE_UI_WIDGET_ENTITY_ENTRY_H
 
-#include <glibmm/ustring.h>
 #include <gtkmm/label.h>
 #include <gtkmm/textview.h>
 

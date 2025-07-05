@@ -15,14 +15,8 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_H
 #define INKSCAPE_UI_WIDGET_CANVAS_H
 
-#include <memory>
-#include <optional>
-#include <2geom/int-rect.h>
 #include <2geom/rect.h>
-#include <glibmm/refptr.h>
-#include <gtk/gtk.h> // GtkEventController*
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <sigc++/signal.h>
 
 #include "display/rendermode.h"
 #include "events/enums.h"

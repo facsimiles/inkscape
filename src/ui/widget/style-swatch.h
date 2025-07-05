@@ -14,9 +14,6 @@
 #ifndef SEEN_INKSCAPE_UI_STYLE_SWATCH_H
 #define SEEN_INKSCAPE_UI_STYLE_SWATCH_H
 
-#include <memory>
-#include <gtkmm/box.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/label.h>
 
 #include "desktop.h"

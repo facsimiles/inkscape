@@ -13,15 +13,9 @@
 #ifndef SEEN_GRADIENT_EDITOR_H
 #define SEEN_GRADIENT_EDITOR_H
 
-#include <memory>
-#include <optional>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
 #include <gtkmm/treemodelcolumn.h>
 
 #include "colors/color-set.h"
-#include "object/sp-gradient.h"
-#include "object/sp-stop.h"
 #include "spin-scale.h"
 #include "gradient-with-stops.h"
 #include "gradient-selector-interface.h"

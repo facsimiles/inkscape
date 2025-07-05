@@ -19,8 +19,8 @@
 #include <gtkmm/togglebutton.h>
 
 #include "document-undo.h"
+#include "object/sp-shape.h"
 #include "preferences.h"
-#include "style.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
 

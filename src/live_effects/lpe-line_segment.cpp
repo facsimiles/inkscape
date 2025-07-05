@@ -16,6 +16,7 @@
 
 #include <glibmm/i18n.h>
 
+#include "line.h"
 #include "object/sp-lpe-item.h"
 #include "ui/tools/lpe-tool.h"
 

@@ -18,28 +18,20 @@
 
 #include "xml-treeview.h"
 
-#include <cassert>
-
 #include <gtkmm/dragsource.h>
 #include <gtkmm/droptarget.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treerowreference.h>
 #include <gtkmm/treestore.h>
 
 #include "document.h"
-#include "object/sp-defs.h"   // D&D in <defs>, <glyph>, etc.
+#include "object/sp-defs.h" // D&D in <defs>, <glyph>, etc.
 #include "object/sp-glyph.h"
-#include "object/sp-item.h"
 #include "object/sp-mask.h"
 #include "object/sp-pattern.h"
 #include "object/sp-root.h" // -> SPGroup -> SPLPEItem -> SPItem
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
-#include "util/cast.h"  // cast<> of SPObjects
-#include "ui/syntax.h"  // XMLFormatter
-#include "xml/node.h"
 #include "xml/simple-node.h"
-#include "xml/node-observer.h"
 #include "util/value-utils.h"
 
 using namespace Inkscape::Util;

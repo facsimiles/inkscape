@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <mutex>
+
 #include "framecheck.h"
+
 namespace fs = std::filesystem;
 
 namespace Inkscape::FrameCheck {

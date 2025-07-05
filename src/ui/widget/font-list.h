@@ -8,25 +8,13 @@
 #ifndef INKSCAPE_UI_WIDGET_FONT_LIST_H
 #define INKSCAPE_UI_WIDGET_FONT_LIST_H
 
-#include <glibmm/ustring.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treepath.h>
-#include <gtkmm/widget.h>
-#include <memory>
-#include <sigc++/connection.h>
-#include <vector>
 #include <gtkmm/builder.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/iconview.h>
-#include <gtkmm/treeview.h>
 #include <gtkmm/listbox.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/scale.h>
-#include <sigc++/scoped_connection.h>
 #include "ui/widget/font-variations.h"
-#include "ui/operation-blocker.h"
 #include "util/font-discovery.h"
 #include "util/font-tags.h"
 #include "font-selector-interface.h"

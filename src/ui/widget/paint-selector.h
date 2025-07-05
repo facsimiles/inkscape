@@ -16,16 +16,7 @@
 #ifndef SEEN_SP_PAINT_SELECTOR_H
 #define SEEN_SP_PAINT_SELECTOR_H
 
-#include <memory>
-#include <optional>
-#include <2geom/forward.h>
-#include <gtkmm/box.h>
-
-#include "colors/color-set.h"
 #include "fill-or-stroke.h"
-#include "gradient-selector-interface.h"
-#include "object/sp-gradient-spread.h"
-#include "object/sp-gradient-units.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/swatch-selector.h"
 

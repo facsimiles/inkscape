@@ -12,12 +12,8 @@
 #ifndef SEEN_COLOR_SLIDER_H
 #define SEEN_COLOR_SLIDER_H
 
-#include <glibmm/refptr.h>
 #include <gtkmm/drawingarea.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <sigc++/signal.h>
 
-#include <sigc++/scoped_connection.h>
 #include "colors/spaces/components.h"
 
 namespace Gtk {

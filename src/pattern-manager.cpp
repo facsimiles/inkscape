@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include <cairomm/surface.h>
 #include <gtkmm/liststore.h>
 #include <glibmm/i18n.h>
 

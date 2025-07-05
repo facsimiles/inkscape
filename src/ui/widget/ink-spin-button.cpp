@@ -8,6 +8,16 @@
 
 #include <cassert>
 #include <iomanip>
+#include <glibmm/main.h>
+#include <glibmm/markup.h>
+#include <gtkmm/cssprovider.h>
+#include <gtkmm/eventcontrollerfocus.h>
+#include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/eventcontrollermotion.h>
+#include <gtkmm/eventcontrollerscroll.h>
+#include <gtkmm/gestureclick.h>
+#include <gtkmm/gesturedrag.h>
+#include <gtkmm/root.h>
 
 #include "ui/containerize.h"
 #include "ui/util.h"

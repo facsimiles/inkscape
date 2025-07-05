@@ -16,21 +16,11 @@
 #ifndef SEEN_SP_MARKER_COMBO_BOX_H
 #define SEEN_SP_MARKER_COMBO_BOX_H
 
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <giomm/liststore.h>
-#include <gtkmm/box.h>
 #include <gtkmm/cellrendererpixbuf.h>
 #include <gtkmm/treemodel.h>
-#include <sigc++/signal.h>
 
 #include "display/drawing.h"
-#include "document.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/operation-blocker.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
 

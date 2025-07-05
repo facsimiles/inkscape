@@ -20,8 +20,6 @@
 #ifndef INKSCAPE_UI_WIDGET_LICENSOR_H
 #define INKSCAPE_UI_WIDGET_LICENSOR_H
 
-#include <memory>
-#include <vector>
 #include <gtkmm/box.h>
 
 class SPDocument;

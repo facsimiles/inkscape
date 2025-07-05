@@ -2,7 +2,6 @@
 
 #ifndef COLOR_WHEEL_H
 #define COLOR_WHEEL_H
-#include <sigc++/functors/slot.h>
 
 namespace Inkscape::Colors {
 class Color;

@@ -15,14 +15,8 @@
 #ifndef INKSCAPE_UI_WIDGET_TAB_STRIP_H
 #define INKSCAPE_UI_WIDGET_TAB_STRIP_H
 
-// #include <memory>
-#include <vector>
-
-// #include <sigc++/scoped_connection.h>
-#include <gtkmm/widget.h>
 #include <2geom/point.h>
-
-#include "ink-spin-button.h"
+#include <gtkmm/menubutton.h>
 
 namespace Gtk { class Popover; }
 

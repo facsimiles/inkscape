@@ -16,9 +16,6 @@
 
 #include "ui/widget/ink-color-wheel.h"
 
-#include <gtk/gtk.h> // GtkEventControllerMotion
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-
 namespace Inkscape::UI::Widget {
 
 /** @brief The color wheel used in the OKHSL picker. */

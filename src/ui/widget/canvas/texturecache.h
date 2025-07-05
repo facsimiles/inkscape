@@ -8,7 +8,6 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_TEXTURECACHE_H
 #define INKSCAPE_UI_WIDGET_CANVAS_TEXTURECACHE_H
 
-#include <memory>
 #include "texture.h"
 
 namespace Inkscape::UI::Widget {

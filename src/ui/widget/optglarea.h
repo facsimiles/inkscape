@@ -3,9 +3,7 @@
 #ifndef INKSCAPE_UI_WIDGET_OPTGLAREA_H
 #define INKSCAPE_UI_WIDGET_OPTGLAREA_H
 
-#include <epoxy/gl.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/drawingarea.h>
+#include <gtkmm/widget.h>
 
 namespace Cairo { class Context; }
 namespace Gdk { class GLContext; }

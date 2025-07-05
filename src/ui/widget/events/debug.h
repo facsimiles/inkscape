@@ -9,7 +9,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <iostream>
 #include "ui/widget/events/canvas-event.h"
 
 namespace Inkscape {

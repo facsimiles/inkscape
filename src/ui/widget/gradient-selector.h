@@ -17,16 +17,12 @@
 #ifndef SEEN_GRADIENT_SELECTOR_H
 #define SEEN_GRADIENT_SELECTOR_H
 
-#include <vector>
 #include <gdkmm/pixbuf.h>
 #include <glibmm/refptr.h>
 #include <gtkmm/box.h>
 #include <gtkmm/treemodel.h>
-#include <sigc++/signal.h>
 
 #include "gradient-selector-interface.h"
-#include "object/sp-gradient-spread.h"
-#include "object/sp-gradient-units.h"
 
 class SPDocument;
 class SPGradient;

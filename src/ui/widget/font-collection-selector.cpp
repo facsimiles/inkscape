@@ -14,19 +14,11 @@
 
 #include "font-collection-selector.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/markup.h>
-#include <gtkmm/cellrenderertext.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/treestore.h>
-#include <set>
-#include <sigc++/functors/mem_fun.h>
 
 #include "libnrtype/font-lister.h"
-#include "ui/controller.h"
-#include "ui/dialog-run.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/iconrenderer.h"
 #include "util/font-collections.h"

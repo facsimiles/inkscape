@@ -8,11 +8,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <sigc++/functors/mem_fun.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/eventcontrollerscroll.h>
 #include <gtkmm/gestureclick.h>
-#include <2geom/point.h>
 
 #include "rotateable.h"
 #include "ui/controller.h"

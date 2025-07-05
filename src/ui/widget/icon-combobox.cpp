@@ -2,22 +2,11 @@
 
 #include "icon-combobox.h"
 
-#include <gdkmm/texture.h>
-#include <giomm/liststore.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/binlayout.h>
-#include <gtkmm/boolfilter.h>
 #include <gtkmm/box.h>
-#include <gtkmm/boxlayout.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/object.h>
 #include <gtkmm/picture.h>
-#include <gtkmm/treemodelfilter.h>
-#include <stdexcept>
-#include <utility>
 #include "ui/util.h"
 
 namespace Inkscape::UI::Widget {

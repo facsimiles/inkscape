@@ -10,8 +10,6 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_SCROLL_UTILS_H
 #define SEEN_INKSCAPE_UI_WIDGET_SCROLL_UTILS_H
 
-#include <gdk/gdk.h>
-
 namespace Gtk {
 class Widget;
 } // namespace Gtk

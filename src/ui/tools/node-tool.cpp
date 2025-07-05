@@ -11,26 +11,28 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "ui/tools/node-tool.h"
+
 #include <iomanip>
 #include <glib/gi18n.h>
 
-#include "rubberband.h"
-#include "selection-chemistry.h"
-#include "selection.h"
-#include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-group.h"
+#include "display/curve.h"
 #include "live_effects/effect.h"
 #include "object/sp-clippath.h"
 #include "object/sp-mask.h"
+#include "object/sp-namedview.h"
 #include "object/sp-shape.h"
+#include "rubberband.h"
+#include "selection-chemistry.h"
+#include "selection.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/modifiers.h"
 #include "ui/shape-editor.h" // temporary!
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "ui/tools/node-tool.h"
 #include "ui/widget/events/canvas-event.h"
 #include "util-string/ustring-format.h"
 

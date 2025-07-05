@@ -2,10 +2,6 @@
 #ifndef SEEN_FONT_SELECTOR_INTERFACE_H
 #define SEEN_FONT_SELECTOR_INTERFACE_H
 
-#include <glibmm/ustring.h>
-#include <gtkmm/widget.h>
-#include <sigc++/signal.h>
-
 class FontSelectorInterface {
 public:
     virtual ~FontSelectorInterface() {};

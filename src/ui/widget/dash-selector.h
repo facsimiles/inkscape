@@ -20,7 +20,6 @@
 #ifndef SEEN_DASH_SELECTOR_H
 #define SEEN_DASH_SELECTOR_H
 
-#include <glibmm/refptr.h>
 #include <gtkmm/box.h>
 
 namespace Gtk {

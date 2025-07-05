@@ -11,10 +11,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "dialog-multipaned.h"
+
 #include <numeric>
 #include <glibmm/i18n.h>
+#include <gtkmm/drawingarea.h>
+#include <gtkmm/eventcontrollermotion.h>
+#include <gtkmm/gestureclick.h>
+#include <gtkmm/gesturedrag.h>
+#include <gtkmm/image.h>
 
-#include "dialog-multipaned.h"
 #include "dialog-window.h"
 #include "ui/controller.h"
 #include "ui/util.h"

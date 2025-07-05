@@ -3,9 +3,6 @@
 #ifndef INKSCAPE_UI_WIDGET_COMPLETION_POPUP_H
 #define INKSCAPE_UI_WIDGET_COMPLETION_POPUP_H
 
-#include <sigc++/signal.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 #include <gtkmm/builder.h>
 

@@ -7,7 +7,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "scroll-utils.h"
 #include <gtkmm/scrolledwindow.h>
 #include "ui/util.h"
 

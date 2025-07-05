@@ -11,7 +11,10 @@
  */
 
 #include "bin.h"
+
 #include <cassert>
+
+#include "ui/containerize.h"
 
 namespace Inkscape::UI::Widget {
 

@@ -10,10 +10,7 @@
 
 #include "desktop.h"
 #include "desktop-style.h"
-#include "layer-manager.h"
 #include "selection.h"
-
-#include "xml/sp-css-attr.h"
 
 namespace Inkscape {
 namespace UI {

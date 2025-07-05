@@ -11,7 +11,6 @@
 #define INKSCAPE_UI_WIDGET_CANVAS_STORES_H
 
 #include "fragment.h"
-#include "util.h"
 #include "ui/util.h"
 
 namespace Inkscape::UI::Widget {

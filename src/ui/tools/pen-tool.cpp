@@ -38,7 +38,8 @@
 #include "live_effects/lpe-spiro.h"             // for sp_spiro_do_effect
 
 #define INKSCAPE_LPE_BSPLINE_C
-#include "live_effects/lpe-bspline.h"           // for sp_bspline_do_effect
+#include "live_effects/lpe-bspline.h" // for sp_bspline_do_effect
+#include "object/sp-namedview.h"
 
 // Given an optionally-present Geom::PathVector, e.g. a smart/raw pointer or an optional,
 // return a copy of it if present, or a blank pathvector otherwise.

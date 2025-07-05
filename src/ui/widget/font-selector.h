@@ -31,20 +31,10 @@
 #ifndef INKSCAPE_UI_WIDGET_FONT_SELECTOR_H
 #define INKSCAPE_UI_WIDGET_FONT_SELECTOR_H
 
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <gtkmm/cellrenderertext.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/label.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treeview.h>
-#include <sigc++/connection.h>
-#include <memory>
-#include <sigc++/signal.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/widget/font-selector-interface.h"
 #include "ui/widget/font-variations.h"
 

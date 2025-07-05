@@ -13,24 +13,17 @@
 
 #include "layer-selector.h"
 
-#include <string>
 #include <glibmm/i18n.h>
-#include <glibmm/ustring.h>
-#include <gdkmm/display.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/image.h>
-#include <gtkmm/styleprovider.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "layer-manager.h"
-#include "object/sp-item-group.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
-#include "ui/util.h"
 
 namespace Inkscape::UI::Widget {
 

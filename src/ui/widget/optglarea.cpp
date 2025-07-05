@@ -2,13 +2,10 @@
 
 #include "optglarea.h"
 
-#include <cassert>
-#include <utility>
 #include <gdkmm/glcontext.h>
 #include <gdkmm/gltexture.h>
 #include <gdkmm/gltexturebuilder.h>
 #include <gtkmm/snapshot.h>
-#include <2geom/int-point.h>
 #include "ui/widget/canvas/texture.h"
 
 namespace Inkscape::UI::Widget {

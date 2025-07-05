@@ -12,11 +12,8 @@
 
 #include "notebook-page.h"
 
-#include <gtkmm/enums.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/object.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/widget.h>
 
 #include "ui/pack.h"
 

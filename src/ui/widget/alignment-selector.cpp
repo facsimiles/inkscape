@@ -7,10 +7,7 @@
 
 #include "ui/widget/alignment-selector.h"
 
-#include <utility>
 #include <gtkmm/image.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"

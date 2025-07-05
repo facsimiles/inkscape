@@ -12,12 +12,6 @@
 #ifndef SEEN_COLOR_PALETTE_H
 #define SEEN_COLOR_PALETTE_H
 
-#include <memory>
-#include <vector>
-#include <glibmm/ustring.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <sigc++/signal.h>
 #include <2geom/int-point.h>
 
 #include "ui/widget/palette_t.h"

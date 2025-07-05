@@ -11,14 +11,9 @@
 #ifndef INKSCAPE_UI_WIDGET_EVENTS_CANVAS_EVENT_H
 #define INKSCAPE_UI_WIDGET_EVENTS_CANVAS_EVENT_H
 
-#include <cstdint>
-#include <memory>
-#include <optional>
-
-#include <gdk/gdk.h>
-#include <gdkmm/enums.h>
-#include <gdkmm/event.h>
 #include <2geom/point.h>
+#include <gdkmm/event.h>
+#include <optional>
 
 #include "enums.h"
 #include "util/variant-visitor.h"

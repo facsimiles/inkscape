@@ -8,9 +8,7 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_PIXELSTREAMER_H
 #define INKSCAPE_UI_WIDGET_CANVAS_PIXELSTREAMER_H
 
-#include <memory>
 #include <2geom/int-point.h>
-#include <cairomm/refptr.h>
 #include <cairomm/surface.h>
 
 namespace Inkscape {

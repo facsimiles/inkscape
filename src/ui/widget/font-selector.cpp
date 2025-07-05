@@ -10,32 +10,16 @@
 
 #include "font-selector.h"
 
-#include <gdkmm/contentprovider.h>
-#include <glibmm/i18n.h>
-#include <glibmm/markup.h>
-#include <glibmm/value.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/grid.h>
-#include <sigc++/functors/mem_fun.h>
-#include <stdexcept>
-#include <string>
-#include <vector>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>         // SignalIdle
-#include <glibmm/markup.h>
-#include <memory>
-
-#include "font-selector.h"
 
 #include "libnrtype/font-factory.h"
-#include "libnrtype/font-instance.h"
 #include "libnrtype/font-lister.h"
 // For updating from selection
 #include "inkscape.h"
-#include "desktop.h"
 #include "preferences.h"
 #include "object/sp-text.h"
-#include "ui/controller.h"
 #include "util-string/ustring-format.h"
 
 namespace Inkscape::UI::Widget {

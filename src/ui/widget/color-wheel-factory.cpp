@@ -2,10 +2,8 @@
 //
 
 #include <chrono>
-#include "color-wheel-factory.h"
 
 #include "color-plate.h"
-#include "ink-color-wheel.h"
 #include "oklab-color-wheel.h"
 
 namespace Inkscape::UI::Widget {

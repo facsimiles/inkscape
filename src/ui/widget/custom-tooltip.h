@@ -3,7 +3,6 @@
 #ifndef INKSCAPE_UI_WIDGET_CUSTOM_TOOLTIP_H
 #define INKSCAPE_UI_WIDGET_CUSTOM_TOOLTIP_H
 
-#include <glibmm/refptr.h>
 #include <gtkmm/enums.h>
 
 namespace Gtk {

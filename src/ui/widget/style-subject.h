@@ -16,15 +16,7 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_STYLE_SUBJECT_H
 #define SEEN_INKSCAPE_UI_WIDGET_STYLE_SUBJECT_H
 
-#include <optional>
-#include <2geom/rect.h>
-#include <cstddef>
-#include <sigc++/sigc++.h>
-
 #include "object/sp-item.h"
-#include "object/sp-tag.h"
-#include "object/sp-tag-use.h"
-#include "object/sp-tag-use-reference.h"
 
 class SPDesktop;
 class SPObject;

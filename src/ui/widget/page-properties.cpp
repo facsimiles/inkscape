@@ -14,29 +14,15 @@
 
 #include "page-properties.h"
 
-#include <algorithm>
-#include <cstdint>
-#include <memory>
-#include <stdexcept>
-#include <tuple>
-#include <type_traits>
-#include <utility>
-
-#include <glibmm/i18n.h>
 #include <giomm/menu.h>
-#include <giomm/simpleaction.h>
 #include <giomm/simpleactiongroup.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
+#include <glibmm/i18n.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/image.h>
 #include <gtkmm/label.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/popovermenu.h>
-#include <gtkmm/checkbutton.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 
 #include "page-size-preview.h"
@@ -44,7 +30,6 @@
 #include "ui/operation-blocker.h"
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
-#include "ui/widget/registry.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-menu.h"
 #include "util/paper.h"

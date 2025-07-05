@@ -15,24 +15,14 @@
 
 #include "ui/widget/ink-color-wheel.h"
 
-#include <2geom/angle.h>
-#include <2geom/coord.h>
-#include <algorithm>
-#include <cstring>
-#include <gdkmm/display.h>
 #include <gdkmm/general.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <sigc++/functors/mem_fun.h>
-#include <utility>
 
-#include "colors/spaces/enum.h"
 #include "colors/spaces/hsluv.h"
-#include "colors/utils.h"
 #include "ui/controller.h"
-#include "ui/dialog/color-item.h"
 #include "ui/util.h"
 #include "ui/widget/bin.h"
 

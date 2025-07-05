@@ -10,51 +10,39 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <algorithm>
-#include <cmath>
-#include <vector>
-#include <sigc++/connection.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
-#include <glibmm/ustring.h>
+#include "selected-style.h"
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/checkbutton.h>
 
-#include "selected-style.h"
-#include "colors/manager.h"
 #include "colors/xml-color.h"
 #include "desktop-style.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "message-context.h"
-#include "selection.h"
-#include "style.h"
-
 #include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
+#include "selection.h"
+#include "style.h"
 #include "svg/css-ostringstream.h"
 #include "ui/controller.h"
-#include "ui/clipboard.h"
 #include "ui/cursor-utils.h"
 #include "ui/dialog/dialog-container.h"
-#include "ui/dialog/dialog-base.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/icon-names.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/gradient-image.h"
-#include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
+#include "util-string/ustring-format.h"
 #include "util/units.h"
 #include "util/value-utils.h"
-#include "util-string/ustring-format.h"
 #include "util/variant-visitor.h"
 
 static constexpr int SELECTED_STYLE_SB_WIDTH     =  48;

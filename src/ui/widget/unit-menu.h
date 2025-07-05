@@ -11,8 +11,6 @@
 #ifndef INKSCAPE_UI_WIDGET_UNIT_H
 #define INKSCAPE_UI_WIDGET_UNIT_H
 
-#include <glibmm/refptr.h>
-
 #include "util/units.h"
 #include "ui/widget/drop-down-list.h"
 

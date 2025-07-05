@@ -18,38 +18,32 @@
 
 #include "stroke-style.h"
 
-#include <iostream>
-#include <iomanip>
-
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/togglebutton.h>
-
-#include "document-undo.h"
-#include "fill-or-stroke.h"
-#include "inkscape.h"
-#include "selection.h"
 
 #include "actions/actions-tools.h"
-#include "object/sp-marker.h"
+#include "dash-selector.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "fill-or-stroke.h"
+#include "inkscape.h"
+#include "marker-combo-box.h"
 #include "object/sp-namedview.h"
-#include "object/sp-rect.h"
-#include "object/sp-stop.h"
 #include "object/sp-text.h"
+#include "selection.h"
+#include "style.h"
 #include "svg/css-ostringstream.h"
+#include "ui/dialog-events.h"
+#include "ui/dialog/dialog-base.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
-#include "ui/util.h"
-#include "ui/widget/dash-selector.h"
-#include "ui/widget/marker-combo-box.h"
-#include "ui/widget/unit-menu.h"
 #include "ui/tools/marker-tool.h"
-#include "ui/dialog-events.h"
-#include "ui/dialog/dialog-base.h"
+#include "ui/util.h"
+#include "ui/widget/unit-menu.h"
 #include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;

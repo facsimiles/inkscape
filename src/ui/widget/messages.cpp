@@ -14,6 +14,8 @@
 
 #include "messages.h"
 
+#include <glibmm/i18n.h>
+
 #include "ui/pack.h"
 
 namespace Inkscape::UI::Widget {

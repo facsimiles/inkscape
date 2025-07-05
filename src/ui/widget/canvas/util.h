@@ -2,13 +2,11 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_UTIL_H
 #define INKSCAPE_UI_WIDGET_CANVAS_UTIL_H
 
-#include <array>
-#include <2geom/int-rect.h>
-#include <2geom/affine.h>
-#include <cairomm/cairomm.h>
+#include <cairomm/context.h>
+#include <cairomm/refptr.h>
+#include <cairomm/region.h>
 
 #include "colors/color.h"
-#include "colors/utils.h"
 
 namespace Inkscape {
 namespace UI {

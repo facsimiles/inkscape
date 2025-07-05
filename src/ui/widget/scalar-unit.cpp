@@ -12,8 +12,6 @@
 
 #include "scalar-unit.h"
 
-#include <utility>
-
 #include "spinbutton.h"
 #include "ui/pack.h"
 

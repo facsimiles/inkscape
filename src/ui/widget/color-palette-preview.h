@@ -15,7 +15,6 @@
 #ifndef SEEN_UI_WIDGET_COLOR_PALETTE_PREVIEW_H
 #define SEEN_UI_WIDGET_COLOR_PALETTE_PREVIEW_H
 
-#include <vector>
 #include <gtkmm/drawingarea.h>
 
 #include "ui/widget/palette_t.h"

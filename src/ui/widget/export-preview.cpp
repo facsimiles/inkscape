@@ -9,14 +9,7 @@
 
 #include "export-preview.h"
 
-#include <utility>
-#include <glibmm/convert.h>
-#include <glibmm/main.h>
-#include <gdkmm/pixbuf.h>
-
 #include "document.h"
-#include "display/cairo-utils.h"
-#include "object/sp-item.h"
 #include "object/sp-root.h"
 #include "util/preview.h"
 #include "io/resource.h"

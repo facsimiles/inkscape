@@ -14,7 +14,6 @@
 
 #include "scalar.h"
 
-#include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/checkbutton.h>
 

@@ -8,10 +8,7 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_UPDATERS_H
 #define INKSCAPE_UI_WIDGET_CANVAS_UPDATERS_H
 
-#include <vector>
-#include <memory>
 #include <2geom/int-rect.h>
-#include <cairomm/refptr.h>
 #include <cairomm/region.h>
 
 namespace Inkscape {

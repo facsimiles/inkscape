@@ -17,7 +17,6 @@
 #define INKSCAPE_UI_WIDGET_UNIT_TRACKER_H
 
 #include <map>
-#include <vector>
 #include <glibmm/refptr.h>
 
 #include "util/units.h"

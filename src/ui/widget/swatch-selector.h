@@ -12,7 +12,9 @@
 
 #include <gtkmm/box.h>
 
-#include "colors/color-set.h"
+namespace Inkscape::Colors {
+class ColorSet;
+}
 
 class SPDocument;
 class SPGradient;

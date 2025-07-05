@@ -12,15 +12,11 @@
 
 #include "page-selector.h"
 
-#include <cstring>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
-#include <string>
 
 #include "desktop.h"
-#include "document.h"
 #include "object/sp-page.h"
-#include "page-manager.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 

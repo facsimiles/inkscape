@@ -12,9 +12,6 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_PALETTE_T_H
 #define SEEN_INKSCAPE_UI_WIDGET_PALETTE_T_H
 
-#include <vector>
-#include <glibmm/ustring.h>
-
 namespace Inkscape::UI::Widget {
 
 struct rgb_t { double r; double g; double b; };

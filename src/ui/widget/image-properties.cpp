@@ -9,29 +9,17 @@
 
 #include "image-properties.h"
 
-#include <array>
-#include <sstream>
-#include <string>
-#include <cairomm/context.h>
 #include <giomm/file.h>
 #include <glib/gi18n.h>
-#include <glibmm/convert.h>
-#include <glibmm/markup.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 
 #include "display/cairo-utils.h"
 #include "document-undo.h"
 #include "enums.h"
-#include "object/sp-image.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog/choose-file.h"
 #include "ui/dialog/save-image.h"

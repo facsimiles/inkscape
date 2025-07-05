@@ -13,13 +13,7 @@
 #ifndef SEEN_SP_COLOR_NOTEBOOK_H
 #define SEEN_SP_COLOR_NOTEBOOK_H
 
-#include <memory>               // for unique_ptr
-#include <vector>               // for vector
-
-#include <glibmm/ustring.h>     // for ustring
 #include <gtkmm/grid.h>         // for Grid
-#include <gtkmm/widget.h>       // for GtkWidget, Widget (ptr only)
-#include <sigc++/connection.h>  // for connection
 
 #include "colors/color-set.h"
 #include "preferences.h"        // for PrefObserver

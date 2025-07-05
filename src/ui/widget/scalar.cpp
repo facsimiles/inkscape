@@ -13,7 +13,6 @@
 
 #include "scalar.h"
 
-#include <cmath>
 #include <gtkmm/label.h>
 #include <gtkmm/scale.h>
 

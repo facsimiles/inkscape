@@ -13,11 +13,7 @@
 
 #include "gradient-image.h"
 
-#include <cairomm/context.h>
-#include <cairomm/surface.h>
 #include <gdkmm/pixbuf.h>
-#include <gtkmm/drawingarea.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "display/cairo-utils.h"
 #include "object/sp-gradient.h"

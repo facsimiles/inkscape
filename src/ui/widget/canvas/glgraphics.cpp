@@ -3,9 +3,7 @@
 #include "glgraphics.h"
 
 #include <2geom/transforms.h>
-#include <2geom/rect.h>
 
-#include "ui/util.h"
 #include "helper/geom.h"
 #include "stores.h"
 #include "prefs.h"

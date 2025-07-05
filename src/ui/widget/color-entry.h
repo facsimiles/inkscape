@@ -14,7 +14,6 @@
 
 #include <gtkmm/entry.h>
 
-#include "colors/color.h"
 #include "colors/color-set.h"
 
 namespace Inkscape {

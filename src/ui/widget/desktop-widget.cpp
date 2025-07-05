@@ -23,45 +23,30 @@
 
 #include "desktop-widget.h"
 
-#include <algorithm>
-#include <string>
-#include <2geom/rect.h>
 #include <glibmm/i18n.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/widget.h>
 
-#include "actions/actions-tools.h"
 #include "conn-avoid-ref.h"
-#include "helper/mathfns.h"
-#include "message-context.h"
-#include "ui/tools/tool-base.h"
-#include "desktop.h"
 #include "document.h"
-#include "document-undo.h"
 #include "enums.h"
-#include "inkscape.h"
+#include "helper/mathfns.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "object/sp-image.h"
 #include "object/sp-namedview.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
-#include "ui/dialog/dialog-window.h"
-#include "ui/dialog-run.h"
 #include "ui/dialog/swatches.h"
-#include "ui/monitor.h"   // Monitor aspect ratio
-#include "ui/shortcuts.h"
+#include "ui/monitor.h" // Monitor aspect ratio
 #include "ui/themes.h"
 #include "ui/toolbar/command-toolbar.h"
 #include "ui/toolbar/snap-toolbar.h"
+#include "ui/toolbar/tool-toolbar.h"
 #include "ui/toolbar/toolbar-constants.h"
 #include "ui/toolbar/toolbars.h"
-#include "ui/toolbar/tool-toolbar.h"
+#include "ui/tools/tool-base.h"
 #include "ui/tools/tool-data.h"
 #include "ui/util.h"
 #include "ui/widget/canvas-grid.h"
@@ -70,9 +55,7 @@
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/status-bar.h"
 #include "ui/widget/tabs-widget.h"
-#include "ui/widget/unit-tracker.h"
 #include "util/units.h"
-#include "widgets/widget-sizes.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::DialogContainer;

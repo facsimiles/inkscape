@@ -3,14 +3,9 @@
 #ifndef SEEN_SVG_RENDERER_H
 #define SEEN_SVG_RENDERER_H
 
-#include <cstdint>
-#include <memory>
-#include <optional>
-#include <cairomm/refptr.h>
 #include <cairomm/surface.h>
 #include <glibmm/refptr.h>
-
-#include "colors/color.h"
+#include <optional>
 
 class SPDocument;
 class SPRoot;

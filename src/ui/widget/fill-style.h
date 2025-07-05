@@ -18,8 +18,6 @@
 #include "ui/operation-blocker.h"
 #include "ui/widget/paint-selector.h"
 
-#include <gtkmm/box.h>
-
 namespace Gtk {
 class Widget;
 }

@@ -10,9 +10,6 @@
 
 #include "font-variants.h"
 
-#include <iostream>
-#include <string>
-#include <vector>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/regex.h>
@@ -20,7 +17,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include <libnrtype/font-factory.h>
 #include <libnrtype/font-instance.h>
-#include <sigc++/functors/mem_fun.h>
 
 // For updating from selection
 #include "desktop.h"

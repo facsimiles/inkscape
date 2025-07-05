@@ -44,6 +44,7 @@
 #include "xml/sp-css-attr.h"
 
 // this is only to flatten nonzero fillrule
+#include "line.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 

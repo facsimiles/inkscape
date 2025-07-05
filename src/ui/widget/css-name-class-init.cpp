@@ -11,8 +11,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <utility>
-#include <glib.h>
 #include <gtk/gtk.h>
 #include "ui/widget/css-name-class-init.h"
 

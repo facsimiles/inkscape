@@ -13,15 +13,8 @@
 #define INKSCAPE_UI_WIDGET_COMBO_ENUMS_H
 
 #include <glibmm/i18n.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/stringlist.h>
-#include <gtkmm/stringobject.h>
-#include <gtkmm/treemodel.h>
 
 #include "attr-widget.h"
-// #include "template-list.h"
 #include "ui/widget/drop-down-list.h"
 #include "ui/widget/labelled.h"
 #include "util/enums.h"

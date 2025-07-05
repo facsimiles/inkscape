@@ -1,48 +1,27 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <algorithm>
-#include <array>
-#include <glibmm/main.h>
-#include <glibmm/priorities.h>
-#include <glibmm/ustring.h>
+#include "font-list.h"
+
 #include <giomm/menu.h>
 #include <giomm/simpleactiongroup.h>
-#include <gtkmm/cellrenderertext.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/label.h>
-#include <gtkmm/progressbar.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/stringlist.h>
-#include <gtkmm/treeiter.h>
-#include <gtkmm/widget.h>
-#include <iostream>
-#include <iterator>
-#include <iomanip>
-#include <memory>
-#include <pangomm/fontdescription.h>
-#include <pangomm/fontfamily.h>
-#include <set>
-#include <glibmm/markup.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/menubutton.h>
+#include <gtkmm/progressbar.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/searchentry2.h>
+#include <gtkmm/separator.h>
 #include <gtkmm/snapshot.h>
-#include <gtkmm/scale.h>
+#include <gtkmm/stringlist.h>
 #include <gtkmm/togglebutton.h>
-#include <glibmm/i18n.h>
-#include <pangomm.h>
-#include <libnrtype/font-factory.h>
-#include <libnrtype/font-instance.h>
-#include <vector>
-#include "font-list.h"
+#include <iomanip>
+
 #include "preferences.h"
+#include "svg/css-ostringstream.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/popover-menu-item.h"
 #include "ui/widget/popover-menu.h"
 #include "util/font-collections.h"
-#include "svg/css-ostringstream.h"
 
 using Inkscape::UI::create_builder;
 

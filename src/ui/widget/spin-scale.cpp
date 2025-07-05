@@ -18,10 +18,8 @@
 
 #include "spin-scale.h"
 
-#include <utility>
-#include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
-#include <gtkmm/enums.h>
+#include <gtkmm/adjustment.h>
 
 #include "ui/pack.h"
 

@@ -3,10 +3,7 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_NOTICE_H
 #define INKSCAPE_UI_WIDGET_CANVAS_NOTICE_H
 
-#include <glibmm/refptr.h>
 #include <gtkmm/revealer.h>
-
-#include <sigc++/scoped_connection.h>
 
 namespace Gtk {
 class Builder;

@@ -15,12 +15,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gdkmm/enums.h>
-#include <utility>
-#include <gdk/gdk.h>
-#include <sigc++/functors/mem_fun.h>
 #include <gdkmm/general.h>
-#include <gdkmm/cursor.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
@@ -31,7 +26,6 @@
 #include "ink-spinscale.h"
 #include "ui/controller.h"
 #include "ui/pack.h"
-#include "ui/util.h"
 
 namespace Controller = Inkscape::UI::Controller;
 

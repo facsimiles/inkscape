@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "tabs-widget.h"
 
-#include <cassert>
 #include <glibmm/i18n.h>
-#include <giomm/menu.h>
-#include <glibmm/main.h>
-#include <gtkmm/button.h>
 #include <gtkmm/dragicon.h>
-#include <gtkmm/dragsource.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/label.h>
 #include <gtkmm/picture.h>
 #include <gtkmm/popovermenu.h>
 #include <gtkmm/snapshot.h>

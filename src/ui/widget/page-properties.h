@@ -16,7 +16,6 @@
 #define INKSCAPE_UI_WIDGET_PAGE_PROPERTIES_H
 
 #include <gtkmm/box.h>
-#include <sigc++/signal.h>
 
 namespace Inkscape {
 

@@ -10,29 +10,22 @@
 #include "pattern-editor.h"
 
 #include <iomanip>
-#include <cairo.h>
 #include <glibmm/i18n.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
-#include <gtkmm/entry.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/picture.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/viewport.h>
 
 #include "document.h"
-#include "preferences.h"
-
-#include "pattern-manager.h"
+#include "object/sp-pattern.h"
 #include "pattern-manipulation.h"
+#include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/pack.h"
 #include "ui/util.h"

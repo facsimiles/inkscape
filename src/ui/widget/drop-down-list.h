@@ -12,7 +12,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/ustring.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/dropdown.h>
 #include <gtkmm/signallistitemfactory.h>

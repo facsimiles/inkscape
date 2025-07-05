@@ -16,14 +16,14 @@
 
 #include "registered-widget.h"
 
+#include <giomm/themedicon.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
-#include <giomm/themedicon.h>
 
+#include "object/sp-namedview.h"
 #include "object/sp-root.h"
 #include "svg/stringstream.h"
-#include "util/safe-printf.h"
 
 namespace Inkscape::UI::Widget {
 

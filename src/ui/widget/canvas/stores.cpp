@@ -9,20 +9,13 @@
 
 #include "stores.h"
 
-#include <algorithm>
-#include <array>
-#include <cmath>
-#include <iostream>
-#include <utility>
-#include <vector>
-#include <2geom/transforms.h>
-#include <2geom/parallelogram.h>
-#include <2geom/point.h>
 #include <2geom/convex-hull.h>
+#include <2geom/parallelogram.h>
 
 #include "graphics.h"
 #include "helper/geom.h"
 #include "prefs.h"
+#include "util.h"
 
 namespace Inkscape::UI::Widget {
 

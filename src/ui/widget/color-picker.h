@@ -15,19 +15,10 @@
 #define SEEN_INKSCAPE_COLOR_PICKER_H
 
 #include "labelled.h"
-#include <cstdint>
-#include <glibmm/ustring.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/popover.h>
-#include <gtkmm/widget.h>
-#include <utility>
 
-#include "colors/color.h"
 #include "colors/color-set.h"
 #include "ui/widget/color-preview.h"
 #include <gtkmm/menubutton.h>
-#include <gtkmm/dialog.h>
-#include <sigc++/signal.h>
 
 namespace Gtk {
 class Builder;

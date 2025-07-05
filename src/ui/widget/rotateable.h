@@ -11,9 +11,7 @@
 #ifndef INKSCAPE_UI_ROTATEABLE_H
 #define INKSCAPE_UI_ROTATEABLE_H
 
-#include <gtk/gtk.h> // GtkEventController*
 #include <gtkmm/box.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
 
 namespace Gtk {
 class GestureClick;

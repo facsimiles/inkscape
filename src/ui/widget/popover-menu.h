@@ -14,7 +14,6 @@
 #ifndef SEEN_UI_WIDGET_POPOVER_MENU_H
 #define SEEN_UI_WIDGET_POPOVER_MENU_H
 
-#include <vector>
 #include <gtkmm/popover.h>
 
 namespace Glib {

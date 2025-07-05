@@ -3,8 +3,22 @@
 #ifndef INK_SPIN_BUTTON_H
 #define INK_SPIN_BUTTON_H
 
-#include <gtkmm.h>
-#include <sigc++/scoped_connection.h>
+#include <glibmm/property.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/button.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/label.h>
+#include <gtkmm/widget.h>
+
+namespace Gtk {
+class EventControllerKey;
+class EventControllerFocus;
+class GestureClick;
+class EventControllerScroll;
+class GestureDrag;
+class EventControllerMotion;
+class Builder;
+}
 
 namespace Inkscape::UI::Widget {
 

@@ -17,15 +17,17 @@
 #include "lpe-perspective-envelope.h"
 
 #include <glibmm/i18n.h>
+#include <gsl/gsl_linalg.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/widget.h>
-#include <gsl/gsl_linalg.h>
 
+#include "crossing.h"
 #include "display/curve.h"
 #include "helper/geom.h"
+#include "line.h"
 #include "object/sp-lpe-item.h"
 #include "ui/pack.h"
 #include "ui/util.h"

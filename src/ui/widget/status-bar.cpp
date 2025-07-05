@@ -11,27 +11,16 @@
 
 #include "status-bar.h"
 
-#include <iostream>
-#include <string>
-#include <utility>
-#include <vector>
 #include <gtkmm/applicationwindow.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/popovermenu.h>
-#include <2geom/point.h>
-#include <2geom/angle.h>  // deg_from_rad
 
 #include "desktop.h"
+#include "selected-style.h"
 #include "ui/builder-utils.h"
-#include "ui/util.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/page-selector.h"
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/selected-style.h"
 
 namespace Inkscape::UI::Widget {
 

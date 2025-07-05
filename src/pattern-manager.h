@@ -4,11 +4,14 @@
 #define INKSCAPE_PATTERN_MANAGER_H
 
 #include <gtkmm/treemodel.h>
-#include <vector>
-#include <unordered_map>
+
 #include "helper/stock-items.h"
 #include "ui/widget/pattern-store.h"
 #include "util/statics.h"
+
+namespace Cairo {
+class Surface;
+}
 
 class SPPattern;
 class SPDocument;

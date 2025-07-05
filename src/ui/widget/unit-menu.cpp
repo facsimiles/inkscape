@@ -8,8 +8,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cmath>
-
 #include "unit-menu.h"
 
 namespace Inkscape::UI::Widget {

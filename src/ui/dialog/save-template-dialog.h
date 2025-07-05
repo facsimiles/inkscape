@@ -11,11 +11,17 @@
 #define INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 
 #include <glibmm/i18n.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/sizegroup.h>
 #include <ui/operation-blocker.h>
 
 #include "ui/widget/document-templates.h"
 #include "ui/widget/ink-spin-button.h"
 
+namespace Gtk {
+class SizeGroup;
+}
 namespace Inkscape::UI::Dialog {
 
 class SaveTemplate : Gtk::Dialog {

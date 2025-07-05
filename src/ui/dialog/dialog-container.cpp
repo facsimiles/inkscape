@@ -39,6 +39,8 @@
 #if WITH_LIBSPELLING
 #include "ui/dialog/spellcheck.h"
 #endif
+#include <gtkmm/viewport.h>
+
 #include "ui/dialog/svg-fonts-dialog.h"
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/symbols.h"

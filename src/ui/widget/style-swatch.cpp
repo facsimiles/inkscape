@@ -14,22 +14,13 @@
 
 #include "style-swatch.h"
 
-#include <functional>
-#include <gtkmm/enums.h>
-#include <utility>
 #include <glibmm/i18n.h>
 #include <gtkmm/grid.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
-#include "style.h"
-
-#include "actions/actions-tools.h"  // Open tool preferences.
 #include "object/sp-linear-gradient.h"
-#include "object/sp-paint-server.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
-#include "ui/controller.h"
+#include "style.h"
 #include "ui/pack.h"
 #include "ui/util.h"
 #include "ui/widget/color-preview.h"

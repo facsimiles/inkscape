@@ -14,11 +14,7 @@
 #ifndef SEEN_SP_GRADIENT_IMAGE_H
 #define SEEN_SP_GRADIENT_IMAGE_H
 
-#include <cairomm/refptr.h>
-#include <glibmm/refptr.h>
 #include <gtkmm/drawingarea.h>
-
-#include <sigc++/scoped_connection.h>
 
 class SPGradient;
 class SPObject;

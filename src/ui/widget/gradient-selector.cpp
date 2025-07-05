@@ -14,14 +14,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <string>
 #include <glibmm/i18n.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "actions/actions-tools.h" // Invoke gradient tool
 #include "document.h"
@@ -31,8 +27,6 @@
 #include "inkscape.h"
 #include "object/sp-defs.h"
 #include "preferences.h"
-#include "ui/controller.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/gradient-vector-selector.h"

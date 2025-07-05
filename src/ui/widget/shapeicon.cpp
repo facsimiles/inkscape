@@ -10,14 +10,6 @@
 
 #include "ui/widget/shapeicon.h"
 
-#include <algorithm>
-#include <utility>
-#include <glibmm/ustring.h>
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/snapshot.h>
-#include <gtkmm/widget.h>
-
 #include "ui/icon-loader.h"
 #include "ui/util.h"
 

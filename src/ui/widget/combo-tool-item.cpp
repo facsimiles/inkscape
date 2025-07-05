@@ -13,12 +13,6 @@
 
 #include "combo-tool-item.h"
 
-#include <utility>
-#include <vector>
-#include <sigc++/functors/mem_fun.h>
-#include <gdkmm/pixbuf.h>
-#include <gtkmm/cellrendererpixbuf.h>
-#include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>

@@ -19,8 +19,6 @@
 
 #include "licensor.h"
 
-#include <algorithm>
-#include <cassert>
 #include <gtkmm/entry.h>
 #include <gtkmm/checkbutton.h>
 

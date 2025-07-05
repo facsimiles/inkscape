@@ -12,45 +12,26 @@
 
 #include "gradient-editor.h"
 
-#include <array>
-#include <initializer_list>
-#include <utility>
-#include <2geom/point.h>
-#include <2geom/line.h>
-#include <2geom/transforms.h>
-#include <cairo.h>
 #include <glibmm/i18n.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/expander.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/treeview.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
+#include "display/cairo-utils.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
-#include "preferences.h"
-#include "display/cairo-utils.h"
-#include "io/resource.h"
-#include "object/sp-gradient-vector.h"
 #include "object/sp-linear-gradient.h"
-#include "svg/css-ostringstream.h"
+#include "object/sp-stop.h"
 #include "ui/builder-utils.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
-#include "ui/widget/color-preview.h"
-#include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
+#include "ui/widget/popover-menu.h"
 
 namespace Inkscape::UI::Widget {
 

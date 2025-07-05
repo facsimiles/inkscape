@@ -10,21 +10,14 @@
 #include "export-lists.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/convert.h>   // filename_from_utf8
-#include <glibmm/ustring.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/viewport.h>
 
 #include "extension/db.h"
 #include "extension/output.h"
-#include "file.h"
-#include "helper/png-write.h"
 #include "io/sys.h"
-#include "preferences.h"
 #include "ui/icon-loader.h"
 #include "ui/builder-utils.h"
 #include "util/units.h"

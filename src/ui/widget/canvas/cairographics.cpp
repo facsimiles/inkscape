@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 #include <2geom/parallelogram.h>
-#include "ui/util.h"
 #include "cairographics.h"
 #include "stores.h"
 #include "prefs.h"

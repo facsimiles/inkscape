@@ -13,39 +13,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/ustring.h>
-#include <gtkmm/stringobject.h>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <utility>
+#include "ui/widget/preferences-widget.h"
+
 #include <glibmm/i18n.h>
-#include <glibmm/convert.h>
-#include <glibmm/regex.h>
-#include <giomm/file.h> // query_info_async
-#include <gtkmm/box.h>
-#include <gtkmm/popover.h>
-#include <gtkmm/filedialog.h> // select_folder
-#include <gtkmm/scale.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
-#include "inkscape.h"
-#include "inkscape-window.h"
-#include "message-stack.h"
-#include "preferences-widget.h"
-#include "preferences.h"
-#include "selcue.h"
-#include "selection-chemistry.h"
 #include "include/gtkmm_version.h"
-#include "io/sys.h"
-#include "ui/dialog/choose-file.h"
+#include "inkscape-window.h"
+#include "inkscape.h"
+#include "preferences.h"
 #include "ui/dialog/choose-file-utils.h"
+#include "ui/dialog/choose-file.h"
 #include "ui/icon-loader.h"
 #include "ui/pack.h"
-#include "ui/popup-menu.h"
 #include "ui/util.h"
-#include "ui/widget/preferences-widget.h"
 
 #ifdef _WIN32
 #include <windows.h>

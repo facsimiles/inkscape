@@ -16,7 +16,6 @@
 
 #include "unit-tracker.h"
 
-#include <algorithm>
 #include <iostream>
 #include <gtkmm/liststore.h>
 

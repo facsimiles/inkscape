@@ -12,7 +12,6 @@
 #define INKSCAPE_UI_WIDGET_REGISTERED_ENUMS_H
 
 #include "ui/widget/combo-enums.h"
-#include "ui/widget/registered-widget.h"
 
 namespace Inkscape {
 namespace UI {

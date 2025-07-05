@@ -11,10 +11,7 @@
 #ifndef INKSCAPE_UI_WIDGET_FONT_VARIANT_H
 #define INKSCAPE_UI_WIDGET_FONT_VARIANT_H
 
-#include <map>
-#include <string>
 #include <gtkmm/box.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/grid.h>

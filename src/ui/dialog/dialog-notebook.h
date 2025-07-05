@@ -15,6 +15,9 @@
 #ifndef INKSCAPE_UI_DIALOG_NOTEBOOK_H
 #define INKSCAPE_UI_DIALOG_NOTEBOOK_H
 
+#include <gtkmm/notebook.h>
+#include <gtkmm/scrolledwindow.h>
+
 #include "dialog-container.h"
 #include "preferences.h"
 #include "ui/widget/popover-menu.h"

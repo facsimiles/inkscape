@@ -14,7 +14,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/label.h>
 #include <gtkmm/expander.h>

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#include <unordered_map>
+
 #include <vector>
-#include <cassert>
 #include <boost/unordered_map.hpp> // For hash of pair
+
 #include "helper/mathfns.h"
 #include "texturecache.h"
 

@@ -14,9 +14,7 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
-#include <gtkmm/image.h>
 
-#include "ui/icon-loader.h"
 #include "ui/pack.h"
 
 namespace Inkscape::UI::Widget {

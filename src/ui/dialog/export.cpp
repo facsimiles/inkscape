@@ -21,16 +21,16 @@
 #include <gtkmm/notebook.h>
 
 #include "desktop.h"
-#include "inkscape.h"
-
 #include "extension/output.h"
 #include "helper/png-write.h"
+#include "inkscape.h"
 #include "io/resource.h"
-#include "io/sys.h"                         // for sanitizeString, file_test
-#include "object/object-set.h"              // for ObjectSet
-#include "object/sp-page.h"                 // for SPPage
-#include "object/sp-root.h"                 // for SPRoot
-#include "object/weakptr.h"                 // for SPWeakPtr
+#include "io/sys.h"            // for sanitizeString, file_test
+#include "object/object-set.h" // for ObjectSet
+#include "object/sp-page.h"    // for SPPage
+#include "object/sp-root.h"    // for SPRoot
+#include "object/weakptr.h"    // for SPWeakPtr
+#include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog/export-single.h"
 #include "ui/interface.h"

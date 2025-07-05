@@ -14,10 +14,6 @@
 #ifndef INKSCAPE_UI_WIDGET_TABS_WIDGET_H
 #define INKSCAPE_UI_WIDGET_TABS_WIDGET_H
 
-#include <memory>
-#include <vector>
-
-#include <sigc++/scoped_connection.h>
 #include <gtkmm/widget.h>
 #include <2geom/point.h>
 

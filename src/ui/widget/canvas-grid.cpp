@@ -16,31 +16,21 @@
 // how to add the buttons easily via a .ui file (which would allow the user to put any
 // buttons they want in their place).
 
-#include <utility>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/image.h>
 #include <gtkmm/label.h>
-#include <gtkmm/popover.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "canvas-grid.h"
 #include "desktop.h"        // Hopefully temp.
-#include "desktop-events.h" // Hopefully temp.
 #include "document-undo.h"
 #include "message-context.h"
 #include "selection.h"
 #include "display/control/canvas-item-guideline.h"
 #include "page-manager.h"
 
-#include "io/resource.h"
 #include "object/sp-grid.h"
 #include "object/sp-root.h"
 #include "ui/builder-utils.h"
@@ -48,7 +38,6 @@
 #include "ui/dialog/command-palette.h"
 #include "ui/drag-and-drop.h"
 #include "ui/tools/tool-base.h"
-#include "ui/util.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"  // Hopefully temp.
 #include "ui/widget/events/canvas-event.h"

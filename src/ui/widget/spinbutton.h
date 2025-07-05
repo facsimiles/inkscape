@@ -11,8 +11,6 @@
 #ifndef INKSCAPE_UI_WIDGET_SPINBUTTON_H
 #define INKSCAPE_UI_WIDGET_SPINBUTTON_H
 
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/spinbutton.h>
 
 #include "ui/popup-menu.h"

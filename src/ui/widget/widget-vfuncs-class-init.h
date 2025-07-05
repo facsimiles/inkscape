@@ -14,10 +14,9 @@
 #ifndef SEEN_UI_WIDGET_WIDGET_VFUNCS_CLASS_INIT_H
 #define SEEN_UI_WIDGET_WIDGET_VFUNCS_CLASS_INIT_H
 
-#include <optional>
 #include <glibmm/extraclassinit.h>
-#include <gtk/gtk.h>
 #include <gtkmm/enums.h>
+#include <optional>
 
 namespace Inkscape::UI::Widget {
 

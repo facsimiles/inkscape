@@ -8,13 +8,10 @@
  * Copyright (C) 2014 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#include <glibmm.h>
+
 #include <glibmm/i18n.h>
-#include <iomanip>
-#include <iostream>
 
 #include "color-entry.h"
-#include "util-string/ustring-format.h"
 
 namespace Inkscape {
 namespace UI {

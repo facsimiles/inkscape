@@ -18,48 +18,25 @@
 
 #include "paint-selector.h"
 
-#include <cstring>
-#include <exception>
-#include <iostream>
-#include <string>
-#include <vector>
-
-#include <2geom/affine.h>
-#include <2geom/point.h>
-#include <2geom/transforms.h>
-#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop-style.h"
 #include "document.h"
-#include "style.h"
 #include "inkscape.h"
-
-#include "helper/stock-items.h"
-#include "io/resource.h"
-#include "io/sys.h"
 #include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-stop.h"
-#include "path-prefix.h"
-#include "pattern-manipulation.h"
-#include "svg/css-ostringstream.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/gradient-editor.h"
-#include "ui/widget/gradient-selector.h"
 #include "ui/widget/pattern-editor.h"
-#include "ui/widget/swatch-selector.h"
 #include "widgets/widget-sizes.h"
-#include "xml/repr.h"
 
 #ifdef SP_PS_VERBOSE
 static gchar const *modeStrings[] = {

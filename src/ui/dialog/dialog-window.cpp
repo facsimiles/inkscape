@@ -13,10 +13,12 @@
 #include "dialog-window.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/shortcutcontroller.h>
 
 #include "document.h"
-#include "inkscape.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/pack.h"

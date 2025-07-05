@@ -12,19 +12,12 @@
  */
 
 #include "color-picker.h"
-#include <glibmm/ustring.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/widget.h>
-#include <utility>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "ui/util.h"
 #include "ui/widget/color-notebook.h"
-#include "ui/widget/color-preview.h"
 
 static bool _in_use = false;
 

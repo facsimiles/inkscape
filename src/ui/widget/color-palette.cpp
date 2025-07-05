@@ -9,27 +9,17 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/enums.h>
-#include <utility>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/ustring.h>
 #include <gdkmm/frameclock.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
+#include <gtkmm/box.h>
 #include <gtkmm/flowbox.h>
-#include <gtkmm/flowboxchild.h>
-#include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/scale.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "color-palette.h"
 #include "ui/builder-utils.h"

@@ -11,9 +11,6 @@
 
 #include "ui/widget/iconrenderer.h"
 
-#include <utility>
-#include <sigc++/functors/mem_fun.h>
-
 namespace Inkscape::UI::Widget {
 
 IconRenderer::IconRenderer() :

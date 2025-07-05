@@ -14,7 +14,6 @@
 
 #include <gtkmm/cellrenderer.h>
 #include <glibmm/property.h>
-#include <glibmm/refptr.h>
 
 namespace Gdk {
 class Event;

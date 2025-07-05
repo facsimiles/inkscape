@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "ui/util.h"
+
 #include "helper/geom.h"
 #include "util.h"
 

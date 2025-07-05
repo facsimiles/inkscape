@@ -14,15 +14,7 @@
 
 #include "canvas.h"
 
-#include <algorithm> // Sort
-#include <array>
-#include <cassert>
-#include <iostream> // Logging
-#include <mutex>
-#include <set> // Coarsener
 #include <thread>
-#include <utility>
-#include <vector>
 #include <boost/asio/thread_pool.hpp>
 #include <boost/asio/post.hpp>
 #include <gtkmm/eventcontrollerfocus.h>
@@ -33,9 +25,7 @@
 #include <gdkmm/glcontext.h>
 #include <gtkmm/applicationwindow.h>
 #include <gtkmm/gestureclick.h>
-#include <sigc++/functors/mem_fun.h>
 
-#include "canvas/fragment.h"
 #include "canvas/graphics.h"
 #include "canvas/prefs.h"
 #include "canvas/stores.h"
@@ -49,14 +39,11 @@
 #include "display/control/canvas-item-group.h"
 #include "display/control/snap-indicator.h"
 #include "display/drawing.h"
-#include "display/drawing-item.h"
 #include "document.h"
 #include "events/canvas-event.h"
 #include "helper/geom.h"
-#include "preferences.h"
 #include "ui/controller.h"
 #include "ui/tools/tool-base.h"      // Default cursor
-#include "ui/util.h"
 
 #include "canvas/updaters.h"         // Update strategies
 #include "canvas/framecheck.h"       // For frame profiling

@@ -17,19 +17,12 @@
 #define noDUMP_CHANGE_INFO
 
 #include <glibmm/i18n.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/label.h>
-#include <gtkmm/stack.h>
 #include <gtkmm/stackswitcher.h>
 
 #include "desktop.h"
-#include "document.h"
 #include "inkscape.h"
-#include "preferences.h"
 #include "colors/manager.h"
 #include "colors/spaces/base.h"
-#include "object/color-profile.h"
 #include "ui/dialog-events.h"
 #include "ui/icon-loader.h"
 #include "ui/pack.h"

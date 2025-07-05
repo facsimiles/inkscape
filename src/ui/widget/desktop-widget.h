@@ -36,12 +36,6 @@
 #ifndef SEEN_SP_DESKTOP_WIDGET_H
 #define SEEN_SP_DESKTOP_WIDGET_H
 
-#include <memory>
-#include <2geom/point.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-
-#include <sigc++/scoped_connection.h>
 #include "message.h"
 #include "preferences.h"
 

@@ -10,20 +10,9 @@
 #ifndef SEEN_PATTERN_EDITOR_H
 #define SEEN_PATTERN_EDITOR_H
 
-#include <optional>
-#include <unordered_map>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-
-#include <2geom/point.h>
-#include <2geom/transforms.h>
-#include "object/sp-pattern.h"
 #include "pattern-manager.h"
-#include "spin-scale.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/color-picker.h"
-#include "ui/widget/pattern-store.h"
 
 namespace Gtk {
 class Builder;

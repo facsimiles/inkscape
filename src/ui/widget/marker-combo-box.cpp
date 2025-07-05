@@ -15,27 +15,16 @@
 
 #include "marker-combo-box.h"
 
-#include <chrono>
-#include <optional>
-#include <sstream>
-#include <utility>
-
-#include <gtkmm/layoutmanager.h>
 #include <gtkmm/binlayout.h>
-#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/picture.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/window.h>
 
 #include "helper/stock-items.h"
 #include "io/resource.h"

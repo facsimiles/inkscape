@@ -11,12 +11,8 @@
 #define WIDGET_TEMPLATE_LIST_H
 
 #include <giomm/liststore.h>
-#include <gtkmm/gridview.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/notebook.h>
-#include <sigc++/signal.h>
-#include <vector>
 #include <gtkmm/boolfilter.h>
+#include <gtkmm/gridview.h>
 #include <gtkmm/stack.h>
 
 #include "extension/template.h"

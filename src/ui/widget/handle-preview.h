@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <cairomm/refptr.h>
 #include <cairomm/surface.h>
 
 // Helper function drawing a few selected handles at current handle size

@@ -25,11 +25,13 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/liststore.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/togglebutton.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -37,9 +39,6 @@
 #include "filter-enums.h"
 #include "inkscape-window.h"
 #include "layer-manager.h"
-#include "preferences.h"
-#include "selection.h"
-#include "style.h"
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
 #include "object/filters/componenttransfer-funcnode.h"
@@ -50,12 +49,15 @@
 #include "object/filters/mergenode.h"
 #include "object/filters/pointlight.h"
 #include "object/filters/spotlight.h"
+#include "preferences.h"
 #include "selection-chemistry.h"
+#include "selection.h"
+#include "style.h"
 #include "ui/builder-utils.h"
 #include "ui/column-menu-builder.h"
 #include "ui/controller.h"
-#include "ui/dialog/choose-file.h"
 #include "ui/dialog/choose-file-utils.h"
+#include "ui/dialog/choose-file.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/util.h"

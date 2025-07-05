@@ -12,6 +12,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/treemodel.h>
+#include <gtkmm/window.h>
 
 #include "live_effects/parameter/nodesatellitesarray.h"
 

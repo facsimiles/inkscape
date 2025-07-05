@@ -14,6 +14,7 @@
 #ifndef SP_EXPORT_BATCH_H
 #define SP_EXPORT_BATCH_H
 
+#include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/flowboxchild.h>

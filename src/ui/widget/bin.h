@@ -14,7 +14,6 @@
 #define INKSCAPE_UI_WIDGET_BIN_H
 
 #include <gtkmm/widget.h>
-#include "ui/containerize.h"
 
 namespace Gtk { class Builder; }
 

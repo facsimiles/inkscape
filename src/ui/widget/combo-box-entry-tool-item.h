@@ -21,14 +21,8 @@
 #ifndef INKSCAPE_UI_WIDGET_COMBOBOXENTRYTOOLITEM_H
 #define INKSCAPE_UI_WIDGET_COMBOBOXENTRYTOOLITEM_H
 
-#include <optional>
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h>
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
-#include <gtkmm/cellrenderertext.h>
-#include <sigc++/signal.h>
-#include <sigc++/scoped_connection.h>
 
 namespace Gtk {
 class TreeModel;

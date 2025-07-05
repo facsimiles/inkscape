@@ -17,7 +17,6 @@
 #ifndef INKSCAPE_UI_WIDGET_MESSAGES_H
 #define INKSCAPE_UI_WIDGET_MESSAGES_H
 
-#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>

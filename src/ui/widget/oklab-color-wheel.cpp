@@ -13,13 +13,9 @@
 
 #include "ui/widget/oklab-color-wheel.h"
 
-#include <algorithm>
-#include <cmath>
 #include <gtkmm/gestureclick.h>
 
-#include "colors/spaces/enum.h"
 #include "colors/spaces/oklch.h"
-#include "colors/utils.h"
 #include "display/cairo-utils.h"
 
 using namespace Inkscape::Colors;

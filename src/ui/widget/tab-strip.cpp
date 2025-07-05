@@ -1,22 +1,19 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "tab-strip.h"
 
-#include <cassert>
 #include <numeric>
-
-#include <gdk/gdk.h>
-#include <glibmm/i18n.h>
+#include <gdkmm/surface.h>
 #include <glibmm/main.h>
 #include <gtkmm/button.h>
 #include <gtkmm/dragicon.h>
+#include <gtkmm/drawingarea.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include <gtkmm/tooltip.h>
 
-#include "ui/builder-utils.h"
 #include "ui/containerize.h"
 #include "ui/popup-menu.h"
 #include "ui/util.h"

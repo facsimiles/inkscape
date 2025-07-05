@@ -9,36 +9,21 @@
 
 #include "template-list.h"
 
-#include <cairomm/surface.h>
-#include <giomm/liststore.h>
-#include <glibmm/markup.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/expression.h>
-#include <gtkmm/gridview.h>
-#include <map>
 #include <glib/gi18n.h>
-#include <gdkmm/pixbuf.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/iconview.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/numericsorter.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/sortlistmodel.h>
-#include <gtkmm/singleselection.h>
-#include <memory>
+#include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
 #include <gtkmm/filterlistmodel.h>
+#include <gtkmm/numericsorter.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/singleselection.h>
+#include <gtkmm/sortlistmodel.h>
 
 #include "document.h"
-#include "extension/db.h"
-#include "extension/template.h"
 #include "inkscape-application.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
-#include "ui/iconview-item-factory.h"
-#include "ui/util.h"
 #include "ui/svg-renderer.h"
+#include "ui/util.h"
 
 using namespace Inkscape::IO::Resource;
 using Inkscape::Extension::TemplatePreset;

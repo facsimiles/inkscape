@@ -2,9 +2,7 @@
 
 #include "canvas-notice.h"
 
-#include <utility>
 #include <glibmm/main.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>

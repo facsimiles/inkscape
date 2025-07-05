@@ -14,10 +14,7 @@
 #ifndef SEEN_UI_WIDGET_POPOVER_MENU_ITEM_H
 #define SEEN_UI_WIDGET_POPOVER_MENU_ITEM_H
 
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerMotion
 #include <gtkmm/button.h>
-#include <gtkmm/enums.h> // Gtk::IconSize
 #include "ui/widget/css-name-class-init.h"
 
 namespace Gtk {

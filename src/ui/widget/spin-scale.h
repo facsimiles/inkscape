@@ -14,11 +14,7 @@
 #ifndef INKSCAPE_UI_WIDGET_SPIN_SCALE_H
 #define INKSCAPE_UI_WIDGET_SPIN_SCALE_H
 
-#include <glibmm/refptr.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/togglebutton.h>
-#include <sigc++/signal.h>
+#include <gtkmm/button.h>
 
 #include "attr-widget.h"
 #include "ink-spinscale.h"

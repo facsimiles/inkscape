@@ -6,7 +6,6 @@
 
 #include "font-button.h"
 
-#include <utility>
 #include <gtkmm/fontbutton.h>
 
 namespace Inkscape::UI::Widget {

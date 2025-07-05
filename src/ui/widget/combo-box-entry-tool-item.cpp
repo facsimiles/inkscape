@@ -26,19 +26,10 @@
 
 #include "combo-box-entry-tool-item.h"
 
-#include <cassert>
-#include <cstring>
-#include <utility>
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/main.h>
-#include <glibmm/regex.h>
-#include <gdkmm/display.h>
-#include <gtkmm/combobox.h>
-#include <gtkmm/entry.h>
 #include <gtkmm/eventcontrollerkey.h>
 
 #include "libnrtype/font-lister.h"
-#include "ui/controller.h"
 #include "ui/icon-names.h"
 
 namespace Inkscape::UI::Widget {

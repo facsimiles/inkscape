@@ -14,8 +14,6 @@
 #ifndef INKSCAPE_UI_WIDGET_SCALAR_H
 #define INKSCAPE_UI_WIDGET_SCALAR_H
 
-#include <glibmm/refptr.h>
-
 #include "labelled.h"
 
 namespace Gtk {

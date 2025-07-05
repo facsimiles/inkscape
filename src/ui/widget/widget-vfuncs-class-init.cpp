@@ -13,11 +13,7 @@
 
 #include "ui/widget/widget-vfuncs-class-init.h"
 
-#include <algorithm>
 #include <unordered_map>
-#include <utility>
-#include <glib.h>
-#include <gtk/gtk.h>
 
 namespace Inkscape::UI::Widget {
 

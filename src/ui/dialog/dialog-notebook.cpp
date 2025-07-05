@@ -12,9 +12,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gtkmm/eventcontrollerscroll.h>
+#include <gtkmm/grid.h>
+
 #include "enums.h"
-#include "inkscape.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "ui/column-menu-builder.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-data.h"

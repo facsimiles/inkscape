@@ -15,7 +15,6 @@
 #define SEEN_UI_WIDGET_CSS_NAME_CLASS_INIT_H
 
 #include <glibmm/extraclassinit.h>
-#include <glibmm/ustring.h>
 
 namespace Inkscape::UI::Widget {
 

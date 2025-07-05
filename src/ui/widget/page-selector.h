@@ -14,14 +14,8 @@
 #define SEEN_INKSCAPE_WIDGETS_PAGE_SELECTOR
 
 #include <gtkmm/box.h>
-#include <gtkmm/cellrenderertext.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodel.h>
-#include <sigc++/slot.h>
-
-#include "object/sp-page.h"
 
 class SPDesktop;
 class SPDocument;

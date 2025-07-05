@@ -12,11 +12,8 @@
 #ifndef SEEN_UI_DIALOG_IMAGETOGGLER_H
 #define SEEN_UI_DIALOG_IMAGETOGGLER_H
 
-#include <string>
 #include <gtkmm/cellrendererpixbuf.h>
 #include <glibmm/property.h>
-#include <glibmm/propertyproxy.h>
-#include <sigc++/signal.h>
 
 namespace Inkscape::UI::Widget {
 

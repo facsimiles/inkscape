@@ -13,20 +13,12 @@
 
 #include "memory.h"
 
-#include <sigc++/functors/mem_fun.h>
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/treeview.h>
 
 #include "debug/heap.h"
 #include "inkgc/gc-core.h"
-#include "ui/widget/memory.h"
 #include "ui/pack.h"
 #include "util/format_size.h"
 

@@ -15,14 +15,12 @@
 
 #include <glibmm/main.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/window.h>
 
 #include "ui/popup-menu.h"
 #include "ui/util.h"
-#include "ui/widget/css-name-class-init.h"
 #include "ui/widget/popover-menu-item.h"
 
 namespace Inkscape::UI::Widget {

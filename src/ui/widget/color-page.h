@@ -11,11 +11,13 @@
 
 #include <gtkmm/box.h>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/widget/color-slider.h"
-#include "ui/widget/spinbutton.h"
 
 using namespace Inkscape::Colors;
+
+namespace Gtk {
+class Label;
+}
 
 namespace Inkscape::Colors {
 class Color;

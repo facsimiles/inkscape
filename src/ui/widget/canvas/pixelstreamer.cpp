@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#include <cassert>
-#include <cmath>
-#include <vector>
+
 #include <epoxy/gl.h>
 #include "pixelstreamer.h"
 #include "helper/mathfns.h"

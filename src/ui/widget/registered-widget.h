@@ -18,30 +18,20 @@
 #define SEEN_INKSCAPE_UI_WIDGET_REGISTERED_WIDGET_H
 
 #include <gtkmm/switch.h>
-#include <utility>
-#include <vector>
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/togglebutton.h>
-#include <2geom/affine.h>
 
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
 #include "registry.h"
 
-#include <sigc++/scoped_connection.h>
-#include "object/sp-namedview.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/font-button.h"
 #include "ui/widget/point.h"
 #include "ui/widget/random.h"
 #include "ui/widget/scalar-unit.h"
-#include "ui/widget/scalar.h"
 #include "ui/widget/text.h"
-#include "ui/widget/unit-menu.h"
-#include "xml/node.h"
 
 class SPDocument;
 

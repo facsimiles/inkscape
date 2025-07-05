@@ -18,26 +18,22 @@
 #include "freehand-base.h"
 
 #include "desktop-style.h"
-#include "id-clash.h"
-#include "selection.h"
-#include "style.h"
-
-#include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
-
+#include "display/curve.h"
+#include "id-clash.h"
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpe-powerstroke.h"
-
+#include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-use.h"
-
+#include "selection.h"
+#include "style.h"
 #include "svg/svg.h"
-
 #include "ui/clipboard.h"
 #include "ui/draw-anchor.h"
-#include "ui/tools/lpe-tool.h" // TODO: Remove in the future
+#include "ui/tools/lpe-tool.h"    // TODO: Remove in the future
 #include "ui/tools/pencil-tool.h" // TODO: Remove in the future
 #include "ui/widget/events/canvas-event.h"
 

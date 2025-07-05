@@ -14,20 +14,15 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVASGRID_H
 #define INKSCAPE_UI_WIDGET_CANVASGRID_H
 
-#include <memory>
-#include <2geom/point.h>
-#include <2geom/int-point.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/grid.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/overlay.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/label.h>
 
 #include "display/control/canvas-item-ptr.h"
 #include "preferences.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/widget/popover-bin.h"
 #include "util/action-accel.h"
 
@@ -37,6 +32,7 @@ class Builder;
 class CheckButton;
 class EventControllerMotion;
 class GestureClick;
+class Label;
 } // namespace Gtk
 
 class SPDesktop;

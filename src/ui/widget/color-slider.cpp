@@ -11,21 +11,12 @@
 
 #include "color-slider.h"
 
-#include <cairomm/pattern.h>
 #include <gdkmm/general.h>
-#include <gtkmm/drawingarea.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <sigc++/functors/mem_fun.h>
-#include <utility>
 
-#include "colors/color.h"
 #include "colors/color-set.h"
-#include "colors/spaces/base.h"
-#include "colors/spaces/components.h"
-#include "preferences.h"
 #include "ui/controller.h"
-#include "ui/util.h"
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"
 

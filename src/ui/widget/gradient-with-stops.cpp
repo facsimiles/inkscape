@@ -13,23 +13,15 @@
 
 #include "gradient-with-stops.h"
 
-#include <cmath>
-#include <string>
-#include <gdkmm/cursor.h>
 #include <gdkmm/general.h>
-#include <gtkmm/drawingarea.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/window.h>
-#include <sigc++/functors/mem_fun.h>
 
-#include "display/cairo-utils.h"
 #include "io/resource.h"
 #include "object/sp-gradient.h"
 #include "object/sp-stop.h"
 #include "ui/controller.h"
-#include "ui/cursor-utils.h"
 #include "ui/util.h"
 #include "util/numeric/converters.h"
 #include "util/object-renderer.h"

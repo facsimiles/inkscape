@@ -15,7 +15,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/grid.h>
-#include <sigc++/signal.h>
 
 namespace Glib {
 class ustring;

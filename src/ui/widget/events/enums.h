@@ -11,8 +11,6 @@
 #ifndef INKSCAPE_UI_WIDGET_EVENTS_ENUMS_H
 #define INKSCAPE_UI_WIDGET_EVENTS_ENUMS_H
 
-#include <limits>
-
 namespace Inkscape {
 
 /**

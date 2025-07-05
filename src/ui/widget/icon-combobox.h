@@ -3,17 +3,12 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_ICONCOMBOBOX
 #define SEEN_INKSCAPE_UI_WIDGET_ICONCOMBOBOX
 
-#include <cairomm/refptr.h>
-#include <cairomm/surface.h>
 #include <giomm/liststore.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/boolfilter.h>
 #include <gtkmm/dropdown.h>
 #include <gtkmm/filterlistmodel.h>
 #include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/singleselection.h>
-#include <sigc++/signal.h>
 
 namespace Inkscape::UI::Widget {
 

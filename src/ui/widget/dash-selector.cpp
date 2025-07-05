@@ -19,23 +19,16 @@
 
 #include "dash-selector.h"
 
-#include <iostream>
 #include <numeric>  // std::accumulate
-#include <vector>
 
 #include <giomm.h>
 #include <glibmm/i18n.h>
-#include <glibmm/regex.h>
 #include <gdkmm/general.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/gridview.h>
-#include <gtkmm/image.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/singleselection.h>
-
-#include <2geom/coord.h> // Geom::are_near
 
 #include "preferences.h"
 #include "style.h"  // Read dash patterns from preferences.

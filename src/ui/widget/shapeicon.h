@@ -11,14 +11,8 @@
 #ifndef SEEN_INKSCAPE_UI_DIALOG_SHAPEICON_H
 #define SEEN_INKSCAPE_UI_DIALOG_SHAPEICON_H
 
-#include <cstdint>
-#include <optional>
-#include <string>
-#include <typeinfo>
 #include <glibmm/property.h>
-#include <glibmm/propertyproxy.h>
 #include <gtkmm/cellrendererpixbuf.h>
-#include <sigc++/functors/mem_fun.h>
 
 namespace Inkscape::UI::Widget {
 

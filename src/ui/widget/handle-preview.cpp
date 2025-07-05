@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "handle-preview.h"
-#include <memory>
 #include "display/control/canvas-item-ctrl.h"
-#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-group.h"
 #include "display/control/canvas-item.h"
 #include "ui/widget/canvas.h"

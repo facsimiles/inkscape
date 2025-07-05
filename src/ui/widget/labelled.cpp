@@ -11,7 +11,6 @@
 
 #include "labelled.h"
 
-#include <gtkmm/enums.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 

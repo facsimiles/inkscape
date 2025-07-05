@@ -13,14 +13,10 @@
 #ifndef SEEN_INKSCAPE_WIDGETS_LAYER_SELECTOR
 #define SEEN_INKSCAPE_WIDGETS_LAYER_SELECTOR
 
-#include <memory>
-#include <glibmm/refptr.h>
 #include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
 
-#include <sigc++/scoped_connection.h>
 #include "xml/helper-observer.h"
 
 namespace Glib {

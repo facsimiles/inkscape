@@ -12,7 +12,6 @@
 #include "ui/widget/imagetoggler.h"
 
 #include <gtkmm/snapshot.h>
-#include <sigc++/functors/mem_fun.h>
 
 namespace Inkscape::UI::Widget {
 

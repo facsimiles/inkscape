@@ -12,12 +12,8 @@
 #ifndef SEEN_UI_WIDGET_ICONRENDERER_H
 #define SEEN_UI_WIDGET_ICONRENDERER_H
 
-#include <vector>
 #include <glibmm/property.h>
-#include <glibmm/propertyproxy.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/cellrendererpixbuf.h>
-#include <sigc++/signal.h>
 
 namespace Inkscape::UI::Widget {
 

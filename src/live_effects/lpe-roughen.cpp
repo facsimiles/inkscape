@@ -17,17 +17,16 @@
 #include "lpe-roughen.h"
 
 #include <boost/functional/hash.hpp>
-
 #include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/separator.h>
 
-#include "preferences.h"
-
 #include "display/curve.h"
 #include "helper/geom.h"
 #include "object/sp-lpe-item.h"
+#include "preferences.h"
+#include "ray.h"
 #include "ui/pack.h"
 #include "util-string/ustring-format.h"
 

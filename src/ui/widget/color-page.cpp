@@ -8,20 +8,14 @@
 
 #include "ui/widget/color-page.h"
 
-#include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
+#include <gtkmm/expander.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 
-#include <utility>
-
 #include "color-wheel-factory.h"
+#include "colors/color-set.h"
 #include "ink-color-wheel.h"
 #include "ink-spin-button.h"
-#include "colors/color.h"
-#include "colors/color-set.h"
-#include "colors/spaces/base.h"
-#include "colors/spaces/components.h"
 #include "ui/builder-utils.h"
 #include "util/signal-blocker.h"
 

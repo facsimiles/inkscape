@@ -2,12 +2,7 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_SYNCHRONIZER_H
 #define INKSCAPE_UI_WIDGET_CANVAS_SYNCHRONIZER_H
 
-#include <functional>
-#include <vector>
-#include <mutex>
 #include <condition_variable>
-
-#include <sigc++/sigc++.h>
 #include <glibmm/dispatcher.h>
 
 namespace Inkscape::UI::Widget {

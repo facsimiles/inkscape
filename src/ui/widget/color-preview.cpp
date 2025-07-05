@@ -13,19 +13,7 @@
 
 #include "ui/widget/color-preview.h"
 
-#include <cairo.h>
-#include <cairomm/context.h>
-#include <cairomm/matrix.h>
-#include <cairomm/pattern.h>
-#include <gdkmm/rgba.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/window.h>
-#include <sigc++/functors/mem_fun.h>
-#include <gtkmm/drawingarea.h>
 #include "display/cairo-utils.h"
-#include "colors/color.h"
-#include "colors/spaces/enum.h"
-#include <2geom/rect.h>
 #include "ui/util.h"
 
 namespace Inkscape::UI::Widget {

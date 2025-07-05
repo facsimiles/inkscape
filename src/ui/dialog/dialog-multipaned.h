@@ -14,6 +14,9 @@
 #ifndef INKSCAPE_UI_DIALOG_MULTIPANED_H
 #define INKSCAPE_UI_DIALOG_MULTIPANED_H
 
+#include <gtkmm/droptarget.h>
+#include <gtkmm/gesture.h>
+
 #include "dialog-notebook.h"
 
 namespace Glib {

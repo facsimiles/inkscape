@@ -11,23 +11,25 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/scrolledwindow.h>
-#include <glibmm/i18n.h>
-#include <gtkmm/grid.h>
+#include "ui/dialog/object-attributes.h"
 
-#include "mod360.h"
-#include "selection.h"
+#include <glibmm/i18n.h>
+#include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/scrolledwindow.h>
+
 #include "actions/actions-tools.h"
 #include "live_effects/effect.h"
+#include "mod360.h"
 #include "object/sp-anchor.h"
 #include "object/sp-ellipse.h"
+#include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-star.h"
+#include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
-#include "ui/dialog/object-attributes.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/tools/object-picker-tool.h"

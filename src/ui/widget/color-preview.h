@@ -14,9 +14,6 @@
 #ifndef SEEN_COLOR_PREVIEW_H
 #define SEEN_COLOR_PREVIEW_H
 
-#include <cairomm/pattern.h>
-#include <cstdint>
-#include <cairomm/refptr.h>
 #include <gtkmm/drawingarea.h>
 
 namespace Cairo {

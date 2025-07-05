@@ -15,14 +15,9 @@
 #ifndef SEEN_COMBO_TOOL_ITEM
 #define SEEN_COMBO_TOOL_ITEM
 
-#include <memory>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/box.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/treemodel.h>
-#include <sigc++/signal.h>
 
 namespace Gtk {
 class ComboBox;

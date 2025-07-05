@@ -10,16 +10,10 @@
 
 #include "spinbutton.h"
 
-#include <cmath>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/object.h>
-#include <gtkmm/popovermenu.h>
 #include <gtkmm/checkbutton.h>
-#include <memory>
-#include <sigc++/functors/mem_fun.h>
 
 #include "scroll-utils.h"
 #include "ui/controller.h"
@@ -27,7 +21,6 @@
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
 #include "ui/widget/popover-menu-item.h"
-#include "ui/widget/popover-menu.h"
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"

@@ -17,14 +17,7 @@
 #ifndef INK_COLORWHEEL_H
 #define INK_COLORWHEEL_H
 
-#include <array>
-#include <memory>
-#include <utility>
-#include <vector>
-#include <2geom/point.h>
 #include <2geom/line.h>
-#include <sigc++/signal.h>
-#include <gtk/gtk.h> // GtkEventControllerKey
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 

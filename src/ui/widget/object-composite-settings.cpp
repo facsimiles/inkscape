@@ -15,8 +15,6 @@
 
 #include "object-composite-settings.h"
 
-#include <utility>
-
 #include "desktop.h"
 #include "desktop-style.h"
 #include "document-undo.h"

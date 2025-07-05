@@ -15,15 +15,10 @@
 #ifndef INKSCAPE_UI_WIDGET_FONT_COLLECTION_SELECTOR_H
 #define INKSCAPE_UI_WIDGET_FONT_COLLECTION_SELECTOR_H
 
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gdkmm/enums.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
-#include <sigc++/signal.h>
 
 namespace Gdk {
 class Drag;

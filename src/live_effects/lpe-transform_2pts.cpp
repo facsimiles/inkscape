@@ -27,6 +27,8 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
+#include "ray.h"
+
 namespace Inkscape::LivePathEffect {
 
 LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :

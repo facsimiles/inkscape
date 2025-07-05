@@ -13,12 +13,9 @@
 
 #include "ui/widget/popover-menu-item.h"
 
-#include <pangomm/layout.h>
 #include <giomm/themedicon.h>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
-#include <gtkmm/tooltip.h>
 
 #include "ui/util.h"
 #include "ui/widget/popover-menu.h"

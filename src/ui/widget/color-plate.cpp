@@ -1,17 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "color-plate.h"
-#include <cassert>
-#include <cairo.h>
-#include <cairomm/context.h>
-#include <2geom/rect.h>
-#include <cairomm/refptr.h>
-#include <cairomm/surface.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
 
-#include "colors/color.h"
-#include "colors/utils.h"
 #include "ui/controller.h"
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"

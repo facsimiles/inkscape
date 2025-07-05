@@ -14,10 +14,6 @@
 
 #include "color-palette-preview.h"
 
-#include <utility>
-#include <cairomm/context.h>
-#include <sigc++/functors/mem_fun.h>
-
 namespace Inkscape::UI::Widget {
 
 static constexpr int height = 2;

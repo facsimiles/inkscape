@@ -9,7 +9,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "colors/color.h"
 #include "display/cairo-utils.h"
 #include "ui/widget/objects-dialog-cells.h"
 

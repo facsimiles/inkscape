@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "drop-down-list.h"
-#include <gtkmm/dropdown.h>
 #include <gtkmm/label.h>
 #include <gtkmm/stringobject.h>
 

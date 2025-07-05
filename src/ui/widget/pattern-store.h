@@ -8,11 +8,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <optional>
-#include <2geom/transforms.h>
-#include "colors/color.h"
-#include <giomm/liststore.h>
 #include <gtkmm/widget.h>
+
 #include "ui/filtered-store.h"
 
 class SPDocument;

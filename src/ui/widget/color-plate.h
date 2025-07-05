@@ -3,12 +3,8 @@
 #ifndef COLOR_SELECTOR_H
 #define COLOR_SELECTOR_H
 
-#include <cairomm/refptr.h>
-#include <cairomm/surface.h>
 #include <gtkmm/drawingarea.h>
 #include <2geom/point.h>
-#include <2geom/rect.h>
-#include <gtkmm/gesture.h>
 
 #include "colors/color.h"
 

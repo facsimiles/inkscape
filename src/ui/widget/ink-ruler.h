@@ -11,14 +11,6 @@
 #ifndef INKSCAPE_UI_WIDGET_RULER_H
 #define INKSCAPE_UI_WIDGET_RULER_H
 
-#include <memory>
-#include <cairomm/refptr.h>
-#include <pangomm/fontdescription.h>
-#include <gdkmm/rgba.h>
-#include <gtkmm/enums.h> // Gtk::Orientation
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <2geom/int-rect.h>
-
 #include "preferences.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
 #include "util/delete-with.h"

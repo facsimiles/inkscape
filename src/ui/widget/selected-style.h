@@ -12,22 +12,14 @@
 #ifndef SEEN_INKSCAPE_UI_SELECTED_STYLE_H
 #define SEEN_INKSCAPE_UI_SELECTED_STYLE_H
 
-#include <memory>
-#include <vector>
-#include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/grid.h>
-#include <gtkmm/label.h>
 
 #include "colors/color.h"
-#include <sigc++/scoped_connection.h>
 #include "rotateable.h"
 #include "ui/defocus-target.h"
-#include "ui/popup-menu.h"
-#include "ui/widget/spinbutton.h"
 #include "ui/widget/popover-bin.h"
+#include "ui/widget/spinbutton.h"
 
 namespace Gtk {
 class Adjustment;

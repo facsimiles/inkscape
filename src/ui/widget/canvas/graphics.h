@@ -8,13 +8,9 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_GRAPHICS_H
 #define INKSCAPE_UI_WIDGET_CANVAS_GRAPHICS_H
 
-#include <cstdint>
-#include <memory>
 #include <optional>
-#include <utility>
 #include <vector>
 
-#include <2geom/rect.h>
 #include <cairomm/refptr.h>
 #include "display/rendermode.h"
 #include "fragment.h"

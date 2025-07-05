@@ -10,16 +10,8 @@
 #ifndef INKSCAPE_UI_WIDGET_EXPORT_PREVIEW_H
 #define INKSCAPE_UI_WIDGET_EXPORT_PREVIEW_H
 
-#include <cstdint>
-#include <memory>
-#include <vector>
 #include <2geom/rect.h>
-#include <glibmm/refptr.h>
 #include <gtkmm/picture.h>
-
-#include "async/channel.h"
-#include "display/drawing.h"
-#include <sigc++/scoped_connection.h>
 
 namespace Gtk {
 class Builder;

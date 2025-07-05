@@ -16,27 +16,20 @@
 #ifndef INKSCAPE_UI_WIDGET_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_WIDGET_INKSCAPE_PREFERENCES_H
 
-#include <cstdint>
 #include <span>
-#include <vector>
-#include <sigc++/signal.h>
-#include <glibmm/refptr.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/drawingarea.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/textview.h>
 
 #include "io/query-file-info.h"
 #include "ui/widget/color-picker.h"
-#include "ui/widget/drop-down-list.h"
-#include "ui/widget/unit-menu.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/scalar-unit.h"
 
 namespace Gtk {
+class Button;
 class Scale;
 } // namespace Gtk
 

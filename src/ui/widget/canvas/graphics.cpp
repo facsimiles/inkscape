@@ -3,12 +3,8 @@
 #include "graphics.h"
 
 #include <2geom/parallelogram.h>
-#include <cairomm/context.h>
-#include <cairomm/surface.h>
 
-#include "colors/color.h"
 #include "display/cairo-utils.h"
-#include "helper/geom.h"
 #include "ui/util.h"
 #include "util.h"
 

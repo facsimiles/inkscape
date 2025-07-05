@@ -14,15 +14,9 @@
 #ifndef SEEN_GRADIENT_WITH_STOPS_H
 #define SEEN_GRADIENT_WITH_STOPS_H
 
-#include <glibmm/refptr.h>
-#include <gdkmm/rgba.h>
-#include <gtk/gtk.h> // GtkEventControllerKey|Motion
 #include <gtkmm/drawingarea.h>
-#include <gtkmm/gesture.h> // Gtk::EventSequenceState
-#include <sigc++/signal.h>
 
 #include "colors/color.h"
-#include <sigc++/scoped_connection.h>
 #include "ui/svg-renderer.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
 

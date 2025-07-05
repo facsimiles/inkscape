@@ -2,9 +2,7 @@
 
 #include "custom-tooltip.h"
 
-#include <ctime>
 #include <chrono>
-#include <gdk/gdk.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/image.h>

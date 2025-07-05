@@ -18,9 +18,6 @@
 #ifndef SEEN_INK_SPINSCALE_H
 #define SEEN_INK_SPINSCALE_H
 
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
-#include <gtk/gtk.h> // GtkEventControllerMotion
 #include <gtkmm/box.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/scale.h>

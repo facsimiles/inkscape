@@ -20,30 +20,24 @@
 #include "pencil-tool.h"
 
 #include <numeric> // std::accumulate
-
 #include <2geom/circle.h>
 
 #include "context-fns.h"
-#include "layer-manager.h"
-#include "message-context.h"
-#include "selection.h"
-
-#include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/snap-indicator.h"
-
-#include "livarot/Path.h"  // Simplify paths
-
+#include "display/curve.h"
+#include "layer-manager.h"
+#include "livarot/Path.h" // Simplify paths
 #include "live_effects/lpe-powerstroke-interpolators.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-simplify.h"
-
+#include "message-context.h"
+#include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "path/path-boolop.h"
+#include "selection.h"
 #include "style.h"
-
 #include "svg/svg.h"
-
 #include "ui/draw-anchor.h"
 #include "ui/widget/events/canvas-event.h"
 
