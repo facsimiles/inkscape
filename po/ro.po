@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-05 20:06+0000\n"
+"PO-Revision-Date: 2025-07-05 20:14+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -10347,17 +10347,15 @@ msgstr "Transformă în text"
 #: ../src/actions/actions-text.cpp:78
 msgid "Convert flowed text to regular text object (preserves appearance)"
 msgstr ""
-"Transformă  textul fluid într-un obiect text obișnuit (păstrând aspectul)"
+"Convertește textul fluid într-un obiect text obișnuit (păstrând aspectul)"
 
 #: ../src/actions/actions-text.cpp:79
-#, fuzzy
 msgid "Convert to Glyphs"
-msgstr "Transformă în trasee"
+msgstr "Convertește în glife"
 
 #: ../src/actions/actions-text.cpp:79
-#, fuzzy
 msgid "Convert text into individual glyphs"
-msgstr "Convertește textele în trasee"
+msgstr "Convertește textul în glife individuale"
 
 #: ../src/actions/actions-text.cpp:80
 msgid "Remove Manual Kerns"
@@ -25709,6 +25707,8 @@ msgstr ""
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
+"Oferă moduri de mixare a imaginii precum ecranare, multiplicare, întunecare "
+"și luminare."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2610
 msgid ""
