@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-05 21:18+0000\n"
+"PO-Revision-Date: 2025-07-06 08:13+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -21488,10 +21488,10 @@ msgid ""
 "<b>Ctrl+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it, "
 "<b>Shift+click</b> launches width dialog."
 msgstr ""
-"<b>Punctul de control al lățimii conturului</b>: trage pentru alterarea "
-"lățimii conturului. <b>Ctrl+click</b> adaugă un punct de  control, "
+"<b>Punctul de control al lățimii conturului</b>: trageți pentru a alterarea "
+"lățimea conturului. <b>Ctrl+click</b> adaugă un punct de control, "
 "<b>Ctrl+Alt+click</b> îl șterge, <b>Shift+click</b> lansează fereastra de "
-"control al lățimii."
+"dialog pentru lățime."
 
 #: ../src/live_effects/parameter/random.cpp:177
 msgid "Change random parameter"
@@ -22635,8 +22635,8 @@ msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
-"Obiectul pe care încerci să-l selectezi <b>nu este vizibil</b>  (este în &lt;"
-"defs&gt;)"
+"Obiectul pe care încercați să îl selectați <b>nu este vizibil</b> (este în "
+"&lt;defs&gt;)"
 
 #: ../src/selection-chemistry.cpp:3029
 msgid "Fill between many"
@@ -23784,7 +23784,7 @@ msgstr "Rotește plăcile cu acest unghi pentru fiecare coloană"
 
 #: ../src/ui/dialog/clonetiler.cpp:516
 msgid "Randomize the rotation angle by this percentage"
-msgstr "Aleatorizează  unghiul de rotație cu acest procentaj"
+msgstr "Aleatorizează unghiul de rotație cu acest procentaj"
 
 #: ../src/ui/dialog/clonetiler.cpp:531
 msgid "Alternate the rotation direction for each row"
