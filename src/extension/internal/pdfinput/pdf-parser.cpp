@@ -2313,11 +2313,11 @@ void PdfParser::doShowText(GooString *s) {
         state->textTransformDelta(originX, originY, &tOriginX, &tOriginY);
 
         // In Gfx.cc this is drawChar(...)
-        builder->addChar(state, state->getCurX() + riseX, state->getCurY() + riseY,
+        builder->addChar(state, state->_POPPLER_GET_CUR_TEXT_X() + riseX, state->_POPPLER_GET_CUR_TEXT_Y() + riseY,
                          dx, dy, ax, ay, tOriginX, tOriginY, code, n, u, uLen);
 
         // Move onto next unicode character.
-        state->shift(tdx, tdy);
+        state->_POPPLER_TEXT_SHIFT_WITH_USER_COORDS(tdx, tdy);
         p += n;
         len -= n;
     }

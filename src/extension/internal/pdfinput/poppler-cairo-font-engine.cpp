@@ -315,7 +315,11 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref, FT_Li
 #endif
     char **enc;
     const char *name;
+#if POPPLER_CHECK_VERSION(25, 7, 0)
+    std::unique_ptr<FoFiType1C> ff1c;
+#else
     FoFiType1C *ff1c;
+#endif
     std::optional<FreeTypeFontFace> font_face;
     std::vector<int> codeToGID;
     bool substitute = false;
@@ -426,7 +430,7 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref, FT_Li
                 FoFiTrueType *ff;
 #endif
                 if (!font_data.empty()) {
-                    ff = FoFiTrueType::make((fontchar)font_data.data(), font_data.size(), 0);
+                    ff = _POPPLER_FOFI_TRUETYPE_MAKE(font_data, 0);
                 } else {
                     ff = FoFiTrueType::load(fileName.c_str(), 0);
                 }
@@ -456,7 +460,7 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref, FT_Li
             FoFiTrueType *ff;
 #endif
             if (!font_data.empty()) {
-                ff = FoFiTrueType::make((fontchar)font_data.data(), font_data.size(), 0);
+                ff = _POPPLER_FOFI_TRUETYPE_MAKE(font_data, 0);
             } else {
                 ff = FoFiTrueType::load(fileName.c_str(), 0);
             }
@@ -490,7 +494,7 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref, FT_Li
         case fontCIDType0C:
             if (!useCIDs) {
                 if (!font_data.empty()) {
-                    ff1c = FoFiType1C::make((fontchar)font_data.data(), font_data.size());
+                    ff1c = _POPPLER_FOFI_TYPE1C_MAKE(font_data);
                 } else {
                     ff1c = FoFiType1C::load(fileName.c_str());
                 }
@@ -503,7 +507,9 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref, FT_Li
                     codeToGID.insert(codeToGID.begin(), src, src + n);
                     gfree(src);
 #endif
+#if !(POPPLER_CHECK_VERSION(25, 7, 0))
                     delete ff1c;
+#endif
                 }
             }
 
@@ -539,13 +545,13 @@ CairoFreeTypeFont *CairoFreeTypeFont::create(GfxFont *gfxFont, XRef *xref, FT_Li
                     FoFiTrueType *ff;
 #endif
                     if (!font_data.empty()) {
-                        ff = FoFiTrueType::make((fontchar)font_data.data(), font_data.size(), 0);
+                        ff = _POPPLER_FOFI_TRUETYPE_MAKE(font_data, 0);
                     } else {
                         ff = FoFiTrueType::load(fileName.c_str(), 0);
                     }
                     if (ff) {
                         if (ff->isOpenTypeCFF()) {
-                            auto src = ff1c->_POPPLER_GET_CID_TO_GID_MAP(&n);
+                            auto src = ff->_POPPLER_GET_CID_TO_GID_MAP(&n);
 #if POPPLER_CHECK_VERSION(25,2,0)
                             codeToGID = std::move(src);
 #else
