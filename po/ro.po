@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-06 09:26+0000\n"
+"PO-Revision-Date: 2025-07-06 10:37+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -16896,8 +16896,8 @@ msgid ""
 "Smoothen and simplify a object. This effect is also available in the Pencil "
 "tool's tool controls."
 msgstr ""
-"Netezește și simplifică un obiect. Acest efect este disponibil și în meniul "
-"uneltei creion"
+"Netezește și simplifică un obiect. Acest efect este disponibil și în "
+"controalele instrumentului Creion."
 
 #: ../src/live_effects/effect.cpp:330
 msgctxt "path effect"
@@ -17011,7 +17011,7 @@ msgid ""
 "mirrored copy can be styled independently."
 msgstr ""
 "Oglindește un obiect de-a lungul unei axe mutabile, sau în jurul centrului "
-"paginii.Copia oglindită poate fi stilizată individual"
+"paginii. Copia oglindită poate fi stilizată independent."
 
 #: ../src/live_effects/effect.cpp:470
 msgctxt "path effect"
@@ -17023,8 +17023,8 @@ msgid ""
 "Create multiple rotated copies of an object, as in a kaleidoscope. The "
 "copies can be styled independently."
 msgstr ""
-"Creează multiple copii rotite ale unui obiect, ca într-un calidoscop. "
-"Copiile pot fi stilizate individual"
+"Creează multiple copii rotite ale unui obiect, ca într-un caleidoscop. "
+"Copiile pot fi stilizate independent."
 
 #: ../src/live_effects/effect.cpp:485
 msgctxt "path effect"
@@ -17931,7 +17931,7 @@ msgstr "Coase traseul:"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:32
 msgid "The path that will be used as stitch."
-msgstr "Traseul care va fi folosit drept cusătură"
+msgstr "Traseul care va fi folosit drept cusătură."
 
 #: ../src/live_effects/lpe-curvestitch.cpp:33
 msgid "N_umber of paths:"
@@ -17939,7 +17939,7 @@ msgstr "N_umărul de trasee:"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:33
 msgid "The number of paths that will be generated."
-msgstr "Numărul de trasee care va fi generat"
+msgstr "Numărul de trasee care va fi generat."
 
 #: ../src/live_effects/lpe-curvestitch.cpp:34
 msgid "Sta_rt edge variance:"
