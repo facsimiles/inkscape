@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-06 08:48+0000\n"
+"PO-Revision-Date: 2025-07-06 09:26+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -12397,7 +12397,7 @@ msgstr ""
 #: ../src/extension/internal/cairo-ps-out.cpp:345
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:243
 msgid "The page bleed can be set with the Page tool."
-msgstr "Întinarea paginii poate fi setată cu unealta de Pagini"
+msgstr "Întinarea paginii poate fi stabilită cu instrumentul Pagină."
 
 #: ../src/extension/internal/cairo-ps-out.cpp:306
 #: ../share/extensions/ps_input.inx:16
