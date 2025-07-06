@@ -15,6 +15,20 @@
 #include <glib/poppler-features.h>
 #include <poppler/UTF.h>
 
+#if POPPLER_CHECK_VERSION(25, 7, 0)
+#define _POPPLER_TEXT_SHIFT_WITH_USER_COORDS(dx, dy) textShiftWithUserCoords(dx, dy)
+#define _POPPLER_FOFI_TRUETYPE_MAKE(font_data, faceIndex) FoFiTrueType::make(std::span(font_data), faceIndex)
+#define _POPPLER_FOFI_TYPE1C_MAKE(font_data) FoFiType1C::make(std::span(font_data))
+#define _POPPLER_GET_CUR_TEXT_X() getCurTextX()
+#define _POPPLER_GET_CUR_TEXT_Y() getCurTextY()
+#else
+#define _POPPLER_TEXT_SHIFT_WITH_USER_COORDS(dx, dy) shift(dx, dy)
+#define _POPPLER_FOFI_TRUETYPE_MAKE(font_data, faceIndex) FoFiTrueType::make((fontchar)font_data.data(), font_data.size(), faceIndex)
+#define _POPPLER_FOFI_TYPE1C_MAKE(font_data) FoFiType1C::make((fontchar)font_data.data(), font_data.size())
+#define _POPPLER_GET_CUR_TEXT_X() getCurX()
+#define _POPPLER_GET_CUR_TEXT_Y() getCurY()
+#endif
+
 #if POPPLER_CHECK_VERSION(25, 6, 0)
 #define _POPPLER_DECLARE_TRANSFER_FUNCTION_VECTOR(name) std::vector<std::unique_ptr<Function>> name(4)
 #define _POPPLER_DELETE_TRANSFER_FUNCTION(name) name.reset()
