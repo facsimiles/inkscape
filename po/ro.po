@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-06 08:28+0000\n"
+"PO-Revision-Date: 2025-07-06 08:48+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -10507,7 +10507,7 @@ msgstr ""
 "<b>Clic</b> pentru a stabili umplerea, <b>Shift+clic</b> pentru a stabili "
 "conturul; <b>trageți</b> pentru culoarea medie în zonă; <b>Alt</b> pentru a "
 "preleva culoarea inversă; <b>Ctrl+C</b> pentru a copia în clipboard culoarea "
-"de sub maus."
+"de sub maus"
 
 #: ../src/actions/actions-tools.cpp:105
 msgid "To tweak a path by pushing, select it and drag over it."
@@ -10549,9 +10549,8 @@ msgid "Create and manage pages."
 msgstr "Creează și gestionează pagini."
 
 #: ../src/actions/actions-tools.cpp:112
-#, fuzzy
 msgid "Pick objects."
-msgstr "Blochează obiectul"
+msgstr "Alegeți obiecte."
 
 #: ../src/actions/actions-tools.cpp:359
 msgid "Selector Tool"
@@ -12391,8 +12390,8 @@ msgid ""
 "When exporting from the Export dialog, you can choose objects to export. "
 "'Save a copy' / 'Save as' will export all pages."
 msgstr ""
-"Când exporți din fereastra de Export, poți alege ce obiecte să exporți."
-"Salvează o copie' / 'Salvează ca' vor exporta toate paginile"
+"Când exportați din dialogul de export, puteți alege ce obiecte să fie "
+"exportate. 'Salvează o copie' sau 'Salvează ca' va exporta toate paginile."
 
 #: ../src/extension/internal/cairo-ps-out.cpp:301
 #: ../src/extension/internal/cairo-ps-out.cpp:345
