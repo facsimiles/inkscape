@@ -482,6 +482,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
         return;
     }
     if (_repr) {
+        _popover->popdown();
         _store->clear();
         _repr->removeObserver(*this);
         Inkscape::GC::release(_repr);
