@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-06 10:37+0000\n"
+"PO-Revision-Date: 2025-07-06 11:17+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -10651,7 +10651,7 @@ msgstr "Desenează trasee caligrafice sau penelate"
 
 #: ../src/actions/actions-tools.cpp:373
 msgid "Text Tool"
-msgstr "Instrument pentru texte"
+msgstr "Instrument text"
 
 #: ../src/actions/actions-tools.cpp:373
 msgid "Create and edit text objects"
@@ -10659,7 +10659,7 @@ msgstr "Creează și editează obiecte text"
 
 #: ../src/actions/actions-tools.cpp:375
 msgid "Gradient Tool"
-msgstr "Instrument pentru degradeuri"
+msgstr "Instrument degrade"
 
 #: ../src/actions/actions-tools.cpp:375
 msgid "Create and edit gradients"
@@ -10691,7 +10691,7 @@ msgstr "Umple zonele circumscrise"
 
 #: ../src/actions/actions-tools.cpp:380
 msgid "Tweak Tool"
-msgstr "Instrument pentru ajustări"
+msgstr "Instrument ajustare"
 
 #: ../src/actions/actions-tools.cpp:380
 msgid "Tweak objects by sculpting or painting"
@@ -10731,7 +10731,7 @@ msgstr "Creează construcții geometrice"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Zoom Tool"
-msgstr "Instrument pentru zoom"
+msgstr "Instrument zoom"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Zoom in or out"
@@ -10739,7 +10739,7 @@ msgstr "Mărire sau micșorare"
 
 #: ../src/actions/actions-tools.cpp:387
 msgid "Measure Tool"
-msgstr "Instrument pentru măsurare"
+msgstr "Instrument măsurare"
 
 #: ../src/actions/actions-tools.cpp:387
 msgid "Measure objects"
@@ -10747,7 +10747,7 @@ msgstr "Măsoară obiectele"
 
 #: ../src/actions/actions-tools.cpp:388
 msgid "Pages Tool"
-msgstr "Instrument pentru pagini"
+msgstr "Instrument pagini"
 
 #: ../src/actions/actions-tools.cpp:388
 msgid "Create and edit document pages"
