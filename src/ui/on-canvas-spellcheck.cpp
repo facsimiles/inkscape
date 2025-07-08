@@ -42,8 +42,8 @@ void ensure_file_exists(const std::string& path)
 
 
 OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
-    : _prefs{*Preferences::get()},
-      _desktop(desktop)
+    : _prefs{*Preferences::get()}
+    , _desktop(desktop)
 {
     // Get the current document root
     auto doc = desktop->getDocument();
@@ -158,7 +158,50 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
         auto begin = it;
         auto end = it;
         end.nextEndOfWord();
+
+        // Try to link with the next word if separated by an apostrophe
+        {
+            SPObject *char_item = nullptr;
+            Glib::ustring::iterator text_iter;
+            layout->getSourceOfCharacter(end, &char_item, &text_iter);
+            if (char_item && is<SPString>(char_item)) {
+                int ch = *text_iter;
+                if (ch == '\'' || ch == 0x2019) {
+                    auto tempEnd = end;
+                    tempEnd.nextCharacter();
+                    layout->getSourceOfCharacter(tempEnd, &char_item, &text_iter);
+                    if (char_item && is<SPString>(char_item)) {
+                        int nextChar = *text_iter;
+                        if (g_ascii_isalpha(nextChar))
+                            end.nextEndOfWord();
+                    }
+                }
+            }
+        }
+
         Glib::ustring _word = sp_te_get_string_multiline(item, begin, end);
+
+        // Check if word is empty
+        if(_word.empty())
+        {
+            it = end;
+            continue;
+        }
+
+        // Skip words containing digits
+        if(_prefs.getInt("/dialogs/spellcheck/ignorenumbers") != 0 &&
+            std::any_of(_word.begin(), _word.end(), [](gchar c) { return g_unichar_isdigit(c); })) {
+            it = end;
+            continue;
+        }
+
+        // Skip ALL-CAPS words
+        if(_prefs.getInt("/dialogs/spellcheck/ignoreallcaps") != 0 &&
+            std::all_of(_word.begin(), _word.end(), [](gchar c) { return g_unichar_isupper(c); })) {
+            it = end;
+            continue;
+        }
+
         if (!_word.empty() && !spelling_checker_check_word(_checker.get(), _word.c_str(), _word.length())) {
             std::cout<<"Misspelled word: " << _word << std::endl;
             // auto squiggle = createSquiggle(item, _word, begin, end);
