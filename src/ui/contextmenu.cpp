@@ -158,7 +158,8 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
 
     //SpellCheck
     bool spellcheck_enabled = false;
-    if(item && is<SPText>(item)) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if(item && is<SPText>(item) && prefs->getBool("/dialogs/spellcheck/live", false)) {
 
         auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool());
 
@@ -438,7 +439,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
     // Do not install this CSS provider; it messes up menus with icons (like popup menu with all dialogs).
     // It doesn't work well with context menu either, introducing disturbing visual glitch 
     // where menu shifts upon opening.
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     bool const shift_icons = prefs->getInt("/theme/shiftIcons", true);
     set_tooltips_and_shift_icons(*this, shift_icons);
     // Set the style and icon theme of the new menu based on the desktop

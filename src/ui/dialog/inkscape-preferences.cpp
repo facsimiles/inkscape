@@ -3756,6 +3756,9 @@ void InkscapePreferences::initPageSpellcheck()
     _spell_ignoreallcaps.init(_("Ignore words in ALL CAPITALS"), "/dialogs/spellcheck/ignoreallcaps", false);
     _page_spellcheck.add_line(false, "", _spell_ignoreallcaps, "", _("Ignore words in all capitals, such as \"IUPAC\""), true);
 
+    _spell_live.init(_("Turn On live spellchecking"), "/dialogs/spellcheck/live", true);
+    _page_spellcheck.add_line(false, "", _spell_live, "", _("Enable live spellchecking while typing"), true);
+
     AddPage(_page_spellcheck, _("Spellcheck"), PREFS_PAGE_SPELLCHECK);
 #endif
 }

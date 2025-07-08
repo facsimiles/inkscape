@@ -88,7 +88,10 @@ OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
         dict_file.close();
     }
 
-    scanDocument();
+    // If live spellcheck is enabled, start scanning the document
+    if(_prefs.getBool("/dialogs/spellcheck/live", false)) {   
+        scanDocument();
+    }
 }
 
 void OnCanvasSpellCheck::allTextItems(SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked)
