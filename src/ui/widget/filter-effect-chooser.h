@@ -31,9 +31,10 @@ extern const Util::EnumDataConverter<SPBlendMode> SPBlendModeConverter;
 namespace UI {
 namespace Widget {
 
-/* Allows basic control over feBlend and feGaussianBlur effects as well as opacity.
- *  Common for Object, Layers, and Fill and Stroke dialogs.
-*/
+/* 
+ * Allows basic control over feBlend and feGaussianBlur effects as well as opacity.
+ * Used in Fill and Stroke dialog.
+ */
 class SimpleFilterModifier : public Gtk::Box
 {
 public:

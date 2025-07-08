@@ -57,8 +57,8 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     , _lb_blend(_("Blend mode"))
     , _lb_isolation("Isolate") // Translate for 1.1
     , _blend(SPBlendModeConverter, SPAttr::INVALID, false, "BlendMode")
-    , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
-    , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
+    , _blur(_("Blur"), 0, 0, 100, 1, 0.1, 1)
+    , _opacity(_("Opacity"), 0, 0, 100, 1, 0.1, 1)
     , _notify(true)
     , _hb_blend(Gtk::Orientation::HORIZONTAL, 4)
 {
@@ -105,7 +105,13 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     }
 
     if (flags & BLUR) {
-       append(_blur);
+        auto* blur_row = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 4);
+        auto* blur_label = Gtk::make_managed<Gtk::Label>("Blur");
+        blur_label->set_halign(Gtk::Align::START);
+        blur_label->set_valign(Gtk::Align::CENTER);
+        blur_row->append(*blur_label);
+        blur_row->append(_blur);
+        
     }
 
     if (flags & OPACITY) {
