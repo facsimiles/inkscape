@@ -45,6 +45,7 @@ class XmlTreeView : public Gtk::TreeView
 {
 public:
     XmlTreeView();
+    ~XmlTreeView() override;
 
     void build_tree(SPDocument* document); // set_root_watcher()
     Inkscape::XML::Node* get_repr(Gtk::TreeModel::ConstRow const &row) const;

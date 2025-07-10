@@ -29,7 +29,7 @@ class ColorProfile final : public SPObject
 {
 public:
     ColorProfile() = default;
-    ~ColorProfile() override = default;
+    ~ColorProfile() override;
     int tag() const override { return tag_of<decltype(*this)>; }
 
     static ColorProfile *createFromProfile(SPDocument *doc, Colors::CMS::Profile const &profile,

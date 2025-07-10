@@ -52,6 +52,8 @@ SPGuide::SPGuide()
     , hicolor(0xff00007f)
 {}
 
+SPGuide::~SPGuide() = default;
+
 void SPGuide::setColor(guint32 color)
 {
     this->color = color;

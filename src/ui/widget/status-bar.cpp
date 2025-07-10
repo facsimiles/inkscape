@@ -144,6 +144,8 @@ StatusBar::StatusBar()
     update_visibility();
 }
 
+StatusBar::~StatusBar() = default;
+
 void StatusBar::set_desktop(SPDesktop *desktop_in)
 {
     desktop = desktop_in;

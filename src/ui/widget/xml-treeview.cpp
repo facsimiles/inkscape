@@ -418,6 +418,8 @@ XmlTreeView::XmlTreeView()
     add_controller(drop);
 }
 
+XmlTreeView::~XmlTreeView() = default;
+
 // Build TreeView model, starting with root.
 void
 XmlTreeView::build_tree(SPDocument* document_in)

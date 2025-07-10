@@ -45,6 +45,8 @@ CanvasItemDrawing::CanvasItemDrawing(CanvasItemGroup *group)
     _drawing->setRoot(root);
 }
 
+CanvasItemDrawing::~CanvasItemDrawing() = default;
+
 /**
  * Returns true if point p (in canvas units) is inside some object in drawing.
  */

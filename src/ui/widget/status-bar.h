@@ -46,7 +46,7 @@ class StatusBar
 {
 public:
     StatusBar();
-    ~StatusBar() override = default;
+    ~StatusBar() override;
 
     void set_desktop(SPDesktop* desktop);
     void set_message(const Inkscape::MessageType type, const char* message);

@@ -123,6 +123,7 @@ class SelectedStyle
 public:
     bool dragging = false;
     SelectedStyle();
+    ~SelectedStyle() override;
 
     void setDesktop(SPDesktop *desktop);
     SPDesktop *getDesktop() {return _desktop;}

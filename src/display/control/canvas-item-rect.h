@@ -44,6 +44,7 @@ public:
     void set_dashed(bool dash = true);
     void set_inverted(bool inverted = false);
     void set_shadow(uint32_t color, int width);
+
 protected:
     ~CanvasItemRect() override = default;
 

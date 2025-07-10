@@ -67,6 +67,7 @@ class DocumentProperties : public DialogBase
 {
 public:
     DocumentProperties();
+    ~DocumentProperties() override;
 
     void  update_widgets();
     static DocumentProperties &getInstance();

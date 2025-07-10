@@ -53,7 +53,7 @@ public:
     }
 
 protected:
-    ~CanvasItemDrawing() override = default;
+    ~CanvasItemDrawing() override;
 
     void _update(bool propagate) override;
     void _render(Inkscape::CanvasItemBuffer &buf) const override;

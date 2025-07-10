@@ -42,7 +42,7 @@ namespace UI::Widget {
 class SPGuide final : public SPObject {
 public:
     SPGuide();
-    ~SPGuide() override = default;
+    ~SPGuide() override;
     int tag() const override { return tag_of<decltype(*this)>; }
 
     void set_color(const unsigned r, const unsigned g, const unsigned b, bool const commit);

@@ -36,6 +36,7 @@ class CalligraphicTool : public DynamicBase
 {
 public:
     CalligraphicTool(SPDesktop *desktop);
+    ~CalligraphicTool() override;
 
     void set(Preferences::Entry const &val) override;
     bool root_handler(CanvasEvent const &event) override;

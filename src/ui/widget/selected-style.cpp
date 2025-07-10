@@ -254,6 +254,8 @@ SelectedStyle::SelectedStyle()
     make_popup_units();
 }
 
+SelectedStyle::~SelectedStyle() = default;
+
 void SelectedStyle::setDesktop(SPDesktop *desktop)
 {
     if (_desktop) {

@@ -10,20 +10,20 @@
 
 #include "color-profile.h"
 
-#include <cstring>
 #include <giomm/error.h>
 
 #include "attributes.h"
 #include "colors/cms/profile.h"
 #include "document.h"
 #include "inkscape.h"
-#include "preferences.h"
 #include "sp-defs.h"
 #include "uri.h"
 #include "xml/document.h"
 #include "xml/href-attribute-helper.h"
 
 namespace Inkscape {
+
+ColorProfile::~ColorProfile() = default;
 
 void ColorProfile::release()
 {

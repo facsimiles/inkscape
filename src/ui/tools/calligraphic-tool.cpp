@@ -115,6 +115,8 @@ CalligraphicTool::CalligraphicTool(SPDesktop *desktop)
     }
 }
 
+CalligraphicTool::~CalligraphicTool() = default;
+
 void CalligraphicTool::set(Preferences::Entry const &val)
 {
     auto const path = val.getEntryName();

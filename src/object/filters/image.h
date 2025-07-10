@@ -32,6 +32,7 @@ class SPFeImage final
 {
 public:
     SPFeImage();
+    ~SPFeImage() override;
     int tag() const override { return tag_of<decltype(*this)>; }
 
 private:

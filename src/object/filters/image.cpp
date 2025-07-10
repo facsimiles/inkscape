@@ -47,6 +47,8 @@ class Node;
 SPFeImage::SPFeImage()
     : elemref(std::make_unique<Inkscape::URIReference>(this)) {}
 
+SPFeImage::~SPFeImage() = default;
+
 void SPFeImage::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPFilterPrimitive::build(document, repr);

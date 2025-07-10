@@ -37,6 +37,7 @@ class InkviewWindow : public Gtk::ApplicationWindow
 public:
     InkviewWindow(Gio::Application::type_vec_files files,
                   bool fullscreen, bool recursive, int timer, double scale, bool preload);
+    ~InkviewWindow() override;
 
     struct NoValidFilesException {};
 

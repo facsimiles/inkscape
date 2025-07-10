@@ -57,6 +57,38 @@ namespace Inkscape::UI::Widget {
     return std::make_pair(std::move(menu), std::ref(*config));
 }
 
+class ColorPaletteMenuItem : public PopoverMenuItem {
+public:
+    ColorPaletteMenuItem(Gtk::CheckButton *&group,
+                         Glib::ustring const &label,
+                         Glib::ustring id,
+                         std::vector<rgb_t> colors)
+        : Glib::ObjectBase{"ColorPaletteMenuItem"}
+        , PopoverMenuItem{}
+        , _radio_button{Gtk::make_managed<Gtk::CheckButton>(label)}
+        , _preview{Gtk::make_managed<ColorPalettePreview>(std::move(colors))}
+        , id{std::move(id)}
+    {
+        if (group) {
+            _radio_button->set_group(*group);
+        } else {
+            group = _radio_button;
+        }
+        auto const box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL, 1);
+        box->append(*_radio_button);
+        box->append(*_preview);
+        set_child(*box);
+    }
+
+    void set_active(bool const active) { _radio_button->set_active(active); }
+
+    Glib::ustring const id;
+
+private:
+    Gtk::CheckButton    *_radio_button = nullptr;
+    ColorPalettePreview *_preview      = nullptr;
+};
+
 ColorPalette::ColorPalette():
     _builder(create_builder("color-palette.glade")),
     _normal_box(get_widget<Gtk::FlowBox>(_builder, "flow-box")),
@@ -677,38 +709,6 @@ void ColorPalette::rebuild_widgets()
     _normal_box.thaw_notify();
     _pinned_box.thaw_notify();
 }
-
-class ColorPaletteMenuItem : public PopoverMenuItem {
-public:
-    ColorPaletteMenuItem(Gtk::CheckButton *&group,
-                         Glib::ustring const &label,
-                         Glib::ustring id,
-                         std::vector<rgb_t> colors)
-        : Glib::ObjectBase{"ColorPaletteMenuItem"}
-        , PopoverMenuItem{}
-        , _radio_button{Gtk::make_managed<Gtk::CheckButton>(label)}
-        , _preview{Gtk::make_managed<ColorPalettePreview>(std::move(colors))}
-        , id{std::move(id)}
-    {
-        if (group) {
-            _radio_button->set_group(*group);
-        } else {
-            group = _radio_button;
-        }
-        auto const box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL, 1);
-        box->append(*_radio_button);
-        box->append(*_preview);
-        set_child(*box);
-    }
-
-    void set_active(bool const active) { _radio_button->set_active(active); }
-
-    Glib::ustring const id;
-
-private:
-    Gtk::CheckButton    *_radio_button = nullptr;
-    ColorPalettePreview *_preview      = nullptr;
-};
 
 void ColorPalette::set_palettes(std::vector<palette_t> const &palettes)
 {

@@ -211,6 +211,8 @@ DocumentProperties::DocumentProperties()
     _wr.setUpdating (false);
 }
 
+DocumentProperties::~DocumentProperties() = default;
+
 //========================================================================
 
 /**
