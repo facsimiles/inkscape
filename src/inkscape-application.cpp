@@ -1005,7 +1005,9 @@ void InkscapeApplication::on_activate()
      * It however loses the window focus when launching via command line without file arguments.
      * Removing this line will open a new document before opening your file.
     */
-    Glib::MainContext::get_default()->iteration(false);
+    //TODO: this prevents main window from activating and bringing it to the foreground
+    // less hacky solution needs to be found
+    // Glib::MainContext::get_default()->iteration(false);
 #endif
 
     if (_use_pipe) {
