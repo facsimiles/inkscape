@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-12 12:29+0000\n"
+"PO-Revision-Date: 2025-07-12 14:03+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -8223,7 +8223,7 @@ msgstr "Manual Inkscape"
 
 #: ../src/actions/actions-help-url.cpp:122
 msgid "Beginners' Guide"
-msgstr ""
+msgstr "Ghidul începătorului"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
@@ -30169,12 +30169,13 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2547
 msgid "Ctrl+A, Tab, Shift+Tab"
-msgstr ""
+msgstr "Ctrl+A, Tab, Shift+Tab"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2549
 msgid "Make keyboard selection commands work on objects in all layers"
 msgstr ""
-"Fă comenzile de selecție din tastatură să funcționeze în toate straturile"
+"Determină comenzile de selecție de la tastatură să funcționeze asupra "
+"obiectelor din toate straturile"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "Make keyboard selection commands work on objects in current layer only"
@@ -30187,8 +30188,8 @@ msgid ""
 "Make keyboard selection commands work on objects in current layer and all "
 "its sublayers"
 msgstr ""
-"Fă comenzile de selecție din tastatură să funcționeze cu obiectele din toate "
-"straturile"
+"Determină comenzile de selecție de la tastatură să funcționeze asupra "
+"obiectelor din stratul curent și din toate substraturile sale"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid ""
@@ -30238,9 +30239,9 @@ msgid ""
 "above the current selection (z-order). Otherwise, insertion happens on top "
 "of all objects in the current layer."
 msgstr ""
-"Daca este bifat, obiectele lipite și documentele importate vor fi plasate "
-"imediat deasupra selecției curente (ordinea-z). Altfel, inserția are loc la "
-"vârf pentru toate obiectele din stratul curent."
+"Dacă opțiunea este bifată, elementele lipite și documentele importate vor fi "
+"plasate imediat deasupra selecției curente (ordinea-z). În caz contrar, "
+"inserarea are loc la deasupra tuturor obiectelor din stratul curent."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2573
 msgid "Selecting"
@@ -30679,6 +30680,9 @@ msgid ""
 "rotated, the selection will then still be moved horizontally and vertically "
 "relative to the screen, not to the rotated document."
 msgstr ""
+"Când sunt activate, tastele săgeată mută obiectele în raport cu ecranul. "
+"Când canavaua este rotită, selecția va fi mutată în continuare pe orizontală "
+"și pe verticală în raport cu ecranul, nu și cu documentul rotit."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2734
 msgid "Steps"
@@ -42454,7 +42458,7 @@ msgstr "Colțuri"
 
 #: ../share/ui/toolbar-select.ui:106
 msgid "Select all objects"
-msgstr ""
+msgstr "Selectează toate obiectele"
 
 #: ../share/ui/toolbar-select.ui:124
 #, fuzzy
@@ -42466,10 +42470,8 @@ msgid "Deselect any selected objects"
 msgstr ""
 
 #: ../share/ui/toolbar-select.ui:161
-#, fuzzy
 msgid "Toggle selection box to select all touched objects"
-msgstr ""
-"Dimensionează selecția pentru a se potrivi cu dimensiunea obiectului copiat"
+msgstr "Comută caseta de selecție pentru selecta toate obiectele atinse"
 
 #: ../share/ui/toolbar-select.ui:209
 #, fuzzy
@@ -47872,6 +47874,14 @@ msgid ""
 "Suspected small objects will be marked out by colored arrows.\n"
 "            "
 msgstr ""
+"\n"
+"Utilizare:\n"
+"1. Selectați toate decalajele zonei (contururi gri)\n"
+"2. Obiect/Degrupare (Shift+Ctrl+G)\n"
+"3. Apăsați butonul Aplică\n"
+"\n"
+"Obiectele suspectate a fi mici vor fi marcate cu săgeți colorate.\n"
+"            "
 
 # hm ? presupun că nu traseu
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:47
@@ -48122,6 +48132,16 @@ msgid ""
 "or remove XML tag 'dxfpoint' with any value.\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"Convertește obiectele selectate în puncte de găurire (așa cum face plugin-ul "
+"dxf_import). De asemenea, puteți salva forma originală. Va fi utilizat doar "
+"punctul de început al fiecărei curbe.\n"
+"\n"
+"De asemenea, puteți selecta manual obiectul, deschide editorul XML "
+"(Shift+Ctrl+X) și adăuga sau elimina eticheta XML „dxfpoint” cu orice "
+"valoare.\n"
+"          "
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:15
 msgid "Convert selection:"
@@ -50325,13 +50345,13 @@ msgid ""
 msgstr ""
 "\n"
 "Această extensie schimbă ordinea z a obiectelor în funcție de poziția lor\n"
-"pe canava sau de ordinea curentă a acestora.\n"
+"pe canava sau de ordinea z curentă a acestora.\n"
 "Extensia stivuiește din nou toate obiectele selectate. Grupurile sunt "
 "tratate ca\n"
 "un singur obiect.\n"
 "Dacă elementele unui grup sunt selectate împreună cu obiecte externe,\n"
 "elementele grupului sunt extrase și poziționate lângă celelalte\n"
-"obiecte restivuite (elementele de pe diferite straturi sunt aduse împreună\n"
+"obiecte restivuite (elementele de pe straturi diferite sunt aduse împreună\n"
 "la același strat).\n"
 "            "
 
@@ -50353,15 +50373,15 @@ msgstr "Dimensiune minimă:"
 
 #: ../share/extensions/rtree.inx:7
 msgid "Omit redundant segments"
-msgstr ""
+msgstr "Omite segmentele redundante"
 
 #: ../share/extensions/rtree.inx:7
 msgid "Lift pen for backward steps"
-msgstr ""
+msgstr "Ridică stiloul pentru pași înapoi"
 
 #: ../share/extensions/rubberstretch.inx:3
 msgid "Rubber Stretch"
-msgstr ""
+msgstr "Întindere elastică"
 
 #: ../share/extensions/rubberstretch.inx:5
 msgid "Strength (%):"
