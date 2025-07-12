@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-06 11:17+0000\n"
+"PO-Revision-Date: 2025-07-12 12:29+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -12349,7 +12349,7 @@ msgstr "PostScript de nivel 2"
 #: ../src/extension/internal/cairo-ps-out.cpp:334
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:226
 msgid "Text output options:"
-msgstr "Opțiuni pentru rezultat text"
+msgstr "Opțiuni pentru textul rezultat:"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:291
 #: ../src/extension/internal/cairo-ps-out.cpp:335
