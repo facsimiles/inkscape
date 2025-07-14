@@ -27,6 +27,9 @@ CssPrinter &CssPrinter::operator<<(double value)
                    (number.substr(number.length() - 1, 1) == "0" || number.substr(number.length() - 1, 1) == "."))
                 number.pop_back();
 
+            if (number == "-0")
+                number = "0";
+
             *this << (_count ? _sep : "") << number;
         }
         _count++;

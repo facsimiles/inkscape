@@ -92,7 +92,7 @@ TEST(ColorsSpacesCms, realColor)
 
     color = Color(0x2c292aff);
     EXPECT_TRUE(color.convert(cmyk));
-    EXPECT_EQ(color.toString(), "#201c1c icc-color(Artifex-CMYK-SWOP-Profile, 0.697, 0.696, 0.658, 0.856)");
+    EXPECT_EQ(color.toString(), "#1f1b1c icc-color(Artifex-CMYK-SWOP-Profile, 0.688, 0.694, 0.648, 0.866)");
 }
 
 TEST(ColorsSpacesCms, fallbackColor)

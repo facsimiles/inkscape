@@ -66,14 +66,18 @@ std::shared_ptr<Transform> const Transform::create_for_cairo(std::shared_ptr<Pro
 std::shared_ptr<Transform> const Transform::create_for_cms(std::shared_ptr<Profile> const &from,
                                                            std::shared_ptr<Profile> const &to, RenderingIntent intent)
 {
+    // Color space is used in lcms2 to scale input and output values, we don't want this.
+    static constexpr cmsUInt32Number mask_colorspace = ~COLORSPACE_SH(0b11111);
+
     if (!to || !from)
         return nullptr;
     unsigned int flags = 0;
     unsigned int lt = lcms_intent(intent, flags);
 
-    // Format is 16bit integer in whatever color space it's in.
-    auto from_format = cmsFormatterForColorspaceOfProfile(from->getHandle(), 2, false);
-    auto to_format = cmsFormatterForColorspaceOfProfile(to->getHandle(), 2, false);
+    // Format is 64bit floating point (double), so try not to do extra conversions.
+    // Note: size of 8 will clobber channel size bit and cause errors, pass zero
+    auto from_format = cmsFormatterForColorspaceOfProfile(from->getHandle(), 0, true) & mask_colorspace;
+    auto to_format = cmsFormatterForColorspaceOfProfile(to->getHandle(), 0, true) & mask_colorspace;
     return create(cmsCreateTransform(from->getHandle(), from_format, to->getHandle(), to_format, lt, flags));
 }
 
@@ -195,20 +199,22 @@ void Transform::do_transform(Cairo::RefPtr<Cairo::ImageSurface> &in, Cairo::RefP
  */
 bool Transform::do_transform(std::vector<double> &io) const
 {
-    std::vector<cmsUInt16Number> input(_channels_in);
-    std::vector<cmsUInt16Number> output(_channels_out);
-
-    for (unsigned int a = 0; a < _channels_in; a++) {
-        // double to uint16 conversion
-        input[a] = io[0] * 65535;
-        io.erase(io.begin());
+    if (!_float_in || !_float_out) {
+        throw ColorError("Transform isn't in a floating point format.");
     }
-    cmsDoTransform(_handle, &input.front(), &output.front(), 1);
 
-    // Preserve any extra non-color channels (i.e. transparency) by inserting
-    // into the front of the vector instead of the end.
-    for (auto &val : boost::adaptors::reverse(output)) {
-        io.insert(io.begin(), val / 65535.0);
+    bool alpha = io.size() == _channels_in + 1;
+
+    // Pad data for output channels
+    while (io.size() < _channels_out + alpha) {
+        io.insert(io.begin() + _channels_in, 0.0);
+    }
+
+    cmsDoTransform(_handle, &io.front(), &io.front(), 1);
+
+    // Trim data for output channels
+    while (io.size() > _channels_out + alpha) {
+        io.erase(io.end() - 1 - alpha);
     }
     return true;
 }

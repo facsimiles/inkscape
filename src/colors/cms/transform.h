@@ -36,8 +36,12 @@ public:
     Transform(cmsHTRANSFORM handle, bool global = false)
         : _handle(handle)
         , _context(!global ? cmsGetTransformContextID(handle) : nullptr)
-        , _channels_in(T_CHANNELS(cmsGetTransformInputFormat(handle)))
-        , _channels_out(T_CHANNELS(cmsGetTransformOutputFormat(handle)))
+        , _format_in(cmsGetTransformInputFormat(handle))
+        , _format_out(cmsGetTransformOutputFormat(handle))
+        , _channels_in(T_CHANNELS(_format_in))
+        , _channels_out(T_CHANNELS(_format_out))
+        , _float_in(FLOAT_SH(_format_in))
+        , _float_out(FLOAT_SH(_format_out))
     {
         assert(_handle);
     }
@@ -67,8 +71,12 @@ private:
     static unsigned int lcms_intent(RenderingIntent intent, unsigned int &flags);
 
 public:
+    cmsUInt32Number _format_in;
+    cmsUInt32Number _format_out;
     unsigned int _channels_in;
     unsigned int _channels_out;
+    bool _float_in;
+    bool _float_out;
 };
 
 } // namespace Inkscape::Colors::CMS
