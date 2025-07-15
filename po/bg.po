@@ -13,19 +13,20 @@ msgstr ""
 "Project-Id-Version: bg\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2021-02-04 10:00+0200\n"
-"Last-Translator: GIMP <vdachev@gmail.com>\n"
-"Language-Team: Bulgarian <bg@li.org>\n"
+"PO-Revision-Date: 2025-07-15 16:31+0000\n"
+"Last-Translator: Hats Off <stoyan@easyads.bg>\n"
+"Language-Team: Bulgarian <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../../build/share/filters/filters.svg.h:2
-#, fuzzy
 msgid "Fast Crop"
-msgstr "Изрязване"
+msgstr "Бързо кадриране"
 
 #: ../../build/share/filters/filters.svg.h:3
 #: ../../build/share/filters/filters.svg.h:527
@@ -39861,9 +39862,8 @@ msgid "Add item"
 msgstr "Добавяне на филтър"
 
 #: ../share/ui/dialog-crash.glade:10
-#, fuzzy
 msgid "Inkscape has crashed and will now close."
-msgstr "Inkscape отчете вътрешна грешка и ще се затвори сега.\n"
+msgstr "Inkscape се срина и ще се затвори."
 
 #: ../share/ui/dialog-crash.glade:11
 msgid ""
@@ -41387,11 +41387,12 @@ msgid ""
 msgstr ""
 
 #: ../share/ui/inkscape-welcome.glade:730
-#, fuzzy
 msgid ""
 "Learn how to\n"
 "Contribute Time"
-msgstr "Търсене в името на атрибутите"
+msgstr ""
+"Научете как да\n"
+"участвате в проекта"
 
 #: ../share/ui/inkscape-welcome.glade:790
 msgid ""
