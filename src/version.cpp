@@ -26,6 +26,7 @@ bool sp_version_from_string(const char *string, Inkscape::Version *version)
     try
     {
         std::stringstream ss;
+        ss.imbue(std::locale::classic());
 
         // Throw exception if error.
         ss.exceptions(std::ios::failbit | std::ios::badbit);
