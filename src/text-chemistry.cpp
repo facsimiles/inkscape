@@ -200,8 +200,6 @@ text_remove_from_path()
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
         DocumentUndo::done(desktop->getDocument(), _("Remove text from path"), INKSCAPE_ICON("draw-text"));
-        std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
-        selection->setList(vec); // reselect to update statusbar description
     }
 }
 

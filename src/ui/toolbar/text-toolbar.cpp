@@ -393,7 +393,7 @@ void TextToolbar::setDesktop(SPDesktop *desktop)
         _cursor_moved_conn = desktop->connect_text_cursor_moved([this] (Tools::TextTool *tool) {
             _cursorMoved(tool);
         });
-        _sub_active_item = nullptr;
+        _sub_active_item.reset();
         _cursor_numbers = 0;
         _selectionChanged(sel);
     }
@@ -1501,9 +1501,10 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
     int result_numbers = 0;
     int result_numbers_fallback = 0;
     if (!outside) {
-        if (_outer && _sub_active_item) {
-            auto parent = cast<SPItem>(_sub_active_item->parent);
-            result_numbers = objects_query_fontnumbers({_sub_active_item}, &query);
+        auto sub_active_item = _sub_active_item.get();
+        if (_outer && sub_active_item) {
+            auto parent = cast<SPItem>(sub_active_item->parent);
+            result_numbers = objects_query_fontnumbers({sub_active_item}, &query);
             result_numbers_fallback = objects_query_fontnumbers({parent}, &query_fallback);
         } else if (_outer) {
             result_numbers = objects_query_fontnumbers(to_work, &query);
@@ -1819,7 +1820,7 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
 
 void TextToolbar::_selectionModified(Selection *selection, unsigned)
 {
-    _sub_active_item = nullptr;
+    _sub_active_item.reset();
     _selectionChanged(selection);
 }
 
@@ -2120,7 +2121,7 @@ void TextToolbar::_cursorMoved(Tools::TextTool* tc)
         std::cout << "subselection_changed: start " << std::endl;
     }
     // quit if run by the _changed callbacks
-    this->_sub_active_item = nullptr;
+    _sub_active_item.reset();
     if (_updating) {
         return;
     }

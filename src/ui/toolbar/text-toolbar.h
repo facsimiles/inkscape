@@ -28,6 +28,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "object/weakptr.h"
 #include "style.h"
 #include "text-editing.h"
 #include "toolbar.h"
@@ -100,7 +101,7 @@ private:
     bool _freeze = false;
     bool _text_style_from_prefs = false;
     bool _outer = true;
-    SPItem *_sub_active_item;
+    SPWeakPtr<SPItem> _sub_active_item;
     int _lineheight_unit;
     Text::Layout::iterator wrap_start;
     Text::Layout::iterator wrap_end;
