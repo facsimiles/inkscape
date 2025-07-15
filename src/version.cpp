@@ -40,6 +40,7 @@ std::optional<Version> Version::from_string(char const *version_string)
 
     try {
         std::istringstream ss{version_string};
+        ss.imbue(std::locale::classic());
 
         // Throw an exception if an error occurs when parsing the major and minor numbers.
         ss.exceptions(std::ios::failbit | std::ios::badbit);
