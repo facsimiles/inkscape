@@ -92,8 +92,10 @@ void CanvasItemSquiggle::_update(bool)
 
     // Set bounds (just a box around the squiggle)
     Geom::Rect bounds_doc(_start, _end);
-    bounds_doc.expandBy(5.0 / affine().descrim()); // Expand by 5 canvas units, convert to doc units
+    bounds_doc.expandBy(5.0); // Expand by 5 canvas units, convert to doc units
     _bounds = bounds_doc;
+
+    *_bounds *= affine();
 
     request_redraw();
 }
