@@ -8,7 +8,7 @@
 
 namespace Inkscape {
 
-CanvasItemSquiggle::CanvasItemSquiggle(CanvasItemGroup *group, Geom::Point start, Geom::Point end, uint32_t color)
+CanvasItemSquiggle::CanvasItemSquiggle(CanvasItemGroup *group, Geom::Point const &start, Geom::Point const &end, uint32_t color)
     : CanvasItem(group)
     , _start(start)
     , _end(end)
@@ -85,15 +85,15 @@ void CanvasItemSquiggle::_rebuild_squiggle()
 
 void CanvasItemSquiggle::_update(bool)
 {
-    std::cout << "CanvasItemSquiggle _update" << std::endl;
+    request_redraw();
+
+    // std::cout << "CanvasItemSquiggle _update" << std::endl;
     _rebuild_squiggle();
 
     // Set bounds (just a box around the squiggle)
     Geom::Rect bounds_doc(_start, _end);
     bounds_doc.expandBy(5.0 / affine().descrim()); // Expand by 5 canvas units, convert to doc units
     _bounds = bounds_doc;
-
-    request_redraw();
 
     request_redraw();
 }
@@ -115,7 +115,7 @@ void CanvasItemSquiggle::_render(CanvasItemBuffer &buf) const
     // Draw in screen coordinates but no affine transformation cause it is already in canvas coordinates
     feed_pathvector_to_cairo(buf.cr->cobj(), _squiggle_path, Geom::Affine(), buf.rect, true, 0);
 
-    ink_cairo_set_source_rgba32(buf.cr, _color);
+    ink_cairo_set_source_color(buf.cr, Colors::Color(_color));
     buf.cr->set_line_width(1.5);
     buf.cr->stroke();
 

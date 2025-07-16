@@ -18,7 +18,7 @@ namespace Inkscape {
 class CanvasItemSquiggle : public CanvasItem
 {
 public:
-    CanvasItemSquiggle(CanvasItemGroup *group, Geom::Point start, Geom::Point end, uint32_t color = 0xff0000ff);
+    CanvasItemSquiggle(CanvasItemGroup *group, Geom::Point const &start, Geom::Point const &end, uint32_t color = 0xff0000ff);
 
     // Properties
     void set_points(Geom::Point start, Geom::Point end);
