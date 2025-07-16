@@ -54,8 +54,6 @@ private:
 
     Util::GObjectPtr<SpellingChecker> _checker;
 
-    Preferences &_prefs;
-
     std::string _lang_code;
 
     std::vector<TrackedTextItem> _tracked_items;

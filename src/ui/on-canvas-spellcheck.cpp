@@ -23,14 +23,19 @@ namespace Inkscape::UI {
 
 namespace {
 
+const char *IGNORED_WORDS_FILE = "inkscape/ignored-words.txt";
+const char *ACCEPTED_WORDS_FILE = "inkscape/accepted-words.txt";
+
+constexpr uint32_t SQUIGGLE_COLOR_RED = 0xff0000ff; // Color for squiggles
+
 std::string get_user_ignore_path()
 {
-    return Glib::build_filename(Glib::get_user_config_dir(), "inkscape/ignored-words.txt");
+    return Glib::build_filename(Glib::get_user_config_dir(), IGNORED_WORDS_FILE);
 }
 
 std::string get_user_dict_path()
 {
-    return Glib::build_filename(Glib::get_user_config_dir(), "inkscape/accepted-words.txt");
+    return Glib::build_filename(Glib::get_user_config_dir(), ACCEPTED_WORDS_FILE);
 }
 
 void ensure_file_exists(const std::string& path)
@@ -42,8 +47,7 @@ void ensure_file_exists(const std::string& path)
 
 
 OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
-    : _prefs{*Preferences::get()}
-    , _desktop(desktop)
+    : _desktop(desktop)
 {
     // Get the current document root
     auto doc = desktop->getDocument();
@@ -89,33 +93,30 @@ OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
     }
 
     // If live spellcheck is enabled, start scanning the document
-    if(_prefs.getBool("/dialogs/spellcheck/live", false)) {   
+    auto prefs = Inkscape::Preferences::get();
+    if(prefs->getBool("/dialogs/spellcheck/live", false)) {   
         scanDocument();
     }
 }
 
-void OnCanvasSpellCheck::allTextItems(SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked)
+void OnCanvasSpellCheck::allTextItems(SPObject *root, std::vector<SPItem *> &list, bool hidden, bool locked)
 {
-    if (is<SPDefs>(r)) {
-        return; // we're not interested in items in defs
-    }
-
-    if (!std::strcmp(r->getRepr()->name(), "svg:metadata")) {
-        return; // we're not interested in metadata
+    if (is<SPDefs>(root) || !std::strcmp(root->getRepr()->name(), "svg:metadata")) {
+        return; // we're not interested in items in defs and metadata
     }
 
     if (_desktop) {
-        for (auto &child: r->children) {
+        for (auto &child: root->children) {
             if (auto item = cast<SPItem>(&child)) {
                 if (!child.cloned && !_desktop->layerManager().isLayer(item)) {
                     if ((hidden || !_desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
                         if (is<SPText>(item) || is<SPFlowtext>(item)) {
-                            l.push_back(item);
+                            list.push_back(item);
                         }
                     }
                 }
             }
-            allTextItems(&child, l, hidden, locked);
+            allTextItems(&child, list, hidden, locked);
         }
     }
 }
@@ -191,15 +192,17 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
             continue;
         }
 
+        auto prefs = Inkscape::Preferences::get();
+
         // Skip words containing digits
-        if(_prefs.getInt("/dialogs/spellcheck/ignorenumbers") != 0 &&
+        if(prefs->getInt("/dialogs/spellcheck/ignorenumbers") != 0 &&
             std::any_of(_word.begin(), _word.end(), [](gchar c) { return g_unichar_isdigit(c); })) {
             it = end;
             continue;
         }
 
         // Skip ALL-CAPS words
-        if(_prefs.getInt("/dialogs/spellcheck/ignoreallcaps") != 0 &&
+        if(prefs->getInt("/dialogs/spellcheck/ignoreallcaps") != 0 &&
             std::all_of(_word.begin(), _word.end(), [](gchar c) { return g_unichar_isupper(c); })) {
             it = end;
             continue;
@@ -263,7 +266,7 @@ void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled, SPItem* item
     misspelled.squiggle = CanvasItemPtr<CanvasItemSquiggle>(
         new Inkscape::CanvasItemSquiggle(_desktop->getCanvasSketch(), start_doc, end_doc)
     );
-    misspelled.squiggle->set_color(0xff0000ff);
+    misspelled.squiggle->set_color(SQUIGGLE_COLOR_RED);
     misspelled.squiggle->set_visible(true);
 }
 
