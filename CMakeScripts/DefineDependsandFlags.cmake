@@ -37,6 +37,9 @@ endif()
 #list(APPEND INKSCAPE_CXX_FLAGS "-DGTK_DISABLE_DEPRECATED")
 #list(APPEND INKSCAPE_CXX_FLAGS "-DGDK_DISABLE_DEPRECATED")
 
+# Disable deprecation warnings for Gtk
+list(APPEND INKSCAPE_CXX_FLAGS "-DGDK_DISABLE_DEPRECATION_WARNINGS")
+
 # Errors for common mistakes
 list(APPEND INKSCAPE_CXX_FLAGS "-fstack-protector-strong")
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
@@ -131,12 +134,8 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
                   fontconfig
                   gsl
                   gmodule-2.0
-                  #double-conversion
                   bdw-gc #boehm-demers-weiser gc
                   lcms2)
-
-# remove this line and uncomment the doiuble-conversion above when double-conversion.pc file gets shipped on all platforms we support
-find_package(DoubleConversion REQUIRED)  # lib2geom dependency
 
 sanitize_ldflags_for_libs(INKSCAPE_DEP_LDFLAGS)
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
