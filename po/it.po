@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-07 23:22+0000\n"
-"Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
+"PO-Revision-Date: 2025-07-19 14:06+0000\n"
+"Last-Translator: marco riva <oelimar@mail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
 "Language: it\n"
@@ -2555,7 +2555,7 @@ msgstr "salmone chiaro (#FFA07A)"
 #: ../../build/share/palettes/palettes.h:53
 msgctxt "Palette"
 msgid "sienna (#A0522D)"
-msgstr "sienna (#A0522D)"
+msgstr "siena (#A0522D)"
 
 #: ../../build/share/palettes/palettes.h:54
 msgctxt "Palette"
@@ -4208,7 +4208,7 @@ msgstr "Nastro magnetico"
 #: ../../build/share/symbols/symbols.h:151
 msgctxt "Symbol"
 msgid "Display"
-msgstr "Display"
+msgstr "Mostra"
 
 #: ../../build/share/symbols/symbols.h:152
 msgctxt "Symbol"
@@ -4343,32 +4343,32 @@ msgstr "Simboli logici"
 #: ../../build/share/symbols/symbols.h:178
 msgctxt "Symbol"
 msgid "Xnor Gate"
-msgstr "Xnor Gate"
+msgstr "Porta Xnor"
 
 #: ../../build/share/symbols/symbols.h:179
 msgctxt "Symbol"
 msgid "Xor Gate"
-msgstr "Xor Gate"
+msgstr "Porta Xor"
 
 #: ../../build/share/symbols/symbols.h:180
 msgctxt "Symbol"
 msgid "Nor Gate"
-msgstr "Nor Gate"
+msgstr "Porta Nor"
 
 #: ../../build/share/symbols/symbols.h:181
 msgctxt "Symbol"
 msgid "Or Gate"
-msgstr "Or Gate"
+msgstr "Porta Or"
 
 #: ../../build/share/symbols/symbols.h:182
 msgctxt "Symbol"
 msgid "Nand Gate"
-msgstr "Nand Gate"
+msgstr "Porta Nand"
 
 #: ../../build/share/symbols/symbols.h:183
 msgctxt "Symbol"
 msgid "And Gate"
-msgstr "And Gate"
+msgstr "Porta And"
 
 #: ../../build/share/symbols/symbols.h:184
 msgctxt "Symbol"
@@ -4378,7 +4378,7 @@ msgstr "Buffer"
 #: ../../build/share/symbols/symbols.h:185
 msgctxt "Symbol"
 msgid "Not Gate"
-msgstr "Not Gate"
+msgstr "Porta Not"
 
 #: ../../build/share/symbols/symbols.h:186
 msgctxt "Symbol"
@@ -4723,7 +4723,7 @@ msgstr "Bed and breakfast 2"
 #: ../../build/share/symbols/symbols.h:310
 msgctxt "Symbol"
 msgid "Camping"
-msgstr "Camping"
+msgstr "Campeggio"
 
 #: ../../build/share/symbols/symbols.h:297
 #: ../../build/share/symbols/symbols.h:311
@@ -6640,7 +6640,7 @@ msgstr "Chiudi immediatamente"
 
 #: ../src/actions/actions-base.cpp:204
 msgid "Immediately quit Inkscape, no check for data loss"
-msgstr "Chiude Inkscape immediatamente, senza controllo per la perdita di dati"
+msgstr "Chiude Inkscape immediatamente senza il controllo della perdita di dati"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Import Page Number"
@@ -7051,11 +7051,11 @@ msgstr "Attiva o disattiva aggancio ai tracciati delle maschere"
 
 #: ../src/actions/actions-canvas-snapping.cpp:278
 msgid "Snap Clip Paths"
-msgstr "Aggancia tracciati del fissaggio"
+msgstr "Aggancia tracciati del ritaglio"
 
 #: ../src/actions/actions-canvas-snapping.cpp:278
 msgid "Toggle snapping to clip paths"
-msgstr "Attiva o disattiva aggancio ai tracciati di fissaggio"
+msgstr "Attiva o disattiva aggancio ai tracciati di ritaglio"
 
 #: ../src/actions/actions-canvas-snapping.cpp:280
 msgid "Simple Snap Bounding Box"
@@ -7581,7 +7581,7 @@ msgstr "Cambiata unità visualizzata"
 #: ../src/actions/actions-edit-document.cpp:79
 #: ../share/ui/page-properties.glade:869
 msgid "Clip to page"
-msgstr "Taglia a pagina"
+msgstr "Ritaglia alla pagina"
 
 #: ../src/actions/actions-edit-document.cpp:90 ../src/object/sp-guide.cpp:276
 msgid "Create Guides Around the Current Page"
@@ -7624,11 +7624,11 @@ msgstr "Adatta la pagina al disegno"
 
 #: ../src/actions/actions-edit-document.cpp:95
 msgid "Toggle Clip to Page"
-msgstr "Imposta taglia a pagina"
+msgstr "Imposta ritaglio a pagina"
 
 #: ../src/actions/actions-edit-document.cpp:95
 msgid "Toggle between clipped to page and complete rendering"
-msgstr "Alterna tra il rendering tagliato alla pagina e completo"
+msgstr "Alterna tra il taglio alla pagina ed il rendering completo"
 
 #: ../src/actions/actions-edit-document.cpp:96
 msgid "Show Grids"
@@ -8000,7 +8000,7 @@ msgstr "Taglia immagine al fissaggio"
 
 #: ../src/actions/actions-element-image.cpp:210
 msgid "Remove parts of the image outside the applied clipping area."
-msgstr "Rimuove le parti dell'immagine esterne all'area del fissaggio"
+msgstr "Rimuove le parti dell'immagine esterne all'area del ritaglio"
 
 #: ../src/actions/actions-element-image.cpp:211
 msgid "Edit externally"
@@ -8108,7 +8108,7 @@ msgid ""
 "document"
 msgstr ""
 "Elimina dal documento definizioni inutilizzate (come gradienti o tracciati "
-"di fissaggio)"
+"di ritaglio)"
 
 #: ../src/actions/actions-file-window.cpp:126
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
@@ -9114,7 +9114,7 @@ msgstr "Applica oggetto di ritaglio invertito"
 
 #: ../src/actions/actions-object.cpp:386
 msgid "Apply inverse clipping path to selection (Power Clip LPE)"
-msgstr "Applica il ritaglio inverso alla selezione (Ritaglio evoluto)"
+msgstr "Applica il ritaglio inversamente alla selezione (Ritaglio evoluto)"
 
 #: ../src/actions/actions-object.cpp:387
 msgid "Object Clip Release"
@@ -10898,8 +10898,8 @@ msgid ""
 "tutorials/"
 msgstr ""
 "I file dei tutorial non sono installati.\n"
-"Per Linux potrebbe essere necessario installare 'inkscape-tutorials'.\n"
-"Per Windows riesegui il setup e seleziona 'Tutorials'.\n"
+"Per Linux potrebbe essere necessario installare 'inkscape-tutorials'. Per "
+"Windows riesegui il setup e seleziona 'Tutorials'.\n"
 "I tutorial sono disponibili online qui: https://inkscape.org/en/learn/"
 "tutorials/"
 
@@ -20534,7 +20534,7 @@ msgid ""
 "that need to be significantly simplified. "
 msgstr ""
 "Modifica il numero di ripetizioni dell'operazione di semplificazione. Utile "
-"per tracciati complessi che necessitano di notevoli semplificazioni."
+"per tracciati complessi che necessitano notevoli semplificazioni. "
 
 #: ../src/live_effects/lpe-simplify.cpp:28
 msgid "Drag slider to set the amount of simplification"
@@ -21335,7 +21335,7 @@ msgstr "_Numero di generazioni:"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid "Depth of the recursion --- keep low!!"
-msgstr "Profondità della ricorsione (non aumentare troppo)"
+msgstr "Profondità della ricorsione... non aumentare troppo!"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:49
 msgid "Generating path:"
@@ -22182,8 +22182,8 @@ msgstr "China"
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
-"Inkscape verrà eseguito con le impostazioni predefinite, e le nuove "
-"impostazioni non verranno salvate"
+"Inkscape verrà eseguito con le impostazioni predefinite; le nuove "
+"impostazioni non verranno salvate. "
 
 #: ../src/preferences.cpp:124
 #, c-format
@@ -29197,7 +29197,7 @@ msgstr "Usa finestre apri e salva in stile Windows"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2008
 msgid "Use GTK open and save dialogs "
-msgstr "Usa sottofinestre apri e salva in stile GTK"
+msgstr "Usa sottofinestre apri e salva in stile GTK "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2010
 msgid "Dialogs settings"
@@ -30208,8 +30208,8 @@ msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked layer)"
 msgstr ""
-"Deseleziona questa opzione per poter selezionare oggetti bloccati (bloccati "
-"loro stessi o in un livello bloccato)"
+"Deseleziona questa opzione per poter selezionare oggetti bloccati (o in un "
+"livello bloccato)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid ""
@@ -37822,7 +37822,7 @@ msgstr "Ombra"
 
 #: ../src/ui/widget/font-variations.cpp:116
 msgid "Controls the depth of a shadow"
-msgstr "Controlla la profondità dell'ombra"
+msgstr "Controlla la profondità dell'ombreggiatura"
 
 #: ../src/ui/widget/font-variations.cpp:117
 msgctxt "Variable font axis"
@@ -37831,21 +37831,21 @@ msgstr "Riflessione"
 
 #: ../src/ui/widget/font-variations.cpp:117
 msgid "Controls the Y reflection"
-msgstr "Controlla la riflessione in Y"
+msgstr "Controlla la riflessione lungo Y"
 
 #: ../src/ui/widget/font-variations.cpp:118
 msgctxt "Variable font axis"
 msgid "Outline"
-msgstr "Contorno"
+msgstr "Contornatura"
 
 #: ../src/ui/widget/font-variations.cpp:118
 msgid "Controls the weight of a font’s outline"
-msgstr "Controlla lo spessore di un carattere outline"
+msgstr "Controlla lo spessore del bordo del carattere"
 
 #: ../src/ui/widget/font-variations.cpp:119
 msgctxt "Variable font axis"
 msgid "Engrave"
-msgstr "Incisione"
+msgstr "Incidi"
 
 #: ../src/ui/widget/font-variations.cpp:119
 msgid "Controls the width of an engraving"
@@ -37863,7 +37863,7 @@ msgstr "Controlla la profondità di un rilievo"
 #: ../src/ui/widget/font-variations.cpp:121
 msgctxt "Variable font axis"
 msgid "Relative X advance"
-msgstr "Avanzamento relativo X"
+msgstr "Avanzamento relativo su X"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgid "Controls the relative X advance - horizontal motion of the glyph"
@@ -37872,23 +37872,21 @@ msgstr "Controlla l'avanzamento relativo lungo X - moto orizzontale del glifo"
 #: ../src/ui/widget/font-variations.cpp:122
 msgctxt "Variable font axis"
 msgid "Relative Y advance"
-msgstr "Avanzamento relativo Y"
+msgstr "Avanzamento relativo lungo Y"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgid "Controls the relative Y advance - vertical motion of the glyph"
 msgstr "Controlla l'avanzamento relativo lungo Y - moto verticale del glifo"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Relativo a:"
+msgstr "Relativo a"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
 msgid "Controls the relative second value - as in one second of animation time"
 msgstr ""
-"Controlla il relativo secondo valore - come in un secondo del tempo di "
+"Controlla il valore relativo del secondo - come in un secondo del tempo di "
 "animazione"
 
 #: ../src/ui/widget/font-variations.cpp:124
@@ -42122,9 +42120,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Apre la finestra LPE (per la modifica dei parametri numerici)"
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Modifica sul disegno"
+msgstr "Modifica il delimitatore sul disegno."
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -44186,7 +44183,7 @@ msgstr "Nessun svg è stato generato dalla compilazione: "
 
 #: ../share/extensions/voronoi_diagram.py:163
 msgid "Please select objects!"
-msgstr "Seleziona degli oggetti"
+msgstr "Seleziona degli oggetti!"
 
 #: ../share/extensions/web_interactive_mockup.py:37
 msgid ""
@@ -44324,7 +44321,7 @@ msgstr ""
 
 #: ../share/extensions/clean_up_path.inx:13
 msgid "Minimum segment length"
-msgstr "Lunghezza minima del segmento:"
+msgstr "Lunghezza minima del segmento"
 
 #: ../share/extensions/clean_up_path.inx:14
 msgid "Remove subpaths with total length less than specified length"
@@ -44458,8 +44455,7 @@ msgstr ""
 "\n"
 "Permette di effettuare diverse funzioni per ogni canale.\n"
 "I valori normalizzati dei canali rosso, verde e blu sono indicati come r,g e "
-"b.\n"
-"I valori RGB risultanti sono definiti automaticamente.\n"
+"b. I valori RGB risultanti sono definiti automaticamente.\n"
 "\n"
 "Esempio (metà rosso, inverti verde e blu):\n"
 "  Funzione rosso: r*0.5\n"
@@ -45103,18 +45099,16 @@ msgid ""
 "- limited support for BLOCKS, use AutoCAD Explode Blocks instead, if needed."
 msgstr ""
 "- Versione minima di AutoCad 13.\n"
-"- Per scalare manualmente, puoi presumere che il disegno DXF è in mm.\n"
-"- Per il disegno SVG puoi presumere che è in pixels con 96 dpi.\n"
+"- Per scalare manualmente, puoi presumere che il disegno DXF sia in mm.\n"
+"- Per il disegno SVG puoi presumere che sia in pixels con 96 dpi.\n"
 "- Per determinare il fattore di scala del testo confronta il file:\n"
-"     (Inkscape/share/inkscape/extensions/) dxf_input_text_scale_factor.svg\n"
+" (Inkscape/share/inkscape/extensions/) dxf_input_text_scale_factor.svg\n"
 "- 'Scala automatica' scala la larghezza per farla entrare in un foglio A4.\n"
 "- 'Leggi da file' usa la variabile $MEASUREMENT del file.\n"
-"- I livelli vengono mantenuti solo se il file viene aperto (File > Apri); se "
-"il\n"
-"    file viene importato (Importa), non vengono mantenuti.\n"
+"- I livelli vengono mantenuti solo se il file viene aperto (File > Apri), "
+"non importato.\n"
 "- Il supporto per i BLOCKS è limitato, invece usa 'AutoCad Explode Blocks', "
-"se\n"
-"    necessario."
+"se necessario."
 
 #: ../share/extensions/dxf_input.inx:42
 msgid "AutoCAD DXF R13 (*.dxf)"
@@ -46166,7 +46160,7 @@ msgid ""
 msgstr ""
 "\n"
 "Strumenti testo Hershey\n"
-" "
+"  "
 
 #: ../share/extensions/hershey.inx:66
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:32
@@ -46227,8 +46221,8 @@ msgid ""
 "  "
 msgstr ""
 "\n"
-"Questa estensione renderizza tutto il testo (o tutto il testo selezionato)\n"
-"nel tuo documento in caratteri speciali addattati per i plotter, usando \n"
+"Questa estensione renderizza tutto il testo (o quello selezionato)\n"
+"nel tuo documento in caratteri speciali adattati per i plotter, usando \n"
 "\"contorni\" o \"incisioni\" specializzati.\n"
 "Mentre i caratteri regolari con \"contorno\" (ad es. TrueType) funzionano\n"
 "riempiendo una regione dentro un contorno invisibile, i 'caratteri di\n"
@@ -46242,8 +46236,8 @@ msgstr ""
 "Una guida completa (in inglese) può essere scaricata da:\n"
 "  http://wiki.evilmadscientist.com/hershey \n"
 "\n"
-"Per un aiuto estensivo, clicca su \"Applica\" con questa scheda "
-"selezionata.\n"
+"Per un aiuto estensivo, clicca su \"Applica\" con questa scheda selezionata."
+"\n"
 "\n"
 "  "
 
@@ -46410,7 +46404,7 @@ msgstr ""
 # File: ../share/extensions/plotter.inx, line: 72
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:69
 msgid "Pen force (g):"
-msgstr "Forza della penna (g)"
+msgstr "Forza della penna (g):"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 14
@@ -46776,7 +46770,7 @@ msgstr "Segui collegamento"
 
 #: ../share/extensions/inset_shadow.inx:3
 msgid "Inset Shadow"
-msgstr "Proietta ombra"
+msgstr "Ombra interna"
 
 #: ../share/extensions/inset_shadow.inx:5
 msgid "Illumination Angle:"
@@ -47760,11 +47754,10 @@ msgstr ""
 "\n"
 "Regole multiple possono essere fornite \n"
 "separandole con il punto e virgola (;).\n"
-"\n"
 
 #: ../share/extensions/long_shadow.inx:3
 msgid "Long Shadow"
-msgstr "Proietta ombra"
+msgstr "Ombra lunga"
 
 #: ../share/extensions/long_shadow.inx:5
 msgid "Length (document units):"
@@ -48367,12 +48360,13 @@ msgstr ""
 "I Gcodetools sono stati sviluppati per creare semplice Gcode dai tracciati "
 "di Inkscape. Il Gcode è un formato speciale che è usato nella maggioranza "
 "delle macchine CNC. Quindi i Gcodetools ti permettono di usare Inkscape come "
-"un software CAM (Computer Aided Manufacturing o Manufattura "
-"computerizzata).\n"
+"un software CAM (Computer Aided Manufacturing o Manufattura computerizzata)."
+"\n"
+"\n"
 "Può essere usato con molti tipi di macchine:\n"
-"    Mulini\n"
+"    Frese\n"
 "    Torni\n"
-"    Tagliatori al Laser o al Plasma, e intagliatori\n"
+"    Tagliatori e/o intagliatori al Laser o al Plasma\n"
 "    Incisori rotanti\n"
 "    Plotters\n"
 "    etc.\n"
@@ -48467,7 +48461,7 @@ msgstr "Larghezza dell'area:"
 # File: ../share/extensions/gcodetools_area.inx, line: 12
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:11
 msgid "Area tool overlap (0..0.9):"
-msgstr "Sovrapposizione dell'area strumento (0..0.9)"
+msgstr "Sovrapposizione dell'area strumento (0..0.9):"
 
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 14
@@ -49027,8 +49021,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"I punti di orientamento vengono usati per calcolare la trasformazione "
-"(proiezione, scala, riflesso, e rotazione nel piano XY) del tracciato.\n"
+"I punti di orientamento vengono usati per calcolare la trasformazione ("
+"proiezione, scala, riflesso, e rotazione nel piano XY) del tracciato.\n"
 "Modo a 3 punti: assicurati che i 3 punti non sono allineati (usa il Modo a 2 "
 "punti in questo caso).\n"
 "\n"
@@ -49043,7 +49037,7 @@ msgstr ""
 "\n"
 "Quindi, premi Applica per creare i punti di controllo (una collezione "
 "indipendente per ogni livello).\n"
-"           "
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:8
@@ -52157,11 +52151,11 @@ msgstr "Dal lato c e angoli a, b"
 
 #: ../share/extensions/twirl.inx:3
 msgid "Twirl"
-msgstr "Rotazione"
+msgstr "Avvolgimento"
 
 #: ../share/extensions/twirl.inx:5
 msgid "Amount of twirl:"
-msgstr "Quantità di rotazione:"
+msgstr "Quantità di avvolgimento:"
 
 #: ../share/extensions/twirl.inx:6
 msgid "Rotation is clockwise"
