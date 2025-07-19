@@ -8,23 +8,24 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "ui/tools/booleans-tool.h"
+
 #include <glibmm/i18n.h>
 
 #include "actions/actions-tools.h" // set_active_tool()
-#include "ui/tools/booleans-tool.h"
-#include "ui/tools/booleans-builder.h"
+#include "desktop.h"
 #include "display/control/canvas-item-drawing.h"
 #include "display/drawing.h"
-
-#include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "event-log.h"
+#include "message-context.h"
 #include "selection.h"
+#include "style.h"
 #include "ui/icon-names.h"
 #include "ui/modifiers.h"
+#include "ui/tools/booleans-builder.h"
 #include "ui/widget/events/canvas-event.h"
-#include "style.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Modifiers::Modifier;

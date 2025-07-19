@@ -17,8 +17,6 @@
 #ifndef INKSCAPE_UI_TOOLBAR_MESH_TOOLBAR_H
 #define INKSCAPE_UI_TOOLBAR_MESH_TOOLBAR_H
 
-#include <vector>
-
 #include "toolbar.h"
 #include "ui/operation-blocker.h"
 

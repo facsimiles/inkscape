@@ -13,38 +13,29 @@
 
 #include "drag-and-drop.h"
 
-#include <span>
-#include <glibmm/i18n.h>
-#include <glibmm/value.h>
-#include <glibmm/miscutils.h>
-#include <giomm/inputstream.h>
 #include <giomm/memoryoutputstream.h>
+#include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/droptarget.h>
 
+#include "colors/dragndrop.h"
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
-#include "gradient-drag.h"
+#include "document.h"
+#include "extension/input.h"
 #include "file.h"
+#include "gradient-drag.h"
+#include "layer-manager.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-text.h"
+#include "path/path-util.h"
 #include "selection.h"
 #include "style.h"
-#include "layer-manager.h"
-
-#include "colors/dragndrop.h"
-#include "extension/input.h"
-
-#include "object/sp-shape.h"
-#include "object/sp-text.h"
-#include "object/sp-flowtext.h"
-
-#include "path/path-util.h"
-
 #include "ui/clipboard.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"
-#include "ui/widget/canvas-grid.h"
-#include "ui/widget/canvas.h"  // Target, canvas to world transform.
+#include "ui/widget/canvas.h" // Target, canvas to world transform.
 #include "ui/widget/desktop-widget.h"
 #include "util/value-utils.h"
 

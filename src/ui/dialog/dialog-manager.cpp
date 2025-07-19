@@ -3,6 +3,8 @@
 #include "dialog-manager.h"
 
 #include <filesystem>
+#include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 
 namespace filesystem = std::filesystem;
 

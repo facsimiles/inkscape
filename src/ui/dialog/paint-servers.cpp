@@ -13,6 +13,8 @@
 
 #include "paint-servers.h"
 
+#include <glibmm/regex.h>
+
 using namespace std::literals;
 
 #include <glibmm/i18n.h>

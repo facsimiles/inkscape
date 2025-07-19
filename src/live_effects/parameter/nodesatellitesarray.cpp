@@ -10,23 +10,21 @@
 #include "nodesatellitesarray.h"
 
 #include <glibmm/i18n.h>
-
 #include <2geom/path-intersection.h>
 
-#include "display/control/canvas-item-enums.h"
-#include "inkscape.h"
-#include "preferences.h"
-
 #include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-enums.h"
 #include "helper/geom.h"
+#include "inkscape.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpe-fillet-chamfer.h"
 #include "object/sp-lpe-item.h"
+#include "preferences.h"
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "ui/knot/knot-holder.h"
+#include "ui/knot/knot.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/node-tool.h"
-
 
 // TODO due to internal breakage in glibmm headers,
 // this has to be included last.

@@ -16,55 +16,32 @@
 
 #include "clipboard.h"
 
-#include <cassert>
-#include <chrono>
-#include <iostream>
-#include <string>
 #include <boost/bimap.hpp>
-
-#include <glibmm/i18n.h>
+#include <chrono>
+#include <giomm/application.h>
+#include <glib/gi18n.h>
+#include <glibmm/convert.h>
 #include <glibmm/main.h>
 #include <glibmm/miscutils.h>
-#include <glibmm/value.h>
-#include <giomm/application.h>
-#include <giomm/asyncresult.h>
-#include <gdkmm/clipboard.h>
-
-#include <2geom/transforms.h>
 #include <2geom/path-sink.h>
 
-// TODO: reduce header bloat if possible
-
-#include "colors/manager.h"
 #include "context-fns.h"
-#include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
-#include "desktop.h"
-#include "document.h"
+#include "desktop-style.h"
+#include "display/curve.h"
+#include "extension/db.h" // extension database
+#include "extension/input.h"
+#include "extension/output.h"
 #include "file.h" // for file_import, used in _pasteImage
 #include "filter-chemistry.h"
 #include "gradient-drag.h"
 #include "helper/png-write.h"
 #include "id-clash.h"
-#include "inkscape.h"
-#include "message-stack.h"
-#include "page-manager.h"
-#include "path-chemistry.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "style.h"
-
-#include "display/curve.h"
-#include "extension/db.h" // extension database
-#include "extension/input.h"
-#include "extension/output.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpeobject-reference.h"
-#include "live_effects/lpeobject.h"
 #include "live_effects/parameter/path.h"
 #include "object/box3d.h"
 #include "object/persp3d.h"
-#include "object/object-set.h"
 #include "object/sp-clippath.h"
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
@@ -78,11 +55,11 @@
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-root.h"
-#include "object/sp-shape.h"
 #include "object/sp-symbol.h"
 #include "object/sp-textpath.h"
 #include "object/sp-use.h"
-#include "svg/css-ostringstream.h" // used in copy
+#include "selection-chemistry.h"
+#include "selection.h"
 #include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
 #include "text-chemistry.h"
 #include "ui/tool/control-point-selection.h"
@@ -90,16 +67,13 @@
 #include "ui/tools/dropper-tool.h" // used in copy()
 #include "ui/tools/node-tool.h"
 #include "ui/tools/text-tool.h"
-#include "util/scope_exit.h"
 #include "util/value-utils.h"
-#include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 
 #ifdef _WIN32
 #undef NOGDI
 #include <windows.h>
 #endif
-#include <glibmm/convert.h>
 
 using namespace Inkscape::Util;
 

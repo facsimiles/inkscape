@@ -29,7 +29,6 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/togglebutton.h>
 
 #include "conn-avoid-ref.h"
@@ -44,7 +43,6 @@
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
-#include "ui/widget/spinbutton.h"
 
 using Inkscape::DocumentUndo;
 

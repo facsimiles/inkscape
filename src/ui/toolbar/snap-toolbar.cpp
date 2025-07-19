@@ -14,13 +14,11 @@
 
 #include "snap-toolbar.h"
 
-#include <glibmm/i18n.h>
-#include <gtkmm/box.h>
 #include <gtkmm/linkbutton.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
 
-#include "actions/actions-canvas-snapping.h" // transition_to_xxx
+#include "actions/actions-canvas-snapping.h"
 #include "inkscape-window.h"
 #include "ui/builder-utils.h"
 #include "ui/pack.h"

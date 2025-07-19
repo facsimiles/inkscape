@@ -10,12 +10,10 @@
 
 #include "toolbar.h"
 
-#include <glibmm/main.h>
+#include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/popover.h>
-#include <map>
 
 #include "desktop.h"
 #include "ui/util.h"

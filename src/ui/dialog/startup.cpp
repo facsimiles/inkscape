@@ -14,6 +14,7 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
+#include <glibmm/main.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/cssprovider.h>
@@ -26,14 +27,14 @@
 #include <gtkmm/windowhandle.h>
 
 #include "inkscape-application.h"
-#include "inkscape.h"
-#include "inkscape-version.h"
 #include "inkscape-version-info.h"
+#include "inkscape-version.h"
+#include "inkscape.h"
 #include "io/recent-files.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog/choose-file.h"
 #include "ui/dialog/choose-file-utils.h"
+#include "ui/dialog/choose-file.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"
 #include "ui/util.h"

@@ -11,39 +11,26 @@
 
 #include "shortcuts.h"
 
-#include <memory>
-#include <numeric>
-#include <iostream>
 #include <iomanip>
-#include <glibmm/convert.h>
+#include <numeric>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
-#include <glibmm/variant.h>
-#include <giomm/file.h>
-#include <giomm/simpleaction.h>
 #include <gtkmm/accelerator.h>
-#include <gtkmm/actionable.h>
-#include <gtkmm/application.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/shortcut.h>
-#include <gtkmm/window.h>
 
 #include "document.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
-#include "preferences.h"
 #include "io/dir-util.h"
 #include "io/resource.h"
-#include "io/sys.h"
-#include "ui/modifiers.h"
-#include "ui/tools/tool-base.h"    // For latin keyval
 #include "ui/dialog/choose-file.h" // Importing/exporting shortcut files.
+#include "ui/modifiers.h"
+#include "ui/tools/tool-base.h" // For latin keyval
 #include "ui/util.h"
 #include "ui/widget/events/canvas-event.h"
 #include "xml/simple-document.h"
-#include "xml/node.h"
-#include "xml/node-iterators.h"
 
 using namespace Inkscape::IO::Resource;
 using namespace Inkscape::Modifiers;

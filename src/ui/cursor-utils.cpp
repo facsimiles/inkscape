@@ -10,34 +10,22 @@
 
 #include "cursor-utils.h"
 
-#include <algorithm>
-#include <cmath>
-#include <memory>
-#include <tuple>
-#include <unordered_map>
-#include <utility>
 #include <boost/compute/detail/lru_cache.hpp>
 #include <glibmm/miscutils.h>
-#include <giomm/file.h>
-#include <gdkmm/cursor.h>
-#include <gdkmm/pixbuf.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/settings.h>
 #include <gtkmm/version.h>
-#include <gtkmm/widget.h>
 
-#include "document.h"
-#include "document-update.h"
-#include "preferences.h"
 #include "display/cairo-utils.h"
+#include "document-update.h"
+#include "document.h"
 #include "helper/pixbuf-ops.h"
 #include "io/file.h"
 #include "io/resource.h"
 #include "libnrtype/font-factory.h"
-#include "object/sp-object.h"
 #include "object/sp-root.h"
+#include "preferences.h"
 #include "ui/util.h"
-#include "util/statics.h"
 #include "util/units.h"
 
 using Inkscape::IO::Resource::SYSTEM;

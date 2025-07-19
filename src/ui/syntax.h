@@ -12,12 +12,12 @@
 #ifndef SEEN_UI_UI_SYNTAX_H
 #define SEEN_UI_UI_SYNTAX_H
 
-#include <memory>
+#include <glibmm/markup.h>
 #include <optional>
-#include <vector>
-#include <gtkmm/textview.h>
-#include <glibmm.h>
-#include <glibmm/ustring.h>
+
+namespace Gtk {
+class TextView;
+}
 
 namespace Inkscape::UI::Syntax {
 

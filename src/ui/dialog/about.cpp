@@ -10,20 +10,22 @@
 #include "about.h"
 
 #include <fstream>
+#include <random>
+#include <regex>
+#include <glibmm/main.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/picture.h>
 #include <gtkmm/textview.h>
-#include <random>
-#include <regex>
 
 #include "desktop.h"
 #include "display/cairo-utils.h"
 #include "inkscape-version-info.h"
-#include "inkscape.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
 #include "ui/svg-renderer.h"

@@ -12,12 +12,6 @@
 #ifndef INKSCAPE_UI_TOOL_MANIPULATOR_H
 #define INKSCAPE_UI_TOOL_MANIPULATOR_H
 
-#include <set>
-#include <map>
-#include <cstddef>
-#include <sigc++/sigc++.h>
-#include <glib.h>
-#include <gdk/gdk.h>
 #include "ui/tools/tool-base.h"
 
 class SPDesktop;

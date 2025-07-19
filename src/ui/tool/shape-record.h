@@ -13,10 +13,6 @@
 #ifndef INKSCAPE_UI_TOOL_SHAPE_RECORD_H
 #define INKSCAPE_UI_TOOL_SHAPE_RECORD_H
 
-#include <glibmm/ustring.h>
-#include <boost/operators.hpp>
-#include <2geom/affine.h>
-
 class SPItem;
 class SPObject;
 namespace Inkscape {

@@ -22,23 +22,17 @@
 
 #include "interface.h"
 
-#include <cassert>                 // for assert
-#include <cstring>                 // for strlen
+#include <glibmm/convert.h>      // for filename_to_utf8
+#include <glibmm/i18n.h>         // for _
+#include <glibmm/miscutils.h>    // for path_get_basename, path_get_dirname
+#include <gtkmm/messagedialog.h> // for MessageDialog, ButtonsType
 
-#include <glibmm/convert.h>        // for filename_to_utf8
-#include <glibmm/i18n.h>           // for _
-#include <glibmm/miscutils.h>      // for path_get_basename, path_get_dirname
-#include <gtk/gtk.h>               // for gtk_dialog_run, gtk_widget_destroy
-#include <gtkmm/messagedialog.h>   // for MessageDialog, ButtonsType
-
-#include "desktop.h"               // for SPDesktop
-#include "inkscape-application.h"  // for InkscapeApplication
+#include "desktop.h" // for SPDesktop
 #include "inkscape-window.h"
-#include "inkscape.h"              // for Application, SP_ACTIVE_DOCUMENT
-
 #include "io/sys.h"                // for file_test, sanitizeString
-#include "ui/dialog-events.h"      // for sp_transientize
-#include "ui/dialog-run.h"         // for dialog_run
+#include "inkscape.h" // for Application, SP_ACTIVE_DOCUMENT
+#include "ui/dialog-events.h" // for sp_transientize
+#include "ui/dialog-run.h"    // for dialog_run
 
 class SPDocument;
 

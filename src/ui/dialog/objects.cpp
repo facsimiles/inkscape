@@ -12,6 +12,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "objects.h"
+
+#include <glibmm/main.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/eventcontrollerkey.h>
@@ -20,13 +23,11 @@
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/treestore.h>
-#include <gtkmm/treeview.h>
 
-#include "objects.h"
 #include "desktop.h"
 #include "display/translucency-group.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "filter-chemistry.h"
 #include "inkscape-window.h"
 #include "layer-manager.h"
@@ -40,11 +41,11 @@
 #include "ui/shortcuts.h"
 #include "ui/util.h"
 #include "ui/widget/canvas.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/objects-dialog-cells.h"
 #include "ui/widget/shapeicon.h"
+#include "ui/widget/widget-vfuncs-class-init.h"
 #include "util/numeric/converters.h"
 
 // alpha (transparency) multipliers corresponding to item selection state combinations (SelectionState)

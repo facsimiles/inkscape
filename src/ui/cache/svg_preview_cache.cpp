@@ -16,14 +16,9 @@
  *
  */
 
-#include <2geom/transforms.h>
-
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
-#include "display/drawing-item.h"
 #include "display/drawing.h"
-
-
 #include "ui/cache/svg_preview_cache.h"
 
 cairo_surface_t* render_surface(Inkscape::Drawing &drawing, double scale_factor, Geom::Rect const &dbox,

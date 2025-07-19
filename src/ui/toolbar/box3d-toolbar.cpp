@@ -33,13 +33,12 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
 #include "object/box3d.h"
 #include "object/persp3d.h"
+#include "preferences.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
-#include "ui/tools/box3d-tool.h"
 #include "ui/widget/spinbutton.h"
 
 using Inkscape::DocumentUndo;

@@ -16,6 +16,9 @@
 
 #include "inkscape-preferences.h"
 
+#include <2geom/path-sink.h>
+#include <glibmm/markup.h>
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
 #endif
@@ -46,7 +49,14 @@
 #   include <gtksourceview/gtksource.h>
 #endif
 
+#include <glibmm/convert.h>
+#include <glibmm/miscutils.h>
+
 #include "auto-save.h"
+#include "colors/cms/system.h"
+#include "colors/manager.h"
+#include "colors/spaces/base.h"
+#include "display/nr-filter-gaussian.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
 #include "path-prefix.h"
@@ -54,24 +64,20 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "style.h"
-
-#include "colors/cms/system.h"
-#include "colors/manager.h"
-#include "colors/spaces/base.h"
-#include "display/nr-filter-gaussian.h"
 #include "ui/builder-utils.h"
 #include "ui/modifiers.h"
 #include "ui/pack.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"
+#include "ui/tool/manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/toolbar/tool-toolbar.h"
 #include "ui/toolbar/toolbar-constants.h"
 #include "ui/util.h"
 #include "ui/widget/style-swatch.h"
+#include "util-string/ustring-format.h"
 #include "util/recently-used-fonts.h"
 #include "util/trim.h"
-#include "util-string/ustring-format.h"
 #include "widgets/spw-utilities.h"
 
 namespace Inkscape::UI::Dialog {

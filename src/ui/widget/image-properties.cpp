@@ -11,6 +11,7 @@
 
 #include <giomm/file.h>
 #include <glib/gi18n.h>
+#include <glibmm/markup.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>

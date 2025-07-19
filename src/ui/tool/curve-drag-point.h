@@ -10,8 +10,8 @@
 #ifndef INKSCAPE_UI_TOOL_CURVE_DRAG_POINT_H
 #define INKSCAPE_UI_TOOL_CURVE_DRAG_POINT_H
 
-#include "ui/tool/control-point.h"
-#include "ui/tool/node.h"
+#include "control-point.h"
+#include "node.h"
 
 class SPDesktop;
 namespace Inkscape::UI {

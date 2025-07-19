@@ -16,32 +16,33 @@
 // how to add the buttons easily via a .ui file (which would allow the user to put any
 // buttons they want in their place).
 
+#include "canvas-grid.h"
+
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/label.h>
 
-#include "canvas-grid.h"
-#include "desktop.h"        // Hopefully temp.
+#include "desktop.h" // Hopefully temp.
+#include "display/control/canvas-item-guideline.h"
 #include "document-undo.h"
 #include "message-context.h"
-#include "selection.h"
-#include "display/control/canvas-item-guideline.h"
-#include "page-manager.h"
-
 #include "object/sp-grid.h"
 #include "object/sp-root.h"
+#include "page-manager.h"
+#include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/dialog/command-palette.h"
 #include "ui/drag-and-drop.h"
 #include "ui/tools/tool-base.h"
-#include "ui/widget/canvas.h"
-#include "ui/widget/desktop-widget.h"  // Hopefully temp.
-#include "ui/widget/events/canvas-event.h"
 #include "ui/widget/canvas-notice.h"
+#include "ui/widget/canvas.h"
+#include "ui/widget/desktop-widget.h" // Hopefully temp.
+#include "ui/widget/events/canvas-event.h"
 #include "ui/widget/ink-ruler.h"
 #include "ui/widget/stack.h"
 #include "ui/widget/tabs-widget.h"

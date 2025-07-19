@@ -28,8 +28,6 @@
 #include "lpe-toolbar.h"
 
 #include <gtkmm/liststore.h>
-#include <gtkmm/togglebutton.h>
-
 #include "live_effects/lpe-line_segment.h"
 #include "selection.h"
 #include "ui/builder-utils.h"

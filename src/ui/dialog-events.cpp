@@ -14,7 +14,6 @@
 
 #include <gtkmm/entry.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/window.h>
 #include <gtkmm/version.h>
 
 #ifdef GDK_WINDOWING_X11
@@ -25,7 +24,6 @@
 #include "enums.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "ui/dialog-events.h"
 
 /**
  * Remove focus from window to whoever it is transient for.

@@ -28,9 +28,6 @@
 #ifndef INKSCAPE_UI_TOOLBAR_NODE_TOOLBAR_H
 #define INKSCAPE_UI_TOOLBAR_NODE_TOOLBAR_H
 
-#include <memory>
-#include <2geom/coord.h>
-
 #include "toolbar.h"
 #include "ui/operation-blocker.h"
 

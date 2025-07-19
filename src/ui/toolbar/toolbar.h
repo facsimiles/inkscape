@@ -12,17 +12,17 @@
 #define INKSCAPE_UI_TOOLBAR_TOOLBAR_H
 
 #include <stack>
-#include <utility>
-#include <vector>
-#include <memory>
-
-#include <gtkmm/box.h>
 
 #include "ui/defocus-target.h"
 #include "ui/widget/bin.h"
 
 class SPDesktop;
-namespace Gtk { class MenuButton; }
+
+namespace Gtk {
+class Box;
+class MenuButton;
+}
+
 namespace Inkscape::Util { class Unit; }
 
 namespace Inkscape::UI::Toolbar {

@@ -9,10 +9,12 @@
 
 #include "export-preview.h"
 
+#include <glibmm/convert.h>
+
 #include "document.h"
+#include "io/resource.h"
 #include "object/sp-root.h"
 #include "util/preview.h"
-#include "io/resource.h"
 
 namespace Inkscape::UI::Dialog {
 

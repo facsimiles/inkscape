@@ -15,9 +15,7 @@
 #ifndef SEEN_UI_POPUP_MENU_H
 #define SEEN_UI_POPUP_MENU_H
 
-#include <memory>
 #include <optional>
-#include <sigc++/connection.h>
 #include <sigc++/slot.h>
 
 namespace Geom {

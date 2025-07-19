@@ -7,17 +7,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <cstdarg>
-#include <string>
-#include <vector>
+#include <gdkmm/enums.h>
 #include <map>
 
-#include <gdk/gdk.h>
-
-#include "message-context.h"
 
 namespace Inkscape {
+class MessageContext;
 
 struct KeyEvent;
 

@@ -21,16 +21,9 @@
 
 #include "svg-view-widget.h"
 
-#include <iostream>
-#include <2geom/transforms.h>
-#include <giomm/appinfo.h>
-#include <gtkmm/window.h>
-
 #include "document.h"
 #include "display/drawing.h"
 #include "display/control/canvas-item-drawing.h"
-#include "display/control/canvas-item-group.h"
-#include "object/sp-item.h"
 #include "object/sp-root.h"
 #include "object/sp-anchor.h"
 #include "ui/widget/canvas.h"

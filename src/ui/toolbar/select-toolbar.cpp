@@ -17,20 +17,12 @@
 #include "select-toolbar.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/image.h>
 #include <gtkmm/togglebutton.h>
-#include <2geom/rect.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
-#include "message-stack.h"
 #include "object/sp-item-transform.h"
-#include "object/sp-namedview.h"
 #include "page-manager.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
@@ -39,7 +31,6 @@
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
-#include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;

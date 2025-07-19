@@ -9,6 +9,7 @@
 
 #include "export-lists.h"
 
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
@@ -18,8 +19,8 @@
 #include "extension/db.h"
 #include "extension/output.h"
 #include "io/sys.h"
-#include "ui/icon-loader.h"
 #include "ui/builder-utils.h"
+#include "ui/icon-loader.h"
 #include "util/units.h"
 
 namespace Inkscape::UI::Dialog {

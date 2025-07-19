@@ -11,34 +11,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/tool/path-manipulator.h"
-
-#include <utility>
-#include <vector>
-#include <2geom/bezier-utils.h>
-#include <2geom/forward.h>
 #include <2geom/path-sink.h>
-#include <2geom/point.h>
 
 #include "display/control/canvas-item-bpath.h"
-#include "display/curve.h"
 #include "helper/geom.h"
-#include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-powerstroke.h"
-#include "live_effects/lpeobject.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
-#include "path/splinefit/bezier-fit.h"
-#include "style.h"
-#include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "ui/tool/node-types.h"
-#include "ui/tools/node-tool.h"
+#include "ui/tool/path-manipulator.h"
 #include "ui/widget/events/canvas-event.h"
-#include "xml/node-observer.h"
+#include "path/splinefit/bezier-fit.h"
+#include "style.h"
 
 namespace Inkscape::UI {
 

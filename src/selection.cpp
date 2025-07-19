@@ -21,6 +21,7 @@
 
 #include "selection.h"
 
+#include <2geom/path-sink.h>
 #include <cmath>
 #include <glibmm/i18n.h>
 

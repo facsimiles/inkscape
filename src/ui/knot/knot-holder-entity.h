@@ -18,14 +18,11 @@
 #include <cstdint>
 #include <2geom/forward.h>
 
-#include "knot.h"
 #include "snapper.h"
 
-#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-quad.h"
 #include "display/control/canvas-item-curve.h"
 #include "display/control/canvas-item-ptr.h"
-#include <sigc++/scoped_connection.h>
 
 class SPHatch;
 class SPItem;

@@ -13,12 +13,15 @@
 
 #include "ui/dialog/export-batch.h"
 
+#include <regex>
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/error.h>
 #include <gtkmm/filedialog.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/progressbar.h>
-#include <regex>
 
 #include "desktop.h"
 #include "document-undo.h"

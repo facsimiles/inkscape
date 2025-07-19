@@ -20,11 +20,13 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/revealer.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/textview.h>
+#include <gtkmm/textbuffer.h>
 #include <gtkmm/tooltip.h>
 
+#include "inkscape.h"
 #include "inkscape-window.h"
 #include "object/sp-text.h"
+#include "ui/dialog-run.h"
 #include "util/numeric/converters.h"
 
 #if (defined (_WIN32) || defined (_WIN64))
@@ -40,10 +42,6 @@
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 #endif
 #endif
-
-#include "desktop.h"
-#include "inkscape.h"
-#include "ui/dialog-run.h"
 
 /*
  * Ellipse text if longer than maxlen, "50% start text + ... + ~50% end text"

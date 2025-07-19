@@ -8,14 +8,15 @@
  */
 
 #include "ui/tool/curve-drag-point.h"
-#include <glib/gi18n.h>
-#include "desktop.h"
-#include "ui/tool/control-point-selection.h"
-#include "ui/tool/multi-path-manipulator.h"
-#include "ui/tool/path-manipulator.h"
-#include "ui/widget/events/canvas-event.h"
 
+#include <glib/gi18n.h>
+
+#include "control-point-selection.h"
+#include "desktop.h"
+#include "multi-path-manipulator.h"
 #include "object/sp-namedview.h"
+#include "path-manipulator.h"
+#include "ui/widget/events/canvas-event.h"
 
 namespace Inkscape {
 namespace UI {

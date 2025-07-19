@@ -14,8 +14,6 @@
 #ifndef SEEN_BUILDER_UTILS_H
 #define SEEN_BUILDER_UTILS_H
 
-#include <utility>
-#include <glibmm/refptr.h>
 #include <gtkmm/builder.h>
 
 namespace Inkscape {

@@ -28,12 +28,10 @@
 
 #include "pencil-toolbar.h"
 
-#include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop.h"
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-patternalongpath.h"
@@ -41,11 +39,9 @@
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpeobject-reference.h"
-#include "live_effects/lpeobject.h"
 #include "object/sp-shape.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
-#include "ui/tools/freehand-base.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"

@@ -7,12 +7,14 @@
  * Copyright (C) 2018 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#include "knot-ptr.h"
+
 #include <algorithm>
 #include <glib.h>
 #include <list>
-#include "knot-ptr.h"
 
-static std::list<void*> deleted_knots;
+static std::list<void *> deleted_knots;
 
 void knot_deleted_callback(void* knot) {
     if (std::find(deleted_knots.begin(), deleted_knots.end(), knot) == deleted_knots.end()) {

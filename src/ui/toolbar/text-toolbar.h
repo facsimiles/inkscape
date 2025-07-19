@@ -28,10 +28,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <sigc++/connection.h>
-
-#include "object/sp-item.h"
-#include "object/sp-object.h"
 #include "style.h"
 #include "text-editing.h"
 #include "toolbar.h"

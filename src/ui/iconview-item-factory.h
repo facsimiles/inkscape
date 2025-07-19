@@ -6,20 +6,11 @@
 #ifndef _ICONVIEWITEMFACTORY_H_
 #define _ICONVIEWITEMFACTORY_H_
 
-#include <gdkmm/texture.h>
-#include <glibmm/objectbase.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/centerbox.h>
-#include <gtkmm/image.h>
 #include <gtkmm/label.h>
-#include <gtkmm/overlay.h>
 #include <gtkmm/picture.h>
 #include <gtkmm/signallistitemfactory.h>
-#include <gtkmm/widget.h>
-#include <memory>
-#include <unordered_map>
 
 namespace Inkscape::UI {
 

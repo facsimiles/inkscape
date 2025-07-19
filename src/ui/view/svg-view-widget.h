@@ -17,8 +17,6 @@
 #ifndef INKSCAPE_UI_VIEW_SVG_VIEW_WIDGET_H
 #define INKSCAPE_UI_VIEW_SVG_VIEW_WIDGET_H
 
-#include <memory>
-
 #include "ui/widget/bin.h"
 
 class SPDocument;

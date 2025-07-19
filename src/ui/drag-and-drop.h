@@ -15,7 +15,6 @@
  */
 
 #include <glibmm/ustring.h>
-#include <string>
 
 namespace Gtk { class Widget; }
 class SPDesktopWidget;

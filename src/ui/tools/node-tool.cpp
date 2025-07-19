@@ -20,6 +20,7 @@
 #include "display/control/canvas-item-group.h"
 #include "display/curve.h"
 #include "live_effects/effect.h"
+#include "message-context.h"
 #include "object/sp-clippath.h"
 #include "object/sp-mask.h"
 #include "object/sp-namedview.h"
@@ -33,6 +34,7 @@
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/path-manipulator.h"
 #include "ui/widget/events/canvas-event.h"
 #include "util-string/ustring-format.h"
 

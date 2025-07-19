@@ -13,13 +13,16 @@
 #include <gtkmm/dragsource.h>
 #include <gtkmm/grid.h>
 #include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 
 #include "libnrtype/font-factory.h"
 #include "libnrtype/font-lister.h"
 // For updating from selection
+#include <glibmm/main.h>
+
 #include "inkscape.h"
-#include "preferences.h"
 #include "object/sp-text.h"
+#include "preferences.h"
 #include "util-string/ustring-format.h"
 
 namespace Inkscape::UI::Widget {

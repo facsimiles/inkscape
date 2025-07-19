@@ -14,6 +14,7 @@
 
 #include "swatches.h"
 
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/eventcontrollerkey.h>
@@ -22,19 +23,19 @@
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop.h"
 #include "desktop-style.h"
+#include "desktop.h"
 #include "document.h"
-#include "style.h"
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
+#include "style.h"
 #include "ui/builder-utils.h"
 #include "ui/column-menu-builder.h"
 #include "ui/controller.h"
 #include "ui/dialog/color-item.h"
 #include "ui/util.h" // ellipsize()
-#include "ui/widget/color-palette.h"
 #include "ui/widget/color-palette-preview.h"
+#include "ui/widget/color-palette.h"
 #include "util/variant-visitor.h"
 
 namespace Inkscape::Colors {

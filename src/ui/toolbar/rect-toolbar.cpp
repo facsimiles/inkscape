@@ -29,24 +29,19 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "object/sp-namedview.h"
 #include "object/sp-rect.h"
+#include "preferences.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
-#include "ui/tools/rect-tool.h"
-#include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
-#include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::DocumentUndo;

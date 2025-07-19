@@ -11,17 +11,10 @@
 #define INK_SHORTCUTS_H
 
 #include <giomm/liststore.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtk/gtk.h> // GtkEventControllerKey
 #include <gtkmm/accelkey.h>
 #include <set>
-#include <sigc++/connection.h>
-#include <sigc++/signal.h>
-#include <string>
 #include <unordered_map>
-#include <utility>
-#include <vector>
 
 namespace Gio {
 class File;

@@ -14,7 +14,6 @@
 #include "booleans-toolbar.h"
 
 #include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 
 #include "desktop.h"

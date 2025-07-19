@@ -26,16 +26,14 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "selection.h"
-
+#include "message-context.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
-
+#include "selection.h"
 #include "ui/icon-names.h"
 #include "ui/modifiers.h"
 #include "ui/shape-editor.h"
 #include "ui/widget/events/canvas-event.h"
-
 #include "util/units.h"
 
 using Inkscape::DocumentUndo;

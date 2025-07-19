@@ -3,8 +3,6 @@
 #ifndef INKSCAPE_UI_DIALOG_RUN_H
 #define INKSCAPE_UI_DIALOG_RUN_H
 
-#include <memory>
-
 namespace Gtk {
 class Dialog;
 class Root;

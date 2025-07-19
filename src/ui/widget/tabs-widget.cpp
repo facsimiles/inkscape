@@ -3,6 +3,7 @@
 #include "tabs-widget.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 #include <gtkmm/dragicon.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/eventcontrollermotion.h>

@@ -19,6 +19,8 @@
 
 #include <gdkmm/general.h>
 #include <gdkmm/seat.h>
+#include <glibmm/main.h>
+#include <glibmm/stringutils.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/eventcontrollermotion.h>

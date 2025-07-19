@@ -21,16 +21,14 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "display/control/canvas-item-ctrl.h"
 #include "knot-holder.h"
+#include "knot.h"
 #include "live_effects/effect.h"
+#include "object/filters/gaussian-blur.h"
 #include "object/sp-hatch.h"
-#include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
-#include "object/filters/gaussian-blur.h"
 #include "preferences.h"
-#include "snap.h"
 #include "style.h"
 
 void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *parent,

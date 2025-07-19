@@ -15,11 +15,7 @@
 #ifndef INKSCAPE_UI_TOOLBAR_PAGE_TOOLBAR_H
 #define INKSCAPE_UI_TOOLBAR_PAGE_TOOLBAR_H
 
-#include <string>
-
-#include <sigc++/scoped_connection.h>
 #include "toolbar.h"
-#include "ui/widget/spinbutton.h"
 
 namespace Gtk {
 class ComboBoxText;
@@ -41,6 +37,9 @@ namespace Inkscape {
 class PaperSize;
 
 namespace UI {
+namespace Widget {
+class MathSpinButton;
+}
 
 namespace Tools {
 class ToolBase;

@@ -27,29 +27,21 @@
 #include "contextmenu.h"
 
 #include <glibmm/i18n.h>
-#include <giomm/icon.h>
-#include <giomm/menu.h>
-#include <giomm/menuitem.h>
-#include <giomm/simpleactiongroup.h>
 #include <gtkmm/image.h>
-#include <gtkmm/window.h>
 
-#include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
 #include "inkscape-window.h"
 #include "layer-manager.h"
-#include "page-manager.h"
-#include "selection.h"
 #include "object/sp-anchor.h"
 #include "object/sp-image.h"
 #include "object/sp-page.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
+#include "preferences.h"
+#include "selection.h"
 #include "ui/desktop/menu-set-tooltips-shift-icons.h"
 #include "ui/util.h"
-#include "ui/widget/desktop-widget.h"
 
 static void
 AppendItemFromAction(Glib::RefPtr<Gio::Menu> const &gmenu,

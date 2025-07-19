@@ -7,18 +7,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <iostream>
-#include <2geom/point.h>
-#include <gdk/gdkkeysyms.h>
+#include "control-point.h"
 
+#include "commit-events.h"
 #include "desktop.h"
-#include "message-context.h"
-#include "display/control/canvas-item-enums.h"
 #include "display/control/snap-indicator.h"
+#include "message-context.h"
 #include "object/sp-namedview.h"
+#include "transform-handle-set.h"
 #include "ui/tools/tool-base.h"
-#include "ui/tool/control-point.h"
-#include "ui/tool/transform-handle-set.h"
 #include "ui/widget/canvas.h" // autoscroll
 #include "ui/widget/events/canvas-event.h"
 

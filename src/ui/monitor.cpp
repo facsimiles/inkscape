@@ -12,11 +12,9 @@
 
 #include "monitor.h"
 
-#include <limits>
 #include <gdkmm/display.h>
 #include <gdkmm/monitor.h>
-#include <gdkmm/surface.h>
-#include <2geom/point.h>
+#include <giomm/listmodel.h>
 #include <2geom/rect.h>
 
 #ifdef GDK_WINDOWING_X11

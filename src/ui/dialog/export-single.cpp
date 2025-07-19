@@ -13,7 +13,10 @@
 
 #include "export-single.h"
 
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/filefilter.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/progressbar.h>
@@ -31,9 +34,9 @@
 #include "object/sp-root.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog/export.h"
-#include "ui/dialog/choose-file.h"
 #include "ui/dialog/choose-file-utils.h"
+#include "ui/dialog/choose-file.h"
+#include "ui/dialog/export.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"

@@ -9,8 +9,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
 #include "ui/tool/modifier-tracker.h"
 #include "ui/widget/events/canvas-event.h"
 

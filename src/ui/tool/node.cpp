@@ -9,17 +9,12 @@
 
 #include "node.h"
 
-#include <atomic>
-#include <gdk/gdkkeysyms.h>
+#include <2geom/path-sink.h>
 #include <glib/gi18n.h>
-#include <iostream>
-#include <vector>
 
 #include "desktop.h"
-#include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-curve.h"
 #include "object/sp-namedview.h"
-#include "snap.h"
 #include "ui/modifiers.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/path-manipulator.h"

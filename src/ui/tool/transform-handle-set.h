@@ -13,14 +13,7 @@
 #ifndef INKSCAPE_UI_TOOL_TRANSFORM_HANDLE_SET_H
 #define INKSCAPE_UI_TOOL_TRANSFORM_HANDLE_SET_H
 
-#include <memory>
-#include <gdk/gdk.h>
-#include <2geom/forward.h>
-#include "ui/tool/commit-events.h"
 #include "ui/tool/manipulator.h"
-#include "ui/tool/control-point.h"
-#include "enums.h"
-#include "snap-candidate.h"
 
 class SPDesktop;
 

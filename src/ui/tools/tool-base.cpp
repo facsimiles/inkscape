@@ -20,24 +20,25 @@
 #include <gdkmm/seat.h>
 #include <gtkmm/eventcontrollerkey.h>
 
+#include "actions/actions-tools.h"
 #include "desktop-events.h"
 #include "desktop-style.h"
 #include "desktop.h"
+#include "display/control/canvas-item-catchall.h" // Grab/Ungrab
+#include "display/control/snap-indicator.h"
 #include "gradient-drag.h"
 #include "inkscape-application.h"
 #include "layer-manager.h"
+#include "message-context.h"
+#include "object/sp-namedview.h"
 #include "selcue.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "actions/actions-tools.h"
-#include "display/control/canvas-item-catchall.h" // Grab/Ungrab
-#include "display/control/snap-indicator.h"
-#include "object/sp-namedview.h"
 #include "ui/contextmenu.h"
 #include "ui/cursor-utils.h"
-#include "ui/knot/knot.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-ptr.h"
+#include "ui/knot/knot.h"
 #include "ui/modifiers.h"
 #include "ui/popup-menu.h"
 #include "ui/shape-editor.h"
@@ -47,8 +48,8 @@
 #include "ui/tools/dropper-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/select-tool.h"
-#include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
 #include "ui/widget/events/debug.h"
 

@@ -25,6 +25,7 @@
 
 #include "text-edit.h"
 
+#include <glibmm/markup.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/searchentry2.h>

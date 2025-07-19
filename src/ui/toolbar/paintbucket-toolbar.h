@@ -28,8 +28,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <memory>
-
 #include "toolbar.h"
 
 namespace Gtk { class Builder; }

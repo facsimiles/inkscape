@@ -29,16 +29,10 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/treemodel.h>
 
-#include "desktop.h"
-#include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/tools/flood-tool.h"
-#include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"

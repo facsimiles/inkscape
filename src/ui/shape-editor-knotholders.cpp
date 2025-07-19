@@ -18,6 +18,7 @@
 #include <glibmm/i18n.h>
 
 #include "display/curve.h"
+#include "knot/knot.h"
 #include "livarot/Path.h"
 #include "live_effects/effect.h"
 #include "object/box3d.h"

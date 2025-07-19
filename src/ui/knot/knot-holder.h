@@ -15,14 +15,16 @@
  *
  */
 
-#include <2geom/forward.h>
-#include <2geom/affine.h>
 #include <list>
-#include <sigc++/connection.h>
 #include <sigc++/scoped_connection.h>
+#include <2geom/affine.h>
 
 #ifndef SEEN_SP_KNOTHOLDER_H
 #define SEEN_SP_KNOTHOLDER_H
+
+namespace Geom {
+class Point;
+}
 
 namespace Inkscape {
 

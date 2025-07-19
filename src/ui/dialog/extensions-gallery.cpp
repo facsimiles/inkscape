@@ -3,6 +3,7 @@
 #include "extensions-gallery.h"
 
 #include <giomm/liststore.h>
+#include <glibmm/markup.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scale.h>

@@ -4,6 +4,7 @@
 
 #include <giomm/menu.h>
 #include <giomm/simpleactiongroup.h>
+#include <glibmm/markup.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/progressbar.h>

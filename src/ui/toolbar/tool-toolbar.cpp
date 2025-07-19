@@ -14,22 +14,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <utility>
 #include <glibmm/i18n.h>
-#include <giomm/menu.h>
-#include <giomm/simpleactiongroup.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/gestureclick.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
 
 #include "tool-toolbar.h"
 #include "actions/actions-tools.h" // Function to open tool preferences.
-#include "inkscape-window.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/util.h"

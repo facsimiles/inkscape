@@ -32,10 +32,8 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog/clonetiler.h"
-#include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/simple-pref-pusher.h"
 #include "ui/util.h"

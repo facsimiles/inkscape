@@ -12,18 +12,13 @@
 
 #include "icon-loader.h"
 
-#include <unordered_map>
 #include <giomm/themedicon.h>
-#include <gdkmm/display.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/image.h>
-#include <gtkmm/styleprovider.h>
-#include <gtkmm/window.h>
+#include <unordered_map>
 
 #include "colors/color.h"
-#include "desktop.h"
-#include "inkscape.h"
 
 Gtk::Image *sp_get_icon_image(Glib::ustring const &icon_name, int size)
 {

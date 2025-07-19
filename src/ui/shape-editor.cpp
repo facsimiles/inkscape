@@ -15,7 +15,6 @@
 #include "shape-editor.h"
 
 #include "desktop.h"
-#include "document.h"
 #include "live_effects/effect.h"
 #include "object/sp-lpe-item.h"
 #include "shape-editor-knotholders.h"

@@ -16,12 +16,16 @@
 
 #include "knot-holder.h"
 
+#include <glib/gi18n.h>
+
 #include "desktop.h"
 #include "display/control/snap-indicator.h"
 #include "document-undo.h"
 #include "knot-holder-entity.h"
+#include "knot.h"
 #include "object/box3d.h"
 #include "object/sp-ellipse.h"
+#include "object/sp-filter.h"
 #include "object/sp-hatch.h"
 #include "object/sp-marker.h"
 #include "object/sp-offset.h"

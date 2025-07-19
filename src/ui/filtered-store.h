@@ -3,10 +3,6 @@
 #ifndef INKSCAPE_PATTERN_EDITOR_H
 #define INKSCAPE_PATTERN_EDITOR_H
 
-#include <algorithm>
-#include <functional>
-#include <iterator>
-#include <vector>
 #include <giomm/liststore.h>
 
 // Simplistic filtered list store implementation

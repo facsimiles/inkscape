@@ -21,16 +21,20 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
+#include "ui/knot/knot.h"
+
 /* Theory in e-mail from J.F. Barraud
 Let B be the skeleton path, and P the pattern (the path to be deformed).
 
 P is a map t --> P(t) = ( x(t), y(t) ).
 B is a map t --> B(t) = ( a(t), b(t) ).
 
-The first step is to re-parametrize B by its arc length: this is the parametrization in which a point p on B is located by its distance s from start. One obtains a new map s --> U(s) = (a'(s),b'(s)), that still describes the same path B, but where the distance along B from start to
-U(s) is s itself.
+The first step is to re-parametrize B by its arc length: this is the parametrization in which a point p on B is located
+by its distance s from start. One obtains a new map s --> U(s) = (a'(s),b'(s)), that still describes the same path B,
+but where the distance along B from start to U(s) is s itself.
 
-We also need a unit normal to the path. This can be obtained by computing a unit tangent vector, and rotate it by 90�. Call this normal vector N(s).
+We also need a unit normal to the path. This can be obtained by computing a unit tangent vector, and rotate it by 90�.
+Call this normal vector N(s).
 
 The basic deformation associated to B is then given by:
 
@@ -38,8 +42,8 @@ The basic deformation associated to B is then given by:
 
 (i.e. we go for distance x along the path, and then for distance y along the normal)
 
-Of course this formula needs some minor adaptations (as is it depends on the absolute position of P for instance, so a little translation is needed
-first) but I think we can first forget about them.
+Of course this formula needs some minor adaptations (as is it depends on the absolute position of P for instance, so a
+little translation is needed first) but I think we can first forget about them.
 */
 
 namespace Inkscape {

@@ -12,18 +12,21 @@
 #ifndef INKSCAPE_UI_TOOL_MULTI_PATH_MANIPULATOR_H
 #define INKSCAPE_UI_TOOL_MULTI_PATH_MANIPULATOR_H
 
-#include <cstddef>
-#include <sigc++/connection.h>
-#include <2geom/path-sink.h>
+#include <2geom/affine.h>
+
 #include "commit-events.h"
+#include "node-types.h"
 #include "manipulator.h"
 #include "modifier-tracker.h"
-#include "node-types.h"
 #include "shape-record.h"
-#include "ui/tool/path-manipulator.h"
+
+namespace Geom {
+class PathBuilder;
+}
 
 namespace Inkscape {
 namespace UI {
+enum class NodeDeleteMode;
 
 class PathManipulator;
 class MultiPathManipulator;

@@ -13,8 +13,6 @@
 #ifndef SEEN_DIALOG_EVENTS_H
 #define SEEN_DIALOG_EVENTS_H
 
-#include <gtk/gtk.h>
- 
 namespace Gtk {
 class Entry;
 class SpinButton;

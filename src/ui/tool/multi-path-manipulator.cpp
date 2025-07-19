@@ -11,23 +11,19 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <unordered_set>
+#include "ui/tool/multi-path-manipulator.h"
 
-#include <gdk/gdkkeysyms.h>
+#include <unordered_set>
 #include <glibmm/i18n.h>
 
+#include "control-point-selection.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "node.h"
-
 #include "live_effects/lpeobject.h"
-
+#include "node.h"
 #include "object/sp-path.h"
-
+#include "path-manipulator.h"
 #include "ui/icon-names.h"
-#include "ui/tool/control-point-selection.h"
-#include "ui/tool/multi-path-manipulator.h"
-#include "ui/tool/path-manipulator.h"
 #include "ui/widget/events/canvas-event.h"
 
 namespace Inkscape {

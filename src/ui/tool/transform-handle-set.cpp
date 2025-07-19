@@ -10,25 +10,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cmath>
-#include <algorithm>
+#include "ui/tool/control-point-selection.h"
 
 #include <glib/gi18n.h>
 
-#include <2geom/transforms.h>
-
-#include "control-point.h"
 #include "desktop.h"
 #include "pure-transform.h"
 #include "seltrans.h"
-#include "snap.h"
-
 #include "display/control/canvas-item-rect.h"
-
 #include "object/sp-namedview.h"
-
-#include "ui/tool/commit-events.h"
-#include "ui/tool/control-point-selection.h"
 #include "ui/tool/node.h"
 #include "ui/tool/transform-handle-set.h"
 #include "ui/tools/node-tool.h"

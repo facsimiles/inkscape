@@ -17,7 +17,10 @@
 
 #include "export.h"
 
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/notebook.h>
 
 #include "desktop.h"

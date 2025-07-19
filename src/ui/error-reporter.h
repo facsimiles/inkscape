@@ -10,7 +10,6 @@
 #ifndef SEEN_UI_ERROR_HANDLER_H
 #define SEEN_UI_ERROR_HANDLER_H
 
-#include <glibmm.h>
 #include <gtkmm/messagedialog.h>
 
 #include "ui/dialog-run.h"

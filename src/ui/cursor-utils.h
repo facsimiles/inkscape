@@ -11,10 +11,7 @@
 #ifndef INK_CURSOR_UTILITIES_H
 #define INK_CURSOR_UTILITIES_H
 
-#include <cstdint>
-#include <string>
 #include <glibmm/refptr.h>
-#include <optional>
 
 #include "colors/color.h"
 

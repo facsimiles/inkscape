@@ -15,8 +15,9 @@
 
 #include "marker-combo-box.h"
 
-#include <gtkmm/binlayout.h>
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <gtkmm/binlayout.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/grid.h>
@@ -32,9 +33,9 @@
 #include "object/sp-marker.h"
 #include "object/sp-root.h"
 #include "ui/builder-utils.h"
-#include "ui/widget/size-reporter.h"
 #include "ui/svg-renderer.h"
 #include "ui/util.h"
+#include "ui/widget/size-reporter.h"
 #include "util/object-renderer.h"
 #include "util/static-doc.h"
 

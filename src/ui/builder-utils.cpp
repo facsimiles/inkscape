@@ -11,11 +11,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <stdexcept>
-#include <glibmm/error.h>
-#include <glibmm/ustring.h>
+#include <gtkmm/builder.h>
 
-#include "builder-utils.h"
 #include "io/resource.h"
 
 namespace Inkscape {

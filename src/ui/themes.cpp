@@ -14,30 +14,15 @@
 
 #include "themes.h"
 
-#include <cstddef>
-#include <cstring>
 #include <regex>
-#include <string>
-#include <utility>
-#include <gio/gio.h>
 #include <glibmm/regex.h>
-#include <glibmm/ustring.h>
-#include <gdkmm/display.h>
-#include <gtk/gtk.h>
 #include <gtkmm/cssprovider.h>
-#include <gtkmm/csssection.h>
 #include <gtkmm/settings.h>
-#include <gtkmm/styleprovider.h>
-#include <gtkmm/window.h>
-#include <pangomm/font.h>
 #include <pangomm/fontdescription.h>
 
-#include "config.h"
 #include "desktop.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
-#include "preferences.h"
-#include "colors/utils.h"
 #include "io/resource.h"
 #include "object/sp-item-group.h"  // set_default_highlight_colors
 #include "svg/css-ostringstream.h"

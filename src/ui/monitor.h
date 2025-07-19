@@ -13,7 +13,6 @@
 #ifndef SEEN_MONITOR_H
 #define SEEN_MONITOR_H
 
-#include <glibmm/refptr.h>
 #include <gdkmm/rectangle.h>
 
 namespace Gdk {

@@ -15,7 +15,9 @@
 #ifndef SEEN_OBJECTS_PANEL_H
 #define SEEN_OBJECTS_PANEL_H
 
+#include <gtkmm/gesture.h>
 #include <gtkmm/treerowreference.h>
+#include <gtkmm/treeview.h>
 
 #include "object/weakptr.h"
 #include "selection.h"

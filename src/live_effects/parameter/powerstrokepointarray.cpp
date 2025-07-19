@@ -8,22 +8,19 @@
 #include "powerstrokepointarray.h"
 
 #include <glibmm/i18n.h>
-
-#include <2geom/sbasis-2d.h>
 #include <2geom/bezier-to-sbasis.h>
 #include <2geom/piecewise.h>
+#include <2geom/sbasis-2d.h>
 #include <2geom/sbasis-geometric.h>
 
 #include "helper/geom.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "object/sp-lpe-item.h"
+#include "preferences.h" // for proportional stroke/path scaling behavior
 #include "ui/dialog/lpe-powerstroke-properties.h"
 #include "ui/knot/knot-holder.h"
-
-
-#include "preferences.h" // for proportional stroke/path scaling behavior
-
+#include "ui/knot/knot.h"
 
 namespace Inkscape {
 

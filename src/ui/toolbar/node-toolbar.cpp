@@ -27,32 +27,22 @@
 
 #include "node-toolbar.h"
 
-#include <giomm/simpleactiongroup.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/image.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/togglebutton.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
-#include "document-undo.h"
-#include "inkscape.h"
-#include "object/sp-namedview.h"
 #include "page-manager.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/simple-pref-pusher.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
-#include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
-#include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;

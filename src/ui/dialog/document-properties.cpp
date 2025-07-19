@@ -22,34 +22,34 @@
 #include "document-properties.h"
 
 #include <giomm/themedicon.h>
-#include <gtkmm/spinbutton.h>
+#include <glibmm/main.h>
 #include <gtkmm/liststore.h>
-
-#include "inkscape-window.h"
-#include "rdf.h"
-#include "page-manager.h"
-#include "selection.h"
+#include <gtkmm/spinbutton.h>
 
 #include "colors/cms/profile.h"
 #include "colors/document-cms.h"
+#include "inkscape-window.h"
 #include "object/color-profile.h"
 #include "object/sp-guide.h"
 #include "object/sp-root.h"
 #include "object/sp-script.h"
+#include "page-manager.h"
+#include "rdf.h"
+#include "selection.h"
 #include "streq.h"
+#include "ui/dialog/choose-file-utils.h"
 #include "ui/dialog/choose-file.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/popup-menu.h"
 #include "ui/util.h"
-#include "ui/dialog/choose-file-utils.h"
 #include "ui/widget/alignment-selector.h"
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/page-properties.h"
-#include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
+#include "ui/widget/popover-menu.h"
 #include "util/expression-evaluator.h"
 
 namespace Inkscape::UI {

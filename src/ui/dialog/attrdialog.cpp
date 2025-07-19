@@ -26,6 +26,9 @@
 #   include <gtksourceview/gtksource.h>
 #endif
 
+#include <glibmm/main.h>
+#include <gtkmm/textview.h>
+
 #include "document-undo.h"
 #include "message-context.h"
 #include "message-stack.h"

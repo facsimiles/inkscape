@@ -24,12 +24,9 @@
 
 #include "ui/pack.h"
 
-#include <algorithm>
-#include <cstdlib>
-#include <unordered_map>
 #include <gtkmm/box.h>
+#include <unordered_map>
 
-#include <sigc++/scoped_connection.h>
 #include "ui/util.h"
 
 namespace Inkscape::UI {

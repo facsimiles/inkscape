@@ -13,8 +13,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <string>
 #include <bitset>
 #include <glibmm/i18n.h>
 

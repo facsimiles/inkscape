@@ -7,6 +7,10 @@
 
 #include "document-resources.h"
 
+#include <glibmm/fileutils.h>
+#include <glibmm/main.h>
+#include <glibmm/markup.h>
+#include <glibmm/uriutils.h>
 #include <gtkmm/columnview.h>
 #include <gtkmm/filterlistmodel.h>
 #include <gtkmm/liststore.h>

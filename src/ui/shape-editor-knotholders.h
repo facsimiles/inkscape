@@ -9,8 +9,6 @@
 #ifndef SEEN_SHAPE_EDITOR_KNOTHOLDERS_H
 #define SEEN_SHAPE_EDITOR_KNOTHOLDERS_H
 
-#include "knot/knot-holder.h"
-
 class SPItem;
 class SPDesktop;
 

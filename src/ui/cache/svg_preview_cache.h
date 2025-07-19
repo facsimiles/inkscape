@@ -10,12 +10,6 @@
 #ifndef SEEN_INKSCAPE_UI_SVG_PREVIEW_CACHE_H
 #define SEEN_INKSCAPE_UI_SVG_PREVIEW_CACHE_H
 
-#include <map>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <glibmm/ustring.h>
-#include <2geom/rect.h>
-#include <2geom/int-point.h>
-
 namespace Inkscape {
 
 class Drawing;

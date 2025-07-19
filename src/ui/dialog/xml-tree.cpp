@@ -21,17 +21,18 @@
 #include "xml-tree.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "layer-manager.h"
-#include "selection.h"
 #include "object/sp-root.h"
+#include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
 #include "ui/widget/xml-treeview.h"

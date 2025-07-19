@@ -13,9 +13,7 @@
 #ifndef SEEN_UI_CONTROLLER_H
 #define SEEN_UI_CONTROLLER_H
 
-#include <gdkmm/enums.h>
 #include <gtkmm/gesture.h>
-#include <utility>
 
 /// Utilities to more easily use Gtk::EventController & subclasses like Gesture.
 namespace Inkscape::UI::Controller {

@@ -12,13 +12,7 @@
 #ifndef INKSCAPE_UI_TOOL_PATH_MANIPULATOR_H
 #define INKSCAPE_UI_TOOL_PATH_MANIPULATOR_H
 
-#include <string>
-#include <memory>
-#include <2geom/pathvector.h>
-#include <2geom/path-sink.h>
-#include <2geom/affine.h>
-#include "ui/tool/node.h"
-#include "ui/tool/manipulator.h"
+#include "node.h"
 
 class SPPath;
 

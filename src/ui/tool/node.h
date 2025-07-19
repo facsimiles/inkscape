@@ -13,23 +13,17 @@
 #ifndef INKSCAPE_UI_TOOL_NODE_H
 #define INKSCAPE_UI_TOOL_NODE_H
 
-#include <cstddef>
-#include <iosfwd>
-#include <list>
-#include <memory>
-#include <optional>
-#include <2geom/point.h>
-#include <boost/noncopyable.hpp>
-
+#include "selectable-control-point.h"
 #include "snap-candidate.h"
-#include "ui/tool/selectable-control-point.h"
 #include "ui/tool/node-types.h"
 
+class SPDesktop;
 namespace Inkscape {
 class CanvasItemGroup;
 class CanvasItemCurve;
 
 namespace UI {
+class ControlPointSelection;
 
 class PathManipulator;
 class MultiPathManipulator;

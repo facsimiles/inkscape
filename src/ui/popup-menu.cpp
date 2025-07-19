@@ -14,14 +14,11 @@
 
 #include "popup-menu.h"
 
-#include <utility>
 #include <2geom/point.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/gestureclick.h>
-#include <gdkmm/rectangle.h>
 #include <gtkmm/popover.h>
-#include <gtkmm/widget.h>
 
 #include "controller.h"
 #include "ui/util.h"

@@ -12,9 +12,6 @@
 
 #ifndef SEEN_CONTEXTMENU_H
 #define SEEN_CONTEXTMENU_H
-
-#include <vector>
-#include <glibmm/refptr.h>
 #include <gtkmm/popovermenu.h>
 
 namespace Gio {

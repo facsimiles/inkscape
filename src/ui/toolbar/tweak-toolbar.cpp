@@ -31,7 +31,6 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop.h"
 #include "ui/builder-utils.h"
 #include "ui/tools/tweak-tool.h"
 #include "ui/util.h"

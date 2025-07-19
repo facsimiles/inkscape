@@ -3,14 +3,15 @@
 #include "choose-file-utils.h"
 
 #include <giomm/liststore.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/filefilter.h>
-
-#include "preferences.h"
 
 #include "extension/db.h"
 #include "extension/input.h"
 #include "extension/output.h"
+#include "preferences.h"
 
 namespace Inkscape::UI::Dialog {
 

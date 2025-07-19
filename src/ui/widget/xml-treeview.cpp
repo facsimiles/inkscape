@@ -18,6 +18,7 @@
 
 #include "xml-treeview.h"
 
+#include <glibmm/property.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/treerowreference.h>
@@ -31,8 +32,8 @@
 #include "object/sp-root.h" // -> SPGroup -> SPLPEItem -> SPItem
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
-#include "xml/simple-node.h"
 #include "util/value-utils.h"
+#include "xml/simple-node.h"
 
 using namespace Inkscape::Util;
 

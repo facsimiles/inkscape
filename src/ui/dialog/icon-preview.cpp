@@ -18,17 +18,18 @@
 #include "icon-preview.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/image.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/togglebutton.h>
 
 #include "desktop.h"
-#include "page-manager.h"
-#include "selection.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"
 #include "object/sp-root.h"
+#include "page-manager.h"
+#include "selection.h"
 #include "ui/util.h"
 #include "ui/widget/frame.h"
 

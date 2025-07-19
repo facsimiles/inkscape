@@ -55,8 +55,9 @@
 
 
 // For SVG 2 text flow
-#include "livarot/Path.h"
+#include <glibmm/regex.h>
 
+#include "livarot/Path.h"
 
 /*#####################################################
 #  SPTEXT

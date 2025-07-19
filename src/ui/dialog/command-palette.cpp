@@ -12,6 +12,8 @@
 #include "command-palette.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/regex.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/eventcontrollerfocus.h>
@@ -24,11 +26,11 @@
 #include "desktop.h"
 #include "document.h"
 #include "file.h"
-#include "inkscape.h"
-#include "preferences.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "io/resource.h"
+#include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/shortcuts.h"
 #include "ui/util.h"

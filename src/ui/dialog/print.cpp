@@ -13,18 +13,18 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "preferences.h"
 #include "print.h"
+
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/i18n.h>
 
 #include "extension/internal/cairo-render-context.h"
 #include "extension/internal/cairo-renderer.h"
-#include "object/sp-page.h"
-
-#include "util/units.h"
 #include "helper/png-write.h"
-
-#include <glibmm/i18n.h>
-
+#include "object/sp-page.h"
+#include "preferences.h"
+#include "util/units.h"
 
 namespace Inkscape {
 namespace UI {

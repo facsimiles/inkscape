@@ -3,17 +3,8 @@
 #ifndef COLUMN_MENU_BUILDER_INCLUDED
 #define COLUMN_MENU_BUILDER_INCLUDED
 
-#include <cassert>
-#include <cstddef>
-#include <optional>
-#include <type_traits>
-#include <utility>
-#include <sigc++/slot.h>
-#include <glibmm/ustring.h>
-#include <gtkmm/enums.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include <gtkmm/separator.h>
+
 #include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
 

@@ -2,13 +2,15 @@
 
 #include "choose-file.h"
 
-#include <glib/gi18n.h>
 #include <giomm/liststore.h>
+#include <glib/gi18n.h>
+#include <glibmm/main.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/error.h>
 #include <gtkmm/filedialog.h>
 
-#include "preferences.h"
 #include "choose-file-utils.h"
+#include "preferences.h"
 
 namespace Inkscape {
 

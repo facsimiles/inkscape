@@ -13,20 +13,12 @@
 #ifndef INKSCAPE_UI_TOOL_CONTROL_POINT_SELECTION_H
 #define INKSCAPE_UI_TOOL_CONTROL_POINT_SELECTION_H
 
-#include <list>
-#include <memory>
-#include <unordered_map>
 #include <unordered_set>
-#include <optional>
-#include <cstddef>
-#include <sigc++/sigc++.h>
-#include <2geom/forward.h>
-#include <2geom/point.h>
-#include <2geom/rect.h>
+
+#include "node-types.h"
+#include "snap-candidate.h"
 #include "ui/tool/commit-events.h"
 #include "ui/tool/manipulator.h"
-#include "ui/tool/node-types.h"
-#include "snap-candidate.h"
 
 class SPDesktop;
 

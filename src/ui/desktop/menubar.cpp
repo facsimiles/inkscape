@@ -20,28 +20,18 @@
 
 #include "menubar.h"
 
-#include <algorithm>
-#include <iostream>
 #include <regex>
-#include <string>
-#include <unordered_map>
-#include <glibmm/i18n.h>
-#include <glibmm/quark.h>
-#include <glibmm/regex.h>
-#include <glibmm/ustring.h>
 #include <giomm/menu.h>
 #include <giomm/menuattributeiter.h>
-#include <giomm/menuitem.h>
 #include <giomm/menulinkiter.h>
-#include <giomm/menumodel.h>
+#include <glibmm/i18n.h>
 #include <gtkmm/builder.h>
 
-#include "actions/actions-effect-data.h"
 #include "actions/actions-effect.h"
-#include "inkscape-application.h" // Open recent
-#include "preferences.h"          // Use icons or not
+#include "inkscape-application.h"
 #include "io/recent-files.h"
-#include "io/resource.h"          // UI File location
+#include "io/resource.h" // UI File location
+#include "preferences.h" // Use icons or not
 
 // =================== Main Menu ================
 void

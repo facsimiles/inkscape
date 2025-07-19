@@ -12,6 +12,7 @@
 
 #include "dialog-base.h"
 
+#include <glibmm/main.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollerscroll.h>
 #include <gtkmm/scrolledwindow.h>

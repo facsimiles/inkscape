@@ -36,16 +36,13 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "object/sp-ellipse.h"
-#include "object/sp-namedview.h"
+#include "preferences.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
-#include "ui/tools/arc-tool.h"
-#include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
-#include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::DocumentUndo;

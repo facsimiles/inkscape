@@ -15,11 +15,10 @@
 
 
 #include "ui/draw-anchor.h"
-#include "ui/tools/tool-base.h"
-#include "ui/tools/lpe-tool.h"
 
+#include "desktop.h"
 #include "display/control/canvas-item-ctrl.h"
-#include "display/curve.h"
+#include "tools/freehand-base.h"
 
 /**
  * Creates an anchor object and initializes it.

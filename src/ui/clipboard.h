@@ -16,8 +16,11 @@
 
 #include <glibmm/ustring.h>
 #include <vector>
-#include <2geom/point.h>
-#include <2geom/rect.h>
+
+namespace Geom {
+class Rect;
+class Point;
+}
 
 class SPDesktop;
 class SPDocument;

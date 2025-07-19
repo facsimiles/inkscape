@@ -13,6 +13,8 @@
 
 #include "marker-toolbar.h"
 
+#include <gtkmm/box.h>
+
 #include "ui/builder-utils.h"
 
 namespace Inkscape::UI::Toolbar {

@@ -28,15 +28,12 @@
 #include "calligraphy-toolbar.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/adjustment.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/togglebutton.h>
 
-#include "desktop.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog/calligraphic-profile-rename.h"
 #include "ui/simple-pref-pusher.h"
-#include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"

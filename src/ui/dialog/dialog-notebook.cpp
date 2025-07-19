@@ -12,6 +12,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <cassert>
 #include <gtkmm/eventcontrollerscroll.h>
 #include <gtkmm/grid.h>
 

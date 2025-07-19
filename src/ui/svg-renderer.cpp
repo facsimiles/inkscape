@@ -12,24 +12,14 @@
 
 #include "svg-renderer.h"
 
-#include <stdexcept>
-#include <vector>
-
-#include <cairomm/surface.h>
-#include <glibmm/ustring.h>
 #include <giomm/file.h>
 #include <gdkmm/pixbuf.h>
-#include <gdkmm/rgba.h>
 
 #include "document.h"
-
 #include "display/cairo-utils.h"
 #include "helper/pixbuf-ops.h"
 #include "io/file.h"
-#include "object/sp-root.h"
-#include "util/safe-printf.h"
 #include "util/units.h"
-#include "xml/repr.h"
 
 namespace Inkscape {
 

@@ -19,15 +19,9 @@
 
 #include "ui/desktop/menu-set-tooltips-shift-icons.h"
 
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/image.h>
 #include <gtkmm/label.h>
 
 #include "inkscape-application.h"  // Action extra data
-#include "ui/shortcuts.h"  // TEMP???
 #include "ui/util.h"
 
 // Could be used to update status bar.

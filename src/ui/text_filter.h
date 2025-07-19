@@ -5,8 +5,6 @@
 #ifndef _TEXTMATCHINGFILTER_H_
 #define _TEXTMATCHINGFILTER_H_
 
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/boolfilter.h>
 #include <gtkmm/filter.h>
 

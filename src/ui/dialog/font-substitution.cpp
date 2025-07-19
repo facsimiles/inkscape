@@ -8,6 +8,7 @@
  */
 
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
@@ -20,8 +21,8 @@
 #include "object/sp-textpath.h"
 #include "object/sp-tspan.h"
 #include "preferences.h"
-#include "selection.h"
 #include "selection-chemistry.h"
+#include "selection.h"
 #include "text-editing.h"
 #include "ui/dialog-events.h"
 #include "ui/pack.h"

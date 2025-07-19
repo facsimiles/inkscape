@@ -16,10 +16,6 @@
 #ifndef INKSCAPE_UI_TOOLBAR_SELECT_TOOLBAR_H
 #define INKSCAPE_UI_TOOLBAR_SELECT_TOOLBAR_H
 
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "preferences.h"
 #include "toolbar.h"
 #include "ui/operation-blocker.h"

@@ -70,32 +70,28 @@
 #include "connector-tool.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/stringutils.h>
 
+#include "3rdparty/adaptagrams/libavoid/router.h"
 #include "context-fns.h"
 #include "desktop-style.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/curve.h"
 #include "document-undo.h"
 #include "document.h"
 #include "message-context.h"
-#include "selection.h"
-
-#include "display/control/canvas-item-bpath.h"
-#include "display/curve.h"
-
-#include "3rdparty/adaptagrams/libavoid/router.h"
-
 #include "object/sp-conn-end.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
-
+#include "selection.h"
+#include "svg/svg.h"
 #include "ui/icon-names.h"
 #include "ui/knot/knot.h"
-#include "ui/widget/canvas.h"  // Enter events hack
+#include "ui/widget/canvas.h" // Enter events hack
 #include "ui/widget/events/canvas-event.h"
-
-#include "svg/svg.h"
 
 namespace Inkscape::UI::Tools {
 

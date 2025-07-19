@@ -16,14 +16,15 @@
 #define UI_THEMES_H_SEEN
 
 #include <map>
-#include <memory>
-#include <vector>
-#include <sigc++/signal.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
-#include <pangomm/fontdescription.h>
+#include <sigc++/signal.h>
 
 #include "preferences.h"
+
+namespace Pango {
+class FontDescription;
+}
 
 namespace Gtk {
 class CssProvider;

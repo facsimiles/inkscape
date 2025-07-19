@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <optional>
-
 #include <glibmm/main.h>
 #include <gtkmm/dialog.h>
-#include <gtkmm/window.h>
 
 #include "dialog-run.h"
 

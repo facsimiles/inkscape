@@ -11,9 +11,6 @@
 #ifndef SEEN_TOOLBAR_TOOL_H
 #define SEEN_TOOLBAR_TOOL_H
 
-#include <memory>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 
 #include "preferences.h"

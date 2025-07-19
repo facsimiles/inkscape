@@ -18,8 +18,10 @@
 #include "svg/svg.h"
 #include "ui/controller.h"
 #include "ui/icon-names.h"
+#include "ui/knot/knot-enums.h"
 #include "ui/knot/knot-holder-entity.h"
 #include "ui/knot/knot-holder.h"
+#include "ui/knot/knot.h"
 #include "ui/pack.h"
 #include "ui/widget/point.h"
 

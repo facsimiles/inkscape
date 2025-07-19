@@ -15,17 +15,13 @@
 
 #include "knot.h"
 
-#include <utility>
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "knot-ptr.h"
 #include "message-context.h"
-#include "message-stack.h"
 
-#include "display/control/canvas-item-ctrl.h"
 #include "ui/tools/tool-base.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/canvas.h" // autoscroll

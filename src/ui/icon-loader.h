@@ -13,10 +13,6 @@
 #ifndef SEEN_INK_ICON_LOADER_H
 #define SEEN_INK_ICON_LOADER_H
 
-#include <cstdint>
-#include <utility>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
 
 namespace Gtk {

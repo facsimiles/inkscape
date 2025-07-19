@@ -11,19 +11,10 @@
 #ifndef INKSCAPE_UI_TOOL_CONTROL_POINT_H
 #define INKSCAPE_UI_TOOL_CONTROL_POINT_H
 
-#include <cstddef>
 #include <boost/noncopyable.hpp>
-#include <gdkmm/pixbuf.h>
-#include <sigc++/signal.h>
-#include <sigc++/trackable.h>
-
-#include <2geom/point.h>
 
 #include "display/control/canvas-item-ctrl.h"
-#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
-#include "enums.h" // TEMP TEMP
-#include <sigc++/scoped_connection.h>
 
 class SPDesktop;
 

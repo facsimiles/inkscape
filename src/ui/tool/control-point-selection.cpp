@@ -10,17 +10,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <boost/none.hpp>
-#include <gdk/gdkkeysyms.h>
-#include <2geom/transforms.h>
-
 #include "desktop.h"
 #include "display/control/snap-indicator.h"
-#include "ui/tool/selectable-control-point.h"
+#include "ui/tool/control-point.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/transform-handle-set.h"
 #include "ui/tool/node.h"
-#include "ui/widget/canvas.h"
 #include "ui/widget/events/canvas-event.h"
 
 namespace Inkscape {

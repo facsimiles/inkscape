@@ -15,19 +15,18 @@
 #ifndef SEEN_SP_KNOT_H
 #define SEEN_SP_KNOT_H
 
-#include <cstdint>
-#include <2geom/point.h>
-#include <sigc++/sigc++.h>
 #include <glibmm/ustring.h>
-#include <glibmm/refptr.h>
-#include <gdkmm/cursor.h>
+#include <sigc++/scoped_connection.h>
+#include <sigc++/signal.h>
+#include <2geom/point.h>
 
 #include "display/control/canvas-item-ctrl.h"
-#include "knot-enums.h"
-#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
-#include "enums.h"
-#include <sigc++/scoped_connection.h>
+#include "knot-enums.h"
+
+namespace Gdk {
+class Cursor;
+}
 
 class SPDesktop;
 class SPItem;
@@ -90,7 +89,7 @@ public:
 
     // FIXME: signals should NOT need to emit the object they came from, the callee should
     // be able to figure that out
-    sigc::signal<void (SPKnot *, unsigned int)> click_signal;
+    sigc::signal<void(SPKnot *, unsigned int)> click_signal;
     sigc::signal<void (SPKnot*, unsigned int)> doubleclicked_signal;
     sigc::signal<void (SPKnot*, unsigned int)> mousedown_signal;
     sigc::signal<void (SPKnot*, unsigned int)> grabbed_signal;

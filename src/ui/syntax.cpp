@@ -12,14 +12,8 @@
 
 #include "ui/syntax.h"
 
-#include <glibmm/ustring.h>
-#include <pango/pango-attributes.h>
-#include <sstream>
-#include <stdexcept>
-#include <string>
+#include <gtkmm/textview.h>
 
-#include "config.h"
-#include "io/resource.h"
 #include "object/sp-factory.h"
 #include "util/trim.h"
 

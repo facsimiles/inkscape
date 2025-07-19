@@ -20,22 +20,18 @@
 #include "mesh-toolbar.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/comboboxtext.h>
+#include <gtkmm/adjustment.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/togglebutton.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "gradient-drag.h"
-#include "inkscape.h"
 #include "object/sp-defs.h"
 #include "object/sp-mesh-gradient.h"
 #include "selection.h"
 #include "style.h"
 #include "ui/builder-utils.h"
-#include "ui/dialog-run.h"
 #include "ui/icon-names.h"
 #include "ui/simple-pref-pusher.h"
 #include "ui/tools/mesh-tool.h"

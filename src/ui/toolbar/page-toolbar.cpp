@@ -18,28 +18,19 @@
 #include <glibmm/regex.h>
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/entrycompletion.h>
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/popover.h>
 #include <gtkmm/separator.h>
-#include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "document.h"
-#include "extension/db.h"
 #include "extension/template.h"
 #include "io/resource.h"
 #include "object/sp-page.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
 #include "ui/popup-menu.h"
-#include "ui/tools/pages-tool.h"
-#include "ui/util.h"
-#include "util/paper.h"
-#include "util/units.h"
+#include "ui/widget/spinbutton.h"
 
 using Inkscape::IO::Resource::UIS;
 

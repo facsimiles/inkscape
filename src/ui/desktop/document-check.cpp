@@ -18,18 +18,15 @@
 #include "document-check.h"
 
 #include <glibmm/i18n.h>  // Internationalization
-#include <glibmm/ustring.h>
 #include <gtkmm/messagedialog.h>
 
 #include "desktop.h"
 #include "document.h"
 #include "file.h"
 #include "inkscape-window.h"
-#include "extension/system.h" // Inkscape::Extension::FILE...
 #include "object/sp-namedview.h"
 #include "ui/dialog-run.h"
 #include "ui/util.h"
-#include "xml/node.h"
 
 static int run_dialog(Gtk::Window &window, char const * const save_text,
                       char const * const format, char const * const document_name)
