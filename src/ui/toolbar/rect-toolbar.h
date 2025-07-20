@@ -29,8 +29,9 @@
  */
 
 #include <array>
-
+#include <string>
 #include "toolbar.h"
+#include "preferences.h"
 #include "ui/operation-blocker.h"
 #include "xml/node-observer.h"
 
@@ -39,6 +40,7 @@ class Builder;
 class Button;
 class Label;
 class Adjustment;
+class ToggleButton;
 } // namespace Gtk
 
 class SPRect;
@@ -68,6 +70,8 @@ public:
 
     void setDesktop(SPDesktop *desktop) override;
     void setActiveUnit(Util::Unit const *unit) override;
+    bool getLockWH() const { return _lock_wh; }
+    bool getLockRXY() const { return _lock_rxy; }
 
 private:
     RectToolbar(Glib::RefPtr<Gtk::Builder> const &builder);
@@ -85,6 +89,16 @@ private:
     auto _getDerivedSpinButtons() const { return std::to_array({&_rx_item, &_ry_item, &_width_item, &_height_item}); }
     void _valueChanged(DerivedSpinButton &btn);
 
+    // Add lock button and state
+    Gtk::ToggleButton &_lock_wh_button; // New toggle button for locking width/height
+    Gtk::ToggleButton &_lock_rxy_button; // New toggle button for locking rx/ry
+    bool _lock_wh = false;  
+    bool _lock_rxy = false;
+    double _aspect_ratio_wh=0.0;     
+    double _aspect_ratio_rxy=0.0;     
+    void toggle_lock_wh();
+    void toggle_lock_rxy();    
+    
     XML::Node *_repr = nullptr;
     SPRect *_rect = nullptr;
     void _attachRepr(XML::Node *repr, SPRect *rect);

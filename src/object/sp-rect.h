@@ -18,6 +18,7 @@
 #include <2geom/forward.h>
 
 #include "svg/svg-length.h"
+#include "svg/svg-bool.h"
 #include "sp-shape.h"
 
 enum GenericRectType {
@@ -54,6 +55,20 @@ public:
 	double getVisibleHeight() const;
 	void setVisibleHeight(double ry);
 
+	bool getLockWh() const;
+	void setLockWh(bool lock);
+
+	bool getLockRxy() const;
+	void setLockRxy(bool lock);
+
+	double getAspectRatioWh() const;
+	void setAspectRatioWh(double ratio);
+
+	double getAspectRatioRxy() const;
+	void setAspectRatioRxy(double ratio);
+
+
+
 	void compensateRxRy(Geom::Affine xform);
 
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
@@ -79,6 +94,10 @@ public:
 	SVGLength height;
 	SVGLength rx;
 	SVGLength ry;
+	SVGBool lock_wh{false};  // Default false, unset
+    SVGBool lock_rxy{false}; // Default false, unset
+	double aspect_ratio_wh=0.0;
+	double aspect_ratio_rxy=0.0;
 
 private:
 	static double vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);

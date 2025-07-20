@@ -600,8 +600,16 @@ enum class SPAttr {
     INKSCAPE_ORIGIN_CORRECTION,
     INKSCAPE_Y_AXIS_DOWN,
 
+    
+    // rectangle lock aspect ratio state
+    INKSCAPE_LOCK_WH,         
+    INKSCAPE_ASPECT_RATIO_WH, 
+    INKSCAPE_LOCK_RXY,        
+    INKSCAPE_ASPECT_RATIO_RXY,
+    
     // sentinel
-    SPAttr_SIZE
+    SPAttr_SIZE,
+
 };
 
 /**

@@ -27,12 +27,16 @@
 
 #include "rect-toolbar.h"
 
+#include <string>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/builder.h>
+#include <gtkmm/builder.h> 
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
+#include <gtkmm/togglebutton.h>
+#include <gtkmm/image.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -47,6 +51,7 @@
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 #include "widgets/widget-sizes.h"
+#include "preferences.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::DocumentUndo;
@@ -85,11 +90,18 @@ RectToolbar::RectToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     , _height_item{UI::get_derived_widget<DerivedSpinButton>(builder, "_height_item", "height", &SPRect::getVisibleHeight, &SPRect::setVisibleHeight)}
     , _rx_item{UI::get_derived_widget<DerivedSpinButton>(builder, "_rx_item", "rx", &SPRect::getVisibleRx, &SPRect::setVisibleRx)}
     , _ry_item{UI::get_derived_widget<DerivedSpinButton>(builder, "_ry_item", "ry", &SPRect::getVisibleRy, &SPRect::setVisibleRy)}
+    , _lock_wh_button{get_widget<Gtk::ToggleButton>(builder, "_lock_wh_button")} 
+    , _lock_rxy_button{get_widget<Gtk::ToggleButton>(builder, "_lock_rxy_button")} 
 {
+    auto prefs = Inkscape::Preferences::get();
     auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
     _not_rounded.signal_clicked().connect([this] { _setDefaults(); });
+
+    // Configure the lock buttons
+    _lock_wh_button.signal_toggled().connect([this] { toggle_lock_wh(); });
+    _lock_rxy_button.signal_toggled().connect([this] { toggle_lock_rxy(); });
 
     for (auto sb : _getDerivedSpinButtons()) {
         auto const adj = sb->get_adjustment();
@@ -213,20 +225,52 @@ void RectToolbar::_valueChanged(DerivedSpinButton &btn)
     auto guard = _blocker.block();
 
     auto const adj = btn.get_adjustment();
+    double value = Quantity::convert(adj->get_value(), _tracker->getActiveUnit(), "px");
 
+    // save the new value to preferences
     if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
         auto const path = Glib::ustring{"/tools/shapes/rect/"} + btn.name;
-        Preferences::get()->setDouble(path, Quantity::convert(adj->get_value(), _tracker->getActiveUnit(), "px"));
+        Preferences::get()->setDouble(path, value);
     }
 
     bool modified = false;
     for (auto item : _desktop->getSelection()->items()) {
         if (auto rect = cast<SPRect>(item)) {
-            if (adj->get_value() != 0) {
-                (rect->*btn.setter)(Quantity::convert(adj->get_value(), _tracker->getActiveUnit(), "px"));
+            double new_value = value;
+            double paired_value = 0.0;
+
+            if (&btn == &_width_item && rect->getLockWh()) {
+                paired_value = new_value * rect->getAspectRatioWh();
+                _height_item.get_adjustment()->set_value(Quantity::convert(paired_value, "px", _tracker->getActiveUnit()));
+                rect->setVisibleHeight(paired_value);
+            } else if (&btn == &_height_item && rect->getLockWh()) {
+                paired_value = new_value / rect->getAspectRatioWh();
+                _width_item.get_adjustment()->set_value(Quantity::convert(paired_value, "px", _tracker->getActiveUnit()));
+                rect->setVisibleWidth(paired_value);
+            } else if (&btn == &_rx_item && rect->getLockRxy()) {
+                paired_value = new_value * rect->getAspectRatioRxy();
+                _ry_item.get_adjustment()->set_value(Quantity::convert(paired_value, "px", _tracker->getActiveUnit()));
+                rect->setVisibleRy(paired_value);
+            } else if (&btn == &_ry_item && rect->getLockRxy()) {
+                paired_value = new_value / rect->getAspectRatioRxy();
+                _rx_item.get_adjustment()->set_value(Quantity::convert(paired_value, "px", _tracker->getActiveUnit()));
+                rect->setVisibleRx(paired_value);
+            }
+
+            // Update the primary dimension
+            if (new_value != 0) {
+                (rect->*btn.setter)(new_value);
             } else {
                 rect->removeAttribute(btn.name);
             }
+
+            // Update aspect ratio after change
+            double w = rect->getVisibleWidth();
+            double h = rect->getVisibleHeight();
+            rect->setAspectRatioWh(h / (w != 0 ? w : 1.0));
+            double rx = rect->getVisibleRx();
+            double ry = rect->getVisibleRy();
+            rect->setAspectRatioRxy(ry / (rx != 0 ? rx : 1.0));
             modified = true;
         }
     }
@@ -275,6 +319,10 @@ void RectToolbar::_selectionChanged(Selection *selection)
 
     if (_single) {
         _attachRepr(repr, rect);
+        _lock_wh_button.set_active(rect->getLockWh());
+        _lock_rxy_button.set_active(rect->getLockRxy());
+        _aspect_ratio_wh = rect->getAspectRatioWh();
+        _aspect_ratio_rxy = rect->getAspectRatioRxy();
         _queueUpdate();
     }
 
@@ -340,6 +388,29 @@ void RectToolbar::_update()
     _sensitivize();
 }
 
+void RectToolbar::toggle_lock_wh() {
+    bool active = _lock_wh_button.get_active();
+    if (_single && _rect) {
+        _rect->setLockWh(active);
+        _lock_wh_button.set_image_from_icon_name(active ? "object-locked" : "object-unlocked");
+        double w = _rect->getVisibleWidth();
+        double h = _rect->getVisibleHeight();
+        _rect->setAspectRatioWh(h / (w != 0 ? w : 1.0)); // Update aspect ratio when toggling
+        DocumentUndo::done(_desktop->getDocument(), _("Toggle rectangle lock"), INKSCAPE_ICON("draw-rectangle"));
+    }
+}
+
+void RectToolbar::toggle_lock_rxy() {
+    bool active = _lock_rxy_button.get_active();
+    if (_single && _rect) {
+        _rect->setLockRxy(active);
+        _lock_rxy_button.set_image_from_icon_name(active ? "object-locked" : "object-unlocked");
+        double rx = _rect->getVisibleRx();
+        double ry = _rect->getVisibleRy();
+        _rect->setAspectRatioRxy(ry / (rx != 0 ? rx : 1.0));
+        DocumentUndo::done(_desktop->getDocument(), _("Toggle rectangle lock"), INKSCAPE_ICON("draw-rectangle"));
+    }
+}
 } // namespace Inkscape::UI::Toolbar
 
 /*

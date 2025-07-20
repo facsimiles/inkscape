@@ -53,6 +53,20 @@
       </object>
     </child>
     <child>
+      <object class="GtkToggleButton" id="_lock_wh_button">
+        <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="receives-default">True</property>
+        <property name="has-frame">False</property>
+        <property name="tooltip-text" translatable="yes">Lock width and height proportions</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">object-unlocked</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="GtkBox" id="height_box">
         <property name="tooltip-text" translatable="yes">Height of rectangle</property>
         <child>
@@ -92,6 +106,20 @@
             <property name="adjustment">_rx_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkToggleButton" id="_lock_rxy_button">
+        <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="receives-default">True</property>
+        <property name="has-frame">False</property>
+        <property name="tooltip-text" translatable="yes">Lock Rx and Ry proportions</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">object-unlocked</property>
           </object>
         </child>
       </object>
