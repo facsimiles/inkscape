@@ -29,8 +29,8 @@ wget -c "$goappimage_url" -O goappimage
 chmod +x goappimage
 
 # Can't use goappimage for second step since internal copy of appstreamcli is too old
-wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagekit
-echo b90f4a8b18967545fda78a445b27680a1642f1ef9488ced28b65398f2be7add2 appimagekit | sha256sum -c
+wget -c "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagekit
+echo 363dafac070b65cc36ca024b74db1f043c6f5cd7be8fca760e190dce0d18d684 appimagekit | sha256sum -c
 chmod +x appimagekit
 
 ./goappimage -s deploy ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop
