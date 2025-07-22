@@ -31,7 +31,6 @@ public:
     unsigned int getComponentCount() const override;
 
     std::shared_ptr<Colors::CMS::Profile> const getProfile() const override;
-    RenderingIntent getIntent() const override { return _intent; }
     void setIntent(RenderingIntent intent) { _intent = intent; }
 
     /** Returns false if this icc profile is not connected to any actual profile */
@@ -43,7 +42,6 @@ protected:
     friend class Colors::DocumentCMS;
 
     std::string toString(std::vector<double> const &values, bool opacity = true) const override;
-    uint32_t toRGBA(std::vector<double> const &values, double opacity = 1.0) const override;
 
     bool overInk(std::vector<double> const &input) const override;
 
@@ -51,7 +49,6 @@ private:
     unsigned _profile_size;
     Type _profile_type;
     std::shared_ptr<Colors::CMS::Profile> _profile;
-    RenderingIntent _intent = RenderingIntent::UNKNOWN;
 
 public:
     class CmsParser : public Parser

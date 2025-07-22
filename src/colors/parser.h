@@ -30,7 +30,7 @@ public:
     static std::string getCssPrefix(std::istringstream &ss);
     static bool css_number(std::istringstream &ss, double &value, std::string &unit, bool &end, char const sep = 0x0);
     static bool append_css_value(std::istringstream &ss, std::vector<double> &output, bool &end, char const sep = 0x0,
-                                 double scale = 1.0);
+                                 double scale = 1.0, double pc_scale = 100.0);
 
     // TODO message: return reason for parsing failure. Otherwise we cannot tell the user why we reject certain colors.
     virtual bool parse(std::istringstream &ss, std::vector<double> &output) const { return false; };

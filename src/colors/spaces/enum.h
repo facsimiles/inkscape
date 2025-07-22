@@ -55,11 +55,12 @@ enum class Type
     HWB,       // Hue, Whiteness and Blackness, similar to HSL and HSV
     CMYK,      // Cyan, Magenta, Yellow and Black for print
     CMY,       // CMYK without the black, used in some icc profiles
-    XYZ,       // Color, Luminance and Blueness, same CIE as RGB
+    XYZ,       // Color, Luminance and Blueness, with a D65 Whitepoint
+    XYZ50,     // Same as XYZ but with a D50 Whitepoint
     YXY,
-    LUV, // Lightness and chromaticity, aka CIELUV
-    LCH, // Lunimance, Chroma and Hue, aka HCL
-    LAB, // Lightness, Green-Magenta and Blue-Yellow, aka CIELAB
+    LUV,       // Lightness and chromaticity, aka CIELUV
+    LCH,       // Lunimance, Chroma and Hue, aka HCL
+    LAB,       // Lightness, Green-Magenta and Blue-Yellow, aka CIELAB
     HSLUV,
     OKHSL,
     OKHSV,

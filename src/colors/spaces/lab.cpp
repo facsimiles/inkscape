@@ -19,11 +19,18 @@ namespace Inkscape::Colors::Space {
 
 constexpr double LUMA_SCALE = 100;
 
-// NOTE! Inkscape's calculations use a range of 256, while CSS uses 250
+// CSS Actual values are scaled -128 -> 127
 constexpr double MIN_SCALE = -128;
-constexpr double MAX_SCALE = 128;
-constexpr double MIN_CSS_SCALE = -125;
-constexpr double MAX_CSS_SCALE = 125;
+constexpr double MAX_SCALE = 127;
+
+/**
+ * Return the RGB color profile, this is static for all RGB sub-types
+ */
+std::shared_ptr<Inkscape::Colors::CMS::Profile> const Lab::getProfile() const
+{
+    static std::shared_ptr<Colors::CMS::Profile> lab_profile = Colors::CMS::Profile::create_lab();
+    return lab_profile;
+}
 
 /**
  * Changes the values from 0..1, to typical lab scaling used in calculations.
@@ -66,7 +73,7 @@ void Lab::toXYZ(std::vector<double> &in_out)
         } else {
             in_out[i] = (in_out[i] - 16.0 / 116.0) / 7.787;
         }
-        in_out[i] *= illuminant_d65[i];
+        //in_out[i] *= illuminant_d65[i];
     }
 }
 
@@ -78,7 +85,7 @@ void Lab::toXYZ(std::vector<double> &in_out)
 void Lab::fromXYZ(std::vector<double> &in_out)
 {
     for (unsigned i = 0; i < 3; i++) {
-        in_out[i] /= illuminant_d65[i];
+        //in_out[i] /= illuminant_d65[i];
     }
 
     double l;
@@ -113,8 +120,8 @@ std::string Lab::toString(std::vector<double> const &values, bool opacity) const
     auto os = CssFuncPrinter(3, "lab");
 
     os << values[0] * LUMA_SCALE                             // Luminance
-       << SCALE_UP(values[1], MIN_CSS_SCALE, MAX_CSS_SCALE)  // Chroma A
-       << SCALE_UP(values[2], MIN_CSS_SCALE, MAX_CSS_SCALE); // Chroma B
+       << SCALE_UP(values[1], MIN_SCALE, MAX_SCALE)  // Chroma A
+       << SCALE_UP(values[2], MIN_SCALE, MAX_SCALE); // Chroma B
 
     if (opacity && values.size() == 4)
         os << values[3]; // Optional opacity
@@ -124,15 +131,18 @@ std::string Lab::toString(std::vector<double> const &values, bool opacity) const
 
 bool Lab::Parser::parse(std::istringstream &ss, std::vector<double> &output) const
 {
+    // CSS Color Module 4 defines 100% as 125 for A/B in lab
+    static double CSS_PERCENT_SCALE = (100.0 / 125.0);
+
     bool end = false;
-    if (append_css_value(ss, output, end, ',', LUMA_SCALE)       // Lightness
-        && append_css_value(ss, output, end, ',', MAX_CSS_SCALE) // Chroma-A
-        && append_css_value(ss, output, end, '/', MAX_CSS_SCALE) // Chroma-B
-        && (append_css_value(ss, output, end) || true)           // Optional opacity
+    if (append_css_value(ss, output, end, ',', LUMA_SCALE)                  // Lightness
+        && append_css_value(ss, output, end, ',', 1.0, CSS_PERCENT_SCALE) // Chroma-A
+        && append_css_value(ss, output, end, '/', 1.0, CSS_PERCENT_SCALE) // Chroma-B
+        && (append_css_value(ss, output, end) || true)                      // Optional opacity
         && end) {
-        // The A and B portions are between -100% and 100% leading to this post unit aditional conversion.
-        output[1] = (output[1] + 1) / 2;
-        output[2] = (output[2] + 1) / 2;
+        // The A and B portions are between -128 and +127 which is hard for append_css_value to convert
+        output[1] = SCALE_DOWN(output[1], MIN_SCALE, MAX_SCALE);
+        output[2] = SCALE_DOWN(output[2], MIN_SCALE, MAX_SCALE);
         return true;
     }
     return false;

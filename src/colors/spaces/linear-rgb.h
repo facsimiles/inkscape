@@ -11,22 +11,23 @@
 #ifndef SEEN_COLORS_SPACES_LINEARRGB_H
 #define SEEN_COLORS_SPACES_LINEARRGB_H
 
-#include "rgb.h"
+#include "base.h"
 
 namespace Inkscape::Colors::Space {
 
-class LinearRGB : public RGB
+class LinearRGB : public AnySpace
 {
 public:
-    LinearRGB(): RGB(Type::linearRGB, 3, "linearRGB", "linearRGB", "color-selector-linear-rgb") {}
+    LinearRGB(): AnySpace(Type::linearRGB, 3, "linearRGB", "linearRGB", "color-selector-linear-rgb") {
+        _intent = RenderingIntent::RELATIVE_COLORIMETRIC;
+        _intent_priority = 10;
+    }
     ~LinearRGB() override = default;
 
 protected:
     friend class Inkscape::Colors::Color;
 
-    void spaceToProfile(std::vector<double> &output) const override { LinearRGB::toRGB(output); }
-    void profileToSpace(std::vector<double> &output) const override { LinearRGB::fromRGB(output); }
-
+    std::shared_ptr<Colors::CMS::Profile> const getProfile() const override;
     std::string toString(std::vector<double> const &values, bool opacity = true) const override;
 
 public:

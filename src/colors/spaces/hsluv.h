@@ -21,10 +21,10 @@
 
 namespace Inkscape::Colors::Space {
 
-class HSLuv : public RGB
+class HSLuv : public XYZ
 {
 public:
-    HSLuv(): RGB(Type::HSLUV, 3, "HSLuv", "HSLuv", "color-selector-hsluv") {}
+    HSLuv(): XYZ(Type::HSLUV, 3, "HSLuv", "HSLuv", "color-selector-hsluv") {}
     ~HSLuv() override = default;
 
 protected:
@@ -35,13 +35,9 @@ protected:
         HSLuv::toLch(output);
         Lch::toLuv(output);
         Luv::toXYZ(output);
-        XYZ::toLinearRGB(output);
-        LinearRGB::toRGB(output);
     }
     void profileToSpace(std::vector<double> &output) const override
     {
-        LinearRGB::fromRGB(output);
-        XYZ::fromLinearRGB(output);
         Luv::fromXYZ(output);
         Lch::fromLuv(output);
         HSLuv::fromLch(output);

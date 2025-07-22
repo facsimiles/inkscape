@@ -34,6 +34,10 @@ std::array<Geom::Line, 6> HSLuv::get_bounds(double l)
     int channel;
     int t;
 
+    static const std::vector<double> d65[3] = {{3.24096994190452134377, -1.53738317757009345794, -0.49861076029300328366},
+                                               {-0.96924363628087982613, 1.87596750150772066772, 0.04155505740717561247},
+                                               {0.05563007969699360846, -0.20397695888897656435, 1.05697151424287856072}};
+
     for (channel = 0; channel < 3; channel++) {
         double m1 = d65[channel][0];
         double m2 = d65[channel][1];

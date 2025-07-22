@@ -19,10 +19,10 @@ namespace Inkscape::Colors::Space {
 constexpr double KAPPA = 903.29629629629629629630;
 constexpr double EPSILON = 0.00885645167903563082;
 
-class Luv : public RGB
+class Luv : public XYZ
 {
 public:
-    Luv(): RGB(Type::LUV, 3, "Luv", "Luv", "color-selector-luv") {}
+    Luv(): XYZ(Type::LUV, 3, "Luv", "Luv", "color-selector-luv") {}
     ~Luv() override = default;
 
 protected:
@@ -32,13 +32,9 @@ protected:
     {
         Luv::scaleUp(output);
         Luv::toXYZ(output);
-        XYZ::toLinearRGB(output);
-        LinearRGB::toRGB(output);
     }
     void profileToSpace(std::vector<double> &output) const override
     {
-        LinearRGB::fromRGB(output);
-        XYZ::fromLinearRGB(output);
         Luv::fromXYZ(output);
         Luv::scaleDown(output);
     }

@@ -14,6 +14,7 @@
 
 #include "luv.h"
 
+#include <algorithm>
 #include <cmath>
 
 namespace Inkscape::Colors::Space {

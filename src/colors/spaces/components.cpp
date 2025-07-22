@@ -155,6 +155,14 @@ static const std::vector<Components> color_spaces = {
         }
     },
     {
+        Type::XYZ50, Type::NONE, Traits::Internal,
+        {
+            { "x", "_X", "X", Unit::EightBit },
+            { "y", "_Y", "Y", Unit::EightBit },
+            { "z", "_Z", "Z", Unit::EightBit }
+        }
+    },
+    {
         Type::YXY, Type::NONE, Traits::Internal,
         {
             { "y1", "_Y", "Y", Unit::EightBit },

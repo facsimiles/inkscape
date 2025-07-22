@@ -24,7 +24,13 @@ public:
     static std::shared_ptr<Profile> create_from_copy(cmsHPROFILE handle);
     static std::shared_ptr<Profile> create_from_uri(std::string path, bool in_home = false);
     static std::shared_ptr<Profile> create_from_data(std::string const &contents);
+
+    /* LittleCMS based indentity profiles */
     static std::shared_ptr<Profile> create_srgb();
+    static std::shared_ptr<Profile> create_linearrgb();
+    static std::shared_ptr<Profile> create_xyz65();
+    static std::shared_ptr<Profile> create_xyz50();
+    static std::shared_ptr<Profile> create_lab();
 
     static bool sortByName(std::shared_ptr<Profile> const &p1, std::shared_ptr<Profile> const &p2)
     {

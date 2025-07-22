@@ -15,11 +15,10 @@
 
 namespace Inkscape::Colors::Space {
 
-class Lch : public RGB
+class Lch : public XYZ
 {
 public:
-    Lch(): RGB(Type::LCH, 3, "Lch", "Lch", "color-selector-lch", true) {}
-    // Lch() = default;
+    Lch(): XYZ(Type::LCH, 3, "Lch", "Lch", "color-selector-lch", true) {}
     ~Lch() override = default;
 
 protected:
@@ -30,13 +29,9 @@ protected:
         Lch::scaleUp(output);
         Lch::toLuv(output);
         Luv::toXYZ(output);
-        XYZ::toLinearRGB(output);
-        LinearRGB::toRGB(output);
     }
     void profileToSpace(std::vector<double> &output) const override
     {
-        LinearRGB::fromRGB(output);
-        XYZ::fromLinearRGB(output);
         Luv::fromXYZ(output);
         Lch::fromLuv(output);
         Lch::scaleDown(output);

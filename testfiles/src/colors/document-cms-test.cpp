@@ -256,7 +256,7 @@ TEST_F(ColorDocumentCMSObjsTest, applyConversion)
     EXPECT_EQ(color.toString(), "#ff0000 icc-color(grb, 0, 1, 0)");
 
     // Converting from one icc profile to another is possible
-    EXPECT_EQ(color.converted(rcm)->toString(), "#ed1c24 icc-color(cmyk-rcm, 0, 1, 1, 0)");
+    EXPECT_EQ(color.converted(rcm)->toString(), "#ed1d24 icc-color(cmyk-rcm, 0, 0.998, 1, 0)");
     // Same icc profile should keep the same cmyk values, but
     // because the render intent is different the RGB changes
     EXPECT_EQ(color.converted(acm)->toString(), "#cf2c2d icc-color(cmyk-acm, 0, 1, 1, 0)");

@@ -76,8 +76,15 @@ std::shared_ptr<Transform> const Transform::create_for_cms(std::shared_ptr<Profi
 
     // Format is 64bit floating point (double), so try not to do extra conversions.
     // Note: size of 8 will clobber channel size bit and cause errors, pass zero
-    auto from_format = cmsFormatterForColorspaceOfProfile(from->getHandle(), 0, true) & mask_colorspace;
+    auto from_format = cmsFormatterForColorspaceOfProfile(from->getHandle(), 0, true);
+    // Masking color values can only happen to non-xyz
+    if ((from_format & COLORSPACE_SH(PT_XYZ)) != COLORSPACE_SH(PT_XYZ)) {
+        from_format &= mask_colorspace;
+    }
     auto to_format = cmsFormatterForColorspaceOfProfile(to->getHandle(), 0, true) & mask_colorspace;
+    if ((to_format & COLORSPACE_SH(PT_XYZ)) != COLORSPACE_SH(PT_XYZ)) {
+        to_format &= mask_colorspace;
+    }
     return create(cmsCreateTransform(from->getHandle(), from_format, to->getHandle(), to_format, lt, flags));
 }
 

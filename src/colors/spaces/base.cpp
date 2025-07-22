@@ -8,6 +8,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <iostream>
+
 #include "base.h"
 
 #include <sstream>
@@ -16,6 +18,7 @@
 #include "colors/cms/profile.h"
 #include "colors/cms/transform.h"
 #include "colors/color.h"
+#include "colors/manager.h"
 #include "components.h"
 #include "gamut.h"
 
@@ -43,6 +46,10 @@ bool AnySpace::isValidData(std::vector<double> const &values) const
  */
 bool AnySpace::convert(std::vector<double> &io, std::shared_ptr<AnySpace> to_space) const
 {
+    // Nothing to change, so return.
+    if (*this == *to_space)
+        return true;
+
     // Firstly convert from the formatted values (i.e. hsl) into the profile values (i.e. sRGB)
     spaceToProfile(io);
     // Secondly convert the color profile itself using lcms2 if the profiles are different
@@ -51,6 +58,8 @@ bool AnySpace::convert(std::vector<double> &io, std::shared_ptr<AnySpace> to_spa
         to_space->profileToSpace(io);
         return true;
     }
+
+    // Turn it back so we don't leave data in a weird state
     profileToSpace(io);
     return false;
 }
@@ -75,15 +84,19 @@ bool AnySpace::profileToProfile(std::vector<double> &io, std::shared_ptr<AnySpac
     if (*to_profile == *from_profile)
         return true;
 
-    // Choose best rendering intent, first ours, then theirs, finally a default
-    auto intent = getIntent();
-    if (intent == RenderingIntent::UNKNOWN)
+    // Choose best rendering intent based on the intent priority
+    auto intent = RenderingIntent::UNKNOWN;
+    if (_intent_priority <= to_space->_intent_priority || getIntent() == RenderingIntent::UNKNOWN) {
         intent = to_space->getIntent();
-    if (intent == RenderingIntent::UNKNOWN)
+    } else {
+        intent = getIntent();
+    }
+    if (intent == RenderingIntent::UNKNOWN) {
         intent = RenderingIntent::PERCEPTUAL;
+    }
 
     // Look in the transform cache for the color profile
-    auto to_profile_id = to_profile->getChecksum() + intentIds[intent];
+    auto to_profile_id = to_profile->getChecksum() + "-" + intentIds[intent];
 
     if (!_transforms.contains(to_profile_id)) {
         // Create a new transform for this one way profile-pair
@@ -96,6 +109,36 @@ bool AnySpace::profileToProfile(std::vector<double> &io, std::shared_ptr<AnySpac
     }
     return false;
 }
+
+/**
+ * Convert the color into an RGBA32 for use within Gdk rendering.
+ */
+uint32_t AnySpace::toRGBA(std::vector<double> const &values, double opacity) const
+{
+    auto to_int32 = [opacity](std::vector<double> const &values) {
+        switch (values.size()) {
+            case 3:
+                return SP_RGBA32_F_COMPOSE(values[0], values[1], values[2], opacity);
+            case 4:
+                return SP_RGBA32_F_COMPOSE(values[0], values[1], values[2], opacity * values[3]);
+            default:
+                throw ColorError("Color values should be size 3 for RGB or 4 for RGBA.");
+        }
+    };
+
+    // We will always output sRGB for RGBA integers
+    static auto srgb = Manager::get().find(Type::RGB);
+    if (getType() != Type::RGB) {
+        std::vector<double> copy = values;
+        if (convert(copy, srgb)) {
+            return to_int32(copy);
+        }
+        throw ColorError("Couldn't convert color space to sRGB.");
+    }
+    return to_int32(values);
+}
+
+
 
 /**
  * Return true if the color would be out of gamut in the target color space.

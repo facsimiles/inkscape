@@ -13,6 +13,7 @@
 namespace {
 
 using Space::Type::LUV;
+using Space::Type::XYZ;
 using Space::Type::RGB;
 
 // clang-format off
@@ -46,8 +47,7 @@ TEST(ColorsSpacesLuv, randomConversion)
     // Isolate conversion functions
     EXPECT_TRUE(RandomPassFunc(Space::Luv::fromXYZ, Space::Luv::toXYZ, 1000));
 
-    // Full stack conversion
-    EXPECT_TRUE(RandomPassthrough(LUV, RGB, 1000));
+    EXPECT_TRUE(RandomPassthrough(LUV, XYZ, 1000));
 }
 
 TEST(ColorsSpacesLuv, components)

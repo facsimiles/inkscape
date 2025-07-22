@@ -170,23 +170,23 @@ TEST(ColorsSpacesCms, printColor)
     auto space = CMS(4);
 
     ASSERT_FALSE(space.isValid());
-    ASSERT_EQ(space.toString({}), "");
-    ASSERT_EQ(space.toString({1}), "");
-    ASSERT_EQ(space.toString({1, 2, 3, 4}), "");
-    ASSERT_EQ(space.toString({0, 0.5, 1, 1, 2, 3, 4}), "#0080ff icc-color(test-profile, 1, 2, 3, 4)");
+    EXPECT_EQ(space.toString({}), "");
+    EXPECT_EQ(space.toString({1}), "");
+    EXPECT_EQ(space.toString({1, 2, 3, 4}), "");
+    EXPECT_EQ(space.toString({0, 0.5001, 1, 1, 2, 3, 4}), "#0080ff icc-color(test-profile, 1, 2, 3, 4)");
 
     space = CMS(2);
     ASSERT_FALSE(space.isValid());
-    ASSERT_EQ(space.toString({1}), "");
-    ASSERT_EQ(space.toString({0, 0.5, 1, 1, 2}), "#0080ff icc-color(test-profile, 1, 2)");
-    ASSERT_EQ(space.toString({0, 0, 0, 1, 2, 3}), "#000000 icc-color(test-profile, 1, 2)");
+    EXPECT_EQ(space.toString({1}), "");
+    EXPECT_EQ(space.toString({0, 0.5001, 1, 1, 2}), "#0080ff icc-color(test-profile, 1, 2)");
+    EXPECT_EQ(space.toString({0, 0, 0, 1, 2, 3}), "#000000 icc-color(test-profile, 1, 2)");
 
     auto srgb = Inkscape::Colors::CMS::Profile::create_srgb();
     space = CMS(srgb);
     space.setIntent(RenderingIntent::AUTO);
     ASSERT_TRUE(space.isValid());
-    ASSERT_EQ(space.toString({1}), "");
-    ASSERT_EQ(space.toString({0, 0.5001, 1}), "#0080ff icc-color(sRGB-built-in, 0, 0.5, 1)");
+    EXPECT_EQ(space.toString({1}), "");
+    EXPECT_EQ(space.toString({0, 0.5001, 1}), "#0080ff icc-color(sRGB-built-in, 0, 0.5, 1)");
 }
 
 TEST(ColorsSpacesCms, outOfGamut)

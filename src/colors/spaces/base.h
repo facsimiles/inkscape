@@ -62,7 +62,7 @@ public:
     virtual Type getComponentType() const { return getType(); }
     virtual unsigned int getComponentCount() const { return _components; }
     virtual std::shared_ptr<Colors::CMS::Profile> const getProfile() const = 0;
-    virtual RenderingIntent getIntent() const { return RenderingIntent::UNKNOWN; }
+    RenderingIntent getIntent() const { return _intent; }
     // Some color spaces (like XYZ or LAB) to not put restrictions on valid ranges of values;
     // others (like sRGB) do, which means that channels outside those bounds represent colors out of gamut.
     bool isUnbounded() const { return _spaceIsUnbounded; }
@@ -85,7 +85,6 @@ protected:
     bool isValidData(std::vector<double> const &values) const;
     virtual std::vector<Parser> getParsers() const { return {}; }
     virtual std::string toString(std::vector<double> const &values, bool opacity = true) const = 0;
-    virtual uint32_t toRGBA(std::vector<double> const &values, double opacity = 1.0) const = 0;
 
     bool convert(std::vector<double> &io, std::shared_ptr<AnySpace> to_space) const;
     bool profileToProfile(std::vector<double> &io, std::shared_ptr<AnySpace> to_space) const;
@@ -93,10 +92,14 @@ protected:
     virtual void profileToSpace(std::vector<double> &io) const;
     virtual bool overInk(std::vector<double> const &input) const { return false; }
 
+    uint32_t toRGBA(std::vector<double> const &values, double opacity = 1.0) const;
+
     std::shared_ptr<Colors::CMS::Profile> srgb_profile = Colors::CMS::Profile::create_srgb();
 
     bool outOfGamut(std::vector<double> const &input, std::shared_ptr<AnySpace> to_space) const;
 
+    RenderingIntent _intent = RenderingIntent::UNKNOWN;
+    int _intent_priority = 0;
 private:
     mutable std::map<std::string, std::shared_ptr<Colors::CMS::Transform>> _transforms;
     mutable std::map<std::string, std::shared_ptr<Colors::CMS::Transform>> _gamut_checkers;

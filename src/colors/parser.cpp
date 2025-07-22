@@ -49,6 +49,8 @@ Parsers::Parsers()
     addParser(new CssParser("srgb-linear", Space::Type::linearRGB, 3));
     addParser(new CssParser("device-cmyk", Space::Type::CMYK, 4));
     addParser(new CssParser("xyz", Space::Type::XYZ, 3));
+    addParser(new CssParser("xyz-d65", Space::Type::XYZ, 3));
+    addParser(new CssParser("xyz-d50", Space::Type::XYZ50, 3));
 }
 
 /**
@@ -318,17 +320,18 @@ bool Parser::css_number(std::istringstream &ss, double &value, std::string &unit
  * @arg end - Is set to true if this number is the last one.
  * @arg sep - The separator to expect after this number (consumed)
  * @arg scale - The default scale of the number of no unit is detected.
+ * @arg percent - Scale of a percent if different from actual scale.
  *
  * @returns True if a number was found and appended.
  */
 bool Parser::append_css_value(std::istringstream &ss, std::vector<double> &output, bool &end, char const sep,
-                              double scale)
+                              double scale, double pc_scale)
 {
     double value;
     std::string unit;
     if (!end && css_number(ss, value, unit, end, sep)) {
         if (unit == "%") {
-            value /= 100;
+            value /= pc_scale;
         } else if (unit == "deg") {
             value /= 360;
         } else if (unit == "turn") {

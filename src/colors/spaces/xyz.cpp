@@ -20,59 +20,41 @@
 
 namespace Inkscape::Colors::Space {
 
-/**
- * Calculate the dot product of the given arrays.
- *
- * @param t1 The first array.
- * @param t2 The second array.
- * @return The resulting dot product.
- */
-static double dot_product(std::vector<double> const &t1, std::vector<double> const &t2)
-{
-    return (t1[0] * t2[0] + t1[1] * t2[1] + t1[2] * t2[2]);
+XYZ::XYZ(Type type, int components, std::string name, std::string shortName, std::string icon, bool spaceIsUnbounded):
+    AnySpace(type, components, std::move(name), std::move(shortName), std::move(icon), spaceIsUnbounded) {
 }
 
 /**
- * Convert a color from the the XYZ colorspace to the RGB colorspace.
- *
- * @param in_out[in,out] The XYZ color converted to a RGB color.
+ * Return the XYZ D65 color profile
  */
-void XYZ::toLinearRGB(std::vector<double> &in_out)
+std::shared_ptr<Inkscape::Colors::CMS::Profile> const XYZ::getProfile() const
 {
-    std::vector<double> result = in_out; // copy
-    for (size_t i : {0, 1, 2}) {
-        result[i] = dot_product(d65[i], in_out);
-    }
-    in_out = result;
+    static std::shared_ptr<Colors::CMS::Profile> xyz_profile = Colors::CMS::Profile::create_xyz65();
+    return xyz_profile;
 }
 
 /**
- * Convert from sRGB icc values to XYZ values
+ * Print the color to a CSS Color module 4 xyz-d65 color.
  *
- * @param in_out[in,out] The RGB color converted to a XYZ color.
- */
-void XYZ::fromLinearRGB(std::vector<double> &in_out)
-{
-    std::vector<double> result = in_out; // copy
-    for (size_t i : {0, 1, 2}) {
-        result[i] = dot_product(in_out, d65_inv[i]);
-    }
-    in_out = result;
-}
-
-/**
- * Print the RGB color to a CSS Color module 4 xyz-d65 color.
- *
- * @arg values - A vector of doubles for each channel in the RGB space
+ * @arg values - A vector of doubles for each channel in the xyz space
  * @arg opacity - True if the opacity should be included in the output.
  */
-std::string XYZ::toString(std::vector<double> const &values, bool opacity) const
+std::string XYZ::_toString(std::vector<double> const &values, bool opacity, bool d50) const
 {
-    auto os = CssColorPrinter(3, "xyz");
+    auto os = CssColorPrinter(3, d50 ? "xyz-d50" : "xyz");
     os << values;
     if (opacity && values.size() == 4)
         os << values[3];
     return os;
+}
+
+/**
+ * Return the XYZ D50 color profile
+ */
+std::shared_ptr<Inkscape::Colors::CMS::Profile> const XYZ50::getProfile() const
+{
+    static std::shared_ptr<Colors::CMS::Profile> xyz_profile = Colors::CMS::Profile::create_xyz50();
+    return xyz_profile;
 }
 
 }; // namespace Inkscape::Colors::Space

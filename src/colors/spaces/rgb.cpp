@@ -45,31 +45,8 @@ std::string RGB::toString(std::vector<double> const &values, bool opacity) const
 }
 
 /**
- * Convert the color into an RGBA32 for use within Gdk rendering.
+ * Parse RGB css values
  */
-uint32_t RGB::toRGBA(std::vector<double> const &values, double opacity) const
-{
-    if (getType() != Type::RGB) {
-        std::vector<double> copy = values;
-        spaceToProfile(copy);
-        return _to_rgba(copy, opacity);
-    }
-    return _to_rgba(values, opacity);
-}
-
-uint32_t RGB::_to_rgba(std::vector<double> const &values, double opacity) const
-{
-    switch (values.size()) {
-        case 3:
-            return SP_RGBA32_F_COMPOSE(values[0], values[1], values[2], opacity);
-        case 4:
-            return SP_RGBA32_F_COMPOSE(values[0], values[1], values[2], opacity * values[3]);
-        default:
-            throw ColorError("Color values should be size 3 for RGB or 4 for RGBA.");
-    }
-    return 0x0; // transparent black
-}
-
 bool RGB::Parser::parse(std::istringstream &ss, std::vector<double> &output) const
 {
     bool end = false;

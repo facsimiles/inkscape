@@ -18,6 +18,15 @@
 namespace Inkscape::Colors::Space {
 
 /**
+ * Return the RGB color profile, this is static for all RGB sub-types
+ */
+std::shared_ptr<Inkscape::Colors::CMS::Profile> const LinearRGB::getProfile() const
+{
+    static std::shared_ptr<Colors::CMS::Profile> linearrgb_profile = Colors::CMS::Profile::create_linearrgb();
+    return linearrgb_profile;
+}
+
+/**
  * Convenience function used for RGB conversions.
  *
  * @param c Value.

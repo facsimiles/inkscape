@@ -36,7 +36,9 @@ CMS::CMS(std::shared_ptr<Inkscape::Colors::CMS::Profile> profile, std::string na
     , _profile_size(profile->getSize())
     , _profile_type(_lcmssig_to_space[profile->getColorSpace()])
     , _profile(profile)
-{}
+{
+    _intent_priority = 100;
+}
 
 /**
  * Naked CMS space for testing and data retention where the profile is unavailable.
@@ -46,7 +48,9 @@ CMS::CMS(std::string profile_name, unsigned profile_size, Space::Type profile_ty
     , _profile_size(profile_size)
     , _profile_type(profile_type)
     , _profile(nullptr)
-{}
+{
+    _intent_priority = 100;
+}
 
 /**
  * Return the profile for this cms space. If this is anonymous, it returns srgb
@@ -62,18 +66,23 @@ std::shared_ptr<Colors::CMS::Profile> const CMS::getProfile() const
 
 /**
  * If this space lacks a profile, it's really the sRGB fallback values,
- * so we strip out any other values from the io.
+ * so we strip out any other values from the io, otherwise we strip the
+ * fallback rgb instead.
  */
 void CMS::spaceToProfile(std::vector<double> &io) const
 {
-    if (isValid())
-        return; // Do nothing for valid spaces
-
-    bool has_opacity = io.size() == _profile_size + 4;
-
-    // Keep deleting the icc color values
-    while (io.size() > (3 + has_opacity)) {
-        io.erase(io.begin() + 3);
+    bool has_rgb = io.size() > _profile_size + 3;
+    if (isValid()) {
+        // Remove RGB backup leaving just the CMS values
+        if (has_rgb) {
+            io.erase(io.begin(), io.begin() + 3);
+        }
+    } else {
+        bool has_opacity = io.size() == _profile_size + (has_rgb * 3) + 1;
+        // Remove the CMS values leaving just the backup RGB
+        while ((int)io.size() > (3 + has_opacity)) {
+            io.erase(io.begin() + 3);
+        }
     }
 }
 
@@ -149,40 +158,6 @@ std::string CMS::toString(std::vector<double> const &values, bool /*opacity*/) c
     }
     // opacity is never added to the printer here, always ignored
     return rgba_to_hex(toRGBA(values), false) + " " + (std::string)oo;
-}
-
-/**
- * Convert this CMS color into a simple sRGB based RGBA value.
- *
- * @arg values - The values for each channel in the icc profile
- * @arg opacity - An extra opacity to mix into the output.
- *
- * @returns An integer of the sRGB value.
- */
-uint32_t CMS::toRGBA(std::vector<double> const &values, double opacity) const
-{
-    if (!isValid()) {
-        if (values.size() == _profile_size + 3)
-            return SP_RGBA32_F_COMPOSE(values[0], values[1], values[2], opacity);
-        if (values.size() == _profile_size + 4)
-            return SP_RGBA32_F_COMPOSE(values[0], values[1], values[2], opacity * values.back());
-        std::cerr << "Can not convert CMS color to sRGB, no profile available and no fallback color\n";
-        return 0x0;
-    }
-
-    static auto rgb = Manager::get().find(Space::Type::RGB);
-    std::vector<double> copy = values;
-    if (convert(copy, rgb)) {
-        // The opacity will be copied during conversion (if present) so we only
-        // need to test if the rgb has opacity and add it on if it does.
-        if (copy.size() == rgb->getComponentCount() + 1)
-            opacity *= copy.back();
-
-        // CMS color channels never include opacity, it's not in the specification
-        return SP_RGBA32_F_COMPOSE(copy[0], copy[1], copy[2], opacity);
-    }
-    std::cerr << "Can not convert CMS color to sRGB.\n";
-    return 0x0;
 }
 
 /**

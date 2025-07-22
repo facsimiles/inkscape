@@ -59,6 +59,7 @@ Manager::Manager()
     addSpace(new Space::OkLab());
     addSpace(new Space::OkLch());
     addSpace(new Space::XYZ());
+    addSpace(new Space::XYZ50());
 }
 
 /**

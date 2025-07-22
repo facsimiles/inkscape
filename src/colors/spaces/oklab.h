@@ -12,6 +12,7 @@
 #define SEEN_COLORS_SPACES_OKLAB_H
 
 #include "linear-rgb.h"
+#include "rgb.h"
 
 namespace Inkscape::Colors::Space {
 

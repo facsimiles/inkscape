@@ -11,32 +11,23 @@
 #ifndef SEEN_COLORS_SPACES_LAB_H
 #define SEEN_COLORS_SPACES_LAB_H
 
-#include "xyz.h"
+#include "base.h"
 
 namespace Inkscape::Colors::Space {
 
-class Lab : public RGB
+class Lab : public AnySpace
 {
 public:
-    Lab(): RGB(Type::LAB, 3, "Lab", "Lab", "color-selector-lab", true) {}
+    Lab(): AnySpace(Type::LAB, 3, "Lab", "Lab", "color-selector-lab", true) {
+        _intent = RenderingIntent::ABSOLUTE_COLORIMETRIC;
+        _intent_priority = 10;
+    }
     ~Lab() override = default;
 
 protected:
     friend class Inkscape::Colors::Color;
 
-    void spaceToProfile(std::vector<double> &output) const override
-    {
-        Lab::toXYZ(output);
-        XYZ::toLinearRGB(output);
-        LinearRGB::toRGB(output);
-    }
-    void profileToSpace(std::vector<double> &output) const override
-    {
-        LinearRGB::fromRGB(output);
-        XYZ::fromLinearRGB(output);
-        Lab::fromXYZ(output);
-    }
-
+    std::shared_ptr<Inkscape::Colors::CMS::Profile> const getProfile() const override;
     std::string toString(std::vector<double> const &values, bool opacity) const override;
 
 public:

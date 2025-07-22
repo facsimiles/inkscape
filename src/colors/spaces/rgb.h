@@ -29,7 +29,6 @@ protected:
     friend class Inkscape::Colors::Color;
 
     std::string toString(std::vector<double> const &values, bool opacity = true) const override;
-    uint32_t toRGBA(std::vector<double> const &values, double opacity = 1.0) const override;
 
 public:
     class Parser : public LegacyParser
@@ -40,9 +39,6 @@ public:
         {}
         bool parse(std::istringstream &input, std::vector<double> &output) const override;
     };
-
-private:
-    uint32_t _to_rgba(std::vector<double> const &values, double opacity) const;
 };
 
 } // namespace Inkscape::Colors::Space

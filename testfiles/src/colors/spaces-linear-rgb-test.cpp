@@ -17,7 +17,10 @@ using Space::Type::RGB;
 
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesLinearRGB, fromString, testing::Values(
-    _P(in, "color(srgb-linear 0.1 1 0.5)", { 0.1, 1, 0.5 }, 0x59ffbcff)
+    _P(in, "color(srgb-linear 0.1 1 0.5)",     { 0.1,  1.0, 0.5       }, 0x59ffbcff),
+    _P(in, "color(srgb-linear 0.03 0 0.12)",   { 0.03, 0.0, 0.12      }, 0x300061ff),
+    _P(in, "color(srgb-linear 0 1 0.5 / 0.8)", { 0.0,  1.0, 0.5,  0.8 }, 0x01ffbccc)
+
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesLinearRGB, badColorString, testing::Values(
