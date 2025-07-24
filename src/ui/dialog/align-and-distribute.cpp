@@ -32,6 +32,9 @@
 #include "ui/builder-utils.h"
 #include "ui/dialog/dialog-base.h" // Tool switching.
 #include "ui/util.h"
+#include "message-stack.h"         // For status messages
+#include "object/sp-item.h"        // For SPItem cast
+#include "util/cast.h"             // For cast function
 
 namespace Inkscape::UI::Dialog {
 
@@ -122,8 +125,19 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
 
     for (auto align_button : align_buttons) {
         auto &button = get_widget<Gtk::Button>(builder, align_button.first);
+        
+        // Connect click handler
         button.signal_clicked().connect(
             sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_align_clicked), align_button.second));
+        
+        // Connect hover handlers for preview
+        button.signal_enter_notify_event().connect(
+            sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_button_hover_enter), align_button.second));
+        button.signal_leave_notify_event().connect(
+            sigc::mem_fun(*this, &AlignAndDistribute::on_button_hover_leave));
+        
+        // Enable events on button
+        button.add_events(Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK);
     }
 
     // ------------ Remove overlap -------------
@@ -165,6 +179,24 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
     // dialog based icon sizes, perhaps done via css instead.
     _icon_sizes_changed = prefs->createObserver("/toolbox/tools/iconsize", set_icon_size_prefs);
     set_icon_size_prefs();
+
+    // Initialize hover preview preference if not set
+    if (!prefs->getEntry("/dialogs/align/enable-hover-preview")) {
+        prefs->setBool("/dialogs/align/enable-hover-preview", true);
+    }
+}
+
+AlignAndDistribute::~AlignAndDistribute()
+{
+    // Clean up any active preview
+    if (_preview_active) {
+        end_preview();
+    }
+    
+    // Disconnect timeout connection
+    if (_preview_timeout_connection.connected()) {
+        _preview_timeout_connection.disconnect();
+    }
 }
 
 void
@@ -232,8 +264,27 @@ AlignAndDistribute::on_align_relative_node_changed()
 void
 AlignAndDistribute::on_align_clicked(std::string const &align_to)
 {
+    // If preview is active, we just confirm it (transforms already applied)
+    if (_preview_active) {
+        _preview_active = false;
+        
+        // Clear preview data but don't restore (we want to keep the alignment)
+        _original_transforms.clear();
+        _preview_objects.clear();
+        
+        // Clear status message
+        auto win = InkscapeApplication::instance()->get_active_window();
+        if (win) {
+            if (auto desktop = win->get_desktop()) {
+                desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, "");
+            }
+        }
+        
+        return; // Alignment is already applied, just confirm it
+    }
+    
+    // Normal operation (no preview was active)
     Glib::ustring argument = align_to;
-
     argument += " " + align_relative_object.get_active_id();
 
     if (align_move_as_group.get_active()) {
@@ -278,6 +329,174 @@ AlignAndDistribute::on_align_node_clicked(std::string const &direction)
     } else {
         win->activate_action("win.node-align-vertical", variant);
     }
+}
+
+// ================== HOVER PREVIEW METHODS ==================
+
+bool
+AlignAndDistribute::on_button_hover_enter(GdkEventCrossing* event, const std::string& action)
+{
+    // Check if preview is enabled in preferences
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
+    
+    if (!preview_enabled) {
+        return false;
+    }
+    
+    // Cancel any existing timeout
+    if (_preview_timeout_connection.connected()) {
+        _preview_timeout_connection.disconnect();
+    }
+    
+    // Store the action for the timeout
+    _preview_action = action;
+    
+    // Start preview after 300ms delay to avoid flickering
+    _preview_timeout_connection = Glib::signal_timeout().connect(
+        sigc::mem_fun(*this, &AlignAndDistribute::start_preview_timeout), 
+        300
+    );
+    
+    return false;
+}
+
+bool
+AlignAndDistribute::on_button_hover_leave(GdkEventCrossing* event)
+{
+    // Cancel pending preview
+    if (_preview_timeout_connection.connected()) {
+        _preview_timeout_connection.disconnect();
+    }
+    
+    // End current preview
+    end_preview();
+    
+    return false;
+}
+
+void
+AlignAndDistribute::start_preview_timeout()
+{
+    start_preview(_preview_action);
+    _preview_timeout_connection.disconnect();
+}
+
+void
+AlignAndDistribute::start_preview(const std::string& action)
+{
+    // Get current window and desktop
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    auto selection = desktop->getSelection();
+    if (!selection || selection->isEmpty()) {
+        return;
+    }
+    
+    // If preview is already active, end it first
+    if (_preview_active) {
+        end_preview();
+    }
+    
+    // Store original transforms
+    store_original_transforms();
+    
+    // Perform preview alignment (without committing to undo stack)
+    Glib::ustring argument = action;
+    argument += " " + align_relative_object.get_active_id();
+    
+    if (align_move_as_group.get_active()) {
+        argument += " group";
+    }
+    
+    // Create the action variant
+    auto variant = Glib::Variant<Glib::ustring>::create(argument);
+    auto app = Gio::Application::get_default();
+    
+    // Set preview flag
+    _preview_active = true;
+    
+    // Execute alignment action
+    if (action.find("vertical") != Glib::ustring::npos || action.find("horizontal") != Glib::ustring::npos) {
+        app->activate_action("object-align-text", variant);
+    } else {
+        app->activate_action("object-align", variant);
+    }
+    
+    // Update status
+    desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, 
+        _("Preview active - click to confirm, move mouse away to cancel"));
+}
+
+void
+AlignAndDistribute::end_preview()
+{
+    if (!_preview_active) {
+        return;
+    }
+    
+    // Restore original transforms
+    restore_original_transforms();
+    
+    _preview_active = false;
+    
+    // Clear status message
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (win) {
+        if (auto desktop = win->get_desktop()) {
+            desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, "");
+        }
+    }
+}
+
+void
+AlignAndDistribute::store_original_transforms()
+{
+    _original_transforms.clear();
+    _preview_objects.clear();
+    
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    auto selection = desktop->getSelection();
+    if (!selection) return;
+    
+    auto items = selection->itemList();
+    for (auto item : items) {
+        _preview_objects.push_back(item);
+        _original_transforms.push_back(item->getTransform());
+    }
+}
+
+void
+AlignAndDistribute::restore_original_transforms()
+{
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    // Restore transforms
+    for (size_t i = 0; i < _preview_objects.size() && i < _original_transforms.size(); ++i) {
+        if (auto item = cast<SPItem>(_preview_objects[i])) {
+            item->setTransform(_original_transforms[i]);
+        }
+    }
+    
+    // Force canvas update
+    desktop->getCanvas()->redraw_all();
+    
+    // Clear stored data
+    _original_transforms.clear();
+    _preview_objects.clear();
 }
 
 } // namespace Inkscape::UI::Dialog
