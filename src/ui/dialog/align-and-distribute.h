@@ -69,7 +69,7 @@ private:
     sigc::connection _preview_timeout_connection;
     
     // Preview methods
-    void start_preview_timeout();
+    bool start_preview_timeout();
     void start_preview(const std::string& action);
     void end_preview();
     void store_original_transforms();

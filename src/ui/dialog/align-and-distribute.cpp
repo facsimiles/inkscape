@@ -375,11 +375,12 @@ AlignAndDistribute::on_button_hover_leave(GdkEventCrossing* event)
     return false;
 }
 
-void
+bool
 AlignAndDistribute::start_preview_timeout()
 {
     start_preview(_preview_action);
     _preview_timeout_connection.disconnect();
+    return false; // Return false to disconnect the timeout
 }
 
 void
