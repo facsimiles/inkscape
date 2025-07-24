@@ -135,11 +135,36 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
         // Create motion controller for hover events (GTK4 way)
         auto motion_controller = Gtk::EventControllerMotion::create();
         
-        // Connect hover handlers for preview
-        motion_controller->signal_enter().connect(
-            sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_button_hover_enter), align_button.second));
-        motion_controller->signal_leave().connect(
-            sigc::mem_fun(*this, &AlignAndDistribute::on_button_hover_leave));
+        // Store action string with controller for later use
+        std::string action(align_button.second);
+        _motion_controllers[action] = motion_controller;
+        
+        // Connect hover handlers - GTK4 style (no parameters from signals)
+        motion_controller->signal_enter().connect([this, action]() {
+            // Check if preview is enabled
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
+            if (!preview_enabled) return;
+            
+            // Cancel any existing timeout
+            if (_preview_timeout_connection.connected()) {
+                _preview_timeout_connection.disconnect();
+            }
+            
+            // Store action and start timeout
+            _preview_action = action;
+            _preview_timeout_connection = Glib::signal_timeout().connect(
+                sigc::mem_fun(*this, &AlignAndDistribute::start_preview_timeout), 300);
+        });
+        
+        motion_controller->signal_leave().connect([this]() {
+            // Cancel pending preview
+            if (_preview_timeout_connection.connected()) {
+                _preview_timeout_connection.disconnect();
+            }
+            // End current preview
+            end_preview();
+        });
         
         // Add controller to button
         button.add_controller(motion_controller);
@@ -337,44 +362,6 @@ AlignAndDistribute::on_align_node_clicked(std::string const &direction)
 }
 
 // ================== HOVER PREVIEW METHODS ==================
-
-void
-AlignAndDistribute::on_button_hover_enter(const std::string& action)
-{
-    // Check if preview is enabled in preferences
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
-    
-    if (!preview_enabled) {
-        return;
-    }
-    
-    // Cancel any existing timeout
-    if (_preview_timeout_connection.connected()) {
-        _preview_timeout_connection.disconnect();
-    }
-    
-    // Store the action for the timeout
-    _preview_action = action;
-    
-    // Start preview after 300ms delay to avoid flickering
-    _preview_timeout_connection = Glib::signal_timeout().connect(
-        sigc::mem_fun(*this, &AlignAndDistribute::start_preview_timeout), 
-        300
-    );
-}
-
-void
-AlignAndDistribute::on_button_hover_leave()
-{
-    // Cancel pending preview
-    if (_preview_timeout_connection.connected()) {
-        _preview_timeout_connection.disconnect();
-    }
-    
-    // End current preview
-    end_preview();
-}
 
 bool
 AlignAndDistribute::start_preview_timeout()
