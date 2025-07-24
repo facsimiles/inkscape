@@ -30,5 +30,6 @@ processes.
 ## More information
 
 - [Download](https://inkscape.org/download)
-- User documentation: Please visit out website [https://inkscape.org/](https://inkscape.org/)
+- [User Documentation](https://inkscape.org/learn/)
 - [Developer Documentation](doc/readme.md)
+- [Report Bugs](https://inkscape.org/contribute/report-bugs/)
