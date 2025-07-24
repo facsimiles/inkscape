@@ -26,6 +26,8 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
+#include <gtkmm/eventcontroller.h>
+#include <gtkmm/eventcontrollermotion.h>
 
 #include <set>
 #include <vector>
@@ -74,8 +76,8 @@ private:
     void end_preview();
     void store_original_transforms();
     void restore_original_transforms();
-    bool on_button_hover_enter(GdkEventCrossing* event, const std::string& action);
-    bool on_button_hover_leave(GdkEventCrossing* event);
+    void on_button_hover_enter(const std::string& action);
+    void on_button_hover_leave();
 
     // UI
     Glib::RefPtr<Gtk::Builder> builder;
@@ -99,7 +101,7 @@ private:
     // State
     sigc::connection tool_connection;
     sigc::connection sel_changed;
-    sigc::connection _icon_sizes_changed;
+    std::unique_ptr<Inkscape::Preferences::Observer> _icon_sizes_changed;
     
     bool single_item = false;
     std::string single_selection_align_to = "first";

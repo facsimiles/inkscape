@@ -23,6 +23,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/treemodelfilter.h>
+#include <gtkmm/eventcontrollermotion.h>
 
 #include "actions/actions-tools.h" // Tool switching.
 #include "desktop.h"               // Tool switching.
@@ -35,6 +36,7 @@
 #include "message-stack.h"         // For status messages
 #include "object/sp-item.h"        // For SPItem cast
 #include "util/cast.h"             // For cast function
+#include "ui/widget/canvas.h"      // For canvas access
 
 namespace Inkscape::UI::Dialog {
 
@@ -130,14 +132,17 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
         button.signal_clicked().connect(
             sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_align_clicked), align_button.second));
         
+        // Create motion controller for hover events (GTK4 way)
+        auto motion_controller = Gtk::EventControllerMotion::create();
+        
         // Connect hover handlers for preview
-        button.signal_enter_notify_event().connect(
+        motion_controller->signal_enter().connect(
             sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_button_hover_enter), align_button.second));
-        button.signal_leave_notify_event().connect(
+        motion_controller->signal_leave().connect(
             sigc::mem_fun(*this, &AlignAndDistribute::on_button_hover_leave));
         
-        // Enable events on button
-        button.add_events(Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK);
+        // Add controller to button
+        button.add_controller(motion_controller);
     }
 
     // ------------ Remove overlap -------------
@@ -181,7 +186,7 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
     set_icon_size_prefs();
 
     // Initialize hover preview preference if not set
-    if (!prefs->getEntry("/dialogs/align/enable-hover-preview")) {
+    if (prefs->getEntry("/dialogs/align/enable-hover-preview").isEmpty()) {
         prefs->setBool("/dialogs/align/enable-hover-preview", true);
     }
 }
@@ -333,15 +338,15 @@ AlignAndDistribute::on_align_node_clicked(std::string const &direction)
 
 // ================== HOVER PREVIEW METHODS ==================
 
-bool
-AlignAndDistribute::on_button_hover_enter(GdkEventCrossing* event, const std::string& action)
+void
+AlignAndDistribute::on_button_hover_enter(const std::string& action)
 {
     // Check if preview is enabled in preferences
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
     
     if (!preview_enabled) {
-        return false;
+        return;
     }
     
     // Cancel any existing timeout
@@ -357,12 +362,10 @@ AlignAndDistribute::on_button_hover_enter(GdkEventCrossing* event, const std::st
         sigc::mem_fun(*this, &AlignAndDistribute::start_preview_timeout), 
         300
     );
-    
-    return false;
 }
 
-bool
-AlignAndDistribute::on_button_hover_leave(GdkEventCrossing* event)
+void
+AlignAndDistribute::on_button_hover_leave()
 {
     // Cancel pending preview
     if (_preview_timeout_connection.connected()) {
@@ -371,8 +374,6 @@ AlignAndDistribute::on_button_hover_leave(GdkEventCrossing* event)
     
     // End current preview
     end_preview();
-    
-    return false;
 }
 
 bool
@@ -430,7 +431,7 @@ AlignAndDistribute::start_preview(const std::string& action)
     
     // Update status
     desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, 
-        _("Preview active - click to confirm, move mouse away to cancel"));
+        "Preview active - click to confirm, move mouse away to cancel");
 }
 
 void
@@ -469,7 +470,7 @@ AlignAndDistribute::store_original_transforms()
     auto selection = desktop->getSelection();
     if (!selection) return;
     
-    auto items = selection->itemList();
+    auto items = selection->items();
     for (auto item : items) {
         _preview_objects.push_back(item);
         _original_transforms.push_back(item->getTransform());
@@ -488,7 +489,7 @@ AlignAndDistribute::restore_original_transforms()
     // Restore transforms
     for (size_t i = 0; i < _preview_objects.size() && i < _original_transforms.size(); ++i) {
         if (auto item = cast<SPItem>(_preview_objects[i])) {
-            item->setTransform(_original_transforms[i]);
+            item->set_transform(_original_transforms[i]);
         }
     }
     
