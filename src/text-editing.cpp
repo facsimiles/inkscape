@@ -1409,7 +1409,7 @@ void sp_te_adjust_linespacing_screen(SPItem *text, Text::Layout::iterator /*star
 
 /** converts an iterator to a character index, mainly because ustring::substr()
 doesn't have a version that takes iterators as parameters. */
-static unsigned char_index_of_iterator(Glib::ustring string, Glib::ustring::const_iterator text_iter)
+static unsigned char_index_of_iterator(Glib::ustring const &string, Glib::ustring::const_iterator text_iter)
 {
     unsigned n = 0;
     for (Glib::ustring::const_iterator it = string.begin() ; it != string.end() && it != text_iter ; ++it)
