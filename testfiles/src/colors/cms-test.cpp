@@ -26,6 +26,7 @@ static std::string display_profile = INKSCAPE_TESTS_DIR "/data/colors/display.ic
 static std::string not_a_profile = INKSCAPE_TESTS_DIR "/data/colors/color-cms.svg";
 
 using namespace Inkscape::Colors;
+using namespace Inkscape::Colors::CMS;
 
 namespace {
 
@@ -140,6 +141,12 @@ TEST_F(ColorCmsSystem, getOutputProfiles)
     auto profiles = cms->getOutputProfiles();
     ASSERT_EQ(profiles.size(), 1);
     ASSERT_EQ(profiles[0]->getName(), "Artifex CMYK SWOP Profile");
+}
+
+TEST_F(ColorCmsSystem, getLinearRgbProfile)
+{
+    auto linear = CMS::Profile::create_linearrgb();
+    EXPECT_EQ(linear->getName(), "linearRGB identity with D65");
 }
 
 TEST_F(ColorCmsSystem, refreshProfiles)

@@ -20,6 +20,7 @@
 #include <sstream>
 
 #include "system.h"
+#include "util-string/string-convert.h"
 
 namespace Inkscape::Colors::CMS {
 
@@ -30,8 +31,7 @@ bool _cmsWriteTag(cmsHPROFILE hProfile, cmsTagSignature tag, std::string const &
 {
     auto ContextID = cmsGetProfileContextID(hProfile);
     if (auto mlu = cmsMLUalloc(ContextID, 1)) {
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        std::wstring wide_string = converter.from_bytes(value.data());
+        std::wstring wide_string = utf8_to_wstring(value);
         if (cmsMLUsetWide(mlu,  "en", "US", wide_string.c_str())) {
             return cmsWriteTag(hProfile, tag,  mlu);
         }
@@ -199,15 +199,15 @@ std::string Profile::getName(bool sanitize) const
     std::string name;
     cmsUInt32Number byteLen = cmsGetProfileInfo(_handle, cmsInfoDescription, "en", "US", nullptr, 0);
     if (byteLen > 0) {
-        std::vector<wchar_t> data(byteLen);
-        cmsUInt32Number readLen =
-            cmsGetProfileInfo(_handle, cmsInfoDescription, "en", "US", data.data(), data.size());
-        if (readLen < data.size()) {
+        // allocate buffer at least byteLen bytes in size
+        constexpr int wc = sizeof(wchar_t);
+        std::vector<wchar_t> data((byteLen + wc - 1) / wc);
+        // lcms returns nul-terminated wide string
+        auto readLen = cmsGetProfileInfo(_handle, cmsInfoDescription, "en", "US", data.data(), byteLen);
+        if (readLen < byteLen) {
             g_warning("Profile::get_name(): icc data read less than expected!");
-            data.resize(readLen);
         }
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        name = converter.to_bytes(data.data());
+        name = wstring_to_utf8(data.data());
     }
     if (sanitize)
         sanitize_name(name);
