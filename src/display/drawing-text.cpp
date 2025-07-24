@@ -93,6 +93,9 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
     Geom::Rect bbox_pick_scaled_d  = bbox_pick  * ctx.ctm;
     Geom::Rect bbox_draw_scaled_d  = bbox_draw  * ctx.ctm;
 
+    // Expand to make it easier to pick text when zoom out.
+    bbox_pick_scaled_d.expandBy(1.0); // One pixel
+
     if (ggroup->_nrstyle.data.stroke.type != NRStyleData::PaintType::NONE) {
         // this expands the selection box for cases where the stroke is "thick"
         float scale = ctx.ctm.descrim();
@@ -569,7 +572,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                 dc.newPath();
                 dc.rectangle(g->bbox_exact);
                 dc.setLineWidth(0.02);
-                dc.setSource(0x80ffff80); // Bluegreen
+                dc.setSource(0.0, 0.0, 1.0, 1.0); // Blue
                 dc.stroke();
             }
             {
@@ -577,7 +580,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                 dc.newPath();
                 dc.rectangle(g->bbox_pick);
                 dc.setLineWidth(0.02);
-                dc.setSource(0xff80ff80); // Purple
+                dc.setSource(1.0, 0.0, 0.0, 1.0); // Red
                 dc.stroke();
             }
             {
@@ -585,7 +588,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                 dc.newPath();
                 dc.rectangle(g->bbox_draw);
                 dc.setLineWidth(0.02);
-                dc.setSource(0xffff8080); // Yellow
+                dc.setSource(0.0, 1.0, 0.0, 1.0); // Green
                 dc.stroke();
             }
             cairo_append_path(dc.raw(), path_copy);
