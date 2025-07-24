@@ -455,13 +455,12 @@ FontGlyph const *FontInstance::LoadGlyph(unsigned int glyph_id)
                   << std::endl;
     }
 
-    // Nominal design space of glyph.
-    n_g->bbox_pick.setRight(n_g->h_advance);
-    n_g->bbox_pick.setBottom(  _ascent_max);
-    n_g->bbox_pick.setTop(   -_descent_max);
+    // Pick box: same as exact bbox but subject to a minimum size (advance width x half em-box height).
+    n_g->bbox_pick = n_g->bbox_exact;
+    n_g->bbox_pick.unionWith(Geom::Rect::from_xywh(0.0, 0.0, n_g->h_advance, 0.5)); // Insure minimum size.
 
     // Any place that might be inked, including any text decoration.
-    n_g->bbox_draw = n_g->bbox_pick;               // Design space for glyph
+    n_g->bbox_draw.setRight(n_g->h_advance);       // Advance
     n_g->bbox_draw.setBottom(  _ascent_max * 1.1); // Expand to allow for text decoration
     n_g->bbox_draw.setTop(   -_descent_max * 1.1);
     n_g->bbox_draw.unionWith(n_g->bbox_exact);     // Extend if glyph leaks outside of design space.
