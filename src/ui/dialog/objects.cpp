@@ -1837,6 +1837,12 @@ bool ObjectsPanel::on_drag_drop(const Glib::RefPtr<Gdk::DragContext> &context, i
     auto document = getDocument();
     if (selection && document) {
         auto item = document->getObjectByRepr(drop_repr);
+
+        // Don't drop on self
+        if (selection->includes(item)) {
+            return true;
+        }
+
         // We always try to drop the item, even if we end up dropping it after the non-group item
         if (drop_into && is<SPGroup>(item)) {
             selection->toLayer(item);

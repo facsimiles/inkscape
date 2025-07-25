@@ -1565,6 +1565,13 @@ void ObjectSet::toLayer(SPObject *moveto, Inkscape::XML::Node *after)
         return;
     }
 
+    /* Make sure moveto is not in the selection. */
+    for (auto item : items()) {
+        if (item == moveto) {
+            return;
+        }
+    }
+
     /* Make sure after is not in the selected group.
      * Iterate after's siblings backwards, finding the nearest that
      * isn't selected. This is important for positioning in the layer.
