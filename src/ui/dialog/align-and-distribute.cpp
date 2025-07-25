@@ -37,6 +37,8 @@
 #include "object/sp-item.h"        // For SPItem cast
 #include "util/cast.h"             // For cast function
 #include "ui/widget/canvas.h"      // For canvas access
+#include "object/algorithms/removeoverlap.h" // For remove overlap preview
+#include "2geom/rect.h"            // For bounding box calculations
 
 namespace Inkscape::UI::Dialog {
 
@@ -126,54 +128,44 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
     // clang-format on
 
     for (auto align_button : align_buttons) {
-        auto &button = get_widget<Gtk::Button>(builder, align_button.first);
-        
-        // Connect click handler
-        button.signal_clicked().connect(
-            sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_align_clicked), align_button.second));
-        
-        // Create motion controller for hover events (GTK4 way)
-        auto motion_controller = Gtk::EventControllerMotion::create();
-        
-        // Store action string with controller for later use
-        std::string action(align_button.second);
-        _motion_controllers[action] = motion_controller;
-        
-        // Connect hover handlers - GTK4 style with proper lambda signatures
-        motion_controller->signal_enter().connect([this, action](double /*x*/, double /*y*/) {
-            // Check if preview is enabled
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
-            if (!preview_enabled) return;
-            
-            // Cancel any existing timeout
-            if (_preview_timeout_connection.connected()) {
-                _preview_timeout_connection.disconnect();
-            }
-            
-            // Store action and start timeout
-            _preview_action = action;
-            _preview_timeout_connection = Glib::signal_timeout().connect(
-                sigc::mem_fun(*this, &AlignAndDistribute::start_preview_timeout), 300);
-        });
-        
-        motion_controller->signal_leave().connect([this]() {
-            // Cancel pending preview
-            if (_preview_timeout_connection.connected()) {
-                _preview_timeout_connection.disconnect();
-            }
-            // End current preview
-            end_preview();
-        });
-        
-        // Add controller to button
-        button.add_controller(motion_controller);
+        setup_hover_preview_for_button(align_button.first, align_button.second, 
+            [this](const std::string& action) { preview_align(action); });
+    }
+
+    // ------------ Distribution buttons -------------
+    std::vector<std::pair<const char*, const char*>> distribute_buttons = {
+        {"distribute-horizontal-left",    "distribute-left"    },
+        {"distribute-horizontal-center",  "distribute-hcenter" },
+        {"distribute-horizontal-right",   "distribute-right"   },
+        {"distribute-horizontal-gaps",    "distribute-hgaps"   },
+        {"distribute-vertical-top",       "distribute-top"     },
+        {"distribute-vertical-center",    "distribute-vcenter" },
+        {"distribute-vertical-bottom",    "distribute-bottom"  },
+        {"distribute-vertical-gaps",      "distribute-vgaps"   }
+    };
+
+    for (auto distribute_button : distribute_buttons) {
+        setup_hover_preview_for_button(distribute_button.first, distribute_button.second,
+            [this](const std::string& action) { preview_distribute(action); });
+    }
+
+    // ------------ Rearrange buttons -------------
+    std::vector<std::pair<const char*, const char*>> rearrange_buttons = {
+        {"rearrange-graph",        "rearrange-graph"     },
+        {"exchange-positions",     "exchange-positions"  },
+        {"exchange-positions-clockwise", "exchange-clockwise" },
+        {"exchange-positions-random", "exchange-random"  },
+        {"unclump",               "unclump"             }
+    };
+
+    for (auto rearrange_button : rearrange_buttons) {
+        setup_hover_preview_for_button(rearrange_button.first, rearrange_button.second,
+            [this](const std::string& action) { preview_rearrange(action); });
     }
 
     // ------------ Remove overlap -------------
-
-    remove_overlap_button.signal_clicked().connect(
-        sigc::mem_fun(*this, &AlignAndDistribute::on_remove_overlap_clicked));
+    setup_hover_preview_for_button("remove-overlap-button", "remove-overlap",
+        [this](const std::string& action) { preview_remove_overlap(); });
 
     // ------------  Node Align  -------------
 
@@ -230,6 +222,55 @@ AlignAndDistribute::~AlignAndDistribute()
 }
 
 void
+AlignAndDistribute::setup_hover_preview_for_button(const char* button_id, const char* action_name,
+                                                   std::function<void(const std::string&)> preview_func)
+{
+    auto &button = get_widget<Gtk::Button>(builder, button_id);
+    
+    // Connect click handler
+    button.signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &AlignAndDistribute::on_button_clicked), std::string(action_name)));
+    
+    // Create motion controller for hover events
+    auto motion_controller = Gtk::EventControllerMotion::create();
+    
+    // Store action string with controller
+    std::string action(action_name);
+    _motion_controllers[action] = motion_controller;
+    
+    // Connect hover handlers
+    motion_controller->signal_enter().connect([this, action, preview_func](double /*x*/, double /*y*/) {
+        // Check if preview is enabled
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
+        if (!preview_enabled) return;
+        
+        // Cancel any existing timeout
+        if (_preview_timeout_connection.connected()) {
+            _preview_timeout_connection.disconnect();
+        }
+        
+        // Store action and start timeout
+        _preview_action = action;
+        _preview_func = preview_func;
+        _preview_timeout_connection = Glib::signal_timeout().connect(
+            sigc::mem_fun(*this, &AlignAndDistribute::start_preview_timeout), 300);
+    });
+    
+    motion_controller->signal_leave().connect([this]() {
+        // Cancel pending preview
+        if (_preview_timeout_connection.connected()) {
+            _preview_timeout_connection.disconnect();
+        }
+        // End current preview
+        end_preview();
+    });
+    
+    // Add controller to button
+    button.add_controller(motion_controller);
+}
+
+void
 AlignAndDistribute::desktop_changed(SPDesktop* desktop)
 {
     tool_connection.disconnect();
@@ -254,7 +295,6 @@ AlignAndDistribute::tool_changed_callback(SPDesktop* desktop, Inkscape::UI::Tool
 {
     tool_changed(desktop);
 }
-
 
 void
 AlignAndDistribute::on_align_as_group_clicked()
@@ -292,28 +332,61 @@ AlignAndDistribute::on_align_relative_node_changed()
 }
 
 void
-AlignAndDistribute::on_align_clicked(std::string const &align_to)
+AlignAndDistribute::on_button_clicked(std::string const &action)
 {
-    // If preview is active, we just confirm it (transforms already applied)
-    if (_preview_active) {
-        _preview_active = false;
-        
-        // Clear preview data but don't restore (we want to keep the alignment)
-        _original_transforms.clear();
-        _preview_objects.clear();
-        
-        // Clear status message
-        auto win = InkscapeApplication::instance()->get_active_window();
-        if (win) {
-            if (auto desktop = win->get_desktop()) {
-                desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, "");
-            }
-        }
-        
-        return; // Alignment is already applied, just confirm it
+    // If preview is active, we just confirm it (transforms already applied in preview)
+    if (_preview_active && _preview_action == action) {
+        confirm_preview();
+        return;
     }
     
-    // Normal operation (no preview was active)
+    // Normal operation (no preview was active) - execute the actual command
+    execute_action(action);
+}
+
+void
+AlignAndDistribute::execute_action(const std::string& action)
+{
+    if (action.find("distribute") != std::string::npos) {
+        execute_distribute_action(action);
+    } else if (action == "remove-overlap") {
+        on_remove_overlap_clicked();
+    } else if (action.find("rearrange") != std::string::npos || 
+               action.find("exchange") != std::string::npos || 
+               action == "unclump") {
+        execute_rearrange_action(action);
+    } else {
+        // Alignment action
+        on_align_clicked(action);
+    }
+}
+
+void
+AlignAndDistribute::execute_distribute_action(const std::string& action)
+{
+    auto app = Gio::Application::get_default();
+    auto variant = Glib::Variant<Glib::ustring>::create(action);
+    app->activate_action("object-distribute", variant);
+}
+
+void
+AlignAndDistribute::execute_rearrange_action(const std::string& action)
+{
+    auto app = Gio::Application::get_default();
+    auto variant = Glib::Variant<Glib::ustring>::create(action);
+    
+    if (action == "rearrange-graph") {
+        app->activate_action("object-rearrange-graph", variant);
+    } else if (action.find("exchange") != std::string::npos) {
+        app->activate_action("object-exchange-positions", variant);
+    } else if (action == "unclump") {
+        app->activate_action("object-unclump", variant);
+    }
+}
+
+void
+AlignAndDistribute::on_align_clicked(std::string const &align_to)
+{
     Glib::ustring argument = align_to;
     argument += " " + align_relative_object.get_active_id();
 
@@ -366,15 +439,16 @@ AlignAndDistribute::on_align_node_clicked(std::string const &direction)
 bool
 AlignAndDistribute::start_preview_timeout()
 {
-    start_preview(_preview_action);
+    if (_preview_func) {
+        start_preview();
+    }
     _preview_timeout_connection.disconnect();
-    return false; // Return false to disconnect the timeout
+    return false;
 }
 
 void
-AlignAndDistribute::start_preview(const std::string& action)
+AlignAndDistribute::start_preview()
 {
-    // Get current window and desktop
     auto win = InkscapeApplication::instance()->get_active_window();
     if (!win) return;
     
@@ -394,26 +468,12 @@ AlignAndDistribute::start_preview(const std::string& action)
     // Store original transforms
     store_original_transforms();
     
-    // Perform preview alignment (without committing to undo stack)
-    Glib::ustring argument = action;
-    argument += " " + align_relative_object.get_active_id();
-    
-    if (align_move_as_group.get_active()) {
-        argument += " group";
-    }
-    
-    // Create the action variant
-    auto variant = Glib::Variant<Glib::ustring>::create(argument);
-    auto app = Gio::Application::get_default();
-    
     // Set preview flag
     _preview_active = true;
     
-    // Execute alignment action
-    if (action.find("vertical") != Glib::ustring::npos || action.find("horizontal") != Glib::ustring::npos) {
-        app->activate_action("object-align-text", variant);
-    } else {
-        app->activate_action("object-align", variant);
+    // Execute preview function
+    if (_preview_func) {
+        _preview_func(_preview_action);
     }
     
     // Update status
@@ -432,6 +492,28 @@ AlignAndDistribute::end_preview()
     restore_original_transforms();
     
     _preview_active = false;
+    
+    // Clear status message
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (win) {
+        if (auto desktop = win->get_desktop()) {
+            desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, "");
+        }
+    }
+}
+
+void
+AlignAndDistribute::confirm_preview()
+{
+    if (!_preview_active) {
+        return;
+    }
+    
+    _preview_active = false;
+    
+    // Clear preview data but don't restore (we want to keep the changes)
+    _original_transforms.clear();
+    _preview_objects.clear();
     
     // Clear status message
     auto win = InkscapeApplication::instance()->get_active_window();
@@ -486,6 +568,183 @@ AlignAndDistribute::restore_original_transforms()
     // Clear stored data
     _original_transforms.clear();
     _preview_objects.clear();
+}
+
+// ================== PREVIEW IMPLEMENTATION METHODS ==================
+
+void
+AlignAndDistribute::preview_align(const std::string& action)
+{
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    auto selection = desktop->getSelection();
+    if (!selection || selection->isEmpty()) return;
+    
+    // Get the reference object/point for alignment
+    auto items = selection->items();
+    if (items.empty()) return;
+    
+    // Calculate reference bounds based on align-to setting
+    Geom::OptRect reference_bounds;
+    std::string align_to = align_relative_object.get_active_id();
+    
+    if (align_to == "page") {
+        reference_bounds = desktop->getDocument()->preferredBounds();
+    } else if (align_to == "selection") {
+        reference_bounds = selection->preferredBounds();
+    } else {
+        // For now, use selection bounds as fallback
+        reference_bounds = selection->preferredBounds();
+    }
+    
+    if (!reference_bounds) return;
+    
+    // Apply alignment preview to each item
+    for (auto item : items) {
+        if (auto sp_item = cast<SPItem>(item)) {
+            auto item_bounds = sp_item->preferredBounds();
+            if (!item_bounds) continue;
+            
+            Geom::Affine transform = sp_item->transform;
+            Geom::Point offset(0, 0);
+            
+            // Calculate offset based on alignment type
+            if (action == "left") {
+                offset.x() = reference_bounds->left() - item_bounds->left();
+            } else if (action == "hcenter") {
+                offset.x() = reference_bounds->midpoint().x() - item_bounds->midpoint().x();
+            } else if (action == "right") {
+                offset.x() = reference_bounds->right() - item_bounds->right();
+            } else if (action == "top") {
+                offset.y() = reference_bounds->top() - item_bounds->top();
+            } else if (action == "vcenter") {
+                offset.y() = reference_bounds->midpoint().y() - item_bounds->midpoint().y();
+            } else if (action == "bottom") {
+                offset.y() = reference_bounds->bottom() - item_bounds->bottom();
+            }
+            
+            // Apply the offset
+            transform *= Geom::Translate(offset);
+            sp_item->set_transform(transform);
+        }
+    }
+    
+    // Force canvas update
+    desktop->getCanvas()->redraw_all();
+}
+
+void
+AlignAndDistribute::preview_distribute(const std::string& action)
+{
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    auto selection = desktop->getSelection();
+    if (!selection || selection->isEmpty()) return;
+    
+    auto items = selection->items();
+    if (items.size() < 3) return; // Need at least 3 items to distribute
+    
+    // Sort items by position
+    std::vector<SPItem*> sorted_items;
+    for (auto item : items) {
+        if (auto sp_item = cast<SPItem>(item)) {
+            sorted_items.push_back(sp_item);
+        }
+    }
+    
+    if (sorted_items.size() < 3) return;
+    
+    // Sort based on distribution type
+    if (action.find("horizontal") != std::string::npos || action.find("left") != std::string::npos || 
+        action.find("right") != std::string::npos || action.find("hcenter") != std::string::npos) {
+        std::sort(sorted_items.begin(), sorted_items.end(), [](SPItem* a, SPItem* b) {
+            auto bounds_a = a->preferredBounds();
+            auto bounds_b = b->preferredBounds();
+            if (!bounds_a || !bounds_b) return false;
+            return bounds_a->midpoint().x() < bounds_b->midpoint().x();
+        });
+    } else {
+        std::sort(sorted_items.begin(), sorted_items.end(), [](SPItem* a, SPItem* b) {
+            auto bounds_a = a->preferredBounds();
+            auto bounds_b = b->preferredBounds();
+            if (!bounds_a || !bounds_b) return false;
+            return bounds_a->midpoint().y() < bounds_b->midpoint().y();
+        });
+    }
+    
+    // Calculate distribution spacing
+    auto first_bounds = sorted_items.front()->preferredBounds();
+    auto last_bounds = sorted_items.back()->preferredBounds();
+    if (!first_bounds || !last_bounds) return;
+    
+    double total_space;
+    if (action.find("horizontal") != std::string::npos) {
+        total_space = last_bounds->midpoint().x() - first_bounds->midpoint().x();
+    } else {
+        total_space = last_bounds->midpoint().y() - first_bounds->midpoint().y();
+    }
+    
+    double spacing = total_space / (sorted_items.size() - 1);
+    
+    // Apply distribution
+    for (size_t i = 1; i < sorted_items.size() - 1; ++i) {
+        auto item = sorted_items[i];
+        auto item_bounds = item->preferredBounds();
+        if (!item_bounds) continue;
+        
+        Geom::Affine transform = item->transform;
+        Geom::Point target_pos;
+        
+        if (action.find("horizontal") != std::string::npos) {
+            target_pos.x() = first_bounds->midpoint().x() + spacing * i;
+            target_pos.y() = item_bounds->midpoint().y();
+        } else {
+            target_pos.x() = item_bounds->midpoint().x();
+            target_pos.y() = first_bounds->midpoint().y() + spacing * i;
+        }
+        
+        Geom::Point offset = target_pos - item_bounds->midpoint();
+        transform *= Geom::Translate(offset);
+        item->set_transform(transform);
+    }
+    
+    desktop->getCanvas()->redraw_all();
+}
+
+void
+AlignAndDistribute::preview_remove_overlap()
+{
+    // For simplicity, just show current positions (remove overlap is complex to preview)
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, 
+        "Remove overlap preview - click to apply");
+}
+
+void
+AlignAndDistribute::preview_rearrange(const std::string& action)
+{
+    // For simplicity, just show current positions (rearrange operations are complex to preview)
+    auto win = InkscapeApplication::instance()->get_active_window();
+    if (!win) return;
+    
+    auto desktop = win->get_desktop();
+    if (!desktop) return;
+    
+    desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, 
+        "Rearrange preview - click to apply");
 }
 
 } // namespace Inkscape::UI::Dialog

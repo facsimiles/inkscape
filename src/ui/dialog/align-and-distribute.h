@@ -64,13 +64,7 @@ private:
     void on_remove_overlap_clicked();
     void on_align_node_clicked(std::string const &direction);
 
-    // Preview functionality
-    bool _preview_active = false;
-    std::string _preview_action;
-    std::vector<Geom::Affine> _original_transforms;
-    std::vector<SPObject*> _preview_objects;
-    sigc::connection _preview_timeout_connection;
-    std::map<std::string, Glib::RefPtr<Gtk::EventControllerMotion>> _motion_controllers;
+controllers;
     
     // Preview methods
     bool start_preview_timeout();
