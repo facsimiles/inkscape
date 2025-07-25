@@ -16,6 +16,7 @@
 #include <pangomm/fontdescription.h>
 #include <pangomm/fontfamily.h>
 #include <pangomm/fontmap.h>
+#include <pangomm/wrap_init.h>
 #include <vector>
 #include "inkscape-application.h"
 #ifdef HAVE_CONFIG_H
@@ -29,6 +30,7 @@
 #include <unordered_map>
 
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 
 #include <fontconfig/fontconfig.h>
 
@@ -209,7 +211,9 @@ static void FactorySubstituteFunc(FcPattern *pattern, gpointer /*data*/)
 FontFactory::FontFactory()
     : fontServer(pango_ft2_font_map_new())
     , fontContext(pango_font_map_create_context(fontServer))
+    , fontConfig(pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer)))
 {
+    Pango::wrap_init();
     _font_map = Glib::wrap(fontServer);
     pango_ft2_font_map_set_resolution(PANGO_FT2_FONT_MAP(fontServer), 72, 72);
 #if PANGO_VERSION_CHECK(1,48,0)
@@ -217,6 +221,14 @@ FontFactory::FontFactory()
 #else
     pango_ft2_font_map_set_default_substitute(PANGO_FT2_FONT_MAP(fontServer), FactorySubstituteFunc, this, nullptr);
 #endif
+
+    auto font_dir = Glib::getenv("INKSCAPE_FONTCONFIG");
+    if (!font_dir.empty()) {
+        // Destroy access to pango's default font configuration for test isolation
+        fontConfig = FcConfigCreate();
+        AddFontConfig(font_dir.c_str());
+        pango_fc_font_map_set_config(PANGO_FC_FONT_MAP(fontServer), fontConfig);
+    }
 }
 
 FontFactory::~FontFactory()
@@ -732,9 +744,7 @@ void FontFactory::AddFontsDir(char const *utf8dir)
 # endif
     }
 
-    FcConfig *conf = nullptr;
-    conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
-    FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
+    FcBool res = FcConfigAppFontAddDir(fontConfig, (FcChar8 const *)dir);
     if (res == FcTrue) {
         g_info("Fonts dir '%s' added successfully.", utf8dir);
         pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
@@ -759,9 +769,7 @@ void FontFactory::AddFontFile(char const *utf8file)
     file = g_filename_from_utf8(utf8file, -1, nullptr, nullptr, nullptr);
 # endif
 
-    FcConfig *conf = nullptr;
-    conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
-    FcBool res = FcConfigAppFontAddFile(conf, (FcChar8 const *)file);
+    FcBool res = FcConfigAppFontAddFile(fontConfig, (FcChar8 const *)file);
     if (res == FcTrue) {
         g_info("Font file '%s' added successfully.", utf8file);
         pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
@@ -770,6 +778,28 @@ void FontFactory::AddFontFile(char const *utf8file)
     }
 
     g_free(file);
+}
+
+void FontFactory::AddFontConfig(char const *utf8file)
+{
+    if (!Inkscape::IO::file_test(utf8file, G_FILE_TEST_IS_REGULAR)) {
+        g_warning("Font config '%s' does not exist and will be ignored.", utf8file);
+        return;
+    }
+
+    gchar *file;
+# ifdef _WIN32
+    file = g_win32_locale_filename_from_utf8(utf8file);
+# else
+    file = g_filename_from_utf8(utf8file, -1, nullptr, nullptr, nullptr);
+# endif
+    file = g_canonicalize_filename(file, nullptr);
+
+    if (FcConfigParseAndLoad(fontConfig, (FcChar8 const *)file, FcTrue)) {
+        FcConfigBuildFonts(fontConfig);
+    } else {
+        g_warning("Failed to add font config: %s", file);
+    }
 }
 
 bool FontFactory::Compare::operator()(PangoFontDescription const *a, PangoFontDescription const *b) const

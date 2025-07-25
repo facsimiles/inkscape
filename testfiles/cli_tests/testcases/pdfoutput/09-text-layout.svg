@@ -17,21 +17,7 @@
   <style
      type="text/css"
      id="style1">
-    text {
-      font-family: Liberation Serif;
-    }
-    @font-face {
-      font-family: "Noto Sans Hebrew";
-      src: url("../../../rendering_tests/fonts/NotoSansHebrew-Regular.ttf");
-    }
-    @font-face {
-      font-family: "Noto Sans Arabic";
-      src: url("../../../rendering_tests/fonts/NotoSansArabic-Regular.ttf");
-    }
-    @font-face {
-      font-family: "Noto Sans CJK JP";
-      src: url("../../../rendering_tests/fonts/NotoSansCJKjp-Regular.otf");
-    }
+    text,
     text.cjk,
     text.hebrew {
       font-family: Noto Sans;

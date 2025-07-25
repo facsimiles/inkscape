@@ -53,6 +53,7 @@ function(add_cli_test_run fixture testname)
     set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT)
     set(multiValueArgs PARAMETERS ENVIRONMENT EXPECTED_FILES TEST_SCRIPT)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    set(CMAKE_CTEST_ENV INKSCAPE_FONTCONFIG=${CMAKE_CURRENT_SOURCE_DIR}/../rendering_tests/fonts/isolated.conf)
 
     #disable dithering
     set(ARG_PARAMETERS ${ARG_PARAMETERS}  "--export-png-use-dithering=false")

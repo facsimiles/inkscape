@@ -19,6 +19,7 @@ EXIT_STATUS=0
 EXPECTED="$(dirname "$TEST")/expected_rendering/$(basename "$TEST")"
 TESTNAME="$(basename "$TEST")"
 export LC_NUMERIC=C
+export INKSCAPE_FONTCONFIG="${MY_LOCATION}/fonts/isolated.conf"
 
 if [ "$FUZZ" = "" ]; then
     METRIC="AE"

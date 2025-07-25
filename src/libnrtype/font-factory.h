@@ -107,8 +107,11 @@ public:
     /// Add a directory from which to include additional fonts
     void AddFontsDir(char const *utf8dir);
 
-    /// Add a an additional font.
+    /// Add an additional font.
     void AddFontFile(char const *utf8file);
+
+    /// Add a new font config file
+    void AddFontConfig(char const *utf8file);
 
     PangoContext *get_font_context() const { return fontContext; }
     PangoFontDescription *parsePostscriptName(std::string const &name, bool substitute);
@@ -121,6 +124,7 @@ private:
     // Pango data. Backend-specific structures are cast to these opaque types.
     PangoFontMap *fontServer;
     PangoContext *fontContext;
+    FcConfig *fontConfig;
     Glib::RefPtr<Pango::FontMap> _font_map;
 
     // A hashmap of all the loaded font instances, indexed by their PangoFontDescription.

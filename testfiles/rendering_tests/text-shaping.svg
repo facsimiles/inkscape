@@ -6,35 +6,6 @@
   height="100%"
   viewBox="0 0 600 600">
 
-  <style type="text/css">
-
-    @font-face {
-      font-family: "Estedad";
-      src: url("fonts/Estedad-Medium.ttf");
-    }
-
-    @font-face {
-      font-family: "Noto Sans Hebrew";
-      src: url("fonts/NotoSansHebrew-Regular.ttf");
-    }
-
-    @font-face {
-      font-family: "Noto Sans";
-      src: url("fonts/NotoSans-Regular.ttf");
-    }
-
-    @font-face {
-      font-family: "Noto Sans CJK JP";
-      src: url("fonts/NotoSansCJKjp-Regular.otf");
-    }
-
-    @font-face {
-      font-family: "Lohit Telugu";
-      src: url("fonts/Lohit-Telugu.ttf");
-    }
-
-  </style>
-
   <g style="fill:none;stroke:black;stroke-width:0.5px;font-size:42px;font-family:serif;text-anchor:middle">
 
     <!-- bug https://gitlab.com/inkscape/inkscape/-/issues/469 -->
