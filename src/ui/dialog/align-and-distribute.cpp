@@ -139,8 +139,8 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
         std::string action(align_button.second);
         _motion_controllers[action] = motion_controller;
         
-        // Connect hover handlers - GTK4 style (no parameters from signals)
-        motion_controller->signal_enter().connect([this, action]() {
+        // Connect hover handlers - GTK4 style with proper lambda signatures
+        motion_controller->signal_enter().connect([this, action](double /*x*/, double /*y*/) {
             // Check if preview is enabled
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             bool preview_enabled = prefs->getBool("/dialogs/align/enable-hover-preview", true);
@@ -211,7 +211,8 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
     set_icon_size_prefs();
 
     // Initialize hover preview preference if not set
-    if (prefs->getEntry("/dialogs/align/enable-hover-preview").isEmpty()) {
+    auto entry = prefs->getEntry("/dialogs/align/enable-hover-preview");
+    if (!entry.isValid() || entry.getString().empty()) {
         prefs->setBool("/dialogs/align/enable-hover-preview", true);
     }
 }
@@ -460,7 +461,7 @@ AlignAndDistribute::store_original_transforms()
     auto items = selection->items();
     for (auto item : items) {
         _preview_objects.push_back(item);
-        _original_transforms.push_back(item->getTransform());
+        _original_transforms.push_back(item->transform);
     }
 }
 

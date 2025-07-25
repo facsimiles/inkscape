@@ -31,6 +31,7 @@
 
 #include <set>
 #include <vector>
+#include <map>
 #include <sigc++/connection.h>
 
 #include "2geom/affine.h"
@@ -69,6 +70,7 @@ private:
     std::vector<Geom::Affine> _original_transforms;
     std::vector<SPObject*> _preview_objects;
     sigc::connection _preview_timeout_connection;
+    std::map<std::string, Glib::RefPtr<Gtk::EventControllerMotion>> _motion_controllers;
     
     // Preview methods
     bool start_preview_timeout();
@@ -76,8 +78,6 @@ private:
     void end_preview();
     void store_original_transforms();
     void restore_original_transforms();
-    void on_button_hover_enter(const std::string& action);
-    void on_button_hover_leave();
 
     // UI
     Glib::RefPtr<Gtk::Builder> builder;
@@ -101,7 +101,7 @@ private:
     // State
     sigc::connection tool_connection;
     sigc::connection sel_changed;
-    std::unique_ptr<Inkscape::Preferences::Observer> _icon_sizes_changed;
+    std::unique_ptr<Inkscape::Preferences::PreferencesObserver> _icon_sizes_changed;
     
     bool single_item = false;
     std::string single_selection_align_to = "first";
