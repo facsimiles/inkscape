@@ -24,7 +24,7 @@
 class ClipHistoryEntry
 {
 public:
-    ClipHistoryEntry(Geom::PathVector const &clipPath = Geom::PathVector(), GfxClipType clipType = clipNormal);
+    ClipHistoryEntry(Geom::PathVector clipPath = Geom::PathVector(), GfxClipType clipType = clipNormal);
     virtual ~ClipHistoryEntry();
 
     // Manipulate clip path stack

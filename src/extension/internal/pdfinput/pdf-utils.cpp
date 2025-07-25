@@ -8,12 +8,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glib.h>
-
 #include "pdf-utils.h"
-#include "poppler-utils.h"
+
+#include <utility>
+#include <glib.h>
 #include <2geom/path-sink.h>
+
 #include "path/path-boolop.h"
+#include "poppler-utils.h"
 
 // Map PDF clip types to fill rules
 const std::map<GfxClipType, FillRule> ClipFillMap = {
@@ -26,9 +28,9 @@ const std::map<GfxClipType, FillRule> ClipFillMap = {
 // ClipHistoryEntry
 //------------------------------------------------------------------------
 
-ClipHistoryEntry::ClipHistoryEntry(const Geom::PathVector &clipPathA, GfxClipType clipTypeA)
+ClipHistoryEntry::ClipHistoryEntry(Geom::PathVector clipPathA, GfxClipType clipTypeA)
     : saved(nullptr)
-    , clipPath(clipPathA)
+    , clipPath(std::move(clipPathA))
     , fillRule(ClipFillMap.at(clipTypeA))
 {}
 
