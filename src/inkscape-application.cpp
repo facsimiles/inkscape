@@ -658,6 +658,7 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OptionType::BOOL,     "pdf-poppler",            '\0', N_("Use poppler when importing via commandline"),                              "");
     gapp->add_main_option_entry(T::OptionType::STRING,   "pdf-font-strategy",      '\0', N_("How fonts are parsed in the internal PDF importer [draw-missing|draw-all|delete-missing|delete-all|substitute|keep]"), N_("STRATEGY")); // xSP
     gapp->add_main_option_entry(T::OptionType::BOOL,     "pdf-convert-colors",     '\0', N_("Convert all colors to sRGB on import"), "");
+    gapp->add_main_option_entry(T::OptionType::STRING,    "pdf-group-by",          '\0', N_("How SVG groups are created from the PDF [xobject|layer]"), "");
     gapp->add_main_option_entry(T::OptionType::STRING,   "convert-dpi-method",     '\0', N_("Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|scale-document]"), N_("METHOD"));
     gapp->add_main_option_entry(T::OptionType::BOOL,     "no-convert-text-baseline-spacing", '\0', N_("Do not fix pre-0.92 document's text baseline spacing on opening"), "");
 
@@ -1070,6 +1071,8 @@ void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files,
         INKSCAPE.set_pages(_pages);
 
     INKSCAPE.set_pdf_font_strategy((int)_pdf_font_strategy);
+    INKSCAPE.set_pdf_convert_colors(_pdf_convert_colors);
+    INKSCAPE.set_pdf_group_by(_pdf_group_by);
 
     if (files.size() > 1 && !_file_export.export_filename.empty()) {
         for (auto &file : files) {
@@ -1602,6 +1605,12 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
     if (options->contains("pdf-convert-colors")) {
         _pdf_convert_colors = true;
+    }
+
+    if (options->contains("pdf-group-by")) {
+        Glib::ustring group_by;
+        options->lookup_value("pdf-group-by", group_by);
+        _pdf_group_by = "by-" + group_by;
     }
 
     if (options->contains("convert-dpi-method")) {

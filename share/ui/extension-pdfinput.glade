@@ -109,6 +109,22 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkListStore" id="group_list">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">by-xobject</col>
+        <col id="1" translatable="yes">PDF Object</col>
+      </row>
+      <row>
+        <col id="0">by-layer</col>
+        <col id="1" translatable="yes">PDF Layer</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="stratedgies">
     <columns>
       <column type="gint"/>
@@ -271,7 +287,7 @@
                     </child>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">4</property>
+                      <property name="row">5</property>
                       <property name="column-span">2</property>
                     </layout>
                   </object>
@@ -284,7 +300,7 @@
                     <property name="active">True</property>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">7</property>
+                      <property name="row">8</property>
                       <property name="column-span">2</property>
                     </layout>
                   </object>
@@ -297,7 +313,7 @@
                     <property name="active">True</property>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">8</property>
+                      <property name="row">9</property>
                       <property name="column-span">2</property>
                     </layout>
                   </object>
@@ -310,11 +326,11 @@
                     <property name="active">True</property>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">9</property>
+                      <property name="row">10</property>
                       <property name="column-span">2</property>
                     </layout>
                   </object>
-                </child>
+                </child>              
                 <child>
                   <object class="GtkLabel">
                     <property name="halign">start</property>
@@ -322,7 +338,7 @@
                     <property name="label" translatable="yes">Precision of approximating gradient meshes</property>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">5</property>
+                      <property name="row">6</property>
                       <property name="column-span">2</property>
                     </layout>
                   </object>
@@ -339,7 +355,7 @@
                     <property name="round-digits">1</property>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">6</property>
+                      <property name="row">7</property>
                       <property name="column-span">2</property>
                     </layout>
                   </object>
@@ -351,7 +367,7 @@
                     <property name="label" translatable="yes">rough</property>
                     <layout>
                       <property name="column">1</property>
-                      <property name="row">6</property>
+                      <property name="row">7</property>
                     </layout>
                   </object>
                 </child>
@@ -370,7 +386,7 @@
                     </child>
                     <layout>
                       <property name="column">1</property>
-                      <property name="row">3</property>
+                      <property name="row">4</property>
                     </layout>
                   </object>
                 </child>
@@ -383,7 +399,7 @@
                     <property name="justify">right</property>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">3</property>
+                      <property name="row">4</property>
                     </layout>
                   </object>
                 </child>
@@ -445,6 +461,38 @@
                     </layout>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">end</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">4</property>
+                    <property name="label" translatable="yes">Group by</property>
+                    <property name="justify">right</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">3</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="group-by">
+                    <property name="hexpand">True</property>
+                    <property name="model">group_list</property>
+                    <property name="active">0</property>
+                    <property name="id-column">0</property>
+                    <property name="active-id">0</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">3</property>
+                    </layout>
+                  </object>
+                </child>  
               </object>
             </property>
             <property name="tab">

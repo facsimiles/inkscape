@@ -318,6 +318,7 @@ private:
   // marked content operators
   void opBeginMarkedContent(Object args[], int numArgs);
   void opEndMarkedContent(Object args[], int numArgs);
+  bool ignoreMarkedContent();
   void opMarkPoint(Object args[], int numArgs);
 
   void pushResources(Dict *resDict);

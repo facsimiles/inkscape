@@ -13,6 +13,14 @@
 
 #include <map>
 
+enum class GroupBy : unsigned char
+{
+    BY_XOBJECT = 0,
+    BY_OCGS,
+    // TODO: Consider other group modes
+    // BY_PAGE,
+    // NECESSARY_ONLY
+};
 enum class FontStrategy : unsigned char
 {
     RENDER_MISSING,

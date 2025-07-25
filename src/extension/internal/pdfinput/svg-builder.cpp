@@ -212,17 +212,17 @@ void SvgBuilder::setDocumentSize(double width, double height) {
  * Crop to this bounding box, do this before setMargins() but after setDocumentSize
  */
 void SvgBuilder::cropPage(const Geom::Rect &bbox)
-{
+{   
     if (_container == _root) {
         // We're not going to crop when there's PDF Layers
         return;
     }
-    auto box = bbox * _page_affine;
-    Inkscape::CSSOStringStream val;
-    val << "M" << box.left() << " " << box.top()
-        << "H" << box.right() << "V" << box.bottom()
-        << "H" << box.left() << "Z";
-    auto clip_path = _createClip(val.str(), false);
+    // Wrap in a Path object for convenience
+    auto box = Geom::Path(bbox * _page_affine);
+
+    // add to the clip history
+    _clip_history->setClip(Geom::PathVector(box), FillRule::fill_nonZero);
+    auto clip_path = _createClip(sp_svg_write_path(box), false);
     gchar *urltext = g_strdup_printf("url(#%s)", clip_path->attribute("id"));
     _container->setAttribute("clip-path", urltext);
     g_free(urltext);
@@ -292,7 +292,11 @@ void SvgBuilder::setAsLayer(const char *layer_name, bool visible)
  * \brief Sets the current container's opacity
  */
 void SvgBuilder::setGroupOpacity(double opacity) {
-    _container->setAttributeSvgDouble("opacity", CLAMP(opacity, 0.0, 1.0));
+    if (_group_by == GroupBy::BY_XOBJECT) {
+        _container->setAttributeSvgDouble("opacity", CLAMP(opacity, 0.0, 1.0));
+    } else {
+        _group_alpha = CLAMP(opacity, 0.0, 1.0);
+    }
 }
 
 void SvgBuilder::saveState(GfxState *state)
@@ -311,6 +315,9 @@ void SvgBuilder::restoreState(GfxState *state) {
         }
     }
     while (_clip_groups > 0) {
+        if (_container != _root) {
+            _clip_history = _clip_history->restore();
+        }
         popGroup(nullptr);
         _clip_groups--;
     }
@@ -325,8 +332,6 @@ Inkscape::XML::Node *SvgBuilder::_pushContainer(Inkscape::XML::Node *node)
 {
     _node_stack.push_back(node);
     _container = node;
-    // Clear the clip history
-    _clip_history = _clip_history->save(true);
     return node;
 }
 
@@ -337,7 +342,6 @@ Inkscape::XML::Node *SvgBuilder::_popContainer()
         node = _node_stack.back();
         _node_stack.pop_back();
         _container = _node_stack.back();    // Re-set container
-        _clip_history = _clip_history->restore();
     } else {
         TRACE(("_popContainer() called when stack is empty\n"));
         node = _root;
@@ -368,6 +372,9 @@ void SvgBuilder::_addToContainer(Inkscape::XML::Node *node, bool release)
     if (release) {
         Inkscape::GC::release(node);
     }
+    if (_group_alpha < 1) {
+        _alpha_objs.push_back(node);
+    }
 }
 
 void SvgBuilder::_setClipPath(Inkscape::XML::Node *node)
@@ -396,6 +403,17 @@ Inkscape::XML::Node *SvgBuilder::_popGroup()
         _popContainer();
     }
     return _container;
+}
+
+void SvgBuilder::setGroupBy(const std::string &group_by) {
+    if (group_by == "by-xobject") {
+        _group_by = GroupBy::BY_XOBJECT;
+    } else if (group_by == "by-layer") {
+        _group_by = GroupBy::BY_OCGS;
+    } else {
+        g_warning("Unknown group mode %s selected, falling back to XObjects\n", group_by.c_str());
+        _group_by = GroupBy::BY_XOBJECT;
+    }
 }
 
 std::string SvgBuilder::convertGfxColor(const GfxColor *color, GfxColorSpace *space, Colors::RenderingIntent intent)
@@ -750,30 +768,29 @@ void SvgBuilder::addPath(GfxState *state, bool fill, bool stroke, bool even_odd)
     _setClipPath(path);
 }
 
-void SvgBuilder::addClippedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr)
-{
-    // Don't change to hasClipPath as it messes up gradient fills
-    if (_clip_history->getClipPath()) {
-        addShadedFill(state, shading, shading_tr, _clip_history->getClipPath(), _clip_history->getAffine(),
-                      _clip_history->getClipType() == clipEO);
-    }
-}
-
 /**
  * \brief Emits the current path in poppler's GfxState data structure
  * The path is set to be filled with the given shading.
  */
-void SvgBuilder::addShadedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr, GfxPath *path,
-                               const Geom::Affine tr, bool even_odd)
+void SvgBuilder::addShadedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr)
 {
-    auto prev = _container->lastChild();
-    gchar *pathtext = svgInterpretPath(path);
+    auto path = _clip_history->getClipPath();
+    if (_group_by == GroupBy::BY_OCGS) {
+        path = _clip_history->getFlattenedClipPath();
+    }
 
+    if (path.empty()) {
+        // For consistent behaviour with previous addClippedFill wrapper, but add a warning
+        g_warning("No clipping path found, skipping shaded fill");
+        return;
+    }
+
+    auto prev = _container->lastChild();   
+    auto pathtext = sp_svg_write_path(path);
     // Create a new gradient object before comitting to creating a path for it
     // And package it into a css bundle which can be applied
     SPCSSAttr *css = sp_repr_css_attr_new();
-    // We remove the shape's affine to adjust the gradient back into place
-    gchar *id = _createGradient(state, shading, shading_tr * tr.inverse(), true);
+    gchar *id = _createGradient(state, shading, shading_tr);
     if (id) {
         gchar *urltext = g_strdup_printf ("url(#%s)", id);
         sp_repr_css_set_property(css, "fill", urltext);
@@ -783,7 +800,7 @@ void SvgBuilder::addShadedFill(GfxState *state, GfxShading *shading, const Geom:
         sp_repr_css_attr_unref(css);
         return;
     }
-    if (even_odd) {
+    if (_clip_history->getFillRule() == FillRule::fill_oddEven) {
         sp_repr_css_set_property(css, "fill-rule", "evenodd");
     }
     // Merge the style with the previous shape
@@ -791,17 +808,15 @@ void SvgBuilder::addShadedFill(GfxState *state, GfxShading *shading, const Geom:
         // POSSIBLE: The gradientTransform might now incorrect if the
         // state of the transformation was different between the two paths.
         sp_repr_css_change(prev, css, "style");
-        g_free(pathtext);
         return;
     }
 
     Inkscape::XML::Node *path_node = _addToContainer("svg:path");
     path_node->setAttribute("d", pathtext);
-    g_free(pathtext);
 
     // Don't add transforms to mask children.
     if (std::string("svg:mask") != _container->name()) {
-        svgSetTransform(path_node, tr * _page_affine);
+        svgSetTransform(path_node, _page_affine);
     }
 
     // Set the gradient into this new path.
@@ -818,15 +833,13 @@ void SvgBuilder::addShadedFill(GfxState *state, GfxShading *shading, const Geom:
 void SvgBuilder::setClip(GfxState *state, GfxClipType clip, bool is_bbox)
 {
     // When there's already a clip path, we add clipping groups to handle them.
-    if (!is_bbox && _clip_history->hasClipPath()) {
+    if (!is_bbox && _clip_history->hasClipPath() && _group_by == GroupBy::BY_XOBJECT) {
         _pushContainer("svg:g");
         _clip_groups++;
+        _clip_history = _clip_history->save();
     }
-    if (clip == clipNormal) {
-        _clip_history->setClip(state, clipNormal, is_bbox);
-    } else {
-        _clip_history->setClip(state, clipEO);
-    }
+    
+    _clip_history->setClip(state, clip);
 }
 
 /**
@@ -847,14 +860,15 @@ Inkscape::XML::Node *SvgBuilder::_getClip(const Inkscape::XML::Node *node)
     if (_clip_text) {
         auto clip_node = _clip_text;
 
-        auto text_tr = Geom::identity();
-        if (auto attr = clip_node->attribute("transform")) {
-            sp_svg_transform_read(attr, &text_tr);
-            clip_node->removeAttribute("transform");
-        }
+        // clip transform should now be baked into the path
+        // auto text_tr = Geom::identity();
+        // if (auto attr = clip_node->attribute("transform")) {
+        //     sp_svg_transform_read(attr, &text_tr);
+        //     clip_node->removeAttribute("transform");
+        // }
 
         for (auto child = clip_node->firstChild(); child; child = child->next()) {
-            Geom::Affine child_tr = text_tr * _page_affine * node_tr.inverse();
+            Geom::Affine child_tr = _page_affine * node_tr.inverse();
             svgSetTransform(child, child_tr);
         }
 
@@ -866,23 +880,36 @@ Inkscape::XML::Node *SvgBuilder::_getClip(const Inkscape::XML::Node *node)
         // page and clip transforms are applied in _createClip, but we need to apply the
         // node inverse so that it compounds properly when clipping in SVG
         auto clip_d = sp_svg_write_path(clip_pathv * node_tr.inverse());
-        return _createClip(clip_d, _clip_history->evenOdd());
+        return _createClip(clip_d, _clip_history->getFillRule() == FillRule::fill_oddEven);
     }
     return nullptr;
 }
 
 Geom::PathVector SvgBuilder::_checkClip(const Inkscape::XML::Node *node, const Geom::Affine &node_tr) const
 {
-    Geom::PathVector empty_path;
-    if (!_clip_history->hasClipPath()) {
-        return empty_path;
+    Geom::PathVector current_clip;
+    if (node->attribute("clip-path")) {
+        // If the node already has a clip path, compound it
+        if (auto clip_txt = try_extract_uri(node->attribute("clip_path"))) {
+            current_clip = sp_svg_read_pathv(clip_txt.value().c_str());
+        }
     }
 
     // node_tr includes _page_affine, so we need to apply it to the clipping path
-    Geom::PathVector clip_pathv = getPathV(_clip_history->getClipPath()) * _clip_history->getAffine() * _page_affine;
+    auto clip_pathv = maybeIntersect(_clip_history->getClipPath() * _page_affine, current_clip);
 
     // if this is a clipping or masking group situation, just return the clip
     if (strcmp(node->name(), "svg:g") == 0 || _clip_groups > 0 || _mask_groups.size() > 0) {
+        return clip_pathv;
+    }
+
+    if (_group_by == GroupBy::BY_OCGS) {
+        // if we're not using clipping groups, flatten the clip path.
+        clip_pathv = maybeIntersect(_clip_history->getFlattenedClipPath() * _page_affine, current_clip);
+    }
+
+    if (clip_pathv.empty()) {
+        // possible to have an empty clipping path at this point
         return clip_pathv;
     }
 
@@ -901,15 +928,17 @@ Geom::PathVector SvgBuilder::_checkClip(const Inkscape::XML::Node *node, const G
         if (!bounds.empty()) {
             node_vec.push_back(Geom::Path(*bounds));
         } else {
-            // what could this be?? clip it just in case
+            // Text nodes in forms in XObject mode haven't been added to the doc yet,
+            // so bounds can't be computed in this way. Not an issue in OCG grouping mode.
+            // Default to clipping.
             return clip_pathv;
         }
     }
 
     node_vec *= node_tr;
 
-    if (pathv_fully_contains(clip_pathv, node_vec, _clip_history->fillRule())) {
-        return empty_path;
+    if (pathv_fully_contains(clip_pathv, node_vec, _clip_history->getFillRule())) {
+        return Geom::PathVector();
     } else {
         return clip_pathv;
     }
@@ -1080,7 +1109,7 @@ gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_
             // SVG applies the object's affine on top of the gradient's affine,
             // So we must remove the object affine to move it back into place.
             auto affine = (grad_affine * pt * flip) * obj_affine.inverse();
-            id = _createGradient(state, shading_pattern->getShading(), affine, !is_stroke);
+            id = _createGradient(state, shading_pattern->getShading(), affine);
         } else if ( pattern->getType() == 1 ) {   // Tiling pattern
             id = _createTilingPattern(static_cast<GfxTilingPattern*>(pattern), state, is_stroke);
         }
@@ -1155,10 +1184,9 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
  * \brief Creates a linear or radial gradient from poppler's data structure
  * \param shading poppler's data structure for the shading
  * \param matrix gradient transformation, can be null
- * \param for_shading true if we're creating this for a shading operator; false otherwise
  * \return id of the created object
  */
-gchar *SvgBuilder::_createGradient(GfxState *state, GfxShading *shading, const Geom::Affine pat_matrix, bool for_shading)
+gchar *SvgBuilder::_createGradient(GfxState *state, GfxShading *shading, const Geom::Affine pat_matrix)
 {
     Inkscape::XML::Node *gradient;
     _POPPLER_CONST Function *func;
@@ -2436,8 +2464,10 @@ void SvgBuilder::applyOptionalMask(Inkscape::XML::Node *mask, Inkscape::XML::Nod
 void SvgBuilder::startGroup(GfxState *state, double *bbox, GfxColorSpace * /*blending_color_space*/, bool isolated,
                            bool knockout, bool for_softmask)
 {
-    // Push group node, but don't attach to previous container yet
-    _pushContainer("svg:g");
+    if (_group_by == GroupBy::BY_XOBJECT || for_softmask) {
+        // Push group node, but don't attach to previous container yet
+        _pushContainer("svg:g");
+    }
 
     if (for_softmask) {
         _mask_groups.push_back(state);
@@ -2452,12 +2482,21 @@ void SvgBuilder::startGroup(GfxState *state, double *bbox, GfxColorSpace * /*ble
 
 void SvgBuilder::finishGroup(GfxState *state, bool for_softmask)
 {
+
     if (for_softmask) {
         // Create mask
         auto mask_node = _popContainer();
         applyOptionalMask(mask_node, _container);
-    } else {
+    } else if (_group_by == GroupBy::BY_XOBJECT) {
         popGroup(state);
+    } else {
+        while (!_alpha_objs.empty()) {
+            auto node = _alpha_objs.back();
+            auto orig = node->getAttributeDouble("opacity", 1.0);
+            node->setAttributeSvgDouble("opacity", orig * _group_alpha);
+            _alpha_objs.pop_back();
+        }
+        _group_alpha = 1.0;
     }
 }
 
@@ -2465,32 +2504,50 @@ void SvgBuilder::popGroup(GfxState *state)
 {
     // Restore node stack
     auto parent = _popContainer();
-    bool will_clip = _clip_history->hasClipPath() && !_clip_history->isBoundingBox();
 
-    if (parent->childCount() == 1 && !parent->attribute("transform")) {
+    if (parent->childCount() == 1) {
         // Merge this opacity and remove unnecessary group
         auto child = parent->firstChild();
 
-        if (will_clip && child->attribute("d")) {
-            // Note to future: this means the group contains a single path, this path is likely
-            // a fake bounding box path and the real path is contained within the clipping region
-            // Moving the clipping region out into the path object and deleting the group would
-            // improve output here.
-        }
-
-        // Do not merge masked or clipped groups, to avoid clobering
-        if (!will_clip && !child->attribute("mask") && !child->attribute("clip-path")) {
+        // Do not merge masked children with masked parents
+        // Clipping paths will be compounded in _checkClip
+        if (!(child->attribute("mask") && parent->attribute("mask"))) {
             auto orig = child->getAttributeDouble("opacity", 1.0);
             auto grp = parent->getAttributeDouble("opacity", 1.0);
             child->setAttributeSvgDouble("opacity", orig * grp);
 
+            // compound the transforms
+            Geom::Affine grp_tr;
+            Geom::Affine child_tr;
+            sp_svg_transform_read(child->attribute("transform"), &child_tr);
+            if (sp_svg_transform_read(parent->attribute("transform"), &grp_tr)) {
+                child_tr *= grp_tr;
+                child->setAttribute("transform", sp_svg_transform_write(child_tr));
+            }
+
+            // if the parent has a mask, apply it to the child
             if (auto mask_id = try_extract_uri_id(parent->attribute("mask"))) {
                 if (auto obj = _doc->getObjectById(*mask_id)) {
+                    auto mask_node = obj->getRepr();
                     applyOptionalMask(obj->getRepr(), child);
+                    // if the child has a transform, undo it on the mask children
+                    if (child_tr != Geom::identity()) {
+                        for (auto m_child = mask_node->firstChild(); m_child != nullptr; m_child = m_child->next()) {
+                            Geom::Affine mask_tr;
+                            sp_svg_transform_read(m_child->attribute("transform"), &mask_tr);
+                            mask_tr *= child_tr.inverse();
+                            m_child->setAttribute("transform", sp_svg_transform_write(mask_tr));
+                        }
+                    }
                 }
             }
+            // this really shouldn't happen, as we haven't set the clip path on the parent yet
             if (auto clip = parent->attribute("clip-path")) {
-                child->setAttribute("clip-path", clip);
+                if (child->attribute("clip-path")) {
+                    g_warning("Discarding group clipping path");
+                } else {
+                    child->setAttribute("clip-path", clip);
+                }
             }
 
             // This duplicate child will get applied in the place of the group

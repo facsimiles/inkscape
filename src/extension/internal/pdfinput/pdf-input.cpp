@@ -147,6 +147,7 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*ur
     , _page_numbers(UI::get_widget<Gtk::Entry>(_builder, "page-numbers"))
     , _preview_area(UI::get_widget<Gtk::DrawingArea>(_builder, "preview-area"))
     , _clip_to(UI::get_widget<Gtk::ComboBox>(_builder, "clip-to"))
+    , _group_by(UI::get_widget<Gtk::ComboBox>(_builder, "group-by"))
     , _embed_images(UI::get_widget<Gtk::CheckButton>(_builder, "embed-images"))
     , _convert_colors(UI::get_widget<Gtk::CheckButton>(_builder, "convert-colors"))
     , _import_pages(UI::get_widget<Gtk::CheckButton>(_builder, "import-pages"))
@@ -246,6 +247,11 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar * /*ur
         _mod->set_param_optiongroup("clipTo", _clip_to.get_active_id().c_str());
     });
 
+    _group_by.set_active_id(mod->get_param_optiongroup("groupBy"));
+    _group_by.signal_changed().connect([this]() {
+        _mod->set_param_optiongroup("groupBy", _group_by.get_active_id().c_str());
+    });
+
     _embed_images.set_active(mod->get_param_bool("embedImages", true));
     _embed_images.signal_toggled().connect([this]() {
         _mod->set_param_bool("embedImages", _embed_images.get_active());
@@ -292,6 +298,11 @@ bool PdfImportDialog::showDialog() {
     } else {
         return FALSE;
     }
+}
+
+bool PdfImportDialog::getImportPages()
+{
+    return _import_pages.get_active();
 }
 
 std::string PdfImportDialog::getSelectedPages()
@@ -653,12 +664,15 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
     }
 
     // Get options
+    bool import_pages = true;
     std::string page_nums = "1";
     PdfImportType import_method = PdfImportType::PDF_IMPORT_INTERNAL;
     FontStrategies font_strats;
     bool convert_colors = true;
+    std::string group_by = "by-xobject";
     if (dlg) {
         page_nums = dlg->getSelectedPages();
+        import_pages = dlg->getImportPages();
         import_method = dlg->getImportMethod();
         font_strats = dlg->getFontStrategies();
     } else {
@@ -669,6 +683,7 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
         import_method = (PdfImportType)INKSCAPE.get_pdf_poppler();
 #endif
         convert_colors = INKSCAPE.get_pdf_convert_colors();
+        group_by = INKSCAPE.get_pdf_group_by();
     }
     // Both poppler and poppler+cairo can get page num info from poppler.
     auto pages = parseIntRange(page_nums, 1, pdf_doc->getCatalog()->getNumPages());
@@ -695,12 +710,15 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
         }
         SvgBuilder *builder = new SvgBuilder(doc.get(), docname, pdf_doc->getXRef());
         builder->setFontStrategies(font_strats);
+        builder->setPageMode(import_pages);
 
         // Get preferences
         builder->setPageMode(mod->get_param_bool("importPages", true));
         builder->setEmbedImages(mod->get_param_bool("embedImages", true));
         builder->setConvertColors(dlg ? mod->get_param_bool("convertColors", true) : convert_colors);
+        builder->setGroupBy(dlg ? mod->get_param_optiongroup("groupBy") : group_by);
         std::string crop_to = mod->get_param_optiongroup("clipTo", "none");
+        
         double color_delta = mod->get_param_float("approximationPrecision", 2.0);
 
         for (auto p : pages) {

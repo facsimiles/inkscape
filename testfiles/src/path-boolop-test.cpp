@@ -13,6 +13,17 @@ public:
     Geom::PathVector const reference_union = sp_svg_read_pathv("M 0,0 L 0,1.5 L 0,2 L 0,2.5 L 0.5,2.5 L 0.5,2 L 2,2 L 2,0 L 0,0 z");
     Geom::PathVector const empty = sp_svg_read_pathv("");
 
+    // shapes to test fill rules
+    Geom::PathVector const star = sp_svg_read_pathv("M 0,10 20,0 15,25 5,0 25,15 z");
+    Geom::PathVector const star_odd_even =
+        sp_svg_read_pathv("M 5 0 L 7.5 6.25 L 11 4.5 z M 11 4.5 L 18.04296875 9.783203125 L 20 0 z M 18.04296875 "
+                          "9.783203125 L 17.30859375 13.4609375 L 25 15 z M 17.30859375 13.4609375 L 9.783203125 "
+                          "11.95703125 L 15 25 z M 9.783203125 11.95703125 L 7.5 6.25 L 0 10 z");
+    Geom::PathVector const star_non_zero =
+        sp_svg_read_pathv("M 5 0 L 7.5 6.25 L 0 10 L 9.783203125 11.95703125 L 15 25 L 17.30859375 13.4609375 L 25 15 "
+                          "L 18.04296875 9.783203125 L 20 0 L 11 4.5 z");
+    Geom::PathVector const star_bbox = sp_svg_read_pathv("M 0,0 L 0,25 L 25,25 L 25,0 z");
+
     static void comparePaths(Geom::PathVector const &result, Geom::PathVector const &reference)
     {
         Geom::SVGPathWriter wr;
@@ -54,6 +65,24 @@ TEST_F(PathBoolopTest, IntersectionInside) {
     // test that the intersection of two objects where one is completely inside the other is the smaller shape
     auto pathv = sp_pathvector_boolop(rectangle_bigger, rectangle_smaller, bool_op_inters, fill_oddEven, fill_oddEven);
     comparePaths(pathv, rectangle_smaller);
+}
+
+TEST_F(PathBoolopTest, IntersectionOddEven) {
+    // test that the intersection of a star in its bounding box with the odd/even rule is an empty star
+    auto pathv = sp_pathvector_boolop(star, star_bbox, bool_op_inters, fill_oddEven, fill_oddEven);
+    comparePaths(pathv, star_odd_even);
+}
+
+TEST_F(PathBoolopTest, IntersectionNonZero) {
+    // test that the intersection of a star in its bounding box with the nonzero rule is a filled star
+    auto pathv = sp_pathvector_boolop(star, star_bbox, bool_op_inters, fill_nonZero, fill_oddEven);
+    comparePaths(pathv, star_non_zero);
+}
+
+TEST_F(PathBoolopTest, IntersectionBBoxNonZero) {
+    // Make sure the bbox winding rule doesn't change anything
+    auto pathv = sp_pathvector_boolop(star, star_bbox, bool_op_inters, fill_oddEven, fill_nonZero);
+    comparePaths(pathv, star_odd_even);
 }
 
 TEST_F(PathBoolopTest, DifferenceInside) {

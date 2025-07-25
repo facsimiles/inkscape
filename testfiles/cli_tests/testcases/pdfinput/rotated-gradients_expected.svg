@@ -23,7 +23,7 @@
        x2="105.33476"
        y2="100.78111"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="scale(2.834646)"
+       gradientTransform="matrix(0,-3.779528,3.779528,0,0,793.70079)"
        spreadMethod="pad"
        id="linearGradient4">
       <stop
@@ -41,17 +41,17 @@
        x2="111.22161"
        y2="233.85242"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="scale(2.834646)"
+       gradientTransform="matrix(0,-3.779528,3.779528,0,0,793.70079)"
        spreadMethod="pad"
-       id="linearGradient8">
+       id="linearGradient9">
       <stop
          style="stop-opacity:1;stop-color:#cc0000"
          offset="0"
-         id="stop7" />
+         id="stop8" />
       <stop
          style="stop-opacity:0;stop-color:#cc0000"
          offset="1"
-         id="stop8" />
+         id="stop9" />
     </linearGradient>
   </defs>
   <sodipodi:namedview
@@ -78,22 +78,25 @@
      inkscape:groupmode="layer"
      inkscape:label="1">
     <path
-       d="M 96.438,81.594 H 346.567 V 320.981 H 96.438 Z"
-       transform="matrix(0,-1.3333333,1.3333333,0,0,793.70079)"
-       style="fill:url(#linearGradient4);fill-rule:evenodd;stroke:#000000;stroke-width:30.9832;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 108.792,665.11679 V 331.61145 h 319.18267 v 333.50534 z"
+       style="fill:url(#linearGradient4);fill-rule:evenodd;stroke:none"
        opacity="1"
        id="path4" />
     <path
        id="path5"
+       d="M 96.438,81.594 H 346.567 V 320.981 H 96.438 Z"
+       style="fill:none;stroke:#000000;stroke-width:30.9832;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="matrix(0,-1.3333333,1.3333333,0,0,793.70079)" />
+    <path
+       id="path6"
        d="M 92.969,454.07 H 343.094 V 693.457 H 92.969 Z"
        style="fill:none;stroke:#000000;stroke-width:30.9832;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        transform="matrix(0,-1.3333333,1.3333333,0,0,793.70079)" />
     <path
-       d="M 92.969,454.07 H 343.094 V 693.457 H 92.969 Z"
-       transform="matrix(0,-1.3333333,1.3333333,0,0,793.70079)"
-       style="fill:url(#linearGradient8);fill-rule:evenodd;stroke:none"
+       d="m 605.42667,669.74212 v -333.5 h 319.18266 v 333.5 z"
+       style="fill:url(#linearGradient9);fill-rule:evenodd;stroke:none"
        opacity="1"
-       id="path8" />
+       id="path9" />
   </g>
   <metadata
      id="metadata1">

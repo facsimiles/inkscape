@@ -320,7 +320,6 @@ PdfParser::PdfParser(std::shared_ptr<PDFDoc> pdf_doc, Inkscape::Extension::Inter
     builder->setMetadata("subject", getString(pdf_doc->getDocInfoStringEntry("Keywords")));
     builder->setMetadata("date", getString(pdf_doc->getDocInfoStringEntry("CreationDate")));
 
-    saveState();
     formDepth = 0;
 
     pushOperator("startPage");
@@ -924,11 +923,9 @@ void PdfParser::doSoftMask(Object *str, GBool alpha,
   resDict = obj1.isDict() ? obj1.getDict() : (Dict *)nullptr;
 
   // draw it
-  ++formDepth;
   doForm1(str, resDict, m, bbox, gTrue, gTrue,
 	  blendingColorSpace, isolated, knockout,
 	  alpha, transferFunc, backdropColor);
-  --formDepth;
 
   _POPPLER_FREE(obj1);
 }
@@ -1620,7 +1617,7 @@ void PdfParser::opShFill(Object args[], int /*numArgs*/)
     break;
   case 2: // Axial shading
   case 3: // Radial shading
-      builder->addClippedFill(state, shading.get(), stateToAffine(state));
+      builder->addShadedFill(state, shading.get(), stateToAffine(state));
       break;
   case 4: // Free-form Gouraud-shaded triangle mesh
   case 5: // Lattice-form Gouraud-shaded triangle mesh
@@ -2833,9 +2830,7 @@ void PdfParser::doForm(Object *str, double *offset)
     _POPPLER_FREE(obj1);
 
     // draw it
-    ++formDepth;
     doForm1(str, resDict, m, bbox, transpGroup, gFalse, blendingColorSpace.get(), isolated, knockout);
-    --formDepth;
 
     _POPPLER_FREE(resObj);
 }
@@ -2844,12 +2839,14 @@ void PdfParser::doForm1(Object *str, Dict *resDict, double *matrix, double *bbox
                         GfxColorSpace *blendingColorSpace, GBool isolated, GBool knockout, GBool alpha,
                         Function *transferFunc, GfxColor *backdropColor)
 {
+    formDepth++;
+
     Parser *oldParser;
 
     // push new resources on stack
     pushResources(resDict);
 
-    // Add a new container group before saving the state
+    // set up clipping groups, letting builder handle SVG group creation
     builder->startGroup(state, bbox, blendingColorSpace, isolated, knockout, softMask);
 
     // save current graphics state
@@ -2904,10 +2901,11 @@ void PdfParser::doForm1(Object *str, Dict *resDict, double *matrix, double *bbox
     restoreState();
 
     // pop resource stack
-    popResources();
+    popResources();    
 
     // complete any masking
     builder->finishGroup(state, softMask);
+    formDepth--;
 }
 
 //------------------------------------------------------------------------
@@ -3025,8 +3023,10 @@ void PdfParser::opEndIgnoreUndef(Object /*args*/[], int /*numArgs*/)
 //------------------------------------------------------------------------
 
 void PdfParser::opBeginMarkedContent(Object args[], int numArgs) {
-    if (formDepth != 0)
+    if (ignoreMarkedContent()) {
         return;
+    }
+
     if (printCommands) {
         printf("  marked content: %s ", args[0].getName());
         if (numArgs == 2)
@@ -3044,8 +3044,20 @@ void PdfParser::opBeginMarkedContent(Object args[], int numArgs) {
 
 void PdfParser::opEndMarkedContent(Object /*args*/[], int /*numArgs*/)
 {
-    if (formDepth == 0)
-        builder->endMarkedContent();
+    if (ignoreMarkedContent()) {
+        return;
+    }
+    builder->endMarkedContent();
+}
+
+/*
+  Decide whether to ignore marked content commands based on selected
+  group handling mode and form depth.
+*/
+bool PdfParser::ignoreMarkedContent()
+{
+    auto group_by = builder->getGroupBy();
+    return group_by == GroupBy::BY_XOBJECT && formDepth != 0;
 }
 
 void PdfParser::opMarkPoint(Object args[], int numArgs) {
@@ -3126,32 +3138,52 @@ void PdfParser::setApproximationPrecision(int shadingType, double colorDelta,
  */
 void PdfParser::loadOptionalContentLayers(Dict *resources)
 {
-    if (!resources) 
+    if (!resources)
         return;
 
     auto props = resources->lookup("Properties");
-    if (!props.isDict())
-        return;
+    if (props.isDict()) {
+        // could have top-level OCGs
+        auto cat = _pdf_doc->getCatalog();
+        auto ocgs = cat->getOptContentConfig();
+        auto dict = props.getDict();
 
-    auto cat = _pdf_doc->getCatalog();
-    auto ocgs = cat->getOptContentConfig();
-    auto dict = props.getDict();
-
-    for (auto j = 0; j < dict->getLength(); j++) {
-        auto val = dict->getVal(j);
-        if (!val.isDict())
-            continue;
-        auto dict2 = val.getDict();
-        if (dict2->lookup("Type").isName("OCG") && ocgs) {
-            std::string label = getDictString(dict2, "Name");
-            auto visible = true;
-            // Normally we'd use poppler optContentIsVisible, but these dict
-            // objects don't retain their references so can't be used directly.
-            for (auto &[ref, ocg] : ocgs->getOCGs()) {
-                if (ocg->getName()->cmp(label) == 0)
-                    visible = ocg->getState() == OptionalContentGroup::On;
+        for (auto j = 0; j < dict->getLength(); j++) {
+            auto val = dict->getVal(j);
+            if (!val.isDict())
+                continue;
+            auto dict2 = val.getDict();
+            if (dict2->lookup("Type").isName("OCG") && ocgs) {
+                std::string label = getDictString(dict2, "Name");
+                auto visible = true;
+                // Normally we'd use poppler optContentIsVisible, but these dict
+                // objects don't retain their references so can't be used directly.
+                for (auto &[ref, ocg] : ocgs->getOCGs()) {
+                    if (ocg->getName()->cmp(label) == 0)
+                        visible = ocg->getState() == OptionalContentGroup::On;
+                }
+                builder->addOptionalGroup(dict->getKey(j), label, visible);
             }
-            builder->addOptionalGroup(dict->getKey(j), label, visible);
+        }
+    }
+
+    // if top-level groups are by OCGs, recurse in case nested objects have OCGs
+    if (builder->getGroupBy() == GroupBy::BY_OCGS) {
+        auto xobjects = resources->lookup("XObject");
+        if (xobjects.isDict()) {
+            auto dict = xobjects.getDict();
+            for (auto i = 0; i < dict->getLength(); ++i) {
+                auto xobj = dict->getVal(i);
+                if (xobj.isStream()) {
+                    if (xobj.streamGetDict()->lookup("Subtype").isName("Form")) {
+                        auto form_resources = xobj.streamGetDict()->lookup("Resources");
+                        if (form_resources.isDict()) {
+                            // phew, that's a lot of nesting
+                            loadOptionalContentLayers(form_resources.getDict());
+                        }
+                    }
+                }
+            }
         }
     }
 }

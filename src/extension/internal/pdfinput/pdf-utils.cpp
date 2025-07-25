@@ -13,63 +13,67 @@
 #include "pdf-utils.h"
 #include "poppler-utils.h"
 #include <2geom/path-sink.h>
+#include "path/path-boolop.h"
+
+// Map PDF clip types to fill rules
+const std::map<GfxClipType, FillRule> ClipFillMap = {
+    {clipNone, FillRule::fill_justDont},
+    {clipNormal, FillRule::fill_nonZero},
+    {clipEO, FillRule::fill_oddEven}
+};
 
 //------------------------------------------------------------------------
 // ClipHistoryEntry
 //------------------------------------------------------------------------
 
-ClipHistoryEntry::ClipHistoryEntry(GfxPath *clipPathA, GfxClipType clipTypeA)
+ClipHistoryEntry::ClipHistoryEntry(const Geom::PathVector &clipPathA, GfxClipType clipTypeA)
     : saved(nullptr)
-    , clipPath((clipPathA) ? clipPathA->copy() : nullptr)
-    , clipType(clipTypeA)
+    , clipPath(clipPathA)
+    , fillRule(ClipFillMap.at(clipTypeA))
 {}
 
 ClipHistoryEntry::~ClipHistoryEntry()
 {
-    if (clipPath) {
-        delete clipPath;
-        clipPath = nullptr;
-    }
-}
-
-void ClipHistoryEntry::setClip(GfxState *state, GfxClipType clipTypeA, bool bbox)
-{
-    const GfxPath *clipPathA = state->getPath();
-
-    if (clipPath) {
-        if (copied) {
-            // Free previously copied clip path.
-            delete clipPath;
-        } else {
-            // This indicates a bad use of the ClipHistory API
-            g_error("Clip path is already set!");
-            return;
-        }
-    }
-
-    cleared = false;
-    copied = false;
-    if (clipPathA) {
-        affine = stateToAffine(state);
-        clipPath = clipPathA->copy();
-        clipType = clipTypeA;
-        is_bbox = bbox;
-    } else {
-        affine = Geom::identity();
-        clipPath = nullptr;
-        clipType = clipNormal;
-        is_bbox = false;
+    if (saved) {
+        delete saved;
+        saved = nullptr;
     }
 }
 
 /**
- * Create a new clip-history, appending it to the stack.
- *
- * If cleared is set to true, it will not remember the current clipping path.
+ * Set the clipping path of the current entry (does not add to stack). This is mostly
+ * exposed in public for ease of testing, but also handy for bbox.
  */
-ClipHistoryEntry *ClipHistoryEntry::save(bool cleared)
+void ClipHistoryEntry::setClip(Geom::PathVector const &newPath, FillRule newFill) {
+    if (copied) {
+        // overwrite the new path info
+        clipPath = newPath;
+    } else {
+        // Destructively compose the new clipping path by intersecting with the current
+        clipPath = maybeIntersect(clipPath, newPath, fillRule, newFill);
+    } 
+    
+    // either way, set the new fill rule. This assumes that the new fill rule is the one that should apply
+    // to the output of the intersection operation, but it may not matter due to intersection normalization
+    fillRule = newFill;
+    copied = false;
+}
+
+/**
+ * Set the clip path based on the poppler GfxState, baking in the affine transform.
+ */
+void ClipHistoryEntry::setClip(GfxState *state, GfxClipType clipType)
 {
-    ClipHistoryEntry *newEntry = new ClipHistoryEntry(this, cleared);
+    auto newPath = getPathV(state->getPath()) * stateToAffine(state);
+    setClip(newPath, ClipFillMap.at(clipType));
+}
+
+/**
+ * Create a new clip-history, appending it to the stack.
+ */
+ClipHistoryEntry *ClipHistoryEntry::save()
+{
+    ClipHistoryEntry *newEntry = new ClipHistoryEntry(this);
     newEntry->saved = this;
     return newEntry;
 }
@@ -89,51 +93,35 @@ ClipHistoryEntry *ClipHistoryEntry::restore()
     return oldEntry;
 }
 
-ClipHistoryEntry::ClipHistoryEntry(ClipHistoryEntry *other, bool cleared)
+ClipHistoryEntry::ClipHistoryEntry(ClipHistoryEntry *other)
 {
-    if (other && other->clipPath) {
-        this->affine = other->affine;
-        this->clipPath = other->clipPath->copy();
-        this->clipType = other->clipType;
-        this->cleared = cleared;
-        this->copied = true;
-        this->is_bbox = other->is_bbox;
-    } else {
-        this->affine = Geom::identity();
-        this->clipPath = nullptr;
-        this->clipType = clipNormal;
-        this->cleared = false;
-        this->copied = false;
-        this->is_bbox = false;
-    }
+    this->clipPath = other->clipPath;
+    this->fillRule = other->fillRule;
+    this->copied = true;
     saved = nullptr;
 }
 
+/**
+ * Computes the intersection of all clipping paths in the stack.
+ */
 
-FillRule ClipHistoryEntry::fillRule() {
-    // convert winding rule to fill rule
-    switch (clipType) {
-        case clipNone:
-            // I don't know why this would happen
-            return FillRule::fill_justDont;
-        case clipNormal:
-            return FillRule::fill_nonZero;
-        case clipEO:
-            return FillRule::fill_oddEven;
-        default:
-            // I don't think this one aligns with any PDF type
-            return FillRule::fill_positive;
+Geom::PathVector ClipHistoryEntry::getFlattenedClipPath() 
+{
+    if (saved) {
+        return maybeIntersect(clipPath, saved->getFlattenedClipPath(), fillRule, saved->fillRule);
+    } else {
+        return clipPath;
     }
 }
 
-/*************** Conversion functions *****************/
+/*************** Helper functions *****************/
 
 Geom::Rect getRect(_POPPLER_CONST PDFRectangle *box)
 {
     return Geom::Rect(box->x1, box->y1, box->x2, box->y2);
 }
 
-Geom::PathVector getPathV(GfxPath *path) 
+Geom::PathVector getPathV(_POPPLER_CONST GfxPath *path) 
 {
     if (!path) {
         // empty path
@@ -167,4 +155,19 @@ Geom::PathVector getPathV(GfxPath *path)
 
     res.flush();
     return res.peek();
+}
+
+/**
+ * Computes the intersection between paths v1 and v2. If one of the paths is empty, return the other.
+ */
+Geom::PathVector maybeIntersect(Geom::PathVector const &v1, Geom::PathVector const &v2, FillRule fill1, FillRule fill2) {
+    if (v1.empty()) {
+        // okay if both are empty (just the same)
+        return v2;
+    }
+    if (v2.empty()) {
+        return v1;
+    }
+
+    return sp_pathvector_boolop(v1, v2, BooleanOp::bool_op_inters, fill1, fill2);
 }

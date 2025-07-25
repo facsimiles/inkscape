@@ -143,6 +143,7 @@ protected:
     bool _pdf_convert_colors = false;
     bool _use_command_line_argument = false;
     Glib::ustring _pages;
+    std::string _pdf_group_by = "by-xobject";
 
     // Documents are owned by the application which is responsible for opening/saving/exporting.
     // Not supported by Apple Clang yet:

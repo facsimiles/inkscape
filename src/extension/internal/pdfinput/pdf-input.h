@@ -45,6 +45,10 @@
                 "<option value=\"trim-box\">" N_("Trim Box") "</option>\n" \
                 "<option value=\"bleed-box\">" N_("Bleed Box") "</option>\n" \
                 "<option value=\"art-box\">" N_("Art Box") "</option>\n" \
+            "</param>\n" \
+            "<param name=\"groupBy\" gui-text=\"" N_("Group by:") "\" type=\"optiongroup\">\n" \
+                "<option value=\"by-xobject\">" N_("PDF XObject") "</option>\n" \
+                "<option value=\"by-layer\">" N_("PDF Layer") "</option>\n" \
             "</param>\n"
 // clang-format on
 
@@ -107,6 +111,7 @@ public:
     ~PdfImportDialog() override;
 
     bool showDialog();
+    bool getImportPages();
     std::string getSelectedPages();
     PdfImportType getImportMethod();
     FontStrategies getFontStrategies();
@@ -127,6 +132,7 @@ private:
     Gtk::Entry &_page_numbers;
     Gtk::DrawingArea &_preview_area;
     Gtk::ComboBox &_clip_to;
+    Gtk::ComboBox &_group_by;
     Gtk::CheckButton &_embed_images;
     Gtk::CheckButton &_convert_colors;
     Gtk::CheckButton &_import_pages;

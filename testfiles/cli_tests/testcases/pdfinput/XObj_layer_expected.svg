@@ -77,50 +77,42 @@
      id="Red_20Rectangles"
      inkscape:groupmode="layer"
      inkscape:label="Red Rectangles">
-    <g
-       id="g3">
-      <path
-         d="M 100,100 H 200 V 200 H 100 Z"
-         style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         transform="matrix(1.3333333,0,0,-1.3333333,0,1056)"
-         clip-path="url(#clipPath2)"
-         id="path3" />
-    </g>
-    <g
-       id="g7">
-      <path
-         d="M 100,100 H 200 V 200 H 100 Z"
-         style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         transform="matrix(1.3333333,0,0,-1.3333333,836,1056)"
-         clip-path="url(#clipPath6)"
-         id="path7" />
-    </g>
+    <path
+       d="M 100,100 H 200 V 200 H 100 Z"
+       style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,0,1056)"
+       clip-path="url(#clipPath2)"
+       opacity="1"
+       id="path3" />
+    <path
+       d="M 100,100 H 200 V 200 H 100 Z"
+       style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,836,1056)"
+       clip-path="url(#clipPath6)"
+       opacity="1"
+       id="path7" />
   </g>
   <g
      id="Blue_20Rectangles"
      inkscape:groupmode="layer"
      inkscape:label="Blue Rectangles">
-    <g
-       id="g5">
-      <path
-         d="M 300,300 H 400 V 400 H 300 Z"
-         style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         transform="matrix(1.3333333,0,0,-1.3333333,0,1056)"
-         clip-path="url(#clipPath4)"
-         id="path5" />
-    </g>
-    <g
-       id="g9">
-      <path
-         d="M 300,300 H 400 V 400 H 300 Z"
-         style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         transform="matrix(1.3333333,0,0,-1.3333333,836,1056)"
-         clip-path="url(#clipPath8)"
-         id="path9" />
-    </g>
+    <path
+       d="M 300,300 H 400 V 400 H 300 Z"
+       style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,0,1056)"
+       clip-path="url(#clipPath4)"
+       opacity="1"
+       id="path5" />
+    <path
+       d="M 300,300 H 400 V 400 H 300 Z"
+       style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,836,1056)"
+       clip-path="url(#clipPath8)"
+       opacity="1"
+       id="path9" />
   </g>
   <g
-     id="g6"
+     id="g5"
      inkscape:groupmode="layer"
      inkscape:label="2" />
 </svg>

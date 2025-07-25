@@ -127,9 +127,7 @@ public:
     bool shouldMergePath(bool is_fill, const std::string &path);
     bool mergePath(GfxState *state, bool is_fill, const std::string &path, bool even_odd = false);
     void addPath(GfxState *state, bool fill, bool stroke, bool even_odd=false);
-    void addClippedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr);
-    void addShadedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr, GfxPath *path,
-                       const Geom::Affine tr, bool even_odd = false);
+    void addShadedFill(GfxState *state, GfxShading *shading, const Geom::Affine shading_tr);
 
     // Image handling
     void addImage(GfxState *state, Stream *str, int width, int height,
@@ -151,7 +149,10 @@ public:
                    bool for_softmask);
     void finishGroup(GfxState *state, bool for_softmask);
     void popGroup(GfxState *state);
-    
+    void pruneGroups();
+    void setGroupBy(const std::string &group_by);
+    GroupBy getGroupBy() { return _group_by; }
+
     // Text handling
     void beginString(GfxState *state, int len);
     void endString(GfxState *state);
@@ -196,7 +197,7 @@ private:
 
     // Pattern creation
     gchar *_createPattern(GfxPattern *pattern, GfxState *state, bool is_stroke=false);
-    gchar *_createGradient(GfxState *state, GfxShading *shading, const Geom::Affine pat_matrix, bool for_shading = false);
+    gchar *_createGradient(GfxState *state, GfxShading *shading, const Geom::Affine pat_matrix);
     void _addStopToGradient(Inkscape::XML::Node *gradient, double offset, GfxColor *color, GfxColorSpace *space,
                             Colors::RenderingIntent intent, double opacity);
     bool _addGradientStops(Inkscape::XML::Node *gradient, GfxState *state, GfxShading *shading,
@@ -286,6 +287,12 @@ private:
     double _height;       // Document size in px
 
     bool _as_pages = true; // If set to false, page objects are not created
+    
+    // Group handling to allow OCGs as top-level layer, with transparency
+    GroupBy _group_by = GroupBy::BY_XOBJECT;
+    double _group_alpha = 1.0;
+    std::vector<Inkscape::XML::Node *> _alpha_objs;
+
     Inkscape::XML::Node *_page = nullptr; // XML Page definition
     int _page_num = 0; // Are we on a page
     double _page_left = 0 ; // Move to the left for more pages

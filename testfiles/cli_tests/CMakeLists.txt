@@ -1022,11 +1022,17 @@ add_cli_test(actions-sequential-export-id-only_svg
 ###########################
 
 function(add_pdfinput_test name pages font_strategy)
-    set(oneValueArgs EXTRA)
+    set(oneValueArgs IN_FILE EXTRA)
     cmake_parse_arguments(ARG "" "${oneValueArgs}" "" ${ARGN})
 
+    if(DEFINED ARG_IN_FILE)
+        set(in_file "${ARG_IN_FILE}")
+    else()
+        set(in_file "${name}")
+    endif()
+
     add_cli_test(pdfinput-${name}
-        INPUT_FILENAME pdfinput/${name}.pdf
+        INPUT_FILENAME pdfinput/${in_file}.pdf
         PARAMETERS --pages=${pages} --pdf-font-strategy=${font_strategy} ${ARG_EXTRA} --actions=export-filename:${name}.svg$<SEMICOLON>export-do
         EXPECTED_FILES "${name}.svg"
         TEST_SCRIPT compare.sh ${name}.svg "${CMAKE_CURRENT_SOURCE_DIR}/testcases/pdfinput/${name}_expected.svg")
@@ -1046,8 +1052,10 @@ add_pdfinput_test(multi-page-sample all draw-all)
 add_pdfinput_test(multiple-style-same-text-block 1 keep)
 add_pdfinput_test(gs_linewidth all draw-all)
 add_pdfinput_test(XObj_layer all draw-all)
-add_pdfinput_test(Annot_w_AP all draw-all EXTRA "--pdf-convert-colors")
+add_pdfinput_test(Annot_w_AP_RGB all draw-all IN_FILE "Annot_w_AP" EXTRA "--pdf-convert-colors")
+add_pdfinput_test(Annot_w_AP_CMYK all draw-all IN_FILE "Annot_w_AP")
 add_pdfinput_test(clipping_shift 1 keep)
+add_pdfinput_test(layers-in-xobj 1 substitute EXTRA "--pdf-group-by=layer")
 
 function(add_pdfoutput_test name)
     set(SOURCE_SVG "${CMAKE_CURRENT_SOURCE_DIR}/testcases/pdfoutput/${name}.svg")

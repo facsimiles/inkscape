@@ -41,7 +41,7 @@
        x2="180.45001"
        y2="167.00288"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,2.340494,-2.337466,0,457.56595,-277.62076)"
+       gradientTransform="matrix(0,3.1206587,-3.1166213,0,610.08793,-370.16101)"
        spreadMethod="pad"
        id="linearGradient5">
       <stop
@@ -99,7 +99,7 @@
        x2="180.45001"
        y2="167.00288"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.028227,2.101885,-2.099165,-1.029559,765.97534,-58.368384)"
+       gradientTransform="matrix(-1.3709693,2.8025133,-2.7988867,-1.3727453,1021.3004,-77.824512)"
        spreadMethod="pad"
        id="linearGradient12">
       <stop
@@ -164,8 +164,7 @@
        transform="matrix(0,1.3333333,-1.331608,0,0,0)" />
     <path
        id="path5"
-       d="m 20.461,46.43 h 93.48 v 93.602 h -93.48 z"
-       transform="scale(1.3333333)"
+       d="M 27.281333,61.906667 H 151.92133 V 186.70933 H 27.281333 Z"
        style="fill:url(#linearGradient5);stroke:none" />
     <path
        id="path6"
@@ -179,8 +178,7 @@
        transform="matrix(-0.65225733,1.3333333,-1.331608,-0.65310267,0,0)" />
     <path
        id="path12"
-       d="M 315.023,81.293 273.902,165.352 189.949,124.18 231.07,40.117 Z"
-       transform="scale(1.3333333)"
+       d="m 420.03067,108.39067 -54.828,112.07866 -111.93734,-54.896 54.828,-112.083997 z"
        style="fill:url(#linearGradient12);stroke:none" />
     <path
        id="path13"
