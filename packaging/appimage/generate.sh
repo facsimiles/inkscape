@@ -29,18 +29,14 @@ wget -c "$goappimage_url" -O goappimage
 chmod +x goappimage
 
 # Can't use goappimage for second step since internal copy of appstreamcli is too old
-wget -c "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagekit
-echo 363dafac070b65cc36ca024b74db1f043c6f5cd7be8fca760e190dce0d18d684 appimagekit | sha256sum -c
-chmod +x appimagekit
+wget -c "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool
+echo 363dafac070b65cc36ca024b74db1f043c6f5cd7be8fca760e190dce0d18d684 appimagetool | sha256sum -c
+chmod +x appimagetool
 
 ./goappimage -s deploy ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop
 sed -i -e 's|/usr/lib/x86_64-linux-gnu/gdk-pixbuf-.*/.*/loaders/||g' ./appdir/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
 cp ./appdir/usr/share/icons/hicolor/256x256/apps/org.inkscape.Inkscape.png ./appdir
-for i in {1..10}; do
-    ARCH=x86_64 ./appimagekit ./appdir && break
-    echo "appimagekit failed, probably due to network error; retrying in 10s"
-    sleep 10
-done
+ARCH=x86_64 ./appimagetool -n ./appdir
 
 sha="$(git rev-parse --short HEAD)"
 mv Inkscape*.AppImage* "../Inkscape-$sha.AppImage"
