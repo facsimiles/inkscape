@@ -16,6 +16,7 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/uriutils.h>
 #include <glibmm/convert.h>
+#include <glibmm/regex.h>
 
 #include "fix-broken-links.h"
 
@@ -31,26 +32,37 @@
 
 namespace Inkscape {
 
-std::vector<std::string> splitPath( std::string const &path )
+std::vector<std::string> splitPath(std::string path)
 {
-    std::vector<std::string> parts;
+#ifdef _WIN32
+    constexpr auto separator = '\\';
+#else
+    constexpr auto separator = '/';
+#endif
+  
+#ifdef _WIN32
+    std::replace(path.begin(), path.end(), '/', '\\');
+#endif
 
-    std::string prior;
-    std::string tmp = path;
-    while ( !tmp.empty() && (tmp != prior) ) {
-        prior = tmp;
+    std::vector<std::string> result;
 
-        parts.push_back( Glib::path_get_basename(tmp) );
-        tmp = Glib::path_get_dirname(tmp);
-    }
-    if ( !parts.empty() ) {
-        std::reverse(parts.begin(), parts.end());
-        if ( (parts[0] == ".") && (path[0] != '.') ) {
-            parts.erase(parts.begin());
+    for (auto part : Glib::Regex::split_simple(std::string{separator}.c_str(), path.c_str())) {
+        if (!part.empty() && part != ".") {
+            result.emplace_back(part.release());
         }
     }
 
-    return parts;
+    // Todo: (C++20) When macOS supports it.
+    /*
+    for (auto part : path | std::views::split(separator)) {
+        auto view = std::string_view{part.begin(), part.end()};
+        if (!view.empty() && view != ".") {
+            result.emplace_back(view);
+        }
+    }
+    */
+
+    return result;
 }
 
 /**

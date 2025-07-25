@@ -95,6 +95,7 @@ set(TEST_SOURCES
     util-uri-test
     drag-and-drop-svgz
     drawing-pattern-test
+    fix-broken-links-test
     poppler-utils-test
     attributes-test
     dir-util-test
