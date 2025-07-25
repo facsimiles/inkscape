@@ -25,6 +25,7 @@
       <object class="GtkButton" id="avoid_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make connectors avoid selected objects</property>
         <property name="has-frame">False</property>
@@ -39,6 +40,7 @@
       <object class="GtkButton" id="ignore_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make connectors ignore selected objects</property>
         <property name="has-frame">False</property>
@@ -53,6 +55,7 @@
       <object class="GtkToggleButton" id="_orthogonal_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make connector orthogonal or polyline</property>
         <property name="has-frame">False</property>
@@ -112,6 +115,7 @@
       <object class="GtkButton" id="graph_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Nicely arrange selected connector network</property>
         <property name="has-frame">False</property>
@@ -152,6 +156,7 @@
       <object class="GtkToggleButton" id="_directed_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make connectors with end-markers (arrows) point downwards</property>
         <property name="has-frame">False</property>
@@ -169,6 +174,7 @@
       <object class="GtkToggleButton" id="_overlap_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Do not allow overlapping shapes</property>
         <property name="has-frame">False</property>

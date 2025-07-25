@@ -850,6 +850,7 @@
     </style>
     <child>
       <object class="GtkToggleButton">
+        <property name="focus-on-click">False</property>
         <property name="action-name">win.snap-global-toggle</property>
         <property name="has-frame">False</property>
         <child>
@@ -896,6 +897,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-bbox</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -909,6 +911,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-bbox-edge</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -922,6 +925,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-bbox-corner</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -935,6 +939,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-bbox-edge-midpoint</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -948,6 +953,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-bbox-center</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -967,6 +973,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-node-category</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -980,6 +987,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-path</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -993,6 +1001,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-path-intersection</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1006,6 +1015,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-node-cusp</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1019,6 +1029,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-node-smooth</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1032,6 +1043,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-line-midpoint</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1045,6 +1057,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-line-perpendicular</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1058,6 +1071,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-line-tangential</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1077,6 +1091,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-others</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1090,6 +1105,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-object-midpoint</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1103,6 +1119,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-rotation-center</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1116,6 +1133,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-text-baseline</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1129,6 +1147,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-path-mask</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1142,6 +1161,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-path-clip</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1161,6 +1181,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-alignment</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1174,6 +1195,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-alignment-self</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1187,6 +1209,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-distribution</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1206,6 +1229,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-grid</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1219,6 +1243,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-guide</property>
                 <property name="has-frame">False</property>
                 <child>
@@ -1232,6 +1257,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
+                <property name="focus-on-click">False</property>
                 <property name="action-name">win.snap-page-border</property>
                 <property name="has-frame">False</property>
                 <child>

@@ -98,6 +98,7 @@
       <object class="GtkButton" id="reset_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reset shape parameters to defaults (use Inkscape Preferences &gt; Tools to change defaults)</property>
         <property name="has-frame">False</property>

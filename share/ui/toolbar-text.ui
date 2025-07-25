@@ -67,6 +67,7 @@
             <property name="valign">center</property>
             <property name="label" translatable="yes">Open Collections Editor</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Open the Font Collections dialog</property>
             <property name="margin-top">3</property>
@@ -223,6 +224,7 @@
       <object class="GtkToggleButton" id="_superscript_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle superscript</property>
         <property name="has-frame">False</property>
@@ -236,6 +238,7 @@
       <object class="GtkToggleButton" id="_subscript_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle subscript</property>
         <property name="has-frame">False</property>

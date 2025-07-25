@@ -132,6 +132,7 @@
       <object class="GtkToggleButton" id="slice_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Switch to slice (closed shape with two radii)</property>
         <property name="has-frame">False</property>
         <style>
@@ -148,6 +149,7 @@
       <object class="GtkToggleButton" id="arc_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Switch to arc (unclosed shape)</property>
         <property name="has-frame">False</property>
         <property name="group">slice_btn</property>
@@ -165,6 +167,7 @@
       <object class="GtkToggleButton" id="chord_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Switch to chord (closed shape)</property>
         <property name="has-frame">False</property>
         <property name="group">slice_btn</property>
@@ -186,6 +189,7 @@
       <object class="GtkButton" id="_make_whole">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make the shape a whole ellipse, not arc or segment</property>
         <property name="has-frame">False</property>

@@ -119,6 +119,7 @@
       <object class="GtkToggleButton" id="_only_selected_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Measure only selected</property>
         <property name="has-frame">False</property>
@@ -133,6 +134,7 @@
       <object class="GtkToggleButton" id="_ignore_1st_and_last_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Ignore first and last</property>
         <property name="has-frame">False</property>
@@ -147,6 +149,7 @@
       <object class="GtkToggleButton" id="_inbetween_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Show measures between items</property>
         <property name="has-frame">False</property>
@@ -161,6 +164,7 @@
       <object class="GtkToggleButton" id="_show_hidden_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Show hidden intersections</property>
         <property name="has-frame">False</property>
@@ -175,6 +179,7 @@
       <object class="GtkToggleButton" id="_all_layers_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Measure all layers</property>
         <property name="has-frame">False</property>
@@ -193,6 +198,7 @@
       <object class="GtkButton" id="reverse_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reverse measure</property>
         <property name="has-frame">False</property>
@@ -210,6 +216,7 @@
       <object class="GtkButton" id="to_phantom_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Phantom measure</property>
         <property name="has-frame">False</property>
@@ -228,6 +235,7 @@
         <property name="valign">center</property>
         <property name="name">_to_guides_item</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">To guides</property>
         <property name="has-frame">False</property>
@@ -245,6 +253,7 @@
       <object class="GtkButton" id="to_item_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Convert to item</property>
         <property name="has-frame">False</property>
@@ -262,6 +271,7 @@
       <object class="GtkButton" id="mark_dimension_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Mark Dimension</property>
         <property name="has-frame">False</property>

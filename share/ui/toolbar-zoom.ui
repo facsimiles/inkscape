@@ -8,6 +8,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom In</property>
         <property name="action-name">win.canvas-zoom-in</property>
         <property name="has-frame">False</property>
@@ -21,6 +23,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Out</property>
         <property name="action-name">win.canvas-zoom-out</property>
         <property name="has-frame">False</property>
@@ -38,6 +42,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom 1-1</property>
         <property name="action-name">win.canvas-zoom-1-1</property>
         <property name="has-frame">False</property>
@@ -51,6 +57,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom 1-2</property>
         <property name="action-name">win.canvas-zoom-1-2</property>
         <property name="has-frame">False</property>
@@ -64,6 +72,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom 2-1</property>
         <property name="action-name">win.canvas-zoom-2-1</property>
         <property name="has-frame">False</property>
@@ -81,6 +91,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Selection</property>
         <property name="action-name">win.canvas-zoom-selection</property>
         <property name="has-frame">False</property>
@@ -94,6 +106,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Drawing</property>
         <property name="action-name">win.canvas-zoom-drawing</property>
         <property name="has-frame">False</property>
@@ -107,6 +121,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Page</property>
         <property name="action-name">win.canvas-zoom-page</property>
         <property name="has-frame">False</property>
@@ -120,6 +136,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Page Width</property>
         <property name="action-name">win.canvas-zoom-page-width</property>
         <property name="has-frame">False</property>
@@ -133,6 +151,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Center Page</property>
         <property name="action-name">win.canvas-zoom-center-page</property>
         <property name="has-frame">False</property>
@@ -150,6 +170,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Previous</property>
         <property name="action-name">win.canvas-zoom-prev</property>
         <property name="has-frame">False</property>
@@ -163,6 +185,8 @@
     <child>
       <object class="GtkButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Zoom Next</property>
         <property name="action-name">win.canvas-zoom-next</property>
         <property name="has-frame">False</property>

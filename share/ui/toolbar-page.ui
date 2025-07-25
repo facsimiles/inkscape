@@ -63,6 +63,7 @@
       <object class="GtkButton" id="page_new">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">New page</property>
         <property name="action-name">win.page-new</property>
@@ -118,6 +119,7 @@
       <object class="GtkButton" id="_btn_page_backward">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reorder backwards</property>
         <property name="action-name">doc.page-move-backward</property>
@@ -145,6 +147,7 @@
       <object class="GtkButton" id="_btn_page_foreward">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reorder forwards</property>
         <property name="action-name">doc.page-move-forward</property>
@@ -172,6 +175,7 @@
       <object class="GtkButton" id="_btn_page_delete">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Delete page</property>
         <property name="action-name">win.page-delete</property>
@@ -197,6 +201,7 @@
       <object class="GtkToggleButton" id="_btn_move_toggle">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Objects stick to pages</property>
         <property name="action-name">doc.page-move-objects</property>

@@ -23,6 +23,7 @@
           <object class="GtkToggleButton" id="new_type_buttons_group">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create linear gradient</property>
             <property name="has-frame">False</property>
             <property name="icon-name">paint-gradient-linear</property>
@@ -32,6 +33,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create radial (elliptic or circular) gradient</property>
             <property name="has-frame">False</property>
             <property name="group">new_type_buttons_group</property>
@@ -47,6 +49,7 @@
           <object class="GtkToggleButton" id="new_fillstroke_buttons_group">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the fill</property>
             <property name="has-frame">False</property>
             <property name="icon-name">object-fill</property>
@@ -56,6 +59,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the stroke</property>
             <property name="has-frame">False</property>
             <property name="group">new_fillstroke_buttons_group</property>
@@ -76,6 +80,7 @@
       <object class="GtkToggleButton" id="_linked_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Link gradients to change all related gradients</property>
         <property name="has-frame">False</property>
@@ -86,6 +91,7 @@
       <object class="GtkButton" id="_stops_reverse_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reverse the direction of the gradient</property>
         <property name="has-frame">False</property>
@@ -136,6 +142,7 @@
       <object class="GtkButton" id="_stops_add_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Insert new stop</property>
         <property name="has-frame">False</property>
@@ -149,6 +156,7 @@
       <object class="GtkButton" id="_stops_delete_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Delete stop</property>
         <property name="has-frame">False</property>

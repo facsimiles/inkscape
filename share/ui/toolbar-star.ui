@@ -27,6 +27,7 @@
     <property name="valign">center</property>
     <property name="label" translatable="yes">radiobutton</property>
     <property name="focusable">True</property>
+    <property name="focus-on-click">False</property>
     <property name="active">True</property>
   </object>
   <object class="GtkAdjustment" id="_length_adj">
@@ -51,6 +52,7 @@
           <object class="GtkToggleButton" id="flat_polygon_button">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Regular polygon (with one handle) instead of a star</property>
             <property name="has-frame">False</property>
             <property name="active">True</property>
@@ -66,6 +68,7 @@
           <object class="GtkToggleButton" id="flat_star_button">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Star instead of a regular polygon (with one handle)</property>
             <property name="has-frame">False</property>
             <property name="group">flat_button_group</property>
@@ -187,6 +190,7 @@
       <object class="GtkButton" id="reset_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Reset all parameters to their default values</property>
         <property name="has-frame">False</property>

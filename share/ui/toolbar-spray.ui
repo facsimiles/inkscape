@@ -55,6 +55,7 @@
           <object class="GtkToggleButton" id="mode_buttons_group">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Spray copies of the initial selection</property>
             <property name="has-frame">False</property>
             <property name="icon-name">spray-mode-copy</property>
@@ -64,6 +65,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Spray clones of the initial selection</property>
             <property name="has-frame">False</property>
             <property name="group">mode_buttons_group</property>
@@ -74,6 +76,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Spray objects in a single path</property>
             <property name="has-frame">False</property>
             <property name="group">mode_buttons_group</property>
@@ -84,6 +87,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Delete sprayed items from selection</property>
             <property name="has-frame">False</property>
             <property name="group">mode_buttons_group</property>
@@ -121,6 +125,7 @@
       <object class="GtkToggleButton" id="use_pressure_width_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the width of spray area</property>
         <property name="has-frame">False</property>
@@ -152,6 +157,7 @@
       <object class="GtkToggleButton" id="use_pressure_population_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the width of spray area</property>
         <property name="has-frame">False</property>
@@ -212,6 +218,7 @@
       <object class="GtkToggleButton" id="_use_pressure_scale_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the scale of new items</property>
         <property name="has-frame">False</property>
@@ -285,6 +292,7 @@
       <object class="GtkToggleButton" id="_over_no_transparent_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Apply over no transparent areas</property>
         <property name="has-frame">False</property>
@@ -298,6 +306,7 @@
       <object class="GtkToggleButton" id="_over_transparent_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Apply over transparent areas</property>
         <property name="has-frame">False</property>
@@ -311,6 +320,7 @@
       <object class="GtkToggleButton" id="_pick_no_overlap_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">No overlap between colors</property>
         <property name="has-frame">False</property>
@@ -324,6 +334,7 @@
       <object class="GtkToggleButton" id="_no_overlap_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Prevent overlapping objects</property>
         <property name="has-frame">False</property>
@@ -367,6 +378,7 @@
       <object class="GtkToggleButton" id="_picker_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Pick color from the drawing. You can use clonetiler trace dialog for advanced effects. In clone mode original fill or stroke colors must be unset.</property>
         <property name="has-frame">False</property>
@@ -380,6 +392,7 @@
       <object class="GtkToggleButton" id="_pick_fill_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Apply picked color to fill</property>
         <property name="has-frame">False</property>
@@ -393,6 +406,7 @@
       <object class="GtkToggleButton" id="_pick_stroke_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Apply picked color to stroke</property>
         <property name="has-frame">False</property>
@@ -406,6 +420,7 @@
       <object class="GtkToggleButton" id="_pick_inverse_value_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Inverted pick value, retaining color in advanced trace mode</property>
         <property name="has-frame">False</property>
@@ -419,6 +434,7 @@
       <object class="GtkToggleButton" id="_pick_center_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Pick from center instead of average area.</property>
         <property name="has-frame">False</property>

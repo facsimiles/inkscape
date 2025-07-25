@@ -28,6 +28,7 @@
       <object class="GtkToggleButton" id="radio_button_group">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Add to the Shape</property>
         <property name="action-name">win.shape-builder-mode</property>
         <property name="action-target">0</property>
@@ -43,6 +44,7 @@
       <object class="GtkToggleButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="tooltip-text" translatable="yes">Remove from Shape</property>
         <property name="action-name">win.shape-builder-mode</property>
         <property name="action-target">1</property>
@@ -70,6 +72,7 @@
       <object class="GtkButton" id="confirm_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Accept</property>
         <property name="has-frame">False</property>
@@ -84,6 +87,7 @@
       <object class="GtkButton" id="cancel_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Cancel</property>
         <property name="has-frame">False</property>
@@ -116,6 +120,8 @@
     <child>
       <object class="GtkToggleButton">
         <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="action-name">win.shape-builder-replace</property>
         <property name="has-frame">False</property>
         <property name="use-underline">True</property>

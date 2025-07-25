@@ -43,6 +43,7 @@
           <object class="GtkToggleButton" id="mode_buttons_group">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Delete objects touched by eraser</property>
             <property name="has-frame">False</property>
             <property name="icon-name">draw-eraser-delete-objects</property>
@@ -52,6 +53,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Cut out from paths and shapes</property>
             <property name="has-frame">False</property>
             <property name="group">mode_buttons_group</property>
@@ -62,6 +64,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Clip from objects</property>
             <property name="has-frame">False</property>
             <property name="group">mode_buttons_group</property>
@@ -102,6 +105,7 @@
       <object class="GtkToggleButton" id="_usepressure_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the width of the pen</property>
         <property name="has-frame">False</property>
@@ -214,6 +218,7 @@
       <object class="GtkToggleButton" id="_split_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Break apart cut items</property>
         <property name="has-frame">False</property>

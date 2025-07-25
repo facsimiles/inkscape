@@ -30,6 +30,7 @@
           <object class="GtkToggleButton" id="new_type_buttons_group">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create mesh gradient</property>
             <property name="has-frame">False</property>
             <property name="icon-name">paint-gradient-mesh</property>
@@ -39,6 +40,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create conical gradient</property>
             <property name="has-frame">False</property>
             <property name="group">new_type_buttons_group</property>
@@ -54,6 +56,7 @@
           <object class="GtkToggleButton" id="new_fillstroke_buttons_group">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the fill</property>
             <property name="has-frame">False</property>
             <property name="icon-name">object-fill</property>
@@ -63,6 +66,7 @@
           <object class="GtkToggleButton">
             <property name="valign">center</property>
             <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
             <property name="tooltip-text" translatable="yes">Create gradient in the stroke</property>
             <property name="has-frame">False</property>
             <property name="group">new_fillstroke_buttons_group</property>
@@ -168,6 +172,7 @@
       <object class="GtkButton" id="toggle_sides_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Toggle selected sides between Beziers and lines.</property>
         <property name="has-frame">False</property>
@@ -181,6 +186,7 @@
       <object class="GtkButton" id="make_elliptical_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Make selected sides elliptical by changing length of handles. Works best if handles already approximate ellipse.</property>
         <property name="has-frame">False</property>
@@ -194,6 +200,7 @@
       <object class="GtkButton" id="pick_colors_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Pick colors for selected corner nodes from underneath mesh.</property>
         <property name="has-frame">False</property>
@@ -207,6 +214,7 @@
       <object class="GtkButton" id="scale_mesh_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Scale mesh to fit inside bounding box.</property>
         <property name="has-frame">False</property>
@@ -227,6 +235,7 @@
       <object class="GtkButton" id="warning_btn">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">WARNING: Mesh SVG Syntax Subject to Change</property>
         <property name="has-frame">False</property>
