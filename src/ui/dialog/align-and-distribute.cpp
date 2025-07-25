@@ -211,8 +211,7 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
     set_icon_size_prefs();
 
     // Initialize hover preview preference if not set
-    auto entry = prefs->getEntry("/dialogs/align/enable-hover-preview");
-    if (!entry.isValid() || entry.getString().empty()) {
+    if (prefs->getString("/dialogs/align/enable-hover-preview", "").empty()) {
         prefs->setBool("/dialogs/align/enable-hover-preview", true);
     }
 }
