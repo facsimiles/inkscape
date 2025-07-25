@@ -41,6 +41,7 @@ IGNORE_PATHS = [
 IGNORE_FILE_ENDINGS = [
     ".bmp",
     ".bz2",
+    ".conf",
     ".dia",
     ".dll",
     ".eps",
