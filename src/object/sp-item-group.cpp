@@ -537,13 +537,6 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children)
     // now is used in clipmask LPE on remove
     prefs->setBool("/options/onungroup", true);
     
-    Inkscape::XML::Node *grepr = group->getRepr();
-
-    g_return_if_fail (!strcmp (grepr->name(), "svg:g")
-                   || !strcmp (grepr->name(), "svg:a")
-                   || !strcmp (grepr->name(), "svg:switch")
-                   || !strcmp (grepr->name(), "svg:svg"));
-
     // this converts the gradient/pattern fill/stroke on the group, if any, to userSpaceOnUse
     group->adjust_paint_recursive(Geom::identity(), Geom::identity());
 
@@ -551,11 +544,8 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children)
     g_assert(pitem);
     Inkscape::XML::Node *prepr = pitem->getRepr();
 
-    {
-        auto box = cast<SPBox3D>(group);
-        if (box) {
-            group = box->convert_to_group();
-        }
+    if (auto box = cast<SPBox3D>(group)) {
+        group = box->convert_to_group();
     }
 
     group->removeAllPathEffects(false);
