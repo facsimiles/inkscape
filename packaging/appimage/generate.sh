@@ -21,8 +21,70 @@ cp ./appdir/usr/share/icons/hicolor/256x256/apps/org.inkscape.Inkscape.png ./app
 sed -i -e 's|^Icon=.*|Icon=org.inkscape.Inkscape|g' ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop # FIXME
 
 ########################################################################
+# Bundle Python for extensions
+########################################################################
+
+apt-get update
+
+make_ld_launcher() {
+    cat > "$2" <<EOF
+#!/bin/sh
+HERE="\$(dirname "\$(readlink -f "\${0}")")"
+exec "\${HERE}/../../lib64/ld-linux-x86-64.so.2" "\${HERE}/$1" "\$@"
+EOF
+    chmod a+x "$2"
+}
+
+apt_bundle() {
+    apt-get download "$@"
+    find *.deb -exec dpkg-deb -x {} appdir \;
+    find *.deb -delete
+}
+
+PY_VER=3.12
+apt_bundle \
+    libpython${PY_VER}-stdlib \
+    libpython${PY_VER}-minimal \
+    python${PY_VER} \
+    python${PY_VER}-minimal \
+    python3-lxml \
+    python3-numpy \
+    python3-six \
+    python3-scour \
+    python3-requests \
+    python3-cachecontrol \
+    python3-urllib3 \
+    python3-chardet \
+    python3-certifi \
+    python3-idna \
+    python3-msgpack \
+    python3-lockfile \
+    python3-cssselect \
+    python3-webencodings \
+    python3-tinycss2 \
+    python3-packaging \
+    python3-appdirs \
+    python3-bs4 \
+    python3-gi \
+    python3-gi-cairo \
+    python3-pil \
+    python3-zstandard \
+    gir1.2-glib-2.0 \
+    gir1.2-gtk-4.0 \
+    gir1.2-gdkpixbuf-2.0 \
+    gir1.2-pango-1.0
+
+(
+    cd ./appdir/usr/bin
+    make_ld_launcher "python${PY_VER}" python3
+)
+
+########################################################################
 # Generate AppImage
 ########################################################################
+
+rm -rf ./appdir/usr/include
+rm -rf ./appdir/usr/share/doc
 
 goappimage_url="https://github.com/$(wget -q https://github.com/probonopd/go-appimage/releases/expanded_assets/continuous -O - | grep "appimagetool-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2)"
 wget -c "$goappimage_url" -O goappimage
@@ -35,7 +97,6 @@ chmod +x appimagetool
 
 ./goappimage -s deploy ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop
 sed -i -e 's|/usr/lib/x86_64-linux-gnu/gdk-pixbuf-.*/.*/loaders/||g' ./appdir/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
-cp ./appdir/usr/share/icons/hicolor/256x256/apps/org.inkscape.Inkscape.png ./appdir
 ARCH=x86_64 ./appimagetool -n ./appdir
 
 sha="$(git rev-parse --short HEAD)"
