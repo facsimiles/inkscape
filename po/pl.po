@@ -16,16 +16,17 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-02-09 11:21+0100\n"
-"Last-Translator: Marcin Floryan\n"
-"Language-Team: Polish Inkscape Translation Team\n"
-"Language: pl_PL\n"
+"PO-Revision-Date: 2025-07-27 22:06+0000\n"
+"Last-Translator: dopelover <tomek@czarnaowca.org>\n"
+"Language-Team: Polish <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/pl/>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.5\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -10675,7 +10676,7 @@ msgstr "Wykonaj konstrukcję geometryczną"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Zoom Tool"
-msgstr "Narzędzia skalowania"
+msgstr "Lupa"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Zoom in or out"
@@ -10717,7 +10718,7 @@ msgstr "Przełączanie między próbnikiem koloru a ostatnio używanym narzędzi
 #: ../src/actions/actions-transform.cpp:125
 #: ../src/actions/actions-transform.cpp:151
 msgid "Reapply Transforms"
-msgstr "Zastosuj przekształcenia"
+msgstr "Zastosuj ponownie przekształcenia"
 
 #: ../src/actions/actions-transform.cpp:140
 msgid "Translate"
@@ -10774,9 +10775,8 @@ msgid "Grow/shrink selected objects relative to zoom level"
 msgstr "Powiększ/pomniejsz wybrane obiekty względem ekran"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Eksportuj zaznaczone obiekty"
+msgstr "Obróć zaznaczone obiekty"
 
 #: ../src/actions/actions-transform.cpp:147
 #, fuzzy
