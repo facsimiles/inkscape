@@ -18,18 +18,18 @@ pkg_search_module(HARFBUZZ REQUIRED harfbuzz)
 # Add your test here (do not put the .svg extension)
 
 # -- Generic tests --
-add_rendering_test(test-empty)
-add_rendering_test(test-dont-crash)
+add_rendering_test(test-empty FUZZ 0.001)
+add_rendering_test(test-dont-crash FUZZ 0.001)
 add_rendering_test(test-use FUZZ 0.03)
-add_rendering_test(solid-color-test)
+add_rendering_test(solid-color-test FUZZ 0.001)
 
 # -- Selector tests --
-add_rendering_test(selector-important-002)
-add_rendering_test(selector-important-003)
+add_rendering_test(selector-important-002 FUZZ 0.001)
+add_rendering_test(selector-important-003 FUZZ 0.001)
 
-add_rendering_test(multi-style)
-add_rendering_test(style-parsing)
-add_rendering_test(test-peppercarrot-text)
+add_rendering_test(multi-style FUZZ 0.001)
+add_rendering_test(style-parsing FUZZ 0.001)
+add_rendering_test(test-peppercarrot-text FUZZ 0.001)
 
 # -- Text tests --
 ## Many (if not all) of these tests are sensitive to the text rendering stack: FreeType, HarfBuzz, Pango.
@@ -60,11 +60,11 @@ add_rendering_test(text-glyphs-vertical FUZZ 0.1 DISABLE TRUE)
 ## Expected rendering generated with Pango 1.44.
 
 # -- LPE tests --
-add_rendering_test(test-powerstroke-join)
+add_rendering_test(test-powerstroke-join FUZZ 0.001)
 
 # <symbol> geometric properties (SVG 2.0 feature)
-add_rendering_test(symbol-svg2-geometry-properties)
-add_rendering_test(symbol-svg2-ref)
+add_rendering_test(symbol-svg2-geometry-properties FUZZ 0.001)
+add_rendering_test(symbol-svg2-ref FUZZ 0.001)
 
 # Tests to run for 64-bit builds only. These fail in 32-bit builds (possibly due to rounding issues)
 # TODO: Figure out actual cause and see if we can fix it
