@@ -35,7 +35,7 @@
 #include "ui/util.h"
 #include "message-stack.h"         // For status messages
 #include "object/sp-item.h"        // For SPItem cast
-#include "object/sp-document.h"    // For SPDocument
+#include "document.h"              // For SPDocument (corrected include)
 #include "util/cast.h"             // For cast function
 #include "ui/widget/canvas.h"      // For canvas access
 #include "object/algorithms/removeoverlap.h" // For remove overlap preview
