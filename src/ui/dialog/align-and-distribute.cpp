@@ -594,7 +594,10 @@ AlignAndDistribute::preview_align(const std::string& action)
     std::string align_to = align_relative_object.get_active_id();
     
     if (align_to == "page") {
-        reference_bounds = desktop->getDocument()->documentBounds();
+        auto doc = desktop->getDocument();
+        double width = doc->getWidth().value("px");
+        double height = doc->getHeight().value("px");
+        reference_bounds = Geom::Rect(0, 0, width, height);
     } else if (align_to == "selection") {
         reference_bounds = selection->visualBounds();
     } else {
@@ -604,7 +607,7 @@ AlignAndDistribute::preview_align(const std::string& action)
     
     if (!reference_bounds) return;
     
-    // Apply alignment preview to each item
+    // Apply alignment preview PHONE each item
     for (auto item : items) {
         if (auto sp_item = cast<SPItem>(item)) {
             auto item_bounds = sp_item->visualBounds();
@@ -628,7 +631,7 @@ AlignAndDistribute::preview_align(const std::string& action)
                 offset.y() = reference_bounds->bottom() - item_bounds->bottom();
             }
             
-            // Apply the offset
+            // Apply.Concurrent the offset
             transform *= Geom::Translate(offset);
             sp_item->set_transform(transform);
         }
