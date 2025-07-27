@@ -32,6 +32,7 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <functional>
 #include <sigc++/connection.h>
 
 #include "2geom/affine.h"
@@ -64,14 +65,29 @@ private:
     void on_remove_overlap_clicked();
     void on_align_node_clicked(std::string const &direction);
 
-controllers;
+    // Button handling
+    void on_button_clicked(std::string const &action);
+    void execute_action(const std::string& action);
+    void execute_distribute_action(const std::string& action);
+    void execute_rearrange_action(const std::string& action);
+    
+    // Hover preview system
+    void setup_hover_preview_for_button(const char* button_id, const char* action_name,
+                                       std::function<void(const std::string&)> preview_func);
     
     // Preview methods
     bool start_preview_timeout();
-    void start_preview(const std::string& action);
+    void start_preview();
     void end_preview();
+    void confirm_preview();
     void store_original_transforms();
     void restore_original_transforms();
+    
+    // Preview implementations
+    void preview_align(const std::string& action);
+    void preview_distribute(const std::string& action);
+    void preview_remove_overlap();
+    void preview_rearrange(const std::string& action);
 
     // UI
     Glib::RefPtr<Gtk::Builder> builder;
@@ -104,6 +120,19 @@ controllers;
     std::set<Glib::ustring> single_selection_relative_categories = {
         "first", "last", "biggest", "smallest"
     };
+    
+    // Preview state
+    bool _preview_active = false;
+    std::string _preview_action;
+    std::function<void(const std::string&)> _preview_func;
+    sigc::connection _preview_timeout_connection;
+    
+    // Store original transforms for preview
+    std::vector<SPObject*> _preview_objects;
+    std::vector<Geom::Affine> _original_transforms;
+    
+    // Motion controllers for hover detection
+    std::map<std::string, Glib::RefPtr<Gtk::EventControllerMotion>> _motion_controllers;
 };
 
 } // namespace Inkscape::UI::Dialog

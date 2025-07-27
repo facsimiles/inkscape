@@ -194,7 +194,7 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
 
     auto set_icon_size_prefs = [prefs, this]() {
         int size = prefs->getIntLimited("/toolbox/tools/iconsize", -1, 16, 48);
-        Inkscape::UI::set_icon_sizes(this, size);
+        Inkscape::UI::set_icon_sizes(static_cast<Gtk::Widget*>(this), size);
     };
 
     // For now we are going to track the toolbox icon size, in the future we will have our own
