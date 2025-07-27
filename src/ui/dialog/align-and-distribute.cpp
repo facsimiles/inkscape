@@ -35,6 +35,7 @@
 #include "ui/util.h"
 #include "message-stack.h"         // For status messages
 #include "object/sp-item.h"        // For SPItem cast
+#include "object/sp-document.h"    // For SPDocument
 #include "util/cast.h"             // For cast function
 #include "ui/widget/canvas.h"      // For canvas access
 #include "object/algorithms/removeoverlap.h" // For remove overlap preview
@@ -593,12 +594,12 @@ AlignAndDistribute::preview_align(const std::string& action)
     std::string align_to = align_relative_object.get_active_id();
     
     if (align_to == "page") {
-        reference_bounds = desktop->getDocument()->preferredBounds();
+        reference_bounds = desktop->getDocument()->documentBounds();
     } else if (align_to == "selection") {
-        reference_bounds = selection->preferredBounds();
+        reference_bounds = selection->visualBounds();
     } else {
         // For now, use selection bounds as fallback
-        reference_bounds = selection->preferredBounds();
+        reference_bounds = selection->visualBounds();
     }
     
     if (!reference_bounds) return;
@@ -606,7 +607,7 @@ AlignAndDistribute::preview_align(const std::string& action)
     // Apply alignment preview to each item
     for (auto item : items) {
         if (auto sp_item = cast<SPItem>(item)) {
-            auto item_bounds = sp_item->preferredBounds();
+            auto item_bounds = sp_item->visualBounds();
             if (!item_bounds) continue;
             
             Geom::Affine transform = sp_item->transform;
@@ -649,40 +650,43 @@ AlignAndDistribute::preview_distribute(const std::string& action)
     auto selection = desktop->getSelection();
     if (!selection || selection->isEmpty()) return;
     
+    // Convert items to vector and check size
+    std::vector<SPItem*> item_vector;
     auto items = selection->items();
-    if (items.size() < 3) return; // Need at least 3 items to distribute
-    
-    // Sort items by position
-    std::vector<SPItem*> sorted_items;
     for (auto item : items) {
         if (auto sp_item = cast<SPItem>(item)) {
-            sorted_items.push_back(sp_item);
+            item_vector.push_back(sp_item);
         }
     }
     
-    if (sorted_items.size() < 3) return;
+    if (item_vector.size() < 3) return; // Need at least 3 items to distribute
+    
+    // Sort items by position
+    std::vector<SPItem*> sorted_items = item_vector;
     
     // Sort based on distribution type
     if (action.find("horizontal") != std::string::npos || action.find("left") != std::string::npos || 
         action.find("right") != std::string::npos || action.find("hcenter") != std::string::npos) {
         std::sort(sorted_items.begin(), sorted_items.end(), [](SPItem* a, SPItem* b) {
-            auto bounds_a = a->preferredBounds();
-            auto bounds_b = b->preferredBounds();
+            if (!a || !b) return false;
+            auto bounds_a = a->visualBounds();
+            auto bounds_b = b->visualBounds();
             if (!bounds_a || !bounds_b) return false;
             return bounds_a->midpoint().x() < bounds_b->midpoint().x();
         });
     } else {
         std::sort(sorted_items.begin(), sorted_items.end(), [](SPItem* a, SPItem* b) {
-            auto bounds_a = a->preferredBounds();
-            auto bounds_b = b->preferredBounds();
+            if (!a || !b) return false;
+            auto bounds_a = a->visualBounds();
+            auto bounds_b = b->visualBounds();
             if (!bounds_a || !bounds_b) return false;
             return bounds_a->midpoint().y() < bounds_b->midpoint().y();
         });
     }
     
     // Calculate distribution spacing
-    auto first_bounds = sorted_items.front()->preferredBounds();
-    auto last_bounds = sorted_items.back()->preferredBounds();
+    auto first_bounds = sorted_items.front()->visualBounds();
+    auto last_bounds = sorted_items.back()->visualBounds();
     if (!first_bounds || !last_bounds) return;
     
     double total_space;
@@ -697,7 +701,7 @@ AlignAndDistribute::preview_distribute(const std::string& action)
     // Apply distribution
     for (size_t i = 1; i < sorted_items.size() - 1; ++i) {
         auto item = sorted_items[i];
-        auto item_bounds = item->preferredBounds();
+        auto item_bounds = item->visualBounds();
         if (!item_bounds) continue;
         
         Geom::Affine transform = item->transform;
