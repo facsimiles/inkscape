@@ -24,6 +24,7 @@
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/eventcontrollermotion.h>
+#include "util/units.h"
 
 #include "actions/actions-tools.h" // Tool switching.
 #include "desktop.h"               // Tool switching.
