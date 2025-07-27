@@ -1130,6 +1130,17 @@ add_pdfinput_test(clipping_shift 1 keep)
 add_pdfinput_test(layers-in-xobj 1 substitute EXTRA "--pdf-group-by=layer")
 
 function(add_pdfoutput_test name)
+    set(oneValueArgs FUZZ_PERCENTAGE RASTER_DPI)
+    cmake_parse_arguments(ARG "" "${oneValueArgs}" "" ${ARGN})
+
+    if(NOT DEFINED ARG_FUZZ_PERCENTAGE)
+        set(ARG_FUZZ_PERCENTAGE 0.1)
+    endif()
+
+    if(DEFINED ARG_RASTER_DPI)
+        set(RASTER_DPI "RASTER_DPI" "${ARG_RASTER_DPI}")
+    endif()
+
     set(SOURCE_SVG "${CMAKE_CURRENT_SOURCE_DIR}/testcases/pdfoutput/${name}.svg")
     execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/get-pages.py ${SOURCE_SVG}
                     ERROR_VARIABLE PAGE_NUMBERS
@@ -1148,7 +1159,8 @@ function(add_pdfoutput_test name)
             OUTPUT_PAGE "${NUM}"
             PNG_FILENAME "pdfoutput/expected/${name}-${NUM}.png"
             FUZZYREF_FILENAME pdfoutput/expected/${name}-${NUM}.png
-            FUZZ_PERCENTAGE 1
+            FUZZ_PERCENTAGE ${ARG_FUZZ_PERCENTAGE}
+            ${RASTER_DPI}
         )
     endforeach()
     add_cli_test_cln(cli_pdfoutput-${name} cli_pdfoutput-${name}-clean
@@ -1158,7 +1170,7 @@ endfunction(add_pdfoutput_test)
 if(WITH_CAPYPDF)
     add_pdfoutput_test(00-one-thing)
     add_pdfoutput_test(01-test-pages)
-    add_pdfoutput_test(02-test-fills)
+    add_pdfoutput_test(02-test-fills FUZZ_PERCENTAGE 1)
     add_pdfoutput_test(03-test-strokes)
     add_pdfoutput_test(04-test-transforms)
     add_pdfoutput_test(05-test-transparencies)
