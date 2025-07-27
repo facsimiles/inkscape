@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-12 14:03+0000\n"
+"PO-Revision-Date: 2025-07-27 22:06+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -10028,7 +10028,7 @@ msgstr "Deselectează"
 
 #: ../src/actions/actions-selection-window.cpp:133
 msgid "Deselect any selected objects or nodes"
-msgstr "Deselectează orice obiecte sau noduri selectate"
+msgstr "Deselectează orice obiect sau nod selectat"
 
 #: ../src/actions/actions-selection.cpp:274
 msgid "Clear Selection"
@@ -42467,7 +42467,7 @@ msgstr "Selectează în toate straturile"
 
 #: ../share/ui/toolbar-select.ui:142
 msgid "Deselect any selected objects"
-msgstr ""
+msgstr "Deselectează orice obiect selectat"
 
 #: ../share/ui/toolbar-select.ui:161
 msgid "Toggle selection box to select all touched objects"
