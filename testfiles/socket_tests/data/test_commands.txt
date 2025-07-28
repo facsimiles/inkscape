@@ -1,3 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Author: Tod Schmidt
+# Copyright: 2025
+#
+
 # Test commands for socket protocol testing
 # Format: COMMAND:request_id:action_name[:arg1][:arg2]...
 
