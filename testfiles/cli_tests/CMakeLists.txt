@@ -1179,3 +1179,27 @@ add_cli_test(systemLanguage_xy     ENVIRONMENT LANGUAGE=xy          INPUT_FILENA
 add_cli_test(systemLanguage_fr_RDF ENVIRONMENT LANGUAGE=xy          INPUT_FILENAME     systemLanguage_RDF.svg
                                                                     OUTPUT_FILENAME    systemLanguage_fr_RDF.png
                                                                     REFERENCE_FILENAME systemLanguage_fr.png)
+
+##############################
+### socket server tests ###
+##############################
+
+# Test socket server startup and basic functionality
+add_cli_test(socket_server_startup PARAMETERS --socket=8080 --without-gui
+                                      PASS_FOR_OUTPUT "Socket server started on 127.0.0.1:8080")
+
+# Test socket server with invalid port (should fail)
+add_cli_test(socket_server_invalid_port PARAMETERS --socket=99999 --without-gui
+                                         FAIL_FOR_OUTPUT "Invalid port number: 99999. Must be between 1 and 65535.")
+
+# Test socket server with zero port (should fail)
+add_cli_test(socket_server_zero_port PARAMETERS --socket=0 --without-gui
+                                    FAIL_FOR_OUTPUT "Invalid port number: 0. Must be between 1 and 65535.")
+
+# Test socket server with negative port (should fail)
+add_cli_test(socket_server_negative_port PARAMETERS --socket=-1 --without-gui
+                                        FAIL_FOR_OUTPUT "Invalid port number: -1. Must be between 1 and 65535.")
+
+# Test socket server with non-numeric port (should fail)
+add_cli_test(socket_server_non_numeric_port PARAMETERS --socket=abc --without-gui
+                                            FAIL_FOR_OUTPUT "Invalid port number: abc")

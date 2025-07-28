@@ -188,6 +188,7 @@ add_dependencies(tests unit_tests)
 add_subdirectory(cli_tests)
 add_subdirectory(rendering_tests)
 add_subdirectory(lpe_tests)
+add_subdirectory(socket_tests)
 
 ### Fuzz test
 if(WITH_FUZZ)

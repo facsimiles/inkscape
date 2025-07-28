@@ -43,6 +43,8 @@ class StartScreen;
 }
 } // namespace Inkscape
 
+class SocketServer;
+
 class InkscapeApplication
 {
 public:
@@ -137,6 +139,8 @@ protected:
     bool _batch_process = false; // Temp
     bool _use_shell   = false;
     bool _use_pipe    = false;
+    bool _use_socket  = false;
+    int _socket_port  = 0;
     bool _auto_export = false;
     int _pdf_poppler  = false;
     FontStrategy _pdf_font_strategy = FontStrategy::RENDER_MISSING;
@@ -179,6 +183,10 @@ protected:
     // std::string is used as key type because Glib::ustring has slow comparison and equality
     // operators.
     std::map<std::string, Glib::ustring> _menu_label_to_tooltip_map;
+    std::unique_ptr<SocketServer> _socket_server;
+    
+    // Friend class to allow SocketServer to access protected members
+    friend class SocketServer;
     void on_startup();
     void on_activate();
     void on_open(const Gio::Application::type_vec_files &files, const Glib::ustring &hint);
