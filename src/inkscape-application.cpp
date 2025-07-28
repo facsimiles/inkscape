@@ -45,12 +45,12 @@
 #include <numeric>
 #include <regex>
 #include <thread>
-#include <unistd.h>
 
 #include <giomm/file.h>
 #include <glibmm/i18n.h> // Internationalization
 #include <gtkmm/application.h>
 #include <gtkmm/recentmanager.h>
+#include <unistd.h>
 
 #include "actions/actions-base.h"
 #include "actions/actions-dialogs.h"
