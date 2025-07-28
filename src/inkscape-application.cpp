@@ -37,32 +37,20 @@
 
 #include "inkscape-application.h"
 
-#include <iostream>
+#include <cerrno> // History file
+#include <chrono>
 #include <fstream>
 #include <iomanip>
-#include <cerrno>  // History file
-#include <regex>
+#include <iostream>
 #include <numeric>
-#include <unistd.h>
-#include <chrono>
+#include <regex>
 #include <thread>
+#include <unistd.h>
 
 #include <giomm/file.h>
-#include <glibmm/i18n.h>  // Internationalization
+#include <glibmm/i18n.h> // Internationalization
 #include <gtkmm/application.h>
 #include <gtkmm/recentmanager.h>
-
-#include "inkscape-version-info.h"
-#include "inkscape-window.h"
-#include "auto-save.h"              // Auto-save
-#include "desktop.h"                // Access to window
-#include "document.h"
-#include "document-update.h"
-#include "file.h"                   // sp_file_convert_dpi
-#include "inkscape.h"               // Inkscape::Application
-#include "object/sp-namedview.h"
-#include "selection.h"
-#include "path-prefix.h"            // Data directory
 
 #include "actions/actions-base.h"
 #include "actions/actions-dialogs.h"
@@ -71,8 +59,8 @@
 #include "actions/actions-element-a.h"
 #include "actions/actions-element-image.h"
 #include "actions/actions-file.h"
-#include "actions/actions-helper.h"
 #include "actions/actions-helper-gui.h"
+#include "actions/actions-helper.h"
 #include "actions/actions-hide-lock.h"
 #include "actions/actions-object-align.h"
 #include "actions/actions-object.h"
@@ -84,24 +72,35 @@
 #include "actions/actions-transform.h"
 #include "actions/actions-tutorial.h"
 #include "actions/actions-window.h"
-#include "socket-server.h"
-#include "debug/logger.h"           // INKSCAPE_DEBUG_LOG support
+#include "auto-save.h"    // Auto-save
+#include "debug/logger.h" // INKSCAPE_DEBUG_LOG support
+#include "desktop.h"      // Access to window
+#include "document-update.h"
+#include "document.h"
 #include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/init.h"
 #include "extension/input.h"
-#include "helper/gettext.h"   // gettext init
-#include "inkgc/gc-core.h"          // Garbage Collecting init
-#include "io/file.h"                // File open (command line).
-#include "io/fix-broken-links.h"    // Fix up references.
-#include "io/resource.h"            // TEMPLATE
-#include "object/sp-root.h"         // Inkscape version.
-#include "ui/desktop/document-check.h"    // Check for data loss on closing document window.
+#include "file.h"           // sp_file_convert_dpi
+#include "helper/gettext.h" // gettext init
+#include "inkgc/gc-core.h"  // Garbage Collecting init
+#include "inkscape-version-info.h"
+#include "inkscape-window.h"
+#include "inkscape.h"            // Inkscape::Application
+#include "io/file.h"             // File open (command line).
+#include "io/fix-broken-links.h" // Fix up references.
+#include "io/resource.h"         // TEMPLATE
+#include "object/sp-namedview.h"
+#include "object/sp-root.h" // Inkscape version.
+#include "path-prefix.h"    // Data directory
+#include "selection.h"
+#include "socket-server.h"
+#include "ui/desktop/document-check.h" // Check for data loss on closing document window.
 #include "ui/dialog-run.h"
-#include "ui/dialog/dialog-manager.h"     // Save state
-#include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
+#include "ui/dialog/dialog-manager.h"    // Save state
+#include "ui/dialog/font-substitution.h" // Warn user about font substitution.
 #include "ui/dialog/startup.h"
-#include "ui/interface.h"                 // sp_ui_error_dialog
+#include "ui/interface.h" // sp_ui_error_dialog
 #include "ui/tools/shortcuts.h"
 #include "ui/widget/desktop-widget.h"
 #include "util/scope_exit.h"
@@ -1470,58 +1469,33 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
     // Use of most command line options turns off use of gui unless explicitly requested!
     // Listed in order that they appear in constructor.
-    if (options->contains("pipe")                  ||
+    if (options->contains("pipe") ||
 
-        options->contains("export-filename")       ||
-        options->contains("export-overwrite")      ||
-        options->contains("export-type")           ||
-        options->contains("export-page")           ||
+        options->contains("export-filename") || options->contains("export-overwrite") ||
+        options->contains("export-type") || options->contains("export-page") ||
 
-        options->contains("export-area-page")      ||
-        options->contains("export-area-drawing")   ||
-        options->contains("export-area")           ||
-        options->contains("export-area-snap")      ||
-        options->contains("export-dpi")            ||
-        options->contains("export-width")          ||
-        options->contains("export-height")         ||
-        options->contains("export-margin")         ||
-        options->contains("export-height")         ||
+        options->contains("export-area-page") || options->contains("export-area-drawing") ||
+        options->contains("export-area") || options->contains("export-area-snap") || options->contains("export-dpi") ||
+        options->contains("export-width") || options->contains("export-height") || options->contains("export-margin") ||
+        options->contains("export-height") ||
 
-        options->contains("export-id")             ||
-        options->contains("export-id-only")        ||
-        options->contains("export-plain-svg")      ||
-        options->contains("export-ps-level")       ||
-        options->contains("export-pdf-version")    ||
-        options->contains("export-text-to_path")   ||
-        options->contains("export-latex")          ||
-        options->contains("export-ignore-filters") ||
-        options->contains("export-use-hints")      ||
-        options->contains("export-background")     ||
-        options->contains("export-background-opacity") ||
-        options->contains("export-text-to_path")   ||
-        options->contains("export-png-color-mode") ||
-        options->contains("export-png-use-dithering") ||
-        options->contains("export-png-compression") ||
-        options->contains("export-png-antialias") ||
-        options->contains("export-make-paths")     ||
+        options->contains("export-id") || options->contains("export-id-only") ||
+        options->contains("export-plain-svg") || options->contains("export-ps-level") ||
+        options->contains("export-pdf-version") || options->contains("export-text-to_path") ||
+        options->contains("export-latex") || options->contains("export-ignore-filters") ||
+        options->contains("export-use-hints") || options->contains("export-background") ||
+        options->contains("export-background-opacity") || options->contains("export-text-to_path") ||
+        options->contains("export-png-color-mode") || options->contains("export-png-use-dithering") ||
+        options->contains("export-png-compression") || options->contains("export-png-antialias") ||
+        options->contains("export-make-paths") ||
 
-        options->contains("query-id")              ||
-        options->contains("query-x")               ||
-        options->contains("query-all")             ||
-        options->contains("query-y")               ||
-        options->contains("query-width")           ||
-        options->contains("query-height")          ||
-        options->contains("query-pages")           ||
+        options->contains("query-id") || options->contains("query-x") || options->contains("query-all") ||
+        options->contains("query-y") || options->contains("query-width") || options->contains("query-height") ||
+        options->contains("query-pages") ||
 
-        options->contains("vacuum-defs")           ||
-        options->contains("select")                ||
-        options->contains("list-input-types")      ||
-        options->contains("action-list")           ||
-        options->contains("actions")               ||
-        options->contains("actions-file")          ||
-        options->contains("shell")                 ||
-        options->contains("socket")
-        ) {
+        options->contains("vacuum-defs") || options->contains("select") || options->contains("list-input-types") ||
+        options->contains("action-list") || options->contains("actions") || options->contains("actions-file") ||
+        options->contains("shell") || options->contains("socket")) {
         _with_gui = false;
     }
 
@@ -1548,7 +1522,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
                 return EXIT_FAILURE;
             }
             _use_socket = true;
-        } catch (const std::exception& e) {
+        } catch (std::exception const &e) {
             std::cerr << "Invalid port number: " << port_str << std::endl;
             return EXIT_FAILURE;
         }
