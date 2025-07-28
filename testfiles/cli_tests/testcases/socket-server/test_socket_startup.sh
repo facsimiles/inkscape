@@ -1,3 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Author: Tod Schmidt
+# Copyright: 2025
+#
+
 #!/bin/bash
 # Test script for Inkscape socket server startup and basic functionality
 

@@ -1,3 +1,9 @@
+<!-- SPDX-License-Identifier: GPL-2.0-or-later -->
+<!--
+Author: Tod Schmidt
+Copyright: 2025
+-->
+
 # Inkscape Socket Server
 
 This document describes the new socket server functionality added to Inkscape.
