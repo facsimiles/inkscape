@@ -68,6 +68,8 @@
 #include "actions/actions-helper-gui.h"
 #include "document.h"
 #include "inkscape.h"
+#include "xml/node.h"
+#include "util/units.h"
 
 #include <iostream>
 #include <sstream>
@@ -407,15 +409,15 @@ std::string SocketServer::get_status_info()
         status << "SUCCESS:0:Document active - ";
         
         // Get document name
-        std::string doc_name = doc->getName();
-        if (!doc_name.empty()) {
+        const char* doc_name = doc->getDocumentName();
+        if (doc_name && strlen(doc_name) > 0) {
             status << "Name: " << doc_name << ", ";
         }
         
         // Get document dimensions
         auto width = doc->getWidth();
         auto height = doc->getHeight();
-        status << "Size: " << width.value << "x" << height.value << "px, ";
+        status << "Size: " << width.quantity << "x" << height.quantity << "px, ";
         
         // Get number of objects
         auto root = doc->getReprRoot();
