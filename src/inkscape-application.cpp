@@ -84,6 +84,7 @@
 #include "actions/actions-transform.h"
 #include "actions/actions-tutorial.h"
 #include "actions/actions-window.h"
+#include "socket-server.h"
 #include "debug/logger.h"           // INKSCAPE_DEBUG_LOG support
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -730,6 +731,7 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OptionType::BOOL,     "batch-process",         '\0', N_("Close GUI after executing all actions"),                                    "");
     _start_main_option_section();
     gapp->add_main_option_entry(T::OptionType::BOOL,     "shell",                 '\0', N_("Start Inkscape in interactive shell mode"),                                 "");
+    gapp->add_main_option_entry(T::OptionType::STRING,   "socket",                '\0', N_("Start socket server on specified port (127.0.0.1:PORT)"),                    N_("PORT"));
     gapp->add_main_option_entry(T::OptionType::BOOL,     "active-window",          'q', N_("Use active window from commandline"),                                       "");
     // clang-format on
 
@@ -938,6 +940,15 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
 
     if (_use_shell) {
         shell();
+    }
+    if (_use_socket) {
+        // Start socket server
+        _socket_server = std::make_unique<SocketServer>(_socket_port, this);
+        if (!_socket_server->start()) {
+            std::cerr << "Failed to start socket server on port " << _socket_port << std::endl;
+            return;
+        }
+        _socket_server->run();
     }
     if (_with_gui && _active_window) {
         document_fix(_active_desktop);
@@ -1508,7 +1519,8 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->contains("action-list")           ||
         options->contains("actions")               ||
         options->contains("actions-file")          ||
-        options->contains("shell")
+        options->contains("shell")                 ||
+        options->contains("socket")
         ) {
         _with_gui = false;
     }
@@ -1524,6 +1536,23 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("batch-process"))  _batch_process = true;
     if (options->contains("shell"))          _use_shell = true;
     if (options->contains("pipe"))           _use_pipe  = true;
+    
+    // Process socket option
+    if (options->contains("socket")) {
+        Glib::ustring port_str;
+        options->lookup_value("socket", port_str);
+        try {
+            _socket_port = std::stoi(port_str);
+            if (_socket_port < 1 || _socket_port > 65535) {
+                std::cerr << "Invalid port number: " << _socket_port << ". Must be between 1 and 65535." << std::endl;
+                return EXIT_FAILURE;
+            }
+            _use_socket = true;
+        } catch (const std::exception& e) {
+            std::cerr << "Invalid port number: " << port_str << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
 
     // Enable auto-export
     if (options->contains("export-filename")  ||

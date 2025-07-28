@@ -75,6 +75,7 @@ set(inkscape_SRC
   unicoderange.cpp
   vanishing-point.cpp
   version.cpp
+  socket-server.cpp
 
   # -------
   # Headers
@@ -169,6 +170,7 @@ set(inkscape_SRC
   unicoderange.h
   vanishing-point.h
   version.h
+  socket-server.h
 
   # TEMP  Need to detangle inkscape-view from ui/interface.cpp
   inkscape-window.h
@@ -426,6 +428,11 @@ target_link_libraries(inkscape_base
     PUBLIC
         ${INKSCAPE_LIBS}
   )
+
+# Add Windows socket library for socket-server.cpp
+if(WIN32)
+    target_link_libraries(inkscape_base PRIVATE ws2_32)
+endif()
 target_include_directories(inkscape_base INTERFACE ${2Geom_INCLUDE_DIRS})
 
 # Link inkscape and inkview against inkscape_base

@@ -1,0 +1,33 @@
+# Expected response formats for socket protocol testing
+# Format: RESPONSE:client_id:request_id:type:exit_code:data
+
+# Success responses
+RESPONSE:1:100:SUCCESS:0:Document active - Size: 800x600px, Objects: 0
+RESPONSE:1:102:SUCCESS:0:Command executed successfully
+RESPONSE:1:200:SUCCESS:0:Command executed successfully
+RESPONSE:1:202:SUCCESS:0:Command executed successfully
+
+# Output responses
+RESPONSE:1:101:OUTPUT:0:file-new,add-rect,export-png,status,action-list
+
+# Error responses
+RESPONSE:1:300:ERROR:2:No valid actions found
+RESPONSE:1:301:ERROR:1:Invalid command format
+RESPONSE:1:302:ERROR:1:Invalid command format
+
+# Response patterns for validation
+SUCCESS
+OUTPUT
+ERROR
+RESPONSE:\d+:[^:]+:(SUCCESS|OUTPUT|ERROR):\d+(?::.+)?
+
+# Exit codes
+0: Success
+1: Invalid command format
+2: No valid actions found
+3: Exception occurred
+4: Document not available
+
+# Handshake messages
+WELCOME:Client ID 1
+REJECT:Another client is already connected 
