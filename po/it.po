@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-19 14:06+0000\n"
+"PO-Revision-Date: 2025-07-28 16:27+0000\n"
 "Last-Translator: marco riva <oelimar@mail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
@@ -18572,7 +18572,7 @@ msgstr "Determina la forma degli spigoli del tracciato"
 #: ../src/live_effects/lpe-offset.cpp:76
 #: ../src/live_effects/lpe-taperstroke.cpp:114
 msgid "Miter limit:"
-msgstr "Spigolosità:"
+msgstr "Limite spigolo:"
 
 #: ../src/live_effects/lpe-jointype.cpp:59
 #: ../src/live_effects/lpe-offset.cpp:76
@@ -20850,11 +20850,11 @@ msgstr "Quantità di smussatura da applicare alla fine della rastrematura"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:111
 msgid "Join type:"
-msgstr "Collegamento nodi:"
+msgstr "Tipo di spigoli:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:111
 msgid "Join type for non-smooth nodes"
-msgstr "Collegamento dei nodi non curvi"
+msgstr "Tipo di spigolo per i nodi non curvi"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:112
 msgid "Start direction:"
