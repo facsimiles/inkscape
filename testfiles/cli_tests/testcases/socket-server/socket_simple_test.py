@@ -1,3 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Author: Tod Schmidt
+# Copyright: 2025
+#
+
 #!/usr/bin/env python3
 """
 Simple socket server test for Inkscape CLI tests.

@@ -1,3 +1,9 @@
+<!-- SPDX-License-Identifier: GPL-2.0-or-later -->
+<!--
+Author: Tod Schmidt
+Copyright: 2025
+-->
+
 # Socket Protocol Tests
 
 This directory contains comprehensive tests for the Inkscape socket server protocol implementation.
