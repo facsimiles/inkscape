@@ -8,50 +8,50 @@
  *
  * PROTOCOL DOCUMENTATION:
  * ======================
- * 
+ *
  * Connection:
  * -----------
  * - Server listens on 127.0.0.1:PORT (specified by --socket=PORT)
  * - Only one client allowed per session
  * - Client receives: "WELCOME:Client ID X" or "REJECT:Another client is already connected"
- * 
+ *
  * Command Format:
  * ---------------
  * COMMAND:request_id:action_name[:arg1][:arg2]...
- * 
+ *
  * Examples:
  * - COMMAND:123:action-list
  * - COMMAND:456:file-new
  * - COMMAND:789:add-rect:100:100:200:200
  * - COMMAND:abc:export-png:output.png
  * - COMMAND:def:status
- * 
+ *
  * Response Format:
  * ---------------
  * RESPONSE:client_id:request_id:type:exit_code:data
- * 
+ *
  * Response Types:
  * - SUCCESS:exit_code:message (command executed successfully)
  * - OUTPUT:exit_code:data (command produced output)
  * - ERROR:exit_code:message (command failed)
- * 
+ *
  * Exit Codes:
  * - 0: Success
  * - 1: Invalid command format
  * - 2: No valid actions found
  * - 3: Exception occurred
  * - 4: Document not available
- * 
+ *
  * Examples:
  * - RESPONSE:1:123:OUTPUT:0:action1,action2,action3
  * - RESPONSE:1:456:SUCCESS:0:Command executed successfully
  * - RESPONSE:1:789:ERROR:2:No valid actions found in command
- * 
+ *
  * Special Commands:
  * ----------------
  * - status: Returns document information and Inkscape state
  * - action-list: Lists all available Inkscape actions
- * 
+ *
  * MCP Server Integration:
  * ----------------------
  * This protocol is designed for MCP (Model Context Protocol) server integration.
@@ -64,19 +64,20 @@
  */
 
 #include "socket-server.h"
-#include "inkscape-application.h"
+
+#include <algorithm>
+#include <cstring>
+#include <iomanip>
+#include <iostream>
+#include <regex>
+#include <sstream>
+
 #include "actions/actions-helper-gui.h"
 #include "document.h"
+#include "inkscape-application.h"
 #include "inkscape.h"
-#include "xml/node.h"
 #include "util/units.h"
-
-#include <iostream>
-#include <sstream>
-#include <regex>
-#include <cstring>
-#include <algorithm>
-#include <iomanip>
+#include "xml/node.h"
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -84,23 +85,22 @@
 #pragma comment(lib, "ws2_32.lib")
 #define close closesocket
 #else
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <netinet/in.h>
 #include <poll.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #endif
 
-SocketServer::SocketServer(int port, InkscapeApplication* app)
+SocketServer::SocketServer(int port, InkscapeApplication *app)
     : _port(port)
     , _server_fd(-1)
     , _app(app)
     , _running(false)
     , _client_id_counter(0)
     , _active_client_id(-1)
-{
-}
+{}
 
 SocketServer::~SocketServer()
 {
@@ -128,7 +128,7 @@ bool SocketServer::start()
 
     // Set socket options
     int opt = 1;
-    if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt)) < 0) {
+    if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0) {
         std::cerr << "Failed to set socket options" << std::endl;
         close(_server_fd);
         return false;
@@ -141,7 +141,7 @@ bool SocketServer::start()
     server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     server_addr.sin_port = htons(_port);
 
-    if (bind(_server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+    if (bind(_server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         std::cerr << "Failed to bind socket to port " << _port << std::endl;
         close(_server_fd);
         return false;
@@ -162,14 +162,14 @@ bool SocketServer::start()
 void SocketServer::stop()
 {
     _running = false;
-    
+
     if (_server_fd >= 0) {
         close(_server_fd);
         _server_fd = -1;
     }
-    
+
     cleanup_threads();
-    
+
 #ifdef _WIN32
     WSACleanup();
 #endif
@@ -187,8 +187,8 @@ void SocketServer::run()
     while (_running) {
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
-        
-        int client_fd = accept(_server_fd, (struct sockaddr*)&client_addr, &client_len);
+
+        int client_fd = accept(_server_fd, (struct sockaddr *)&client_addr, &client_len);
         if (client_fd < 0) {
             if (_running) {
                 std::cerr << "Failed to accept connection" << std::endl;
@@ -206,7 +206,7 @@ void SocketServer::handle_client(int client_fd)
     char buffer[1024];
     std::string response;
     std::string input_buffer;
-    
+
     // Generate client ID and check if we can accept this client
     int client_id = generate_client_id();
     if (!can_client_connect(client_id)) {
@@ -215,7 +215,7 @@ void SocketServer::handle_client(int client_fd)
         close(client_fd);
         return;
     }
-    
+
     // Send welcome message with client ID
     std::string welcome_msg = "WELCOME:Client ID " + std::to_string(client_id);
     send(client_fd, welcome_msg.c_str(), welcome_msg.length(), 0);
@@ -223,33 +223,32 @@ void SocketServer::handle_client(int client_fd)
     while (_running) {
         memset(buffer, 0, sizeof(buffer));
         int bytes_received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
-        
+
         if (bytes_received <= 0) {
             break; // Client disconnected or error
         }
 
         // Add received data to buffer
         input_buffer += std::string(buffer);
-        
+
         // Look for complete commands (ending with newline or semicolon)
         size_t pos = 0;
-        while ((pos = input_buffer.find('\n')) != std::string::npos || 
+        while ((pos = input_buffer.find('\n')) != std::string::npos ||
                (pos = input_buffer.find('\r')) != std::string::npos) {
-            
             // Extract the command up to the newline
             std::string command_line = input_buffer.substr(0, pos);
             input_buffer = input_buffer.substr(pos + 1);
-            
+
             // Remove carriage return if present
             if (!command_line.empty() && command_line.back() == '\r') {
                 command_line.pop_back();
             }
-            
+
             // Skip empty lines
             if (command_line.empty()) {
                 continue;
             }
-            
+
             // Parse and execute command
             std::string request_id;
             std::string command = parse_command(command_line, request_id);
@@ -265,17 +264,17 @@ void SocketServer::handle_client(int client_fd)
                 return;
             }
         }
-        
+
         // Also check for commands ending with semicolon (for multiple commands)
         while ((pos = input_buffer.find(';')) != std::string::npos) {
             std::string command_line = input_buffer.substr(0, pos);
             input_buffer = input_buffer.substr(pos + 1);
-            
+
             // Skip empty commands
             if (command_line.empty()) {
                 continue;
             }
-            
+
             // Parse and execute command
             std::string request_id;
             std::string command = parse_command(command_line, request_id);
@@ -297,22 +296,22 @@ void SocketServer::handle_client(int client_fd)
     if (_active_client_id.load() == client_id) {
         _active_client_id.store(-1);
     }
-    
+
     close(client_fd);
 }
 
-std::string SocketServer::execute_command(const std::string& command)
+std::string SocketServer::execute_command(std::string const &command)
 {
     try {
         // Handle special STATUS command
         if (command == "status") {
             return get_status_info();
         }
-        
+
         // Create action vector from command
         action_vector_t action_vector;
         _app->parse_actions(command, action_vector);
-        
+
         if (action_vector.empty()) {
             return "ERROR:2:No valid actions found in command";
         }
@@ -325,57 +324,59 @@ std::string SocketServer::execute_command(const std::string& command)
 
         // Capture stdout before executing actions
         std::stringstream captured_output;
-        std::streambuf* original_cout = std::cout.rdbuf();
+        std::streambuf *original_cout = std::cout.rdbuf();
         std::cout.rdbuf(captured_output.rdbuf());
 
         // Execute actions
-        activate_any_actions(action_vector, Glib::RefPtr<Gio::Application>(_app->gio_app()), _app->get_active_window(), _app->get_active_document());
-        
+        activate_any_actions(action_vector, Glib::RefPtr<Gio::Application>(_app->gio_app()), _app->get_active_window(),
+                             _app->get_active_document());
+
         // Process any pending events
         auto context = Glib::MainContext::get_default();
-        while (context->iteration(false)) {}
+        while (context->iteration(false)) {
+        }
 
         // Restore original stdout
         std::cout.rdbuf(original_cout);
 
         // Get the captured output
         std::string output = captured_output.str();
-        
+
         // Clean up the output (remove trailing newlines)
         while (!output.empty() && (output.back() == '\n' || output.back() == '\r')) {
             output.pop_back();
         }
-        
+
         // If there's output, return it, otherwise return success message
         if (!output.empty()) {
             return "OUTPUT:0:" + output;
         } else {
             return "SUCCESS:0:Command executed successfully";
         }
-        
-    } catch (const std::exception& e) {
+
+    } catch (std::exception const &e) {
         return "ERROR:3:" + std::string(e.what());
     }
 }
 
-std::string SocketServer::parse_command(const std::string& input, std::string& request_id)
+std::string SocketServer::parse_command(std::string const &input, std::string &request_id)
 {
     // Remove leading/trailing whitespace
     std::string cleaned = input;
     cleaned.erase(0, cleaned.find_first_not_of(" \t\r\n"));
     cleaned.erase(cleaned.find_last_not_of(" \t\r\n") + 1);
-    
+
     // Check for COMMAND: prefix (case insensitive)
     std::string upper_input = cleaned;
     std::transform(upper_input.begin(), upper_input.end(), upper_input.begin(), ::toupper);
-    
+
     if (upper_input.substr(0, 8) != "COMMAND:") {
         return "";
     }
-    
+
     // Extract the command part after COMMAND:
     std::string command_part = cleaned.substr(8);
-    
+
     // Parse request ID (format: COMMAND:request_id:actual_command)
     size_t first_colon = command_part.find(':');
     if (first_colon != std::string::npos) {
@@ -402,23 +403,23 @@ bool SocketServer::can_client_connect(int client_id)
 std::string SocketServer::get_status_info()
 {
     std::stringstream status;
-    
+
     // Check if we have an active document
     auto doc = _app->get_active_document();
     if (doc) {
         status << "SUCCESS:0:Document active - ";
-        
+
         // Get document name
-        const char* doc_name = doc->getDocumentName();
+        char const *doc_name = doc->getDocumentName();
         if (doc_name && strlen(doc_name) > 0) {
             status << "Name: " << doc_name << ", ";
         }
-        
+
         // Get document dimensions
         auto width = doc->getWidth();
         auto height = doc->getHeight();
         status << "Size: " << width.quantity << "x" << height.quantity << "px, ";
-        
+
         // Get number of objects
         auto root = doc->getReprRoot();
         if (root) {
@@ -431,11 +432,12 @@ std::string SocketServer::get_status_info()
     } else {
         status << "SUCCESS:0:No active document - Inkscape ready for new document";
     }
-    
+
     return status.str();
 }
 
-bool SocketServer::send_response(int client_fd, int client_id, const std::string& request_id, const std::string& response)
+bool SocketServer::send_response(int client_fd, int client_id, std::string const &request_id,
+                                 std::string const &response)
 {
     // Format: RESPONSE:client_id:request_id:response
     std::string formatted_response = "RESPONSE:" + std::to_string(client_id) + ":" + request_id + ":" + response + "\n";
@@ -445,7 +447,7 @@ bool SocketServer::send_response(int client_fd, int client_id, const std::string
 
 void SocketServer::cleanup_threads()
 {
-    for (auto& thread : _client_threads) {
+    for (auto &thread : _client_threads) {
         if (thread.joinable()) {
             thread.join();
         }
@@ -462,4 +464,4 @@ void SocketServer::cleanup_threads()
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 : 
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

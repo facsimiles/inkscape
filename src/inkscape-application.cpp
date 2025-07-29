@@ -105,8 +105,8 @@
 #include "util/scope_exit.h"
 
 #ifdef WITH_GNU_READLINE
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 #endif
 
 using Inkscape::IO::Resource::UIS;
@@ -162,7 +162,8 @@ std::pair<SPDocument *, bool> InkscapeApplication::document_open(Glib::RefPtr<Gi
         return {nullptr, true};
     }
     if (!document) {
-        std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name().raw() << std::endl;
+        std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name().raw()
+                  << std::endl;
         return {nullptr, false};
     }
 
@@ -182,7 +183,8 @@ std::pair<SPDocument *, bool> InkscapeApplication::document_open(Glib::RefPtr<Gi
             if (is_crash) {
                 document->setModifiedSinceSave(true);
                 // Crash files store the original name in the display name field.
-                auto old_path = Inkscape::IO::find_original_file(path, Glib::filename_from_utf8(orig->get_display_name()));
+                auto old_path =
+                    Inkscape::IO::find_original_file(path, Glib::filename_from_utf8(orig->get_display_name()));
                 document->setDocumentFilename(old_path.empty() ? nullptr : old_path.c_str());
                 // We don't want other programs to gain access to this crash file
                 recentmanager->remove_item(uri);
@@ -239,7 +241,8 @@ bool InkscapeApplication::document_swap(SPDesktop *desktop, SPDocument *document
     }
 
     // Remove desktop from document map.
-    auto dt_it = std::find_if(doc_it->second.begin(), doc_it->second.end(), [=] (auto &dt) { return dt.get() == desktop; });
+    auto dt_it =
+        std::find_if(doc_it->second.begin(), doc_it->second.end(), [=](auto &dt) { return dt.get() == desktop; });
     if (dt_it == doc_it->second.end()) {
         std::cerr << "InkscapeApplication::swap_document: Desktop not found!" << std::endl;
         return false;
@@ -351,7 +354,6 @@ void InkscapeApplication::document_fix(SPDesktop *desktop)
     // But some require the GUI to be present. These are handled here.
 
     if (_with_gui) {
-
         auto document = desktop->getDocument();
 
         // Perform a fixup pass for hrefs.
@@ -413,9 +415,9 @@ SPDesktop *InkscapeApplication::desktopOpen(SPDocument *document)
         auto const win = _windows.emplace_back(std::make_unique<InkscapeWindow>(desktop)).get();
 
         _active_window = win;
-        assert(_active_desktop   == desktop);
+        assert(_active_desktop == desktop);
         assert(_active_selection == desktop->getSelection());
-        assert(_active_document  == document);
+        assert(_active_document == document);
 
         // Resize the window to match the document properties
         sp_namedview_window_from_document(desktop);
@@ -441,7 +443,7 @@ void InkscapeApplication::desktopClose(SPDesktop *desktop)
 
     // Leave active document alone (maybe should find new active window and reset variables).
     _active_selection = nullptr;
-    _active_desktop   = nullptr;
+    _active_desktop = nullptr;
 
     // Remove desktop from document map.
     auto doc_it = _documents.find(document);
@@ -450,7 +452,8 @@ void InkscapeApplication::desktopClose(SPDesktop *desktop)
         return;
     }
 
-    auto dt_it = std::find_if(doc_it->second.begin(), doc_it->second.end(), [=] (auto &dt) { return dt.get() == desktop; });
+    auto dt_it =
+        std::find_if(doc_it->second.begin(), doc_it->second.end(), [=](auto &dt) { return dt.get() == desktop; });
     if (dt_it == doc_it->second.end()) {
         std::cerr << "InkscapeApplication::close_window: desktop not found!" << std::endl;
         return;
@@ -458,7 +461,8 @@ void InkscapeApplication::desktopClose(SPDesktop *desktop)
 
     if (get_number_of_windows() == 1) {
         // Persist layout of docked and floating dialogs before deleting the last window.
-        Inkscape::UI::Dialog::DialogManager::singleton().save_dialogs_state(desktop->getDesktopWidget()->getDialogContainer());
+        Inkscape::UI::Dialog::DialogManager::singleton().save_dialogs_state(
+            desktop->getDesktopWidget()->getDialogContainer());
     }
 
     auto win = desktop->getInkscapeWindow();
@@ -466,7 +470,7 @@ void InkscapeApplication::desktopClose(SPDesktop *desktop)
     win->get_desktop_widget()->removeDesktop(desktop);
 
     INKSCAPE.remove_desktop(desktop); // clears selection and event_context
-    doc_it->second.erase(dt_it); // Results in call to SPDesktop::destroy()
+    doc_it->second.erase(dt_it);      // Results in call to SPDesktop::destroy()
 }
 
 // Closes active window (useful for scripting).
@@ -606,23 +610,23 @@ InkscapeApplication::InkscapeApplication()
     // Glib::set_application_name(N_("Inkscape - A Vector Drawing Program"));  // After gettext() init.
 
     // ======================== Actions =========================
-    add_actions_base(this);                 // actions that are GUI independent
-    add_actions_edit(this);                 // actions for editing
-    add_actions_effect(this);               // actions for Filters and Extensions
-    add_actions_element_a(this);            // actions for the SVG a (anchor) element
-    add_actions_element_image(this);        // actions for the SVG image element
-    add_actions_file(this);                 // actions for file handling
-    add_actions_hide_lock(this);            // actions for hiding/locking items.
-    add_actions_object(this);               // actions for object manipulation
-    add_actions_object_align(this);         // actions for object alignment
-    add_actions_output(this);               // actions for file export
-    add_actions_selection(this);            // actions for object selection
-    add_actions_path(this);                 // actions for Paths
-    add_actions_selection_object(this);     // actions for selected objects
-    add_actions_text(this);                 // actions for Text
-    add_actions_tutorial(this);             // actions for opening tutorials (with GUI only)
-    add_actions_transform(this);            // actions for transforming selected objects
-    add_actions_window(this);               // actions for windows
+    add_actions_base(this);             // actions that are GUI independent
+    add_actions_edit(this);             // actions for editing
+    add_actions_effect(this);           // actions for Filters and Extensions
+    add_actions_element_a(this);        // actions for the SVG a (anchor) element
+    add_actions_element_image(this);    // actions for the SVG image element
+    add_actions_file(this);             // actions for file handling
+    add_actions_hide_lock(this);        // actions for hiding/locking items.
+    add_actions_object(this);           // actions for object manipulation
+    add_actions_object_align(this);     // actions for object alignment
+    add_actions_output(this);           // actions for file export
+    add_actions_selection(this);        // actions for object selection
+    add_actions_path(this);             // actions for Paths
+    add_actions_selection_object(this); // actions for selected objects
+    add_actions_text(this);             // actions for Text
+    add_actions_tutorial(this);         // actions for opening tutorials (with GUI only)
+    add_actions_transform(this);        // actions for transforming selected objects
+    add_actions_window(this);           // actions for windows
 
     // ====================== Command Line ======================
 
@@ -633,12 +637,15 @@ InkscapeApplication::InkscapeApplication()
     // TODO: Claims to be translated automatically, but seems broken, so pass already translated strings
     gapp->set_option_context_parameter_string(_("file1 [file2 [fileN]]"));
     gapp->set_option_context_summary(_("Process (or open) one or more files."));
-    gapp->set_option_context_description(Glib::ustring("\n") + _("Examples:") + '\n'
-            + "  " + Glib::ustring::compose(_("Export input SVG (%1) to PDF (%2) format:"), "in.svg", "out.pdf") + '\n'
-            + '\t' + "inkscape --export-filename=out.pdf in.svg\n"
-            + "  " + Glib::ustring::compose(_("Export input files (%1) to PNG format keeping original name (%2):"), "in1.svg, in2.svg", "in1.png, in2.png") + '\n'
-            + '\t' + "inkscape --export-type=png in1.svg in2.svg\n"
-            + "  " + Glib::ustring::compose(_("See %1 and %2 for more details."), "'man inkscape'", "http://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line"));
+    gapp->set_option_context_description(
+        Glib::ustring("\n") + _("Examples:") + '\n' + "  " +
+        Glib::ustring::compose(_("Export input SVG (%1) to PDF (%2) format:"), "in.svg", "out.pdf") + '\n' + '\t' +
+        "inkscape --export-filename=out.pdf in.svg\n" + "  " +
+        Glib::ustring::compose(_("Export input files (%1) to PNG format keeping original name (%2):"),
+                               "in1.svg, in2.svg", "in1.png, in2.png") +
+        '\n' + '\t' + "inkscape --export-type=png in1.svg in2.svg\n" + "  " +
+        Glib::ustring::compose(_("See %1 and %2 for more details."), "'man inkscape'",
+                               "http://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line"));
 
     // clang-format off
     // General
@@ -733,7 +740,8 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OptionType::BOOL,     "active-window",          'q', N_("Use active window from commandline"),                                       "");
     // clang-format on
 
-    gapp->signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options), true);
+    gapp->signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options),
+                                                true);
 
     if (_with_gui && !non_unique) { // Will fail to register if not unique.
         // On macOS, this enables:
@@ -779,9 +787,9 @@ SPDesktop *InkscapeApplication::createDesktop(SPDocument *document, bool replace
 }
 
 /** Create a window given a Gio::File. This is what most external functions should call.
-  *
-  * @param file - The filename to open as a Gio::File object
-*/
+ *
+ * @param file - The filename to open as a Gio::File object
+ */
 void InkscapeApplication::create_window(Glib::RefPtr<Gio::File> const &file)
 {
     if (!gtk_app()) {
@@ -789,7 +797,7 @@ void InkscapeApplication::create_window(Glib::RefPtr<Gio::File> const &file)
         return;
     }
 
-    SPDocument* document = nullptr;
+    SPDocument *document = nullptr;
     SPDesktop *desktop = nullptr;
     bool cancelled = false;
 
@@ -806,8 +814,8 @@ void InkscapeApplication::create_window(Glib::RefPtr<Gio::File> const &file)
             desktop = createDesktop(document, replace);
             document_fix(desktop);
         } else if (!cancelled) {
-            std::cerr << "InkscapeApplication::create_window: Failed to load: "
-                      << file->get_parse_name().raw() << std::endl;
+            std::cerr << "InkscapeApplication::create_window: Failed to load: " << file->get_parse_name().raw()
+                      << std::endl;
 
             gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), file->get_parse_name().c_str());
             sp_ui_error_dialog(text);
@@ -873,7 +881,7 @@ bool InkscapeApplication::destroyDesktop(SPDesktop *desktop, bool keep_alive)
 
         if (it->second.size() == 0) {
             // No window contains document so let's close it.
-            document_close (document);
+            document_close(document);
         }
 
     } else {
@@ -921,7 +929,7 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
     bool replace = _use_pipe || _batch_process;
 
     // Open window if needed (reuse window if we are doing one file at a time inorder to save overhead).
-    _active_document  = document;
+    _active_document = document;
     if (_with_gui) {
         _active_desktop = createDesktop(document, replace);
         _active_window = _active_desktop->getInkscapeWindow();
@@ -990,15 +998,15 @@ void InkscapeApplication::on_startup()
     auto *gapp = gio_app();
 
     // ======================= Actions (GUI) ======================
-    gapp->add_action("new",    sigc::mem_fun(*this, &InkscapeApplication::on_new   ));
-    gapp->add_action("quit",   sigc::mem_fun(*this, &InkscapeApplication::on_quit  ));
+    gapp->add_action("new", sigc::mem_fun(*this, &InkscapeApplication::on_new));
+    gapp->add_action("quit", sigc::mem_fun(*this, &InkscapeApplication::on_quit));
 
     // ========================= GUI Init =========================
     Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
 
     // build_menu(); // Builds and adds menu to app. Used by all Inkscape windows. This can be done
-                     // before all actions defined. * For the moment done by each window so we can add
-                     // window action info to menu_label_to_tooltip map.
+    // before all actions defined. * For the moment done by each window so we can add
+    // window action info to menu_label_to_tooltip map.
 
     // Add tool based shortcut meta-data
     init_tool_shortcuts(this);
@@ -1019,10 +1027,10 @@ void InkscapeApplication::on_activate()
      * than via command line or splash screen.
      * It however loses the window focus when launching via command line without file arguments.
      * Removing this line will open a new document before opening your file.
-    */
-    //TODO: this prevents main window from activating and bringing it to the foreground
-    // less hacky solution needs to be found
-    // Glib::MainContext::get_default()->iteration(false);
+     */
+    // TODO: this prevents main window from activating and bringing it to the foreground
+    //  less hacky solution needs to be found
+    //  Glib::MainContext::get_default()->iteration(false);
 #endif
 
     if (_use_pipe) {
@@ -1031,27 +1039,27 @@ void InkscapeApplication::on_activate()
         std::string s(begin, end);
         document = document_open(s);
         output = "-";
-     } else if (_with_gui && gtk_app() && !INKSCAPE.active_document())  {
+    } else if (_with_gui && gtk_app() && !INKSCAPE.active_document()) {
         if (Inkscape::UI::Dialog::StartScreen::get_start_mode()) {
             auto start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
             start_screen->show_welcome();
             Inkscape::UI::dialog_run(*start_screen);
             document = start_screen->get_document();
-            //In case the welcome screen gets closed before a file was picked
+            // In case the welcome screen gets closed before a file was picked
             if (!document)
                 document = document_new();
         } else {
             document = document_new();
         }
-     } else if (_use_command_line_argument) {
-         document = document_new();
-     } else {
+    } else if (_use_command_line_argument) {
+        document = document_new();
+    } else {
         std::cerr << "InkscapeApplication::on_activate: failed to create document!" << std::endl;
         return;
-     }
+    }
 
     // Process document (command line actions, shell, create window)
-    process_document (document, output);
+    process_document(document, output);
 
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
@@ -1059,10 +1067,9 @@ void InkscapeApplication::on_activate()
     }
 }
 
-
 void InkscapeApplication::windowClose(InkscapeWindow *window)
 {
-    auto win_it = std::find_if(_windows.begin(), _windows.end(), [=] (auto &w) { return w.get() == window; });
+    auto win_it = std::find_if(_windows.begin(), _windows.end(), [=](auto &w) { return w.get() == window; });
     _windows.erase(win_it);
     if (window == _active_window) {
         _active_window = nullptr;
@@ -1074,9 +1081,9 @@ void InkscapeApplication::windowClose(InkscapeWindow *window)
 void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files, Glib::ustring const &hint)
 {
     // on_activate isn't called in this instance
-    if(_pdf_poppler)
+    if (_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
-    if(!_pages.empty())
+    if (!_pages.empty())
         INKSCAPE.set_pages(_pages);
 
     INKSCAPE.set_pdf_font_strategy((int)_pdf_font_strategy);
@@ -1096,7 +1103,6 @@ void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files,
     }
 
     for (auto file : files) {
-
         // Open file
         auto [document, cancelled] = document_open(file);
         if (!document) {
@@ -1124,7 +1130,7 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", input);
     for (auto token : tokens) {
         // Note: split into 2 tokens max ("param:value"); allows value to contain colon (e.g. abs. paths on Windows)
-        std::vector<Glib::ustring> tokens2 = re_colon->split(token, 0,  static_cast<Glib::Regex::MatchFlags>(0), 2);
+        std::vector<Glib::ustring> tokens2 = re_colon->split(token, 0, static_cast<Glib::Regex::MatchFlags>(0), 2);
         Glib::ustring action;
         Glib::ustring value;
         if (tokens2.size() > 0) {
@@ -1140,7 +1146,7 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
         Glib::RefPtr<Gio::Action> action_ptr = _gio_application->lookup_action(action);
         if (action_ptr) {
             // Doesn't seem to be a way to test this using the C++ binding without Glib-CRITICAL errors.
-            const  GVariantType* gtype = g_action_get_parameter_type(action_ptr->gobj());
+            GVariantType const *gtype = g_action_get_parameter_type(action_ptr->gobj());
             if (gtype) {
                 // With value.
                 Glib::VariantType type = action_ptr->get_parameter_type();
@@ -1151,7 +1157,8 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
                     } else if (value == "0" || value == "false") {
                         b = false;
                     } else {
-                        std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":" << value << std::endl;
+                        std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":"
+                                  << value << std::endl;
                     }
                     action_vector.emplace_back(action, Glib::Variant<bool>::create(b));
                 } else if (type.get_string() == "i") {
@@ -1160,10 +1167,11 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
                     action_vector.emplace_back(action, Glib::Variant<double>::create(std::stod(value)));
                 } else if (type.get_string() == "s") {
                     action_vector.emplace_back(action, Glib::Variant<Glib::ustring>::create(value));
-                 } else if (type.get_string() == "(dd)") {
+                } else if (type.get_string() == "(dd)") {
                     std::vector<Glib::ustring> tokens3 = Glib::Regex::split_simple(",", value.c_str());
                     if (tokens3.size() != 2) {
-                        std::cerr << "InkscapeApplication::parse_actions: " << action << " requires two comma separated numbers" << std::endl;
+                        std::cerr << "InkscapeApplication::parse_actions: " << action
+                                  << " requires two comma separated numbers" << std::endl;
                         continue;
                     }
 
@@ -1173,14 +1181,15 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
                         d0 = std::stod(tokens3[0]);
                         d1 = std::stod(tokens3[1]);
                     } catch (...) {
-                        std::cerr << "InkscapeApplication::parse_actions: " << action << " requires two comma separated numbers" << std::endl;
+                        std::cerr << "InkscapeApplication::parse_actions: " << action
+                                  << " requires two comma separated numbers" << std::endl;
                         continue;
                     }
 
                     action_vector.emplace_back(action, Glib::Variant<std::tuple<double, double>>::create({d0, d1}));
-               } else {
-                    std::cerr << "InkscapeApplication::parse_actions: unhandled action value: "
-                              << action << ": " << type.get_string() << std::endl;
+                } else {
+                    std::cerr << "InkscapeApplication::parse_actions: unhandled action value: " << action << ": "
+                              << type.get_string() << std::endl;
                 }
             } else {
                 // Stateless (i.e. no value).
@@ -1195,7 +1204,7 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
 #ifdef WITH_GNU_READLINE
 
 // For use in shell mode. Command completion of action names.
-char* readline_generator (const char* text, int state)
+char *readline_generator(char const *text, int state)
 {
     static std::vector<Glib::ustring> actions;
 
@@ -1214,26 +1223,26 @@ char* readline_generator (const char* text, int state)
         len = strlen(text);
     }
 
-    const char* name = nullptr;
+    char const *name = nullptr;
     while (list_index < actions.size()) {
         name = actions[list_index].c_str();
         list_index++;
-        if (strncmp (name, text, len) == 0) {
+        if (strncmp(name, text, len) == 0) {
             return (strdup(name));
         }
     }
 
-    return ((char*)nullptr);
+    return ((char *)nullptr);
 }
 
-char** readline_completion(const char* text, int start, int end)
+char **readline_completion(char const *text, int start, int end)
 {
-    char **matches = (char**)nullptr;
+    char **matches = (char **)nullptr;
 
     // Match actions names, but only at start of line.
     // It would be nice to also match action names after a ';' but it's not possible as text won't include ';'.
     if (start == 0) {
-        matches = rl_completion_matches (text, readline_generator);
+        matches = rl_completion_matches(text, readline_generator);
     }
 
     return (matches);
@@ -1322,7 +1331,8 @@ void InkscapeApplication::shell(bool active_window)
             // This would allow displaying the results of actions on the fly... but it needs to be well
             // vetted first.
             auto context = Glib::MainContext::get_default();
-            while (context->iteration(false)) {};
+            while (context->iteration(false)) {
+            };
         }
     }
 
@@ -1344,7 +1354,7 @@ void InkscapeApplication::redirect_output()
 {
     auto const tmpfile = get_active_desktop_commands_location();
 
-    for (int counter = 0; ; counter++) {
+    for (int counter = 0;; counter++) {
         if (Glib::file_test(tmpfile, Glib::FileTest::EXISTS)) {
             break;
         } else if (counter >= 300) { // 30 seconds exit
@@ -1355,9 +1365,7 @@ void InkscapeApplication::redirect_output()
         }
     }
 
-    auto tmpfile_delete_guard = scope_exit([&] {
-        unlink(tmpfile.c_str());
-    });
+    auto tmpfile_delete_guard = scope_exit([&] { unlink(tmpfile.c_str()); });
 
     auto awo = std::ifstream(tmpfile);
     if (!awo) {
@@ -1374,9 +1382,7 @@ void InkscapeApplication::redirect_output()
         return;
     }
 
-    auto doc_delete_guard = scope_exit([&] {
-        Inkscape::GC::release(doc);
-    });
+    auto doc_delete_guard = scope_exit([&] { Inkscape::GC::release(doc); });
 
     bool noout = true;
     for (auto child = doc->root()->firstChild(); child; child = child->next()) {
@@ -1407,8 +1413,7 @@ void InkscapeApplication::redirect_output()
  * For each file without GUI: Open -> Query -> Process -> Export
  * More flexible processing can be done via actions.
  */
-int
-InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
+int InkscapeApplication::on_handle_local_options(Glib::RefPtr<Glib::VariantDict> const &options)
 {
     auto prefs = Inkscape::Preferences::get();
     if (!options) {
@@ -1498,17 +1503,18 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         _with_gui = false;
     }
 
-    if (options->contains("with-gui")        ||
-        options->contains("batch-process")
-        ) {
+    if (options->contains("with-gui") || options->contains("batch-process")) {
         _with_gui = bool(gtk_app()); // Override turning GUI off
         if (!_with_gui)
             std::cerr << "No GUI available, some actions may fail" << std::endl;
     }
 
-    if (options->contains("batch-process"))  _batch_process = true;
-    if (options->contains("shell"))          _use_shell = true;
-    if (options->contains("pipe"))           _use_pipe  = true;
+    if (options->contains("batch-process"))
+        _batch_process = true;
+    if (options->contains("shell"))
+        _use_shell = true;
+    if (options->contains("pipe"))
+        _use_pipe = true;
 
     // Process socket option
     if (options->contains("socket")) {
@@ -1528,11 +1534,8 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     }
 
     // Enable auto-export
-    if (options->contains("export-filename")  ||
-        options->contains("export-type")      ||
-        options->contains("export-overwrite") ||
-        options->contains("export-use-hints")
-        ) {
+    if (options->contains("export-filename") || options->contains("export-type") ||
+        options->contains("export-overwrite") || options->contains("export-use-hints")) {
         _auto_export = true;
     }
 
@@ -1638,16 +1641,23 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         }
     }
 
-    if (options->contains("query-all"))    _command_line_actions.emplace_back("query-all",   base);
-    if (options->contains("query-x"))      _command_line_actions.emplace_back("query-x",     base);
-    if (options->contains("query-y"))      _command_line_actions.emplace_back("query-y",     base);
-    if (options->contains("query-width"))  _command_line_actions.emplace_back("query-width", base);
-    if (options->contains("query-height")) _command_line_actions.emplace_back("query-height",base);
-    if (options->contains("query-pages"))  _command_line_actions.emplace_back("query-pages", base);
+    if (options->contains("query-all"))
+        _command_line_actions.emplace_back("query-all", base);
+    if (options->contains("query-x"))
+        _command_line_actions.emplace_back("query-x", base);
+    if (options->contains("query-y"))
+        _command_line_actions.emplace_back("query-y", base);
+    if (options->contains("query-width"))
+        _command_line_actions.emplace_back("query-width", base);
+    if (options->contains("query-height"))
+        _command_line_actions.emplace_back("query-height", base);
+    if (options->contains("query-pages"))
+        _command_line_actions.emplace_back("query-pages", base);
 
     // =================== PROCESS =====================
 
-    if (options->contains("vacuum-defs"))  _command_line_actions.emplace_back("vacuum-defs", base);
+    if (options->contains("vacuum-defs"))
+        _command_line_actions.emplace_back("vacuum-defs", base);
 
     if (options->contains("select")) {
         Glib::ustring select;
@@ -1659,18 +1669,19 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
     // ==================== EXPORT =====================
     if (options->contains("export-filename")) {
-        options->lookup_value("export-filename",  _file_export.export_filename);
+        options->lookup_value("export-filename", _file_export.export_filename);
     }
 
     if (options->contains("export-type")) {
-        options->lookup_value("export-type",      _file_export.export_type);
+        options->lookup_value("export-type", _file_export.export_type);
     }
     if (options->contains("export-extension")) {
         options->lookup_value("export-extension", _file_export.export_extension);
         _file_export.export_extension = _file_export.export_extension.lowercase();
     }
 
-    if (options->contains("export-overwrite"))    _file_export.export_overwrite    = true;
+    if (options->contains("export-overwrite"))
+        _file_export.export_overwrite = true;
 
     if (options->contains("export-page")) {
         options->lookup_value("export-page", _file_export.export_page);
@@ -1691,48 +1702,56 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     }
 
     if (options->contains("export-margin")) {
-        options->lookup_value("export-margin",    _file_export.export_margin);
+        options->lookup_value("export-margin", _file_export.export_margin);
     }
 
-    if (options->contains("export-area-snap"))    _file_export.export_area_snap    = true;
+    if (options->contains("export-area-snap"))
+        _file_export.export_area_snap = true;
 
     if (options->contains("export-width")) {
-        options->lookup_value("export-width",     _file_export.export_width);
+        options->lookup_value("export-width", _file_export.export_width);
     }
 
     if (options->contains("export-height")) {
-        options->lookup_value("export-height",    _file_export.export_height);
+        options->lookup_value("export-height", _file_export.export_height);
     }
 
     // Export - Options
     if (options->contains("export-id")) {
-        options->lookup_value("export-id",        _file_export.export_id);
+        options->lookup_value("export-id", _file_export.export_id);
     }
 
-    if (options->contains("export-id-only"))      _file_export.export_id_only     = true;
-    if (options->contains("export-plain-svg"))    _file_export.export_plain_svg      = true;
+    if (options->contains("export-id-only"))
+        _file_export.export_id_only = true;
+    if (options->contains("export-plain-svg"))
+        _file_export.export_plain_svg = true;
 
     if (options->contains("export-dpi")) {
-        options->lookup_value("export-dpi",       _file_export.export_dpi);
+        options->lookup_value("export-dpi", _file_export.export_dpi);
     }
 
-    if (options->contains("export-ignore-filters")) _file_export.export_ignore_filters = true;
-    if (options->contains("export-text-to-path"))   _file_export.export_text_to_path   = true;
+    if (options->contains("export-ignore-filters"))
+        _file_export.export_ignore_filters = true;
+    if (options->contains("export-text-to-path"))
+        _file_export.export_text_to_path = true;
 
     if (options->contains("export-ps-level")) {
-        options->lookup_value("export-ps-level",  _file_export.export_ps_level);
+        options->lookup_value("export-ps-level", _file_export.export_ps_level);
     }
 
     if (options->contains("export-pdf-version")) {
         options->lookup_value("export-pdf-version", _file_export.export_pdf_level);
     }
 
-    if (options->contains("export-latex"))        _file_export.export_latex       = true;
-    if (options->contains("export-use-hints"))    _file_export.export_use_hints   = true;
-    if (options->contains("export-make-paths"))   _file_export.make_paths = true;
+    if (options->contains("export-latex"))
+        _file_export.export_latex = true;
+    if (options->contains("export-use-hints"))
+        _file_export.export_use_hints = true;
+    if (options->contains("export-make-paths"))
+        _file_export.make_paths = true;
 
     if (options->contains("export-background")) {
-        options->lookup_value("export-background",_file_export.export_background);
+        options->lookup_value("export-background", _file_export.export_background);
     }
 
     // FIXME: Upstream bug means DOUBLE is ignored if set to 0.0 so doesn't exist in options
@@ -1754,9 +1773,10 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 18, 0)
             std::cerr << "Your cairo version does not support dithering! Option will be ignored." << std::endl;
 #endif
-        }
-        else if (val == "false") _file_export.export_png_use_dithering = false;
-        else std::cerr << "invalid value for export-png-use-dithering. Ignoring." << std::endl;
+        } else if (val == "false")
+            _file_export.export_png_use_dithering = false;
+        else
+            std::cerr << "invalid value for export-png-use-dithering. Ignoring." << std::endl;
     } else {
         _file_export.export_png_use_dithering = prefs->getBool("/options/dithering/value", true);
     }
@@ -1765,18 +1785,14 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("export-png-compression")) {
         Glib::ustring compression;
         options->lookup_value("export-png-compression", compression);
-        const char *begin = compression.raw().c_str();
+        char const *begin = compression.raw().c_str();
         char *end;
         long ival = strtol(begin, &end, 10);
         if (end == begin || *end != '\0' || errno == ERANGE) {
-            std::cerr << "Cannot parse integer value "
-                      << compression
-                      << " for --export-png-compression; the default value "
-                      <<  _file_export.export_png_compression
-                      << " will be used"
-                      << std::endl;
-        }
-        else {
+            std::cerr << "Cannot parse integer value " << compression
+                      << " for --export-png-compression; the default value " << _file_export.export_png_compression
+                      << " will be used" << std::endl;
+        } else {
             _file_export.export_png_compression = ival;
         }
     }
@@ -1785,18 +1801,13 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("export-png-antialias")) {
         Glib::ustring antialias;
         options->lookup_value("export-png-antialias", antialias);
-        const char *begin = antialias.raw().c_str();
+        char const *begin = antialias.raw().c_str();
         char *end;
         long ival = strtol(begin, &end, 10);
         if (end == begin || *end != '\0' || errno == ERANGE) {
-            std::cerr << "Cannot parse integer value "
-                      << antialias
-                      << " for --export-png-antialias; the default value "
-                      <<  _file_export.export_png_antialias
-                      << " will be used"
-                      << std::endl;
-        }
-        else {
+            std::cerr << "Cannot parse integer value " << antialias << " for --export-png-antialias; the default value "
+                      << _file_export.export_png_antialias << " will be used" << std::endl;
+        } else {
             _file_export.export_png_antialias = ival;
         }
     }
@@ -1844,7 +1855,8 @@ void InkscapeApplication::on_new()
 void InkscapeApplication::on_quit()
 {
     if (gtk_app()) {
-        if (!destroy_all()) return; // Quit aborted.
+        if (!destroy_all())
+            return; // Quit aborted.
         // For mac, ensure closing the gtk_app windows
         for (auto window : gtk_app()->get_windows()) {
             window->close();
@@ -1857,8 +1869,7 @@ void InkscapeApplication::on_quit()
 /*
  * Quit without checking for data loss.
  */
-void
-InkscapeApplication::on_quit_immediate()
+void InkscapeApplication::on_quit_immediate()
 {
     gio_app()->quit();
 }
@@ -1871,8 +1882,7 @@ void InkscapeApplication::set_active_desktop(SPDesktop *desktop)
     }
 }
 
-void
-InkscapeApplication::print_action_list()
+void InkscapeApplication::print_action_list()
 {
     auto const *gapp = gio_app();
 
@@ -1880,8 +1890,8 @@ InkscapeApplication::print_action_list()
     std::sort(actions.begin(), actions.end());
     for (auto const &action : actions) {
         Glib::ustring fullname("app." + action);
-        std::cout << std::left << std::setw(20) << action
-                  << ":  " << _action_extra_data.get_tooltip_for_action(fullname) << std::endl;
+        std::cout << std::left << std::setw(20) << action << ":  "
+                  << _action_extra_data.get_tooltip_for_action(fullname) << std::endl;
     }
 }
 
@@ -1905,10 +1915,11 @@ void InkscapeApplication::print_input_type_list() const
 /**
  * Return number of open Inkscape Windows (irrespective of number of documents)
 .*/
-int InkscapeApplication::get_number_of_windows() const {
+int InkscapeApplication::get_number_of_windows() const
+{
     if (_with_gui) {
         return std::accumulate(_documents.begin(), _documents.end(), 0,
-          [&](int sum, auto& v){ return sum + static_cast<int>(v.second.size()); });
+                               [&](int sum, auto &v) { return sum + static_cast<int>(v.second.size()); });
     }
     return 0;
 }
@@ -1918,8 +1929,9 @@ int InkscapeApplication::get_number_of_windows() const {
  *
  *  \c effect is Filter or Extension
  *  \c show_prefs is used to show preferences dialog
-*/
-void action_effect(Inkscape::Extension::Effect* effect, bool show_prefs) {
+ */
+void action_effect(Inkscape::Extension::Effect *effect, bool show_prefs)
+{
     auto desktop = InkscapeApplication::instance()->get_active_desktop();
     if (!effect->check()) {
         auto handler = ErrorReporter((bool)desktop);
@@ -1933,51 +1945,56 @@ void action_effect(Inkscape::Extension::Effect* effect, bool show_prefs) {
 }
 
 // Modifying string to get submenu id
-std::string action_menu_name(std::string menu) {
+std::string action_menu_name(std::string menu)
+{
     transform(menu.begin(), menu.end(), menu.begin(), ::tolower);
-    for (auto &x:menu) {
-        if (x==' ') {
+    for (auto &x : menu) {
+        if (x == ' ') {
             x = '-';
         }
     }
     return menu;
 }
 
-void InkscapeApplication::init_extension_action_data() {
+void InkscapeApplication::init_extension_action_data()
+{
     if (_no_extensions) {
         return;
     }
     for (auto effect : Inkscape::Extension::db.get_effect_list()) {
-
         std::string aid = effect->get_sanitized_id();
         std::string action_id = "app." + aid;
 
         auto app = this;
         if (auto gapp = gtk_app()) {
-            auto action = gapp->add_action(aid, [effect](){ action_effect(effect, true); });
-            auto action_noprefs = gapp->add_action(aid + ".noprefs", [effect](){ action_effect(effect, false); });
+            auto action = gapp->add_action(aid, [effect]() { action_effect(effect, true); });
+            auto action_noprefs = gapp->add_action(aid + ".noprefs", [effect]() { action_effect(effect, false); });
             _effect_actions.emplace_back(action);
             _effect_actions.emplace_back(action_noprefs);
         }
 
-        if (effect->hidden_from_menu()) continue;
+        if (effect->hidden_from_menu())
+            continue;
 
         // Submenu retrieval as a list of strings (to handle nested menus).
         auto sub_menu_list = effect->get_menu_list();
 
         // Setting initial value of description to name of action in case there is no description
         auto description = effect->get_menu_tip();
-        if (description.empty()) description = effect->get_name();
+        if (description.empty())
+            description = effect->get_name();
 
         if (effect->is_filter_effect()) {
-            std::vector<std::vector<Glib::ustring>>raw_data_filter =
-                {{ action_id, effect->get_name(), "Filters", description },
-                { action_id + ".noprefs", Glib::ustring(effect->get_name()) + " " + _("(No preferences)"), "Filters (no prefs)", description }};
+            std::vector<std::vector<Glib::ustring>> raw_data_filter = {
+                {action_id, effect->get_name(), "Filters", description},
+                {action_id + ".noprefs", Glib::ustring(effect->get_name()) + " " + _("(No preferences)"),
+                 "Filters (no prefs)", description}};
             app->get_action_extra_data().add_data(raw_data_filter);
         } else {
-            std::vector<std::vector<Glib::ustring>>raw_data_effect =
-                {{ action_id, effect->get_name(), "Extensions", description },
-                { action_id + ".noprefs", Glib::ustring(effect->get_name()) + " " + _("(No preferences)"), "Extensions (no prefs)", description }};
+            std::vector<std::vector<Glib::ustring>> raw_data_effect = {
+                {action_id, effect->get_name(), "Extensions", description},
+                {action_id + ".noprefs", Glib::ustring(effect->get_name()) + " " + _("(No preferences)"),
+                 "Extensions (no prefs)", description}};
             app->get_action_extra_data().add_data(raw_data_effect);
         }
 

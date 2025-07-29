@@ -7,21 +7,24 @@
  * Tests for the socket server protocol implementation
  */
 
-#include <gtest/gtest.h>
+#include <regex>
 #include <string>
 #include <vector>
-#include <regex>
+#include <gtest/gtest.h>
 
 // Mock socket server protocol parser for testing
-class SocketProtocolParser {
+class SocketProtocolParser
+{
 public:
-    struct Command {
+    struct Command
+    {
         std::string request_id;
         std::string action_name;
         std::vector<std::string> arguments;
     };
 
-    struct Response {
+    struct Response
+    {
         int client_id;
         std::string request_id;
         std::string type;
@@ -30,31 +33,32 @@ public:
     };
 
     // Parse incoming command string
-    static Command parse_command(const std::string& input) {
+    static Command parse_command(std::string const &input)
+    {
         Command cmd;
-        
+
         // Remove leading/trailing whitespace
         std::string cleaned = input;
         cleaned.erase(0, cleaned.find_first_not_of(" \t\r\n"));
         cleaned.erase(cleaned.find_last_not_of(" \t\r\n") + 1);
-        
+
         // Check for COMMAND: prefix (case insensitive)
         std::string upper_input = cleaned;
         std::transform(upper_input.begin(), upper_input.end(), upper_input.begin(), ::toupper);
-        
+
         if (upper_input.substr(0, 8) != "COMMAND:") {
             return cmd; // Return empty command
         }
-        
+
         // Extract the command part after COMMAND:
         std::string command_part = cleaned.substr(8);
-        
+
         // Parse request ID and actual command
         size_t first_colon = command_part.find(':');
         if (first_colon != std::string::npos) {
             cmd.request_id = command_part.substr(0, first_colon);
             std::string actual_command = command_part.substr(first_colon + 1);
-            
+
             // Parse action name and arguments
             std::vector<std::string> parts = split_string(actual_command, ':');
             if (!parts.empty()) {
@@ -70,21 +74,22 @@ public:
                 cmd.arguments.assign(parts.begin() + 1, parts.end());
             }
         }
-        
+
         return cmd;
     }
 
     // Parse response string
-    static Response parse_response(const std::string& input) {
+    static Response parse_response(std::string const &input)
+    {
         Response resp;
-        
+
         std::vector<std::string> parts = split_string(input, ':');
         if (parts.size() >= 5 && parts[0] == "RESPONSE") {
             resp.client_id = std::stoi(parts[1]);
             resp.request_id = parts[2];
             resp.type = parts[3];
             resp.exit_code = std::stoi(parts[4]);
-            
+
             // Combine remaining parts as data
             if (parts.size() > 5) {
                 resp.data = parts[5];
@@ -93,50 +98,57 @@ public:
                 }
             }
         }
-        
+
         return resp;
     }
 
     // Validate command format
-    static bool is_valid_command(const std::string& input) {
+    static bool is_valid_command(std::string const &input)
+    {
         Command cmd = parse_command(input);
         return !cmd.action_name.empty();
     }
 
     // Validate response format
-    static bool is_valid_response(const std::string& input) {
+    static bool is_valid_response(std::string const &input)
+    {
         Response resp = parse_response(input);
         return resp.client_id > 0 && !resp.request_id.empty() && !resp.type.empty();
     }
 
 private:
-    static std::vector<std::string> split_string(const std::string& str, char delimiter) {
+    static std::vector<std::string> split_string(std::string const &str, char delimiter)
+    {
         std::vector<std::string> tokens;
         std::stringstream ss(str);
         std::string token;
-        
+
         while (std::getline(ss, token, delimiter)) {
             tokens.push_back(token);
         }
-        
+
         return tokens;
     }
 };
 
 // Test fixture for socket protocol tests
-class SocketProtocolTest : public ::testing::Test {
+class SocketProtocolTest : public ::testing::Test
+{
 protected:
-    void SetUp() override {
+    void SetUp() override
+    {
         // Setup code if needed
     }
 
-    void TearDown() override {
+    void TearDown() override
+    {
         // Cleanup code if needed
     }
 };
 
 // Test command parsing
-TEST_F(SocketProtocolTest, ParseValidCommands) {
+TEST_F(SocketProtocolTest, ParseValidCommands)
+{
     // Test basic command format
     auto cmd1 = SocketProtocolParser::parse_command("COMMAND:123:file-new");
     EXPECT_EQ(cmd1.request_id, "123");
@@ -168,7 +180,8 @@ TEST_F(SocketProtocolTest, ParseValidCommands) {
 }
 
 // Test invalid command parsing
-TEST_F(SocketProtocolTest, ParseInvalidCommands) {
+TEST_F(SocketProtocolTest, ParseInvalidCommands)
+{
     // Test missing COMMAND: prefix
     auto cmd1 = SocketProtocolParser::parse_command("file-new");
     EXPECT_TRUE(cmd1.action_name.empty());
@@ -189,7 +202,8 @@ TEST_F(SocketProtocolTest, ParseInvalidCommands) {
 }
 
 // Test response parsing
-TEST_F(SocketProtocolTest, ParseValidResponses) {
+TEST_F(SocketProtocolTest, ParseValidResponses)
+{
     // Test success response
     auto resp1 = SocketProtocolParser::parse_response("RESPONSE:1:123:SUCCESS:0:Command executed successfully");
     EXPECT_EQ(resp1.client_id, 1);
@@ -224,7 +238,8 @@ TEST_F(SocketProtocolTest, ParseValidResponses) {
 }
 
 // Test invalid response parsing
-TEST_F(SocketProtocolTest, ParseInvalidResponses) {
+TEST_F(SocketProtocolTest, ParseInvalidResponses)
+{
     // Test missing RESPONSE prefix
     auto resp1 = SocketProtocolParser::parse_response("SUCCESS:0:Command executed");
     EXPECT_EQ(resp1.client_id, 0);
@@ -245,12 +260,13 @@ TEST_F(SocketProtocolTest, ParseInvalidResponses) {
 }
 
 // Test command validation
-TEST_F(SocketProtocolTest, ValidateCommands) {
+TEST_F(SocketProtocolTest, ValidateCommands)
+{
     EXPECT_TRUE(SocketProtocolParser::is_valid_command("COMMAND:123:file-new"));
     EXPECT_TRUE(SocketProtocolParser::is_valid_command("COMMAND:456:add-rect:100:100:200:200"));
     EXPECT_TRUE(SocketProtocolParser::is_valid_command("COMMAND:status"));
     EXPECT_TRUE(SocketProtocolParser::is_valid_command("  COMMAND:789:export-png:output.png  "));
-    
+
     EXPECT_FALSE(SocketProtocolParser::is_valid_command("file-new"));
     EXPECT_FALSE(SocketProtocolParser::is_valid_command("COMMAND:"));
     EXPECT_FALSE(SocketProtocolParser::is_valid_command("COMMAND:123:"));
@@ -258,11 +274,12 @@ TEST_F(SocketProtocolTest, ValidateCommands) {
 }
 
 // Test response validation
-TEST_F(SocketProtocolTest, ValidateResponses) {
+TEST_F(SocketProtocolTest, ValidateResponses)
+{
     EXPECT_TRUE(SocketProtocolParser::is_valid_response("RESPONSE:1:123:SUCCESS:0:Command executed successfully"));
     EXPECT_TRUE(SocketProtocolParser::is_valid_response("RESPONSE:1:456:OUTPUT:0:action1,action2,action3"));
     EXPECT_TRUE(SocketProtocolParser::is_valid_response("RESPONSE:1:789:ERROR:2:No valid actions found"));
-    
+
     EXPECT_FALSE(SocketProtocolParser::is_valid_response("SUCCESS:0:Command executed"));
     EXPECT_FALSE(SocketProtocolParser::is_valid_response("RESPONSE:1:123"));
     EXPECT_FALSE(SocketProtocolParser::is_valid_response("RESPONSE:0:123:SUCCESS:0:test"));
@@ -270,7 +287,8 @@ TEST_F(SocketProtocolTest, ValidateResponses) {
 }
 
 // Test special commands
-TEST_F(SocketProtocolTest, SpecialCommands) {
+TEST_F(SocketProtocolTest, SpecialCommands)
+{
     // Test status command
     auto cmd1 = SocketProtocolParser::parse_command("COMMAND:123:status");
     EXPECT_EQ(cmd1.action_name, "status");
@@ -283,7 +301,8 @@ TEST_F(SocketProtocolTest, SpecialCommands) {
 }
 
 // Test command with various argument types
-TEST_F(SocketProtocolTest, CommandArguments) {
+TEST_F(SocketProtocolTest, CommandArguments)
+{
     // Test numeric arguments
     auto cmd1 = SocketProtocolParser::parse_command("COMMAND:123:add-rect:100:200:300:400");
     EXPECT_EQ(cmd1.arguments.size(), 4);
@@ -305,7 +324,8 @@ TEST_F(SocketProtocolTest, CommandArguments) {
     EXPECT_EQ(cmd3.arguments[0], "");
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
-} 
+}
