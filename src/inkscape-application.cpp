@@ -45,7 +45,6 @@
 #include <numeric>
 #include <regex>
 #include <thread>
-
 #include <giomm/file.h>
 #include <glibmm/i18n.h> // Internationalization
 #include <gtkmm/application.h>
@@ -1510,7 +1509,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("batch-process"))  _batch_process = true;
     if (options->contains("shell"))          _use_shell = true;
     if (options->contains("pipe"))           _use_pipe  = true;
-    
+
     // Process socket option
     if (options->contains("socket")) {
         Glib::ustring port_str;
