@@ -10,11 +10,11 @@
 #ifndef INKSCAPE_SOCKET_SERVER_H
 #define INKSCAPE_SOCKET_SERVER_H
 
-#include <string>
-#include <memory>
-#include <vector>
-#include <thread>
 #include <atomic>
+#include <memory>
+#include <string>
+#include <thread>
+#include <vector>
 
 // Forward declarations
 class InkscapeApplication;
@@ -25,7 +25,7 @@ class InkscapeApplication;
 class SocketServer
 {
 public:
-    SocketServer(int port, InkscapeApplication* app);
+    SocketServer(int port, InkscapeApplication *app);
     ~SocketServer();
 
     /**
@@ -52,7 +52,7 @@ public:
 private:
     int _port;
     int _server_fd;
-    InkscapeApplication* _app;
+    InkscapeApplication *_app;
     std::atomic<bool> _running;
     std::vector<std::thread> _client_threads;
     std::atomic<int> _client_id_counter;
@@ -69,7 +69,7 @@ private:
      * @param command The command to execute
      * @return Response string with exit code
      */
-    std::string execute_command(const std::string& command);
+    std::string execute_command(std::string const &command);
 
     /**
      * Parse and validate incoming command
@@ -77,7 +77,7 @@ private:
      * @param request_id Output parameter for request ID
      * @return Parsed command or empty string if invalid
      */
-    std::string parse_command(const std::string& input, std::string& request_id);
+    std::string parse_command(std::string const &input, std::string &request_id);
 
     /**
      * Generate a unique client ID
@@ -106,7 +106,7 @@ private:
      * @param response Response to send
      * @return true if sent successfully, false otherwise
      */
-    bool send_response(int client_fd, int client_id, const std::string& request_id, const std::string& response);
+    bool send_response(int client_fd, int client_id, std::string const &request_id, std::string const &response);
 
     /**
      * Clean up client threads
@@ -125,4 +125,4 @@ private:
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 : 
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

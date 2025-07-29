@@ -7,15 +7,17 @@
  * Tests for socket server response formatting and validation
  */
 
-#include <gtest/gtest.h>
+#include <regex>
 #include <string>
 #include <vector>
-#include <regex>
+#include <gtest/gtest.h>
 
 // Mock response formatter for testing
-class SocketResponseFormatter {
+class SocketResponseFormatter
+{
 public:
-    struct Response {
+    struct Response
+    {
         int client_id;
         std::string request_id;
         std::string type;
@@ -24,26 +26,26 @@ public:
     };
 
     // Format a response according to the socket protocol
-    static std::string format_response(const Response& response) {
+    static std::string format_response(Response const &response)
+    {
         std::stringstream ss;
-        ss << "RESPONSE:" << response.client_id << ":" 
-           << response.request_id << ":" 
-           << response.type << ":" 
+        ss << "RESPONSE:" << response.client_id << ":" << response.request_id << ":" << response.type << ":"
            << response.exit_code;
-        
+
         if (!response.data.empty()) {
             ss << ":" << response.data;
         }
-        
+
         return ss.str();
     }
 
     // Parse a response string
-    static Response parse_response(const std::string& input) {
+    static Response parse_response(std::string const &input)
+    {
         Response resp;
         resp.client_id = 0;
         resp.exit_code = 0;
-        
+
         std::vector<std::string> parts = split_string(input, ':');
         if (parts.size() >= 5 && parts[0] == "RESPONSE") {
             try {
@@ -51,7 +53,7 @@ public:
                 resp.request_id = parts[2];
                 resp.type = parts[3];
                 resp.exit_code = std::stoi(parts[4]);
-                
+
                 // Combine remaining parts as data
                 if (parts.size() > 5) {
                     resp.data = parts[5];
@@ -59,61 +61,74 @@ public:
                         resp.data += ":" + parts[i];
                     }
                 }
-            } catch (const std::exception& e) {
+            } catch (std::exception const &e) {
                 // Parsing failed, return default values
                 resp.client_id = 0;
                 resp.exit_code = 0;
             }
         }
-        
+
         return resp;
     }
 
     // Validate response format
-    static bool is_valid_response(const std::string& input) {
+    static bool is_valid_response(std::string const &input)
+    {
         Response resp = parse_response(input);
         return resp.client_id > 0 && !resp.request_id.empty() && !resp.type.empty();
     }
 
     // Validate response type
-    static bool is_valid_response_type(const std::string& type) {
+    static bool is_valid_response_type(std::string const &type)
+    {
         return type == "SUCCESS" || type == "OUTPUT" || type == "ERROR";
     }
 
     // Validate exit code
-    static bool is_valid_exit_code(int exit_code) {
-        return exit_code >= 0 && exit_code <= 4;
-    }
+    static bool is_valid_exit_code(int exit_code) { return exit_code >= 0 && exit_code <= 4; }
 
     // Get exit code description
-    static std::string get_exit_code_description(int exit_code) {
+    static std::string get_exit_code_description(int exit_code)
+    {
         switch (exit_code) {
-            case 0: return "Success";
-            case 1: return "Invalid command format";
-            case 2: return "No valid actions found";
-            case 3: return "Exception occurred";
-            case 4: return "Document not available";
-            default: return "Unknown exit code";
+            case 0:
+                return "Success";
+            case 1:
+                return "Invalid command format";
+            case 2:
+                return "No valid actions found";
+            case 3:
+                return "Exception occurred";
+            case 4:
+                return "Document not available";
+            default:
+                return "Unknown exit code";
         }
     }
 
     // Create success response
-    static Response create_success_response(int client_id, const std::string& request_id, const std::string& message = "Command executed successfully") {
+    static Response create_success_response(int client_id, std::string const &request_id,
+                                            std::string const &message = "Command executed successfully")
+    {
         return {client_id, request_id, "SUCCESS", 0, message};
     }
 
     // Create output response
-    static Response create_output_response(int client_id, const std::string& request_id, const std::string& output) {
+    static Response create_output_response(int client_id, std::string const &request_id, std::string const &output)
+    {
         return {client_id, request_id, "OUTPUT", 0, output};
     }
 
     // Create error response
-    static Response create_error_response(int client_id, const std::string& request_id, int exit_code, const std::string& error_message) {
+    static Response create_error_response(int client_id, std::string const &request_id, int exit_code,
+                                          std::string const &error_message)
+    {
         return {client_id, request_id, "ERROR", exit_code, error_message};
     }
 
     // Validate response data based on type
-    static bool validate_response_data(const std::string& type, const std::string& data) {
+    static bool validate_response_data(std::string const &type, std::string const &data)
+    {
         if (type == "SUCCESS") {
             return !data.empty();
         } else if (type == "OUTPUT") {
@@ -125,33 +140,38 @@ public:
     }
 
 private:
-    static std::vector<std::string> split_string(const std::string& str, char delimiter) {
+    static std::vector<std::string> split_string(std::string const &str, char delimiter)
+    {
         std::vector<std::string> tokens;
         std::stringstream ss(str);
         std::string token;
-        
+
         while (std::getline(ss, token, delimiter)) {
             tokens.push_back(token);
         }
-        
+
         return tokens;
     }
 };
 
 // Test fixture for socket response tests
-class SocketResponseTest : public ::testing::Test {
+class SocketResponseTest : public ::testing::Test
+{
 protected:
-    void SetUp() override {
+    void SetUp() override
+    {
         // Setup code if needed
     }
 
-    void TearDown() override {
+    void TearDown() override
+    {
         // Cleanup code if needed
     }
 };
 
 // Test response formatting
-TEST_F(SocketResponseTest, FormatResponses) {
+TEST_F(SocketResponseTest, FormatResponses)
+{
     // Test success response
     auto resp1 = SocketResponseFormatter::create_success_response(1, "123", "Command executed successfully");
     std::string formatted1 = SocketResponseFormatter::format_response(resp1);
@@ -174,7 +194,8 @@ TEST_F(SocketResponseTest, FormatResponses) {
 }
 
 // Test response parsing
-TEST_F(SocketResponseTest, ParseResponses) {
+TEST_F(SocketResponseTest, ParseResponses)
+{
     // Test success response parsing
     auto resp1 = SocketResponseFormatter::parse_response("RESPONSE:1:123:SUCCESS:0:Command executed successfully");
     EXPECT_EQ(resp1.client_id, 1);
@@ -209,7 +230,8 @@ TEST_F(SocketResponseTest, ParseResponses) {
 }
 
 // Test invalid response parsing
-TEST_F(SocketResponseTest, ParseInvalidResponses) {
+TEST_F(SocketResponseTest, ParseInvalidResponses)
+{
     // Test missing RESPONSE prefix
     auto resp1 = SocketResponseFormatter::parse_response("SUCCESS:0:Command executed");
     EXPECT_EQ(resp1.client_id, 0);
@@ -238,11 +260,12 @@ TEST_F(SocketResponseTest, ParseInvalidResponses) {
 }
 
 // Test response validation
-TEST_F(SocketResponseTest, ValidateResponses) {
+TEST_F(SocketResponseTest, ValidateResponses)
+{
     EXPECT_TRUE(SocketResponseFormatter::is_valid_response("RESPONSE:1:123:SUCCESS:0:Command executed successfully"));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_response("RESPONSE:1:456:OUTPUT:0:action1,action2,action3"));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_response("RESPONSE:1:789:ERROR:2:No valid actions found"));
-    
+
     EXPECT_FALSE(SocketResponseFormatter::is_valid_response("SUCCESS:0:Command executed"));
     EXPECT_FALSE(SocketResponseFormatter::is_valid_response("RESPONSE:1:123"));
     EXPECT_FALSE(SocketResponseFormatter::is_valid_response("RESPONSE:0:123:SUCCESS:0:test"));
@@ -250,11 +273,12 @@ TEST_F(SocketResponseTest, ValidateResponses) {
 }
 
 // Test response type validation
-TEST_F(SocketResponseTest, ValidateResponseTypes) {
+TEST_F(SocketResponseTest, ValidateResponseTypes)
+{
     EXPECT_TRUE(SocketResponseFormatter::is_valid_response_type("SUCCESS"));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_response_type("OUTPUT"));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_response_type("ERROR"));
-    
+
     EXPECT_FALSE(SocketResponseFormatter::is_valid_response_type(""));
     EXPECT_FALSE(SocketResponseFormatter::is_valid_response_type("SUCCES"));
     EXPECT_FALSE(SocketResponseFormatter::is_valid_response_type("success"));
@@ -262,20 +286,22 @@ TEST_F(SocketResponseTest, ValidateResponseTypes) {
 }
 
 // Test exit code validation
-TEST_F(SocketResponseTest, ValidateExitCodes) {
+TEST_F(SocketResponseTest, ValidateExitCodes)
+{
     EXPECT_TRUE(SocketResponseFormatter::is_valid_exit_code(0));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_exit_code(1));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_exit_code(2));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_exit_code(3));
     EXPECT_TRUE(SocketResponseFormatter::is_valid_exit_code(4));
-    
+
     EXPECT_FALSE(SocketResponseFormatter::is_valid_exit_code(-1));
     EXPECT_FALSE(SocketResponseFormatter::is_valid_exit_code(5));
     EXPECT_FALSE(SocketResponseFormatter::is_valid_exit_code(100));
 }
 
 // Test exit code descriptions
-TEST_F(SocketResponseTest, ExitCodeDescriptions) {
+TEST_F(SocketResponseTest, ExitCodeDescriptions)
+{
     EXPECT_EQ(SocketResponseFormatter::get_exit_code_description(0), "Success");
     EXPECT_EQ(SocketResponseFormatter::get_exit_code_description(1), "Invalid command format");
     EXPECT_EQ(SocketResponseFormatter::get_exit_code_description(2), "No valid actions found");
@@ -286,7 +312,8 @@ TEST_F(SocketResponseTest, ExitCodeDescriptions) {
 }
 
 // Test response data validation
-TEST_F(SocketResponseTest, ValidateResponseData) {
+TEST_F(SocketResponseTest, ValidateResponseData)
+{
     // Test SUCCESS response data
     EXPECT_TRUE(SocketResponseFormatter::validate_response_data("SUCCESS", "Command executed successfully"));
     EXPECT_FALSE(SocketResponseFormatter::validate_response_data("SUCCESS", ""));
@@ -304,7 +331,8 @@ TEST_F(SocketResponseTest, ValidateResponseData) {
 }
 
 // Test response creation helpers
-TEST_F(SocketResponseTest, ResponseCreationHelpers) {
+TEST_F(SocketResponseTest, ResponseCreationHelpers)
+{
     // Test success response creation
     auto success_resp = SocketResponseFormatter::create_success_response(1, "123", "Test message");
     EXPECT_EQ(success_resp.client_id, 1);
@@ -331,12 +359,13 @@ TEST_F(SocketResponseTest, ResponseCreationHelpers) {
 }
 
 // Test round-trip formatting and parsing
-TEST_F(SocketResponseTest, RoundTripFormatting) {
+TEST_F(SocketResponseTest, RoundTripFormatting)
+{
     // Test success response round-trip
     auto original1 = SocketResponseFormatter::create_success_response(1, "123", "Test message");
     std::string formatted1 = SocketResponseFormatter::format_response(original1);
     auto parsed1 = SocketResponseFormatter::parse_response(formatted1);
-    
+
     EXPECT_EQ(parsed1.client_id, original1.client_id);
     EXPECT_EQ(parsed1.request_id, original1.request_id);
     EXPECT_EQ(parsed1.type, original1.type);
@@ -347,7 +376,7 @@ TEST_F(SocketResponseTest, RoundTripFormatting) {
     auto original2 = SocketResponseFormatter::create_output_response(1, "456", "test:output:with:colons");
     std::string formatted2 = SocketResponseFormatter::format_response(original2);
     auto parsed2 = SocketResponseFormatter::parse_response(formatted2);
-    
+
     EXPECT_EQ(parsed2.client_id, original2.client_id);
     EXPECT_EQ(parsed2.request_id, original2.request_id);
     EXPECT_EQ(parsed2.type, original2.type);
@@ -355,7 +384,8 @@ TEST_F(SocketResponseTest, RoundTripFormatting) {
     EXPECT_EQ(parsed2.data, original2.data);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
-} 
+}
