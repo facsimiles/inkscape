@@ -949,12 +949,14 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
     }
     if (_use_socket) {
         // Start socket server
-        _socket_server = std::make_unique<SocketServer>(_socket_port, this);
-        if (!_socket_server->start()) {
-            std::cerr << "Failed to start socket server on port " << _socket_port << std::endl;
-            return;
+        if (!_socket_server) {
+            _socket_server = std::make_unique<SocketServer>(_socket_port, this);
+            if (!_socket_server->start()) {
+                std::cerr << "Failed to start socket server on port " << _socket_port << std::endl;
+                return;
+            }
+            _socket_server->run();
         }
-        _socket_server->run();
     }
     if (_with_gui && _active_window) {
         document_fix(_active_desktop);
@@ -1060,6 +1062,16 @@ void InkscapeApplication::on_activate()
 
     // Process document (command line actions, shell, create window)
     process_document(document, output);
+
+    // Start socket server if requested, even without a document
+    if (_use_socket && !_socket_server) {
+        _socket_server = std::make_unique<SocketServer>(_socket_port, this);
+        if (!_socket_server->start()) {
+            std::cerr << "Failed to start socket server on port " << _socket_port << std::endl;
+            return;
+        }
+        _socket_server->run();
+    }
 
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
