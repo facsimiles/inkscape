@@ -955,7 +955,11 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
                 std::cerr << "Failed to start socket server on port " << _socket_port << std::endl;
                 return;
             }
-            _socket_server->run();
+            // Run socket server in a separate thread to avoid blocking
+            std::thread socket_thread([this]() {
+                _socket_server->run();
+            });
+            socket_thread.detach(); // Detach the thread so it runs independently
         }
     }
     if (_with_gui && _active_window) {
@@ -1070,7 +1074,11 @@ void InkscapeApplication::on_activate()
             std::cerr << "Failed to start socket server on port " << _socket_port << std::endl;
             return;
         }
-        _socket_server->run();
+        // Run socket server in a separate thread to avoid blocking
+        std::thread socket_thread([this]() {
+            _socket_server->run();
+        });
+        socket_thread.detach(); // Detach the thread so it runs independently
     }
 
     if (_batch_process) {
