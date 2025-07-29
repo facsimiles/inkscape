@@ -39,7 +39,7 @@ public:
         if (std::regex_match(input, match, welcome_pattern)) {
             msg.type = "WELCOME";
             msg.client_id = std::stoi(match[1]);
-            msg.message = "Client ID " + match[1];
+            msg.message = "Client ID " + match[1].str();
         } else {
             msg.type = "UNKNOWN";
             msg.message = input;
