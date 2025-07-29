@@ -21,6 +21,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 
+#include "config.h"
 #include "ui/util.h"
 #if WITH_GSOURCEVIEW
 #   include <gtksourceview/gtksource.h>

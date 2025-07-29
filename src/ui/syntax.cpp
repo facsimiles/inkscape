@@ -14,8 +14,11 @@
 
 #include <gtkmm/textview.h>
 
+#include "io/resource.h"
 #include "object/sp-factory.h"
 #include "util/trim.h"
+
+#include "config.h"
 
 #if WITH_GSOURCEVIEW
 #   include <gtksourceview/gtksource.h>

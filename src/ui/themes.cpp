@@ -20,6 +20,7 @@
 #include <gtkmm/settings.h>
 #include <pangomm/fontdescription.h>
 
+#include "config.h"
 #include "desktop.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
