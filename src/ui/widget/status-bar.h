@@ -35,10 +35,10 @@ class SPDesktopWidget;
 
 namespace Inkscape::UI::Widget {
 
+class InkSpinButton;
 class SelectedStyle;
 class LayerSelector;
 class PageSelector;
-class SpinButton;
 
 class StatusBar
     : public Gtk::Box
@@ -62,14 +62,11 @@ public:
     void onDefocus() override;
 
 private:
-    int zoom_input(double &new_value);
-    bool zoom_output();
-    void zoom_value_changed();
+    void zoom_value_changed(double value);
     void zoom_menu_handler();
     bool zoom_popup(PopupMenuOptionalClick);
 
-    bool rotate_output();
-    void rotate_value_changed();
+    void rotate_value_changed(double value);
     void rotate_menu_handler();
     bool rotate_popup(PopupMenuOptionalClick);
 
@@ -79,10 +76,8 @@ private:
     PageSelector *_page_selector = nullptr;
     Gtk::Label*    selection = nullptr;
     Gtk::Label*     coordinates = nullptr;
-    Gtk::Box*      zoom = nullptr;
-    Gtk::Box*      rotate = nullptr;
-    UI::Widget::SpinButton* zoom_value = nullptr;
-    UI::Widget::SpinButton* rotate_value = nullptr;
+    UI::Widget::InkSpinButton *_zoom = nullptr;
+    UI::Widget::InkSpinButton *_rotate = nullptr;
 
     SPDesktopWidget* desktop_widget = nullptr;
     std::unique_ptr<Gtk::Popover> zoom_popover;

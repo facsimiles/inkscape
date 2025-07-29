@@ -22,6 +22,7 @@
 
 #include "ui/containerize.h"
 #include "ui/controller.h"
+#include "ui/defocus-target.h"
 #include "util/expression-evaluator.h"
 
 namespace Inkscape::UI::Widget {
@@ -765,8 +766,9 @@ inline void InkSpinButton::enter_edit() {
 bool InkSpinButton::defocus() {
     if (_focus->contains_focus()) {
         // move focus away
-        if (_defocus_widget) {
-            if (_defocus_widget->grab_focus()) return true;
+        if (_defocus_target) {
+            _defocus_target->onDefocus();
+            return true;
         }
         if (_entry.child_focus(Gtk::DirectionType::TAB_FORWARD)) {
             return true;

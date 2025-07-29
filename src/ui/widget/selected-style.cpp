@@ -12,6 +12,7 @@
 
 #include "selected-style.h"
 
+#include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/droptarget.h>
 #include <gtkmm/gestureclick.h>
@@ -39,13 +40,15 @@
 #include "ui/widget/canvas.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/gradient-image.h"
+#include "ui/widget/ink-spin-button.h"
 #include "ui/widget/popover-menu-item.h"
+#include "ui/widget/popover-menu.h"
 #include "util-string/ustring-format.h"
 #include "util/units.h"
 #include "util/value-utils.h"
 #include "util/variant-visitor.h"
 
-static constexpr int SELECTED_STYLE_SB_WIDTH     =  48;
+static constexpr int SELECTED_STYLE_SB_WIDTH     =  80;
 static constexpr int SELECTED_STYLE_PLACE_WIDTH  =  50;
 static constexpr int SELECTED_STYLE_STROKE_WIDTH =  40;
 static constexpr int SELECTED_STYLE_FLAG_WIDTH   =  12;
@@ -212,16 +215,18 @@ SelectedStyle::SelectedStyle()
 
     // Opacity
     make_popup_opacity();
-    opacity_label = Gtk::make_managed<Gtk::Label>(_("O:"));
     opacity_adjustment = Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0);
-    opacity_sb = Gtk::make_managed<Inkscape::UI::Widget::SpinButton>(0.02, 0);
+    opacity_sb = Gtk::make_managed<Inkscape::UI::Widget::InkSpinButton>();
+    opacity_sb->set_step(0.02);
+    opacity_sb->set_digits(0);
+    opacity_sb->set_label(C_("Opacity", "O"));
+    opacity_sb->set_suffix(_("%"));
     opacity_sb->set_adjustment(opacity_adjustment);
     opacity_sb->set_size_request(SELECTED_STYLE_SB_WIDTH);
     opacity_sb->set_sensitive(false);
     opacity_sb->setDefocusTarget(this);
 
     auto opacity_box = Gtk::make_managed<Gtk::Box>();
-    opacity_box->append(*opacity_label);
     opacity_box->append(*opacity_sb);
 
     auto const click = Gtk::GestureClick::create();
@@ -955,7 +960,7 @@ bool SelectedStyle::on_opacity_popup(PopupMenuOptionalClick)
     return true;
 }
 
-void SelectedStyle::on_opacity_changed ()
+void SelectedStyle::on_opacity_changed(double value)
 {
     g_return_if_fail(_desktop); // TODO this shouldn't happen!
     if (_opacity_blocked) {
@@ -964,7 +969,7 @@ void SelectedStyle::on_opacity_changed ()
     _opacity_blocked = true;
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream os;
-    os << CLAMP ((opacity_adjustment->get_value() / 100), 0.0, 1.0);
+    os << std::clamp(value / 100, 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);

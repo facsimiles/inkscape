@@ -18,13 +18,14 @@
 #include "colors/color.h"
 #include "rotateable.h"
 #include "ui/defocus-target.h"
+#include "ui/popup-menu.h"
 #include "ui/widget/popover-bin.h"
-#include "ui/widget/spinbutton.h"
 
 namespace Gtk {
 class Adjustment;
 class GestureClick;
 class CheckButton;
+class Label;
 } // namespace Gtk
 
 class SPDesktop;
@@ -37,6 +38,7 @@ class Unit;
 
 namespace UI::Widget {
 
+class InkSpinButton;
 class PopoverMenu;
 class PopoverMenuItem;
 
@@ -146,9 +148,8 @@ protected:
     Gtk::Label *stroke_width; // Stroke width
     RotateableStrokeWidth *stroke_width_rotateable;
 
-    Gtk::Label *opacity_label;
     Glib::RefPtr<Gtk::Adjustment> opacity_adjustment;
-    Inkscape::UI::Widget::SpinButton *opacity_sb;
+    Inkscape::UI::Widget::InkSpinButton *opacity_sb;
 
     Glib::ustring _paintserver_id[2];
 
@@ -169,7 +170,7 @@ protected:
 
     std::unique_ptr<UI::Widget::PopoverMenu> _popup_opacity;
     void make_popup_opacity();
-    void on_opacity_changed();
+    void on_opacity_changed(double value);
     bool on_opacity_popup(PopupMenuOptionalClick);
     void opacity_0();
     void opacity_025();

@@ -37,8 +37,8 @@
   <object class="GtkAdjustment" id="statusbar-rotate-adjustment">
     <property name="step-increment">1</property>
     <property name="page-increment">15</property>
-    <property name="lower">-360</property>
-    <property name="upper">360</property>
+    <property name="lower">-180</property>
+    <property name="upper">180</property>
   </object>
   <menu id="statusbar-rotate-menu"/>
   <object class="GtkBox" id="statusbar">
@@ -84,66 +84,36 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-        <property name="orientation">vertical</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-end">6</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkLabel" id="statusbar-coordinates">
         <property name="name">StatusbarCoordinates</property>
-	<property name="margin-end">10</property>
-	<property name="tooltip-text" translatable="yes">Cursor coordinates</property>
+        <property name="margin-end">10</property>
+        <property name="tooltip-text" translatable="yes">Cursor coordinates</property>
         <property name="label" translatable="no">(0.00, 0.00)</property>
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="statusbar-zoom">
+      <object class="gtkmm__CustomObject_InkSpinButton" id="statusbar-zoom">
         <property name="tooltip-text" translatable="yes">Zoom (also Ctrl+scroll)</property>
-        <child>
-          <object class="GtkLabel" id="statusbar-label-z">
-            <property name="name">StatusbarZoomLabel</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes" context="Abbreviation for canvas zoom level">Z</property>
-            <property name="margin-start">2</property>
-            <property name="margin-end">4</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="statusbar-zoom-value">
-            <property name="name">StatusbarZoomValue</property>
-            <property name="focusable">True</property>
-            <property name="adjustment">statusbar-zoom-adjustment</property>
-            <property name="width-chars">1</property>
-            <property name="width-request">57</property>
-            <property name="value">100</property>
-          </object>
-        </child>
+        <property name="label" translatable="yes" context="Abbreviation for canvas zoom level">Z</property>
+        <property name="name">StatusbarZoomValue</property>
+        <property name="focusable">True</property>
+        <property name="adjustment">statusbar-zoom-adjustment</property>
+        <property name="digits">1</property>
+        <property name="value">100</property>
+        <property name="margin-end">10</property>
+        <property name="suffix" translatable="yes">%</property>
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="statusbar-rotate">
+      <object class="gtkmm__CustomObject_InkSpinButton" id="statusbar-rotate">
         <property name="tooltip-text" translatable="yes">Rotation (also Ctrl+Shift+scroll)</property>
-        <child>
-          <object class="GtkLabel" id="statusbar-label-R">
-            <property name="name">StatusbarRotateLabel</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes" context="Abbreviation for canvas rotation">R</property>
-            <property name="margin-start">10</property>
-            <property name="margin-end">4</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="statusbar-rotate-value">
-            <property name="name">StatusbarRotateValue</property>
-            <property name="focusable">True</property>
-            <property name="adjustment">statusbar-rotate-adjustment</property>
-            <property name="width-chars">1</property>
-            <property name="width-request">57</property>
-          </object>
-        </child>
+        <property name="label" translatable="yes" context="Abbreviation for canvas rotation">R</property>
+        <property name="name">StatusbarRotateValue</property>
+        <property name="focusable">True</property>
+        <property name="adjustment">statusbar-rotate-adjustment</property>
+        <property name="digits">1</property>
+        <property name="suffix" translatable="yes">°</property>
+        <property name="wrap-around">True</property>
       </object>
     </child>
   </object>

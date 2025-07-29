@@ -21,6 +21,7 @@ class GestureDrag;
 class EventControllerMotion;
 class Builder;
 }
+namespace Inkscape::UI { class DefocusTarget; }
 
 namespace Inkscape::UI::Widget {
 
@@ -59,7 +60,7 @@ public:
     void set_scaling_factor(double factor);
     // Which widget to focus if defocusing this spin button;
     // if not set explicitly, the next available focusable widget will be used
-    void set_defocus_widget(Gtk::Widget* widget) { _defocus_widget = widget; }
+    void setDefocusTarget(DefocusTarget *target) { _defocus_target = target; }
     // Suppress expression evaluator
     void set_dont_evaluate(bool flag) { _dont_evaluate = flag; }
     // Set the distance in pixels of drag travel to adjust full button range; the lower the value, the more sensitive the dragging gets
@@ -173,7 +174,7 @@ private:
     int _icon_width = 0;
     bool _enable_arrows = true;
     sigc::scoped_connection _spinning;
-    Gtk::Widget* _defocus_widget = nullptr;
+    DefocusTarget *_defocus_target = nullptr;
     bool _dont_evaluate = false; // turn off expression evaluator?
     bool _enter_exit_edit = false;
     Glib::RefPtr<Gdk::Cursor> _old_cursor;

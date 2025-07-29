@@ -9,6 +9,9 @@
 #ifndef SEEN_SHAPE_EDITOR_KNOTHOLDERS_H
 #define SEEN_SHAPE_EDITOR_KNOTHOLDERS_H
 
+#include <memory>
+
+class KnotHolder;
 class SPItem;
 class SPDesktop;
 

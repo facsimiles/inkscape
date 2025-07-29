@@ -19,6 +19,7 @@
 #include "ui/builder-utils.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
+#include "ui/widget/ink-spin-button.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/page-selector.h"
 
@@ -27,6 +28,7 @@ namespace Inkscape::UI::Widget {
 StatusBar::StatusBar()
     : Gtk::Box(Gtk::Orientation::HORIZONTAL)
 {
+    UI::Widget::InkSpinButton::register_type();
     auto builder = Inkscape::UI::create_builder("statusbar.ui");
 
     auto &statusbar = UI::get_widget<Gtk::Box>(builder, "statusbar");
@@ -41,8 +43,7 @@ StatusBar::StatusBar()
 
     // ******** Zoom ********
 
-    zoom = &UI::get_widget<Gtk::Box>(builder, "statusbar-zoom");
-    zoom_value = &UI::get_derived_widget<UI::Widget::SpinButton>(builder, "statusbar-zoom-value");
+    _zoom = &UI::get_derived_widget<UI::Widget::InkSpinButton>(builder, "statusbar-zoom");
 
     // Can't seem to add actions with double parameters to .ui file, add here.
     const std::vector<std::pair<std::string, std::string>> zoom_entries =
@@ -63,23 +64,23 @@ StatusBar::StatusBar()
     }
 
     zoom_popover = std::make_unique<Gtk::PopoverMenu>(zoom_menu, Gtk::PopoverMenu::Flags::NESTED);
-    zoom_popover->set_parent(*zoom);
+    zoom_popover->set_parent(*_zoom);
 
-    zoom_value->signal_input().connect(sigc::mem_fun(*this, &StatusBar::zoom_input), true);
-    zoom_value->signal_output().connect(sigc::mem_fun(*this, &StatusBar::zoom_output), true);
-    zoom_value->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::zoom_value_changed));
-    on_popup_menu(*zoom_value, sigc::mem_fun(*this, &StatusBar::zoom_popup));
-    zoom_value->setDefocusTarget(this);
+    _zoom->set_transformers(
+        [] (double value) { return std::log(value / 100.0) / std::log(2); },
+        [] (double value) { return std::floor(10 * (std::pow(2, value) * 100.0 + 0.05)) / 10; }
+    );
+    _zoom->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::zoom_value_changed));
+    on_popup_menu(*_zoom, sigc::mem_fun(*this, &StatusBar::zoom_popup));
+    _zoom->setDefocusTarget(this);
 
-    auto zoom_adjustment = zoom_value->get_adjustment();
+    auto zoom_adjustment = _zoom->get_adjustment();
     zoom_adjustment->set_lower(log(SP_DESKTOP_ZOOM_MIN)/log(2));
     zoom_adjustment->set_upper(log(SP_DESKTOP_ZOOM_MAX)/log(2));
 
     // ******* Rotate *******
 
-    rotate = &UI::get_widget<Gtk::Box>(builder, "statusbar-rotate");
-    rotate_value = &UI::get_derived_widget<UI::Widget::SpinButton>(builder, "statusbar-rotate-value");
-    rotate_value->set_dont_evaluate(true); // ExpressionEvaluator has trouble parsing degree symbol.
+    _rotate = &UI::get_derived_widget<UI::Widget::InkSpinButton>(builder, "statusbar-rotate");
 
     // Can't seem to add actions with double parameters to .ui file, add here.
     const std::vector<std::pair<std::string, std::string>> rotate_entries =
@@ -101,12 +102,11 @@ StatusBar::StatusBar()
     }
 
     rotate_popover = std::make_unique<Gtk::PopoverMenu>(rotate_menu, Gtk::PopoverMenu::Flags::NESTED);
-    rotate_popover->set_parent(*rotate);
+    rotate_popover->set_parent(*_rotate);
 
-    rotate_value->signal_output().connect(sigc::mem_fun(*this, &StatusBar::rotate_output), true);
-    rotate_value->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::rotate_value_changed));
-    on_popup_menu(*rotate_value, sigc::mem_fun(*this, &StatusBar::rotate_popup));
-    rotate_value->setDefocusTarget(this);
+    _rotate->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::rotate_value_changed));
+    on_popup_menu(*_rotate, sigc::mem_fun(*this, &StatusBar::rotate_popup));
+    _rotate->setDefocusTarget(this);
 
     // Add rest by hand for now.
 
@@ -170,24 +170,21 @@ StatusBar::set_message(const Inkscape::MessageType type, const char* message)
     selection->set_tooltip_text(selection->get_text());
 }
 
-void
-StatusBar::set_coordinate(const Geom::Point& p)
+void StatusBar::set_coordinate(Geom::Point const &p)
 {
     char * str_total = g_strdup_printf("(%7.2f, %7.2f)", p.x(), p.y());
     coordinates->set_markup(str_total);
     g_free(str_total);
 }
 
-void
-StatusBar::rotate_grab_focus()
+void StatusBar::rotate_grab_focus()
 {
-    rotate_value->grab_focus();
+    _rotate->grab_focus();
 }
 
-void
-StatusBar::zoom_grab_focus()
+void StatusBar::zoom_grab_focus()
 {
-    zoom_value->grab_focus();
+    _zoom->grab_focus();
 }
 
 void StatusBar::onDefocus()
@@ -197,38 +194,14 @@ void StatusBar::onDefocus()
 
 // ******** Zoom ********
 
-int
-StatusBar::zoom_input(double &new_value)
-{
-    double value = g_strtod(zoom_value->get_text().c_str(), nullptr);
-    new_value = log(value / 100.0) / log(2);
-    return true;
-}
-
-bool
-StatusBar::zoom_output()
-{
-    double value = floor (10 * (pow (2, zoom_value->get_value()) * 100.0 + 0.05)) / 10;
-
-    char b[64];
-    if (value < 10) {
-        g_snprintf(b, 64, "%4.1f%%", value);
-    } else {
-        g_snprintf(b, 64, "%4.0f%%", value);
-    }
-    zoom_value->set_text(b);
-
-    return true;
-}
-
-void StatusBar::zoom_value_changed()
+void StatusBar::zoom_value_changed(double value)
 {
     if (_blocker.pending()) {
         return;
     }
     auto guard = _blocker.block();
 
-    double const zoom_factor = std::pow(2, zoom_value->get_value());
+    double const zoom_factor = std::pow(2, value);
 
     if (auto const window = dynamic_cast<Gtk::ApplicationWindow *>(get_root())) {
         auto variant = Glib::Variant<double>::create(zoom_factor);
@@ -240,7 +213,7 @@ void StatusBar::zoom_value_changed()
 
 bool StatusBar::zoom_popup(PopupMenuOptionalClick)
 {
-    popup_at_center(*zoom_popover, *zoom);
+    popup_at_center(*zoom_popover, *_zoom);
     return true;
 }
 
@@ -258,26 +231,12 @@ void StatusBar::update_zoom()
         correction = prefs->getDouble("/options/zoomcorrection/value", 1.0);
     }
 
-    zoom_value->set_value(log(desktop->current_zoom() / correction) / log(2));
+    _zoom->set_value(log(desktop->current_zoom() / correction) / log(2));
 }
 
 // ******* Rotate *******
 
-bool
-StatusBar::rotate_output()
-{
-    auto val = rotate_value->get_value();
-    if (val < -180) val += 360;
-    if (val >  180) val -= 360;
-
-    char b[64];
-    g_snprintf(b, 64, "%7.2f°", val);
-    rotate_value->set_text(b);
-
-    return true;
-}
-
-void StatusBar::rotate_value_changed()
+void StatusBar::rotate_value_changed(double value)
 {
     if (_blocker.pending()) {
         return;
@@ -285,7 +244,7 @@ void StatusBar::rotate_value_changed()
     auto guard = _blocker.block();
 
     if (auto const window = dynamic_cast<Gtk::ApplicationWindow *>(get_root())) {
-        auto variant = Glib::Variant<double>::create(rotate_value->get_value());
+        auto variant = Glib::Variant<double>::create(value);
         window->activate_action("win.canvas-rotate-absolute-degrees", variant);
     } else {
         std::cerr << "StatusBar::rotate_value_changed(): failed to get window!" << std::endl;
@@ -294,7 +253,7 @@ void StatusBar::rotate_value_changed()
 
 bool StatusBar::rotate_popup(PopupMenuOptionalClick)
 {
-    popup_at_center(*rotate_popover, *rotate);
+    popup_at_center(*rotate_popover, *_rotate);
     return true;
 }
 
@@ -305,11 +264,10 @@ void StatusBar::update_rotate()
     }
     auto guard = _blocker.block();
 
-    rotate_value->set_value(Geom::deg_from_rad(desktop->current_rotation().angle()));
+    _rotate->set_value(Geom::deg_from_rad(desktop->current_rotation().angle()));
 }
 
-void
-StatusBar::update_visibility()
+void StatusBar::update_visibility()
 {
     auto prefs = Inkscape::Preferences::get();
     Glib::ustring path("/statusbar/visibility/");
@@ -317,7 +275,7 @@ StatusBar::update_visibility()
     layer_selector->set_visible(prefs->getBool(path + "layer",       true));
     selected_style->set_visible(prefs->getBool(path + "style",       true));
     coordinates->set_visible(   prefs->getBool(path + "coordinates", true));
-    rotate->set_visible(        prefs->getBool(path + "rotation",    true));
+    _rotate->set_visible(       prefs->getBool(path + "rotation",    true));
 }
 
 } // namespace Inkscape::UI::Widget
