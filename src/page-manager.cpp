@@ -248,13 +248,13 @@ void PageManager::deletePage(SPPage *page, bool content)
             items_to_delete.deleteItems(true);
         }
         // Only adjust if there will be a page after viewport page is deleted
-        bool fit_viewport = page->isViewportPage() && getPageCount() > 2;
+        bool fit_viewport = page->isViewportPage() && getPageCount() >= 2;
 
         // Removal from pages is done automatically via signals.
         page->deleteObject();
 
         if (fit_viewport) {
-            _document->fitToRect(getFirstPage()->getDesktopRect(), false);
+            _document->fitToRect(getFirstPage()->getDocumentRect(), false);
         }
     }
 
