@@ -618,10 +618,9 @@ void SingleExport::onExport()
     float x1 = unit->convert(spin_buttons[SPIN_X1]->get_value(), "px");
     float y0 = unit->convert(spin_buttons[SPIN_Y0]->get_value(), "px");
     float y1 = unit->convert(spin_buttons[SPIN_Y1]->get_value(), "px");
-    auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1));
+    auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)) * _desktop->dt2doc();
 
     if (omod->is_raster()) {
-        area *= _desktop->dt2doc();
         unsigned long int width = int(spin_buttons[SPIN_BMWIDTH]->get_value() + 0.5);
         unsigned long int height = int(spin_buttons[SPIN_BMHEIGHT]->get_value() + 0.5);
 
