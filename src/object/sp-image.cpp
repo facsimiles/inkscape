@@ -22,6 +22,7 @@
 
 #include <giomm/error.h>
 #include <glib/gstdio.h>
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 
 #include <2geom/rect.h>
@@ -515,9 +516,9 @@ Inkscape::Pixbuf *SPImage::readImage(gchar const *href, gchar const *absref, gch
 {
     Inkscape::Pixbuf *inkpb = nullptr;
 
-    gchar const *filename = href;
+    char const *filename = href;
     
-    if (filename != nullptr) {
+    if (filename) {
         if (g_ascii_strncasecmp(filename, "data:", 5) == 0) {
             /* data URI - embedded image */
             filename += 5;
@@ -526,8 +527,13 @@ Inkscape::Pixbuf *SPImage::readImage(gchar const *href, gchar const *absref, gch
             auto url = Inkscape::URI::from_href_and_basedir(href, base);
 
             if (url.hasScheme("file")) {
-                auto native = url.toNativeFilename();
-                inkpb = Inkscape::Pixbuf::create_from_file(native.c_str(), svgdpi);
+                try {
+                    auto native = url.toNativeFilename();
+                    inkpb = Inkscape::Pixbuf::create_from_file(native.c_str(), svgdpi);
+                } catch (Glib::ConvertError const &e) {
+                    g_warning("readImage: %s", e.what());
+                    inkpb = nullptr;
+                }
             } else {
                 try {
                     auto contents = url.getContents();
@@ -538,7 +544,7 @@ Inkscape::Pixbuf *SPImage::readImage(gchar const *href, gchar const *absref, gch
             }
         }
 
-        if (inkpb != nullptr) {
+        if (inkpb) {
             return inkpb;
         }
     }

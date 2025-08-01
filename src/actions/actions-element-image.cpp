@@ -92,7 +92,13 @@ void image_edit(InkscapeApplication *app)
             continue;
         }
 
-        std::string const filename = uri.toNativeFilename();
+        std::string filename;
+        try {
+            filename = uri.toNativeFilename();
+        } catch (Glib::ConvertError const &e) {
+            g_warning("Edit Externally: %s", e.what());
+            continue;
+        }
         std::string const command = Glib::shell_quote(image_get_editor_name(has_svg_extension(filename))) + " " +
                                     Glib::shell_quote(filename);
 
@@ -113,7 +119,7 @@ void image_edit(InkscapeApplication *app)
                 show_output(Glib::ustring("image_edit: ") + message);
             }
         } catch (Glib::ShellError &error) {
-            g_error("Edit Externally: %s\n%s %s", message, _("System error message:"), error.what());
+            g_critical("Edit Externally: %s\n%s %s", message, _("System error message:"), error.what());
         }
     }
 }

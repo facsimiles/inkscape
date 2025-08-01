@@ -91,7 +91,12 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
         return ret;
     }
 
-    auto abs_href = uri.toNativeFilename();
+    std::string abs_href;
+    try {
+        abs_href = uri.toNativeFilename();
+    } catch (Glib::ConvertError const &) {
+        return ret;
+    }
 
     auto absref_it = find_record(absref_key);
     if (absref_it != ret.end()) {
@@ -141,14 +146,21 @@ static void rebase_image_href(Inkscape::XML::Node *ir, std::string const &old_ba
         return;
     }
 
+    std::string filename;
+    try {
+        filename = url.toNativeFilename();
+    } catch (Glib::ConvertError const &) {
+        return;
+    }
+
     // if path doesn't exist, use sodipodi:absref
-    if (!g_file_test(url.toNativeFilename().c_str(), G_FILE_TEST_EXISTS)) {
+    if (!g_file_test(filename.c_str(), G_FILE_TEST_EXISTS)) {
         auto spabsref = ir->attribute("sodipodi:absref");
         if (spabsref && g_file_test(spabsref, G_FILE_TEST_EXISTS)) {
             url = URI::from_native_filename(spabsref);
         }
     } else if (spns) {
-        ir->setAttributeOrRemoveIfEmpty("sodipodi:absref", url.toNativeFilename());
+        ir->setAttributeOrRemoveIfEmpty("sodipodi:absref", filename);
     }
 
     if (!spns) {

@@ -175,11 +175,11 @@ const gchar *URI::getOpaque() const {
 }
 
 std::string URI::toNativeFilename() const
-{ //
+{
     auto uristr = str();
 
     // remove fragment identifier
-    if (getFragment() != nullptr) {
+    if (getFragment()) {
         uristr.resize(uristr.find('#'));
     }
 

@@ -1483,18 +1483,15 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
         style->block_filter_bbox_updates = false;
     }
 
-    try
-    {
-        this->update(ctx, flags);
-    }
-    catch(...)
-    {
+    try {
+        update(ctx, flags);
+    } catch (...) {
         /** \todo
         * in case of catching an exception we need to inform the user somehow that the document is corrupted
         * maybe by implementing an document flag documentOk
         * or by a modal error dialog
         */
-        g_warning("SPObject::updateDisplay(SPCtx *ctx, unsigned int flags) : throw in ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->update(this, ctx, flags);");
+        g_warning("SPObject::updateDisplay: uncaught exception");
     }
 
     assert((document->update_in_progress)--);

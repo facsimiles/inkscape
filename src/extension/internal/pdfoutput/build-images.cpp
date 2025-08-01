@@ -85,9 +85,9 @@ void DrawContext::paint_raster(SPImage const *image)
                 auto image = _doc._gen.load_image(uri.toNativeFilename().c_str());
                 raster_id = _doc._gen.add_image(image, props);
             }
-        } catch (Inkscape::BadURIException &e) {
+        } catch (Inkscape::BadURIException const &e) {
             g_warning("Couldn't read image: %s", e.what());
-        } catch (std::exception &e) {
+        } catch (std::exception const &e) {
             g_warning("Could not add image file to PDF: %s", e.what());
         }
     } else {
