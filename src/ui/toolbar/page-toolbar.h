@@ -15,7 +15,10 @@
 #ifndef INKSCAPE_UI_TOOLBAR_PAGE_TOOLBAR_H
 #define INKSCAPE_UI_TOOLBAR_PAGE_TOOLBAR_H
 
+#include "svg/svg-box.h"
 #include "toolbar.h"
+#include "ui/operation-blocker.h"
+#include "ui/widget/spinbutton.h"
 
 namespace Gtk {
 class ComboBoxText;
@@ -61,11 +64,7 @@ private:
     void labelEdited();
     void bleedsEdited();
     void marginsEdited();
-    void marginTopEdited();
-    void marginRightEdited();
-    void marginBottomEdited();
-    void marginLeftEdited();
-    void marginSideEdited(int side, const Glib::ustring &value);
+    void marginSideEdited(BoxSide side, UI::Widget::SpinButton const &entry);
     void sizeChoose(const std::string &preset_key);
     void sizeChanged();
     void setLabelText(SPPage *page = nullptr);
@@ -101,10 +100,13 @@ private:
     Glib::RefPtr<Gtk::ListStore> _sizes_list;
     Glib::RefPtr<Gtk::ListStore> _sizes_search;
 
-    Inkscape::UI::Widget::MathSpinButton &_margin_top;
-    Inkscape::UI::Widget::MathSpinButton &_margin_right;
-    Inkscape::UI::Widget::MathSpinButton &_margin_bottom;
-    Inkscape::UI::Widget::MathSpinButton &_margin_left;
+    UI::Widget::SpinButton &_margin_top;
+    UI::Widget::SpinButton &_margin_right;
+    UI::Widget::SpinButton &_margin_bottom;
+    UI::Widget::SpinButton &_margin_left;
+
+    std::unique_ptr<UI::Widget::UnitTracker> _unit_tracker;
+    OperationBlocker _blocker;
 
     double _unit_to_size(std::string number, std::string unit_str, std::string const &backup);
 };

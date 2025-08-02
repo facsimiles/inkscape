@@ -31,6 +31,8 @@
 #include "ui/icon-names.h"
 #include "ui/popup-menu.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/unit-tracker.h"
+#include "util/units.h"
 
 using Inkscape::IO::Resource::UIS;
 
@@ -70,10 +72,11 @@ PageToolbar::PageToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     , _sep1(get_widget<Gtk::Separator>(builder, "_sep1"))
     , _sizes_list(get_object<Gtk::ListStore>(builder, "_sizes_list"))
     , _sizes_search(get_object<Gtk::ListStore>(builder, "_sizes_search"))
-    , _margin_top(get_derived_widget<UI::Widget::MathSpinButton>(builder, "_margin_top"))
-    , _margin_right(get_derived_widget<UI::Widget::MathSpinButton>(builder, "_margin_right"))
-    , _margin_bottom(get_derived_widget<UI::Widget::MathSpinButton>(builder, "_margin_bottom"))
-    , _margin_left(get_derived_widget<UI::Widget::MathSpinButton>(builder, "_margin_left"))
+    , _margin_top(UI::get_derived_widget<UI::Widget::SpinButton>(builder, "_margin_top"))
+    , _margin_right(UI::get_derived_widget<UI::Widget::SpinButton>(builder, "_margin_right"))
+    , _margin_bottom(UI::get_derived_widget<UI::Widget::SpinButton>(builder, "_margin_bottom"))
+    , _margin_left(UI::get_derived_widget<UI::Widget::SpinButton>(builder, "_margin_left"))
+    , _unit_tracker{std::make_unique<UI::Widget::UnitTracker>(Util::UNIT_TYPE_LINEAR)}
 {
     set_name("PageToolbar");
 
@@ -98,22 +101,40 @@ PageToolbar::PageToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     _margin_popover.set_parent(*this);
 
     _text_page_margins.signal_icon_press().connect([&](Gtk::Entry::IconPosition) {
+        if (_blocker.pending()) {
+            return;
+        }
+        auto guard = _blocker.block();
+
+        // Set the unit of the unit-selector, so the units of the margin spin-edits
+        // are updated to the selected display unit.
+        _unit_tracker->setActiveUnit(_document->getDisplayUnit());
+
         if (auto page = _document->getPageManager().getSelected()) {
             auto const &margin = page->getMarginBox();
             auto unit = _document->getDisplayUnit()->abbr;
             auto scale = _document->getDocumentScale();
+
             _margin_top.set_value(margin.top().toValue(unit) * scale[Geom::Y]);
             _margin_right.set_value(margin.right().toValue(unit) * scale[Geom::X]);
             _margin_bottom.set_value(margin.bottom().toValue(unit) * scale[Geom::Y]);
             _margin_left.set_value(margin.left().toValue(unit) * scale[Geom::X]);
+
             _text_page_bleeds.set_text(page->getBleedLabel());
         }
         UI::popup_at(_margin_popover, _text_page_margins);
     });
-    _margin_top.signal_value_changed().connect(sigc::mem_fun(*this, &PageToolbar::marginTopEdited));
-    _margin_right.signal_value_changed().connect(sigc::mem_fun(*this, &PageToolbar::marginRightEdited));
-    _margin_bottom.signal_value_changed().connect(sigc::mem_fun(*this, &PageToolbar::marginBottomEdited));
-    _margin_left.signal_value_changed().connect(sigc::mem_fun(*this, &PageToolbar::marginLeftEdited));
+
+    auto const pairs = std::to_array({std::pair<UI::Widget::SpinButton &, BoxSide>
+         {_margin_top, BoxSide::BOX_TOP},
+         {_margin_right, BoxSide::BOX_RIGHT},
+         {_margin_bottom, BoxSide::BOX_BOTTOM},
+         {_margin_left, BoxSide::BOX_LEFT}
+    });
+    for (auto &[btn, side] : pairs) {
+        btn.addUnitTracker(_unit_tracker.get());
+        btn.signal_value_changed().connect(std::bind(&PageToolbar::marginSideEdited, this, side, std::ref(btn)));
+    }
 
     dynamic_cast<Gtk::Entry &>(*_combo_page_sizes.get_child()).set_completion(get_object<Gtk::EntryCompletion>(builder, "_sizes_searcher"));
 
@@ -248,7 +269,7 @@ void PageToolbar::marginsEdited()
 {
     auto text = _text_page_margins.get_text();
 
-    // And modifiction to the margin causes pages to be enabled
+    // And modification to the margin causes pages to be enabled
     auto &pm = _document->getPageManager();
     pm.enablePages();
 
@@ -259,30 +280,19 @@ void PageToolbar::marginsEdited()
     }
 }
 
-void PageToolbar::marginTopEdited()
+void PageToolbar::marginSideEdited(BoxSide side, UI::Widget::SpinButton const &entry)
 {
-    marginSideEdited(0, _margin_top.get_text());
-}
-void PageToolbar::marginRightEdited()
-{
-    marginSideEdited(1, _margin_right.get_text());
-}
-void PageToolbar::marginBottomEdited()
-{
-    marginSideEdited(2, _margin_bottom.get_text());
-}
-void PageToolbar::marginLeftEdited()
-{
-    marginSideEdited(3, _margin_left.get_text());
-}
-void PageToolbar::marginSideEdited(int side, const Glib::ustring &value)
-{
-    // And modifiction to the margin causes pages to be enabled
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
+    // And modification to the margin causes pages to be enabled
     auto &pm = _document->getPageManager();
     pm.enablePages();
 
     if (auto page = pm.getSelected()) {
-        page->setMarginSide(side, value, false);
+        page->setMarginSide(side, entry.get_text(), false);
         DocumentUndo::maybeDone(_document, "page-margin", _("Edit page margin"), INKSCAPE_ICON("tool-pages"));
         setMarginText(page);
     }
