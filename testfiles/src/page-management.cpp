@@ -18,6 +18,8 @@
 #include <src/object/sp-rect.h>
 #include <src/page-manager.h>
 
+#include "geom-predicates.h"
+
 using namespace Inkscape;
 using namespace Inkscape::XML;
 using namespace std::literals;
@@ -49,28 +51,6 @@ public:
     std::unique_ptr<SPDocument> doc;
 };
 
-::testing::AssertionResult RectNear(std::string expr1,
-                                    std::string expr2,
-                                    Geom::Rect val1,
-                                    Geom::Rect val2,
-                                    double abs_error = 0.01) {
-
-  double diff = 0;
-  for (auto x = 0; x < 2; x++) {
-      for (auto y = 0; y < 2; y++) {
-          diff += fabs(val1[x][y] - val2[x][y]);
-      }
-  }
-
-  if (diff <= abs_error)
-      return ::testing::AssertionSuccess();
-
-  return ::testing::AssertionFailure()
-      << "The difference between " << expr1 << " and " << expr2
-      << " is " << diff << ", which exceeds " << abs_error << ", where\n"
-      << expr1 << " evaluates to " << val1 << ",\n"
-      << expr2 << " evaluates to " << val2 << ".\n";
-}
 
 TEST_F(MultiPageTest, swapPages)
 {
@@ -82,10 +62,12 @@ TEST_F(MultiPageTest, swapPages)
     auto rect1 = cast<SPRect>(doc->getObjectById("rect1"));
     auto rect2 = cast<SPRect>(doc->getObjectById("rect2"));
 
-    EXPECT_TRUE(RectNear(page1->getId(), "initial", page1->getRect(), {0, 0, 100, 100}));
-    EXPECT_TRUE(RectNear(page2->getId(), "initial", page2->getRect(), {-100, 200, -90, 390}));
-    EXPECT_TRUE(RectNear(rect1->getId(), "initial", *rect1->geometricBounds(), {-100, -100, -50, -50}));
-    EXPECT_TRUE(RectNear(rect2->getId(), "initial", *rect2->geometricBounds(), {-200, 145, -195, 240}));
+    const double eps = 0.01;
+
+    EXPECT_RECT_NEAR(page1->getRect(), Geom::Rect(0, 0, 100, 100), eps);
+    EXPECT_RECT_NEAR(page2->getRect(), Geom::Rect(-100, 200, -90, 390), eps);
+    EXPECT_RECT_NEAR(*rect1->geometricBounds(), Geom::Rect(-100, -100, -50, -50), eps);
+    EXPECT_RECT_NEAR(*rect2->geometricBounds(), Geom::Rect(-200, 145, -195, 240), eps);
     EXPECT_TRUE(page1->itemOnPage(rect1));
     EXPECT_TRUE(page2->itemOnPage(rect2));
     EXPECT_TRUE(page1->isViewportPage());
@@ -95,20 +77,20 @@ TEST_F(MultiPageTest, swapPages)
     // This causes the viewport page to be resized if it's incorrectly positioned.
     doc->ensureUpToDate();
 
-    EXPECT_TRUE(RectNear(page1->getId(), "swap1", page1->getRect(), {-100, 200, 0, 300}));
-    EXPECT_TRUE(RectNear(page2->getId(), "swap1", page2->getRect(), {0, 0, 10, 190}));
-    EXPECT_TRUE(RectNear(rect1->getId(), "swap1", *rect1->geometricBounds(), {-200, 100, -150, 150}));
-    EXPECT_TRUE(RectNear(rect2->getId(), "swap1", *rect2->geometricBounds(), {-100, -55, -95, 40}));
+    EXPECT_RECT_NEAR(page1->getRect(), Geom::Rect(-100, 200, 0, 300), eps);
+    EXPECT_RECT_NEAR(page2->getRect(), Geom::Rect(0, 0, 10, 190), eps);
+    EXPECT_RECT_NEAR(*rect1->geometricBounds(), Geom::Rect(-200, 100, -150, 150), eps);
+    EXPECT_RECT_NEAR(*rect2->geometricBounds(), Geom::Rect(-100, -55, -95, 40), eps);
     EXPECT_FALSE(page1->isViewportPage());
     EXPECT_TRUE(page2->isViewportPage());
     
     page1->swapPage(page2, true);
     doc->ensureUpToDate();
 
-    EXPECT_TRUE(RectNear(page1->getId(), "swap2", page1->getRect(), {0, 0, 100, 100}));
-    EXPECT_TRUE(RectNear(page2->getId(), "swap2", page2->getRect(), {-100, 200, -90, 390}));
-    EXPECT_TRUE(RectNear(rect1->getId(), "swap2", *rect1->geometricBounds(), {-100, -100, -50, -50}));
-    EXPECT_TRUE(RectNear(rect2->getId(), "swap2", *rect2->geometricBounds(), {-200, 145, -195, 240}));
+    EXPECT_RECT_NEAR(page1->getRect(), Geom::Rect(0, 0, 100, 100), eps);
+    EXPECT_RECT_NEAR(page2->getRect(), Geom::Rect(-100, 200, -90, 390), eps);
+    EXPECT_RECT_NEAR(*rect1->geometricBounds(), Geom::Rect(-100, -100, -50, -50), eps);
+    EXPECT_RECT_NEAR(*rect2->geometricBounds(), Geom::Rect(-200, 145, -195, 240), eps);
     EXPECT_TRUE(page1->isViewportPage());
     EXPECT_FALSE(page2->isViewportPage());
 }

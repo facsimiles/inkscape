@@ -124,6 +124,23 @@ public:
 
     // Make a deep copy.
     std::unique_ptr<SPDocument> copy() const;
+    enum class ImportLayersMode
+    {
+        None,
+        ToGroup, // convert layers to groups
+        // Merge //TODO: implement
+    };
+    enum class ImportRoot
+    {
+        None,
+        AlwaysGroup,   // always create new group at root
+        WhenNeeded,    // Create group if needed for applying properties
+        Single,        // Keep single object at root, group when needed
+        UngroupSingle, // Single+ungroup when possible
+    };
+    void import(SPDocument &input_doc, Inkscape::XML::Node *parent, Inkscape::XML::Node *after_node,
+                Geom::Affine transform, std::vector<Inkscape::XML::Node *> *pasted_objects_result = nullptr,
+                ImportRoot rootMode = ImportRoot::None, ImportLayersMode layerMode = ImportLayersMode::None);
     // Substitute doc root
     void rebase(Inkscape::XML::Document * new_xmldoc, bool keep_namedview = true);
     // Substitute doc root with a file

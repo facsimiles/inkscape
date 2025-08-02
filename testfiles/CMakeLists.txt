@@ -134,6 +134,7 @@ set(TEST_SOURCES
     store-test
     lpe-test
     ui-util-test
+    sp-document-test
     ${LPE_TESTS_64bit}
     )
 

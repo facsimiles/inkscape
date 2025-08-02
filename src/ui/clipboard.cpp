@@ -320,7 +320,6 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
 
     _createInternalClipboard();   // construct a new clipboard document
     _copySelection(set);   // copy all items in the selection to the internal clipboard
-    fit_canvas_to_drawing(_clipboardSPDoc.get());
 
     _setClipboardTargets();
 }
@@ -475,7 +474,6 @@ void ClipboardManagerImpl::insertSymbol(SPDesktop *desktop, Geom::Point const &s
         return;
     }
 
-    prevent_id_clashes(symbol.get(), desktop->getDocument(), true);
     auto *root = symbol->getRoot();
 
     // Synthesize a clipboard position in order to paste the symbol where it got dropped.
@@ -540,7 +538,6 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place, bool on_page
     }
 
     // copy definitions
-    prevent_id_clashes(tempdoc.get(), desktop->getDocument(), true);
     sp_import_document(desktop, tempdoc.get(), in_place, on_page);
 
     // _copySelection() has put all items in groups, now ungroup them (preserves transform
@@ -1190,6 +1187,14 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
         auto page_rect = page->getDesktopRect();
         _clipnode->setAttributePoint("page-min", page_rect.min());
         _clipnode->setAttributePoint("page-max", page_rect.max());
+    }
+    // Preferably set bounds based on original doc.
+    // Some of the objects like <use> referring to objects which are not part of selection don't have proper bounds
+    // at this stage.
+    if (Geom::OptRect bounds = selection->documentBounds(SPItem::VISUAL_BBOX)) {
+        _clipboardSPDoc->fitToRect(bounds.value());
+    } else {
+        fit_canvas_to_drawing(_clipboardSPDoc.get());
     }
 }
 

@@ -546,7 +546,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
                 Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         }
     }
-    
+
     // remove this node from current document after saving it as template
     root->removeChild(templateinfo_node);
 
@@ -565,20 +565,21 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
  */
 void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, bool on_page)
 {
-    //TODO: merge with file_import()
-
     SPDocument *target_document = desktop->getDocument();
     Inkscape::XML::Node *root = clipdoc->getReprRoot();
     auto layer = desktop->layerManager().currentLayer();
     Inkscape::XML::Node *target_parent = layer->getRepr();
-
-    Inkscape::XML::rebase_hrefs(clipdoc, target_document->getDocumentBase(), false);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Get page manager for on_page pasting, this must be done before selection changes
     Inkscape::PageManager &pm = target_document->getPageManager();
     SPPage *to_page = pm.getSelected();
+    Geom::OptRect from_page;
+    Inkscape::XML::Node *clipboard = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
+    if (clipboard && clipboard->attribute("page-min")) {
+        from_page = Geom::OptRect(clipboard->getAttributePoint("page-min"), clipboard->getAttributePoint("page-max"));
+    }
 
     auto *node_after = desktop->getSelection()->topRepr();
     if (node_after && prefs->getBool("/options/paste/aboveselected", true) && node_after != target_parent) {
@@ -595,126 +596,40 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
         node_after = target_parent->lastChild();
     }
 
-    // copy definitions
-    desktop->doc()->importDefs(clipdoc);
-
-    Inkscape::XML::Node* clipboard = nullptr;
-    // copy objects
-    std::vector<Inkscape::XML::Node*> pasted_objects;
-    for (Inkscape::XML::Node *obj = root->firstChild() ; obj ; obj = obj->next()) {
-        // Don't copy metadata, defs, named views and internal clipboard contents to the document
-        if (!strcmp(obj->name(), "svg:defs")) {
-            continue;
-        }
-        if (!strcmp(obj->name(), "svg:metadata")) {
-            continue;
-        }
-        if (!strcmp(obj->name(), "sodipodi:namedview")) {
-            continue;
-        }
-        if (!strcmp(obj->name(), "inkscape:clipboard")) {
-            clipboard = obj;
-            continue;
-        }
-
-        Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        target_parent->addChild(obj_copy, node_after);
-        node_after = obj_copy;
-        Inkscape::GC::release(obj_copy);
-
-        // if we are pasting a clone to an already existing object, its
-        // transform is relative to the document, not to its original (see ui/clipboard.cpp)
-        auto spobject = target_document->getObjectByRepr(obj_copy);
-        auto use = cast<SPUse>(spobject);
-        if (use) {
-            SPItem *original = use->get_original();
-            if (original) {
-                Geom::Affine relative_use_transform = original->transform.inverse() * use->transform;
-                obj_copy->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(relative_use_transform));
-            }
-        }
-
-        if (is<SPItem>(spobject)) {
-            pasted_objects.push_back(obj_copy);
-        }
-    }
-
-    std::vector<Inkscape::XML::Node*> pasted_objects_not;
-    Geom::Affine doc2parent = layer->i2doc_affine().inverse();
-
-    Geom::OptRect from_page;
+    Geom::Point offset(0, 0);
+    Geom::Rect bbox;
     if (clipboard) {
-        if (clipboard->attribute("page-min")) {
-            from_page = Geom::OptRect(clipboard->getAttributePoint("page-min"), clipboard->getAttributePoint("page-max"));
-        }
-
-        for (Inkscape::XML::Node *obj = clipboard->firstChild(); obj; obj = obj->next()) {
-            if (target_document->getObjectById(obj->attribute("id")))
-                continue;
-            Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-            layer->appendChildRepr(obj_copy);
-            Inkscape::GC::release(obj_copy);
-            pasted_objects_not.push_back(obj_copy);
-        }
+        Geom::Point min, max;
+        min = clipboard->getAttributePoint("min", min);
+        max = clipboard->getAttributePoint("max", max);
+        bbox = Geom::Rect(min, max) * target_document->dt2doc();
+        offset = bbox.min();
     }
+    if (!in_place) {
+        auto &m = desktop->getNamedView()->snap_manager;
+        m.setup(desktop);
+        desktop->getTool()->discard_delayed_snap_event();
+
+        // Get offset from mouse pointer to bbox center, snap to grid if enabled
+        auto cursor_position = desktop->point() * target_document->dt2doc();
+        auto snap_shift = m.multipleOfGridPitch(cursor_position - bbox.midpoint(), bbox.midpoint());
+        offset += snap_shift;
+        m.unSetup();
+    }
+    if (on_page && from_page && to_page) {
+        auto page_offset = to_page->getDocumentRect().min() - (from_page.value() * target_document->dt2doc()).min();
+        offset += page_offset;
+    }
+    Geom::Affine transform = Geom::Translate(offset);
+
+    // copy objects
+    std::vector<Inkscape::XML::Node *> pasted_objects;
+    target_document->import(*clipdoc, layer->getRepr(), node_after, transform, &pasted_objects);
+
     target_document->ensureUpToDate();
     Inkscape::Selection *selection = desktop->getSelection();
-    selection->setReprList(pasted_objects_not);
-
-    selection->deleteItems(true);
-
     // Change the selection to the freshly pasted objects
     selection->setReprList(pasted_objects);
-    for (auto item : selection->items()) {
-        auto pasted_lpe_item = cast<SPLPEItem>(item);
-        if (pasted_lpe_item) {
-            sp_lpe_item_enable_path_effects(pasted_lpe_item, false);
-        }
-    }
-    // Apply inverse of parent transform
-    selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
-
-    // Update (among other things) all curves in paths, for bounds() to work
-    target_document->ensureUpToDate();
-
-    // move selection either to original position (in_place) or to mouse pointer
-    Geom::OptRect sel_bbox = selection->visualBounds();
-    if (sel_bbox) {
-        // get offset of selection to original position of copied elements
-        Geom::Point pos_original;
-        Inkscape::XML::Node *clipnode = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
-        if (clipnode) {
-            Geom::Point min, max;
-            min = clipnode->getAttributePoint("min", min);
-            max = clipnode->getAttributePoint("max", max);
-            pos_original = Geom::Point(min[Geom::X], max[Geom::Y]);
-        }
-        Geom::Point offset = pos_original - sel_bbox->corner(3);
-
-        if (!in_place) {
-            auto &m = desktop->getNamedView()->snap_manager;
-            m.setup(desktop);
-            desktop->getTool()->discard_delayed_snap_event();
-
-            // Get offset from mouse pointer rounded to the pixel to bbox center, snap to grid if enabled
-            Geom::Point mouse_offset = (desktop->point() - sel_bbox->midpoint()).round();
-            offset = m.multipleOfGridPitch(mouse_offset - offset, sel_bbox->midpoint() + offset) + offset;
-            m.unSetup();
-        } else if (on_page && from_page && to_page) {
-            // Moving to the same location on a different page requires us to remove the original page translation
-            offset *= Geom::Translate(from_page->min()).inverse();
-            // Then add the new page's transform on top.
-            offset *= Geom::Translate(to_page->getDesktopRect().min());
-        }
-
-        selection->moveRelative(offset);
-        for (auto po : pasted_objects) {
-            auto lpeitem = cast<SPLPEItem>(target_document->getObjectByRepr(po));
-            if (lpeitem) {
-                sp_lpe_item_enable_path_effects(lpeitem, true);
-            }
-        }
-    }
     target_document->emitReconstructionFinish();
 }
 
@@ -722,8 +637,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
  *  Import a resource.  Called by document_import() and Drag and Drop.
  *  The only place 'key' is used non-null is in drag-and-drop of a GDK_TYPE_TEXTURE.
  */
-SPObject *
-file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Extension *key)
+SPObject *file_import(SPDocument *in_doc, std::string const &path, Inkscape::Extension::Extension *key)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     bool cancelled = false;
@@ -737,7 +651,7 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
         key = Inkscape::Extension::Input::find_by_filename(path.c_str());
     }
 
-    //DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
+    // DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
     std::unique_ptr<SPDocument> doc;
     try {
         doc = Inkscape::Extension::open(key, path.c_str(), true);
@@ -767,20 +681,6 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
         app->desktopOpen(doc_ptr);
         return nullptr;
     }
-
-    // Standard case: Import
-
-    // Always preserve any imported text kerning / formatting
-    auto root_repr = in_doc->getReprRoot();
-    root_repr->setAttribute("xml:space", "preserve");
-
-    Inkscape::XML::rebase_hrefs(doc.get(), in_doc->getDocumentBase(), false);
-    Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
-    prevent_id_clashes(doc.get(), in_doc, true);
-    sp_file_fix_lpe(doc.get());
-
-    in_doc->importDefs(doc.get());
-
     // The extension should set it's pages enabled or disabled when opening
     // in order to indicate if pages are being imported or if objects are.
     if (doc->getPageManager().hasPages()) {
@@ -790,34 +690,7 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
         return nullptr;
     }
 
-    SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
-
-    // Count the number of top-level items in the imported document.
-    guint items_count = 0;
-    SPObject *o = nullptr;
-    for (auto& child: doc->getRoot()->children) {
-        if (is<SPItem>(&child)) {
-            items_count++;
-            o = &child;
-        }
-    }
-
-    //ungroup if necessary
-    bool did_ungroup = false;
-    while(items_count==1 && o && is<SPGroup>(o) && o->children.size()==1){
-        std::vector<SPItem *>v;
-        sp_item_group_ungroup(cast<SPGroup>(o), v);
-        o = v.empty() ? nullptr : v[0];
-        did_ungroup=true;
-    }
-
-    // Create a new group if necessary.
-    Inkscape::XML::Node *newgroup = nullptr;
-    const auto & al = style->attributeList();
-    if ((style && !al.empty()) || items_count > 1) {
-        newgroup = xml_in_doc->createElement("svg:g");
-        sp_repr_css_set(newgroup, style, "style");
-    }
+    // Standard case: Import
 
     // Determine the place to insert the new object.
     // This will be the current layer, if possible.
@@ -831,59 +704,28 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
         place_to_insert = in_doc->getRoot();
     }
 
-    // Construct a new object representing the imported image,
-    // and insert it into the current document.
-    SPObject *new_obj = nullptr;
-    for (auto& child: doc->getRoot()->children) {
-        if (is<SPItem>(&child)) {
-            Inkscape::XML::Node *newitem = did_ungroup ? o->getRepr()->duplicate(xml_in_doc) : child.getRepr()->duplicate(xml_in_doc);
+    std::vector<XML::Node *> result;
 
-            // convert layers to groups, and make sure they are unlocked
-            // FIXME: add "preserve layers" mode where each layer from
-            //        import is copied to the same-named layer in host
-            newitem->removeAttribute("inkscape:groupmode");
-            newitem->removeAttribute("sodipodi:insensitive");
+    doc->ensureUpToDate();
+    auto const bbox = doc->getRoot()->desktopPreferredBounds().value_or(Geom::Rect());
+    auto const bbox_doc = bbox * doc->dt2doc();
+    Geom::Affine transform = Geom::Translate(pointer_location * in_doc->dt2doc() - bbox_doc.midpoint());
 
-            if (newgroup) newgroup->appendChild(newitem);
-            else new_obj = place_to_insert->appendChildRepr(newitem);
-        }
+    in_doc->import(*doc, place_to_insert->getRepr(), nullptr, transform, &result,
+                   is_svg ? SPDocument::ImportRoot::Single
+                          : SPDocument::ImportRoot::UngroupSingle, // remove groups for imported bitmap images
+                   SPDocument::ImportLayersMode::ToGroup);
 
-        // don't lose top-level defs or style elements
-        else if (child.getRepr()->type() == Inkscape::XML::NodeType::ELEMENT_NODE) {
-            const gchar *tag = child.getRepr()->name();
-            if (!strcmp(tag, "svg:style")) {
-                in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));
-            }
-        }
+    SPObject *import_root = nullptr;
+    if (!result.empty()) {
+        g_assert(result.size() == 1);
+        import_root = in_doc->getObjectByRepr(result[0]);
     }
+    Inkscape::Selection *selection = desktop->getSelection();
+    selection->setReprList(result);
     in_doc->emitReconstructionFinish();
-    if (newgroup) new_obj = place_to_insert->appendChildRepr(newgroup);
-
-    // release some stuff
-    if (newgroup) Inkscape::GC::release(newgroup);
-    if (style) sp_repr_css_attr_unref(style);
-
-    // select and move the imported item
-    if (auto new_item = cast<SPItem>(new_obj)) {
-        Inkscape::Selection *selection = desktop->getSelection();
-        selection->set(new_item);
-
-        // preserve parent and viewBox transformations
-        // c2p is identity matrix at this point unless ensureUpToDate is called
-        doc->ensureUpToDate();
-        Geom::Affine affine = doc->getRoot()->c2p * cast<SPItem>(place_to_insert)->i2doc_affine().inverse();
-        selection->applyAffine(desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
-
-        // move to mouse pointer
-        desktop->getDocument()->ensureUpToDate();
-        if (auto sel_bbox = selection->visualBounds()) {
-            auto m = pointer_location.round() - sel_bbox->midpoint();
-            selection->moveRelative(m, false);
-        }
-    }
-
     DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
-    return new_obj;
+    return import_root;
 }
 
 /**
@@ -896,8 +738,6 @@ void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
 {
     auto &this_pm = this_doc->getPageManager();
     auto &that_pm = that_doc->getPageManager();
-    auto this_root = this_doc->getReprRoot();
-    auto that_root = that_doc->getReprRoot();
 
     // Make sure objects have visualBounds created for import
     that_doc->ensureUpToDate();
@@ -910,25 +750,7 @@ void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
         this_page->copyFrom(that_page);
     }
 
-    // Unwind the document scales for the imported objects
-    tr = this_doc->getDocumentScale().inverse() * that_doc->getDocumentScale() * tr;
-    Inkscape::ObjectSet set(this_doc);
-    for (Inkscape::XML::Node *that_repr = that_root->firstChild(); that_repr; that_repr = that_repr->next()) {
-        // Don't copy metadata, defs, named views and internal clipboard contents to the document
-        if (!strcmp(that_repr->name(), "svg:defs") ||
-            !strcmp(that_repr->name(), "svg:metadata") ||
-            !strcmp(that_repr->name(), "sodipodi:namedview")) {
-            continue;
-        }
-
-        auto this_repr = that_repr->duplicate(this_doc->getReprDoc());
-        this_root->addChild(this_repr, this_root->lastChild());
-        Inkscape::GC::release(this_repr);
-        if (auto this_item = this_doc->getObjectByRepr(this_repr)) {
-            set.add(this_item);
-        }
-    }
-    set.applyAffine(tr, true, false, true);
+    this_doc->import(*that_doc, nullptr, nullptr, tr, nullptr);
 }
 
 /*

@@ -17,6 +17,8 @@
 #include <src/object/sp-root.h>
 #include <src/object/sp-object.h>
 
+#include "geom-predicates.h"
+
 using namespace Inkscape;
 using namespace Inkscape::XML;
 using namespace std::literals;
@@ -74,29 +76,6 @@ public:
     std::unique_ptr<SPDocument> doc;
 };
 
-::testing::AssertionResult RectNear(std::string expr1,
-                                    std::string expr2,
-                                    Geom::Rect val1,
-                                    Geom::Rect val2,
-                                    double abs_error = 0.01) {
-
-  double diff = 0;
-  for (auto x = 0; x < 2; x++) {
-      for (auto y = 0; y < 2; y++) {
-          diff += fabs(val1[x][y] - val2[x][y]);
-      }
-  }
-
-  if (diff <= abs_error)
-      return ::testing::AssertionSuccess();
-
-  return ::testing::AssertionFailure()
-      << "The difference between " << expr1 << " and " << expr2
-      << " is " << diff << ", which exceeds " << abs_error << ", where\n"
-      << expr1 << " evaluates to " << val1 << ",\n"
-      << expr2 << " evaluates to " << val2 << ".\n";
-}
-
 TEST_F(ObjectLinksTest, removeTransforms)
 {
     doc->ensureUpToDate();
@@ -122,6 +101,6 @@ TEST_F(ObjectLinksTest, removeTransforms)
         auto old_box = boxes[id];
         auto new_box = item->documentGeometricBounds();
         ASSERT_TRUE(new_box) << " item bounds '" << id << "'";
-        EXPECT_TRUE(RectNear(id + ".old_box", id + ".new_box", old_box, *new_box, 0.01));
+        EXPECT_RECT_NEAR(old_box, *new_box, 0.01) << "id";
     }
 }

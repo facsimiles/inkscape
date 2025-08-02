@@ -35,17 +35,27 @@
 
 #include "document.h"
 
-#include <vector>
-#include <string>
 #include <cstring>
-
+#include <string>
+#include <vector>
 #include <boost/range/adaptor/reversed.hpp>
 #include <glibmm/main.h>
 #include <glibmm/miscutils.h>
-
 #include <2geom/transforms.h>
 
+#include "3rdparty/adaptagrams/libavoid/router.h"
+#include "3rdparty/libcroco/src/cr-sel-eng.h"
+#include "3rdparty/libcroco/src/cr-selector.h"
+#include "actions/actions-edit-document.h"
+#include "actions/actions-effect.h"
+#include "actions/actions-pages.h"
+#include "actions/actions-svg-processing.h"
+#include "actions/actions-undo-document.h"
+#include "colors/document-cms.h"
+#include "debug/console-output-undo-observer.h"
 #include "desktop.h"
+#include "display/control/canvas-item-drawing.h"
+#include "display/drawing.h"
 #include "document-undo.h"
 #include "document-update.h"
 #include "event-log.h"
@@ -53,24 +63,8 @@
 #include "id-clash.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
-#include "layer-manager.h"
-#include "page-manager.h"
-#include "colors/document-cms.h"
-#include "rdf.h"
-#include "selection.h"
-
-#include "3rdparty/adaptagrams/libavoid/router.h"
-#include "3rdparty/libcroco/src/cr-sel-eng.h"
-#include "3rdparty/libcroco/src/cr-selector.h"
-#include "actions/actions-effect.h"
-#include "actions/actions-edit-document.h"
-#include "actions/actions-pages.h"
-#include "actions/actions-svg-processing.h"
-#include "actions/actions-undo-document.h"
-#include "debug/console-output-undo-observer.h"
-#include "display/control/canvas-item-drawing.h"
-#include "display/drawing.h"
 #include "io/dir-util.h"
+#include "layer-manager.h"
 #include "live_effects/lpeobject.h"
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
@@ -81,11 +75,16 @@
 #include "object/sp-page.h"
 #include "object/sp-root.h"
 #include "object/sp-symbol.h"
+#include "page-manager.h"
+#include "rdf.h"
+#include "selection.h"
+#include "style.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
 #include "util/units.h"
 #include "xml/croco-node-iface.h"
 #include "xml/rebase-hrefs.h"
+#include "xml/sp-css-attr.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::UnitTable;
@@ -518,6 +517,185 @@ std::unique_ptr<SPDocument> SPDocument::copy() const
     auto doc = createDoc(new_rdoc, document_filename, document_base, document_name, keepalive);
     doc->_original_document = this;
     return doc;
+}
+
+/** Import content of a document into current document.
+ *
+ * \param input_doc warning, this object will be modified
+ * \param parent the new partent of the imported objects, must be part of current document
+ * \param after_node place of insertion
+ * \param transform additional transformation in doc space, in case of identity source and target doc (0, 0) will
+ * match
+ * \param pasted_objects_result output parameter, returns list of newly created object
+ * \param rootMode how to handle imported object root
+ * \param layerMode
+ */
+void SPDocument::import(SPDocument &input_doc, Inkscape::XML::Node *parent, Inkscape::XML::Node *after_node,
+                        Geom::Affine transform, std::vector<Inkscape::XML::Node *> *pasted_objects_result,
+                        ImportRoot rootMode, ImportLayersMode layerMode)
+{
+    auto &output_doc = *this;
+    prevent_id_clashes(&input_doc, &output_doc, true);
+    Inkscape::XML::rebase_hrefs(&input_doc, output_doc.getDocumentBase(), false);
+    sp_file_fix_lpe(&input_doc);
+    output_doc.importDefs(&input_doc);
+
+    if (parent == nullptr) {
+        parent = output_doc.getReprRoot();
+        after_node = nullptr;
+    }
+    auto place_to_add = parent;
+    Inkscape::XML::Node *newgroup = nullptr;
+    if (rootMode != ImportRoot::None) {
+        newgroup = output_doc.getReprDoc()->createElement("svg:g");
+        if (after_node) {
+            parent->addChild(newgroup, after_node);
+        } else {
+            parent->appendChild(newgroup);
+        }
+        Inkscape::GC::release(newgroup);
+        place_to_add = newgroup;
+        after_node = nullptr;
+    }
+    auto root = input_doc.getReprRoot();
+
+    bool has_group_attributes = false;
+    if (SPCSSAttr *style = sp_css_attr_from_object(input_doc.getRoot())) {
+        auto &al = style->attributeList();
+        if (!al.empty() && newgroup) {
+            sp_repr_css_set(newgroup, style, "style");
+            has_group_attributes = true;
+        }
+        sp_repr_css_attr_unref(style);
+    }
+
+    std::vector<Inkscape::XML::Node *> pasted_objects;
+    for (Inkscape::XML::Node *obj = root->firstChild(); obj; obj = obj->next()) {
+        // Don't copy metadata, defs, named views and internal clipboard contents to the document
+        auto tag = obj->name();
+        if (!strcmp(tag, "svg:defs") || // imported by import_defs
+            !strcmp(obj->name(), "svg:metadata") || !strcmp(obj->name(), "sodipodi:namedview") ||
+            !strcmp(obj->name(), "inkscape:clipboard")) {
+            continue;
+        }
+
+        if (!strcmp(tag, "svg:style")) {
+            auto copy = obj->duplicate(output_doc.getReprDoc());
+            output_doc.getRoot()->appendChildRepr(copy);
+            Inkscape::GC::release(copy);
+            continue;
+        }
+
+        Inkscape::XML::Node *obj_copy = obj->duplicate(output_doc.getReprDoc());
+        if (after_node) {
+            place_to_add->addChild(obj_copy, after_node);
+            after_node = obj_copy;
+        } else {
+            place_to_add->appendChild(obj_copy);
+        }
+        Inkscape::GC::release(obj_copy);
+
+        sp_repr_visit_descendants(obj_copy, [&layerMode, &output_doc](XML::Node *node) {
+            auto tag = node->name();
+            if (layerMode == ImportLayersMode::ToGroup && !strcmp(tag, "svg:g")) {
+                // convert layers to groups, and make sure they are unlocked
+                // FIXME: add "preserve layers" mode where each layer from
+                //        import is copied to the same-named layer in host
+                if (sp_repr_is_layer(node)) {
+                    node->removeAttribute("inkscape:groupmode");
+                    node->removeAttribute("sodipodi:insensitive");
+                }
+                return true;
+            }
+            return true;
+        });
+
+        auto spobject = output_doc.getObjectByRepr(obj_copy);
+        if (is<SPItem>(spobject)) {
+            pasted_objects.push_back(obj_copy);
+        }
+    }
+
+    // Fixup objects referencing objects that didn't get copied, for example copying <use> without original.
+    // When the original gets erased, clones get properly unlinked and replaced by the content of original.
+    std::vector<Inkscape::XML::Node *> pasted_objects_not;
+    if (auto clipboard = sp_repr_lookup_name(root, "inkscape:clipboard", 1)) {
+        for (Inkscape::XML::Node *obj = clipboard->firstChild(); obj; obj = obj->next()) {
+            if (output_doc.getObjectById(obj->attribute("id")))
+                continue;
+            Inkscape::XML::Node *obj_copy = obj->duplicate(output_doc.getReprDoc());
+            place_to_add->appendChild(obj_copy);
+            Inkscape::GC::release(obj_copy);
+            pasted_objects_not.push_back(obj_copy);
+        }
+    }
+    output_doc.ensureUpToDate();
+    Inkscape::ObjectSet object_set(&output_doc);
+    object_set.setReprList(pasted_objects_not);
+    object_set.deleteItems(true);
+
+    if (newgroup && !has_group_attributes && rootMode != ImportRoot::AlwaysGroup &&
+        (newgroup->childCount() == 1 || rootMode == ImportRoot::WhenNeeded)) {
+        // remove unnecessary group
+        SPObject *group_root = output_doc.getObjectByRepr(newgroup);
+        std::vector<SPItem *> group_children;
+        sp_item_group_ungroup(cast<SPGroup>(group_root), group_children);
+        newgroup = nullptr;
+        // further ungroup, mainly needed only for imported images
+        if (rootMode == ImportRoot::UngroupSingle) {
+            while (group_children.size() == 1) {
+                auto group = cast<SPGroup>(group_children[0]);
+                if (!(group && group->children.size() == 1)) {
+                    break;
+                }
+                group_children.clear();
+                sp_item_group_ungroup(group, group_children);
+            }
+        }
+        pasted_objects.clear();
+        for (auto item : group_children) {
+            pasted_objects.push_back(item->getRepr());
+        }
+    } else if (newgroup) {
+        pasted_objects.clear();
+        pasted_objects.push_back(newgroup);
+    }
+
+    for (auto po : pasted_objects) {
+        if (auto lpeitem = cast<SPLPEItem>(output_doc.getObjectByRepr(po))) {
+            sp_lpe_item_enable_path_effects(lpeitem, false);
+        }
+    }
+
+    output_doc.ensureUpToDate();
+    input_doc.ensureUpToDate();
+
+    Geom::Affine parent2doc;
+    if (auto sp_parent = cast<SPItem>(output_doc.getObjectByRepr(parent))) {
+        parent2doc = sp_parent->i2doc_affine();
+    } else {
+        parent2doc = output_doc.getRoot()->i2doc_affine();
+    }
+
+    auto final_transform =
+        output_doc.dt2doc()    // objectSet operates in dt space, but for following operations it's easier to use doc
+        * parent2doc.inverse() // cancel out parent transformation
+        * input_doc.getRoot()->c2p // cancel out source doc user scaling and viewport
+        * transform *              // addd the new transform
+        output_doc.doc2dt();
+
+    object_set.setReprList(pasted_objects);
+    object_set.applyAffine(final_transform, true, false);
+
+    for (auto po : pasted_objects) {
+        if (auto lpeitem = cast<SPLPEItem>(output_doc.getObjectByRepr(po))) {
+            sp_lpe_item_enable_path_effects(lpeitem, true);
+        }
+    }
+
+    if (pasted_objects_result != nullptr) {
+        *pasted_objects_result = std::move(pasted_objects);
+    }
 }
 
 /*
