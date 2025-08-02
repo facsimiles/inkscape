@@ -24,6 +24,7 @@
 
 #include "selection-chemistry.h"
 
+#include <2geom/numeric/symmetric-matrix-fs-operation.h>
 #include <boost/range/adaptor/reversed.hpp>
 #include <cstring>
 #include <glibmm/i18n.h>
@@ -86,7 +87,6 @@
 #include "svg/svg.h"
 #include "text-chemistry.h"
 #include "text-editing.h"
-#include "numeric/symmetric-matrix-fs-operation.h"
 #include "ui/clipboard.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"

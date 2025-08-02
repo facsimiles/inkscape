@@ -22,6 +22,7 @@
 #include <gtkmm/button.h>
 
 #include <2geom/affine.h>
+#include <2geom/line.h>
 #include <2geom/path-intersection.h>
 
 #include "style.h"
@@ -44,7 +45,6 @@
 #include "xml/sp-css-attr.h"
 
 // this is only to flatten nonzero fillrule
-#include "line.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 

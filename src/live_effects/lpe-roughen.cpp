@@ -16,6 +16,7 @@
 
 #include "lpe-roughen.h"
 
+#include <2geom/ray.h>
 #include <boost/functional/hash.hpp>
 #include <glibmm/i18n.h>
 #include <gtkmm/box.h>
@@ -26,7 +27,6 @@
 #include "helper/geom.h"
 #include "object/sp-lpe-item.h"
 #include "preferences.h"
-#include "ray.h"
 #include "ui/pack.h"
 #include "util-string/ustring-format.h"
 

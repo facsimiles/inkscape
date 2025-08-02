@@ -12,6 +12,7 @@
 
 #include "lpe-transform_2pts.h"
 
+#include <2geom/ray.h>
 #include <gtkmm/box.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
@@ -27,7 +28,6 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
-#include "ray.h"
 
 namespace Inkscape::LivePathEffect {
 
