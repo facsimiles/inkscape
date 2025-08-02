@@ -62,7 +62,7 @@ void System::refreshProfiles()
                               << profile->getName() << ":" << std::endl;
                     std::cerr << "   " << profile->getPath() << " (" << profile->getId() << ")" << std::endl;
                     std::cerr << "   " << other->getPath() << " (" << other->getId() << ")" << std::endl;
-                    return;
+                    continue;
                 }
             }
             _profiles.emplace_back(std::move(profile));
