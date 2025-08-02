@@ -650,11 +650,13 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
     std::string page_nums = "1";
     PdfImportType import_method = PdfImportType::PDF_IMPORT_INTERNAL;
     FontStrategies font_strats;
+    int preview_page = 1;
     if (dlg) {
         page_nums = dlg->getSelectedPages();
         import_pages = dlg->getImportPages();
         import_method = dlg->getImportMethod();
         font_strats = dlg->getFontStrategies();
+        preview_page = dlg->getPreviewPage();
     } else {
         page_nums = INKSCAPE.get_pages();
         auto strat = (FontStrategy)INKSCAPE.get_pdf_font_strategy();
@@ -669,6 +671,11 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
     if (pages.empty()) {
         g_warning("No pages selected, getting first page only.");
         pages.insert(1);
+    }
+
+    if (!dlg) {
+        // Set page for Cairo non-interactive import
+        preview_page = *pages.begin();
     }
 
     // Create Inkscape document from file
@@ -723,8 +730,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
             return nullptr;
         }
 
-        int page_num = *pages.begin();
-        if (PopplerPage* page = poppler_document_get_page(document, page_num - 1)) {
+        if (PopplerPage* page = poppler_document_get_page(document, preview_page - 1)) {
             double width, height;
             poppler_page_get_size(page, &width, &height);
 
@@ -753,7 +759,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri, bool /
 
             g_object_unref(G_OBJECT(page));
         } else if (document) {
-            std::cerr << "PDFInput::open: error opening page " << page_num << " of document: " << full_uri.raw() << std::endl;
+            std::cerr << "PDFInput::open: error opening page " << preview_page << " of document: " << full_uri.raw() << std::endl;
         }
         g_object_unref(G_OBJECT(document));
 

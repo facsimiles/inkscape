@@ -88,6 +88,7 @@ public:
     bool showDialog();
     bool getImportPages();
     std::string getSelectedPages();
+    int getPreviewPage() { return _preview_page; }
     PdfImportType getImportMethod();
     void getImportSettings(Inkscape::XML::Node *prefs);
     FontStrategies getFontStrategies();
