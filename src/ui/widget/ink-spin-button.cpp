@@ -261,6 +261,7 @@ void InkSpinButton::construct() {
     _has_frame(*this, "has-frame", true), \
     _show_arrows(*this, "show-arrows", true), \
     _enter_exit(*this, "enter-exit-editing", false), \
+    _wrap_around(*this, "wrap-around", false), \
     _icon_name(*this, "icon", {}), \
     _label_text(*this, "label", {}), \
     _prefix(*this, "prefix", {}), \
@@ -307,9 +308,15 @@ void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, in
     std::string text;
     if (_min_size_pattern.empty()) {
         auto delta = _digits.get_value() > 0 ? pow(10.0, -_digits.get_value()) : 0;
-        auto low = format(_adjustment->get_lower() + delta, true, false, true, true);
-        auto high = format(_adjustment->get_upper() - delta, true, false, true, true);
-        text = low.size() > high.size() ? low : high;
+        auto low = _adjustment->get_lower() + delta;
+        auto high = _adjustment->get_upper() - delta;
+        if (_output_transformer) {
+            low = _output_transformer(low);
+            high = _output_transformer(high);
+        }
+        auto low_str = format(low, true, false, true, true);
+        auto high_str = format(high, true, false, true, true);
+        text = low_str.size() > high_str.size() ? low_str : high_str;
     }
     else {
         text = _min_size_pattern;
@@ -556,6 +563,9 @@ void InkSpinButton::update(bool fire_change_notification) {
     if (!_adjustment) return;
 
     auto value = _adjustment->get_value();
+    if (_output_transformer) {
+        value = _output_transformer(value);
+    }
     auto text = format(value, false, false, _trim_zeros, false);
     _entry.set_text(text);
     if (_suffix.get_value().empty() && _prefix.get_value().empty()) {
@@ -565,16 +575,20 @@ void InkSpinButton::update(bool fire_change_notification) {
         _value.set_markup(format(value, true, true, _trim_zeros, false));
     }
 
-    _minus.set_sensitive(_adjustment->get_value() > _adjustment->get_lower());
-    _plus.set_sensitive(_adjustment->get_value() < _adjustment->get_upper());
+    bool wrap = _wrap_around.get_value();
+    _minus.set_sensitive(wrap || _adjustment->get_value() > _adjustment->get_lower());
+    _plus .set_sensitive(wrap || _adjustment->get_value() < _adjustment->get_upper());
 
     if (fire_change_notification) {
         _signal_value_changed.emit(value / _fmt_scaling_factor);
     }
 }
 
-void InkSpinButton::set_new_value(double new_value) {
-    _adjustment->set_value(new_value);
+void InkSpinButton::set_new_value(double value) {
+    if (_wrap_around.get_value()) {
+        value = wrap_around(value);
+    }
+    _adjustment->set_value(value);
     //TODO: reflect new value in _num_value property while avoiding cycle updates
 }
 
@@ -710,7 +724,11 @@ bool InkSpinButton::commit_entry() {
         else {
             value = Util::ExpressionEvaluator{text}.evaluate().value;
         }
-        _adjustment->set_value(value);
+        // apply input transformer
+        if (_input_transformer) {
+            value = _input_transformer(value);
+        }
+        set_new_value(value);
         return true;
     }
     catch (const std::exception& e) {
@@ -814,7 +832,21 @@ double InkSpinButton::get_value() const {
 
 void InkSpinButton::change_value(double inc, Gdk::ModifierType state) {
     double scale = get_accel_factor(state);
-    set_new_value(_adjustment->get_value() + _adjustment->get_step_increment() * scale * inc);
+    auto value = _adjustment->get_value() + _adjustment->get_step_increment() * scale * inc;
+    set_new_value(value);
+}
+
+double InkSpinButton::wrap_around(double value) {
+    auto min = _adjustment->get_lower();
+    auto max = _adjustment->get_upper();
+    auto range = max - min;
+
+    if (range > 0 && (value <= min || value > max)) {
+        auto safemod = [](double a, double b) { return a - std::floor(a / b) * b; };
+        value = max - safemod(max - value, range);
+    }
+
+    return value;
 }
 
 // ------------------   KEY    ------------------
@@ -960,6 +992,16 @@ void InkSpinButton::set_icon(const Glib::ustring& icon_name) {
         _icon.set_visible(true);
         _icon_width = _icon.measure(Gtk::Orientation::HORIZONTAL).sizes.minimum;
     }
+}
+
+void InkSpinButton::set_wrap_around(bool wrap) {
+    _wrap_around.set_value(wrap);
+}
+
+void InkSpinButton::set_transformers(std::function<double(double)> input, std::function<double(double)> output) {
+    _input_transformer = std::move(input);
+    _output_transformer = std::move(output);
+    update(false); // apply transformer
 }
 
 GType InkSpinButton::gtype = 0;

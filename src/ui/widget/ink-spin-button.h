@@ -78,11 +78,17 @@ public:
     void set_enter_exit_edit(bool enable = true);
     // Set icon to be shown inside the spin button (it replaces short label, if any)
     void set_icon(const Glib::ustring& icon_name);
+    // If true, enable value wrap around limits
+    void set_wrap_around(bool wrap = true);
+    // Set value transformers:
+    // - input transformer takes value as input by the user and transforms it to the internal domain
+    // - output transformer takes internal value and transforms is to the presentation layer
+    void set_transformers(std::function<double (double)> input, std::function<double (double)> output);
 
 private:
     void construct();
     void update(bool fire_change_notification = true);
-    void set_new_value(double new_value);
+    void set_new_value(double value);
     Gtk::SizeRequestMode get_request_mode_vfunc() const override;
     void measure_vfunc(Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const override;
     void size_allocate_vfunc(int width, int height, int baseline) override;
@@ -146,6 +152,7 @@ private:
     void show_label_icon(bool on = true);
     bool commit_entry();
     void change_value(double inc, Gdk::ModifierType state);
+    double wrap_around(double value);
     std::string format(double value, bool with_prefix_suffix, bool with_markup, bool trim_zeros, bool limit_size) const;
     void start_spinning(double steps, Gdk::ModifierType state, Glib::RefPtr<Gtk::GestureClick>& gesture);
     void stop_spinning();
@@ -176,6 +183,8 @@ private:
     std::string _min_size_pattern;
     std::function<double (const Glib::ustring&)> _evaluator; // evaluator callback
     bool _mouse_entered = false; // flag to keep track of motion_enter/leave
+    std::function<double (double)> _output_transformer;
+    std::function<double (double)> _input_transformer;
 
     // ----------- PROPERTIES ------------
     Glib::Property<Glib::RefPtr<Gtk::Adjustment>> _adjust;
@@ -188,6 +197,7 @@ private:
     Glib::Property<bool> _has_frame;
     Glib::Property<bool> _show_arrows;
     Glib::Property<bool> _enter_exit;
+    Glib::Property<bool> _wrap_around;
     Glib::Property<Glib::ustring> _icon_name;
     Glib::Property<Glib::ustring> _label_text;
     Glib::Property<Glib::ustring> _prefix;
@@ -208,6 +218,7 @@ public:
     Glib::PropertyProxy<bool> property_has_frame() { return _has_frame.get_proxy(); }
     Glib::PropertyProxy<bool> property_show_arrows() { return _show_arrows.get_proxy(); }
     Glib::PropertyProxy<bool> property_enter_exit() { return _enter_exit.get_proxy(); }
+    Glib::PropertyProxy<bool> property_wrap_around() { return _wrap_around.get_proxy(); }
 
     // Construct a C++ object from a parent (=base) C class object
 
