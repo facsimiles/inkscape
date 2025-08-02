@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-28 16:27+0000\n"
+"PO-Revision-Date: 2025-08-03 13:06+0000\n"
 "Last-Translator: marco riva <oelimar@mail.com>\n"
 "Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/it/>\n"
@@ -2460,7 +2460,7 @@ msgstr "grigio chiaro (#D3D3D3)"
 #: ../../build/share/palettes/palettes.h:34
 msgctxt "Palette"
 msgid "gainsboro (#DCDCDC)"
-msgstr "gainsboro (#DCDCDC)"
+msgstr "grigio medio (#DCDCDC)"
 
 #: ../../build/share/palettes/palettes.h:35
 msgctxt "Palette"
@@ -2595,7 +2595,7 @@ msgstr "lino (#FAF0E6)"
 #: ../../build/share/palettes/palettes.h:61
 msgctxt "Palette"
 msgid "bisque (#FFE4C4)"
-msgstr "bisque (#FFE4C4)"
+msgstr "pesca (#FFE4C4)"
 
 #: ../../build/share/palettes/palettes.h:62
 msgctxt "Palette"
@@ -2750,7 +2750,7 @@ msgstr "verde-giallo (#ADFF2F)"
 #: ../../build/share/palettes/palettes.h:92
 msgctxt "Palette"
 msgid "chartreuse (#7FFF00)"
-msgstr "chartreuse (#7FFF00)"
+msgstr "lime (#7FFF00)"
 
 #: ../../build/share/palettes/palettes.h:93
 msgctxt "Palette"
@@ -5101,7 +5101,7 @@ msgstr "Fast food 2"
 #: ../../build/share/symbols/symbols.h:438
 msgctxt "Symbol"
 msgid "Fast food (pizza)"
-msgstr "Fast food (pizza)"
+msgstr "Pizzeria"
 
 #: ../../build/share/symbols/symbols.h:428
 #: ../../build/share/symbols/symbols.h:439
@@ -14757,23 +14757,23 @@ msgstr "RGB 16"
 
 #: ../src/extension/internal/png-output.cpp:62
 msgid "Gray 1"
-msgstr "Gray 1"
+msgstr "Grigio 1"
 
 #: ../src/extension/internal/png-output.cpp:63
 msgid "Gray 2"
-msgstr "Gray 2"
+msgstr "Grigio 2"
 
 #: ../src/extension/internal/png-output.cpp:64
 msgid "Gray 4"
-msgstr "Gray 4"
+msgstr "Grigio 4"
 
 #: ../src/extension/internal/png-output.cpp:65
 msgid "Gray 8"
-msgstr "Gray 8"
+msgstr "Grigio 8"
 
 #: ../src/extension/internal/png-output.cpp:66
 msgid "Gray 16"
-msgstr "Gray 16"
+msgstr "Grigio 16"
 
 #: ../src/extension/internal/png-output.cpp:68
 msgid "Compression"
@@ -15494,7 +15494,7 @@ msgstr "Input VSD"
 
 #: ../src/extension/internal/vsd-input.cpp:323
 msgid "Microsoft Visio Diagram (*.vsd)"
-msgstr "Microsoft Visio Diagram (*.vsd)"
+msgstr "Diagramma Microsoft Visio (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:324
 msgid "File format used by Microsoft Visio 6 and later"
@@ -15506,7 +15506,7 @@ msgstr "Input VDX"
 
 #: ../src/extension/internal/vsd-input.cpp:335
 msgid "Microsoft Visio XML Diagram (*.vdx)"
-msgstr "Microsoft Visio XML Diagram (*.vdx)"
+msgstr "Diagramma Microsoft Visio XML (*.vdx)"
 
 #: ../src/extension/internal/vsd-input.cpp:336
 msgid "File format used by Microsoft Visio 2010 and later"
@@ -16767,7 +16767,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:160
 msgctxt "path effect"
 msgid "VonKoch"
-msgstr "VonKoch"
+msgstr "Von Koch"
 
 #: ../src/live_effects/effect.cpp:163
 msgid "Create VonKoch fractal"
@@ -17177,7 +17177,7 @@ msgstr "Seziona l'oggetto in parti. Può anche essere applicato più volte."
 #: ../src/live_effects/effect.cpp:671
 msgctxt "path effect"
 msgid "Tiling"
-msgstr "Titling"
+msgstr "Tasselli"
 
 #: ../src/live_effects/effect.cpp:674
 msgid ""
@@ -18073,7 +18073,7 @@ msgstr "nessuno"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
 msgid "zig-zag"
-msgstr "zig-zag"
+msgstr "zigzag"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
 msgid "zig-zag, reverse first"
@@ -18469,7 +18469,7 @@ msgstr "InterpolatoreSpiro"
 #: ../src/live_effects/lpe-interpolate_points.cpp:29
 #: ../src/live_effects/lpe-powerstroke.cpp:131
 msgid "Centripetal Catmull-Rom"
-msgstr "Centripetal Catmull-Rom"
+msgstr "Catmull-Rom Centripeta"
 
 #: ../src/live_effects/lpe-interpolate_points.cpp:36
 msgid "Interpolator type:"
@@ -25984,7 +25984,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2981
 msgid "Bias:"
-msgstr "Bias:"
+msgstr "Scarto:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2981
 msgid ""
@@ -26610,7 +26610,7 @@ msgstr "tutti"
 
 #: ../src/ui/dialog/glyphs.cpp:48
 msgid "common"
-msgstr "common"
+msgstr "comune"
 
 #: ../src/ui/dialog/glyphs.cpp:49
 msgid "inherited"
@@ -26826,7 +26826,7 @@ msgstr "Ugaritico"
 
 #: ../src/ui/dialog/glyphs.cpp:102 ../src/ui/dialog/glyphs.cpp:267
 msgid "New Tai Lue"
-msgstr "New Tai Lue"
+msgstr "Nuovo Tai Lue"
 
 #: ../src/ui/dialog/glyphs.cpp:103 ../src/ui/dialog/glyphs.cpp:269
 msgid "Buginese"
@@ -27078,7 +27078,7 @@ msgstr "Nabateo"
 
 #: ../src/ui/dialog/glyphs.cpp:165
 msgid "Old North Arabian"
-msgstr "Old North Arabian"
+msgstr "Antico nord-Arabo"
 
 #: ../src/ui/dialog/glyphs.cpp:166
 msgid "Old Permic"
@@ -27142,11 +27142,11 @@ msgstr "Basic Plane"
 
 #: ../src/ui/dialog/glyphs.cpp:216
 msgid "Extended Multilingual Plane"
-msgstr "Extended Multilingual Plane"
+msgstr "Piano multilingue esteso"
 
 #: ../src/ui/dialog/glyphs.cpp:217
 msgid "Supplementary Ideographic Plane"
-msgstr "Supplementary Ideographic Plane"
+msgstr "Piano Ideografico Supplementare"
 
 #: ../src/ui/dialog/glyphs.cpp:218
 msgid "Basic Latin"
@@ -27170,7 +27170,7 @@ msgstr "Estensioni IPA"
 
 #: ../src/ui/dialog/glyphs.cpp:223
 msgid "Spacing Modifier Letters"
-msgstr "Spacing Modifier Letters"
+msgstr "Lettere modificatrici di spaziatura"
 
 #: ../src/ui/dialog/glyphs.cpp:224
 msgid "Combining Diacritical Marks"
@@ -27518,7 +27518,7 @@ msgstr "Vari Simboli e Pittogrammi"
 
 #: ../src/ui/dialog/glyphs.cpp:370
 msgid "Emoticons"
-msgstr "Emoticons"
+msgstr "Faccine"
 
 #: ../src/ui/dialog/glyphs.cpp:371
 msgid "Ornamental Dingbats"
@@ -30964,7 +30964,7 @@ msgstr "Mostra effetti sperimentali"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2847
 msgid "Tiling"
-msgstr "Tiling"
+msgstr "Tasselli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2848
 msgid "Add advanced tiling options"
@@ -31686,7 +31686,7 @@ msgstr "Confermi di voler riassegnare questa scorciatoia?"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3590 ../src/ui/shortcuts.cpp:680
 msgid "Numpad"
-msgstr "Numpad"
+msgstr "Tastierino numerico"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3689
 msgid "Ignore words with digits"
@@ -37212,7 +37212,7 @@ msgstr "Unicase"
 #: ../src/ui/widget/font-variants.cpp:176
 msgctxt "Font feature"
 msgid "Titling"
-msgstr "Titling"
+msgstr "Titolazione"
 
 #: ../src/ui/widget/font-variants.cpp:178
 msgctxt "Font feature"
@@ -39577,7 +39577,7 @@ msgstr "Quantizzazione colore"
 
 #: ../share/ui/dialog-trace.glade:410
 msgid "Autotrace"
-msgstr "Autotrace"
+msgstr "Autotracciamento"
 
 #: ../share/ui/dialog-trace.glade:411
 msgid "Centerline tracing (autotrace)"
