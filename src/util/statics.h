@@ -134,7 +134,7 @@ protected:
     }
 
 private:
-    struct ConstructibleT : T
+    struct ConstructibleT : std::remove_cv_t<T>
     {
         using T::T;
     };
