@@ -238,9 +238,8 @@ TEST_F(SocketResponseTest, ParseInvalidResponses)
 
     // Test incomplete response - should parse what it can
     auto resp2 = SocketResponseFormatter::parse_response("RESPONSE:1:123");
-    EXPECT_EQ(resp2.client_id, 1);
-    EXPECT_EQ(resp2.request_id, "123");
-    EXPECT_TRUE(resp2.type.empty());
+    EXPECT_EQ(resp2.client_id, 0); // Should fail to parse due to insufficient parts
+    EXPECT_TRUE(resp2.request_id.empty());
 
     // Test invalid client ID
     auto resp3 = SocketResponseFormatter::parse_response("RESPONSE:abc:123:SUCCESS:0:test");

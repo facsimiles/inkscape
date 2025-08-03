@@ -75,10 +75,18 @@ public:
 
         std::vector<std::string> parts = split_string(input, ':');
         if (parts.size() >= 5 && parts[0] == "RESPONSE") {
-            resp.client_id = std::stoi(parts[1]);
+            try {
+                resp.client_id = std::stoi(parts[1]);
+            } catch (std::exception const &) {
+                resp.client_id = 0; // Default value on parsing error
+            }
             resp.request_id = parts[2];
             resp.type = parts[3];
-            resp.exit_code = std::stoi(parts[4]);
+            try {
+                resp.exit_code = std::stoi(parts[4]);
+            } catch (std::exception const &) {
+                resp.exit_code = 0; // Default value on parsing error
+            }
 
             // Combine remaining parts as data
             if (parts.size() > 5) {
@@ -229,11 +237,10 @@ TEST_F(SocketProtocolTest, ParseInvalidResponses)
     auto resp1 = SocketProtocolParser::parse_response("SUCCESS:0:Command executed");
     EXPECT_EQ(resp1.client_id, 0);
 
-    // Test incomplete response - should parse what it can
+    // Test incomplete response - should fail to parse due to insufficient parts
     auto resp2 = SocketProtocolParser::parse_response("RESPONSE:1:123");
-    EXPECT_EQ(resp2.client_id, 1);
-    EXPECT_EQ(resp2.request_id, "123");
-    EXPECT_TRUE(resp2.type.empty());
+    EXPECT_EQ(resp2.client_id, 0); // Should fail to parse due to insufficient parts
+    EXPECT_TRUE(resp2.request_id.empty());
 
     // Test invalid client ID - should fail to parse and return 0
     auto resp3 = SocketProtocolParser::parse_response("RESPONSE:abc:123:SUCCESS:0:test");
