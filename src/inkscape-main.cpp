@@ -93,17 +93,12 @@ static void set_themes_env()
     Glib::setenv("XDG_DATA_DIRS", xdg_data_dirs + G_SEARCHPATH_SEPARATOR_S + inkscape_datadir);
 }
 
-
-
 #ifdef _WIN32
 // some win32-specific environment adjustments
 static void set_win32_env()
 {
-    // activate "experimental" native DND implementation that uses OLE2
-    // - fixes some docking issues with the new dialog system
-    // - is likely to become the default at some point, see
-    //     https://discourse.gnome.org/t/can-should-we-use-the-experimental-win32-ole2-dnd-implementation/4062
-    Glib::setenv("GDK_WIN32_USE_EXPERIMENTAL_OLE2_DND", "1");
+    // Restore native titlebars.
+    Glib::setenv("GTK_CSD", "0");
 }
 #endif
 
