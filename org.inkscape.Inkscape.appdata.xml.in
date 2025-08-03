@@ -4,6 +4,7 @@
 <component type="desktop">
   <id>org.inkscape.Inkscape</id>
   <launchable type="desktop-id">org.inkscape.Inkscape.desktop</launchable>
+  <launchable type="desktop-id">org.inkscape.Inkview.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <developer id="inkscape.org">
     <name>The Inkscape Community</name>
@@ -193,6 +194,7 @@
   </releases>
   <provides>
     <id>inkscape.desktop</id>
+    <id>inkview.desktop</id>
   </provides>
   <content_rating type="oars-1.1" />
   <supports>

@@ -104,42 +104,53 @@ if(UNIX)
 	  ""
   )
 
-  configure_file(${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.desktop.template
-    ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop.in)
+  foreach(APP Inkscape Inkview)
+    configure_file(${CMAKE_SOURCE_DIR}/org.inkscape.${APP}.desktop.template
+      ${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop.in)
+  endforeach()
 
   if(ENABLE_NLS)
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
-    DEPENDS ${LANGUAGES}
-    COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
-    --desktop
-    --template ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop.in
-    -d ${CMAKE_SOURCE_DIR}/po
-    -o ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
-    --keyword=Name
-    --keyword=GenericName
-    --keyword=X-GNOME-FullName
-    --keyword=Comment
-    --keyword=Keywords
+    foreach(APP Inkscape Inkview)
+      add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop
+        DEPENDS ${LANGUAGES}
+        COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
+        --desktop
+        --template ${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop.in
+        -d ${CMAKE_SOURCE_DIR}/po
+        -o ${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop
+        --keyword=Name
+        --keyword=GenericName
+        --keyword=X-GNOME-FullName
+        --keyword=Comment
+        --keyword=Keywords
+      )
+    endforeach()
+    add_custom_target(inkscape_desktop ALL DEPENDS
+      ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
+      ${CMAKE_BINARY_DIR}/org.inkscape.Inkview.desktop
     )
-  add_custom_target(inkscape_desktop ALL DEPENDS ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop)
 
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
-    DEPENDS ${LANGUAGES}
-    COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
-    --xml
-    --template ${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.appdata.xml.in
-    -d ${CMAKE_SOURCE_DIR}/po -o ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
+    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
+      DEPENDS ${LANGUAGES}
+      COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
+      --xml
+      --template ${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.appdata.xml.in
+      -d ${CMAKE_SOURCE_DIR}/po -o ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
     )
-  add_custom_target(inkscape_appdata ALL DEPENDS ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml)
+    add_custom_target(inkscape_appdata ALL DEPENDS ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml)
   else()
     configure_file(${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.appdata.xml.in ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml COPYONLY)
-    configure_file(${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop.in
-      ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop COPYONLY)
+    foreach(APP Inkscape Inkview)
+      configure_file(${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop.in
+        ${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop COPYONLY)
+    endforeach()
   endif()
 
+  foreach(APP Inkscape Inkview)
+    install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.${APP}.desktop
+      DESTINATION ${SHARE_INSTALL}/applications)
+  endforeach()
 
-  install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
-    DESTINATION ${SHARE_INSTALL}/applications)
   install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
     DESTINATION ${SHARE_INSTALL}/metainfo)
 
