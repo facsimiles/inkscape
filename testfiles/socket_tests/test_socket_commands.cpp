@@ -69,12 +69,16 @@ public:
                 return result;
             }
 
-            // Don't parse arguments - the action system handles that
-            result.action_name = actual_command;
+            // Parse action name and arguments
+            std::vector<std::string> parts = split_string(actual_command, ':');
+            result.action_name = parts[0];
+            result.arguments.assign(parts.begin() + 1, parts.end());
         } else {
             // No request ID provided
             result.request_id = "";
-            result.action_name = command_part;
+            std::vector<std::string> parts = split_string(command_part, ':');
+            result.action_name = parts[0];
+            result.arguments.assign(parts.begin() + 1, parts.end());
         }
 
         // Validate action name
@@ -100,9 +104,8 @@ public:
             return false;
         }
 
-        // Action names should contain only alphanumeric characters, hyphens, underscores, and colons
-        // (colons are allowed because arguments are part of the action name)
-        std::regex action_pattern("^[a-zA-Z0-9_-:]+$");
+        // Action names should contain only alphanumeric characters, hyphens, and underscores
+        std::regex action_pattern("^[a-zA-Z0-9_-]+$");
         return std::regex_match(action_name, action_pattern);
     }
 
@@ -191,8 +194,12 @@ TEST_F(SocketCommandTest, ParseValidCommands)
     auto cmd2 = SocketCommandParser::parse_command("COMMAND:456:add-rect:100:100:200:200");
     EXPECT_TRUE(cmd2.is_valid);
     EXPECT_EQ(cmd2.request_id, "456");
-    EXPECT_EQ(cmd2.action_name, "add-rect:100:100:200:200");
-    EXPECT_TRUE(cmd2.arguments.empty());
+    EXPECT_EQ(cmd2.action_name, "add-rect");
+    EXPECT_EQ(cmd2.arguments.size(), 4);
+    EXPECT_EQ(cmd2.arguments[0], "100");
+    EXPECT_EQ(cmd2.arguments[1], "100");
+    EXPECT_EQ(cmd2.arguments[2], "200");
+    EXPECT_EQ(cmd2.arguments[3], "200");
 
     // Test command without request ID
     auto cmd3 = SocketCommandParser::parse_command("COMMAND:status");
@@ -205,8 +212,9 @@ TEST_F(SocketCommandTest, ParseValidCommands)
     auto cmd4 = SocketCommandParser::parse_command("  COMMAND:789:export-png:output.png  ");
     EXPECT_TRUE(cmd4.is_valid);
     EXPECT_EQ(cmd4.request_id, "789");
-    EXPECT_EQ(cmd4.action_name, "export-png:output.png");
-    EXPECT_TRUE(cmd4.arguments.empty());
+    EXPECT_EQ(cmd4.action_name, "export-png");
+    EXPECT_EQ(cmd4.arguments.size(), 1);
+    EXPECT_EQ(cmd4.arguments[0], "output.png");
 }
 
 // Test invalid command parsing
@@ -248,11 +256,11 @@ TEST_F(SocketCommandTest, ValidateActionNames)
     EXPECT_TRUE(SocketCommandParser::is_valid_action_name("action-list"));
     EXPECT_TRUE(SocketCommandParser::is_valid_action_name("action_name"));
     EXPECT_TRUE(SocketCommandParser::is_valid_action_name("action123"));
-    EXPECT_TRUE(SocketCommandParser::is_valid_action_name("action:name")); // Test with colon
 
     EXPECT_FALSE(SocketCommandParser::is_valid_action_name(""));
     EXPECT_FALSE(SocketCommandParser::is_valid_action_name("invalid@action"));
     EXPECT_FALSE(SocketCommandParser::is_valid_action_name("invalid action"));
+    EXPECT_FALSE(SocketCommandParser::is_valid_action_name("invalid:action"));
     EXPECT_FALSE(SocketCommandParser::is_valid_action_name("invalid.action"));
 }
 
@@ -284,9 +292,6 @@ TEST_F(SocketCommandTest, SpecialCommands)
 // Test argument validation
 TEST_F(SocketCommandTest, ValidateArguments)
 {
-    // Note: Arguments are not parsed by the command parser, they are handled by the action system
-    // This test validates that the action system would handle arguments correctly
-    
     // Test status command (no arguments)
     EXPECT_TRUE(SocketCommandParser::validate_arguments("status", {}));
     EXPECT_FALSE(SocketCommandParser::validate_arguments("status", {"arg1"}));
@@ -332,23 +337,31 @@ TEST_F(SocketCommandTest, CaseSensitivity)
 // Test command with various argument types
 TEST_F(SocketCommandTest, CommandArguments)
 {
-    // Test numeric arguments (arguments are part of action_name)
+    // Test numeric arguments
     auto cmd1 = SocketCommandParser::parse_command("COMMAND:123:add-rect:100:200:300:400");
     EXPECT_TRUE(cmd1.is_valid);
-    EXPECT_EQ(cmd1.action_name, "add-rect:100:200:300:400");
-    EXPECT_TRUE(cmd1.arguments.empty());
+    EXPECT_EQ(cmd1.action_name, "add-rect");
+    EXPECT_EQ(cmd1.arguments.size(), 4);
+    EXPECT_EQ(cmd1.arguments[0], "100");
+    EXPECT_EQ(cmd1.arguments[1], "200");
+    EXPECT_EQ(cmd1.arguments[2], "300");
+    EXPECT_EQ(cmd1.arguments[3], "400");
 
-    // Test string arguments (arguments are part of action_name)
+    // Test string arguments
     auto cmd2 = SocketCommandParser::parse_command("COMMAND:456:export-png:output.png:800:600");
     EXPECT_TRUE(cmd2.is_valid);
-    EXPECT_EQ(cmd2.action_name, "export-png:output.png:800:600");
-    EXPECT_TRUE(cmd2.arguments.empty());
+    EXPECT_EQ(cmd2.action_name, "export-png");
+    EXPECT_EQ(cmd2.arguments.size(), 3);
+    EXPECT_EQ(cmd2.arguments[0], "output.png");
+    EXPECT_EQ(cmd2.arguments[1], "800");
+    EXPECT_EQ(cmd2.arguments[2], "600");
 
     // Test command ending with colon (no arguments)
     auto cmd3 = SocketCommandParser::parse_command("COMMAND:789:file-new:");
     EXPECT_TRUE(cmd3.is_valid);
-    EXPECT_EQ(cmd3.action_name, "file-new:");
-    EXPECT_TRUE(cmd3.arguments.empty());
+    EXPECT_EQ(cmd3.action_name, "file-new");
+    EXPECT_EQ(cmd3.arguments.size(), 1);
+    EXPECT_EQ(cmd3.arguments[0], "");
 }
 
 int main(int argc, char **argv)

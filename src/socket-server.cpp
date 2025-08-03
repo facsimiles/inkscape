@@ -161,7 +161,8 @@ bool SocketServer::start()
 
 void SocketServer::stop()
 {
-    /** TODO: Error handling? */
+    _running = false;
+
     if (_server_fd >= 0) {
         close(_server_fd);
         _server_fd = -1;
@@ -172,7 +173,6 @@ void SocketServer::stop()
 #ifdef _WIN32
     WSACleanup();
 #endif
-    _running = false;
 }
 
 void SocketServer::run()
@@ -203,7 +203,6 @@ void SocketServer::run()
 
 void SocketServer::handle_client(int client_fd)
 {
-    /** TODO: Error handling? Is this buffer safe? */
     char buffer[1024];
     std::string response;
     std::string input_buffer;
@@ -233,8 +232,6 @@ void SocketServer::handle_client(int client_fd)
         input_buffer += std::string(buffer);
 
         // Look for complete commands (ending with newline or semicolon)
-        /** TODO: Shell requires semicolon to separate commands 
-         and end a command */
         size_t pos = 0;
         while ((pos = input_buffer.find('\n')) != std::string::npos ||
                (pos = input_buffer.find('\r')) != std::string::npos) {
@@ -284,7 +281,7 @@ void SocketServer::handle_client(int client_fd)
             if (!command.empty()) {
                 response = execute_command(command);
             } else {
-                response = "ERROR:1:Invalid command format. Use: COMMAND:request_id:action1:arg1;action2:arg2;";
+                response = "ERROR:1:Invalid command format. Use: COMMAND:request_id:action1:arg1;action2:arg2";
             }
 
             // Send response
@@ -320,13 +317,6 @@ std::string SocketServer::execute_command(std::string const &command)
         }
 
         // Ensure we have a document for actions that need it
-        /** TODO: Not sure I like creating a new document here.
-         *  I think we should just use the active document.
-         *  If there is no active document, we should return an error.
-         *  If the document is not loaded, we should return an error.
-         *  If the document is not saved, we should return an error.
-         *  If the document is not a valid document, we should return an error.
-         */
         if (!_app->get_active_document()) {
             // Create a new document if none exists
             _app->document_new();
@@ -377,9 +367,6 @@ std::string SocketServer::parse_command(std::string const &input, std::string &r
     cleaned.erase(cleaned.find_last_not_of(" \t\r\n") + 1);
 
     // Check for COMMAND: prefix (case insensitive)
-    /** We use COMMAND to allow for request id so client
-     *  can track the response to the command.
-     */
     std::string upper_input = cleaned;
     std::transform(upper_input.begin(), upper_input.end(), upper_input.begin(), ::toupper);
 
@@ -434,7 +421,6 @@ std::string SocketServer::get_status_info()
         status << "Size: " << width.quantity << "x" << height.quantity << "px, ";
 
         // Get number of objects
-        /** TODO: Any other info we want to include? */
         auto root = doc->getReprRoot();
         if (root) {
             int object_count = 0;
