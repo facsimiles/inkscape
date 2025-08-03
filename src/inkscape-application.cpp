@@ -956,9 +956,7 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
                 return;
             }
             // Run socket server in a separate thread to avoid blocking
-            std::thread socket_thread([this]() {
-                _socket_server->run();
-            });
+            std::thread socket_thread([this]() { _socket_server->run(); });
             socket_thread.detach(); // Detach the thread so it runs independently
         }
     }
@@ -1075,9 +1073,7 @@ void InkscapeApplication::on_activate()
             return;
         }
         // Run socket server in a separate thread to avoid blocking
-        std::thread socket_thread([this]() {
-            _socket_server->run();
-        });
+        std::thread socket_thread([this]() { _socket_server->run(); });
         socket_thread.detach(); // Detach the thread so it runs independently
     }
 
