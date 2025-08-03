@@ -1308,7 +1308,9 @@ popover.menu > stack > box > modelbutton:first-child > * /* Affect children not 
 /* ColorSlider */
 #ColorSlider {
     min-width : 96px;
-    min-height:  8px;
+    min-height:  12px;
+    /* this is color of the thumb ring */
+    color: @theme_base_color;
 }
 
 #ColorPicker {

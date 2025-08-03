@@ -34,11 +34,10 @@ void draw_border_shape(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect
 
     if (rect.width() < 1 || rect.height() < 1) return;
 
-    if (device_scale > 1) {
-        // there's one physical pixel overhang on a high-dpi display, so eliminate that:
-        auto pix = 1.0 / device_scale;
-        rect = Geom::Rect::from_xywh(rect.min().x(), rect.min().y(), rect.width() - pix, rect.height() - pix);
-    }
+    // there's one pixel overhang, so eliminate that:
+    auto pix = 1.0 / device_scale;
+    rect = Geom::Rect::from_xywh(rect.min().x(), rect.min().y(), rect.width() - pix, rect.height() - pix);
+
     ctx->save();
     // operate on physical pixels
     ctx->scale(1.0 / device_scale, 1.0 / device_scale);

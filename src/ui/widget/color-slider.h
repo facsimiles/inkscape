@@ -40,11 +40,10 @@ public:
         Glib::RefPtr<Gtk::Builder> const &builder,
         std::shared_ptr<Colors::ColorSet> color,
         Colors::Space::Component component);
-    ~ColorSlider() override = default;
+    ~ColorSlider() override;
 
     double getScaled() const;
     void setScaled(double value);
-    static int get_checkerboard_tile_size();
 protected:
     friend class ColorPageChannel;
 
@@ -66,6 +65,10 @@ private:
     // Memory buffers for the painted gradient
     std::vector<unsigned int> _gr_buffer;
     Glib::RefPtr<Gdk::Pixbuf> _gradient;
+    bool _hover = false;
+    unsigned int _tick_callback = 0;
+    double _ring_size = 0;
+    double _ring_thickness = 0;
 };
 
 } // namespace Inkscape::UI::Widget

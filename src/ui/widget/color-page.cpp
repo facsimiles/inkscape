@@ -182,8 +182,6 @@ ColorPageChannel::ColorPageChannel(
     _label.set_xalign(0.5);
 
     _slider.set_hexpand(true);
-    _slider.set_valign(Gtk::Align::CENTER);
-    _slider.set_size_request(-1, ColorSlider::get_checkerboard_tile_size() * 2);
 
     _adj->set_lower(0.0);
     _adj->set_upper(component.scale);

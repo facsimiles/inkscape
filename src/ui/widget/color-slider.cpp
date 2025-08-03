@@ -24,12 +24,14 @@
 #include "colors/spaces/components.h"
 #include "colors/spaces/enum.h"
 #include "ui/controller.h"
+#include "ui/util.h"
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"
 
 constexpr int THUMB_SPACE = 16;
-constexpr int THUMB_SIZE = 10;
-constexpr int CHECKERBOARD_TILE = 7;
+constexpr int TRACK_HEIGHT = 8;
+constexpr int THUMB_SIZE = TRACK_HEIGHT + 2;
+constexpr int CHECKERBOARD_TILE = TRACK_HEIGHT / 2;
 constexpr uint32_t ERR_DARK = 0xff00ff00;    // Green
 constexpr uint32_t ERR_LIGHT = 0xffff00ff;   // Magenta
 
@@ -54,9 +56,17 @@ ColorSlider::ColorSlider(
     construct();
 }
 
+ColorSlider::~ColorSlider() {
+    if (_tick_callback) {
+        remove_tick_callback(_tick_callback);
+    }
+}
+
 void ColorSlider::construct() {
     set_name("ColorSlider");
 
+    _ring_size = THUMB_SIZE;
+    _ring_thickness = 2;
     set_draw_func(sigc::mem_fun(*this, &ColorSlider::draw_func));
 
     auto const click = Gtk::GestureClick::create();
@@ -66,6 +76,14 @@ void ColorSlider::construct() {
 
     auto const motion = Gtk::EventControllerMotion::create();
     motion->signal_motion().connect([this, &motion = *motion](auto &&...args) { on_motion(motion, args...); });
+    motion->signal_enter().connect([this](auto&& ...) {
+        _hover = true;
+        if (!_tick_callback) _tick_callback = add_tick_callback([this] (auto &&) { queue_draw(); return true; });
+    });
+    motion->signal_leave().connect([this](auto&& ...) {
+        _hover = false;
+        if (!_tick_callback) _tick_callback = add_tick_callback([this] (auto &&) { queue_draw(); return true; });
+    });
     add_controller(motion);
 
     _drag = Gtk::GestureDrag::create();
@@ -167,44 +185,19 @@ Glib::RefPtr<Gdk::Pixbuf> _make_checkerboard(uint32_t dark, uint32_t light, unsi
     return Gdk::Pixbuf::create_from_data((guint8*)buffer.data(), Gdk::Colorspace::RGB, true, 8, pattern, pattern, pattern * 4);
 }
 
-static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& location, double size, const Gdk::RGBA& fill, const Gdk::RGBA& stroke, int device_scale, bool ring) {
+static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& location, double size, double thickness, const Gdk::RGBA& fill, const Gdk::RGBA& stroke) {
     auto center = location.round(); //todo - verify pix grid fit + Geom::Point(0.5, 0.5);
     auto radius = size / 2;
-    if (ring) {
-        // donut-shaped handle?
-        ctx->save();
-        ctx->begin_new_path();
-        ctx->rectangle(location.x() - size, location.y() - size, size * 2, size * 2);
-        ctx->arc(center.x(), center.y(), radius / 2, 0, 2 * M_PI);
-        ctx->set_fill_rule(Cairo::Context::FillRule::EVEN_ODD);
-        ctx->clip();
-    }
-    auto alpha = 0.06 / device_scale;
-    double step = 1.0 / device_scale;
-    for (int i = 2 * device_scale; i > 0; --i) {
-        ctx->set_source_rgba(0, 0, 0, alpha);
-        alpha *= 1.5;
-        auto offset = Geom::Point{1, 1} * step * i;
-        ctx->arc(center.x() + offset.x(), center.y() + offset.y(), radius+1, 0, 2 * M_PI);
-        ctx->fill();
-    }
-    // border/outline
-    ctx->arc(center.x(), center.y(), radius+1, 0, 2 * M_PI);
-    ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), 0.6);
-    ctx->fill();
-    // fill
-    ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
-    ctx->set_source_rgb(fill.get_red(), fill.get_green(), fill.get_blue());
-    ctx->fill();
 
-    if (ring) {
-        ctx->restore();
-        // inner outline of the ring
-        ctx->arc(center.x(), center.y(), radius / 2 - 0.5, 0, 2 * M_PI);
-        ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), 0.3);
-        ctx->set_line_width(1);
-        ctx->stroke();
-    }
+    ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
+    ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), stroke.get_alpha());
+    ctx->set_line_width(thickness + 2.0);
+    ctx->stroke();
+    // ring
+    ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
+    ctx->set_source_rgba(fill.get_red(), fill.get_green(), fill.get_blue(), fill.get_alpha());
+    ctx->set_line_width(thickness);
+    ctx->stroke();
 }
 
 void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
@@ -214,12 +207,16 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     if (!maybe_area) return;
 
     auto area = *maybe_area;
-    bool dark_theme = Util::is_current_theme_dark(*this);
 
-    // expand border past active area on both sides, so slider's thumb doesn't hang at any extreme, but looks confined
     auto border = area;
-    border.expandBy(1, 0);
-    double radius = 2;
+    // stretch the track horizontally to align its rounded ends with a center of the thumb
+    // when it's in a leftmost/rightmost position
+    border.expandBy(4, 0);
+    // shrink the track to the desired height
+    border.shrinkBy(0, (area.height() - TRACK_HEIGHT) / 2);
+    border.setBottom(border.top() + TRACK_HEIGHT);
+    // rounded ends
+    auto radius = TRACK_HEIGHT / 2.0;
     Util::rounded_rectangle(cr, border, radius);
 
     auto const scale = get_scale_factor();
@@ -285,24 +282,32 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     cr->fill();
     cr->restore();
 
+    bool dark_theme = Util::is_current_theme_dark(*this);
     Util::draw_standard_border(cr, border, dark_theme, radius, scale);
 
     // draw slider thumb
-    auto style = get_style_context();
-    auto fill = Util::lookup_background_color(style);
-    if (!dark_theme || !fill) {
-        float x = dark_theme ? 0.3f : 1.0f;
-        fill = Gdk::RGBA(x, x, x);
-    }
-    auto stroke = Util::lookup_foreground_color(style);
-    if (!stroke) {
-        float x = dark_theme ? 0.9f : 0.3f;
-        stroke = Gdk::RGBA(x, x, x);
-    }
     if (_colors->isValid(_component)) {
+        auto ring = get_color();
+        auto dark = get_luminance(ring) < 0.5;
+        float x = dark ? 1.0f : 0.0f;
+        float alpha = dark ? 0.40f : 0.25f;
+        auto stroke = Gdk::RGBA(x, x, x, alpha);
+
         double value = std::clamp(_colors->getAverage(_component), 0.0, 1.0);
         if (std::isfinite(value)) {
-            draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor(), false);
+            // vary ring thickness to show the user that they are hovering over the slider
+            auto size = std::clamp(_ring_size + (_hover ? -0.2 : 0.1), THUMB_SIZE - 1.0, THUMB_SIZE * 1.0);
+            auto thickness = std::clamp(_ring_thickness + (_hover ? 0.2 : -0.1), 2.0, 3.0);
+            draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), size, thickness, ring, stroke);
+
+            if (size != _ring_size || thickness != _ring_thickness) {
+                _ring_size = size;
+                _ring_thickness = thickness;
+            }
+            else if (_tick_callback) {
+                remove_tick_callback(_tick_callback);
+                _tick_callback = 0;
+            }
         }
     }
 }
@@ -322,10 +327,6 @@ void ColorSlider::setScaled(double value)
     }
     // setAll replaces every color with the same value, setAverage moves them all by the same amount.
     _colors->setAll(_component, value / _component.scale);
-}
-
-int ColorSlider::get_checkerboard_tile_size() {
-    return CHECKERBOARD_TILE;
 }
 
 } // namespace Inkscape::UI::Widget
