@@ -7,10 +7,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glib.h>
 #include <gtest/gtest.h>
 
-#include <glib.h>
-
+#include "test-utils.h"
 #include "util/units.h"
 
 namespace {
@@ -86,6 +86,25 @@ TEST(UtilUnitsTest, UnitMetricGet)
     }
 }
 
+class UnitLocale : public GlobalLocaleTestFixture
+{
+};
+
+TEST_P(UnitLocale, UnitScale)
+{
+    UnitTable units;
+    auto mm = units.getUnit("mm");
+    auto inch = units.getUnit("in");
+    EXPECT_NE(mm, nullptr);
+    EXPECT_NE(inch, nullptr);
+    ASSERT_DOUBLE_EQ(25.4, inch->convert(1, mm));
+
+    auto cm = units.getUnit("cm");
+    EXPECT_NE(cm, nullptr);
+    ASSERT_DOUBLE_EQ(10, cm->convert(1, mm));
+}
+
+INSTANTIATE_TEST_SUITE_P(UtilUnitsTest, UnitLocale, testing::Values("C", "de_DE.UTF8"));
 
 } // namespace
 

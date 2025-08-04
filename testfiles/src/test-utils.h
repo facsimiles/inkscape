@@ -84,6 +84,69 @@ inline static std::vector<double> random_values(unsigned ccount)
     return values;
 }
 
+/** Locale testing fixture.
+ *
+ * This fixture only creates a locale, it is test responsibility to use it.
+ * \code{.cpp}
+ * class FooTestFixture : public LocaleTestFixture {};
+ * TEST_P(FooTestFixture, Test1)
+ * {
+ *    std::sstream stream("1.32");
+ *    stream.imbue(locale);
+ *    float v;
+ *    stream >> v;
+ * }
+ * TEST_P(FooTestFixture, Test2) { .. }
+ * INSTANTIATE_TEST_SUITE_P(TestSuite,
+ *                           FooTestFixture,
+ *                           testing::Values("C", "de_DE.UTF8"));
+ * \endcode
+ */
+class LocaleTestFixture : public ::testing::TestWithParam<char const *>
+{
+protected:
+    std::locale locale;
+
+    void SetUp() override { locale = std::locale(GetParam()); }
+};
+
+/** Global locale testing fixture.
+ *
+ * Parametrized test fixtures which automatically sets up and restores global locale.
+ * \code{.cpp}
+ * class FooTestFixture : public GlobalLocaleTestFixture {};
+ * TEST_P(FooTestFixture, Test1)
+ * {
+ *    test_logic
+ * }
+ * TEST_P(FooTestFixture, Test2) { .. }
+ * INSTANTIATE_TEST_SUITE_P(TestSuite,
+ *                           FooTestFixture,
+ *                           testing::Values("C", "de_DE.UTF8"));
+ * \endcode
+ */
+class GlobalLocaleTestFixture : public LocaleTestFixture
+{
+    std::locale backup;
+
+protected:
+    void SetUp() override
+    {
+        try {
+            LocaleTestFixture::SetUp();
+        } catch (std::exception const &e) {
+            GTEST_SKIP() << "Skipping locale '" << GetParam() << "' not available\n";
+        }
+        backup = std::locale::global(locale);
+    }
+
+    void TearDown() override
+    {
+        LocaleTestFixture::TearDown();
+        std::locale::global(backup);
+    }
+};
+
 } // namespace
 
 /*

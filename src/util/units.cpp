@@ -7,21 +7,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cmath>
+#include "util/units.h"
+
 #include <cerrno>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
-#include <utility>
 #include <unordered_map>
+#include <utility>
 #include <glib.h>
-#include <glibmm/regex.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/markup.h>
-
+#include <glibmm/regex.h>
+#include <glibmm/stringutils.h>
 #include <2geom/coord.h>
 
 #include "io/resource.h"
-#include "util/units.h"
 #include "path-prefix.h"
 #include "streq.h"
 #include "util-string/ustring-format.h"
@@ -508,12 +509,11 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
     } else if (element == "abbr") {
         unit.abbr = text;
     } else if (element == "factor") {
-        // TODO make sure we use the right conversion
-        unit.factor = std::stod(text.raw());
+        unit.factor = Glib::Ascii::strtod(text);
     } else if (element == "description") {
         unit.description = text;
     } else if (element == "tic" && metric) {
-        auto tic = std::stod(text.raw());
+        auto tic = Glib::Ascii::strtod(text);
         metric->ruler_scale.push_back(tic);
         if (is_div) {
             metric->subdivide.push_back(tic);
