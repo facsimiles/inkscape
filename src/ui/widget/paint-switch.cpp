@@ -14,6 +14,8 @@
 
 #include "color-picker-panel.h"
 #include "colors/color-set.h"
+#include "colors/manager.h"
+#include "colors/spaces/base.h"
 #include "style-internal.h"
 #include "ui/builder-utils.h"
 #include "ui/operation-blocker.h"
@@ -130,13 +132,16 @@ PaintSwitch::PaintSwitch():
 
 namespace {
 
-Colors::Space::Type get_color_type() {
-    auto type = static_cast<Space::Type>(Preferences::get()->getInt("/color-picker/color-type", int(Space::Type::HSL)));
-    return type;
+Space::Type get_color_type() {
+    auto name = Preferences::get()->getString("/color-picker/sel-color-type", "HSL");
+    auto space = Manager::get().find(name);
+    return space ? space->getType() : Space::Type::HSL;
 }
 
-void store_color_type(Colors::Space::Type type) {
-    Preferences::get()->setInt("/color-picker/color-type", int(type));
+void store_color_type(Space::Type type) {
+    if (auto space = Manager::get().find(type)) {
+        Preferences::get()->setString("/color-picker/sel-color-type", space->getName());
+    }
 }
 
 } // namespace
