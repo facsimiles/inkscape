@@ -361,6 +361,7 @@ Quantity UnitTable::parseQuantity(Glib::ustring const &q) const
     Glib::RefPtr<Glib::Regex> value_regex = Glib::Regex::create("[-+]*[\\d+]*[\\.,]*[\\d+]*[eE]*[-+]*\\d+");
     if (value_regex->match(q, match_info)) {
         std::istringstream tmp_v(match_info.fetch(0).raw());
+        tmp_v.imbue(std::locale::classic());
         tmp_v >> value;
     }
     int start_pos, end_pos;
@@ -509,11 +510,11 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
         unit.abbr = text;
     } else if (element == "factor") {
         // TODO make sure we use the right conversion
-        unit.factor = std::stod(text.raw());
+        unit.factor = g_ascii_strtod(text.c_str(), nullptr);
     } else if (element == "description") {
         unit.description = text;
     } else if (element == "tic" && metric) {
-        auto tic = std::stod(text.raw());
+        auto tic = g_ascii_strtod(text.c_str(), nullptr);
         metric->ruler_scale.push_back(tic);
         if (is_div) {
             metric->subdivide.push_back(tic);

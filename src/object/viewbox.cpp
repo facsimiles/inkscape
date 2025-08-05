@@ -91,6 +91,7 @@ void SPViewBox::set_viewBox(const gchar* value) {
   // std::string sv( value );
   // std::replace( sv.begin(), sv.end(), ',', ' ');
   // std::stringstream ss( sv );
+  // ss.imbue(std::locale::classic());
   // double x, y, width, height;
   // ss >> x >> y >> width >> height;
 }

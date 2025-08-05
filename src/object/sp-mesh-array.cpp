@@ -716,6 +716,7 @@ bool SPMeshNodeArray::read(SPMeshGradient *mg_in)
                             // std::cout << "    current_p: " << current_p << std::endl;
 
                             std::stringstream os( path_string );
+                            os.imbue(std::locale::classic());
 
                             // Determine type of path
                             char path_type;
@@ -820,6 +821,7 @@ bool SPMeshNodeArray::read(SPMeshGradient *mg_in)
                         // std::cout << "    tensor_string: " << tensor_string << std::endl;
 
                         std::stringstream os( tensor_string );
+                        os.imbue(std::locale::classic());
                         for( unsigned i = 0; i < 4; ++i ) {
                             double x = 0.0;
                             double y = 0.0;

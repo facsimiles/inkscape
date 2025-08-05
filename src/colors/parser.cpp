@@ -7,6 +7,7 @@
 
 #include "parser.h"
 
+#include <glib.h>
 #include <iostream>
 #include <sstream>
 
@@ -71,6 +72,7 @@ bool Parsers::parse(std::string const &input, Space::Type &type, std::string &cm
                     std::vector<double> &fallback) const
 {
     std::istringstream ss(input);
+    ss.imbue(std::locale::classic());
     return _parse(ss, type, cms, values, fallback);
 }
 
@@ -278,7 +280,11 @@ bool Parser::css_number(std::istringstream &ss, double &value, std::string &unit
         }
     }
     if (parsed) {
-        value = std::stod(result);
+        char* endptr = nullptr;
+        value = g_ascii_strtod(result.c_str(), &endptr);
+        if (errno == ERANGE || endptr == result.c_str()) {
+            parsed = false;
+        }
     }
 #else
     bool parsed = (bool)(ss >> value);
