@@ -36,6 +36,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/togglebutton.h>
+#include <gtkmm/version.h>
 
 #include "css-chemistry.h"
 #include "desktop.h"
@@ -386,6 +387,9 @@ details::AttributesPanel::AttributesPanel()
     //todo: is this needed?
     // auto init_units = desktop->getNamedView()->display_units;
     // _tracker->setActiveUnit(init_units);
+#if GTKMM_CHECK_VERSION(4, 18, 0)
+    _lpe_menu.set_tab_behavior(Gtk::ListTabBehavior::ITEM);
+#endif
 }
 
 void details::AttributesPanel::add_fill_and_stroke(Parts parts) {

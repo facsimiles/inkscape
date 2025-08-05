@@ -21,6 +21,7 @@
 #include <gtkmm/stack.h>
 #include <gtkmm/stringsorter.h>
 #include <gtkmm/treemodelfilter.h>
+#include <gtkmm/version.h>
 
 #include "colors/color-set.h"
 #include "desktop.h"
@@ -449,6 +450,9 @@ DocumentResources::DocumentResources()
         // list_item->set_focusable(!separator);
     });
 
+#if GTKMM_CHECK_VERSION(4, 18, 0)
+    _selector.set_tab_behavior(Gtk::ListTabBehavior::ITEM);
+#endif
     _selector.add_css_class("list-view-small");
     _selector.set_factory(factory_1);
 

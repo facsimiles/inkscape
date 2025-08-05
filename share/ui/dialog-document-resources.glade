@@ -188,7 +188,7 @@
             <property name="has-frame">True</property>
             <property name="child">
               <object class="GtkListView" id="tree">
-                <property name="tab-behavior">item</property>
+<!-- v4.18              <property name="tab-behavior">item</property>-->
               </object>
             </property>
           </object>

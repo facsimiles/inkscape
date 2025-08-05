@@ -398,7 +398,7 @@
               <object class="GtkListBox" id="lpe-menu">
                 <property name="activate-on-single-click">true</property>
                 <property name="selection-mode">browse</property>
-                <property name="tab-behavior">item</property>
+<!-- v4.18              <property name="tab-behavior">item</property>-->
               </object>
             </property>
           </object>
