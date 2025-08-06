@@ -582,9 +582,9 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
     _marker_start.preview_scale(scale);
     _marker_mid.preview_scale(scale);
     _marker_end.preview_scale(scale);
-    get_widget<Gtk::Box>(_builder, "marker-start").append(_marker_start);
-    get_widget<Gtk::Box>(_builder, "marker-middle").append(_marker_mid);
-    get_widget<Gtk::Box>(_builder, "marker-end").append(_marker_end);
+    _markers.append(_marker_start);
+    _markers.append(_marker_mid);
+    _markers.append(_marker_end);
 
     auto set_marker = [this](int location, const char* id, const std::string& uri) {
         if (!can_update()) return;

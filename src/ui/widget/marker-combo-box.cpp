@@ -111,7 +111,7 @@ double get_attrib_num(SPMarker* marker, const char* attrib, double default_value
 MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     Glib::ObjectBase{"MarkerComboBox"},
     WidgetVfuncsClassInit{},
-    Gtk::Box{},
+    Gtk::MenuButton(),
     _combo_id(std::move(id)),
     _loc(l),
     _builder(create_builder("marker-popup.glade")),
@@ -122,7 +122,6 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _scale_x(get_widget<InkSpinButton>(_builder, "scale-x")),
     _scale_y(get_widget<InkSpinButton>(_builder, "scale-y")),
     _scale_with_stroke(get_widget<Gtk::CheckButton>(_builder, "scale-with-stroke")),
-    _menu_btn(get_widget<Gtk::MenuButton>(_builder, "menu-btn")),
     _angle_btn(get_widget<InkSpinButton>(_builder, "angle")),
     _offset_x(get_widget<InkSpinButton>(_builder, "offset-x")),
     _offset_y(get_widget<InkSpinButton>(_builder, "offset-y")),
@@ -131,9 +130,17 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _orient_auto(get_widget<Gtk::ToggleButton>(_builder, "orient-auto")),
     _orient_angle(get_widget<Gtk::ToggleButton>(_builder, "orient-angle")),
     _orient_flip_horz(get_widget<Gtk::Button>(_builder, "btn-horz-flip")),
-    _current_img(get_widget<Gtk::Picture>(_builder, "current-img")),
     _edit_marker(get_widget<Gtk::Button>(_builder, "edit-marker"))
 {
+    set_hexpand();
+    set_always_show_arrow();
+    set_popover(get_widget<Gtk::Popover>(_builder, "popover"));
+    preview_scale(1.0);
+    _current_img.set_content_fit(Gtk::ContentFit::SCALE_DOWN);
+    _current_img.set_halign(Gtk::Align::CENTER);
+    _current_img.set_valign(Gtk::Align::CENTER);
+    set_child(_current_img);
+
     auto& input_grid = get_widget<Gtk::Grid>(_builder, "input-grid");
     _widgets = reparent_properties(input_grid, _grid, true, false, 1);
     get_widget<Gtk::Box>(_builder, "main-box").append(_grid);
@@ -157,7 +164,6 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         g_bad_marker = renderer.render_surface(1.0);
     }
 
-    prepend(_menu_btn);
     if (_loc == SP_MARKER_LOC_START) {
         set_tooltip_text(_("Start marker is drawn on the first node of a path"));
     }
@@ -300,7 +306,7 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         sp_marker_set_opacity(get_current(), alpha);
     });
     // request to edit marker on canvas; close the popup to get it out of the way and call marker edit tool
-    _edit_marker.signal_clicked().connect([this]{ _menu_btn.get_popover()->popdown(); _signal_edit(); });
+    _edit_marker.signal_clicked().connect([this]{ get_popover()->popdown(); _signal_edit(); });
     // clear marker - unassign it
     get_widget<Gtk::Button>(_builder, "clear-marker").signal_clicked().connect([this] {
         _marker_list.unselect_all();
@@ -308,7 +314,7 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     });
 
     // before showing popover refresh marker attributes
-    _menu_btn.get_popover()->signal_show().connect([this]{
+    get_popover()->signal_show().connect([this]{
         if (!_is_up_to_date) {
             refresh_after_markers_modified();
         }
@@ -500,7 +506,7 @@ void MarkerComboBox::setDocument(SPDocument *document)
 
         if (_document) {
             modified_connection = _document->getDefs()->connectModified([this](SPObject*, unsigned int){
-                if (_menu_btn.get_popover()->is_visible()) {
+                if (get_popover()->is_visible()) {
                     refresh_after_markers_modified();
                 }
                 else {
@@ -814,15 +820,7 @@ sigc::connection MarkerComboBox::connect_edit(sigc::slot<void ()> slot)
 }
 
 void MarkerComboBox::set_flat(bool flat) {
-    _menu_btn.set_has_frame(!flat);
-    get_widget<Gtk::Image>(_builder, "down-arrow").set_visible(!flat);
-    get_widget<Gtk::Box>(_builder, "btn-box").set_halign(flat ? Gtk::Align::CENTER : Gtk::Align::FILL);
-    if (flat) {
-        _menu_btn.add_css_class("rectangle");
-    }
-    else {
-        _menu_btn.remove_css_class("rectangle");
-    }
+    set_always_show_arrow(!flat);
 }
 
 void MarkerComboBox::preview_scale(double scale) {

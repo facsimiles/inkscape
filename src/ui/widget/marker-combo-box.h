@@ -51,10 +51,7 @@ class Bin;
 /**
  * ComboBox-like class for selecting stroke markers.
  */
-class MarkerComboBox final
-    : public WidgetVfuncsClassInit
-    , public Gtk::Box
-{
+class MarkerComboBox : public WidgetVfuncsClassInit, public Gtk::MenuButton {
 public:
     MarkerComboBox(Glib::ustring id, int loc);
 
@@ -99,7 +96,7 @@ private:
 
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void ()> _signal_edit;
-    double _preview_scale = 1.0;
+    double _preview_scale = 0.0;
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::FlowBox& _marker_list;
     Gtk::Label& _marker_name;
@@ -111,7 +108,6 @@ private:
     bool _preview_no_alloc = true;
     Gtk::Button& _link_scale;
     InkSpinButton& _angle_btn;
-    Gtk::MenuButton& _menu_btn;
     InkSpinButton& _scale_x;
     InkSpinButton& _scale_y;
     Gtk::CheckButton& _scale_with_stroke;
@@ -122,7 +118,7 @@ private:
     Gtk::ToggleButton& _orient_auto;
     Gtk::ToggleButton& _orient_angle;
     Gtk::Button& _orient_flip_horz;
-    Gtk::Picture& _current_img;
+    Gtk::Picture _current_img;
     Gtk::Button& _edit_marker;
     bool _scale_linked = true;
     guint32 _background_color;

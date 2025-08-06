@@ -87,27 +87,8 @@
       <object class="GtkBox" id="stroke-markers">
         <property name="overflow">hidden</property>
         <style>
-          <class name="border-box"></class>
+          <class name="linked"></class>
         </style>
-        <child>
-          <object class="GtkBox" id="marker-start"></object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="orientation">vertical</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="marker-middle"></object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="orientation">vertical</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="marker-end"></object>
-        </child>
         <layout>
           <property name="column">2</property>
           <property name="row">2</property>
