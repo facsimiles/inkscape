@@ -359,8 +359,14 @@ if(WIN32)
 endif()
 
 # make executables for inkscape and inkview
-add_executable(inkscape ${main_SRC})
-add_executable(inkview ${view_SRC})
+if(NOT ANDROID)
+  add_executable(inkscape ${main_SRC})
+  add_executable(inkview ${view_SRC})
+else()
+  add_library(inkscape ${main_SRC})
+  add_library(inkview ${view_SRC})
+endif()
+
 if(WIN32)
   # Make the same executables again, but this time as console application (GUI applications can't print to the console)
   add_executable(inkscape_com ${main_SRC})

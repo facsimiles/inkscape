@@ -8,7 +8,10 @@
 #ifndef INKSCAPE_UI_WIDGET_CANVAS_GLGRAPHICS_H
 #define INKSCAPE_UI_WIDGET_CANVAS_GLGRAPHICS_H
 
+#include <memory>
+#include <mutex>
 #include <boost/noncopyable.hpp>
+#include <epoxy/gl.h>
 
 #include "graphics.h"
 #include "texturecache.h"

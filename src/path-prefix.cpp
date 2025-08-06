@@ -84,6 +84,8 @@ char const *get_inkscape_datadir()
             } else {
                 datadir = Glib::build_filename(_get_bundle_prefix_dir(), "share");
             }
+#elif defined(__ANDROID__)
+            datadir = g_get_system_data_dirs()[0];
 #else
             datadir = Glib::build_filename(_get_bundle_prefix_dir(), "share");
 #endif

@@ -60,6 +60,9 @@ Gdk::Rectangle get_monitor_geometry_primary() {
     Gdk::Rectangle monitor_geometry;
     auto const display = Gdk::Display::get_default();
     auto monitor = get_primary_monitor(display);
+    if (!monitor) {
+        return {};
+    }
 
     monitor->get_geometry(monitor_geometry);
     return monitor_geometry;

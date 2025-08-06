@@ -252,6 +252,33 @@ inkscape:windows:
     paths:
       - build/inkscape*.${DIST}
 
+inkscape:android:
+  stage: build
+  timeout: 3h
+  image: registry.gitlab.com/inkscape/infra/inkscape-ci-android/master@sha256:bf573c2dc030aadfe0c14f3fac8e5fdaba1ef4826c6108d21e012ef001508b6a # Commit 062ddef091ff299d120d4be75c3a76d6ecdc5102
+  when: manual
+  cache:
+    key: "cache-android"
+    paths:
+      - ccache/
+    when: 'always'
+  variables:
+    CCACHE_DIR: $CI_PROJECT_DIR/ccache
+    CCACHE_MAXSIZE: "800Mi"
+  script:
+    - git config --global safe.directory '*'
+    - mkdir build
+    - cd build
+    - cmake .. -GNinja -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_TOOLCHAIN_FILE=~/inkscape/deps/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-g0 -DCMAKE_CXX_FLAGS=-g0 -DCMAKE_SHARED_LINKER_FLAGS=-s -DWITH_INTERNAL_2GEOM=ON -DBUILD_TESTING=OFF -DWITH_GNU_READLINE=OFF
+    - ninja
+    - cd ..
+    - packaging/android/package.sh
+    - mv ~/inkscape/packaging/build/inkscape.apk "$CI_PROJECT_DIR"
+  artifacts:
+    expire_in: 1 year
+    paths:
+      - inkscape.apk
+
 #tests, always run after building
 test:linux:
   stage: test
