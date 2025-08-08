@@ -494,7 +494,8 @@ bool MeasureTool::root_handler(CanvasEvent const &event)
 
             measure_item.clear();
 
-            if (!last_end || Geom::LInfty(event.pos - *last_end) > tolerance / 4.0) {
+            // Note: GDK_CURRENT_TIME tests for delayed snap events, which would otherwise always be blocked.
+            if (event.time == GDK_CURRENT_TIME || !last_end || Geom::LInfty(event.pos - *last_end) > tolerance / 4.0) {
                 auto const motion_dt = _desktop->w2d(event.pos);
                 end_p = motion_dt;
 
