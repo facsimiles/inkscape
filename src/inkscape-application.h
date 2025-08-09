@@ -58,7 +58,7 @@ public:
     /// The Gio application instance, never NULL
     Gio::Application *gio_app() { return _gio_application.get(); }
 
-    SPDesktop *createDesktop(SPDocument *document, bool replace);
+    SPDesktop *createDesktop(SPDocument *document, bool replace, bool new_window = false);
     void create_window(Glib::RefPtr<Gio::File> const &file = {});
     bool destroyDesktop(SPDesktop *desktop, bool keep_alive = false);
     void detachDesktopToNewWindow(SPDesktop *desktop);
@@ -115,7 +115,7 @@ public:
     void windowClose(InkscapeWindow *window);
 
     /******* Desktop *******/
-    SPDesktop *desktopOpen(SPDocument *document);
+    SPDesktop *desktopOpen(SPDocument *document, bool new_window = false);
     void desktopClose(SPDesktop *desktop);
     void desktopCloseActive();
 
@@ -182,7 +182,7 @@ protected:
     void on_startup();
     void on_activate();
     void on_open(const Gio::Application::type_vec_files &files, const Glib::ustring &hint);
-    void process_document(SPDocument* document, std::string output_path);
+    void process_document(SPDocument* document, std::string output_path, bool new_window = false);
     void parse_actions(const Glib::ustring& input, action_vector_t& action_vector);
 
     void redirect_output();
@@ -194,6 +194,9 @@ private:
     void init_extension_action_data();
     std::vector<Glib::RefPtr<Gio::SimpleAction>> _effect_actions;
     bool _no_extensions = false;
+
+    void _openStartScreen();
+    void _closeStartScreen();
 };
 
 #endif // INKSCAPE_APPLICATION_H

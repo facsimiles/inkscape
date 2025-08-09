@@ -72,6 +72,15 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
 
     _app->gtk_app()->add_window(*this);
 
+    // On macOS, once a main window is opened, closing it should not quit the app.
+#ifdef __APPLE__
+    static bool called_hold = false;
+    if (!called_hold) {
+        _app->gtk_app()->hold();
+        called_hold = true;
+    }
+#endif
+
     // =================== Actions ===================
 
     // After canvas has been constructed.. move to canvas proper.

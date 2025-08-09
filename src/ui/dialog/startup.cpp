@@ -11,9 +11,6 @@
 #include "startup.h"
 
 #include <glibmm/i18n.h>
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/wayland/gdkwayland.h>
-#endif
 #include <glibmm/main.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
@@ -127,73 +124,27 @@ class ThemeCols: public Gtk::TreeModel::ColumnRecord {
 using Inkscape::UI::Widget::TemplateList;
 
 StartScreen::StartScreen()
-    : Gtk::Dialog()
-    , opt_shown(std::string("/options/boot/shown/ver") + Inkscape::version_string_without_revision)
+    : opt_shown(std::string("/options/boot/shown/ver") + Inkscape::version_string_without_revision)
     , build_splash(create_builder("inkscape-splash.glade"))
     // Global widgets
-    , banners        (get_widget<Gtk::WindowHandle>         (build_splash, "banner"))
-    , close_btn      (get_widget<Gtk::Button>          (build_splash, "close_window"))
-    , messages       (get_widget<Gtk::Label>           (build_splash, "messages"))
+    , banners{get_widget<Gtk::WindowHandle>(build_splash, "banner")}
+    , close_btn{get_widget<Gtk::Button>(build_splash, "close_window")}
+    , messages{get_widget<Gtk::Label>(build_splash, "messages")}
 {
     set_name("start-screen-window");
     set_title(Inkscape::inkscape_version());
     set_focusable(true);
-    grab_focus();
     set_receives_default(true);
     set_default_widget(*this);
     set_modal(true);
 
     // Move banner to dialog window
     set_titlebar(banners);
-    get_content_area()->append(messages);
-}
 
-void StartScreen::show_now()
-{
-    set_default_size(700, 0);
-    set_resizable(false);
-
-    // Show the main banner when already welcomed for the first time
-    if (Inkscape::Preferences::get()->getBool(opt_shown, false)) {
-        auto const start_splash_file   = Resource::get_filename(Resource::SCREENS, "start-splash.png");
-        get_widget<Gtk::Picture>(build_splash, "start-splash"  ).set_filename(start_splash_file);
-        banner_switch(2);
-    } else {
-        auto const welcome_text_file   = Resource::get_filename(Resource::SCREENS, "start-welcome-text.svg", true);
-        auto const start_welcome_file  = Resource::get_filename(Resource::SCREENS, "start-welcome.png");
-        get_widget<Gtk::Picture>(build_splash, "welcome_text"  ).set_filename(welcome_text_file);
-        get_widget<Gtk::Picture>(build_splash, "start-welcome" ).set_filename(start_welcome_file);
-    }
-
-    close_btn.hide();
-    property_resizable() = false;
-    show();
-    banners.show();
-    set_visible(true);
-    present(); // This makes the widget actually appear
-    _timer.start();
-
-    auto main_context = Glib::MainContext::get_default();
-    while (main_context->iteration(false)) {
-    }
-}
-
-void StartScreen::show_welcome()
-{
-    _welcome = true;
-
-#ifdef GDK_WINDOWING_WAYLAND
-    // Hide the window for a short time so it can be repositioned
-    if (GDK_IS_WAYLAND_DISPLAY(this->get_display()->gobj())) {
-        hide();
-        auto main_context = Glib::MainContext::get_default();
-        while (main_context->iteration(false)) {
-        }
-    }
-#endif
+    set_child(_box);
+    _box.append(messages);
 
     set_default_size(700, 360);
-    grab_focus();
     messages.hide();
 
     build_welcome = create_builder("inkscape-welcome.glade");
@@ -204,7 +155,7 @@ void StartScreen::show_welcome()
     recentfiles = &get_widget<Gtk::TreeView>(build_welcome, "recent_treeview");
 
     auto tabs = &get_widget<Gtk::Notebook>(build_welcome, "tabs");
-    get_content_area()->append(*tabs);
+    _box.append(*tabs);
 
     // Get references to various widget used locally. (In order of appearance.)
     auto canvas      = &get_widget<Gtk::ComboBox>    (build_welcome, "canvas");
@@ -274,8 +225,7 @@ void StartScreen::show_welcome()
     load_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     templates.connectItemSelected([this](int){ new_document(); });
     new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
-    close_btn.signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
-    close_btn.show();
+    close_btn.signal_clicked().connect([this] { close(); });
 
     // move pages from stack to our notebook
     for (auto cat : templates.get_categories()) {
@@ -409,14 +359,12 @@ void StartScreen::on_kind_changed(const Glib::ustring& name)
 /**
  * Called when new button clicked or template is double clicked, or escape pressed.
  */
-void
-StartScreen::new_document()
+void StartScreen::new_document()
 {
     // Generate a new document from the selected template.
-    _document = get_template_document();
-    if (_document) {
-    // Quit welcome screen if options not 'canceled'
-        response(GTK_RESPONSE_APPLY);
+    if (auto document = get_template_document()) {
+        // Quit welcome screen if options not cancelled
+        _finish(document);
     }
 }
 
@@ -468,15 +416,8 @@ StartScreen::load_document()
             }
 
             // Now we have file, open document.
-            _document = app->document_open(file).first;
-
-            if (_document) {
-                // We're done, hand back to app but first flush conflicting signals
-                // like signal_row_activated which blocks if the dialog is destroyed
-                auto main_context = Glib::MainContext::get_default();
-                while (main_context->iteration(false)) {}
-
-                response(GTK_RESPONSE_OK);
+            if (auto [document, cancelled] = app->document_open(file); !cancelled) {
+                _finish(document);
             }
         }
     }
@@ -491,7 +432,7 @@ StartScreen::notebook_next(Gtk::Widget *button)
     auto tabs = &get_widget<Gtk::Notebook>(build_welcome, "tabs");
     int page = tabs->get_current_page();
     if (page == 2) {
-        response(GTK_RESPONSE_CANCEL); // Only occurs from keypress.
+        _finish(nullptr); // Only occurs from keypress.
     } else {
         tabs->set_current_page(page + 1);
     }
@@ -502,9 +443,9 @@ StartScreen::notebook_next(Gtk::Widget *button)
  */
 bool StartScreen::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::ModifierType state)
 {
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef __APPLE__
     // On macOS only, if user press Cmd+Q => exit
-    if (keyval == 'q' && static_cast<GdkModifierType>(state) == (GDK_MOD2_MASK | GDK_META_MASK)) {
+    if (keyval == 'q' && state == Gdk::ModifierType::META_MASK) {
         close();
         return false;
     }
@@ -513,7 +454,7 @@ bool StartScreen::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::Mod
     switch (keyval) {
         case GDK_KEY_Escape:
             // Prevent loading any selected items
-            response(GTK_RESPONSE_CANCEL);
+            _finish(nullptr);
             return true;
         case GDK_KEY_Return:
             notebook_next(nullptr);
@@ -523,29 +464,18 @@ bool StartScreen::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::Mod
     return false;
 }
 
-void
-StartScreen::on_response(int response_id)
+void StartScreen::_finish(SPDocument *document)
 {
-    if (response_id == GTK_RESPONSE_DELETE_EVENT || response_id == GTK_RESPONSE_CLOSE) {
-        // Don't open a window for force closing.
-        return;
-    }
-    if (response_id == GTK_RESPONSE_CANCEL) {
-        templates.reset_selection();
-    }
-    if (response_id != GTK_RESPONSE_OK && !_document) {
-        // Last ditch attempt to generate a new document while exiting.
-        _document = get_template_document();
-    }
+    _signal_open.emit(document);
+    close(); // Caution: Typically deletes self.
 }
-
 
 /**
  * Get the preference for the startup mode.
  *
  * @returns
  *    0 - Show nothing
- *    1 = Show the splash and startup screens
+ *    1 = Show the startup screen
  */
 int StartScreen::get_start_mode()
 {

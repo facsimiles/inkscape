@@ -96,7 +96,6 @@
 #include "io/resource.h"            // TEMPLATE
 #include "object/sp-root.h"         // Inkscape version.
 #include "ui/desktop/document-check.h"    // Check for data loss on closing document window.
-#include "ui/dialog-run.h"
 #include "ui/dialog/dialog-manager.h"     // Save state
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/dialog/startup.h"
@@ -388,7 +387,7 @@ std::vector<SPDocument *> InkscapeApplication::get_documents()
 }
 
 // Take an already open document and create a new window, adding window to document map.
-SPDesktop *InkscapeApplication::desktopOpen(SPDocument *document)
+SPDesktop *InkscapeApplication::desktopOpen(SPDocument *document, bool new_window)
 {
     assert(document);
     // Once we've removed Inkscape::Application (separating GUI from non-GUI stuff)
@@ -408,7 +407,7 @@ SPDesktop *InkscapeApplication::desktopOpen(SPDocument *document)
     auto const desktop = doc_it->second.emplace_back(std::make_unique<SPDesktop>(document->getNamedView())).get();
     INKSCAPE.add_desktop(desktop);
 
-    if (_active_window) { // Divert all opened documents to new tabs if possible.
+    if (_active_window && !new_window) { // Divert all opened documents to new tabs unless asked not to.
         _active_window->get_desktop_widget()->addDesktop(desktop);
     } else {
         auto const win = _windows.emplace_back(std::make_unique<InkscapeWindow>(desktop)).get();
@@ -548,9 +547,8 @@ InkscapeApplication::InkscapeApplication()
     // (e.g org.inkscape.Inkscape.tag, /org/inkscape/Inkscape/tag/window/1).
     // If this flag isn't set, any new instance of Inkscape will be merged with the already running
     // instance of Inkscape before on_open() or on_activate() is called.
-    if (Glib::getenv("INKSCAPE_APP_ID_TAG") != "") {
-        flags |= Gio::Application::Flags::CAN_OVERRIDE_APP_ID;
-        app_id += "." + Glib::getenv("INKSCAPE_APP_ID_TAG");
+    if (auto tag = Glib::getenv("INKSCAPE_APP_ID_TAG"); tag != "") {
+        app_id += "." + tag;
         if (!Gio::Application::id_is_valid(app_id)) {
             std::cerr << "InkscapeApplication: invalid application id: " << app_id.raw() << std::endl;
             std::cerr << "  tag must be ASCII and not start with a number." << std::endl;
@@ -569,11 +567,14 @@ InkscapeApplication::InkscapeApplication()
                 non_unique = true;
             }
         }
-        // Run the application (a no-op) since there is no other way to unregister from D-Bus.
-        // Without this, a (wrong) warning is printed.
-        // See https://gitlab.gnome.org/GNOME/glib/-/issues/1857
-        test_app->run(0, nullptr);
         Gio::Application::unset_default();
+
+        // Silence wrong warning when test_app is destroyed - https://gitlab.gnome.org/GNOME/glib/-/issues/1857.
+        // Previous workaround test_app->run(0, nullptr) was not acceptable as it fires spurious activate signals.
+        // Fixme: The warning must be removed upstream, or unregister_application() added so we can call it here.
+        g_log_set_default_handler([] (auto...) {}, nullptr);
+        test_app.reset();
+        g_log_set_default_handler(g_log_default_handler, nullptr);
     }
 
     if (gtk_init_check()) {
@@ -751,7 +752,7 @@ InkscapeApplication::~InkscapeApplication()
 /**
  * Create a desktop given a document. This is used internally in InkscapeApplication.
  */
-SPDesktop *InkscapeApplication::createDesktop(SPDocument *document, bool replace)
+SPDesktop *InkscapeApplication::createDesktop(SPDocument *document, bool replace, bool new_window)
 {
     if (!gtk_app()) {
         g_assert_not_reached();
@@ -772,7 +773,7 @@ SPDesktop *InkscapeApplication::createDesktop(SPDocument *document, bool replace
             }
         }
     } else {
-        desktop = desktopOpen(document);
+        desktop = desktopOpen(document, new_window);
     }
 
     return desktop;
@@ -915,7 +916,7 @@ bool InkscapeApplication::destroy_all()
 
 /** Common processing for documents
  */
-void InkscapeApplication::process_document(SPDocument *document, std::string output_path)
+void InkscapeApplication::process_document(SPDocument *document, std::string output_path, bool new_window)
 {
     // Are we doing one file at a time? In that case, we don't recreate new windows for each file.
     bool replace = _use_pipe || _batch_process;
@@ -923,7 +924,7 @@ void InkscapeApplication::process_document(SPDocument *document, std::string out
     // Open window if needed (reuse window if we are doing one file at a time inorder to save overhead).
     _active_document  = document;
     if (_with_gui) {
-        _active_desktop = createDesktop(document, replace);
+        _active_desktop = createDesktop(document, replace, new_window);
         _active_window = _active_desktop->getInkscapeWindow();
     } else {
         _active_window = nullptr;
@@ -1004,52 +1005,34 @@ void InkscapeApplication::on_activate()
     // Create new document, either from pipe or from template.
     SPDocument *document = nullptr;
 
-#ifdef __APPLE__
-    /*
-     * Defers execution to on_open() if an open signal is on queue when opening a file other
-     * than via command line or splash screen.
-     * It however loses the window focus when launching via command line without file arguments.
-     * Removing this line will open a new document before opening your file.
-    */
-    //TODO: this prevents main window from activating and bringing it to the foreground
-    // less hacky solution needs to be found
-    // Glib::MainContext::get_default()->iteration(false);
-#endif
-
     if (_use_pipe) {
         // Create document from pipe in.
         std::istreambuf_iterator<char> begin(std::cin), end;
         std::string s(begin, end);
         document = document_open(s);
         output = "-";
-     } else if (_with_gui && gtk_app() && !INKSCAPE.active_document())  {
-        if (Inkscape::UI::Dialog::StartScreen::get_start_mode()) {
-            auto start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-            start_screen->show_welcome();
-            Inkscape::UI::dialog_run(*start_screen);
-            document = start_screen->get_document();
-            //In case the welcome screen gets closed before a file was picked
-            if (!document)
-                document = document_new();
-        } else {
-            document = document_new();
+    } else if (_with_gui)  {
+        if (gtk_app()->get_windows().empty() && Inkscape::UI::Dialog::StartScreen::get_start_mode() > 0) {
+            _openStartScreen();
+            return;
         }
-     } else if (_use_command_line_argument) {
-         document = document_new();
-     } else {
+        _closeStartScreen();
+        document = document_new();
+    } else if (_use_command_line_argument) {
+        document = document_new();
+    } else {
         std::cerr << "InkscapeApplication::on_activate: failed to create document!" << std::endl;
         return;
-     }
+    }
 
     // Process document (command line actions, shell, create window)
-    process_document (document, output);
+    process_document(document, output, true);
 
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
 }
-
 
 void InkscapeApplication::windowClose(InkscapeWindow *window)
 {
@@ -1086,8 +1069,10 @@ void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files,
         return;
     }
 
-    for (auto file : files) {
+    _closeStartScreen();
 
+    bool first = true; // for opening all files in one new window
+    for (auto file : files) {
         // Open file
         auto [document, cancelled] = document_open(file);
         if (!document) {
@@ -1098,7 +1083,8 @@ void InkscapeApplication::on_open(Gio::Application::type_vec_files const &files,
         }
 
         // Process document (command line actions, shell, create window)
-        process_document(document, file->get_path());
+        process_document(document, file->get_path(), first);
+        first = false;
     }
 
     if (_batch_process) {
@@ -1996,6 +1982,35 @@ void InkscapeApplication::init_extension_action_data() {
         bool is_filter = effect->is_filter_effect();
         app->get_action_effect_data().add_data(aid, is_filter, sub_menu_list, menu_name);
         g_free(ellipsized_name);
+    }
+}
+
+/// Create and show the start screen. It will self-destruct.
+void InkscapeApplication::_openStartScreen()
+{
+    assert(_with_gui);
+    auto win = Gtk::make_managed<Inkscape::UI::Dialog::StartScreen>();
+    gtk_app()->add_window(*win);
+    win->present();
+    win->connectOpen([this] (SPDocument *document) { // self outlives win
+        if (!document) {
+            document = document_new();
+        }
+        process_document(document, {});
+    });
+}
+
+/// Close the start screen, if open.
+void InkscapeApplication::_closeStartScreen()
+{
+    if (!_with_gui) {
+        return;
+    }
+    for (auto win : gtk_app()->get_windows()) {
+        if (auto existing_start_screen = dynamic_cast<Inkscape::UI::Dialog::StartScreen *>(win)) {
+            existing_start_screen->close();
+            break; // Should be unique. Safer to exit, as it prevents dangling win in further iterations.
+        }
     }
 }
 

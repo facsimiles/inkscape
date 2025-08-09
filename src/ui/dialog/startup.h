@@ -11,9 +11,9 @@
 #ifndef STARTSCREEN_H
 #define STARTSCREEN_H
 
-#include <glibmm/timer.h>     // for Timer
-#include <gtkmm/dialog.h>     // for Dialog
+#include <gtkmm/box.h>
 #include <gtkmm/treemodel.h>  // for TreeModel
+#include <gtkmm/window.h>
 
 #include "ui/widget/template-list.h"
 
@@ -32,19 +32,17 @@ class SPDocument;
 
 namespace Inkscape::UI::Dialog {
 
-class StartScreen : public Gtk::Dialog {
+class StartScreen : public Gtk::Window
+{
 public:
     StartScreen();
     ~StartScreen() override = default;
 
-    SPDocument* get_document() { return _document; }
-
-    void show_now();
-    void show_welcome();
-
     static int get_start_mode();
-protected:
-    void on_response(int response_id) override;
+
+    /// The open signal is emitted when the user opens a document.
+    /// If the document is null, a default new document should be opened.
+    sigc::connection connectOpen(sigc::slot<void (SPDocument *)> &&slot) { return _signal_open.connect(std::move(slot)); }
 
 private:
     SPDocument* get_template_document();
@@ -72,7 +70,6 @@ private:
     void on_kind_changed(const Glib::ustring& name);
 
     const std::string opt_shown;
-    Glib::Timer _timer;
 
     Glib::RefPtr<Gtk::Builder> build_splash;
     Gtk::WindowHandle &banners;
@@ -83,11 +80,13 @@ private:
     Glib::RefPtr<Gtk::Builder> build_welcome;
     Gtk::TreeView *recentfiles = nullptr;
 
-    SPDocument* _document = nullptr;
-    bool _welcome = false;
-
     sigc::scoped_connection _tabs_switch_page_conn;
     sigc::scoped_connection _templates_switch_page_conn;
+
+    sigc::signal<void (SPDocument *)> _signal_open;
+    Gtk::Box _box;
+
+    void _finish(SPDocument *document);
 };
 
 } // namespace Inkscape::UI::Dialog
