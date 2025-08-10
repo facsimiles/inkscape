@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "Ninja Install",
             // The .com file is necessary to get command line output to GDB. https://gitlab.com/inkscape/inbox/-/issues/4495
-            "program": "${workspaceFolder}/build/inkscape/bin/inkscape.com",
+            "program": "${workspaceFolder}/build/install_dir/bin/inkscape.com",
             "cwd": "${workspaceFolder}",
             // Fails if false unless terminal.integrated.automationProfile.windows is PS or cmd,
             // or if it's absent and terminal.integrated.defaultProfile.windows is one of those.

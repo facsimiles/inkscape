@@ -40,23 +40,9 @@
 
 0. To build Inkscape, I recommend trying via the terminal first to make it easier to troubleshoot. You can do that in VS Code: in the command palette, enter `> Create New Terminal (With Profile)` and choose `UCRT`.
 
-    At this point you can follow [the commands from the compilation tutorial](../building/windows.md#building-inkscape-with-msys2), but for debugging and IntelliSense you will want to include some CMake flags:
+    At this point you can follow [the commands from the compilation tutorial](../building/windows.md#building-inkscape-with-msys2).
 
-    ```sh
-    cd build
-
-    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -G Ninja ..
-
-    ninja install
-    ```
-
-    Here is what they mean:
-
-    - `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` tells CMake to output `build/compile_commands.json`. [c_cpp_properties.json](./c_cpp_properties.json) tells IntelliSense to use this to understand the code, preventing a lot of false errors.
-
-    - `-DCMAKE_BUILD_TYPE=Debug` is for debug symbols.
-
-    - `-DBUILD_SHARED_LIBS=OFF` avoids trying to build with [too many debug symbols](https://stackoverflow.com/questions/47135973/error-export-ordinal-too-large-104116).
+    (Footnote: The build flag `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` in the standard build commands tells CMake to output `build/compile_commands.json`. [c_cpp_properties.json](./c_cpp_properties.json) tells IntelliSense to use this to understand the code, preventing a lot of false errors.)
 
 0. To make the build process more convenient, [tasks.json](./tasks.json) defines tasks called `CMake` and `Ninja Install` that you can run via the command palette by entering `task ` followed by the name. These require the `build` folder to exist.
 

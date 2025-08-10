@@ -74,9 +74,6 @@ export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBPREFIX/opt/libsoup@2/lib/pkgconfig"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBPREFIX/opt/libxslt/lib/pkgconfig"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBPREFIX/opt/libxml2/lib/pkgconfig"
 
-# where to install
-PREFIX="$PWD/install-prefix"
-
 mkdir -p build
 cd build
 
@@ -84,20 +81,20 @@ cmake \
     -G Ninja \
     -DCMAKE_SHARED_LINKER_FLAGS="-L$LIBPREFIX/lib" \
     -DCMAKE_EXE_LINKER_FLAGS="-L$LIBPREFIX/lib" \
-    -DCMAKE_INSTALL_PREFIX=$PREFIX \
+    -DCMAKE_INSTALL_PREFIX="${PWD}/install_dir" \
     -DCMAKE_C_COMPILER_LAUNCHER=ccache \
     -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DWITH_INTERNAL_2GEOM=ON \
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -DWITH_DBUS=OFF \
     ..
 
-ninja
 ninja install
 
 # Start Inkscape
-$PREFIX/bin/inkscape
+./install_dir/bin/inkscape
 ```
-
-<!-- TODO - why do we here use a different PREFIX than in the Linux instructions? This may complicate things when we explain OS-independent parts like profiling. -->
 
 ## Using MacPorts
 
@@ -106,7 +103,21 @@ We currently have no working instructions for MacPorts. Feel free to provide ins
 
 ## Packaging
 
-If `$PREFIX/bin/inkscape` works when executed and you want to turn it into an app or a DMG, you can use the [mibap](https://github.com/dehesselle/mibap) toolset together with the resource files inside the inkscape/packaging/macos directory.
+This section explains how to turn Inkscape into an installable app or DMG.
+
+<!-- TODO: Is the ninja install step really needed? mibap compiles Inkscape again anyway... --->
+
+Compile and copy all relevant files into the `install_dir` folder:
+```
+ninja install
+```
+
+Start Inkscape from that folder:
+```
+./install_dir/bin/inkscape
+```
+
+To turn the folder into an app or a DMG, you can use the [mibap](https://github.com/dehesselle/mibap) toolset together with the resource files inside the inkscape/packaging/macos directory.
 
 Follow the steps to install the toolset, package the app, and create a DMG. You will get the app under `/Users/Shared/work/mibap-*/` and you will get a DMG file in the same place you ran ./build_inkscape.sh. 
 

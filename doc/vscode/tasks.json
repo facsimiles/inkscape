@@ -26,7 +26,7 @@
         {
             "label": "CMake",
             "type": "shell",
-            "command": "cd \"${workspaceFolder}/build\" && cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug -G Ninja ..",
+            "command": "cd \"${workspaceFolder}/build\" && cmake -DCMAKE_INSTALL_PREFIX=\"${workspaceFolder}/build/install_dir\" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_INTERNAL_2GEOM=ON -DBUILD_SHARED_LIBS=OFF -G Ninja ..",
             "options": {
                 "shell": {
                     "executable": "C:\\msys64\\usr\\bin\\bash.exe",

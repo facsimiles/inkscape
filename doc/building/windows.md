@@ -64,26 +64,26 @@ cd build
 # create build files with CMake (we generate rules for "Ninja" as it's
 # significantly faster then "MinGW Makefiles" which uses mingw32-make)
 # note the source path '..' (which in this case is the parent directory) and
-# should always point to the root folder of your copy of the Inkscape source
-cmake -G Ninja ..
+# should always point to the root folder of your copy of the Inkscape source.
 
-# start the compilation
-ninja
+# ( For details on these build flags, see below "Build Flags" )
+cmake -G Ninja -DCMAKE_INSTALL_PREFIX=${PWD}/install_dir -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DWITH_INTERNAL_2GEOM=ON  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
+# start the compilation and
 # install compiled files and all dependencies required to run Inkscape into the
-# folder 'build/inkscape/'
+# folder 'build/inkscape/':
 ninja install
 
-# The last two steps can be combined (i.e. run 'ninja install' immediately) to
-# save some time (the "install" target includes the default target)
+# Run Inkscape
+./install_dir/bin/inkscape.exe
 ```
 
 _**That's it!**_  
-Afterwards, you should have a complete binary distribution of Inkscape in the folder "build/inkscape/" that can be run on any machine running Windows 8.1 or later.
+Afterwards, you should have a complete binary distribution of Inkscape in the folder "build/install_dir/" that can be run on any machine running Windows 8.1 or later.
 
 ## Running Inkscape
 
-Simply execute `inkscape.exe` from the "build/**inkscape**/bin" directory (not "build/bin") created in the previous step. (The `ninja install` command takes care of copying all required files into this directory.)
+Simply execute `inkscape.exe` from the "build/**install_dir**/bin" directory (not "build/bin") created in the previous step. (The `ninja install` command takes care of copying all required files into this directory.)
 
 ## Packaging
 
@@ -101,6 +101,10 @@ For some additional details which have not been incorporated into this page yet,
 ## Installing
 
 To install the self-built Inkscape, generate an EXE or MSI installer as described above and run it.
+
+## See also
+- [Contributing and Developing](../../CONTRIBUTING.md)
+- [Advanced Information on Compiling Inkscape](doc/build/general_advanced.md)
 
 ## Troubleshooting
 
@@ -136,7 +140,7 @@ For older versions before 1.5.0, or if you do not want the automatic installatio
 
 *   **Step 1** — Install MSYS2
     1.  Download the installer from the [MSYS2 homepage](http://www.msys2.org/) (a 64-bit version of Windows 7 or later is required to run MSYS2 and build Inkscape).  
-        Start the installation and follow the instructions on screen. Use the standard installation directory `C:\msys64` .  
+        Start the installation and follow the instructions on screen. Use the standard installation directory `C:\msys64` .
         Wait until it finishes.
     2.  Start an MSYS2 **MSYS** shell from the start menu (or launch "msys2.exe" in the installation directory).
     3.  Execute the command `pacman -Syuu`. This will start a full system upgrade and ensures that you have the latest versions of all core libraries.
@@ -157,3 +161,10 @@ For older versions before 1.5.0, or if you do not want the automatic installatio
             *   Open Notepad. Open the file buildtools/windows-deps-install-wix4.ps1 from the Inkscape sources. Select all. Copy.
             *   Click in the powershell window with the right mouse button to Paste and run the commands.
         *   For older versions up to 1.4.0, you will instead need WiX version 3 from [https://github.com/wixtoolset/wix3/releases](https://github.com/wixtoolset/wix3/releases)
+
+## Build flags
+
+Some background information on why the build flags were chosen.
+
+- `-DBUILD_SHARED_LIBS=OFF` avoids trying to build with [too many debug symbols](https://stackoverflow.com/questions/47135973/error-export-ordinal-too-large-104116).
+- The other build flags are the recommended default also for [Linux](../linux.md).

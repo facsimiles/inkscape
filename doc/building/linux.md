@@ -8,7 +8,7 @@
 
 ## Getting Dependencies
 
-For common linux-distributions (Ubuntu, Debian, Fedora) you can use 
+For common linux-distributions (Ubuntu, Debian, Fedora, Arch and more) you can use
 [a bash-script](https://gitlab.com/inkscape/inkscape-ci-docker/-/raw/master/install_dependencies.sh?inline=false) 
 for getting required libraries:
 
@@ -48,7 +48,7 @@ mkdir build
 # Change to it
 cd build
 # run CMake for initial setup
-cmake -DCMAKE_INSTALL_PREFIX=${PWD}/install_dir -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -G Ninja ..
+cmake -DCMAKE_INSTALL_PREFIX=${PWD}/install_dir -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DWITH_INTERNAL_2GEOM=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G Ninja ..
 # compile
 ninja install
 # run
