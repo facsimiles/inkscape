@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-07-27 22:06+0000\n"
+"PO-Revision-Date: 2025-08-13 18:06+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -16247,7 +16247,7 @@ msgstr "Exportă fișierul PNG sursă (%1) în format PDF (%2):"
 
 #: ../src/inkscape-application.cpp:714
 msgid "See %1 and %2 for more details."
-msgstr "Vezi %1 și %2 pentru mai multe detalii"
+msgstr "Vedeți %1 și %2 pentru mai multe detalii."
 
 #: ../src/inkscape-application.cpp:719
 msgid "Print Inkscape version"
@@ -16661,8 +16661,8 @@ msgstr "traseu 1 [traseu2 [traseuN]]"
 msgid ""
 "Open one or more SVG files (or folders containing SVG files) for viewing."
 msgstr ""
-"Deschide una sau mai multe fișiere SVG (sau directoare ce conțin fișiere "
-"SVG) pentru vizionare"
+"Deschide unul sau mai multe fișiere SVG (sau dosare ce conțin fișiere SVG) "
+"pentru vizualizare."
 
 #: ../src/inkview-application.cpp:77
 msgid "Print Inkview version"
@@ -16707,7 +16707,7 @@ msgstr "Eroare"
 
 #: ../src/inkview-application.cpp:140
 msgid "No (valid) files to open."
-msgstr "Niciun fișier valid de deschis"
+msgstr "Niciun fișier (valid) de deschis."
 
 #: ../src/io/fix-broken-links.cpp:352
 msgid "Fixup broken links"
@@ -16857,8 +16857,8 @@ msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
-"Adaugă marcaje de riglă obiectului în intervale ajustabile, folosindu-i "
-"stilul de contur"
+"Adaugă marcaje de riglă la obiect la intervale ajustabile, utilizând stilul "
+"de contur al obiectului."
 
 #: ../src/live_effects/effect.cpp:287
 msgctxt "path effect"
@@ -16884,7 +16884,9 @@ msgstr "Clonează originalul"
 msgid ""
 "Let an object take on the shape, fill, stroke and/or other attributes of "
 "another object."
-msgstr "Atribuie forma, umplutura și conturul unui obiect, altuia"
+msgstr ""
+"Permite unui obiect să preia forma, umplutura, conturul și/sau alte atribute "
+"ale unui alt obiect."
 
 #: ../src/live_effects/effect.cpp:316
 msgctxt "path effect"
@@ -18413,7 +18415,7 @@ msgstr "Traiectorie:"
 
 #: ../src/live_effects/lpe-interpolate.cpp:27
 msgid "Path along which intermediate steps are created."
-msgstr "Traseu de-a lungul căruia sunt creați pașii intermediari"
+msgstr "Traseu de-a lungul căruia sunt creați pașii intermediari."
 
 #: ../src/live_effects/lpe-interpolate.cpp:29
 msgid "Steps_:"
@@ -18421,7 +18423,7 @@ msgstr "Trepte_:"
 
 #: ../src/live_effects/lpe-interpolate.cpp:29
 msgid "Determines the number of steps from start to end path."
-msgstr "Determină numărul de trepte de la începutul la sfârșitul traseului"
+msgstr "Determină numărul de trepte de la începutul la sfârșitul traseului."
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "E_quidistant spacing"
@@ -18433,9 +18435,9 @@ msgid ""
 "the path. If false, the distance depends on the location of the nodes of the "
 "trajectory path."
 msgstr ""
-"Dacă > 0, spațierea între intermediare este constantă de-a lungul lungimii "
-"traseului.Daca = 0, distanța depinde de locația nodurilor traseului de "
-"traiectorie"
+"Dacă este adevărat, distanța dintre intermediare este constantă pe toată "
+"lungimea traseului. Dacă este fals, distanța depinde de locația nodurilor "
+"traseului."
 
 #: ../src/live_effects/lpe-interpolate_points.cpp:26
 #: ../src/live_effects/lpe-powerstroke.cpp:128
@@ -18596,8 +18598,8 @@ msgid ""
 "Gap width is given in multiples of stroke width. When unchecked, document "
 "units are used."
 msgstr ""
-"Lățimea găurii este dată în multiplii ai lățimii conturului. Nebifat, "
-"unitatea de măsura a documentului va fi folosită"
+"Lățimea spațiului liber este dată în multipli ai lățimii conturului. Când "
+"opțiunea este nebifată, se utilizează unități de document."
 
 #: ../src/live_effects/lpe-knot.cpp:355
 msgid "_Gaps in both"
@@ -19085,8 +19087,9 @@ msgid ""
 "Comma-separated list of indices of segments that should not be measured. You "
 "can use another LPE with different parameters to measure these."
 msgstr ""
-"Listă de indici ce segmente, separați de virgule, care nu trebuie măsurați. "
-"Poți folosi alt LPE cu parametri diferiți pentru a le măsura"
+"Listă de indici separați prin virgulă a segmentelor care nu ar trebui "
+"măsurate. Se poate utiliza un alt LPE cu parametri diferiți pentru a le "
+"măsura."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
 msgid "Invert blacklist"
@@ -19431,8 +19434,8 @@ msgid ""
 "Split original and mirror image into separate paths, so each can have its "
 "own style."
 msgstr ""
-"Separă imaginea originală și oglindită în trasee separate, așa încât fiecare "
-"să aibă stilul propriu"
+"Separă imaginea originală și cea în oglindă în trasee separate, astfel încât "
+"fiecare să poată avea propriul stil."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
 msgid "Keep open paths on split"
