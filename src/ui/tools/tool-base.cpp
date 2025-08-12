@@ -1436,6 +1436,12 @@ void ToolBase::snap_delay_handler(gpointer item, gpointer item2, MotionEvent con
         return;
     }
 
+    // No point duplicating events if no delay.
+    auto const delay = Preferences::get()->getDoubleLimited("/options/snapdelay/value", 0, 0, 1000);
+    if (delay == 0) {
+        return;
+    }
+
     // Snapping occurs when dragging with the left mouse button down, or when hovering e.g. in the pen tool with left mouse button up
     bool const c1 = event.modifiers & GDK_BUTTON2_MASK; // We shouldn't hold back any events when other mouse buttons have been
     bool const c2 = event.modifiers & GDK_BUTTON3_MASK; // pressed, e.g. when scrolling with the middle mouse button; if we do then
@@ -1605,8 +1611,7 @@ void ToolBase::discard_delayed_snap_event()
 void ToolBase::_schedule_delayed_snap_event()
 {
     // Get timeout value in seconds.
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double value = prefs->getDoubleLimited("/options/snapdelay/value", 0, 0, 1000);
+    double value = Preferences::get()->getDoubleLimited("/options/snapdelay/value", 0, 0, 1000);
 
     // If the timeout value is too large, we assume it comes from an old preferences file
     // where it used to be measured in milliseconds, and convert it appropriately.

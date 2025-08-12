@@ -540,29 +540,25 @@ bool MeasureTool::root_handler(CanvasEvent const &event)
                 return;
             }
 
-            auto prefs = Preferences::get();
-            tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-
             measure_item.clear();
 
-            if (!last_end || Geom::LInfty(event.pos - *last_end) > tolerance / 4.0) {
-                auto const motion_dt = _desktop->w2d(event.pos);
-                end_p = motion_dt;
+            auto const motion_dt = _desktop->w2d(event.pos);
+            end_p = motion_dt;
 
-                if (event.modifiers & GDK_CONTROL_MASK) {
-                    spdc_endpoint_snap_rotation(this, end_p, start_p, event.modifiers);
-                } else if (!(event.modifiers & GDK_SHIFT_MASK)) {
-                    auto &snap_manager = _desktop->getNamedView()->snap_manager;
-                    snap_manager.setup(_desktop);
-                    auto scp = SnapCandidatePoint(end_p, SNAPSOURCE_OTHER_HANDLE);
-                    scp.addOrigin(start_p);
-                    auto const sp = snap_manager.freeSnap(scp);
-                    end_p = sp.getPoint();
-                    snap_manager.unSetup();
-                }
-                showCanvasItems();
-                last_end = event.pos;
+            if (event.modifiers & GDK_CONTROL_MASK) {
+                spdc_endpoint_snap_rotation(this, end_p, start_p, event.modifiers);
+            } else if (!(event.modifiers & GDK_SHIFT_MASK)) {
+                auto &snap_manager = _desktop->getNamedView()->snap_manager;
+                snap_manager.setup(_desktop);
+                auto scp = SnapCandidatePoint(end_p, SNAPSOURCE_OTHER_HANDLE);
+                scp.addOrigin(start_p);
+                auto const sp = snap_manager.freeSnap(scp);
+                end_p = sp.getPoint();
+                snap_manager.unSetup();
             }
+            showCanvasItems();
+            last_end = event.pos;
+
             gobble_motion_events(GDK_BUTTON1_MASK);
 
             ret = true;
