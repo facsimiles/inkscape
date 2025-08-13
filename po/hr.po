@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-05-24 08:47+0000\n"
+"PO-Revision-Date: 2025-08-13 18:06+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hr/>\n"
@@ -10702,29 +10702,24 @@ msgid "Grow/shrink selected objects relative to zoom level"
 msgstr "Povećaj odabrane objekte, relativno u odnosu na razinu zumiranja"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
 msgid "Rotate selected objects"
-msgstr "Izvezi odabrane objekte"
+msgstr "Okreni odabrane objekte"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate Step"
-msgstr "Podešavanje okretanja"
+msgstr "Korak okretanja"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
 msgid "Rotate selected objects by multiple of step value"
-msgstr "Povećaj/Smanji odabrane objekte višestrukom vrijednošću koraka"
+msgstr "Okreni odabrane objekte višestrukom vrijednošću koraka"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Okreni gradijent"
+msgstr "Okreni pikselima ekrana"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
 msgid "Rotate selected objects relative to zoom level"
-msgstr "Povećaj odabrane objekte, relativno u odnosu na razinu zumiranja"
+msgstr "Okreni odabrane objekte, relativno u odnosu na razinu zumiranja"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -51974,41 +51969,35 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:43
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Uređivanje Flatpak logotipa"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:47
-#, fuzzy
 msgid "Multipage editing"
-msgstr "Višestruki gradijenti"
+msgstr "Višestranično uređivanje"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:51
-#, fuzzy
 msgid "Editing with Inkscape"
-msgstr "Kako započeti s Inkscape programom"
+msgstr "Uređivanje s Inkscapeom"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:55
-#, fuzzy
 msgid "Gradient editing"
-msgstr "Omogući uređivanje gradijenata"
+msgstr "Uređivanje gradijenata"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:61
-#, fuzzy
 msgid "Inkscape 1.4.1"
-msgstr "Inkscape 1.4"
+msgstr "Inkscape 1.4.1"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:63
-#, fuzzy
 msgid "Many bugfixes!"
-msgstr "I još mnogo ispravaka grešaka!"
+msgstr "Mnogo ispravaka grešaka!"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:64
 msgid "Many improvements to affinity file importer"
-msgstr ""
+msgstr "Mnoga poboljšanja za uvoz Affinity datoteka"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:65
-#, fuzzy
 msgid "Splash screen on load"
-msgstr "Odaberi skript za učitavanje"
+msgstr "Početni ekran nakon učitavanja"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:72
 msgid "Inkscape 1.4"
