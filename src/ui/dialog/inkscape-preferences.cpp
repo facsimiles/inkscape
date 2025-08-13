@@ -82,6 +82,8 @@
 #include "util/trim.h"
 #include "widgets/spw-utilities.h"
 
+#include "ui/libspelling-wrapper.h"
+
 namespace Inkscape::UI::Dialog {
 
 using Inkscape::UI::Widget::DialogPage;
@@ -3758,6 +3760,37 @@ void InkscapePreferences::initPageSpellcheck()
 
     _spell_live.init(_("Turn On live spellchecking"), "/dialogs/spellcheck/live", true);
     _page_spellcheck.add_line(false, "", _spell_live, "", _("Enable live spellchecking while typing"), true);
+
+    std::vector<Glib::ustring> lang_labels;
+    std::vector<Glib::ustring> lang_codes;
+    auto provider = spelling_provider_get_default();
+    Inkscape::UI::list_language_names_and_codes(provider, [&](auto name, auto code) {
+        lang_labels.push_back(name);
+        lang_codes.push_back(code);
+        return false;
+    });
+
+    // Get saved language code from preferences
+    auto prefs = Inkscape::Preferences::get();
+    Glib::ustring saved_code = prefs->getString("/dialogs/spellcheck/live_lang");
+
+    // Initialize PrefCombo
+    _spell_live_lang.init("/dialogs/spellcheck/live_lang",
+                        std::span<const Glib::ustring>(lang_labels.data(), lang_labels.size()),
+                        std::span<const Glib::ustring>(lang_codes.data(), lang_codes.size()),
+                        saved_code);
+
+    // Save selection to preferences when changed
+    _spell_live_lang.signal_changed().connect([prefs, lang_labels, lang_codes, this]() {
+        int idx = _spell_live_lang.get_selected();
+        if (idx >= 0 && idx < (int)lang_codes.size()) {
+            prefs->setString("/dialogs/spellcheck/live_lang", lang_codes[idx]);
+        }
+    });
+
+    // Add to preferences page
+    _page_spellcheck.add_line(false, _("Live Spellcheck language:"), _spell_live_lang, "",
+        _("Select the language used for live spellchecking."), true);
 
     AddPage(_page_spellcheck, _("Spellcheck"), PREFS_PAGE_SPELLCHECK);
 #endif

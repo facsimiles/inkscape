@@ -58,8 +58,8 @@ OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
     _provider = spelling_provider_get_default();
 
     // Choose a language (for example, the first available)
-    list_language_names_and_codes(_provider,
-        [&](auto name, auto code) { _lang_code = code; return false; }); // store first code
+    auto prefs = Inkscape::Preferences::get();
+    _lang_code = prefs->getString("/dialogs/spellcheck/live_lang", "en_US");
 
     // Create the checker
     _checker = GObjectPtr(spelling_checker_new(_provider, _lang_code.c_str()));
@@ -93,7 +93,6 @@ OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
     }
 
     // If live spellcheck is enabled, start scanning the document
-    auto prefs = Inkscape::Preferences::get();
     if(prefs->getBool("/dialogs/spellcheck/live", false)) {   
         scanDocument();
     }

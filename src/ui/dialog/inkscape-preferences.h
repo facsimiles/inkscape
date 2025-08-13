@@ -473,6 +473,7 @@ protected:
     UI::Widget::PrefCheckButton _spell_ignorenumbers;
     UI::Widget::PrefCheckButton _spell_ignoreallcaps;
     UI::Widget::PrefCheckButton _spell_live;
+    UI::Widget::PrefCombo       _spell_live_lang;
 
     // Bitmaps
     UI::Widget::PrefCombo       _misc_overs_bitmap;
