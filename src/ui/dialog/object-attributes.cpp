@@ -11,17 +11,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "object-attributes.h"
+
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
-#include <gtkmm/entry.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/textview.h>
 #include <memory>
 #include <optional>
 #include <string>
 #include <tuple>
+
+#include <gtkmm/entry.h>
+#include <gtkmm/menubutton.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/ustring.h>
@@ -42,6 +45,7 @@
 #include "preferences.h"
 #include "selection.h"
 #include "actions/actions-tools.h"
+#include "helper/auto-connection.h"
 #include "live_effects/effect-enum.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -57,7 +61,6 @@
 #include "object/sp-star.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
-#include "ui/dialog/object-attributes.h"
 #include "ui/icon-names.h"
 #include "ui/menuize.h"
 #include "ui/pack.h"
@@ -881,8 +884,28 @@ public:
     ~PathPanel() override = default;
 
     void update(SPObject* object) override {
-        _path = cast<SPPath>(object);
-        if (!_path) return;
+        auto path = cast<SPPath>(object);
+        auto change = path != _path;
+        _path = path;
+        if (!_path) {
+            _update_data.disconnect();
+            return;
+        }
+
+        if (!change) {
+            // throttle UI refresh, it is expensive
+            _update_data = Glib::signal_timeout().connect([this]{ update_ui(); return false; }, 250, Glib::PRIORITY_DEFAULT_IDLE);
+        }
+        else {
+            _update_data.disconnect();
+            // new path; update right away
+            update_ui();
+        }
+    }
+
+private:
+    void update_ui() {
+        if (_update.pending()) return;
 
         auto scoped(_update.block());
 
@@ -907,7 +930,6 @@ public:
         //TODO: we can consider adding more stats, like perimeter, area, etc.
     }
 
-private:
     gboolean on_key_pressed(const GtkEventControllerKey* controller, unsigned keyval, unsigned keycode, GdkModifierType state) {
         switch (keyval) {
         case GDK_KEY_Return:
@@ -938,6 +960,7 @@ private:
     std::unique_ptr<Syntax::TextEditView> _svgd_edit = Syntax::TextEditView::create(Syntax::SyntaxMode::SvgPathData);
     Gtk::TextView& _data;
     int _precision = 2;
+    Inkscape::auto_connection _update_data;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
