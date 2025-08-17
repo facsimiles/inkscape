@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-08-17 13:13+0000\n"
+"PO-Revision-Date: 2025-08-17 13:26+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -25673,8 +25673,8 @@ msgid ""
 "Performs a convolution on the input image enabling effects like blur, "
 "sharpening, embossing and edge detection."
 msgstr ""
-"Produce o convoluție pe imaginea sursă, activând efecte ca blurare, "
-"pronunțare, imprimare și detectare a muchiilor"
+"Efectuează o convoluție asupra imaginii de intrare, activând efecte precum "
+"estomparea sau accentuarea clarității, stamparea și detectarea marginilor."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2602
 msgid ""
@@ -25689,8 +25689,8 @@ msgid ""
 "Tiles a region with an input graphic. The source tile is defined by the "
 "filter primitive subregion of the input."
 msgstr ""
-"Plachează o regiune cu o grafică sursă. Placa sursă este definită de filtrul "
-"subregiunii primitive a sursei"
+"Plachează o regiune cu o grafică de intrare. Dala sursă este definită de "
+"subregiunea primitivă de filtrare a intrării."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2606
 msgid ""
@@ -27571,9 +27571,8 @@ msgid "X:"
 msgstr "X:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:470
-#, fuzzy
 msgid "Horizontal spacing between columns"
-msgstr "Spațiere orizontală între coloane."
+msgstr "Spațiere orizontală între coloane"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:471
 #: ../src/ui/widget/registered-widget.cpp:560
@@ -27584,9 +27583,8 @@ msgid "Y:"
 msgstr "Y:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:471
-#, fuzzy
 msgid "Vertical spacing between rows"
-msgstr "Spațiere verticală între coloane."
+msgstr "Spațiere verticală între rânduri"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:489
 msgid "_Rows:"
@@ -28663,8 +28661,9 @@ msgid ""
 "display objects in their true sizes"
 msgstr ""
 "Ajustați glisorul până când lungimea riglei de pe ecran se potrivește cu "
-"lungimea ei reală. Această transformare este folosită la raportul de zoom de "
-"1:1, 1:2, etc., pentru a putea afișa obiectele la dimensiunea lor adevărată."
+"lungimea sa reală. Această transformare este folosită când se ajustează zoom-"
+"ul la un raport de 1:1, 1:2 etc., pentru a afișa obiectele în dimensiunile "
+"lor reale."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1603
 msgid "Show zoom percentage corrected by factor"
@@ -28707,8 +28706,8 @@ msgid ""
 "Prevent accidental canvas rotation by disabling on-canvas keyboard and mouse "
 "actions for rotation"
 msgstr ""
-"Preveniți rotirea accidentală a pânzei de lucru prin dezactivarea acțiunilor "
-"de rotație ale tastaturii și mausului pe pânză."
+"Previne rotirea accidentală a canavalei prin dezactivarea acțiunilor de "
+"rotație ale tastaturii și mausului pe canava"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1617
 msgid "Show selection in ruler"
@@ -30652,8 +30651,8 @@ msgid ""
 "When activated, clicking the middle mouse button (usually the mouse wheel) "
 "zooms."
 msgstr ""
-"Când este activat, clicul cu butonul din mijloc al mouse-ului (de obicei "
-"rotița), magnifică"
+"Când opțiunea este activată, un clic pe butonul din mijloc al mausului (de "
+"obicei, rotița acestuia) mărește."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2724
 #, fuzzy
@@ -30966,8 +30965,8 @@ msgid ""
 "Configure number of threads to use when rendering. The default value of zero "
 "means choose automatically."
 msgstr ""
-"Configurează numărul de fire folosit la redare. Valoarea predefinită 0 "
-"înseamnă alegerea automată"
+"Configurează numărul de fire de execuție care vor fi utilizate la randare. "
+"Valoarea implicită zero înseamnă că alegerea se face automat."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2862
 msgid "Rendering _cache size:"
@@ -32962,9 +32961,8 @@ msgstr "Prea mare pentru previzualizare"
 
 #. TRANSLATORS: A list of swatches in the document
 #: ../src/ui/dialog/swatches.cpp:484
-#, fuzzy
 msgid "Document swatches"
-msgstr "Document salvat."
+msgstr ""
 
 #: ../src/ui/dialog/symbols.cpp:158
 msgid "All symbol sets"
@@ -33568,7 +33566,7 @@ msgstr "Fără alipire la transformare"
 # fără punct în mod deliberat
 #: ../src/ui/modifiers.cpp:108
 msgid "Disable snapping when transforming object."
-msgstr "Dezactivează alipirea la transformarea obiectului"
+msgstr "Dezactivează acroșarea la transformarea obiectului."
 
 #: ../src/ui/modifiers.cpp:111
 msgid "Switch mode"
