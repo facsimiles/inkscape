@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-08-17 13:26+0000\n"
+"PO-Revision-Date: 2025-08-18 16:06+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -12438,7 +12438,7 @@ msgstr "PDF 1.4"
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:234
 msgid "Rounding compensation:"
-msgstr "Compensare de rotunjire"
+msgstr "Compensare de rotunjire:"
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:235
 msgid ""
@@ -13171,11 +13171,11 @@ msgstr "Luminare"
 
 #: ../src/extension/internal/filter/bumps.h:340
 msgid "Lighting blend:"
-msgstr "Amestec luminare"
+msgstr "Amestec de iluminare:"
 
 #: ../src/extension/internal/filter/bumps.h:347
 msgid "Highlight blend:"
-msgstr "Amestec de pronunțare"
+msgstr "Amestec de evidențiere:"
 
 #: ../src/extension/internal/filter/bumps.h:356
 msgid "Bump color"
@@ -13187,7 +13187,7 @@ msgstr "Revocă umflătura"
 
 #: ../src/extension/internal/filter/bumps.h:358
 msgid "Transparency type:"
-msgstr "Tipul de transparență"
+msgstr "Tip de transparență:"
 
 #: ../src/extension/internal/filter/bumps.h:359
 #: ../src/extension/internal/filter/morphology.h:182 ../src/filter-enums.cpp:72
@@ -13441,7 +13441,7 @@ msgstr "Galben"
 
 #: ../src/extension/internal/filter/color.h:750
 msgid "Background blend mode:"
-msgstr "Mod de amestec cu fundalul"
+msgstr "Mod de amestec al fundalului:"
 
 #: ../src/extension/internal/filter/color.h:755
 msgid "Channel to alpha"
@@ -13453,7 +13453,7 @@ msgstr "Extrage canalu de culoare ca imagine transparentă"
 
 #: ../src/extension/internal/filter/color.h:850
 msgid "Fade to Black or White"
-msgstr "Palește la negru sau alb"
+msgstr "Estompare la negru sau alb"
 
 #: ../src/extension/internal/filter/color.h:853
 msgid "Fade to:"
@@ -13473,7 +13473,7 @@ msgstr "Alb"
 
 #: ../src/extension/internal/filter/color.h:864
 msgid "Fade to black or white"
-msgstr "Palește la negru sau alb"
+msgstr "Estompare la negru sau alb"
 
 #: ../src/extension/internal/filter/color.h:933
 msgid "Greyscale"
