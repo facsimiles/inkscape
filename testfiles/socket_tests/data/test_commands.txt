@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Author: Tod Schmidt
+# Copyright: 2025
+#
+
+# Test commands for socket protocol testing
+# Format: COMMAND:request_id:action_name[:arg1][:arg2]...
+
+# Basic commands
+COMMAND:100:status
+COMMAND:101:action-list
+COMMAND:102:file-new
+
+# File operations
+COMMAND:200:add-rect:100:100:200:200
+COMMAND:201:add-rect:50:50:150:150
+COMMAND:202:export-png:output.png
+COMMAND:203:export-png:output.png:800:600
+
+# Invalid commands for error testing
+COMMAND:300:invalid-action
+COMMAND:301:action-with-invalid@chars
+COMMAND:302:
+
+# Commands with various argument types
+COMMAND:400:add-rect:0:0:100:100
+COMMAND:401:add-rect:999:999:50:50
+COMMAND:402:export-png:file_with_underscores.png
+COMMAND:403:export-png:file-with-hyphens.png
+
+# Edge cases
+COMMAND:500:status
+COMMAND:501:action-list
+COMMAND:502:file-new
+COMMAND:503:add-rect:1:1:1:1 
