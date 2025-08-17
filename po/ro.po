@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-08-17 10:32+0000\n"
+"PO-Revision-Date: 2025-08-17 13:13+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -24314,9 +24314,8 @@ msgid "pair of decimal numbers"
 msgstr "Valoare invalidă! Introdu un număr rațional"
 
 #: ../src/ui/dialog/command-palette.cpp:574
-#, fuzzy
 msgid "Enter a %1..."
-msgstr "Intră în grupul %1"
+msgstr "Introduceți un %1..."
 
 #: ../src/ui/dialog/command-palette.cpp:1082
 msgid "Enter search term to search for a command"
@@ -24333,15 +24332,15 @@ msgstr "Mod istoric"
 
 #: ../src/ui/dialog/command-palette.cpp:1221
 msgid "Invalid input! Enter an integer number."
-msgstr "Valoare invalidă! Introdu un număr întreg"
+msgstr "Intrare nevalidă! Introduceți un număr întreg."
 
 #: ../src/ui/dialog/command-palette.cpp:1231
 msgid "Invalid input! Enter a decimal number."
-msgstr "Valoare invalidă! Introdu un număr rațional"
+msgstr "Intrare nevalidă! Introduceți un număr zecimal."
 
 #: ../src/ui/dialog/command-palette.cpp:1265
 msgid "Invalid input! Enter two comma separated numbers."
-msgstr "Valoare invalidă! Introdu două valori separate de virgulă"
+msgstr "Intrare nevalidă! Introduceți două valori separate prin virgulă."
 
 #: ../src/ui/dialog/dialog-container.cpp:177
 msgid "Close Tab"
@@ -24842,8 +24841,8 @@ msgid ""
 "Determines whether the grid is displayed or not. Objects are still snapped "
 "to invisible grids."
 msgstr ""
-"Determină daca grila este afișată sau nu. Elementele sunt încă înfășurate în "
-"grilele invizibile"
+"Determină dacă grila este afișată sau nu. Obiectele sunt în continuare "
+"acroșate la grile invizibile."
 
 #: ../src/ui/dialog/document-properties.cpp:1805
 msgid "_Show dots instead of lines"
@@ -24920,9 +24919,8 @@ msgstr "Golul X"
 
 #: ../src/ui/dialog/document-properties.cpp:1892
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
-#, fuzzy
 msgid "Horizontal distance between blocks"
-msgstr "Spațiere orizontală între coloane."
+msgstr "Distanță orizontal între blocuri"
 
 #: ../src/ui/dialog/document-properties.cpp:1895
 #, fuzzy
@@ -24931,9 +24929,8 @@ msgstr "Golul Y"
 
 #: ../src/ui/dialog/document-properties.cpp:1895
 #: ../src/ui/dialog/inkscape-preferences.cpp:2178
-#, fuzzy
 msgid "Vertical distance between blocks"
-msgstr "Spațiere verticală între coloane."
+msgstr "Distanță verticală între blocuri"
 
 #: ../src/ui/dialog/document-properties.cpp:1898
 #, fuzzy
@@ -25461,7 +25458,7 @@ msgstr "Folosește elementul SVG selectat"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:660
 msgid "Select an image to be used as input."
-msgstr "Selectează o imagine care să fie folosită ca sursă"
+msgstr "Selectați o imagine care să fie folosită ca sursă de intrare."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:758
 msgid "This SVG filter effect does not require any parameters."
@@ -25558,9 +25555,9 @@ msgid ""
 "light source and the point to which it is pointing at) and the spot light "
 "cone. No light is projected outside this cone."
 msgstr ""
-"Acesta este unghiul dintre axa spotului luminos ( axa dintre sursa de lumină "
-"și punctul către care indică ) și conul spotului. Nicio lumină nu este "
-"proiectată în afara acestui con"
+"Acesta este unghiul dintre axa spotului luminos (adică axa dintre sursa de "
+"lumină și punctul spre care este îndreptată) și conul spotului luminos. Nu "
+"se proiectează lumină în afara acestui con."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1208
 msgid "New light source"
@@ -25652,8 +25649,8 @@ msgid ""
 "Uniformly blurs its input. Commonly used together with Offset to create a "
 "drop shadow effect."
 msgstr ""
-"Blurează uniform sursa. Folosit de obicei împreună cu Decalajul pentru a "
-"crea un efect de umbră proiectată"
+"Estompează uniform claritatea sursei. Folosit de obicei împreună cu Decalaj "
+"pentru a crea un efect de umbră detașată."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2596
 msgid ""
@@ -36146,9 +36143,8 @@ msgid "Quick Zoom"
 msgstr "Zoom rapid:"
 
 #: ../src/ui/tools/shortcuts.cpp:21
-#, fuzzy
 msgid "Zoom into the selected objects while the key is pressed."
-msgstr "Rotește selecțiile după un unghi"
+msgstr ""
 
 #: ../src/ui/tools/shortcuts.cpp:22
 #, fuzzy
@@ -36183,9 +36179,8 @@ msgid "Pen Segments To Guides"
 msgstr "Determină segmentele să devină curbe"
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
 msgid "Convert the pen shape into guides."
-msgstr "Convertire la ghidaje"
+msgstr "Convertește forma stiloului în ghidaje."
 
 #: ../src/ui/tools/spiral-tool.cpp:207
 msgid "<b>Ctrl</b>: snap angle"
@@ -39926,9 +39921,8 @@ msgid "All fonts"
 msgstr "Toate fonturile"
 
 #: ../share/ui/font-list.glade:73
-#, fuzzy
 msgid "Show all fonts"
-msgstr "Arată toate întretăierile."
+msgstr "Arată toate fonturile"
 
 #: ../share/ui/font-list.glade:116
 #, fuzzy
@@ -41930,9 +41924,8 @@ msgid "Align and Distribute..."
 msgstr "_Aliniere și distribuire..."
 
 #: ../share/ui/toolbar-commands.ui:796
-#, fuzzy
 msgid "Preferences..."
-msgstr "Preferințe"
+msgstr "Preferințe..."
 
 #: ../share/ui/toolbar-connector.ui:65
 msgid "Make connector orthogonal or polyline"
@@ -42088,9 +42081,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr ""
 
 #: ../share/ui/toolbar-marker.ui:16
-#, fuzzy
 msgid "Edit marker on canvas."
-msgstr "Editare pe canava"
+msgstr "Editează markerul pe canava."
 
 #: ../share/ui/toolbar-measure.ui:70
 msgid "The font size to be used in the measurement labels"
@@ -51811,9 +51803,8 @@ msgid "Inkscape 1.2"
 msgstr "Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:102
-#, fuzzy
 msgid "Multiple pages support"
-msgstr "Nu este selectat niciun element."
+msgstr "Suport pentru pagini multiple"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:103
 msgid "Editable markers and dash patterns"
