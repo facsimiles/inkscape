@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-08-13 18:06+0000\n"
+"PO-Revision-Date: 2025-08-17 10:32+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -19600,8 +19600,8 @@ msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
 "limited to -90% of pattern width."
 msgstr ""
-"Spațiul dintre copiile tiparului. Valorile negative sunt admise, dar "
-"limitate la -90% din lățimea tiparului"
+"Spațiu între copiile modelului. Valorile negative sunt permise, dar sunt "
+"limitate la -90% din lățimea modelului."
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:85
 msgid "No_rmal offset:"
@@ -20093,8 +20093,8 @@ msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
-"Adaugă aleatorizare de direcție prin mutarea jumătăților de tur de la "
-"'fund', tangențial către hotar"
+"Adaugă aleatorietate direcțională prin mutarea jumătăților de tură "
+"„inferioare” tangențial la limită."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:225
 msgid "←→ Random: Top"
@@ -20105,8 +20105,8 @@ msgid ""
 "Add direction randomness by randomly moving 'top' half-turns tangentially to "
 "the boundary."
 msgstr ""
-"Adaugă aleatorizare de direcție prin mutarea jumătăților de tur de la 'top', "
-"tangențial către hotar"
+"Adaugă aleatorietate direcțională prin mutarea aleatorie a jumătăților de "
+"tură „superioare” tangențial la limită."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Rand. Smooth: Bottom"
@@ -20241,8 +20241,8 @@ msgid ""
 "Add nodes between existing nodes. Choose <b>Number of segments</b> method "
 "from the dropdown to use this subdivision method."
 msgstr ""
-"Adaugă noduri între nodurile existente. Alege<b>Număr de segmente</b> metoda "
-"din meniul rulant pentru a folosi această metodă de subdiviziune"
+"Adaugă noduri între nodurile existente. Alegeți metoda <b>Număr de segmente</"
+"b> din meniul derulant pentru a folosi această metodă de subdiviziune."
 
 #: ../src/live_effects/lpe-roughen.cpp:53
 msgid "Displace ←→"
@@ -20281,8 +20281,8 @@ msgid ""
 "Uncheck to use this LPE for just adding nodes, without roughening; useful "
 "for further interactive processing."
 msgstr ""
-"Debifați pentru a folosi acest LPE doar pentru a separa noduri, fără "
-"rugozare; folositor pentru procesare interactivă ulterioară"
+"Debifați pentru a utiliza acest LPE doar pentru adăugarea de noduri, fără a "
+"fi prelucrat superficial; util pentru procesare interactivă ulterioară."
 
 #: ../src/live_effects/lpe-roughen.cpp:58
 msgid "Fixed displacement"
@@ -20525,7 +20525,7 @@ msgstr "Distanța medie de la traseul original la fiecare contur"
 
 #: ../src/live_effects/lpe-sketch.cpp:37
 msgid "Stroke length max."
-msgstr "Lungimea maximă a conturului"
+msgstr "Lungimea maximă a conturului."
 
 #: ../src/live_effects/lpe-sketch.cpp:38
 msgid "Maximum length of approximating strokes"
@@ -22164,7 +22164,7 @@ msgstr "Fișierul de preferințe i-a fost facută copie de rezervă la"
 
 #: ../src/preferences.cpp:277
 msgid "There was an error trying to reset the preferences file."
-msgstr "A fost o eroare în încercarea de a reseta fișierul de preferințe"
+msgstr "A apărut o eroare la încercarea de restabilire fișierul de preferințe."
 
 #: ../src/rdf.cpp:180
 msgid "CC Attribution"
@@ -22559,7 +22559,7 @@ msgstr "Mută orizontal în pixeli"
 
 #: ../src/selection-chemistry.cpp:2528
 msgid "The selection has no applied path effect."
-msgstr "Selecția nu are niciun efect de traseu"
+msgstr "Selecția nu are niciun efect de traseu aplicat."
 
 #: ../src/selection-chemistry.cpp:2572 ../src/ui/dialog/clonetiler.cpp:2081
 msgid "Select an <b>object</b> to clone."
@@ -22605,8 +22605,7 @@ msgid ""
 "Unable to unlink. Check the setting for 'Unlinking Clones' in your "
 "preferences."
 msgstr ""
-"Nu se poate deconecta. Verifică setarea pentru 'Deconectat Clone' în "
-"preferințe"
+"Nu se poate deconecta. Verificați setarea „Dezlegare clone” din preferințe."
 
 #: ../src/selection-chemistry.cpp:2817
 msgid "Unlink clone recursively"
@@ -22682,7 +22681,7 @@ msgstr "Dezsimbolizează toate simbolurile selectate"
 
 #: ../src/selection-chemistry.cpp:3338
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Selectează <b>obiectele</b> de convertit la model"
+msgstr "Selectează <b>obiectele</b> de convertit la model."
 
 #: ../src/selection-chemistry.cpp:3424
 msgid "Objects to pattern"
@@ -22741,7 +22740,7 @@ msgstr "Selectați <b>obiectele</b> cărora să li se potrivească canavaua."
 
 #: ../src/selection-chemistry.cpp:4134
 msgid "Select <b>path(s)</b> to create fill between."
-msgstr "Selectează <b>traseele</b> între care sa se creeze umplutură"
+msgstr "Selectează <b>traseele</b> pentru a crea o umplutură între ele."
 
 #: ../src/selection-chemistry.cpp:4188
 msgid "Create linked fill object between paths"
@@ -23057,7 +23056,7 @@ msgstr ""
 
 #: ../src/text-chemistry.cpp:711
 msgid "<b>No flowed text(s)</b> to convert in the selection."
-msgstr "<b>Niciun text fluid</b> în selecție pentru convertit"
+msgstr "<b>Niciun text fluid</b> de convertit în selecție."
 
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
