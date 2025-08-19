@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-04-27 20:44+0200\n"
-"PO-Revision-Date: 2025-08-18 16:06+0000\n"
+"PO-Revision-Date: 2025-08-19 17:06+0000\n"
 "Last-Translator: Cristian Secară <cristi@secarica.ro>\n"
 "Language-Team: Romanian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/ro/>\n"
@@ -13263,7 +13263,7 @@ msgstr "Discromare"
 
 #: ../src/extension/internal/filter/color.h:269
 msgid "Blindness type:"
-msgstr "Tip de discromare"
+msgstr "Tip de daltonism:"
 
 #: ../src/extension/internal/filter/color.h:270
 msgid "Rod monochromacy (atypical achromatopsia)"
@@ -14137,7 +14137,7 @@ msgstr "Expansiune"
 
 #: ../src/extension/internal/filter/paint.h:102
 msgid "Grain blend:"
-msgstr "Mixare granulară"
+msgstr "Amestec de granulație:"
 
 #: ../src/extension/internal/filter/paint.h:118
 msgid "Chromo effect with customizable edge drawing and graininess"
@@ -17411,7 +17411,7 @@ msgstr "Specifică capătul stâng al bisectoarei"
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
 msgid "Length right:"
-msgstr "Lungime în dreapta"
+msgstr "Lungime în dreapta:"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:47
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
@@ -17446,7 +17446,7 @@ msgstr "Poziția de atașare a începutului traseului"
 
 #: ../src/live_effects/lpe-attach-path.cpp:28
 msgid "Start path curve start:"
-msgstr "Începutul primului traseu curb"
+msgstr "Începutul curbei traseului de pornire:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:28
 #: ../src/live_effects/lpe-attach-path.cpp:32
@@ -17455,7 +17455,7 @@ msgstr "Curba de început"
 
 #: ../src/live_effects/lpe-attach-path.cpp:29
 msgid "Start path curve end:"
-msgstr "Sfârșitul primului traseu curb"
+msgstr "Sfârșitul curbei traseului de pornire:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:29
 #: ../src/live_effects/lpe-attach-path.cpp:33
@@ -17464,7 +17464,7 @@ msgstr "Curba de sfârșit"
 
 #: ../src/live_effects/lpe-attach-path.cpp:30
 msgid "End path:"
-msgstr "Traseul de sfârșit"
+msgstr "Traseu de sfârșit:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:30
 msgid "Path to attach to the end of this path"
@@ -17472,7 +17472,7 @@ msgstr "Traseul de atașat la sfârșitul acestui traseu"
 
 #: ../src/live_effects/lpe-attach-path.cpp:31
 msgid "End path position:"
-msgstr "Poziția sfârșitului traseului"
+msgstr "Poziția de sfârșit a traseului:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:31
 msgid "Position to attach path end to"
