@@ -71,6 +71,8 @@ private:
     std::string _checksum;
     bool _in_home = false;
 
+public:
+    std::string get_id() const;
     std::string generate_id() const;
     std::string generate_checksum() const;
 };

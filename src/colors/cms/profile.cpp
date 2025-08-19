@@ -283,11 +283,11 @@ bool Profile::isIccFile(std::string const &filepath)
 }
 
 /**
- * Get or generate a profile Id, and save in the object for later use.
+ * Get the id from the cms header itself, ususally correct but sometimes will be
+ * completely empty. Use generate_checksum to make a new one.
  */
-std::string Profile::generate_id() const
+std::string Profile::get_id() const
 {
-    // 1. get the id from the cms header itself, ususally correct.
     cmsUInt8Number tmp[16];
     cmsGetHeaderProfileID(_handle, tmp);
 
@@ -297,13 +297,21 @@ std::string Profile::generate_id() const
         // Setw must happen each loop
         oo << std::setw(2) << static_cast<unsigned>(digit);
     }
+    return oo.str();
+}
+
+/**
+ * Get or generate a profile Id, and save in the object for later use.
+ */
+std::string Profile::generate_id() const
+{
+    auto s = get_id();
 #ifdef __APPLE__
-    auto s = oo.str();
     if (std::count_if(s.begin(), s.end(), [](char c){ return c == '0'; }) < 24)
 #else
-    if (std::ranges::count(oo.str(), '0') < 24)
+    if (std::ranges::count(s, '0') < 24)
 #endif
-        return oo.str(); // Done
+        return s; // Done
     // If there's no path, then what we have is a generated or in-memory profile
     // which is unlikely to ever need to be matched with anything via id but it's
     // also true that this id would change between computers, and creation date.
@@ -326,6 +334,8 @@ std::string Profile::generate_checksum() const
         return "~";
     }
     // Zero out the required bytes as per the above specification
+    for (unsigned i = 44; i < 48; i++)
+        data[i] = 0;
     for (unsigned i = 64; i < 68; i++)
         data[i] = 0;
     for (unsigned i = 84; i < 100; i++)

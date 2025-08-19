@@ -230,6 +230,20 @@ TEST(ColorCmsProfile, cmsDumpBase64)
               "AAA9aGxjbXMEMAAAbW50clJHQiBYWVogB+YAAgAWAA0AGQAuYWNzcEFQUEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEA");
 }
 
+TEST(ColorCmsProfile, cmsGenerateId)
+{
+    auto profile = CMS::Profile::create_from_uri(cmyk_profile);
+
+    EXPECT_EQ(profile->get_id(), "00000000000000000000000000000000");
+    EXPECT_EQ(profile->generate_id(), "f9185275b4d6bcee53bc48dddb70fce5");
+    EXPECT_EQ(profile->generate_checksum(), "f9185275b4d6bcee53bc48dddb70fce5");
+
+    profile = CMS::Profile::create_from_uri(grb_profile);
+    EXPECT_EQ(profile->get_id(), "f9eda5a42a222a28f0adb82a938eeb0e");
+    EXPECT_EQ(profile->generate_id(), "f9eda5a42a222a28f0adb82a938eeb0e");
+    EXPECT_EQ(profile->generate_checksum(), "f9eda5a42a222a28f0adb82a938eeb0e");
+}
+
 // ================= CMS::Transform ================= //
 
 TEST(ColorCmsTransform, applyTransformColor)
