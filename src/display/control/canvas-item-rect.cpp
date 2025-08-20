@@ -19,7 +19,6 @@
 #include <cairo/cairo.h>
 #include <cairomm/pattern.h>
 
-#include "desktop.h"
 #include "display/cairo-utils.h"
 #include "helper/geom.h"
 #include "ui/util.h"
@@ -139,14 +138,14 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
         auto const alpha = (std::exp(-3 * SP_RGBA32_A_F(_shadow_color)) - 1) / (std::exp(-3) - 1);
 
         // Flip shadow upside-down if y-axis is inverted.
-        auto doc2dt = Geom::identity();
-        if (auto desktop = get_canvas()->get_desktop()) {
-            doc2dt = desktop->doc2dt();
+        auto vflip = Geom::identity();
+        if (!_context->yaxisdown()) {
+            vflip = Geom::Affine(1, 0, 0, -1, 0, rect.top() + rect.bottom()); // flip rect upside down
         }
 
         buf.cr->save();
-        buf.cr->transform(geom_to_cairo(doc2dt * aff));
-        ink_cairo_draw_drop_shadow(buf.cr, rect * doc2dt, get_shadow_size(), _shadow_color, alpha);
+        buf.cr->transform(geom_to_cairo(vflip * aff));
+        ink_cairo_draw_drop_shadow(buf.cr, rect, get_shadow_size(), _shadow_color, alpha);
         buf.cr->restore();
     }
 

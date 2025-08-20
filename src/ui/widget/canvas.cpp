@@ -635,12 +635,15 @@ void CanvasPrivate::launch_redraw()
     handle_stores_action(stores.update(Fragment{ q->_affine, q->get_area_world() }));
 
     // Geometry.
+    bool const yaxisdown = q->_desktop ? q->_desktop->is_yaxisdown() : true;
     bool const affine_changed = canvasitem_ctx->affine() != stores.store().affine;
-    if (q->_need_update || affine_changed) {
+    bool const yaxisdown_changed = canvasitem_ctx->yaxisdown() != yaxisdown;
+    if (q->_need_update || affine_changed || yaxisdown_changed) {
         FrameCheck::Event fc;
         if (prefs.debug_framecheck) fc = FrameCheck::Event("update");
         q->_need_update = false;
         canvasitem_ctx->setAffine(stores.store().affine);
+        canvasitem_ctx->setYaxisdown(yaxisdown);
         canvasitem_ctx->root()->update(affine_changed);
     }
 

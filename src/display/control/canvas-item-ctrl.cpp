@@ -382,7 +382,7 @@ void CanvasItemCtrl::_update(bool)
         double angle = int{_anchor} * M_PI_4;
         // Affine flips if view orientation has been altered (horizontal or vertical flip).
         // But it also flips when Y axis is pointing up. We need to take both into account.
-        if (affine().flips() == _context->is_yaxisdown()) {
+        if (affine().flips() == _context->yaxisdown()) {
             angle = -angle;
         }
         angle += angle_of(affine());

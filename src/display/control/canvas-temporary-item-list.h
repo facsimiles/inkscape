@@ -13,8 +13,6 @@
 
 #include <list>
 
-class SPDesktop;
-
 namespace Inkscape {
 
 class CanvasItem;
