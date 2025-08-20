@@ -44,6 +44,8 @@ public:
     template<typename F>
     void defer(F &&f) { _snapshotted ? _funclog.emplace(std::forward<F>(f)) : f(); }
 
+    bool is_yaxisdown() const;
+
 private:
     // Structure
     UI::Widget::Canvas *_canvas;

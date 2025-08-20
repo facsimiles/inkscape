@@ -18,10 +18,8 @@
 
 #include "canvas-item-guideline.h"
 #include "canvas-item-ctrl.h"
-
-#include "desktop.h" // Canvas orientation so label is orientated correctly.
+#include "colors/utils.h"
 #include "display/control/canvas-item-enums.h"
-#include "ui/widget/canvas.h"
 
 namespace Inkscape {
 
@@ -161,8 +159,7 @@ void CanvasItemGuideLine::_render(Inkscape::CanvasItemBuffer &buf) const
         ctx->save();
         ctx->translate(aligned_origin.x(), aligned_origin.y());
 
-        auto desktop = get_canvas()->get_desktop();
-        ctx->rotate(atan2(normal.cw()) + M_PI * (desktop && desktop->is_yaxisdown() ? 1 : 0));
+        ctx->rotate(atan2(normal.cw()) + M_PI * (_context->is_yaxisdown() ? 1 : 0));
         ctx->translate(0, -(_origin_ctrl->radius() + LABEL_SEP)); // Offset by dot radius + 2
         ctx->move_to(0, 0);
         ctx->show_text(_label);
