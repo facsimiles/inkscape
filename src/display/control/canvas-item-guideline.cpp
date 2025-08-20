@@ -159,7 +159,7 @@ void CanvasItemGuideLine::_render(Inkscape::CanvasItemBuffer &buf) const
         ctx->save();
         ctx->translate(aligned_origin.x(), aligned_origin.y());
 
-        ctx->rotate(atan2(normal.cw()) + M_PI * (_context->is_yaxisdown() ? 1 : 0));
+        ctx->rotate(atan2(normal.cw()) + M_PI * (_context->yaxisdown() ? 1 : 0));
         ctx->translate(0, -(_origin_ctrl->radius() + LABEL_SEP)); // Offset by dot radius + 2
         ctx->move_to(0, 0);
         ctx->show_text(_label);

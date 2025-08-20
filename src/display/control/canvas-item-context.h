@@ -33,6 +33,9 @@ public:
     Geom::Affine const &affine() const { return _affine; }
     void setAffine(Geom::Affine const &affine) { _affine = affine; }
 
+    bool yaxisdown() const { return _yaxisdown; }
+    void setYaxisdown(bool yaxisdown) { _yaxisdown = yaxisdown; }
+
     // Control handle styling
     std::shared_ptr<Handles::Css const> const &handlesCss() const { return _handles_css; }
 
@@ -44,8 +47,6 @@ public:
     template<typename F>
     void defer(F &&f) { _snapshotted ? _funclog.emplace(std::forward<F>(f)) : f(); }
 
-    bool is_yaxisdown() const;
-
 private:
     // Structure
     UI::Widget::Canvas *_canvas;
@@ -53,6 +54,7 @@ private:
 
     // Geometry
     Geom::Affine _affine;
+    bool _yaxisdown = true;
 
     // Control handle styling
     std::shared_ptr<Handles::Css const> _handles_css;
