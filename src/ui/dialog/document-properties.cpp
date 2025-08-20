@@ -286,11 +286,11 @@ void set_document_dimensions(SPDesktop* desktop, double width, double height, co
 
     // The origin for the user is in the lower left corner; this point should remain stationary when
     // changing the page size. The SVG's origin however is in the upper left corner, so we must compensate for this
-    if (!doc->is_yaxisdown()) {
+    if (!doc->yaxisdown()) {
         auto const vert_offset = Geom::Translate(Geom::Point(0, (old_height_q.value("px") - new_height_q.value("px"))));
         doc->getRoot()->translateChildItems(vert_offset);
     } else {
-        // when this is_yaxisdown is true, we need to translate just the guides
+        // when this yaxisdown is true, we need to translate just the guides
         // the guides simply need their new converted positions
         // in reference to: https://gitlab.com/inkscape/inkscape/-/issues/1230
         for (auto guide : doc->getNamedView()->guides) {

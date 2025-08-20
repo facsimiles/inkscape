@@ -640,7 +640,7 @@ box3d_aux_set_z_orders (int z_orders[6], int a, int b, int c, int d, int e, int 
     // TODO add function argument: SPDocument *doc = box->document
     auto doc = SP_ACTIVE_DOCUMENT;
 
-    if (doc->is_yaxisdown()) {
+    if (doc->yaxisdown()) {
         std::swap(a, f);
         std::swap(b, e);
         std::swap(c, d);

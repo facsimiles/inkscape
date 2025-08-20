@@ -349,7 +349,7 @@ void CanvasGrid::updateRulers()
     double w2r_scale = _dtw->get_dt2r() / d2c_scalerot.expansionX();
     auto const rulerbox = startbox * Geom::Scale{w2r_scale};
     _hruler->set_range(rulerbox.left(), rulerbox.right());
-    if (desktop->is_yaxisdown()) {
+    if (desktop->yaxisdown()) {
         _vruler->set_range(rulerbox.top(), rulerbox.bottom());
     } else {
         _vruler->set_range(-rulerbox.top(), -rulerbox.bottom());
@@ -638,7 +638,7 @@ void CanvasGrid::_createGuide(Geom::Point origin, Geom::Point normal)
     }
 
     // <sodipodi:guide> stores inverted y-axis coordinates
-    if (desktop->is_yaxisdown()) {
+    if (desktop->yaxisdown()) {
         origin.y() = desktop->doc()->getHeight().value("px") - origin.y();
         normal.y() *= -1.0;
     }

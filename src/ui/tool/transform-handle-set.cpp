@@ -649,7 +649,7 @@ TransformHandleSet::TransformHandleSet(SPDesktop *d, Inkscape::CanvasItemGroup *
     _trans_outline->set_visible(false);
     _trans_outline->set_dashed(true);
 
-    bool y_inverted = !d->is_yaxisdown();
+    bool y_inverted = !d->yaxisdown();
     for (unsigned i = 0; i < 4; ++i) {
         unsigned d_c = y_inverted ? i : 3 - i;
         unsigned d_s = y_inverted ? i : 6 - i;

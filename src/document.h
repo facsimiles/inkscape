@@ -271,7 +271,7 @@ public:
         return doc2dt();
     }
     /// True if the desktop Y-axis points down, false if it points up.
-    bool is_yaxisdown() const { return yaxisdir() > 0; }
+    bool yaxisdown() const { return yaxisdir() > 0; }
     /// "1" if the desktop Y-axis points down, "-1" if it points up.
     double yaxisdir() const { return _doc2dt[3]; }
     // return true if coordinate system origin needs to move to current page

@@ -424,7 +424,7 @@ public:
     Geom::Point dt2doc(Geom::Point const &p) const { return p * dt2doc(); }
 
     double yaxisdir() const { return doc2dt()[3]; }
-    bool is_yaxisdown() const { return yaxisdir() > 0; }
+    bool yaxisdown() const { return yaxisdir() > 0; }
 
     void setDocument(SPDocument *doc);
 

@@ -148,7 +148,7 @@ LineSnapper::LineList GridSnapper::getSnapLinesAxonom(Geom::Point const &p) cons
     double ta_x = tan(Geom::rad_from_deg(_grid->getAngleX()));
     double ta_z = tan(Geom::rad_from_deg(_grid->getAngleZ()));
 
-    if (desktop && desktop->is_yaxisdown()) {
+    if (desktop && desktop->yaxisdown()) {
         std::swap(ta_x, ta_z);
     }
 

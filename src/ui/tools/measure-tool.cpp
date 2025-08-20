@@ -742,7 +742,7 @@ void MeasureTool::toMarkDimension()
     total += unit_name;
 
     double textangle = Geom::rad_from_deg(180) - ray.angle();
-    if (_desktop->is_yaxisdown()) {
+    if (_desktop->yaxisdown()) {
         textangle = ray.angle() - Geom::rad_from_deg(180);
     }
 
@@ -767,7 +767,7 @@ void MeasureTool::setGuide(Geom::Point origin, double angle, const char *label)
     }
 
     // <sodipodi:guide> stores inverted y-axis coordinates
-    if (_desktop->is_yaxisdown()) {
+    if (_desktop->yaxisdown()) {
         origin[Geom::Y] = doc->getHeight().value("px") - origin[Geom::Y];
         angle *= -1.0;
     }

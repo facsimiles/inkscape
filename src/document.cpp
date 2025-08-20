@@ -925,7 +925,7 @@ void SPDocument::setHeight(const Inkscape::Util::Quantity &height, bool changeSi
 
 const Geom::Affine &SPDocument::doc2dt() const
 {
-    if (root && !is_yaxisdown()) {
+    if (root && !yaxisdown()) {
         _doc2dt[5] = root->height.computed;
     }
 
@@ -1002,7 +1002,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool)
 
     // 1. Calculate geometric transformations that must be applied to the drawing,
     //    pages, grids and guidelines to compensate for the changed origin.
-    bool y_down = is_yaxisdown();
+    bool y_down = yaxisdown();
     double const old_height = root->height.computed;
     double const tr_x = -rect[Geom::X].min();
     double const tr_y_items = -rect[Geom::Y].min() * yaxisdir();
@@ -1412,7 +1412,7 @@ bool SPDocument::has_yaxis_orientation_changed() {
     if (!root) return false;
 
     // detect Y-axis orientation change
-    if (auto nv = getNamedView(); nv && is_yaxisdown() != nv->is_y_axis_down()) {
+    if (auto nv = getNamedView(); nv && yaxisdown() != nv->is_y_axis_down()) {
         return true;
     }
 

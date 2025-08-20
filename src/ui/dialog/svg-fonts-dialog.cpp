@@ -761,7 +761,7 @@ void set_up_typography_canvas(SPDocument* document, double em, double asc, doubl
     double xPos = base + xheight;
     double desPos = base - des;
 
-    if (!document->is_yaxisdown()) {
+    if (!document->yaxisdown()) {
         base = size.quantity - des;
         ascPos = base - asc;
         capPos = base - cap;

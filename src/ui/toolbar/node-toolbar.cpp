@@ -330,7 +330,7 @@ void NodeToolbar::edit_add_rightmost()
 /* add a node at the top-most point on selected path(s)*/
 void NodeToolbar::edit_add_topmost()
 {
-    const auto extrema = _desktop->is_yaxisdown()
+    const auto extrema = _desktop->yaxisdown()
                          ? PointManipulator::EXTR_MIN_Y
                          : PointManipulator::EXTR_MAX_Y;
     if (auto nt = get_node_tool()) {
@@ -341,7 +341,7 @@ void NodeToolbar::edit_add_topmost()
 /* add a node at the bottom-most point on selected path(s)*/
 void NodeToolbar::edit_add_bottommost()
 {
-    const auto extrema = _desktop->is_yaxisdown()
+    const auto extrema = _desktop->yaxisdown()
                          ? PointManipulator::EXTR_MAX_Y
                          : PointManipulator::EXTR_MIN_Y;
     if (auto nt = get_node_tool()) {

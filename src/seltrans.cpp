@@ -261,7 +261,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         _items_centers.push_back(it->getCenter()); // for content-dragging, we need to remember original centers
     }
 
-    if (y != -1 && _desktop->is_yaxisdown()) {
+    if (y != -1 && _desktop->yaxisdown()) {
         y = 1 - y;
     }
 

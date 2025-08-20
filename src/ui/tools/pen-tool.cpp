@@ -1154,7 +1154,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
     if (prefs->getBool("/options/compassangledisplay/value", false) != 0) {
         angle = 90 - angle;
 
-        if (_desktop->is_yaxisdown()) {
+        if (_desktop->yaxisdown()) {
             angle = 180 - angle;
         }
 

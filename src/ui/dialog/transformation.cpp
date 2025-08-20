@@ -1025,14 +1025,14 @@ void Transformation::onRotateCounterclockwiseClicked()
 {
     _scalar_rotate.set_tooltip_text(_("Rotation angle (positive = counterclockwise)"));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", !getDesktop()->is_yaxisdown());
+    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", !getDesktop()->yaxisdown());
 }
 
 void Transformation::onRotateClockwiseClicked()
 {
     _scalar_rotate.set_tooltip_text(_("Rotation angle (positive = clockwise)"));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", getDesktop()->is_yaxisdown());
+    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", getDesktop()->yaxisdown());
 }
 
 void Transformation::onSkewValueChanged()
@@ -1159,7 +1159,7 @@ void Transformation::desktopReplaced()
         }
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (prefs->getBool("/dialogs/transformation/rotateCounterClockwise", true) != desktop->is_yaxisdown()) {
+        if (prefs->getBool("/dialogs/transformation/rotateCounterClockwise", true) != desktop->yaxisdown()) {
             _counterclockwise_rotate.set_active();
             onRotateCounterclockwiseClicked();
         } else {

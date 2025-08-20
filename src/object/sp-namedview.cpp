@@ -420,7 +420,7 @@ void SPNamedView::updateViewPort()
     } else {
         // Otherwise we are showing the viewport item.
         _viewport->show();
-        _viewport->update(*box, {}, {}, nullptr, document->getPageManager().hasPages(), document->is_yaxisdown());
+        _viewport->update(*box, {}, {}, nullptr, document->getPageManager().hasPages(), document->yaxisdown());
     }
 }
 
