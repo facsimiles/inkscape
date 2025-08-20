@@ -7,6 +7,8 @@
 
 #include "canvas-item-group.h"
 #include "ctrl-handle-manager.h"
+#include "desktop.h" // Canvas Y axis orientation
+#include "ui/widget/canvas.h"
 
 namespace Inkscape {
 
@@ -40,6 +42,11 @@ void CanvasItemContext::unsnapshot()
     assert(_snapshotted);
     _snapshotted = false;
     _funclog();
+}
+
+bool CanvasItemContext::is_yaxisdown() const {
+    auto desktop = _canvas->get_desktop();
+    return desktop && desktop->is_yaxisdown();
 }
 
 } // namespace Inkscape
