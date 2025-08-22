@@ -234,9 +234,12 @@ TEST(ColorCmsProfile, cmsGenerateId)
 {
     auto profile = CMS::Profile::create_from_uri(cmyk_profile);
 
+// lcms2 2.16 fixed by Krita to preserve data in the icc and make ids correct.
+#if (LCMS_VERSION >= 2160)
     EXPECT_EQ(profile->get_id(), "00000000000000000000000000000000");
-    EXPECT_EQ(profile->generate_id(), "f9185275b4d6bcee53bc48dddb70fce5");
-    EXPECT_EQ(profile->generate_checksum(), "f9185275b4d6bcee53bc48dddb70fce5");
+    EXPECT_EQ(profile->generate_id(), "fd199526f0a7e0bceb294a777cd84252");
+    EXPECT_EQ(profile->generate_checksum(), "fd199526f0a7e0bceb294a777cd84252");
+#endif
 
     profile = CMS::Profile::create_from_uri(grb_profile);
     EXPECT_EQ(profile->get_id(), "f9eda5a42a222a28f0adb82a938eeb0e");

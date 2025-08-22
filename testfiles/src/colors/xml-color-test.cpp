@@ -77,20 +77,23 @@ TEST_F(ColorXmlColor, test_icc_paint_xml)
     auto color = Color(space, vals);
     auto str = paint_to_xml_string(color);
 
+#if (LCMS_VERSION >= 2160)
     ASSERT_EQ(str, R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <paint>
   <color
      space="Artifex-CMYK-SWOP-Profile"
-     icc="f9185275b4d6bcee53bc48dddb70fce5"
+     icc="fd199526f0a7e0bceb294a777cd84252"
      c="0.5"
      m="0.2"
      y="0.1"
      k="0.23" />
 </paint>
 )");
+#endif
 
     auto reverse = xml_string_to_paint(str, nullptr);
     ASSERT_EQ(std::get<Color>(reverse).toString(), color.toString());
+
 }
 
 TEST_F(ColorXmlColor, test_xml_string_to_paint)
