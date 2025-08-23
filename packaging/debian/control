@@ -4,6 +4,7 @@ Uploaders: Marc Jeanmougin <marc.jeanmougin@telecom-paris.fr>
 Build-Depends: cmake (>=3.15), dh-cmake, dh-sequence-cpack, debhelper (>=11), debhelper-compat (=13), dh-cmake-compat (=1), dh-python, dh-sequence-python3, python3, ninja-build
 Build-Depends-Arch:
  bc,
+ fonts-dejavu,
  ghostscript,
  imagemagick,
  libboost-dev,
