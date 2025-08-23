@@ -98,17 +98,15 @@
                   <class name="active-background"></class>
                 </style>
                 <child>
-                  <object class="GtkPicture" id="preview">
+                  <object class="GtkWidget" id="preview">
                     <property name="margin-end">12</property>
                     <property name="margin-start">32</property>
                     <property name="margin-top">0</property>
+                    <property name="margin-bottom">0</property>
                     <property name="height-request">85</property>
                     <property name="width-request">-1</property>
-                    <property name="content-fit">scale-down</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="margin-bottom">0</property>
-                    <style></style>
                   </object>
                 </child>
                 <child>

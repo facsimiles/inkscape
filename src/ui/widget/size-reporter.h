@@ -28,6 +28,10 @@ protected:
     {
         resized.emit();
     }
+
+    void measure_vfunc(const Gtk::Widget& widget, Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const override {
+        LayoutManager::measure_vfunc(widget, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
+    }
 };
 
 #endif // SIZEREPORTER_H

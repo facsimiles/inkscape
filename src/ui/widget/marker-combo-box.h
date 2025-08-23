@@ -7,6 +7,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *   Maximilian Albert <maximilian.albert@gmail.com>
+ *   Mike Kowalski
  *
  * Copyright (C) 2002 Lauris Kaplinski
  *
@@ -18,14 +19,13 @@
 
 #include <giomm/liststore.h>
 #include <gtkmm/cellrendererpixbuf.h>
-#include <gtkmm/treemodel.h>
 
 #include "display/drawing.h"
 #include "document.h"
 #include "ink-property-grid.h"
 #include "ink-spin-button.h"
+#include "snapshot-widget.h"
 #include "ui/operation-blocker.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
 
 namespace Gtk {
 class Builder;
@@ -35,7 +35,6 @@ class FlowBox;
 class Image;
 class Label;
 class MenuButton;
-class Picture;
 class SpinButton;
 class ToggleButton;
 } // namespace Gtk
@@ -51,7 +50,7 @@ class Bin;
 /**
  * ComboBox-like class for selecting stroke markers.
  */
-class MarkerComboBox : public WidgetVfuncsClassInit, public Gtk::MenuButton {
+class MarkerComboBox : public Gtk::MenuButton {
 public:
     MarkerComboBox(Glib::ustring id, int loc);
 
@@ -67,12 +66,9 @@ public:
     sigc::connection connect_edit   (sigc::slot<void ()> slot);
     // set a flat look
     void set_flat(bool flat);
-    // scale default marker preview size; 1.0 by default (=40x32)
-    void preview_scale(double scale);
 
 private:
     struct MarkerItem : Glib::Object {
-        Cairo::RefPtr<Cairo::Surface> pix;
         SPDocument* source = nullptr;
         std::string id;
         std::string label;
@@ -96,7 +92,6 @@ private:
 
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void ()> _signal_edit;
-    double _preview_scale = 0.0;
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::FlowBox& _marker_list;
     Gtk::Label& _marker_name;
@@ -104,7 +99,7 @@ private:
     std::vector<Glib::RefPtr<MarkerItem>> _stock_items;
     std::vector<Glib::RefPtr<MarkerItem>> _history_items;
     std::map<Gtk::Widget*, Glib::RefPtr<MarkerItem>> _widgets_to_markers;
-    Gtk::Picture& _preview;
+    SnapshotWidget& _preview;
     bool _preview_no_alloc = true;
     Gtk::Button& _link_scale;
     InkSpinButton& _angle_btn;
@@ -118,11 +113,9 @@ private:
     Gtk::ToggleButton& _orient_auto;
     Gtk::ToggleButton& _orient_angle;
     Gtk::Button& _orient_flip_horz;
-    Gtk::Picture _current_img;
+    SnapshotWidget _current_img;
     Gtk::Button& _edit_marker;
     bool _scale_linked = true;
-    guint32 _background_color;
-    guint32 _foreground_color;
     Glib::ustring _combo_id;
     int _loc;
     OperationBlocker _update;
@@ -138,21 +131,22 @@ private:
     void update_scale_link();
     Glib::RefPtr<MarkerItem> get_active();
     Glib::RefPtr<MarkerItem> find_marker_item(SPMarker* marker);
-    void css_changed(GtkCssStyleChange *change) override;
     void update_preview(Glib::RefPtr<MarkerItem> marker_item);
-    void update_menu_btn(Glib::RefPtr<MarkerItem> marker_item);
+    void update_menu_btn();
     void set_active(Glib::RefPtr<MarkerItem> item);
     void init_combo();
     void marker_list_from_doc(SPDocument* source, bool history);
     std::vector<SPMarker*> get_marker_list(SPDocument* source);
-    void add_markers (std::vector<SPMarker *> const& marker_list, SPDocument *source,  gboolean history);
-    void remove_markers (gboolean history);
-    Cairo::RefPtr<Cairo::Surface> create_marker_image(Geom::IntPoint pixel_size, gchar const *mname,
-        SPDocument *source, Inkscape::Drawing &drawing, unsigned /*visionkey*/, bool checkerboard, bool no_clip, double scale, bool add_cross);
+    void add_markers(std::vector<SPMarker *> const& marker_list, SPDocument *source, bool history);
+    Cairo::RefPtr<Cairo::ImageSurface> create_marker_image(Geom::IntPoint pixel_size, gchar const *mname,
+        SPDocument *source, Inkscape::Drawing &drawing, double scale, bool add_cross);
     void refresh_after_markers_modified();
+    void draw_small_preview(const Glib::RefPtr<Gtk::Snapshot>& ctx, int width, int height, SPMarker* marker);
+    void draw_big_preview(const Glib::RefPtr<Gtk::Snapshot>& snapshot, int width, int height);
     sigc::scoped_connection modified_connection;
     sigc::scoped_connection _idle;
     bool _is_up_to_date = false;
+    Cairo::RefPtr<Cairo::ImageSurface> marker_to_image(Geom::IntPoint size, SPMarker* marker);
 };
 
 } // namespace Inkscape::UI::Widget

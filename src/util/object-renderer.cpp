@@ -320,7 +320,7 @@ std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_i
 }
 
 
-Cairo::RefPtr<Cairo::Surface> create_marker_image(
+Cairo::RefPtr<Cairo::ImageSurface> create_marker_image(
     const Glib::ustring& group_id,
     SPDocument* _sandbox,
     Gdk::RGBA marker_color,
@@ -334,7 +334,7 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
     int device_scale,
     bool add_cross)
 {
-    Cairo::RefPtr<Cairo::Surface> g_bad_marker;
+    Cairo::RefPtr<Cairo::ImageSurface> g_bad_marker;
 
     // Retrieve the marker named 'mname' from the source SVG document
     const SPObject* marker = source ? source->getObjectById(mname) : nullptr;
@@ -479,7 +479,7 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
     guint32 bgnd_color = checkerboard.has_value() ? *checkerboard : 0;
     auto surface = render_surface(drawing, scale, *dbox, pixel_size, device_scale, checkerboard.has_value() ? &bgnd_color : nullptr, no_clip);
     cairo_surface_set_device_scale(surface, device_scale, device_scale);
-    return Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(surface, true));
+    return Cairo::RefPtr<Cairo::ImageSurface>(new Cairo::ImageSurface(surface, true));
 }
 
 Cairo::RefPtr<Cairo::Surface> render_image(const Inkscape::Pixbuf* pixbuf, int width, int height, int device_scale) {

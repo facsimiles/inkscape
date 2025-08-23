@@ -100,7 +100,7 @@ std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_i
  * area in the bounding box, and then renders it. This allows us to fill in
  * preview images of each marker in the marker combobox.
  */
-Cairo::RefPtr<Cairo::Surface> create_marker_image(
+Cairo::RefPtr<Cairo::ImageSurface> create_marker_image(
     const Glib::ustring& group_id,
     SPDocument* _sandbox,
     Gdk::RGBA marker_color,

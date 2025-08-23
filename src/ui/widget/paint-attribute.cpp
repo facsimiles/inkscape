@@ -578,10 +578,6 @@ void PaintAttribute::PaintStrip::set_paint(const SPIPaint& paint, double opacity
 }
 
 void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
-    auto scale = 0.6;
-    _marker_start.preview_scale(scale);
-    _marker_mid.preview_scale(scale);
-    _marker_end.preview_scale(scale);
     _markers.append(_marker_start);
     _markers.append(_marker_mid);
     _markers.append(_marker_end);

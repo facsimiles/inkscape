@@ -278,6 +278,7 @@ set(ui_SRC
 	widget/scroll-utils.cpp
 	widget/selected-style.cpp
 	widget/shapeicon.cpp
+	widget/snapshot-widget.cpp
 	widget/spin-scale.cpp
 	widget/spinbutton.cpp
 	widget/stack.cpp
@@ -604,6 +605,7 @@ set(ui_SRC
 	widget/scroll-utils.h
 	widget/selected-style.h
 	widget/shapeicon.h
+	widget/snapshot-widget.h
 	widget/size-reporter.h
 	widget/spin-scale.h
 	widget/spinbutton.h

@@ -555,8 +555,17 @@ button.link:hover image {
     -gtk-icon-filter: opacity(0.5);
 }
 
+/* Markers */
+#MarkerComboBox {
+    /* Keep it from getting too small due to reduced box padding below */
+    min-height: 26px;
+}
+#MarkerComboBox > button {
+    /* reduced padding for marker combo box to present larger preview */
+    padding: 2px;
+}
 .marker-item-box {
-    padding: 0px;
+    padding: 0 2px;
 }
 .marker-separator {
     padding: 0;
