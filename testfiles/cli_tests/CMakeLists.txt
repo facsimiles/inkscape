@@ -240,7 +240,9 @@ add_cli_test(export-type_svg  PARAMETERS --export-type=svg INPUT_FILENAME shapes
 add_cli_test(export-type_png  PARAMETERS --export-type=png INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.png REFERENCE_FILENAME shapes_expected.png)
 add_cli_test(export-type_ps   PARAMETERS --export-type=ps  INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.ps  REFERENCE_FILENAME shapes_expected.ps)
 add_cli_test(export-type_eps  PARAMETERS --export-type=eps INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.eps REFERENCE_FILENAME shapes_expected.eps)
+if(WITH_CAPYPDF)
 add_cli_test(export-type_pdf  PARAMETERS --export-type=pdf INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.pdf REFERENCE_FILENAME shapes_expected.pdf)
+endif()
 add_cli_test(export-type_emf  PARAMETERS --export-type=emf INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.emf REFERENCE_FILENAME shapes_expected.emf)
 add_cli_test(export-type_wmf  PARAMETERS --export-type=wmf INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.wmf REFERENCE_FILENAME shapes_expected.wmf)
 # XAML is not supported by ImageMagick's convert, so simply compare binary
@@ -250,7 +252,9 @@ add_cli_test(export-type_xaml PARAMETERS --export-type=xaml INPUT_FILENAME shape
 # --export-area-page
 add_cli_test(export-area-page_png PARAMETERS --export-area-page --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page.png REFERENCE_FILENAME export-area-page_expected.png)
 add_cli_test(export-area-page_svg PARAMETERS --export-area-page --export-type=svg INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page.svg REFERENCE_FILENAME export-area-page_expected.svg)
+if(WITH_CAPYPDF)
 add_cli_test(export-area-page_pdf PARAMETERS --export-area-page --export-type=pdf INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page.pdf REFERENCE_FILENAME export-area-page_expected.pdf)
+endif()
 add_cli_test(export-area-page_ps  PARAMETERS --export-area-page --export-type=ps  INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page.ps  REFERENCE_FILENAME export-area-page_expected.ps)
 # EPS: Currently not supported. Feature request: https://gitlab.com/inkscape/inkscape/-/issues/1074
 # add_cli_test(export-area-page_eps PARAMETERS --export-area-page --export-type=eps INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page.eps REFERENCE_FILENAME export-area-page_expected.eps)
@@ -261,7 +265,9 @@ add_cli_test(export-area-page_wmf PARAMETERS --export-area-page --export-type=wm
 # TODO: PDF/PS/EPS always behave as if --export-id-only was given, see https://gitlab.com/inkscape/inkscape/-/issues/1173
 add_cli_test(export-area-page_export-id_png PARAMETERS --export-area-page --export-id=MyStar --export-id-only INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page_export-id.png REFERENCE_FILENAME export-area-page_export-id.png)
 add_cli_test(export-area-page_export-id_svg PARAMETERS --export-area-page --export-id=MyStar --export-id-only INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page_export-id.svg REFERENCE_FILENAME export-area-page_export-id.svg)
+if(WITH_CAPYPDF)
 add_cli_test(export-area-page_export-id_pdf PARAMETERS --export-area-page --export-id=MyStar --export-id-only INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page_export-id.pdf REFERENCE_FILENAME export-area-page_export-id.pdf)
+endif()
 add_cli_test(export-area-page_export-id_ps  PARAMETERS --export-area-page --export-id=MyStar --export-id-only INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page_export-id.ps  REFERENCE_FILENAME export-area-page_export-id.ps)
 # EPS: Currently not supported. Feature request: https://gitlab.com/inkscape/inkscape/-/issues/1074
 #add_cli_test(export-area-page_export-id_eps PARAMETERS --export-area-page --export-id=MyStar INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-page_export-id.eps REFERENCE_FILENAME export-area-page_export-id.eps)
@@ -270,7 +276,9 @@ add_cli_test(export-area-page_export-id_ps  PARAMETERS --export-area-page --expo
 # --export-area-drawing
 add_cli_test(export-area-drawing_png PARAMETERS --export-area-drawing --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.png REFERENCE_FILENAME export-area-drawing_expected.png)
 add_cli_test(export-area-drawing_svg PARAMETERS --export-area-drawing --export-type=svg INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.svg REFERENCE_FILENAME export-area-drawing_expected.svg)
+if(WITH_CAPYPDF)
 add_cli_test(export-area-drawing_pdf PARAMETERS --export-area-drawing --export-type=pdf INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.pdf REFERENCE_FILENAME export-area-drawing_expected.pdf)
+endif()
 add_cli_test(export-area-drawing_ps  PARAMETERS --export-area-drawing --export-type=ps  INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.ps  REFERENCE_FILENAME export-area-drawing_expected.ps)
 add_cli_test(export-area-drawing_eps PARAMETERS --export-area-drawing --export-type=eps INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.eps REFERENCE_FILENAME export-area-drawing_expected.eps)
 # EMF, WMF: Currently not supported. Feature request: https://gitlab.com/inkscape/inkscape/-/issues/1056
@@ -280,7 +288,9 @@ add_cli_test(export-area-drawing_eps PARAMETERS --export-area-drawing --export-t
 # --export-area-drawing + --export-area-page should be overriden by --export-area-page
 add_cli_test(export-area-drawing-page_png PARAMETERS --export-area-drawing --export-area-page --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing-page.png REFERENCE_FILENAME export-area-page_expected.png)
 add_cli_test(export-area-drawing-page_svg PARAMETERS --export-area-drawing --export-area-page --export-type=svg INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing-page.svg REFERENCE_FILENAME export-area-page_expected.svg)
+if(WITH_CAPYPDF)
 add_cli_test(export-area-drawing-page_pdf PARAMETERS --export-area-drawing --export-area-page --export-type=pdf INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing-page.pdf REFERENCE_FILENAME export-area-page_expected.pdf)
+endif()
 add_cli_test(export-area-drawing-page_ps  PARAMETERS --export-area-drawing --export-area-page --export-type=ps  INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing-page.ps  REFERENCE_FILENAME export-area-page_expected.ps)
 
 # --export-area=x0:y0:x1:y1
@@ -295,7 +305,9 @@ add_cli_test(export-area-snap_export-area-drawing PARAMETERS --export-area-drawi
 # --export-dpi=DPI
 add_cli_test(export-dpi_png PARAMETERS --export-dpi=12 --export-type=png INPUT_FILENAME filter.svg OUTPUT_FILENAME export-dpi.png REFERENCE_FILENAME export-dpi_expected.png)
 # SVG: doesn't make sense
+if(WITH_CAPYPDF)
 add_cli_test(export-dpi_pdf PARAMETERS --export-dpi=12 --export-type=pdf INPUT_FILENAME filter.svg OUTPUT_FILENAME export-dpi.pdf REFERENCE_FILENAME export-dpi_expected.pdf)
+endif()
 add_cli_test(export-dpi_ps  PARAMETERS --export-dpi=12 --export-type=ps  INPUT_FILENAME filter.svg OUTPUT_FILENAME export-dpi.ps  REFERENCE_FILENAME export-dpi_expected.ps)
 add_cli_test(export-dpi_eps PARAMETERS --export-dpi=12 --export-type=eps INPUT_FILENAME filter.svg OUTPUT_FILENAME export-dpi.eps REFERENCE_FILENAME export-dpi_expected.eps)
 # EMF, WMF: doesn't make sense
@@ -559,7 +571,9 @@ add_cli_test(export-with-filters_svg  PARAMETERS --export-type=svg INPUT_FILENAM
 add_cli_test(export-with-filters_png  PARAMETERS --export-type=png INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.png REFERENCE_FILENAME export-with-filters_expected.png)
 add_cli_test(export-with-filters_ps   PARAMETERS --export-type=ps  INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.ps  REFERENCE_FILENAME export-with-filters_expected.ps )
 add_cli_test(export-with-filters_eps  PARAMETERS --export-type=eps INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.eps REFERENCE_FILENAME export-with-filters_expected.eps)
+if(WITH_CAPYPDF)
 add_cli_test(export-with-filters_pdf  PARAMETERS --export-type=pdf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.pdf REFERENCE_FILENAME export-with-filters_expected.pdf)
+endif()
 add_cli_test(export-grouped-mp PARAMETERS --export-type=pdf
                                INPUT_FILENAME export-grouped-mp.svg
                                OUTPUT_FILENAME export-grouped-mp.pdf
@@ -599,6 +613,7 @@ add_cli_test(convert-text-paintorder PARAMETERS --export-text-to-path --export-e
                                      FUZZYREF_FILENAME export-text-paintorder_expected.png
                                      FUZZ_PERCENTAGE 3.5)
 
+if(WITH_CAPYPDF)
 add_cli_test(export-mask-viewbox PARAMETERS --export-type=pdf
                                  INPUT_FILENAME  export-mask-viewbox-scale.svg
                                  OUTPUT_FILENAME export-mask-viewbox-scale.pdf
@@ -610,6 +625,7 @@ add_cli_test(export-mask-on-transformed-image PARAMETERS --export-type=pdf
                                               OUTPUT_FILENAME   export-mask-on-transformed-image.pdf
                                               FUZZYREF_FILENAME export-mask-on-transformed-image_expected.png
                                               FUZZ_PERCENTAGE 1)
+endif()
 
 # EMF, WMF: No support for exporting filters. Feature request: https://gitlab.com/inkscape/inbox/-/issues/2275
 # add_cli_test(export-with-filters_emf  PARAMETERS --export-type=emf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.emf REFERENCE_FILENAME export-with-filters_expected.emf)
@@ -1084,22 +1100,24 @@ function(add_pdfoutput_test name)
         OUTPUT_FILENAME pdfoutput/${name}.pdf)
 endfunction(add_pdfoutput_test)
 
-add_pdfoutput_test(00-one-thing)
-add_pdfoutput_test(01-test-pages)
-add_pdfoutput_test(02-test-fills)
-add_pdfoutput_test(03-test-strokes)
-add_pdfoutput_test(04-test-transforms)
-add_pdfoutput_test(05-test-transparencies)
-add_pdfoutput_test(06-test-markers)
-add_pdfoutput_test(07-test-shapes)
-add_pdfoutput_test(08-clones)
-add_pdfoutput_test(09-text-layout)
-add_pdfoutput_test(10-text-paint)
-add_pdfoutput_test(11-text-decoration)
-add_pdfoutput_test(12-rasters)
-add_pdfoutput_test(13-clips)
-add_pdfoutput_test(14-filters)
-add_pdfoutput_test(15-many-items)
+if(WITH_CAPYPDF)
+    add_pdfoutput_test(00-one-thing)
+    add_pdfoutput_test(01-test-pages)
+    add_pdfoutput_test(02-test-fills)
+    add_pdfoutput_test(03-test-strokes)
+    add_pdfoutput_test(04-test-transforms)
+    add_pdfoutput_test(05-test-transparencies)
+    add_pdfoutput_test(06-test-markers)
+    add_pdfoutput_test(07-test-shapes)
+    add_pdfoutput_test(08-clones)
+    add_pdfoutput_test(09-text-layout)
+    add_pdfoutput_test(10-text-paint)
+    add_pdfoutput_test(11-text-decoration)
+    add_pdfoutput_test(12-rasters)
+    add_pdfoutput_test(13-clips)
+    add_pdfoutput_test(14-filters)
+    add_pdfoutput_test(15-many-items)
+endif()
 
 ###########################
 ### file format support ###
