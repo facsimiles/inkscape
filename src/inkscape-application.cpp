@@ -1148,7 +1148,7 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
                 } else if (type.get_string() == "i") {
                     action_vector.emplace_back(action, Glib::Variant<int>::create(std::stoi(value)));
                 } else if (type.get_string() == "d") {
-                    action_vector.emplace_back(action, Glib::Variant<double>::create(std::stod(value)));
+                    action_vector.emplace_back(action, Glib::Variant<double>::create(g_ascii_strtod(value.c_str(), nullptr)));
                 } else if (type.get_string() == "s") {
                     action_vector.emplace_back(action, Glib::Variant<Glib::ustring>::create(value));
                  } else if (type.get_string() == "(dd)") {
@@ -1161,8 +1161,8 @@ void InkscapeApplication::parse_actions(Glib::ustring const &input, action_vecto
                     double d0 = 0;
                     double d1 = 0;
                     try {
-                        d0 = std::stod(tokens3[0]);
-                        d1 = std::stod(tokens3[1]);
+                        d0 = g_ascii_strtod(tokens3[0].c_str(), nullptr);
+                        d1 = g_ascii_strtod(tokens3[1].c_str(), nullptr);
                     } catch (...) {
                         std::cerr << "InkscapeApplication::parse_actions: " << action << " requires two comma separated numbers" << std::endl;
                         continue;

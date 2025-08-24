@@ -1203,6 +1203,7 @@ void SvgFontsDialog::glyph_advance_edit(const Glib::ustring&, const Glib::ustrin
 
     //XML Tree being directly used here while it shouldn't be.
     std::istringstream is(str.raw());
+    is.imbue(std::locale::classic());
     double value;
     // Check if input valid
     if ((is >> value)) {

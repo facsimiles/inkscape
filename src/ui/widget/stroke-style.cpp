@@ -189,6 +189,7 @@ std::vector<double> parse_dash_pattern(const Glib::ustring& input) {
     if (input.empty()) return output;
 
     std::istringstream stream(input.c_str());
+    stream.imbue(std::locale::classic());
     while (stream) {
         double val;
         stream >> val;

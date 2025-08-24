@@ -233,7 +233,7 @@ void FontInstance::init_face()
                 regex->match(token, matchInfo);
                 if (matchInfo.matches()) {
 
-                    float value = std::stod(matchInfo.fetch(2).raw());  // Should clamp value
+                    float value = g_ascii_strtod(matchInfo.fetch(2).c_str(), nullptr);  // Should clamp value
 
                     // Translate the "named" axes.
                     auto name = matchInfo.fetch(1);
@@ -640,10 +640,10 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
         svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::Regex::MatchFlags>(0));
 
         // Insert group with required transform to map glyph to new viewbox.
-        double x = std::stod(matchInfo.fetch(1).raw());
-        double y = std::stod(matchInfo.fetch(2).raw());
-        double w = std::stod(matchInfo.fetch(3).raw());
-        double h = std::stod(matchInfo.fetch(4).raw());
+        double x = g_ascii_strtod(matchInfo.fetch(1).c_str(), nullptr);
+        double y = g_ascii_strtod(matchInfo.fetch(2).c_str(), nullptr);
+        double w = g_ascii_strtod(matchInfo.fetch(3).c_str(), nullptr);
+        double h = g_ascii_strtod(matchInfo.fetch(4).c_str(), nullptr);
         // std::cout << " x: " << x
         //           << " y: " << y
         //           << " w: " << w
