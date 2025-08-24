@@ -9,6 +9,7 @@
  */
 #include "svg/svg-length.h"
 #include "svg/svg.h"
+#include "util/units.h"
 
 #include <glib.h>
 #include <gtest/gtest.h>
@@ -19,34 +20,41 @@ struct test_t
 {
     char const *str;
     SVGLength::Unit unit;
-    float value;
-    float computed;
+    double value;
+    double computed;
 };
 
-test_t absolute_tests[12] = {
+static std::vector<test_t> absolute_tests = {
     // clang-format off
     {"0",            SVGLength::NONE,   0        ,   0},
+    {"  1  ",        SVGLength::NONE,   1        ,   1},
+    {"\t2\n",        SVGLength::NONE,   2        ,   2},
+    {"\n3    ",      SVGLength::NONE,   3        ,   3},
     {"1",            SVGLength::NONE,   1        ,   1},
     {"1.00001",      SVGLength::NONE,   1.00001  ,   1.00001},
     {"1px",          SVGLength::PX  ,   1        ,   1},
+    {".1",           SVGLength::NONE,   0.1      ,   0.1},
     {".1px",         SVGLength::PX  ,   0.1      ,   0.1},
-    {"100pt",        SVGLength::PT  , 100        ,  400.0/3.0},
-    {"1e2pt",        SVGLength::PT  , 100        ,  400.0/3.0},
+    {"1.",           SVGLength::NONE,   1        ,   1},
+    {"1.px",         SVGLength::PX  ,   1        ,   1},
+    {"100pt",        SVGLength::PT  , 100        ,  133.33333333333331},
+    {"1e2pt",        SVGLength::PT  , 100        ,  133.33333333333331},
     {"3pc",          SVGLength::PC  ,   3        ,  48},
     {"-3.5pc",       SVGLength::PC  ,  -3.5      ,  -3.5*16.0},
-    {"1.2345678mm",  SVGLength::MM  ,   1.2345678,   1.2345678f*96.0/25.4}, // TODO: More precise constants? (a 7 digit constant when the default precision is 8 digits?)
-    {"123.45678cm",  SVGLength::CM  , 123.45678  , 123.45678f*96.0/2.54},   // Note that svg_length_read is casting the result from g_ascii_strtod to float.
-    {"73.162987in",  SVGLength::INCH,  73.162987 ,  73.162987f*96.0/1.00}
+    {"1.2345678mm",  SVGLength::MM  ,   1.2345678,  4.6660830236220479},
+    {"123.45678cm",  SVGLength::CM  , 123.45678  ,  4666.0830236220481},
+    {"73.162987in",  SVGLength::INCH,  73.162987 ,  7023.6467520000006},
+    {"1.2345678912", SVGLength::NONE, 1.2345678912, 1.2345678912} // Precision of prasing checking, double
 };
 
-test_t relative_tests[3] = {
+static std::vector<test_t> relative_tests = {
     {"123em", SVGLength::EM,      123, 123. *  7.},
     {"123ex", SVGLength::EX,      123, 123. * 13.},
     {"123%",  SVGLength::PERCENT, 1.23, 1.23 * 19.}
     // clang-format on
 };
 
-const char* fail_tests[8] = {
+static std::vector<const char *> fail_single_tests = {
     "123 px",
     "123e",
     "123e+m",
@@ -54,7 +62,21 @@ const char* fail_tests[8] = {
     "123pxt",
     "--123",
     "",
-    "px"
+    "px",
+    "1,",
+    "1.0,,,",
+    "inf",
+    "+inf",
+    "-inf",
+    "nan"
+};
+
+// One successful value, then one failure
+const std::vector<const char *> fail_list_tests = {
+    "1 2rm",
+    "4 ,",
+    "\n3\n,,, 2",
+    "3 trees wave goodbye,"
 };
 
 struct eq_test_t
@@ -64,7 +86,7 @@ struct eq_test_t
     bool equal;
 };
 
-eq_test_t eq_tests[4] = {
+static std::vector<eq_test_t> eq_tests = {
     {"", "", true},
     {"1", "1", true},
     {"10mm", "10mm", true},
@@ -75,130 +97,137 @@ eq_test_t eq_tests[4] = {
 
 TEST(SvgLengthTest, testRead)
 {
-    for (size_t i = 0; i < G_N_ELEMENTS(absolute_tests); i++) {
+    for (auto &test : absolute_tests) {
         SVGLength len;
-        ASSERT_TRUE( len.read(absolute_tests[i].str)) << absolute_tests[i].str;
-        ASSERT_EQ( len.unit, absolute_tests[i].unit) << absolute_tests[i].str;
-        ASSERT_EQ( len.value, absolute_tests[i].value) << absolute_tests[i].str;
-        ASSERT_EQ( len.computed, absolute_tests[i].computed) << absolute_tests[i].str;
+        ASSERT_TRUE( len.read(test.str)) << "'" << test.str << "'";
+        EXPECT_EQ( len.unit, test.unit) << test.str;
+        EXPECT_EQ( len.value, test.value) << test.str;
+        EXPECT_EQ( len.computed, test.computed) << test.str;
     }
-    for (size_t i = 0; i < G_N_ELEMENTS(relative_tests); i++) {
+    for (auto &test : relative_tests) {
         SVGLength len;
-        ASSERT_TRUE( len.read(relative_tests[i].str)) << relative_tests[i].str;
+        ASSERT_TRUE( len.read(test.str)) << test.str;
         len.update(7, 13, 19);
-        ASSERT_EQ( len.unit, relative_tests[i].unit) << relative_tests[i].str;
-        ASSERT_EQ( len.value, relative_tests[i].value) << relative_tests[i].str;
-        ASSERT_EQ( len.computed, relative_tests[i].computed) << relative_tests[i].str;
+        EXPECT_EQ( len.unit, test.unit) << test.str;
+        EXPECT_EQ( len.value, test.value) << test.str;
+        EXPECT_EQ( len.computed, test.computed) << test.str;
     }
-    for (size_t i = 0; i < G_N_ELEMENTS(fail_tests); i++) {
+    for (auto test : fail_single_tests) {
         SVGLength len;
-        ASSERT_TRUE( !len.read(fail_tests[i])) << fail_tests[i];
+        ASSERT_TRUE( !len.read(test)) << test;
     }
 }
 
 TEST(SvgLengthTest, testReadOrUnset)
 {
-    for (size_t i = 0; i < G_N_ELEMENTS(absolute_tests); i++) {
+    for (auto &test : absolute_tests) {
         SVGLength len;
-        len.readOrUnset(absolute_tests[i].str);
-        ASSERT_EQ( len.unit, absolute_tests[i].unit) << absolute_tests[i].str;
-        ASSERT_EQ( len.value, absolute_tests[i].value) << absolute_tests[i].str;
-        ASSERT_EQ( len.computed, absolute_tests[i].computed) << absolute_tests[i].str;
+        len.readOrUnset(test.str);
+        ASSERT_EQ( len.unit, test.unit) << test.str;
+        ASSERT_EQ( len.value, test.value) << test.str;
+        ASSERT_EQ( len.computed, test.computed) << test.str;
     }
-    for (size_t i = 0; i < G_N_ELEMENTS(relative_tests); i++) {
+    for (auto &test : relative_tests) {
         SVGLength len;
-        len.readOrUnset(relative_tests[i].str);
+        len.readOrUnset(test.str);
         len.update(7, 13, 19);
-        ASSERT_EQ( len.unit, relative_tests[i].unit) << relative_tests[i].str;
-        ASSERT_EQ( len.value, relative_tests[i].value) << relative_tests[i].str;
-        ASSERT_EQ( len.computed, relative_tests[i].computed) << relative_tests[i].str;
+        ASSERT_EQ( len.unit, test.unit) << test.str;
+        ASSERT_EQ( len.value, test.value) << test.str;
+        ASSERT_EQ( len.computed, test.computed) << test.str;
     }
-    for (size_t i = 0; i < G_N_ELEMENTS(fail_tests); i++) {
+    for (auto test : fail_single_tests) {
         SVGLength len;
-        len.readOrUnset(fail_tests[i], SVGLength::INCH, 123, 456);
-        ASSERT_EQ( len.unit, SVGLength::INCH) << fail_tests[i];
-        ASSERT_EQ( len.value, 123) << fail_tests[i];
-        ASSERT_EQ( len.computed, 456) << fail_tests[i];
+        len.readOrUnset(test, SVGLength::INCH, 123, 456);
+        ASSERT_EQ( len.unit, SVGLength::INCH) << test;
+        ASSERT_EQ( len.value, 123) << test;
+        ASSERT_EQ( len.computed, 456) << test;
     }
 }
 
 TEST(SvgLengthTest, testReadAbsolute)
 {
-    for (size_t i = 0; i < G_N_ELEMENTS(absolute_tests); i++) {
+    for (auto &test : absolute_tests) {
         SVGLength len;
-        ASSERT_TRUE( len.readAbsolute(absolute_tests[i].str)) << absolute_tests[i].str;
-        ASSERT_EQ( len.unit, absolute_tests[i].unit) << absolute_tests[i].str;
-        ASSERT_EQ( len.value, absolute_tests[i].value) << absolute_tests[i].str;
-        ASSERT_EQ( len.computed, absolute_tests[i].computed) << absolute_tests[i].str;
+        ASSERT_TRUE( len.readAbsolute(test.str)) << test.str;
+        EXPECT_EQ( len.unit, test.unit) << test.str;
+        EXPECT_EQ( len.value, test.value) << test.str;
+        EXPECT_EQ( len.computed, test.computed) << test.str;
     }
-    for (size_t i = 0; i < G_N_ELEMENTS(relative_tests); i++) {
+    for (auto &test : relative_tests) {
         SVGLength len;
-        ASSERT_TRUE( !len.readAbsolute(relative_tests[i].str)) << relative_tests[i].str;
+        EXPECT_TRUE( !len.readAbsolute(test.str)) << test.str;
     }
-    for (size_t i = 0; i < G_N_ELEMENTS(fail_tests); i++) {
+    for (auto test : fail_single_tests) {
         SVGLength len;
-        ASSERT_TRUE( !len.readAbsolute(fail_tests[i])) << fail_tests[i];
+        ASSERT_TRUE( !len.readAbsolute(test)) << test;
     }
+}
+
+TEST(SvgLengthTest, testReadLocale)
+{
+    std::locale was;
+    try {
+        was = std::locale::global(std::locale("de_DE.UTF8"));
+    } catch (std::runtime_error &e) {
+        GTEST_SKIP() << "Skipping all locale test, locale not available";
+    }
+    for (auto &test : absolute_tests) {
+        SVGLength len;
+        ASSERT_TRUE( len.read(test.str)) << test.str;
+        EXPECT_EQ( len.unit, test.unit) << test.str;
+        EXPECT_EQ( len.value, test.value) << test.str;
+        EXPECT_EQ( len.computed, test.computed) << test.str;
+    }
+    std::locale::global(was);
 }
 
 TEST(SvgLengthTest, testToFromString)
 {
+    double scale = 96.0 / 25.4;
     SVGLength len;
-    ASSERT_TRUE(len.fromString("10", "mm", 3.7795277));
-    ASSERT_EQ(len.unit, SVGLength::NONE);
-    ASSERT_EQ(len.write(), "10");
-    ASSERT_EQ(len.toString("mm", 3.7795277), "10mm");
-    ASSERT_EQ(len.toString("in", 3.7795277), "0.3937008in");
-    ASSERT_EQ(len.toString("", 3.7795277), "37.795277");
+    ASSERT_TRUE(len.fromString("10", "mm", scale));
+    EXPECT_EQ(len.unit, SVGLength::NONE);
+    EXPECT_EQ(len.write(), "10");
+    EXPECT_EQ(len.toString("mm", scale), "10mm");
+    EXPECT_EQ(len.toString("in", scale), "0.39370079in");
+    EXPECT_EQ(len.toString("", scale), "37.795276");
 }
 
 TEST(SvgLengthTest, testEquality)
 {
-    for (size_t i = 0; i < G_N_ELEMENTS(eq_tests); i++) {
+    for (auto &test : eq_tests) {
         SVGLength len_a;
         SVGLength len_b;
-        len_a.read(eq_tests[i].a);
-        len_b.read(eq_tests[i].b);
-        if (eq_tests[i].equal) {
-            ASSERT_TRUE(len_a == len_b) << eq_tests[i].a << " == " << eq_tests[i].b;
+        len_a.read(test.a);
+        len_b.read(test.b);
+        if (test.equal) {
+            ASSERT_TRUE(len_a == len_b) << test.a << " == " << test.b;
         } else {
-            ASSERT_TRUE(len_a != len_b) << eq_tests[i].a << " != " << eq_tests[i].b;
-        }
-    }
-}
-
-TEST(SvgLengthTest, testEnumMappedToString)
-{
-    for (int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++) {
-        SVGLength::Unit target = static_cast<SVGLength::Unit>(i);
-        // PX is a special case where we don't have a unit string
-        if ((target != SVGLength::PX)) {
-            gchar const *val = sp_svg_length_get_css_units(target);
-            ASSERT_NE(val, "") << i;
+            ASSERT_TRUE(len_a != len_b) << test.a << " != " << test.b;
         }
     }
 }
 
 TEST(SvgLengthTest, testStringsAreValidSVG)
 {
+    static auto const &unit_table = Inkscape::Util::UnitTable::get();
     gchar const *valid[] = {"", "em", "ex", "px", "pt", "pc", "cm", "mm", "in", "%"};
     std::set<std::string> validStrings(valid, valid + G_N_ELEMENTS(valid));
     for (int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++) {
-        SVGLength::Unit target = static_cast<SVGLength::Unit>(i);
-        gchar const *val = sp_svg_length_get_css_units(target);
-        ASSERT_TRUE( validStrings.find(std::string(val)) != validStrings.end()) << i;
+        Inkscape::Util::Unit const *unit = unit_table.getUnit(static_cast<SVGLength::Unit>(i));
+        ASSERT_TRUE( validStrings.find(unit->abbr) != validStrings.end()) << i;
     }
 }
 
 TEST(SvgLengthTest, testValidSVGStringsSupported)
 {
+    static auto const &unit_table = Inkscape::Util::UnitTable::get();
     // Note that "px" is omitted from the list, as it will be assumed to be so if not explicitly set.
     gchar const *valid[] = {"em", "ex", "pt", "pc", "cm", "mm", "in", "%"};
     std::set<std::string> validStrings(valid, valid + G_N_ELEMENTS(valid));
     for (int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++) {
-        SVGLength::Unit target = static_cast<SVGLength::Unit>(i);
-        gchar const *val = sp_svg_length_get_css_units(target);
-        std::set<std::string>::iterator iter = validStrings.find(std::string(val));
+        Inkscape::Util::Unit const *unit = unit_table.getUnit(static_cast<SVGLength::Unit>(i));
+        std::set<std::string>::iterator iter = validStrings.find(unit->abbr);
         if (iter != validStrings.end()) {
             validStrings.erase(iter);
         }
@@ -227,6 +256,39 @@ TEST(SvgLengthTest, testPlaces)
         unsigned int retval = buf.length();
         ASSERT_EQ( retval, strlen(precTests[i].str)) << "Number of chars written";
         ASSERT_EQ( std::string(buf), std::string(precTests[i].str)) << "Numeric string written";
+    }
+}
+
+TEST(SvgLengthTest, testList)
+{
+    auto items = sp_svg_length_list_read("56px \t-4in, 99.73738 9% 34.0em\n2e+2pt \n  3e-4px ");
+    ASSERT_EQ(items.size(), 7);
+    EXPECT_TRUE(items[0]);
+    EXPECT_EQ(items[0].value, 56);
+    EXPECT_EQ(items[0].unit, SVGLength::PX);
+    EXPECT_EQ(items[1].value, -4);
+    EXPECT_EQ(items[1].unit, SVGLength::INCH);
+    EXPECT_EQ(items[2].value, 99.73738);
+    EXPECT_EQ(items[2].unit, SVGLength::NONE);
+    EXPECT_EQ(items[3].value, 0.09);
+    EXPECT_EQ(items[3].unit, SVGLength::PERCENT);
+    EXPECT_EQ(items[4].value, 34);
+    EXPECT_EQ(items[4].unit, SVGLength::EM);
+    EXPECT_EQ(items[5].value, 200);
+    EXPECT_EQ(items[5].unit, SVGLength::PT);
+    EXPECT_EQ(items[6].value, 0.0003);
+    EXPECT_EQ(items[6].unit, SVGLength::PX);
+}
+
+TEST(SvgLengthTest, testListFailures)
+{
+    for (auto &test : fail_list_tests) {
+        auto items = sp_svg_length_list_read(test);
+        std::string debug;
+        for (auto &item : items) {
+            debug += "\n  * " + item.toString("px", 1.0);
+        }
+        EXPECT_EQ(items.size(), 1) << test << debug.c_str();
     }
 }
 

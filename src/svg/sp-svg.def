@@ -10,7 +10,6 @@ EXPORTS
 	gnome_canvas_bpath_def_new_from
 	gnome_canvas_bpath_def_ref
 	sp_svg_length_read
-	sp_svg_length_read_ldd
 	sp_svg_length_unset
 	sp_svg_length_update
 	sp_svg_number_read_d

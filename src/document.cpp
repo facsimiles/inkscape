@@ -422,9 +422,9 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
     // If no units are set in the document, try and guess them from the width/height
     // XXX Replace these calls with nv->setDocumentUnit(document->root->width.getUnit());
     if (document->root->width.isAbsolute()) {
-        nv->setDefaultAttribute("inkscape:document-units", "", document->root->width.getUnit());
+        nv->setDefaultAttribute("inkscape:document-units", "", document->root->width.getUnit()->abbr);
     } else if (document->root->height.isAbsolute()) {
-        nv->setDefaultAttribute("inkscape:document-units", "", document->root->height.getUnit());
+        nv->setDefaultAttribute("inkscape:document-units", "", document->root->height.getUnit()->abbr);
     }
 
     // Defs

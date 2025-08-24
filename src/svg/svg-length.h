@@ -16,6 +16,10 @@
 #include <string>
 #include <optional>
 
+namespace Inkscape::Util {
+class Unit;
+}
+
 /**
  *  SVG length type
  */
@@ -44,12 +48,12 @@ public:
     Unit unit;
 
     // The value of this SVGLength as found in the SVG.
-    float value;
+    double value;
 
     // The value in pixels (value * pixels/unit).
-    float computed;
+    double computed;
 
-    float operator=(float v) {
+    double operator=(double v) {
         _set = true;
         unit = NONE;
         value = computed = v;
@@ -71,9 +75,9 @@ public:
     operator bool() const { return _set; }
 
     bool read(char const *str);
-    void readOrUnset(char const *str, Unit u = NONE, float v = 0, float c = 0);
+    void readOrUnset(char const *str, Unit u = NONE, double v = 0, double c = 0);
     bool readAbsolute(char const *str);
-    std::string getUnit() const;
+    Inkscape::Util::Unit const *getUnit() const;
     bool isAbsolute();
 
     std::string write() const;
@@ -82,14 +86,13 @@ public:
     bool fromString(const std::string &input, const std::string &unit, std::optional<double> scale = {});
 
     // To set 'v' use '='
-    void set(Unit u, float v); // Sets computed value based on u and v.
-    void set(Unit u, float v, float c); // Sets all three values.
-    void unset(Unit u = NONE, float v = 0, float c = 0);
+    void set(Unit u, double v); // Sets computed value based on u and v.
+    void set(Unit u, double v, double c); // Sets all three values.
+    void unset(Unit u = NONE, double v = 0, double c = 0);
     void scale(double scale); // Scales length (value, computed), leaving unit alone.
     void update(double em, double ex, double scale); // Updates computed value
 };
 
-char const *sp_svg_length_get_css_units(SVGLength::Unit unit);
 bool svg_length_absolute_unit(SVGLength::Unit unit);
 
 namespace Inkscape {

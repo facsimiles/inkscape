@@ -25,7 +25,7 @@
 
 using std::pow;
 
-static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next);
+bool parse_number_with_unit(char const *ss, SVGLength::Unit &unit, double &value, double &computed, bool abs, char **next);
 
 #ifndef MAX
 # define MAX(a,b) ((a < b) ? (b) : (a))
@@ -49,10 +49,6 @@ unsigned int sp_svg_number_read_f(gchar const *str, float *val)
 
 unsigned int sp_svg_number_read_d(gchar const *str, double *val)
 {
-    if (!str) {
-        return 0;
-    }
-
     char *e;
     double const v = g_ascii_strtod(str, &e);
     if ((gchar const *) e == str) {
@@ -151,52 +147,14 @@ SVGLength::SVGLength()
 
 bool SVGLength::read(gchar const *str)
 {
-    if (!str) {
-        return false;
-    }
-
-    SVGLength::Unit u;
-    float v;
-    float c;
-    if (!sp_svg_length_read_lff(str, &u, &v, &c, nullptr)) {
-        return false;
-    }
-
-    if (!std::isfinite(v)) {
-        return false;
-    }
-
-    _set = true;
-    unit = u;
-    value = v;
-    computed = c;
-
-    return true;
+    _set = parse_number_with_unit(str, unit, value, computed, false);
+    return _set;
 }
 
 bool SVGLength::readAbsolute(gchar const *str)
 {
-    if (!str) {
-        return false;
-    }
-
-    SVGLength::Unit u;
-    float v;
-    float c;
-    if (!sp_svg_length_read_lff(str, &u, &v, &c, nullptr)) {
-        return false;
-    }
-
-    if (svg_length_absolute_unit(u) == false) {
-        return false;
-    }
-
-    _set = true;
-    unit = u;
-    value = v;
-    computed = c;
-
-    return true;
+    _set = parse_number_with_unit(str, unit, value, computed, true);
+    return _set;
 }
 
 /**
@@ -204,9 +162,10 @@ bool SVGLength::readAbsolute(gchar const *str)
  *
  * @returns unit string
  */
-std::string SVGLength::getUnit() const
+Inkscape::Util::Unit const *SVGLength::getUnit() const
 {
-    return sp_svg_length_get_css_units(unit);
+    static auto const &unit_table = Inkscape::Util::UnitTable::get();
+    return unit_table.getUnit(unit);
 }
 
 /**
@@ -219,230 +178,93 @@ bool SVGLength::isAbsolute()
     return unit && svg_length_absolute_unit(unit);
 }
 
-unsigned int sp_svg_length_read_computed_absolute(gchar const *str, float *length)
-{
-    if (!str) {
-        return 0;
-    }
-
-    SVGLength::Unit unit;
-    float computed;
-    if (!sp_svg_length_read_lff(str, &unit, nullptr, &computed, nullptr)) {
-        // failed to read
-        return 0;
-    }
-
-    if (svg_length_absolute_unit(unit) == false) {
-        return 0;
-    }
-
-    *length = computed;
-
-    return 1;
-}
-
 std::vector<SVGLength> sp_svg_length_list_read(gchar const *str)
 {
     if (!str) {
-        return std::vector<SVGLength>();
+        return {};
     }
 
     SVGLength::Unit unit;
-    float value;
-    float computed;
+    double value;
+    double computed;
     char *next = (char *) str;
     std::vector<SVGLength> list;
 
-    while (sp_svg_length_read_lff(next, &unit, &value, &computed, &next)) {
-
+    while (parse_number_with_unit(next, unit, value, computed, false, &next)) {
         SVGLength length;
         length.set(unit, value, computed);
         list.push_back(length);
-
-        while (next && *next &&
-               (*next == ',' || *next == ' ' || *next == '\n' || *next == '\r' || *next == '\t')) {
-            // the list can be comma- or space-separated, but we will be generous and accept
-            // a mix, including newlines and tabs
+        // Allow for a single comma in the number list between values
+        if (next && *next == ',') {
             next++;
         }
-
-        if (!next || !*next) {
-            break;
-        }
     }
-
     return list;
 }
 
-
-#define UVAL(a,b) (((unsigned int) (a) << 8) | (unsigned int) (b))
-
-static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next)
+/**
+ * Parse a number with an optional unit
+ *
+ * @arg ss - The string stream to read, will resposition to after last read value
+ * @returns unit - The unit, ususally an empty string
+ * @returns val - The value read in without adjustment
+ * @returns computed - The value read in with adjustment
+ * @arg abs - If true limits output to absolute units only
+ * @arg next - The char position after a successful read. Does not change if parsing failed.
+ *
+ * @returns true if a number and unit was parsed correctly and next was advanced.
+ */
+bool parse_number_with_unit(char const *str, SVGLength::Unit &unit, double &val, double &computed, bool abs, char **next)
 {
-/* note: this function is sometimes fed a string with several consecutive numbers, e.g. by sp_svg_length_list_read.
-So after the number, the string does not necessarily have a \0 or a unit, it might also contain a space or comma and then the next number!
-*/
-
     if (!str) {
-        return 0;
+        return false;
+    }
+    char *end = nullptr;
+    double value = g_ascii_strtod(str, &end);
+
+    // Parsing failed.
+    if (end == str || !std::isfinite(value)) {
+        return false;
     }
 
-    gchar const *e;
-    float const v = g_ascii_strtod(str, (char **) &e);
-    if (e == str) {
-        return 0;
+    // Collect the unit, no spaces are allowed after the number
+    std::string unit_str;
+    while (end && (*end == '%' || (*end >= 'a' && *end <= 'z') || (*end >= 'A' && *end <= 'Z'))) {
+        unit_str += *(end++);
+    }
+    // Trim the remaining spaces
+    while (end && (*end == ' ' || *end == '\n' || *end == '\r' || *end == '\t')) {
+        end++;
     }
 
-    if (!e[0]) {
-        /* Unitless */
-        if (unit) {
-            *unit = SVGLength::NONE;
+    static auto const &unit_table = Inkscape::Util::UnitTable::get();
+    // There might be a few bugs in UunitTable, parsing pxt as px and calling em and ex Absolute units
+    if (auto u = unit_table.getUnit(unit_str); unit_str == u->abbr.c_str()) {
+        if (abs && !(u->isAbsolute() && u->type != Inkscape::Util::UNIT_TYPE_FONT_HEIGHT) && unit_str.size()) {
+            return false;
         }
-        if (val) {
-            *val = v;
-        }
-        if (computed) {
-            *computed = v;
-        }
+        // If we expect to parse more, return that pointer. Otherwise fail.
         if (next) {
-            *next = nullptr; // no more values
+            *next = end;
+        } else if (*end) { // There were more letters, which is a failure
+            return false;
         }
-        return 1;
-    } else if (!g_ascii_isalnum(e[0])) {
-        /* Unitless or percent */
-        if (e[0] == '%') {
-            /* Percent */
-            if (e[1] && g_ascii_isalnum(e[1])) {
-                return 0;
-            }
-            if (unit) {
-                *unit = SVGLength::PERCENT;
-            }
-            if (val) {
-                *val = v * 0.01;
-            }
-            if (computed) {
-                *computed = v * 0.01;
-            }
-            if (next) {
-                *next = (char *) e + 1;
-            }
-            return 1;
-        } else if (g_ascii_isspace(e[0]) && e[1] && g_ascii_isalpha(e[1])) {
-            return 0; // spaces between value and unit are not allowed
-        } else {
-            /* Unitless */
-            if (unit) {
-                *unit = SVGLength::NONE;
-            }
-            if (val) {
-                *val = v;
-            }
-            if (computed) {
-                *computed = v;
-            }
-            if (next) {
-                *next = (char *) e;
-            }
-            return 1;
-        }
-    } else if (e[1] && !g_ascii_isalnum(e[2])) {
-        /* TODO: Allow the number of px per inch to vary (document preferences, X server
-         * or whatever).  E.g. don't fill in computed here, do it at the same time as
-         * percentage units are done. */
-        unsigned int const uval = UVAL(e[0], e[1]);
-        switch (uval) {
-            case UVAL('p','x'):
-                if (unit) {
-                    *unit = SVGLength::PX;
-                }
-                if (computed) {
-                    *computed = v;
-                }
-                break;
-            case UVAL('p','t'):
-                if (unit) {
-                    *unit = SVGLength::PT;
-                }
-                if (computed) {
-                    *computed = Inkscape::Util::Quantity::convert(v, "pt", "px");
-                }
-                break;
-            case UVAL('p','c'):
-                if (unit) {
-                    *unit = SVGLength::PC;
-                }
-                if (computed) {
-                    *computed = Inkscape::Util::Quantity::convert(v, "pc", "px");
-                }
-                break;
-            case UVAL('m','m'):
-                if (unit) {
-                    *unit = SVGLength::MM;
-                }
-                if (computed) {
-                    *computed = Inkscape::Util::Quantity::convert(v, "mm", "px");
-                }
-                break;
-            case UVAL('c','m'):
-                if (unit) {
-                    *unit = SVGLength::CM;
-                }
-                if (computed) {
-                    *computed = Inkscape::Util::Quantity::convert(v, "cm", "px");
-                }
-                break;
-            case UVAL('i','n'):
-                if (unit) {
-                    *unit = SVGLength::INCH;
-                }
-                if (computed) {
-                    *computed = Inkscape::Util::Quantity::convert(v, "in", "px");
-                }
-                break;
-            case UVAL('e','m'):
-                if (unit) {
-                    *unit = SVGLength::EM;
-                }
-                break;
-            case UVAL('e','x'):
-                if (unit) {
-                    *unit = SVGLength::EX;
-                }
-                break;
-            default:
-                /* Invalid */
-                return 0;
-                break;
-        }
-        if (val) {
-            *val = v;
-        }
-        if (next) {
-            *next = (char *) e + 2;
-        }
-        return 1;
-    }
 
-    /* Invalid */
-    return 0;
+        unit = (SVGLength::Unit)u->svgUnit();
+
+        // Percent is handled as it's own computed value (FIXME!)
+        if (unit == SVGLength::Unit::PERCENT) {
+            val = value / 100.0;
+            computed = val;
+            return true;
+        }
+        val = value;
+        computed = unit ? u->convert(value, "px") : value;
+        return true;
+    }
+    return false;
 }
 
-unsigned int sp_svg_length_read_ldd(gchar const *str, SVGLength::Unit *unit, double *value, double *computed)
-{
-    float a;
-    float b;
-    unsigned int r = sp_svg_length_read_lff(str, unit, &a, &b, nullptr);
-    if (r) {
-        if (value) {
-            *value = a;
-        }
-        if (computed) {
-            *computed = b;
-        }
-    }
-    return r;
-}
 
 std::string SVGLength::write() const
 {
@@ -504,41 +326,15 @@ bool SVGLength::fromString(const std::string &input, const std::string &default_
     return true;
 }
 
-void SVGLength::set(SVGLength::Unit u, float v)
+void SVGLength::set(SVGLength::Unit u, double v)
 {
     _set = true;
     unit = u;
-    Glib::ustring hack("px");
-    switch( unit ) {
-        case NONE:
-        case PX:
-        case EM:
-        case EX:
-        case PERCENT:
-            break;
-        case PT:
-            hack = "pt";
-            break;
-        case PC:
-            hack = "pc";
-            break;
-        case MM:
-            hack = "mm";
-            break;
-        case CM:
-            hack = "cm";
-            break;
-        case INCH:
-            hack = "in";
-            break;
-        default:
-            break;
-    }
     value = v;
-    computed =  Inkscape::Util::Quantity::convert(v, hack, "px");
+    computed = getUnit()->convert(v, "px");
 }
 
-void SVGLength::set(SVGLength::Unit u, float v, float c)
+void SVGLength::set(SVGLength::Unit u, double v, double c)
 {
     _set = true;
     unit = u;
@@ -546,7 +342,7 @@ void SVGLength::set(SVGLength::Unit u, float v, float c)
     computed = c;
 }
 
-void SVGLength::unset(SVGLength::Unit u, float v, float c)
+void SVGLength::unset(SVGLength::Unit u, double v, double c)
 {
     _set = false;
     unit = u;
@@ -573,40 +369,15 @@ void SVGLength::update(double em, double ex, double scale)
 
 double sp_svg_read_percentage(char const *str, double def)
 {
-    if (str == nullptr) {
-        return def;
-    }
-
-    char *u;
-    double v = g_ascii_strtod(str, &u);
-    while (isspace(*u)) {
-        if (*u == '\0') {
-            return v;
+    double value;
+    double computed;
+    SVGLength::Unit unit;
+    if (parse_number_with_unit(str, unit, value, computed, false)) {
+        if (unit == SVGLength::Unit::NONE || unit == SVGLength::Unit::PERCENT) {
+            return value;
         }
-        u++;
     }
-    if (*u == '%') {
-        v /= 100.0;
-    }
-
-    return v;
-}
-
-gchar const *sp_svg_length_get_css_units(SVGLength::Unit unit)
-{
-    switch (unit) {
-        case SVGLength::NONE: return "";
-        case SVGLength::PX: return "";
-        case SVGLength::PT: return "pt";
-        case SVGLength::PC: return "pc";
-        case SVGLength::MM: return "mm";
-        case SVGLength::CM: return "cm";
-        case SVGLength::INCH: return "in";
-        case SVGLength::EM: return "em";
-        case SVGLength::EX: return "ex";
-        case SVGLength::PERCENT: return "%";
-    }
-    return "";
+    return def;
 }
 
 bool svg_length_absolute_unit(SVGLength::Unit u)
@@ -622,15 +393,17 @@ std::string sp_svg_length_write_with_units(SVGLength const &length)
 {
     Inkscape::SVGOStringStream os;
     if (length.unit == SVGLength::PERCENT) {
-        os << 100*length.value << sp_svg_length_get_css_units(length.unit);
+        os << 100*length.value << length.getUnit()->abbr.c_str();
+    } else if (length.unit == SVGLength::PX) {
+        os << length.value;
     } else {
-        os << length.value << sp_svg_length_get_css_units(length.unit);
+        os << length.value << length.getUnit()->abbr.c_str();
     }
     return os.str();
 }
 
 
-void SVGLength::readOrUnset(gchar const *str, Unit u, float v, float c)
+void SVGLength::readOrUnset(gchar const *str, Unit u, double v, double c)
 {
     if (!read(str)) {
         unset(u, v, c);

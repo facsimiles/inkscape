@@ -95,11 +95,15 @@ def main():
     parser.add_argument('--cmp', default='path-comparison.svg', metavar='FILE', help='Output file for visualisation of path differences')
     parser.add_argument('--a', default='a.txt', metavar='FILE', help='Output file for original paths')
     parser.add_argument('--b', default='b.txt', metavar='FILE', help='Output file for new paths')
-    parser.add_argument('--inkscape', default='..', metavar='DIR', help='Inkscape project root directory')
+    parser.add_argument('--inkscape', default=None, metavar='DIR', help='Inkscape project root directory')
     args = parser.parse_args()
 
-    if not os.path.isdir(os.path.join(args.inkscape, '.git')):
-        sys.stderr.write(f"Project not found in '{args.inkscape}'\n\n")
+    path = args.inkscape
+    if not path:
+        path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+    if not os.path.isdir(os.path.join(path, '.git')):
+        sys.stderr.write(f"Project not found in '{path}'\n\n")
         sys.stderr.write("Please run this from the Inkscape project root directory, or pass it as --inkscape\n")
         sys.exit(-1)
 
@@ -120,7 +124,7 @@ def main():
             data[tag] = value
             if tag == "b":
                 count += 1
-                found(cmpf, af, bf, args.inkscape, count, **data)
+                found(cmpf, af, bf, path, count, **data)
 
         cmpf.write("</svg>\n")
 

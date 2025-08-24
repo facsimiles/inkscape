@@ -47,9 +47,9 @@ write_test_t write_tests[7] = {
     {"0", "0"},
     {"1", "1"},
     {"1 1 1 1", "1"},
-    {"1cm", "37.795277"},
-    {"4cm 2in", "151.18111 192"},
-    {"7 2 4cm", "7 2 151.18111"},
+    {"1cm", "37.795276"},
+    {"4cm 2in", "151.1811 192"},
+    {"7 2 4cm", "7 2 151.1811"},
     {"1,2,3", "1 2 3"},
 };
 read_test_t set_tests[3] = {
@@ -101,9 +101,9 @@ TEST(SvgBoxTest, testToFromString)
 {
     SVGBox box;
     ASSERT_TRUE(box.fromString("10mm 5", "mm", Geom::Scale(5)));
-    ASSERT_EQ(box.toString("mm", Geom::Scale(5)), "10mm 5.0000001mm");
+    ASSERT_EQ(box.toString("mm", Geom::Scale(5)), "10mm 5mm");
     // This result is mm to px (internal conversion) plus scale test.
-    ASSERT_EQ(box.write(), "7.5590553 3.7795277");
+    ASSERT_EQ(box.write(), "7.5590551 3.7795276");
 }
 
 TEST(SvgBoxTest, testConfine)

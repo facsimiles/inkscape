@@ -96,82 +96,64 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
 
 void SPSpiral::set(SPAttr key, gchar const* value) {
     /// \todo fixme: we should really collect updates
+    SVGLength::Unit unit;
+    double temp;
     switch (key) {
     case SPAttr::SODIPODI_CX:
-        if (!sp_svg_length_read_computed_absolute (value, &this->cx)) {
-        	this->cx = 0.0;
+        if (!parse_number_with_unit(value, unit, temp, this->cx, false)) {
+            this->cx = 0.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SPAttr::SODIPODI_CY:
-        if (!sp_svg_length_read_computed_absolute (value, &this->cy)) {
-        	this->cy = 0.0;
+        if (!parse_number_with_unit(value, unit, temp, this->cy, false)) {
+            this->cy = 0.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SPAttr::SODIPODI_EXPANSION:
-        if (value) {
-            /** \todo
-                         * FIXME: check that value looks like a (finite)
-                         * number. Create a routine that uses strtod, and
-                         * accepts a default value (if strtod finds an error).
-                         * N.B. atof/sscanf/strtod consider "nan" and "inf"
-                         * to be valid numbers.
-                         */
-        	this->exp = g_ascii_strtod (value, nullptr);
+        if (sp_svg_number_read_d(value, &this->exp)) {
             this->exp = CLAMP (this->exp, 0.0, 1000.0);
         } else {
-        	this->exp = 1.0;
+            this->exp = 1.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SPAttr::SODIPODI_REVOLUTION:
-        if (value) {
-        	this->revo = g_ascii_strtod (value, nullptr);
+        if (sp_svg_number_read_d(value, &this->revo)) {
             this->revo = CLAMP (this->revo, 0.05, 1024.0);
         } else {
-        	this->revo = 3.0;
+            this->revo = 3.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SPAttr::SODIPODI_RADIUS:
-        if (!sp_svg_length_read_computed_absolute (value, &this->rad)) {
-        	this->rad = MAX (this->rad, 0.001);
+        if (!parse_number_with_unit(value, unit, temp, this->rad, false)) {
+            this->rad = MAX (this->rad, 0.001);
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SPAttr::SODIPODI_ARGUMENT:
-        if (value) {
-        	this->arg = g_ascii_strtod (value, nullptr);
-            /** \todo
-                         * FIXME: We still need some bounds on arg, for
-                         * numerical reasons. E.g., we don't want inf or NaN,
-                         * nor near-infinite numbers. I'm inclined to take
-                         * modulo 2*pi.  If so, then change the knot editors,
-                         * which use atan2 - revo*2*pi, which typically
-                         * results in very negative arg.
-                         */
-        } else {
-        	this->arg = 0.0;
+        if (!sp_svg_number_read_d(value, &this->arg)) {
+            this->arg = 0.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SPAttr::SODIPODI_T0:
-        if (value) {
-        	this->t0 = g_ascii_strtod (value, nullptr);
-        	this->t0 = CLAMP (this->t0, 0.0, 0.999);
+        if (sp_svg_number_read_d(value, &this->t0)) {
+            this->t0 = CLAMP (this->t0, 0.0, 0.999);
             /** \todo
                          * Have shared constants for the allowable bounds for
                          * attributes. There was a bug here where we used -1.0

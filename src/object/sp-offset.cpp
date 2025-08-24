@@ -217,6 +217,8 @@ void SPOffset::set(SPAttr key, const gchar* value) {
     	refresh_offset_source(this);
     }
 
+    SVGLength::Unit unit;
+    double temp;
     /* fixme: we should really collect updates */
     switch (key)
     {
@@ -249,7 +251,7 @@ void SPOffset::set(SPAttr key, const gchar* value) {
 
         case SPAttr::INKSCAPE_RADIUS:
         case SPAttr::SODIPODI_RADIUS:
-            if (!sp_svg_length_read_computed_absolute (value, &this->rad)) {
+            if (!parse_number_with_unit(value, unit, temp, this->rad, true)) {
                 if (fabs (this->rad) < 0.01) {
                     this->rad = (this->rad < 0) ? -0.01 : 0.01;
                 }

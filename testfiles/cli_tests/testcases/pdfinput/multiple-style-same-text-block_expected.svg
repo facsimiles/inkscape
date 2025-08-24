@@ -4,9 +4,9 @@
 <svg
    version="1.1"
    id="svg1"
-   width="793.70135"
+   width="793.70133"
    height="1122.52"
-   viewBox="0 0 793.70135 1122.52"
+   viewBox="0 0 793.70133 1122.52"
    sodipodi:docname="multiple-style-same-text-block.pdf"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -31,7 +31,7 @@
        y="0"
        inkscape:label="1"
        id="page1"
-       width="793.70135"
+       width="793.70133"
        height="1122.52"
        margin="0"
        bleed="0" />
@@ -47,7 +47,7 @@
          id="tspan1"
          style="font-variant:normal;font-weight:normal;font-size:33.873px;font-family:'Latin Modern Sans';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
          x="0"
-         dx="0 0 0 10.602242"
+         dx="0 0 0 10.602243"
          y="0">SamSammington</tspan></text>
     <text
        id="text2"
@@ -56,7 +56,7 @@
          id="tspan2"
          style="font-style:oblique;font-variant:normal;font-weight:normal;font-size:17.2154px;font-family:'Latin Modern Sans';writing-mode:lr-tb;fill:#737373;fill-opacity:1;fill-rule:nonzero;stroke:none"
          x="0"
-         dx="0 0 0 0 0 0 0 0 0 0 5.3884325"
+         dx="0 0 0 0 0 0 0 0 0 0 5.3884327"
          y="0">CurriculumVitae</tspan></text>
     <path
        id="path2"
@@ -86,7 +86,7 @@
          id="tspan5"
          style="font-variant:normal;font-weight:normal;font-size:10.9091px;font-family:'Latin Modern Sans';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
          x="0"
-         dx="0 0 0 0 0 0 0 0.29454544 3.643636 0 0 0 0.29454544 0 3.643636 0 3.6327269"
+         dx="0 0 0 0 0 0 0 0.29454543 3.6436361 0 0 0 0.29454543 0 3.6436361 0 3.632727"
          y="0">Inkscapeschoolofdesign</tspan></text>
   </g>
   <metadata

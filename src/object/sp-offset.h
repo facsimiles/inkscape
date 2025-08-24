@@ -55,7 +55,7 @@ public:
 
     void *originalPath; ///< will be a livarot Path, just don't declare it here to please the gcc linker FIXME what?
     char *original;     ///< SVG description of the source path
-    float rad;          ///< offset radius
+    double rad;          ///< offset radius
 
     /// for interactive setting of the radius
     bool knotSet;

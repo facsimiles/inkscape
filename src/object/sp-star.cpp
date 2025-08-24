@@ -96,6 +96,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
 void SPStar::set(SPAttr key, const gchar* value) {
     SVGLength::Unit unit;
+    double temp;
 
     /* fixme: we should really collect updates */
     switch (key) {
@@ -111,10 +112,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
         break;
 
     case SPAttr::SODIPODI_CX:
-        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->center[Geom::X]) ||
-            (unit == SVGLength::EM) ||
-            (unit == SVGLength::EX) ||
-            (unit == SVGLength::PERCENT)) {
+        if (!parse_number_with_unit(value, unit, temp, this->center[Geom::X], true)) {
             this->center[Geom::X] = 0.0;
         }
 
@@ -122,10 +120,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
         break;
 
     case SPAttr::SODIPODI_CY:
-        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->center[Geom::Y]) ||
-            (unit == SVGLength::EM) ||
-            (unit == SVGLength::EX) ||
-            (unit == SVGLength::PERCENT)) {
+        if (!parse_number_with_unit(value, unit, temp, this->center[Geom::Y], true)) {
             this->center[Geom::Y] = 0.0;
         }
 
@@ -133,10 +128,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
         break;
 
     case SPAttr::SODIPODI_R1:
-        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->r[0]) ||
-            (unit == SVGLength::EM) ||
-            (unit == SVGLength::EX) ||
-            (unit == SVGLength::PERCENT)) {
+        if (!parse_number_with_unit(value, unit, temp, this->r[0], true)) {
             this->r[0] = 1.0;
         }
 
@@ -145,10 +137,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
         break;
 
     case SPAttr::SODIPODI_R2:
-        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->r[1]) ||
-            (unit == SVGLength::EM) ||
-            (unit == SVGLength::EX) ||
-            (unit == SVGLength::PERCENT)) {
+        if (!parse_number_with_unit(value, unit, temp, this->r[1], true)) {
             this->r[1] = 0.0;
         }
 

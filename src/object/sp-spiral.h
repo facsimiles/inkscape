@@ -42,12 +42,12 @@ public:
 	~SPSpiral() override;
     int tag() const override { return tag_of<decltype(*this)>; }
 
-	float cx, cy;
-	float exp;  ///< Spiral expansion factor
-	float revo; ///< Spiral revolution factor
-	float rad;  ///< Spiral radius
-	float arg;  ///< Spiral argument
-	float t0;
+	double cx, cy;
+	double exp;  ///< Spiral expansion factor
+	double revo; ///< Spiral revolution factor
+	double rad;  ///< Spiral radius
+	double arg;  ///< Spiral argument
+	double t0;
 
 	/* Lowlevel interface */
 	void setPosition(double cx, double cy, double exp, double revo, double rad, double arg, double t0);
