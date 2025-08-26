@@ -8,15 +8,11 @@ export DEBIAN_FRONTEND=noninteractive
 export APPIMAGE_EXTRACT_AND_RUN=1
 
 ########################################################################
-# Build Inkscape and install to appdir/
+# Install Inkscape to appdir/
 ########################################################################
 
-mkdir -p build && cd build
-cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DENABLE_BINRELOC=ON \
--DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_COMPILER_LAUNCHER=ccache \
--DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-ninja
-DESTDIR="$PWD/appdir" ninja install ; find appdir/
+cd build
+DESTDIR="$PWD/appdir" cmake --install . --prefix /usr ; find appdir/
 cp ./appdir/usr/share/icons/hicolor/256x256/apps/org.inkscape.Inkscape.png ./appdir/
 sed -i -e 's|^Icon=.*|Icon=org.inkscape.Inkscape|g' ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop # FIXME
 

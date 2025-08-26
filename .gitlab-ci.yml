@@ -38,11 +38,6 @@ variables:
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
 
-.cmake: &cmake
-- mkdir -p build/conf
-- cd build
-- cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
 # basic workflow setup:
 # - run pipelines for all branches without an open MR
 # - run MR pipeline only as soon as an MR is opened
@@ -88,13 +83,10 @@ inkscape:linux:
       - ccache/
   <<: *ccache_init
   script:
-    - *cmake
-    - make -j3 install
-    - make -j3 tests
-    - make -j3 unit_tests
-    #- cpack -G DEB
-    - rm -rf src _CPack_Packages # exclude from artifacts
-    - cd ..
+    - mkdir build
+    - cd build
+    - cmake .. -GNinja -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr
+    - ninja all tests
   artifacts:
     expire_in: 1 year
     paths:
@@ -107,17 +99,13 @@ appimage:linux:
   rules:
     - *do_not_run_for_schedules
     - *run_otherwise
-  cache:
-    key: "cache-appimage"
-    paths:
-      - ccache/
-  <<: *ccache_init
+  needs: ["inkscape:linux"]
   script:
     - bash -ex packaging/appimage/generate.sh
   artifacts:
     expire_in: 1 year
     paths:
-      - Inkscape*.AppImage*
+      - Inkscape*.AppImage
 
 
 inkscape:macos:
@@ -270,8 +258,6 @@ test:linux:
   rules:
     - *do_not_run_for_schedules
     - *run_otherwise
-  dependencies:
-    - inkscape:linux
   needs: ["inkscape:linux"]
   script:
     - sed -i '/<policy domain="coder" rights="none"/d' /etc/ImageMagick-6/policy.xml
