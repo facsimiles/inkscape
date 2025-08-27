@@ -14,6 +14,7 @@
 #include "util/gobjectptr.h"
 #include "display/control/canvas-item-ptr.h"
 #include <sigc++/scoped_connection.h>
+#include "display/control/canvas-item-squiggle.h"
 
 class SPObject;
 class SPItem;
@@ -30,7 +31,19 @@ struct MisspelledWord {
     Glib::ustring word;
     Text::Layout::iterator begin;
     Text::Layout::iterator end;
-    CanvasItemPtr<CanvasItemSquiggle> squiggle;
+    std::vector< CanvasItemPtr<CanvasItemSquiggle> > squiggle;
+
+    // Constructor for initialization
+    MisspelledWord(Glib::ustring w, Text::Layout::iterator b, Text::Layout::iterator e,
+                   std::vector<CanvasItemPtr<CanvasItemSquiggle>> s = {})
+        : word(std::move(w)), begin(b), end(e), squiggle(std::move(s)) {}
+
+    // Move-only
+    MisspelledWord() = default;
+    MisspelledWord(MisspelledWord&&) = default;
+    MisspelledWord& operator=(MisspelledWord&&) = default;
+    MisspelledWord(const MisspelledWord&) = delete;
+    MisspelledWord& operator=(const MisspelledWord&) = delete;
 };
 
 struct TrackedTextItem {
@@ -72,7 +85,7 @@ private:
     void checkTextItem(SPItem* item);
 
     // Create a squiggle for a misspelled word
-    void createSquiggle(MisspelledWord& misspelled, SPItem* item);
+    void createSquiggle(MisspelledWord& misspelled, SPItem* item, const Text::Layout* layout);
 
     // Object Modified handler
     void onObjModified(TrackedTextItem &tracked_item);

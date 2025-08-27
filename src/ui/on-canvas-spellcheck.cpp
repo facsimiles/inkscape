@@ -211,8 +211,8 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
             std::cout<<"Misspelled word: " << _word << std::endl;
             // auto squiggle = createSquiggle(item, _word, begin, end);
             // _misspelled_words.push_back({item, _word, begin, end, std::move(squiggle)});
-            misspelled_words.push_back({_word, begin, end, nullptr});
-            createSquiggle(misspelled_words.back(), item);
+            misspelled_words.push_back(MisspelledWord{_word, begin, end, {}});
+            createSquiggle(misspelled_words.back(), item, layout);
         }
         it = end;
     }
@@ -245,9 +245,8 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
 
 }
 
-void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled, SPItem* item)
+void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled, SPItem* item, const Text::Layout* layout)
 {
-    auto layout = te_get_layout(item);
     if (!layout) {
         return; // No layout available
     }
@@ -257,16 +256,32 @@ void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled, SPItem* item
         return; // Not enough points to draw a squiggle
     }
 
-    // Use the bottom left and bottom right corners for the squiggle
-    Geom::Point start_doc = points[3]; // bottom left
-    Geom::Point end_doc   = points[2]; // bottom right
+    // Initially get the bottom left and bottom right points
+    std::vector<Geom::Point> squiggle_points_temp;
+    for(int i=0; i<points.size()-3; i+=4)
+    {
+        squiggle_points_temp.push_back(points[i+3]);
+        squiggle_points_temp.push_back(points[i+2]);
+    }
 
-    // Create the squiggle (in document coordinates)
-    misspelled.squiggle = CanvasItemPtr<CanvasItemSquiggle>(
-        new Inkscape::CanvasItemSquiggle(_desktop->getCanvasSketch(), start_doc, end_doc)
-    );
-    misspelled.squiggle->set_color(SQUIGGLE_COLOR_RED);
-    misspelled.squiggle->set_visible(true);
+    // Replace Bottom Left and Bottom Right points with midpoints to create smooth squiggle
+    std::vector<Geom::Point> squiggle_points;
+    squiggle_points.push_back(squiggle_points_temp[0]);
+
+    for(int i=1; i<squiggle_points_temp.size()-1; i+=2)
+    {
+        squiggle_points.push_back((squiggle_points_temp[i]+squiggle_points_temp[i+1])/2);
+    }
+    squiggle_points.push_back(squiggle_points_temp.back());
+
+    // Create the squiggle segments between the points
+    for(int i=0; i<squiggle_points.size()-1; i++) {
+        misspelled.squiggle.push_back( CanvasItemPtr<CanvasItemSquiggle>(
+            new Inkscape::CanvasItemSquiggle(_desktop->getCanvasSketch(), squiggle_points[i], squiggle_points[i+1])
+        ));
+        misspelled.squiggle.back()->set_color(SQUIGGLE_COLOR_RED);
+        misspelled.squiggle.back()->set_visible(true);
+    }
 }
 
 void OnCanvasSpellCheck::onObjModified(TrackedTextItem &tracked_item)
@@ -346,9 +361,11 @@ void OnCanvasSpellCheck::ignoreOnce(SPItem *item, Text::Layout::iterator begin, 
                                  });
         if (mispelled_it != it->misspelled_words.end()) {
             // Remove the squiggle
-            if (mispelled_it->squiggle) {
-                mispelled_it->squiggle->set_visible(false);
-                mispelled_it->squiggle.reset();
+            if (mispelled_it->squiggle.size() > 0) {
+                for(auto &squiggle_part: mispelled_it->squiggle) {
+                    squiggle_part->set_visible(false);
+                }
+                mispelled_it->squiggle.clear();
             }
             // Remove the misspelled word from the list
             it->misspelled_words.erase(mispelled_it);
