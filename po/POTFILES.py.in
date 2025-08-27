@@ -22,11 +22,11 @@
 ../share/extensions/hershey.py
 ../share/extensions/hpgl2_input.py
 ../share/extensions/hpgl_output.py
-../share/extensions/image_embed.py
 ../share/extensions/image_extract.py
 ../share/extensions/ink2canvas_lib/svg.py
 ../share/extensions/inkex/bezier.py
 ../share/extensions/inkex/deprecated/deprecatedeffect.py
+../share/extensions/inkex/elements/_image.py
 ../share/extensions/inkex/elements/_parser.py
 ../share/extensions/inkex/elements/_selected.py
 ../share/extensions/inkex/extensions.py
