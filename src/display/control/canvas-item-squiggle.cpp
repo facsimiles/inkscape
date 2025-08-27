@@ -44,7 +44,7 @@ void CanvasItemSquiggle::_rebuild_squiggle()
     Geom::Point e = _end * aff;
 
     // Minimum length in canvas units to draw squiggle
-    constexpr double min_canvas_len = 20.0;
+    constexpr double min_canvas_len = 4.0;
     double len = Geom::L2(e - s);
 
     _squiggle_path.clear();
