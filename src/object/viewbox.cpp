@@ -326,25 +326,28 @@ void SPViewBox::write_preserveAspectRatio(Inkscape::XML::Node *repr) const
  */
 Geom::OptRect SPViewBox::get_paintbox(double width, double height, Geom::OptRect const &size) const
 {
-    if (aspect_align == SP_ASPECT_NONE || !size)
+    if (aspect_align == SP_ASPECT_NONE || !size) {
         return size;
+    }
 
     double scalex = size->width() / width;
     double scaley = size->height() / height;
     double scale = (aspect_clip == SP_ASPECT_MEET) ? std::min(scalex, scaley) : std::max(scalex, scaley);
     auto pbox = Geom::Rect::from_xywh(size->left(), size->top(), width * scale, height * scale);
-    double x, y = 0.0;
+    double x = 0.0, y = 0.0;
 
     /* Now place viewbox to requested position */
     switch (aspect_align) {
         case SP_ASPECT_XMAX_YMIN:
         case SP_ASPECT_XMAX_YMID:
         case SP_ASPECT_XMAX_YMAX:
-            x -= 0.5;
+            x -= 1;
+            break;
         case SP_ASPECT_XMID_YMIN:
         case SP_ASPECT_XMID_YMID:
         case SP_ASPECT_XMID_YMAX:
             x -= 0.5;
+            break;
         default:
             break;
     }
@@ -352,16 +355,18 @@ Geom::OptRect SPViewBox::get_paintbox(double width, double height, Geom::OptRect
         case SP_ASPECT_XMIN_YMAX:
         case SP_ASPECT_XMID_YMAX:
         case SP_ASPECT_XMAX_YMAX:
-            y -= 0.5;
+            y -= 1;
+            break;
         case SP_ASPECT_XMIN_YMID:
         case SP_ASPECT_XMID_YMID:
         case SP_ASPECT_XMAX_YMID:
             y -= 0.5;
+            break;
         default:
             break;
     }
     return pbox * Geom::Translate(x * (pbox.width() - size->width()),
-                                  y * (pbox.height() - size->height())); 
+                                  y * (pbox.height() - size->height()));
 }
 
 /*
