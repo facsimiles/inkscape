@@ -445,16 +445,23 @@ RegisteredColorPicker::on_changed(Colors::Color const &color)
         local_repr = dt->getNamedView()->getRepr();
         local_doc = dt->getDocument();
     }
-    bool alpha = _akey == _ckey + "_opacity_LPE"; //For LPE parameter we want stored with alpha
-    auto c = color.toString(alpha);
+    if (_setter) {
+        _setter(local_repr, color);
 
-    {
-        DocumentUndo::ScopedInsensitive _no_undo(local_doc);
-        local_repr->setAttribute(_ckey, c);
-        local_repr->setAttributeCssDouble(_akey.c_str(), color.getOpacity());
+        local_doc->setModifiedSinceSave();
+        DocumentUndo::maybeDone(local_doc, "repr-color-change", "registered-widget.cpp: RegisteredColorPicker::on_changed", ""); // TODO Fix description.
     }
-    local_doc->setModifiedSinceSave();
-    DocumentUndo::done(local_doc, "registered-widget.cpp: RegisteredColorPicker::on_changed", ""); // TODO Fix description.
+    else {
+        bool alpha = _akey == _ckey + "_opacity_LPE"; //For LPE parameter we want stored with alpha
+        auto c = color.toString(alpha);
+        {
+            DocumentUndo::ScopedInsensitive _no_undo(local_doc);
+            local_repr->setAttribute(_ckey, c);
+            local_repr->setAttributeCssDouble(_akey.c_str(), color.getOpacity());
+        }
+        local_doc->setModifiedSinceSave();
+        DocumentUndo::done(local_doc, "registered-widget.cpp: RegisteredColorPicker::on_changed", ""); // TODO Fix description.
+    }
 
     _wr->setUpdating(false);
 }

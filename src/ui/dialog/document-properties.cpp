@@ -1810,7 +1810,7 @@ GridWidget::GridWidget(SPGrid *grid)
     _grid_color->setCustomSetter([](Inkscape::XML::Node* node, Colors::Color color) {
         // major color
         node->setAttribute("empcolor", color.toString(false));
-        node->setAttributeSvgDouble("empopacity", color.getOpacity());
+        node->setAttributeCssDouble("empopacity", color.getOpacity());
 
         // minor color at half opacity
         color.addOpacity(0.5);
