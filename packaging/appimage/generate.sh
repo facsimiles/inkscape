@@ -54,7 +54,7 @@ apt_bundle \
     python3-certifi \
     python3-idna \
     python3-msgpack \
-    python3-lockfile \
+    python3-filelock \
     python3-cssselect \
     python3-webencodings \
     python3-tinycss2 \
@@ -63,7 +63,10 @@ apt_bundle \
     python3-bs4 \
     python3-gi \
     python3-gi-cairo \
+    python3-cairo \
     python3-pil \
+    python3-pyparsing \
+    python3-serial \
     python3-zstandard \
     gir1.2-glib-2.0 \
     gir1.2-gtk-4.0 \

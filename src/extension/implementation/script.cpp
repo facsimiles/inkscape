@@ -563,7 +563,7 @@ void Script::effect(Inkscape::Extension::Effect *module, ExecutionEnv *execution
 
         Glib::ustring empty;
         file_listener outfile;
-        execute(command, {}, empty, outfile, false, module->pipe_diffs);
+        execute(command, {}, empty, outfile, module->ignore_stderr, module->pipe_diffs);
 
         // Hack to allow for extension manager to reload extensions
         // TODO: Find a better way to do this, e.g. implement an action and have extensions (or users)
@@ -732,6 +732,8 @@ int Script::execute(std::list<std::string> const &in_command, std::list<std::str
                     Glib::ustring const &filein, file_listener &fileout, bool ignore_stderr, bool pipe_diffs)
 {
     g_return_val_if_fail(!in_command.empty(), 0);
+
+    pump_events();
 
     std::vector<std::string> argv;
 
