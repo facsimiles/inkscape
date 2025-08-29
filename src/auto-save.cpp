@@ -30,6 +30,7 @@
 #include <sigc++/scoped_connection.h>
 #include "io/sys.h"
 #include "xml/repr.h"
+#include "util/trim.h"
 
 #ifdef _WIN32
 #include <process.h>
@@ -109,7 +110,12 @@ AutoSave::save()
         ++docnum; // Give each document a unique number.
 
         if (document->isModifiedSinceAutoSave()) {
-            std::string base_name = "automatic-save-" + std::to_string(uid);
+            // Base name: document filename + user ID
+            Glib::ustring doc_name = (document->getDocumentFilename()
+                    ? Glib::path_get_basename(document->getDocumentFilename())
+                    : "automatic-save");
+            Util::trim(doc_name, ".svg");
+            std::string base_name = doc_name + "-" + std::to_string(uid);
 
             // The following we do for each document (rather wasteful...) so that
             // we make room for each document that needs saving. We probably should
