@@ -4,7 +4,13 @@
 
 This page explains how to compile Inkscape on Windows. We use [**MSYS2**](http://www.msys2.org/), which provides all necessary build tools and dependencies.
 
-## Installing Build Dependencies Easily
+## Installing MSYS2 and the Build Dependencies
+
+You have two options:
+- Method 1: By a single click on a batch file install the most recent version of MSYS2 with all build dependencies included. This will offer you a lot of flexibility but builds may brake since MSYS2 uses a rolling release model so the Inkscape source code may not compile against the most recent libraries offered by the installed MSYS2 environment. Alternatively, ...
+- ... Method 2: install a pre-packaged version of the build environment (also used by the GitLab CI tests). By this method it is ensured that you build against matching versions of all libraries used by Inkscape.
+
+### Method 1: Single Click - Install MSYS2 together with all Build Dependencies
 
 In the basic case, you can install all the needed tools with a one-click script. This is supported for Inkscape 1.5 or newer, running on standard 64bit Windows (not ARM). In other cases, please see below "Installing Build Dependencies Manually".
 
@@ -17,11 +23,21 @@ In the basic case, you can install all the needed tools with a one-click script.
     *   Confirm Administrator rights if Windows asks you to
 3.  Wait a few hours until the script says Done. Then you can compile Inkscape as described below.
 
+### Method 2: Download Pre-packaged MSYS2 together with all Build Dependencies
+
+Identify the Inkscape version you would like to compile, e.g. Inkscape 1.5.x on branch `master` or Inkscape 1.4.x on branch `1.4.x`.
+
+1. Go to [https://gitlab.com/inkscape/infra/inkscape-ci-windows/-/releases](https://gitlab.com/inkscape/infra/inkscape-ci-windows/-/releases).
+2. Navigate through the list of releases until you find the most recent one matching the Inkscape version you would like to build, e.g. `r118 for Inkscape 1.5.x` or `r88 for Inkscape 1.4.x`.
+3. Under `Assets`-`Other` download the `.7z` package. If there are multiple files offered use the one containing `ucrt64`.
+4. Unpack the downloaded archive to the root of a drive (e.g. `C:\ink88` or `D:\ink118`)
+5. Double click on `ucrt64.exe` (!!!) in the MSYS2 installation folder crated in the previous step to open a shell. **Do not use any of the other shells!** All commands in the next sections must be executed in this **UCRT64** shell. There does not exist a start menu entry!
+
 ## Obtaining Inkscape Source
 
 As MSYS2 provides the version control software Git, you do not need to download it separately.
 
-Open the MSYS2 **UCRT64** (!!!) shell from the start menu.
+Open the MSYS2 **UCRT64** (!!!) shell from the start menu (if you installed MSYS2 via the one-click-method) or double click on `ucrt64.exe` (!!!) in the MSYS2 installation folder (e.g. C:\ink88 if you used the pre-packaged MSYS2 environment).
 
 Run the command
 
@@ -40,7 +56,7 @@ git pull --recurse-submodules
 
 ## Building Inkscape with MSYS2
 
-*   **Read carefully:** To compile Inkscape open the MSYS2 **UCRT64** (!!!) shell from the start menu (or launch C:\\msys64\\ucrt64.exe)
+*   **Read carefully:** To compile Inkscape open the MSYS2 **UCRT64** (!!!) shell from the start menu (or launch `C:\\msys64\\ucrt64.exe`)
 *   ⚠️ _Warning:_ Using the right shell type is important so that the right type of Inkscape is built and the right dependencies are installed:
     *   UCRT64 is the standard for compiling 64-bit Inkscape
     *   (MinGW 64bit / 32bit was used until mid 2023 to build 64/32bit versions. ARM may be used in the future to build for ARM processors.)
@@ -78,7 +94,7 @@ ninja install
 # save some time (the "install" target includes the default target)
 ```
 
-_**That's it!**_  
+_**That's it!**_
 Afterwards, you should have a complete binary distribution of Inkscape in the folder "build/inkscape/" that can be run on any machine running Windows 8.1 or later.
 
 ## Running Inkscape
@@ -125,7 +141,7 @@ Re-run CMake using `rm -rf CMakeCache.txt && cmake -G Ninja ..`.
 
 The first command will delete cached and potentially stale info from the previous run, the second command will run CMake again to update the ninja files.
 
-  
+
 ☎ _If you can't solve your issue with the information above, please [ask in the chat](https://chat.inkscape.org/channel/team_devel) or [report a bug](https://inkscape.org/report)_.
 
 ## Installing Build Dependencies Manually
@@ -135,8 +151,8 @@ The first command will delete cached and potentially stale info from the previou
 For older versions before 1.5.0, or if you do not want the automatic installation, you can also execute all the installation steps by hand:
 
 *   **Step 1** — Install MSYS2
-    1.  Download the installer from the [MSYS2 homepage](http://www.msys2.org/) (a 64-bit version of Windows 7 or later is required to run MSYS2 and build Inkscape).  
-        Start the installation and follow the instructions on screen. Use the standard installation directory `C:\msys64` .  
+    1.  Download the installer from the [MSYS2 homepage](http://www.msys2.org/) (a 64-bit version of Windows 7 or later is required to run MSYS2 and build Inkscape).
+        Start the installation and follow the instructions on screen. Use the standard installation directory `C:\msys64` .
         Wait until it finishes.
     2.  Start an MSYS2 **MSYS** shell from the start menu (or launch "msys2.exe" in the installation directory).
     3.  Execute the command `pacman -Syuu`. This will start a full system upgrade and ensures that you have the latest versions of all core libraries.
@@ -145,7 +161,7 @@ For older versions before 1.5.0, or if you do not want the automatic installatio
     1.  Close the MSYS2 **MSYS** shell.
     2.  **Read carefully:** Start an MSYS2 **UCRT64** (!!!) shell from the start menu (or launch "ucrt64.exe" in the installation directory). Using the right shell type is important for ensuring that the correct dependencies are installed.
     3.  **Double-check:** The shell window must show "**UCRT64**" in purple text. If it shows "MSYS" then you have the wrong shell, please go back.
-    4.  Execute the command `curl [https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh](https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh) | bash`  
+    4.  Execute the command `curl [https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh](https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh) | bash`
         (The command downloads and runs the script [msys2installdeps.sh](https://gitlab.com/inkscape/inkscape/blob/master/buildtools/msys2installdeps.sh). Alternatively, you can copy-paste the script into the console or download it, change to the folder containing the file and type `./msys2installdeps.sh`. If you already have a copy of the Inkscape source it should also be included in the "buildtools" folder.)
     5.  Relax and take a break, as this may take some time (a few minutes at best, but it can take significantly longer if you have a slow internet connection or the server load is high).
 *   **Step 3** - Install dependencies for creating the installer packages (.EXE, .MSI, .7Z) This step is optional.
