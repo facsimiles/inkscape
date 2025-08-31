@@ -249,7 +249,7 @@ void DialogNotebook::build_dialog_menu(UI::Widget::PopoverMenu& menu) {
                     // open dialog and dock it here if request comes from the main window and dialog was not floating;
                     // if we are in a floating dialog window, then do not dock new dialog here, it is not useful
                     bool floating = DialogManager::singleton().should_open_floating(key);
-                    container->new_dialog(key, container == _container && !floating ? this : nullptr);
+                    container->new_dialog(key, container == _container && !floating ? this : nullptr, true);
                 }
             }
         };

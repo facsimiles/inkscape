@@ -47,7 +47,7 @@ public:
 
     // Dialog-related functions
     void new_dialog(const Glib::ustring& dialog_type);
-    void new_dialog(const Glib::ustring& dialog_type, DialogNotebook* notebook);
+    void new_dialog(const Glib::ustring& dialog_type, DialogNotebook* notebook, bool ensure_visibility);
     DialogWindow* new_floating_dialog(const Glib::ustring& dialog_type);
     bool has_dialog_of_type(DialogBase *dialog);
     DialogBase *get_dialog(const Glib::ustring& dialog_type);

@@ -177,7 +177,7 @@ void DialogContainer::new_dialog(const Glib::ustring& dialog_type)
     if (dockable == PREFS_DIALOGS_BEHAVIOR_FLOATING || floating) {
         new_floating_dialog(dialog_type);
     } else {
-        new_dialog(dialog_type, nullptr);
+        new_dialog(dialog_type, nullptr, true);
     }
 
     if (DialogBase* dialog = find_existing_dialog(dialog_type)) {
@@ -196,9 +196,11 @@ DialogBase* DialogContainer::find_existing_dialog(const Glib::ustring& dialog_ty
 /**
  * Overloaded new_dialog
  */
-void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNotebook* notebook)
+void DialogContainer::new_dialog(const Glib::ustring& dialog_type, DialogNotebook* notebook, bool ensure_visibility)
 {
-    _columns->ensure_multipaned_children();
+    if (ensure_visibility) {
+        _columns->ensure_multipaned_children();
+    }
 
     // Limit each container to containing one of any type of dialog.
     if (DialogBase* existing_dialog = find_existing_dialog(dialog_type)) {
@@ -381,7 +383,7 @@ bool DialogContainer::recreate_dialogs_from_state(InkscapeWindow* inkscape_windo
                             notebook = nb.get();
                             column->append(std::move(nb));
                         }
-                        active_container->new_dialog(type, notebook);
+                        active_container->new_dialog(type, notebook, true);
                     } else {
                         std::cerr << "recreate_dialogs_from_state: invalid dialog type: " << type.raw() << std::endl;
                     }
@@ -628,6 +630,8 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
             if (!active_container || !active_columns) {
                 continue;
             }
+
+            active_columns->ensure_multipaned_children();
         }
 
         // Step 3.2: for each column, load its state
@@ -687,7 +691,7 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
 
                     if (dialog_data.find(type) != dialog_data.end()) {
                         if (is_dockable) {
-                            active_container->new_dialog(type, notebook);
+                            active_container->new_dialog(type, notebook, false);
                         } else {
                             dialog_window = create_new_floating_dialog(type, false);
                         }
@@ -709,6 +713,12 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
                             nb->set_current_page(page);
                         }
                     }
+                }
+            }
+            if (column) {
+                if (keyfile->has_key(column_group_name, "Collapsed")) {
+                    auto is_collapsed = keyfile->get_boolean(column_group_name, "Collapsed");
+                    column->set_visible(!is_collapsed);
                 }
             }
         }
@@ -888,6 +898,7 @@ Glib::RefPtr<Glib::KeyFile> DialogContainer::save_container_state()
             Glib::ustring group_name = "Window" + std::to_string(window_idx) + "Column" + std::to_string(column_idx);
             int notebook_count = 0; // non-empty notebooks count
             int width = multipanes[column_idx]->get_allocated_width();
+            auto collapsed = !multipanes[column_idx]->get_visible();
 
             // Step 3.1.0: for each notebook, get its dialogs' types
             for (auto const &columns_widget : multipanes[column_idx]->get_multipaned_children()) {
@@ -915,6 +926,7 @@ Glib::RefPtr<Glib::KeyFile> DialogContainer::save_container_state()
             }
 
             keyfile->set_integer(group_name, "ColumnWidth", width);
+            keyfile->set_boolean(group_name, "Collapsed", collapsed);
 
             // Step 3.1.2: Save the column's data
             keyfile->set_integer(group_name, "NotebookCount", notebook_count);
