@@ -317,15 +317,7 @@ void SelectTool::sp_select_context_cycle_through_items(Selection *selection, Scr
     if ( cycling_items.empty() )
         return;
 
-    Inkscape::DrawingItem *arenaitem;
-
-    if(cycling_cur_item) {
-        arenaitem = cycling_cur_item->get_arenaitem(_desktop->dkey);
-        arenaitem->setOpacity(0.3);
-    }
-
     // Find next item and activate it
-
 
     std::vector<SPItem *>::iterator next = cycling_items.end();
 
@@ -360,6 +352,17 @@ void SelectTool::sp_select_context_cycle_through_items(Selection *selection, Scr
                 --next;
             }
         }
+    }
+    else {
+        // ignore no-scroll that mouse driver can deliver
+        return;
+    }
+
+    Inkscape::DrawingItem *arenaitem;
+
+    if (cycling_cur_item) {
+        arenaitem = cycling_cur_item->get_arenaitem(_desktop->dkey);
+        arenaitem->setOpacity(0.3);
     }
 
     cycling_cur_item = *next;
