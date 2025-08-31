@@ -56,11 +56,6 @@ Cairo::RefPtr<Cairo::ImageSurface> create_separator(double alpha, int width, int
     height *= device_scale;
     auto surface = Cairo::ImageSurface::create(Cairo::Surface::Format::ARGB32, width, height);
     auto ctx = Cairo::Context::create(surface);
-    if (device_scale & 1) { // pixel grid fitting
-        Cairo::Matrix transform;
-        transform.translate(0.5, 0.5);
-        ctx->set_matrix(transform);
-    }
     auto x = 0.0;
     ctx->set_source_rgba(0.5, 0.5, 0.5, alpha);
     auto mid = height / 2;
