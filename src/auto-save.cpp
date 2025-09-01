@@ -105,15 +105,18 @@ AutoSave::save()
 
     int docnum = 0;
     int autosave_max = prefs->getInt("/options/autosave/max", 10);
+    std::string preset_name = "autosave";
+
+    // Remove old files over the max autosave number
     for (auto document : documents) {
 
         ++docnum; // Give each document a unique number.
 
         if (document->isModifiedSinceAutoSave()) {
             // Base name: document filename + user ID
-            Glib::ustring doc_name = (document->getDocumentFilename()
-                    ? Glib::path_get_basename(document->getDocumentFilename())
-                    : "automatic-save");
+            Glib::ustring doc_name =
+                (document->getDocumentFilename() ? Glib::path_get_basename(document->getDocumentFilename())
+                                                 : "untitled");
             Util::trim(doc_name, ".svg");
             std::string base_name = doc_name + "-" + std::to_string(uid);
 
@@ -131,7 +134,7 @@ AutoSave::save()
             // Delete oldest files.
             int count = 0;
             for (auto &file_name : file_names) {
-                if (file_name.compare(0, base_name.size(), base_name) == 0) {
+                if (file_name.compare(0, preset_name.size(), preset_name) == 0) {
                     ++count;
                     if (count >= autosave_max) {
                         // Delete (making room for one more).
@@ -146,7 +149,8 @@ AutoSave::save()
 
             // Construct save file path
             // datetime MUST happen first, otherwise the above sorting will fail
-            std::string filename = base_name + "-" + datetime.str() + "-" + std::to_string(pid) + "-" + std::to_string(docnum) + ".svg";
+            std::string filename = preset_name + "-" + datetime.str() + "-" + base_name + "-" + std::to_string(pid) +
+                                   "-" + std::to_string(docnum) + ".svg";
             std::string path = Glib::build_filename(autosave_dir, filename.c_str());
 
             // Try to save the file
