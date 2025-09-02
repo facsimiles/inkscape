@@ -1650,12 +1650,11 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
   GfxColor color0M, color1M, colorM0, colorM1, colorMM;
   GfxColor colors2[4];
   double functionColorDelta = colorDeltas[pdfFunctionShading-1];
-  const double *matrix;
   double xM, yM;
   int nComps, i, j;
 
   nComps = shading->getColorSpace()->getNComps();
-  matrix = shading->getMatrix();
+  const auto& matrix = shading->getMatrix();
 
   // compare the four corner colors
   for (i = 0; i < 4; ++i) {

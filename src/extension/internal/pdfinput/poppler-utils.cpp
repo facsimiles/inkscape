@@ -38,6 +38,10 @@ Geom::Affine ctmToAffine(const double *ctm)
     return Geom::Affine(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 }
 
+Geom::Affine ctmToAffine(const std::array<double, 6>& ctm) {
+    return ctmToAffine(ctm.data());
+}
+
 void ctmout(const char *label, const double *ctm)
 {
     std::cout << "C:" << label << ":" << ctm[0] << "," << ctm[1] << "," << ctm[2] << "," << ctm[3] << "," << ctm[4]
