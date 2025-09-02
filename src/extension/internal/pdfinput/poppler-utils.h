@@ -13,6 +13,7 @@
 #ifndef POPPLER_UTILS_H
 #define POPPLER_UTILS_H
 
+#include <array>
 #include <map>
 #include <memory>
 #include <string>
@@ -36,7 +37,10 @@ class Ref;
 class XRef;
 
 Geom::Affine stateToAffine(GfxState *state);
+// this function is for Poppler older than v25.09.0
 Geom::Affine ctmToAffine(const double *ctm);
+// this flavor is for Poppler v25.09.0 and above
+Geom::Affine ctmToAffine(const std::array<double, 6>& ctm);
 
 void ctmout(const char *label, const double *ctm);
 void affout(const char *label, Geom::Affine affine);

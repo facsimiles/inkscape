@@ -1136,7 +1136,7 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
     pattern_node->setAttribute("patternUnits", "userSpaceOnUse");
     // Set pattern tiling
     // FIXME: don't ignore XStep and YStep
-    const double *bbox = tiling_pattern->getBBox();
+    const auto& bbox = tiling_pattern->getBBox();
     pattern_node->setAttributeSvgDouble("x", 0.0);
     pattern_node->setAttributeSvgDouble("y", 0.0);
     pattern_node->setAttributeSvgDouble("width", bbox[2] - bbox[0]);
@@ -1367,7 +1367,7 @@ void SvgBuilder::updateFont(GfxState *state, std::shared_ptr<CairoFont> cairo_fo
 
     auto new_font_size = state->getFontSize();
     if (font->getType() == fontType3) {
-        const double *font_matrix = font->getFontMatrix();
+        const auto& font_matrix = font->getFontMatrix();
         if (font_matrix[0] != 0.0) {
             new_font_size *= font_matrix[3] / font_matrix[0];
         }
