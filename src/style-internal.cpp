@@ -2120,7 +2120,7 @@ const Glib::ustring SPIFilter::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
     if (this->href && this->href->getURI()) return this->href->getURI()->cssStr();
-    return Glib::ustring("");
+    return Glib::ustring("none");
 }
 
 void
