@@ -64,9 +64,11 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
       _pathvector_nodesatellites(nullptr)
 {
     // fix legacy < 1.2:
-    const gchar * satellites_param = getLPEObj()->getAttribute("satellites_param");
-    if (satellites_param){
-        getLPEObj()->setAttribute("nodesatellites_param", satellites_param);
+    if (const gchar * satellites_param = getLPEObj()->getAttribute("satellites_param")){
+        if (!(getLPEObj()->getAttribute("nodesatellites_param"))) {
+            getLPEObj()->setAttribute("nodesatellites_param", satellites_param);
+        }
+        getLPEObj()->removeAttribute("satellites_param");
     };
     registerParameter(&nodesatellites_param);
     registerParameter(&radius);
@@ -151,7 +153,8 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     nodesatellite.setIsTime(flexible);
     nodesatellite.setHasMirror(true);
     nodesatellite.setHidden(hide_knots);
-    _pathvector_nodesatellites->recalculateForNewPathVector(pathv, nodesatellite);
+    _pathvector_nodesatellites->setDefaultNodeSatellite(nodesatellite);
+    _pathvector_nodesatellites->adjustForNewPath(pathv);
     nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites);
 }
 
@@ -340,7 +343,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         if (!_pathvector_nodesatellites) {
             _pathvector_nodesatellites = new PathVectorNodeSatellites();
         }
-        if (is_load || _adjust_path) {
+        if (_adjust_path) {
             double power = radius;
             if (!flexible) {
                 power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), "px") / getSPDoc()->getDocumentScale()[Geom::X];
@@ -361,7 +364,8 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             nodesatellite.setHasMirror(true);
             nodesatellite.setHidden(hide_knots);
             _pathvector_nodesatellites->setNodeSatellites(nodesatellites);
-            _pathvector_nodesatellites->recalculateForNewPathVector(pathv, nodesatellite);
+            _pathvector_nodesatellites->setDefaultNodeSatellite(nodesatellite);
+            _pathvector_nodesatellites->adjustForNewPath(pathv);
             nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true);
             nodesatellites_param.reloadKnots();
         } else {
