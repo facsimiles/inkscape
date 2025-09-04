@@ -569,6 +569,10 @@ public:
         _successor = successor;
     }
 
+    /// Tell whether the other object is, for all practical purposes, identical to this one.
+    bool isEquivalent(SPObject const &other) const { return _isEquivalent(other); }
+
+    // FIXME: the three methods below are a hack; remove them.
     /**
      * Indicates that another object supercedes temporaty this one.
      */
@@ -852,9 +856,10 @@ private:
      */
     Glib::ustring textualContent() const;
 
+    virtual bool _isEquivalent(SPObject const &) const { return false; }
+
     /* Real handlers of repr signals */
 
-private:
     // XML::NodeObserver functions
     void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark key, Inkscape::Util::ptr_shared oldval,
                                 Inkscape::Util::ptr_shared newval) final;

@@ -80,7 +80,6 @@
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
 #include "object/sp-root.h"
-#include "object/sp-symbol.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
 #include "util/units.h"
@@ -2012,204 +2011,69 @@ void SPDocument::setModifiedSinceSave(bool modified)
     _saved_or_modified_signal.emit();
 }
 
-/**
- * Paste SVG defs from the document retrieved from the clipboard or imported document into the active document.
- * @param clipdoc The document to paste.
- * @pre @c clipdoc != NULL and pasting into the active document is possible.
- */
-void SPDocument::importDefs(SPDocument *source)
+void SPDocument::importDefs(SPDocument &source)
 {
-    Inkscape::XML::Node *root = source->getReprRoot();
-    Inkscape::XML::Node *target_defs = this->getDefs()->getRepr();
-    std::vector<Inkscape::XML::Node const *> defsNodes = sp_repr_lookup_name_many(root, "svg:defs");
+    prevent_id_clashes(&source, this);
 
-    prevent_id_clashes(source, this);
-
-    for (auto & defsNode : defsNodes) {
-       _importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
+    for (auto defsNode : sp_repr_lookup_name_many(source.rroot, "svg:defs")) {
+        _importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode));
     }
 }
 
-void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs)
+/** Import all children of the defs_to_import into the defs of this document.
+ *
+ * @pre There are no ID clashes between this document and source_document.
+ *
+ * @param[in,out] source_document The document from which to import defs.
+ * @param[in,out] defs_to_import  A specific <defs> node whose children to import.
+ *
+ * If a resource in the source_document's defs is identical to a resource we already have, we simply change the ID of
+ * this resource in the source_document to match the ID of the equivalent resource in this document. After this
+ * operation, the IDs will no longer be unique between our document and the source document. However, objects that were
+ * referencing the resource within the source_document will be correctly repointed to the equivalent resource in our
+ * <defs>, so these references will still work after these objects are imported into our document.
+ */
+void SPDocument::_importDefsNode(SPDocument &source_document, Inkscape::XML::Node *defs_to_import)
 {
-    int stagger=0;
-
-    /*  Note, "clipboard" throughout the comments means "the document that is either the clipboard
-        or an imported document", as importDefs is called in both contexts.
-
-        The order of the records in the clipboard is unpredictable and there may be both
-        forward and backwards references to other records within it.  There may be definitions in
-        the clipboard that duplicate definitions in the present document OR that duplicate other
-        definitions in the clipboard.  (Inkscape will not have created these, but they may be read
-        in from other SVG sources.)
-
-        There are 3 passes to clean this up:
-
-        In the first find and mark definitions in the clipboard that are duplicates of those in the
-        present document.  Change the ID to "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF_XXXXXXXXX".
-        (Inkscape will not reuse an ID, and the XXXXXXXXX keeps it from automatically creating new ones.)
-        References in the clipboard to the old clipboard name are converted to the name used
-        in the current document.
-
-        In the second find and mark definitions in the clipboard that are duplicates of earlier
-        definitions in the clipbard.  Unfortunately this is O(n^2) and could be very slow for a large
-        SVG with thousands of definitions.  As before, references are adjusted to reflect the name
-        going forward.
-
-        In the final cycle copy over those records not marked with that ID.
-
-        If an SVG file uses the special ID it will cause problems!
-
-        If this function is called because of the paste of a true clipboard the caller will have passed in a
-        COPY of the clipboard items.  That is good, because this routine modifies that document.  If the calling
-        behavior ever changes, so that the same document is passed in on multiple pastes, this routine will break
-        as in the following example:
-        1.  Paste clipboard containing B same as A into document containing A.  Result, B is dropped
-        and all references to it will point to A.
-        2.  Paste same clipboard into a new document.  It will not contain A, so there will be unsatisfied
-        references in that window.
-    */
-
-    std::string DuplicateDefString = "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF";
-
-    /* First pass: remove duplicates in clipboard of definitions in document */
-    for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        if(def->type() != Inkscape::XML::NodeType::ELEMENT_NODE)continue;
-        /* If this  clipboard has been pasted into one document, and is now being pasted into another,
-        or pasted again into the same, it will already have been processed.  If we detect that then
-        skip the rest of this pass. */
-        Glib::ustring defid = def->attribute("id");
-        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )break;
-
-        SPObject *src = source->getObjectByRepr(def);
-
-        // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
-        auto s_gr = cast<SPGradient>(src);
-        auto s_lpeobj = cast<LivePathEffectObject>(src);
-        if (src && (s_gr || s_lpeobj)) {
-            for (auto& trg: getDefs()->children) {
-                auto t_gr = cast<SPGradient>(&trg);
-                if (src != &trg && s_gr && t_gr) {
-                    if (s_gr->isEquivalent(t_gr)) {
-                        // Change object references to the existing equivalent gradient
-                        Glib::ustring newid = trg.getId();
-                        if (newid != defid) { // id could be the same if it is a second paste into the same document
-                            change_def_references(src, &trg);
-                        }
-                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                        def->setAttribute("id", longid);
-                        g_free(longid);
-                        // do NOT break here, there could be more than 1 duplicate!
-                    }
-                }
-                auto t_lpeobj = cast<LivePathEffectObject>(&trg);
-                if (src != &trg && s_lpeobj && t_lpeobj) {
-                    if (t_lpeobj->is_similar(s_lpeobj)) {
-                        // Change object references to the existing equivalent gradient
-                        Glib::ustring newid = trg.getId();
-                        if (newid != defid) { // id could be the same if it is a second paste into the same document
-                            change_def_references(src, &trg);
-                        }
-                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                        def->setAttribute("id", longid);
-                        g_free(longid);
-                        // do NOT break here, there could be more than 1 duplicate!
-                    }
-                }
-            }
+    for (auto *input_defs_child_node = defs_to_import->firstChild(); input_defs_child_node;
+         input_defs_child_node = input_defs_child_node->next()) {
+        if (input_defs_child_node->type() != Inkscape::XML::NodeType::ELEMENT_NODE) {
+            continue;
         }
-    }
 
-    /* Second pass: remove duplicates in clipboard of earlier definitions in clipboard */
-    for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        if(def->type() != Inkscape::XML::NodeType::ELEMENT_NODE)continue;
-        Glib::ustring defid = def->attribute("id");
-        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
-        SPObject *src = source->getObjectByRepr(def);
-        auto s_lpeobj = cast<LivePathEffectObject>(src);
-        auto s_gr = cast<SPGradient>(src);
-        if (src && (s_gr || s_lpeobj)) {
-            for (Inkscape::XML::Node *laterDef = def->next() ; laterDef ; laterDef = laterDef->next()) {
-                SPObject *trg = source->getObjectByRepr(laterDef);
-                auto t_gr = cast<SPGradient>(trg);
-                if (trg && (src != trg) && s_gr && t_gr) {
-                    Glib::ustring newid = trg->getId();
-                    if (newid.find(DuplicateDefString) != Glib::ustring::npos)
-                        continue; // this one already handled
-                    if (t_gr && s_gr->isEquivalent(t_gr)) {
-                        // Change object references to the existing equivalent gradient
-                        // two id's in the clipboard should never be the same, so always change references
-                        change_def_references(trg, src);
-                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                        laterDef->setAttribute("id", longid);
-                        g_free(longid);
-                        // do NOT break here, there could be more than 1 duplicate!
-                    }
-                }
-                auto t_lpeobj = cast<LivePathEffectObject>(trg);
-                if (trg && (src != trg) && s_lpeobj && t_lpeobj) {
-                    Glib::ustring newid = trg->getId();
-                    if (newid.find(DuplicateDefString) != Glib::ustring::npos)
-                        continue; // this one already handled
-                    if (t_lpeobj->is_similar(s_lpeobj)) {
-                        // Change object references to the existing equivalent gradient
-                        // two id's in the clipboard should never be the same, so always change references
-                        change_def_references(trg, src);
-                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                        laterDef->setAttribute("id", longid);
-                        g_free(longid);
-                        // do NOT break here, there could be more than 1 duplicate!
-                    }
-                }
+        auto &our_defs = getDefs()->children;
+        auto *foreign_resource = source_document.getObjectByRepr(input_defs_child_node);
+
+        auto const existing_equivalent_resource =
+            std::find_if(our_defs.begin(), our_defs.end(), [foreign_resource](auto const &our_object) {
+                return foreign_resource->isEquivalent(our_object);
+            });
+
+        if (existing_equivalent_resource != our_defs.end()) {
+            // We have an identical object, so we just need to give the two objects
+            // identical IDs. However, if that were to cause an ID clash within the source_document,
+            // we must still make a copy.
+            auto const id_in_our_document = existing_equivalent_resource->getId();
+            auto const id_in_source_document = foreign_resource->getId();
+
+            if (id_in_our_document == id_in_source_document) {
+                continue; // IDs are already identical, nothing to do.
             }
-        }
-    }
 
-    /* Final pass: copy over those parts which are not duplicates  */
-    for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        if(def->type() != Inkscape::XML::NodeType::ELEMENT_NODE)continue;
-
-        /* Ignore duplicate defs marked in the first pass */
-        Glib::ustring defid = def->attribute("id");
-        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue;
-
-        bool duplicate = false;
-        SPObject *src = source->getObjectByRepr(def);
-
-        // Prevent duplication of symbols... could be more clever.
-        // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol().
-        // We assume that symbols are in defs section (not required by SVG spec).
-        if (src && is<SPSymbol>(src)) {
-
-            Glib::ustring id = src->getRepr()->attribute("id");
-            size_t pos = id.find( "_inkscape_duplicate" );
-            if( pos != Glib::ustring::npos ) {
-
-                // This is our symbol, now get rid of tag
-                id.erase( pos );
-
-                // Check that it really is a duplicate
-                for (auto& trg: getDefs()->children) {
-                    if (is<SPSymbol>(&trg) && src != &trg) {
-                        Glib::ustring id2 = trg.getRepr()->attribute("id");
-
-                        if( !id.compare( id2 ) ) {
-                            duplicate = true;
-                            break;
-                        }
-                    }
-                }
-                if ( !duplicate ) {
-                    src->setAttribute("id", id);
-                }
+            // Try to change the ID in source_document, but only if that ID is not taken yet.
+            // Although we started without ID clashes, this could happen if we rewrote the ID
+            // of another foreign resource identical to our existing equivalent resource.
+            if (!source_document.getObjectById(id_in_our_document)) {
+                change_def_references(source_document.getObjectByRepr(input_defs_child_node),
+                                      &*existing_equivalent_resource);
+                continue;
             }
         }
 
-        if (!duplicate) {
-            Inkscape::XML::Node * dup = def->duplicate(this->getReprDoc());
-            target_defs->appendChild(dup);
-            Inkscape::GC::release(dup);
-        }
+        // We do not have this resource yet, so we must import it
+        auto *copy = input_defs_child_node->duplicate(rdoc);
+        getDefs()->appendChild(copy);
+        Inkscape::GC::release(copy);
     }
 }
 

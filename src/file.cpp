@@ -546,7 +546,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
                 Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         }
     }
-    
+
     // remove this node from current document after saving it as template
     root->removeChild(templateinfo_node);
 
@@ -596,7 +596,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
     }
 
     // copy definitions
-    desktop->doc()->importDefs(clipdoc);
+    desktop->doc()->importDefs(*clipdoc);
 
     Inkscape::XML::Node* clipboard = nullptr;
     // copy objects
@@ -776,10 +776,10 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
 
     Inkscape::XML::rebase_hrefs(doc.get(), in_doc->getDocumentBase(), false);
     Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
-    prevent_id_clashes(doc.get(), in_doc, true);
+    prevent_id_clashes(doc.get(), in_doc);
     sp_file_fix_lpe(doc.get());
 
-    in_doc->importDefs(doc.get());
+    in_doc->importDefs(*doc);
 
     // The extension should set it's pages enabled or disabled when opening
     // in order to indicate if pages are being imported or if objects are.

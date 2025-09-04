@@ -105,6 +105,14 @@ void SPGradient::setPinned(bool pinned)
     }
 }
 
+bool SPGradient::_isEquivalent(SPObject const &other) const
+{
+    if (auto *other_gradient = cast<SPGradient>(&other)) {
+        // TODO: fix const correctness of isEquivalent()
+        return const_cast<SPGradient *>(this)->isEquivalent(const_cast<SPGradient *>(other_gradient));
+    }
+    return false;
+}
 
 /**
  * return true if this gradient is "equivalent" to that gradient.
@@ -116,7 +124,8 @@ bool SPGradient::isEquivalent(SPGradient *that)
     //TODO Make this work for mesh gradients
 
     bool status = false;
-    
+
+    // TODO: Remove this useless "loop" (╯°□°)╯︵ ┻━┻
     while(true){ // not really a loop, used to avoid deep nesting or multiple exit points from function
         if (this->getStopCount() != that->getStopCount()) { break; }
         if (this->hasStops() != that->hasStops()) { break; }

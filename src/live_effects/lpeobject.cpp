@@ -127,6 +127,15 @@ bool LivePathEffectObject::is_similar(LivePathEffectObject *that)
     return true;
 }
 
+bool LivePathEffectObject::_isEquivalent(SPObject const &other) const
+{
+    if (auto *other_lpe = cast<LivePathEffectObject>(&other)) {
+        // TODO: fix const correctness of is_similar()
+        return const_cast<LivePathEffectObject *>(this)->is_similar(const_cast<LivePathEffectObject *>(other_lpe));
+    }
+    return false;
+}
+
 /**
  * Set lpeobject is on clipboard
  */

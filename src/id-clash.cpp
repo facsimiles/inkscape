@@ -177,7 +177,7 @@ fix_ref(IdReference const &idref, SPObject *to_obj, const char *old_id) {
  *  FIXME: There are some types of references not yet dealt with here
  *         (e.g., ID selectors in CSS stylesheets, and references in scripts).
  */
-static void find_references(SPObject *elem, refmap_type &refmap, bool from_clipboard)
+static void find_references(SPObject *elem, refmap_type &refmap)
 {
     if (elem->cloned) return;
     Inkscape::XML::Node *repr_elem = elem->getRepr();
@@ -369,7 +369,7 @@ static void find_references(SPObject *elem, refmap_type &refmap, bool from_clipb
     // recurse
     for (auto& child: elem->children)
     {
-        find_references(&child, refmap, from_clipboard);
+        find_references(&child, refmap);
     }
 }
 
@@ -378,47 +378,26 @@ static void find_references(SPObject *elem, refmap_type &refmap, bool from_clipb
  *  a list of those changes that will require fixing up references.
  */
 static void change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc, SPObject *elem,
-                                refmap_type const &refmap, id_changelist_type *id_changes, bool from_clipboard)
+                                refmap_type const &refmap, id_changelist_type *id_changes)
 {
-    const gchar *id = elem->getId();
-    bool fix_clashing_ids = true;
+    gchar const *id = elem->getId();
+    if (!id) {
+        return;
+    }
 
-    if (id && current_doc->getObjectById(id)) {
+    if (auto *current_doc_object = current_doc->getObjectById(id)) {
         // Choose a new ID.
         // To try to preserve any meaningfulness that the original ID
         // may have had, the new ID is the old ID followed by a hyphen
         // and one or more digits.
 
-        if (is<SPGradient>(elem)) {
-            SPObject *cd_obj =  current_doc->getObjectById(id);
-
-            if (cd_obj && is<SPGradient>(cd_obj)) {
-                auto cd_gr = cast<SPGradient>(cd_obj);
-                if ( cd_gr->isEquivalent(cast<SPGradient>(elem))) {
-                    fix_clashing_ids = false;
-                 }
-             }
-        }
-
-        auto lpeobj = cast<LivePathEffectObject>(elem);
-        if (lpeobj) {
-            SPObject *cd_obj = current_doc->getObjectById(id);
-            auto cd_lpeobj = cast<LivePathEffectObject>(cd_obj);
-            if (cd_lpeobj && lpeobj->is_similar(cd_lpeobj)) {
-                fix_clashing_ids = from_clipboard;
-            }
-        }
-
+        bool const fix_clashing_ids = current_doc_object->isEquivalent(*elem);
         if (fix_clashing_ids) {
-            std::string old_id(id);
+            std::string const old_id(id);
             std::string new_id(old_id + '-');
-            for (;;) {
-                new_id += "0123456789"[std::rand() % 10];
-                const char *str = new_id.c_str();
-                if (current_doc->getObjectById(str) == nullptr &&
-                    imported_doc->getObjectById(str) == nullptr) break;
-            }
-            // Change to the new ID
+            do {
+                new_id += '0' + (std::rand() % 10);
+            } while (current_doc->getObjectById(new_id) || imported_doc->getObjectById(new_id));
 
             elem->setAttribute("id", new_id);
             // Make a note of this change, if we need to fix up refs to it
@@ -428,11 +407,10 @@ static void change_clashing_ids(SPDocument *imported_doc, SPDocument *current_do
         }
     }
 
-
     // recurse
     for (auto& child: elem->children)
     {
-        change_clashing_ids(imported_doc, current_doc, &child, refmap, id_changes, from_clipboard);
+        change_clashing_ids(imported_doc, current_doc, &child, refmap, id_changes);
     }
 }
 
@@ -461,14 +439,14 @@ fix_up_refs(refmap_type const &refmap, const id_changelist_type &id_changes)
  *  clash with IDs in the existing document are changed, and references to
  *  those IDs are updated accordingly.
  */
-void prevent_id_clashes(SPDocument *imported_doc, SPDocument *current_doc, bool from_clipboard)
+void prevent_id_clashes(SPDocument *imported_doc, SPDocument *current_doc)
 {
     refmap_type refmap;
     id_changelist_type id_changes;
     SPObject *imported_root = imported_doc->getRoot();
 
-    find_references(imported_root, refmap, from_clipboard);
-    change_clashing_ids(imported_doc, current_doc, imported_root, refmap, &id_changes, from_clipboard);
+    find_references(imported_root, refmap);
+    change_clashing_ids(imported_doc, current_doc, imported_root, refmap, &id_changes);
     fix_up_refs(refmap, id_changes);
 }
 
@@ -482,7 +460,7 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
     SPDocument *current_doc = from_obj->document;
     std::string old_id(from_obj->getId());
 
-    find_references(current_doc->getRoot(), refmap, false);
+    find_references(current_doc->getRoot(), refmap);
 
     refmap_type::const_iterator pos = refmap.find(old_id);
     if (pos != refmap.end()) {
@@ -606,7 +584,7 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
 
     SPDocument *current_doc = elem->document;
     refmap_type refmap;
-    find_references(current_doc->getRoot(), refmap, false);
+    find_references(current_doc->getRoot(), refmap);
 
     std::string old_id(elem->getId());
     if (current_doc->getObjectById(id)) {

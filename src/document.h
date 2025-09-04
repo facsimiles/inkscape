@@ -166,7 +166,7 @@ public:
     const Inkscape::Colors::DocumentCMS &getDocumentCMS() const { return *_cms_manager; }
 
 private:
-    void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
+    void _importDefsNode(SPDocument &source_document, Inkscape::XML::Node *defs_to_import);
     SPObject *_activexmltree;
 
     std::unique_ptr<Inkscape::PageManager> _page_manager;
@@ -187,7 +187,23 @@ private:
 
 public:
     void clearNodeCache() { _node_cache.clear(); }
-    void importDefs(SPDocument *source);
+
+    /**
+     * Import the elements from all <defs> nodes of a source document into our document.
+     *
+     * If the ID of an element of the source document clashes with an ID already used in this document, the function
+     * will change the clashing ID in the source document to something else, relinking all references to maintain the
+     * consistency of the source document.
+     *
+     * It may happen that an object in the source_document's <defs> returns true from isEquivalent() when passed an
+     * object from this document's <defs>. In this case, the ID in the source object will be simply changed to match
+     * ours, provided that it is not taken yet, but such element will not be imported into our <defs> in order to
+     * prevent unnecessary duplication.
+     *
+     * @param[in,out] source The document from which to import all element nodes contained in <defs>.
+     * NOTE: The source document may be modified if IDs are rewritten. Please pass a copy if this is an issue for you.
+     */
+    void importDefs(SPDocument &source);
 
     unsigned int vacuumDocument();
 
@@ -334,7 +350,7 @@ public:
      */
     static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const std::vector<SPItem*> &list, Geom::Point const &p, bool take_insensitive = false);
 
-
+    // TODO: remove this entire section: a document should not know about 3D Boxes or LPEs!
     // Box tool -------------------------------
     void setCurrentPersp3D(Persp3D * const persp);
     /*
@@ -414,7 +430,7 @@ private:
 
     // Find items ----------------------------
     std::map<std::string, SPObject *> iddef;
-    std::map<Inkscape::XML::Node *, SPObject *> reprdef;
+    std::map<Inkscape::XML::Node const *, SPObject *> reprdef;
 
     // Find items by geometry --------------------
     mutable std::map<unsigned long, std::deque<SPItem*>> _node_cache; // Used to speed up search.

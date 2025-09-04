@@ -475,7 +475,7 @@ void ClipboardManagerImpl::insertSymbol(SPDesktop *desktop, Geom::Point const &s
         return;
     }
 
-    prevent_id_clashes(symbol.get(), desktop->getDocument(), true);
+    prevent_id_clashes(symbol.get(), desktop->getDocument());
     auto *root = symbol->getRoot();
 
     // Synthesize a clipboard position in order to paste the symbol where it got dropped.
@@ -540,7 +540,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place, bool on_page
     }
 
     // copy definitions
-    prevent_id_clashes(tempdoc.get(), desktop->getDocument(), true);
+    prevent_id_clashes(tempdoc.get(), desktop->getDocument());
     sp_import_document(desktop, tempdoc.get(), in_place, on_page);
 
     // _copySelection() has put all items in groups, now ungroup them (preserves transform
@@ -822,7 +822,7 @@ bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
 
     if (pasted) {
         // pasted style might depend on defs from the source
-        set->document()->importDefs(tempdoc.get());
+        set->document()->importDefs(*tempdoc);
     }
 
     return pasted;
@@ -897,6 +897,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
  */
 bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
 {
+    static constexpr auto PATH_EFFECT_ATTRIBUTE = "inkscape:path-effect";
     /** @todo FIXME: pastePathEffect crashes when moving the path with the applied effect,
         segfaulting in fork_private_if_necessary(). */
 
@@ -912,22 +913,29 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
     _retrieveClipboard("image/x-inkscape-svg");
     auto &tempdoc = _clipboardSPDoc;
     if (tempdoc) {
-        Inkscape::XML::Node *root = tempdoc->getReprRoot();
-        Inkscape::XML::Node *clipnode = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
-        if ( clipnode ) {
-            char const *effectstack = clipnode->attribute("inkscape:path-effect");
-            if ( effectstack ) {
-                set->document()->importDefs(tempdoc.get());
-                // make sure all selected items are converted to paths first (i.e. rectangles)
-                set->toLPEItems();
-                auto itemlist= set->items();
-                for(auto i=itemlist.begin();i!=itemlist.end();++i){
-                    SPItem *item = *i;
-                    _applyPathEffect(item, effectstack);
-                    item->doWriteTransform(item->transform);
-                }
+        if (auto *clipnode = sp_repr_lookup_name(tempdoc->getReprRoot(), "inkscape:clipboard", 1)) {
+            if (char const *effectstack = clipnode->attribute(PATH_EFFECT_ATTRIBUTE)) {
+                Glib::ustring clipboard_lpe_id = effectstack;
+                clipboard_lpe_id = clipboard_lpe_id.substr(clipboard_lpe_id.find_last_of('#') + 1);
 
-                return true;
+                if (auto const *lpe_object = tempdoc->getObjectById(clipboard_lpe_id)) {
+                    set->document()->importDefs(*tempdoc);
+
+                    // Issue https://gitlab.com/inkscape/inkscape/-/issues/5694: The ID can change
+                    // during the import of <defs> as a part of ID clash prevention between documents.
+                    clipboard_lpe_id = lpe_object->getId();
+                    auto const lpe_href = '#' + clipboard_lpe_id;
+                    clipnode->setAttribute(PATH_EFFECT_ATTRIBUTE, lpe_href);
+
+                    // make sure all selected items are converted to paths first (i.e. rectangles)
+                    set->toLPEItems();
+                    for (auto item : set->items()) {
+                        _applyPathEffect(item, lpe_href.c_str());
+                        item->doWriteTransform(item->transform);
+                    }
+
+                    return true;
+                }
             }
         }
     }
