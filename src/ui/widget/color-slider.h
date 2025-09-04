@@ -69,6 +69,7 @@ private:
     unsigned int _tick_callback = 0;
     double _ring_size = 0;
     double _ring_thickness = 0;
+    gint64 _last_time = 0;
 };
 
 } // namespace Inkscape::UI::Widget

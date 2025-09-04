@@ -11,6 +11,7 @@
 
 #include "color-slider.h"
 
+#include <gdkmm/frameclock.h>
 #include <gdkmm/general.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
@@ -31,6 +32,7 @@
 constexpr int THUMB_SPACE = 16;
 constexpr int TRACK_HEIGHT = 8;
 constexpr int THUMB_SIZE = TRACK_HEIGHT + 2;
+constexpr int RING_THICKNESS = 2;
 constexpr int CHECKERBOARD_TILE = TRACK_HEIGHT / 2;
 constexpr uint32_t ERR_DARK = 0xff00ff00;    // Green
 constexpr uint32_t ERR_LIGHT = 0xffff00ff;   // Magenta
@@ -66,7 +68,7 @@ void ColorSlider::construct() {
     set_name("ColorSlider");
 
     _ring_size = THUMB_SIZE;
-    _ring_thickness = 2;
+    _ring_thickness = RING_THICKNESS;
     set_draw_func(sigc::mem_fun(*this, &ColorSlider::draw_func));
 
     auto const click = Gtk::GestureClick::create();
@@ -74,15 +76,52 @@ void ColorSlider::construct() {
     click->signal_pressed().connect([this, &click = *click](auto &&...args) { on_click_pressed(click, args...); });
     add_controller(click);
 
+    // slider thumb animation logic
+    auto connect_tick_callback = [this] {
+        if (_tick_callback) return;
+
+        _tick_callback = add_tick_callback([this] (const Glib::RefPtr<Gdk::FrameClock>& clock) {
+            auto timings = clock->get_current_timings();
+            auto ft = timings->get_frame_time();
+            double dt; // time delta
+            if (_last_time) {
+                dt = ft - _last_time;
+            }
+            else {
+                dt = timings->get_refresh_interval();
+                if (dt <= 0) dt = 1e6 / 60; // pick some default interval for 60 frames/second
+            }
+            _last_time = ft;
+            dt /= 1'000'000; // microseconds to seconds
+            // on mouse hover grow by 12 px/s, otherwise shrink by 6 px/s:
+            auto change = dt * (_hover ? 12 : 6); // calc distance in pixels
+
+            // vary ring thickness to show the user that they are hovering over the slider
+            auto size = std::clamp(_ring_size + (_hover ? -change : change), THUMB_SIZE - 1.0, THUMB_SIZE + 0.0);
+            auto thickness = std::clamp(_ring_thickness + (_hover ? change : -change), RING_THICKNESS + 0.0, RING_THICKNESS + 1.0);
+            queue_draw();
+
+            if (size != _ring_size || thickness != _ring_thickness) {
+                _ring_size = size;
+                _ring_thickness = thickness;
+                return true; // continue animation
+            }
+            else {
+                _tick_callback = 0;
+                _last_time = 0;
+                return false; // stop the callback
+            }
+        });
+    };
     auto const motion = Gtk::EventControllerMotion::create();
     motion->signal_motion().connect([this, &motion = *motion](auto &&...args) { on_motion(motion, args...); });
-    motion->signal_enter().connect([this](auto&& ...) {
+    motion->signal_enter().connect([this, connect_tick_callback](auto&& ...) {
         _hover = true;
-        if (!_tick_callback) _tick_callback = add_tick_callback([this] (auto &&) { queue_draw(); return true; });
+        connect_tick_callback();
     });
-    motion->signal_leave().connect([this](auto&& ...) {
+    motion->signal_leave().connect([this, connect_tick_callback](auto&& ...) {
         _hover = false;
-        if (!_tick_callback) _tick_callback = add_tick_callback([this] (auto &&) { queue_draw(); return true; });
+        connect_tick_callback();
     });
     add_controller(motion);
 
@@ -295,19 +334,7 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
 
         double value = std::clamp(_colors->getAverage(_component), 0.0, 1.0);
         if (std::isfinite(value)) {
-            // vary ring thickness to show the user that they are hovering over the slider
-            auto size = std::clamp(_ring_size + (_hover ? -0.2 : 0.1), THUMB_SIZE - 1.0, THUMB_SIZE * 1.0);
-            auto thickness = std::clamp(_ring_thickness + (_hover ? 0.2 : -0.1), 2.0, 3.0);
-            draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), size, thickness, ring, stroke);
-
-            if (size != _ring_size || thickness != _ring_thickness) {
-                _ring_size = size;
-                _ring_thickness = thickness;
-            }
-            else if (_tick_callback) {
-                remove_tick_callback(_tick_callback);
-                _tick_callback = 0;
-            }
+            draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), _ring_size, _ring_thickness, ring, stroke);
         }
     }
 }
