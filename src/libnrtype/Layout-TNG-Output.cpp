@@ -848,6 +848,38 @@ Geom::PathVector Layout::convertToCurves(iterator const &from_glyph, iterator co
     return curve;
 }
 
+Geom::PathVector Layout::convertToSVG(iterator const &from_glyph, iterator const &to_glyph,
+                                      std::vector<std::pair<std::string, Geom::Affine>> &svgOut) const
+{
+    Geom::PathVector curve;
+
+    for (int glyph_index = from_glyph._glyph_index; glyph_index < to_glyph._glyph_index; glyph_index++) {
+        Span const &span = _glyphs[glyph_index].span(this);
+        Geom::Affine glyph_matrix = _glyphs[glyph_index].transform(*this);
+        auto glyph_id = _glyphs[glyph_index].glyph;
+        auto &font = span.font;
+        auto glyph = font->LoadGlyph(glyph_id);
+        if (!glyph) {
+            continue;
+        }
+        if (font->FontHasSVG()) {
+            auto svg = font->GlyphSvg(glyph_id);
+            if (!svg.empty()) {
+                auto scale = 1.0 / font->GetDesignUnits();
+                svgOut.push_back({std::move(svg), Geom::Scale(scale, -scale) * glyph_matrix});
+            }
+            continue;
+        }
+        Geom::PathVector const *pathv = span.font->PathVector(glyph_id);
+        if (pathv) {
+            Geom::PathVector pathv_trans = *pathv * glyph_matrix;
+            pathvector_append(curve, std::move(pathv_trans));
+        }
+    }
+
+    return curve;
+}
+
 void Layout::transform(Geom::Affine const &transform)
 {
     // this is all massively oversimplified

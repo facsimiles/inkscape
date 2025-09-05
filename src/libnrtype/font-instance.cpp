@@ -718,6 +718,15 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
     return pixbuf;
 }
 
+std::string FontInstance::GlyphSvg(unsigned int glyph_id)
+{
+    auto glyph_iter = data->openTypeSVGGlyphs.find(glyph_id);
+    if (glyph_iter == data->openTypeSVGGlyphs.end()) {
+        return "";
+    }
+    return data->openTypeSVGData[glyph_iter->second.entry_index];
+}
+
 double FontInstance::Advance(unsigned int glyph_id, bool vertical)
 {
     auto g = LoadGlyph(glyph_id);

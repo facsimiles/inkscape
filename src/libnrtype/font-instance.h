@@ -83,6 +83,8 @@ public:
     // are lazy-loaded but immutable once loaded. They are guaranteed to be in Cairo pixel format.
     Inkscape::Pixbuf const *PixBuf(unsigned int glyph_id);
 
+    std::string GlyphSvg(unsigned int glyph_id);
+
     // Horizontal advance if 'vertical' is false, vertical advance if true.
     double Advance(unsigned int glyph_id, bool vertical);
 

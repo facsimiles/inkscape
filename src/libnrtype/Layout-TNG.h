@@ -415,6 +415,8 @@ public:
     outlines.
     */
     Geom::PathVector convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const;
+    Geom::PathVector convertToSVG(iterator const &from_glyph, iterator const &to_glyph,
+                                  std::vector<std::pair<std::string, Geom::Affine>> &svgOut) const;
     Geom::PathVector convertToCurves() const;
 
     /** Apply the given transform to all the output presently stored in

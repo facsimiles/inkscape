@@ -518,8 +518,122 @@ void Inkscape::convert_text_to_curves(SPDocument *doc)
     sp_item_list_to_curves(items, selected, to_select);
 }
 
-Inkscape::XML::Node *
-sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
+Inkscape::XML::Node *sp_text_to_curve_repr(SPItem *item)
+{
+    Inkscape::XML::Document *xml_doc = item->getRepr()->document();
+    auto target_doc = item->document;
+
+    // Special treatment for text: convert each glyph to separate path, then group the paths
+    auto layout = te_get_layout(item);
+
+    // Save original text for accessibility.
+    Glib::ustring original_text = sp_te_get_string_multiline(item, layout->begin(), layout->end());
+
+    SPObject *prev_parent = nullptr;
+    std::vector<std::pair<Geom::PathVector, SPStyle *>> curves;
+
+    Inkscape::XML::Node *result = xml_doc->createElement("svg:g");
+    // temporary add the group to doc, some of the transformation logic expects object to be within document tree
+    item->parent->addChild(result);
+    SPItem *tmpParent = cast<SPItem>(target_doc->getObjectByRepr(result));
+    tmpParent->set_i2d_affine(item->i2dt_affine());
+
+    bool need_group = false;
+    Inkscape::Text::Layout::iterator iter = layout->begin();
+    while (iter != layout->end()) {
+        Inkscape::Text::Layout::iterator iter_next = iter;
+        iter_next.nextGlyph(); // iter_next is one glyph ahead from iter
+        if (iter == iter_next)
+            break;
+
+        /* This glyph's style */
+        SPObject *pos_obj = nullptr;
+        layout->getSourceOfCharacter(iter, &pos_obj);
+        if (!pos_obj) // no source for glyph, abort
+            break;
+        while (is<SPString>(pos_obj) && pos_obj->parent) {
+            pos_obj = pos_obj->parent; // SPStrings don't have style
+        }
+
+        // get path from iter to iter_next:
+        std::vector<std::pair<std::string, Geom::Affine>> svgSnippets;
+        auto curve = layout->convertToSVG(iter, iter_next, svgSnippets);
+        iter = iter_next; // shift to next glyph
+
+        if (curve.empty() && svgSnippets.empty()) { // whitespace glyph?
+            continue;
+        }
+
+        for (auto &svgSnippet : svgSnippets) {
+            auto doc = SPDocument::createNewDocFromMem(svgSnippet.first, false);
+            if (!doc) {
+                continue;
+            }
+            auto transform = svgSnippet.second * item->i2doc_affine();
+            target_doc->import(*doc, result, nullptr, transform, nullptr, SPDocument::ImportRoot::UngroupSingle,
+                               SPDocument::ImportLayersMode::ToGroup);
+            need_group = true;
+        }
+
+        if (curve.empty()) {
+            continue;
+        }
+
+        // Create a new path for each span to group glyphs into
+        // which preserves styles such as paint-order
+        if (!prev_parent || prev_parent != pos_obj) {
+            // Record the style for the dying tspan tree (see sp_style_merge_from_dying_parent in style.cpp)
+            auto style = pos_obj->style;
+            for (auto sp = pos_obj->parent; sp && sp != item; sp = sp->parent) {
+                style->merge(sp->style);
+            }
+            curves.emplace_back(curve, style);
+        } else {
+            for (auto &path : curve) {
+                curves.back().first.push_back(path);
+            }
+        }
+
+        prev_parent = pos_obj;
+    }
+    result->parent()->removeChild(result);
+
+    if (curves.empty() && !need_group) {
+        Inkscape::GC::release(result);
+        return nullptr;
+    }
+
+    auto result_style = std::make_unique<SPStyle>(item->document);
+
+    for (auto &[pathv, style] : curves) {
+        Glib::ustring glyph_style = style->writeIfDiff(item->style);
+        auto new_path = xml_doc->createElement("svg:path");
+        new_path->setAttributeOrRemoveIfEmpty("style", glyph_style);
+        new_path->setAttribute("d", sp_svg_write_path(pathv));
+        if (curves.size() == 1 && !need_group) {
+            Inkscape::GC::release(result);
+            result = new_path;
+            result_style->merge(style);
+        } else {
+            result->appendChild(new_path);
+            Inkscape::GC::release(new_path);
+        }
+    }
+
+    result_style->merge(item->style);
+    Glib::ustring css = result_style->writeIfDiff(item->parent ? item->parent->style : nullptr);
+
+    Inkscape::copy_object_properties(result, item->getRepr());
+    result->setAttributeOrRemoveIfEmpty("style", css);
+    result->setAttributeOrRemoveIfEmpty("transform", item->getRepr()->attribute("transform"));
+
+    if (!original_text.empty()) {
+        result->setAttribute("aria-label", original_text);
+    }
+    return result;
+}
+
+Inkscape::XML::Node *sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 {
     if (!item)
         return nullptr;
@@ -527,92 +641,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     Inkscape::XML::Document *xml_doc = item->getRepr()->document();
 
     if (is<SPText>(item) || is<SPFlowtext>(item)) {
-
-        // Special treatment for text: convert each glyph to separate path, then group the paths
-        auto layout = te_get_layout(item);
-
-        // Save original text for accessibility.
-        Glib::ustring original_text = sp_te_get_string_multiline(item, layout->begin(), layout->end());
-
-        SPObject *prev_parent = nullptr;
-        std::vector<std::pair<Geom::PathVector, SPStyle *>> curves;
-
-        Inkscape::Text::Layout::iterator iter = layout->begin();
-        do {
-            Inkscape::Text::Layout::iterator iter_next = iter;
-            iter_next.nextGlyph(); // iter_next is one glyph ahead from iter
-            if (iter == iter_next)
-                break;
-
-            /* This glyph's style */
-            SPObject *pos_obj = nullptr;
-            layout->getSourceOfCharacter(iter, &pos_obj);
-            if (!pos_obj) // no source for glyph, abort
-                break;
-            while (is<SPString>(pos_obj) && pos_obj->parent) {
-               pos_obj = pos_obj->parent;   // SPStrings don't have style
-            }
-
-            // get path from iter to iter_next:
-            auto curve = layout->convertToCurves(iter, iter_next);
-            iter = iter_next; // shift to next glyph
-            if (curve.empty()) { // whitespace glyph?
-                continue;
-            }
-
-            // Create a new path for each span to group glyphs into
-            // which preserves styles such as paint-order
-            if (!prev_parent || prev_parent != pos_obj) {
-                // Record the style for the dying tspan tree (see sp_style_merge_from_dying_parent in style.cpp)
-                auto style = pos_obj->style;
-                for (auto sp = pos_obj->parent; sp && sp != item; sp = sp->parent) {
-                    style->merge(sp->style);
-                }
-                curves.emplace_back(curve, style);
-            } else {
-                for (auto &path : curve) {
-                    curves.back().first.push_back(path);
-                }
-            }
-
-            prev_parent = pos_obj;
-            if (iter == layout->end())
-                break;
-
-        } while (true);
-
-        if (curves.empty())
-            return nullptr;
-
-        Inkscape::XML::Node *result = curves.size() > 1 ? xml_doc->createElement("svg:g") : nullptr;
-        SPStyle *result_style = new SPStyle(item->document);
-
-        for (auto &[pathv, style] : curves) {
-            Glib::ustring glyph_style = style->writeIfDiff(item->style);
-            auto new_path = xml_doc->createElement("svg:path");
-            new_path->setAttributeOrRemoveIfEmpty("style", glyph_style);
-            new_path->setAttribute("d", sp_svg_write_path(pathv));
-            if (curves.size() == 1) {
-                result = new_path;
-                result_style->merge(style);
-            } else {
-                result->appendChild(new_path);
-                Inkscape::GC::release(new_path);
-            }
-        }
-
-        result_style->merge(item->style);
-        Glib::ustring css = result_style->writeIfDiff(item->parent ? item->parent->style : nullptr);
-        delete result_style;
-
-        Inkscape::copy_object_properties(result, item->getRepr());
-        result->setAttributeOrRemoveIfEmpty("style", css);
-        result->setAttributeOrRemoveIfEmpty("transform", item->getRepr()->attribute("transform"));
-
-        if (!original_text.empty()) {
-            result->setAttribute("aria-label", original_text);
-        }
-        return result;
+        return sp_text_to_curve_repr(item);
     }
 
     Geom::PathVector curve;
@@ -645,7 +674,6 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     repr->setAttribute("d", sp_svg_write_path(curve));
     return repr;
 }
-
 
 void
 ObjectSet::pathReverse()
