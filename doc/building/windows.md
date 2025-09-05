@@ -149,7 +149,7 @@ For older versions before 1.5.0, or if you do not want the automatic installatio
     1.  Close the MSYS2 **MSYS** shell.
     2.  **Read carefully:** Start an MSYS2 **UCRT64** (!!!) shell from the start menu (or launch "ucrt64.exe" in the installation directory). Using the right shell type is important for ensuring that the correct dependencies are installed.
     3.  **Double-check:** The shell window must show "**UCRT64**" in purple text. If it shows "MSYS" then you have the wrong shell, please go back.
-    4.  Execute the command `curl [https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh](https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh) | bash`  
+    4.  Execute the command `curl https://gitlab.com/inkscape/inkscape/-/raw/master/buildtools/msys2installdeps.sh | bash`
         (The command downloads and runs the script [msys2installdeps.sh](https://gitlab.com/inkscape/inkscape/blob/master/buildtools/msys2installdeps.sh). Alternatively, you can copy-paste the script into the console or download it, change to the folder containing the file and type `./msys2installdeps.sh`. If you already have a copy of the Inkscape source it should also be included in the "buildtools" folder.)
     5.  Relax and take a break, as this may take some time (a few minutes at best, but it can take significantly longer if you have a slow internet connection or the server load is high).
 *   **Step 3** - Install dependencies for creating the installer packages (.EXE, .MSI, .7Z) This step is optional.

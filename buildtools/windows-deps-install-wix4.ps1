@@ -20,5 +20,6 @@ if (-not $MSYS) {
 # install WiX in a path where MSYS finds it
 $WIXPATH = $MSYS + "\usr\local\bin\"
 $Env:DOTNET_CLI_TELEMETRY_OPTOUT = "1"
-dotnet tool install wix --version 4.0.4 --tool-path $WIXPATH
+# Note: we use an explicit path to dotnet.exe because PATH is not reloaded by winget after the installation
+& "$Env:ProgramFiles\dotnet\dotnet" tool install wix --version 4.0.4 --tool-path $WIXPATH
 & "$WIXPATH\wix" extension add --global WixToolset.UI.wixext/4.0.4
