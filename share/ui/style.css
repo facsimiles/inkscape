@@ -1384,7 +1384,7 @@ popover.menu > stack > box > modelbutton:first-child > * /* Affect children not 
     /* widget's height; it should take stop template's height into account
      * current value is fine-tuned to make stop handles overlap gradient image
      * just the right amount */
-    min-height: 35px;
+    min-height: 34px;
 }
 
 /* Canvas */

@@ -13,8 +13,6 @@
 #ifndef SEEN_GRADIENT_EDITOR_H
 #define SEEN_GRADIENT_EDITOR_H
 
-#include <gtkmm/treemodelcolumn.h>
-
 #include "color-page.h"
 #include "color-picker-panel.h"
 #include "colors/color-set.h"
@@ -30,7 +28,6 @@ class Adjustment;
 class Builder;
 class Button;
 class Expander;
-class Grid;
 class Image;
 class ListStore;
 class SpinButton;
@@ -60,15 +57,15 @@ public:
     decltype(_signal_dragged) signal_dragged() const { return _signal_dragged; }
     decltype(_signal_released) signal_released() const { return _signal_released; }
 
-    void setGradient(SPGradient *gradient) final;
-    SPGradient *getVector() final;
-    void setVector(SPDocument *doc, SPGradient *vector) final;
-    void setMode(SelectorMode mode) final;
-    void setUnits(SPGradientUnits units) final;
-    SPGradientUnits getUnits() final;
-    void setSpread(SPGradientSpread spread) final;
-    SPGradientSpread getSpread() final;
-    void selectStop(SPStop *selected) final;
+    void setGradient(SPGradient *gradient) override;
+    SPGradient* getVector() override;
+    void setVector(SPDocument* doc, SPGradient* vector) override;
+    void setMode(SelectorMode mode) override;
+    void setUnits(SPGradientUnits units) override;
+    SPGradientUnits getUnits() override;
+    void setSpread(SPGradientSpread spread) override;
+    SPGradientSpread getSpread() override;
+    void selectStop(SPStop* selected) override;
     void set_color_picker_plate(ColorPickerPanel::PlateType type);
     ColorPickerPanel::PlateType get_color_picker_plate() const;
     SPGradientType get_type() const;
@@ -79,19 +76,17 @@ private:
     void stop_selected();
     void insert_stop_at(double offset);
     void add_stop(int index);
-    // void duplicate_stop();
     void delete_stop(int index);
-    void show_stops(bool visible);
-    void update_stops_layout();
     void set_repeat_mode(SPGradientSpread mode);
     void set_repeat_icon(SPGradientSpread mode);
     void reverse_gradient();
     void turn_gradient(double angle, bool relative);
     void set_stop_color(Colors::Color const &color);
-    std::optional<Gtk::TreeRow> current_stop();
+    SPStop* current_stop();
+    std::optional<int> current_stop_index();
+    std::optional<int> get_stop_index(SPStop* stop);
     SPStop* get_nth_stop(size_t index);
-    SPStop* get_current_stop();
-    bool select_stop(size_t index);
+    bool select_stop(int index);
     void set_stop_offset(size_t index, double offset);
     SPGradient* get_gradient_vector();
     void fire_stop_selected(SPStop* stop);
@@ -101,25 +96,12 @@ private:
     GradientSelector* _selector;
     std::shared_ptr<Colors::ColorSet> _colors;
     std::unique_ptr<UI::Widget::PopoverMenu> _repeat_popover;
-    Gtk::Image& _repeat_icon;
     GradientWithStops _gradient_image;
-    Glib::RefPtr<Gtk::ListStore> _stop_list_store;
-    Gtk::TreeModelColumnRecord _stop_columns;
-    Gtk::TreeModelColumn<SPStop*> _stopObj;
-    Gtk::TreeModelColumn<size_t> _stopIdx;
-    Gtk::TreeModelColumn<Glib::ustring> _stopID;
-    Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> _stop_color;
-    Gtk::TreeView& _stop_tree;
     Gtk::Button& _turn_gradient;
     Glib::RefPtr<Gtk::Adjustment> _angle_adj;
     InkSpinButton& _offset_btn;
     InkSpinButton& _angle_btn;
-    Gtk::Button& _add_stop;
-    Gtk::Button& _delete_stop;
-    bool _stops_list_visible = true;
-    Gtk::Box& _stops_gallery;
-    Gtk::Box& _colors_box;
-    Gtk::Grid& _main_grid;
+    int _current_stop_index = 0;
     SPGradient* _gradient = nullptr;
     SPDocument* _document = nullptr;
     OperationBlocker _update;
@@ -128,6 +110,7 @@ private:
     std::unique_ptr<ColorPickerPanel> _color_picker;
     Gtk::ToggleButton& _linear_btn;
     Gtk::ToggleButton& _radial_btn;
+    Gtk::MenuButton& _repeat_mode_btn;
 };
 
 } // namespace Inkscape::UI::Widget

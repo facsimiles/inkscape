@@ -42,7 +42,12 @@ ink-spinbutton button { border: 0 solid alpha(@border-color, 0.30); border-radiu
 ink-spinbutton button.left  { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 1px; }
 ink-spinbutton button.right { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-width: 1px; }
 ink-spinbutton entry#InkSpinButton-Entry { border: none; border-radius: 3px; padding: 0; min-height: 13px; background-color: @bgnd-color; outline-width: 0; }
+.linked:not(.vertical) > ink-spinbutton:dir(ltr):not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.linked:not(.vertical) > ink-spinbutton:dir(ltr):not(:last-child)  { border-right-style: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.linked:not(.vertical) > ink-spinbutton:dir(rtl):not(:first-child) { border-right-style: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.linked:not(.vertical) > ink-spinbutton:dir(rtl):not(:last-child)  { border-top-left-radius: 0; border-bottom-left-radius: 0; }
 )=====";
+
 constexpr int timeout_click = 500;
 constexpr int timeout_repeat = 50;
 constexpr int icon_margin = 2;
