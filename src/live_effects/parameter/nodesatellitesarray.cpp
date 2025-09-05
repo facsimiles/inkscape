@@ -47,15 +47,20 @@ void NodeSatelliteArrayParam::set_oncanvas_looks(CanvasItemCtrlShape shape, uint
     _knot_color = color;
 }
 
-void NodeSatelliteArrayParam::setPathVectorNodeSatellites(PathVectorNodeSatellites *pathVectorNodeSatellites,
-                                                          bool write)
+void NodeSatelliteArrayParam::setPathVectorNodeSatellites(PathVectorNodeSatellites *pathVectorNodeSatellites, bool update, bool write)
 {
     _last_pathvector_nodesatellites = pathVectorNodeSatellites;
-    if (write) {
-        param_set_and_write_new_value(_last_pathvector_nodesatellites->getNodeSatellites());
-    } else {
+    if (update || write) {
         param_setValue(_last_pathvector_nodesatellites->getNodeSatellites());
     }
+    if (write) {
+        write_to_SVG();
+    }
+}
+
+void NodeSatelliteArrayParam::write_to_SVG()
+{
+    param_set_and_write_new_value(_last_pathvector_nodesatellites->getNodeSatellites());
 }
 
 void NodeSatelliteArrayParam::reloadKnots()
@@ -77,6 +82,7 @@ void NodeSatelliteArrayParam::reloadKnots()
         }
     }
 }
+
 void NodeSatelliteArrayParam::setUseDistance(bool use_knot_distance)
 {
     _use_distance = use_knot_distance;
@@ -359,6 +365,7 @@ FilletChamferKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point 
     Inkscape::LivePathEffect::LPEFilletChamfer *filletchamfer = dynamic_cast<Inkscape::LivePathEffect::LPEFilletChamfer *>(_pparam->param_effect);
     if (filletchamfer) {
         filletchamfer->helperpath = false;
+        _pparam->write_to_SVG();
         filletchamfer->makeUndoDone(_("Move handle"));
     }
 }
@@ -384,7 +391,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     }
     NodeSatellite nodesatellite = _pparam->_vector[satelite_index][subsatelite_index];
     Geom::PathVector pathv = _pparam->_last_pathvector_nodesatellites->getPathVector();
-    if (nodesatellite.hidden ||
+    if (nodesatellite.hidden || pathv.size() <= satelite_index ||
         (!pathv[satelite_index].closed() &&
          (subsatelite_index == 0 || subsatelite_index == count_path_nodes(pathv[satelite_index]) -
                                                              1))) // ignore first and last nodesatellites on open paths
