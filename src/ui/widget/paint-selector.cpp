@@ -407,21 +407,12 @@ void PaintSelector::clear_frame()
     }
 }
 
-// ColorPickerPanel* pp = 0;
-
 void PaintSelector::set_mode_empty()
 {
     set_style_buttons(nullptr);
     _style->set_sensitive(false);
     clear_frame();
     _label->set_markup(_("<b>No objects</b>"));
-
-// if (!pp) {
-//     pp = ColorPickerPanel::create(); // Gtk::make_managed<ColorPlate>();
-//     pp->set_expand();
-//     // pp->set_size_request(520,460);
-//     _frame->append(*pp);
-// }
 }
 
 void PaintSelector::set_mode_multiple()

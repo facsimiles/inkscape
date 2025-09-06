@@ -51,7 +51,6 @@ public:
 
     void show_expander(bool show);
     ColorWheel* create_color_wheel(Space::Type type, bool disc);
-    // Gtk::Grid& get_grid();
     void set_spinner_size_pattern(const std::string& pattern);
 
     void attach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column);

@@ -42,9 +42,6 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
         for (auto &[id, color] : *_specific_colors) {
             _selected_colors->set(id, color);
         }
-        if (_color_wheel && _color_wheel->get_widget().is_drawable()) {
-            _color_wheel->set_color(_specific_colors->getAverage());
-        }
     });
 
     // Keep the child in-sync with the selected colorset.
@@ -52,6 +49,9 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
         auto scoped = SignalBlocker{_specific_changed_connection};
         for (auto &[id, color] : *_selected_colors) {
             _specific_colors->set(id, color);
+        }
+        if (_color_wheel && _color_wheel->get_widget().is_drawable()) {
+            _color_wheel->set_color(_specific_colors->getAverage());
         }
     });
 
