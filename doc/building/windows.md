@@ -67,7 +67,7 @@ cd build
 # should always point to the root folder of your copy of the Inkscape source.
 
 # ( For details on these build flags, see below "Build Flags" )
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX=${PWD}/install_dir -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DWITH_INTERNAL_2GEOM=ON  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+cmake -G Ninja -DCMAKE_INSTALL_PREFIX="${PWD}/install_dir" -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DWITH_INTERNAL_2GEOM=ON  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
 # start the compilation and
 # install compiled files and all dependencies required to run Inkscape into the
