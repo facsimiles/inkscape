@@ -38,7 +38,16 @@ SPDrawAnchor::SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc, std::shared_pt
     ctrl->set_pickable(false); // We do our own checking. (TODO: Should be fixed!)
 }
 
-SPDrawAnchor::~SPDrawAnchor() = default;
+SPDrawAnchor::~SPDrawAnchor()
+{
+    // Clear references in FreehandBase.
+    if (dc->sa == this) {
+        dc->sa = nullptr;
+    }
+    if (dc->ea == this) {
+        dc->ea = nullptr;
+    }
+}
 
 /**
  * Test if point is near anchor, if so fill anchor on canvas and return
