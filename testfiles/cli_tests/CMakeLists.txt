@@ -1011,7 +1011,15 @@ add_cli_test(action_test_multiline_anchoring
                         PARAMETERS --actions=select-by-id:grouped_text$<SEMICOLON>transform-translate:10,0$<SEMICOLON>transform-translate:-10,0$<SEMICOLON>export-filename:multiline-anchoring_out.svg$<SEMICOLON>export-plain-svg$<SEMICOLON>export-do
                         EXPECTED_FILES multiline-anchoring_out.svg
                         TEST_SCRIPT match_regex_fail.sh multiline-anchoring_out.svg "(x=\"[3-9][0-9]{2}\")|(x=\"[12][0-9]{3}\")|(y=\"[0-9]{2}\")|(y=\"1[0-9]{2}\")")
-
+# test text to path with SVG in OTF fonts, at the end of test erase all text elements to make sure it doesn't pass by
+# rendering the nonconverted text.
+add_cli_test(actions-svginot-text-topath
+    INPUT_FILENAME ../../rendering_tests/text-gzipped-svg-glyph.svg
+    PARAMETERS --actions=select-all$<SEMICOLON>object-to-path$<SEMICOLON>select-clear$<SEMICOLON>select-by-element:text$<SEMICOLON>delete
+    OUTPUT_FILENAME actions-svginot-text-topath-output.png
+    FUZZYREF_FILENAME ../../rendering_tests/expected_rendering/text-gzipped-svg-glyph.png
+    FUZZ_PERCENTAGE 3
+)
 
 # The export area type should be the last set value
 add_cli_test(actions-export-area-drawing-then-page

@@ -59,7 +59,7 @@ if [ -n "${REFERENCE_FILENAME}" ]; then
     fi
 
     # compare files
-    if ! compare ${FUZZ} -metric AE ${PNG_FILENAME} ${PNG_REFERENCE} ${PNG_COMPARE}; then
+    if ! compare ${FUZZ} -metric AE ${PNG_REFERENCE} ${PNG_FILENAME} ${PNG_COMPARE}; then
         echo && echo "Error: Comparison failed."
         exit 1
     fi
