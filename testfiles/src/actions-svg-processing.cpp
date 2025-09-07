@@ -12,10 +12,11 @@
 
 #include <gtest/gtest.h>
 
-#include <src/document.h>
-#include <src/inkscape.h>
-#include <src/object/sp-root.h>
-#include <src/object/sp-object.h>
+#include "src/actions/actions-helper.h"
+#include "src/document.h"
+#include "src/inkscape.h"
+#include "src/object/sp-root.h"
+#include "src/object/sp-object.h"
 
 #include "geom-predicates.h"
 
@@ -103,4 +104,10 @@ TEST_F(ObjectLinksTest, removeTransforms)
         ASSERT_TRUE(new_box) << " item bounds '" << id << "'";
         EXPECT_RECT_NEAR(old_box, *new_box, 0.01) << "id";
     }
+}
+
+TEST(ActionsTest, to_string_for_actions)
+{
+    ASSERT_EQ(to_string_for_actions(90.0), "90.0");
+    ASSERT_EQ(to_string_for_actions(-90.0), "-90.0");
 }

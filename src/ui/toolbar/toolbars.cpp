@@ -18,6 +18,8 @@
 
 #include "toolbars.h"
 
+#include "ui/shortcuts.h"
+
 // For creating toolbars
 #include "ui/toolbar/arc-toolbar.h"
 #include "ui/toolbar/booleans-toolbar.h"
@@ -119,6 +121,7 @@ void Toolbars::setTool(Tools::ToolBase *tool)
             toolbars_entry = data.create();
             toolbars_entry->set_name(data.name + "Toolbar");
             toolbars_entry->set_hexpand();
+            Shortcuts::getInstance().update_gui_text_recursive(toolbars_entry.get());
             append(*toolbars_entry);
         }
 

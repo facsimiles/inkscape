@@ -15,6 +15,7 @@
 #include <glibmm/convert.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/ustring.h>
+#include <double-conversion/double-conversion.h>
 
 #include "inkscape-application.h"
 #include "xml/document.h"          // for Document
@@ -98,6 +99,29 @@ get_document_and_selection(InkscapeApplication* app, SPDocument** document, Inks
 
     return true;
 }
+
+/**
+ * Convert a double to a string in a way that is compatible with GTK action parsing.
+ *
+ * This means locale-independent conversion to the shortest possible string that still
+ * has a ".0" at the end (so GTK doesn't confuse it with an integer).
+ */
+std::string to_string_for_actions(double x)
+{
+    using namespace double_conversion;
+    auto const conv = DoubleToStringConverter{
+        DoubleToStringConverter::UNIQUE_ZERO |
+            DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+            DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT,
+        "inf", "NaN", 'e', -3, 6, 0, 0
+    };
+    auto buf = std::string(32, '\0');
+    auto builder = double_conversion::StringBuilder(buf.data(), buf.size());
+    conv.ToShortest(x, &builder);
+    buf.resize(builder.position());
+    return buf;
+}
+
 
 /*
   Local Variables:

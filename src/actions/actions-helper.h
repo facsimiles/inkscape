@@ -33,6 +33,7 @@ void active_window_end_helper();
 std::string get_active_desktop_commands_location();
 void show_output(Glib::ustring const &data, bool is_cerr = true);
 bool get_document_and_selection(InkscapeApplication* app, SPDocument** document, Inkscape::Selection** selection);
+std::string to_string_for_actions(double x);
 
 #endif // INK_ACTIONS_HELPER_H
 

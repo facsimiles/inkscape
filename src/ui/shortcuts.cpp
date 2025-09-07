@@ -20,6 +20,7 @@
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/shortcut.h>
 
+#include "actions/actions-helper.h"
 #include "document.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
@@ -245,6 +246,9 @@ Shortcuts::update_gui_text_recursive(Gtk::Widget* widget)
                     action += "('" + variant + "')";
                 } else if (type == "i") {
                     variant = std::to_string(static_cast<Glib::Variant<std::int32_t> const &>(value).get());
+                    action += "(" + variant + ")";
+                } else if (type == "d") {
+                    variant = to_string_for_actions(static_cast<Glib::Variant<double> const &>(value).get());
                     action += "(" + variant + ")";
                 } else {
                     std::cerr << "Shortcuts::update_gui_text_recursive: unhandled variant type: " << type << std::endl;
