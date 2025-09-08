@@ -217,6 +217,7 @@ void PatternEditor::bind_store(Gtk::FlowBox& list, PatternStore& pat) {
         auto const box = Gtk::make_managed<Box>(Gtk::Orientation::VERTICAL);
         auto const image = Gtk::make_managed<Gtk::Image>(to_texture(item->pix));
         image->set_size_request(_tile_size, _tile_size);
+        image->set_pixel_size(_tile_size);
         box->append(*image);
         auto name = Glib::ustring(item->label.c_str());
         if (_show_names.get_active()) {
@@ -470,6 +471,7 @@ void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::R
                             // update preview, it might be stale
                             for_each_descendant(*box, [&](Widget &widget){
                                 if (auto const image = dynamic_cast<Gtk::Image *>(&widget)) {
+                                    image->set_pixel_size(_tile_size);
                                     image->set(to_texture(item->pix));
                                     return ForEachResult::_break;
                                 }
