@@ -329,28 +329,32 @@ iconview *:hover {
     font-size: smaller;
     color: alpha(@theme_fg_color, 0.6);
 }
-
+.dark #InkRuler {
+    color: alpha(@theme_fg_color, 0.7);
+}
+:root {
+    --ruler-separator-color: alpha(@borders, 0.6);
+    --ruler-size: 18px;
+    /* increase contrast between background and page area in light theme */
+    --ruler-light-background: shade(@theme_bg_color, 0.97);
+    --ruler-dark-background: @theme_bg_color;
+}
 #InkRuler.horz {
-    min-height: 2em;
+    min-height: var(--ruler-size);
+    border-top: solid 1px var(--ruler-separator-color);
 }
-
 #InkRuler.vert {
-    min-width: 2em;
+    min-width: var(--ruler-size);
+    border-left: solid 1px var(--ruler-separator-color);
 }
-
-.bright #InkRuler {
-    /* increase contrast between background and page area */
-    background-color: shade(@theme_bg_color, 0.94);
+#InkRuler {
+    background-color: var(--ruler-light-background);
+}
+.dark #InkRuler {
+    background-color: var(--ruler-dark-background);
 }
 
 /* Ensure ui/themes.cpp excludes these classes on applying overridebasecolor: */
-
-.bright #InkRuler.shadow {
-    color: rgba(0,0,0,0.3);
-}
-.dark #InkRuler.shadow {
-    color: rgba(0,0,0,0.5);
-}
 
 .bright #InkRuler.page {
     color: @theme_base_color;
@@ -358,14 +362,25 @@ iconview *:hover {
 .dark #InkRuler.page {
     color: shade(@theme_base_color, 0.666);
 }
-
-.bright #InkRuler.selection.border,
-.dark   #InkRuler.selection.border {
+/* selected object, stroke */
+.bright #InkRuler.selection.border {
     color: @theme_selected_bg_color;
 }
-.bright #InkRuler.selection.background,
+.dark   #InkRuler.selection.border {
+    color: shade(@theme_selected_bg_color, 1.5);
+}
+/* selected object, background */
+.bright #InkRuler.selection.background {
+    color: alpha(@theme_selected_bg_color, 0.15);
+}
 .dark   #InkRuler.selection.background {
-    color: transparent;
+    color: alpha(@theme_selected_bg_color, 0.35);
+}
+.bright #InkRuler.ticks {
+    color: alpha(@theme_fg_color, 0.4);
+}
+.dark   #InkRuler.ticks {
+    color: alpha(@theme_fg_color, 0.5);
 }
 
 /* The actual canvas (Inkscape's drawing area). */
@@ -379,9 +394,25 @@ SPCanvas {
     margin: 0;
     outline: none;
     border-radius: 0;
-    border-width: 0px;
-    min-width: 22px;
-    min-height: 22px;
+    border-width: 0;
+    min-width: var(--ruler-size);
+    min-height: var(--ruler-size);
+}
+#LockGuides {
+    border-top:  solid 1px var(--ruler-separator-color);
+    border-left: solid 1px var(--ruler-separator-color);
+}
+.dark #LockGuides {
+    background-image: image(var(--ruler-dark-background));
+}
+.dark #LockGuides image {
+    background-color: var(--ruler-dark-background);
+}
+.bright #LockGuides {
+    background-image: image(var(--ruler-light-background));
+}
+.bright #LockGuides image {
+    background-color: var(--ruler-light-background);
 }
 /* Don't let images inside those buttons inflate their sizes */
 #QuickActions *, #LockGuides *, #CMS_Adjust * {

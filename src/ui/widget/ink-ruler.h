@@ -79,15 +79,16 @@ private:
     Glib::RefPtr<Gtk::EventControllerMotion> _track_widget_controller;
 
     // Cached style properties
-    Gdk::RGBA _shadow;
     Gdk::RGBA _foreground;
+    Gdk::RGBA _major;
+    Gdk::RGBA _minor;
     int _font_size{};
     Gdk::RGBA _page_fill;
     Gdk::RGBA _select_fill;
     Gdk::RGBA _select_stroke;
+    Gdk::RGBA _select_bgnd;
 
     // Cached render nodes.
-    RenderNodePtr _shadow_node;
     RenderNodePtr _scale_tile_node;
     RenderNodePtr _scale_node;
     std::map<int, RenderNodePtr> _label_nodes;

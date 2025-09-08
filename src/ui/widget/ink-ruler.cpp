@@ -183,14 +183,38 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
         snapshot->append_color(_page_fill, geom_to_gtk(rect));
     }
 
-    // Draw bottom/right line of ruler
-    Geom::IntRect edge_rect;
-    if (_orientation == Gtk::Orientation::HORIZONTAL) {
-        edge_rect = {0, aperp - 1, aparallel, aperp};
-    } else {
-        edge_rect = {aperp - 1, 0, aperp, aparallel};
+    // Draw a selection bar
+    if (_sel_lower != _sel_upper && _sel_visible) {
+        constexpr auto line_width = 2.0;
+        auto const delta = _sel_upper - _sel_lower;
+        auto const dxy = 0;//delta > 0 ? radius : -radius;
+        double sy0 = _sel_lower;
+        double sy1 = _sel_upper;
+        double sx0 = std::floor(aperp * 0.7);
+        double sx1 = sx0;
+
+        if (_orientation == Gtk::Orientation::HORIZONTAL) {
+            std::swap(sy0, sx0);
+            std::swap(sy1, sx1);
+        }
+
+        if (std::abs(delta) >= 1) {
+            Geom::Rect rect;
+            Geom::Rect bgnd;
+            if (_orientation == Gtk::Orientation::HORIZONTAL) {
+                // auto edge_rect = {0, aperp - 1, aparallel, aperp};
+                auto const y = aperp - line_width;// std::round(sy0 - line_width / 2);
+                bgnd = Geom::Rect(sx0 + dxy, 0, sx1 - dxy, aperp -line_width);
+                rect = Geom::Rect(sx0 + dxy, y, sx1 - dxy, y + line_width);
+            } else {
+                auto const x = aperp - line_width; // std::round(sx0 - line_width / 2);
+                bgnd = Geom::Rect(0, sy0 + dxy, aperp - line_width, sy1 - dxy);
+                rect = Geom::Rect(x, sy0 + dxy, x + line_width, sy1 - dxy);
+            }
+            snapshot->append_color(_select_bgnd, geom_to_gtk(bgnd).gobj());
+            snapshot->append_color(_select_stroke, geom_to_gtk(rect).gobj());
+        }
     }
-    snapshot->append_color(_foreground, geom_to_gtk(edge_rect));
 
     double const abs_size = std::abs(_max_size);
     int const sign = _max_size >= 0 ? 1 : -1;
@@ -252,7 +276,7 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
                 (to_reset.reset(), ...);
             }
         };
-        update(aparallel, _params->aparallel, _shadow_node, _scale_node);
+        update(aparallel, _params->aparallel, _scale_node);
         update(aperp, _params->aperp, _scale_tile_node);
         update(divide_index, _params->divide_index, _scale_tile_node);
         update_approx(pixels_per_tick, _params->pixels_per_tick, _scale_tile_node);
@@ -261,7 +285,7 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     if (!_scale_tile_node) {
         _scale_node.reset(); // _scale_node contains _scale_tile_node
     }
-
+#if 0 // example of creating a drop shadow
     // Draw a shadow which overlaps any previously painted object.
     if (!_shadow_node) {
         Geom::IntRect shadow_rect;
@@ -287,32 +311,37 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
         _shadow_node = RenderNodePtr{gtk_snapshot_free_to_node(shadow_snapshot)};
     }
     gtk_snapshot_append_node(snapshot->gobj(), _shadow_node.get());
-
+#endif
     // Build a single scale tile, i.e. one major tick.
     if (!_scale_tile_node) {
         auto scale_tile = gtk_snapshot_new();
+        bool major = true;
 
         for (int i = 0; i < subdivisions; i++) {
             // Position of tick
             double position = std::round(i * pixels_per_tick);
 
             // Height of tick
-            int size = aperp - 7;
+            int size = aperp - 8;
             for (int j = divide_index; j > 0; --j) {
                 if (i % ruler_metric->subdivide[j] == 0) {
                     break;
                 }
                 size = size / 2 + 1;
+                major = false;
+            }
+            if (major) {
+                size = size / 2 + 3;
             }
 
             // Draw ticks
             Geom::Rect rect;
             if (_orientation == Gtk::Orientation::HORIZONTAL) {
-                rect = Geom::Rect(position, aperp - size, position + 1, aperp - 1);
+                rect = Geom::Rect(position, aperp - size, position + 1, aperp);
             } else {
-                rect = Geom::Rect(aperp - size, position, aperp - 1, position + 1);
+                rect = Geom::Rect(aperp - size, position, aperp, position + 1);
             }
-            gtk_snapshot_append_color(scale_tile, _foreground.gobj(), geom_to_gtk(rect).gobj());
+            gtk_snapshot_append_color(scale_tile, major ? _major.gobj() : _minor.gobj(), geom_to_gtk(rect).gobj());
         }
 
         _scale_tile_node = RenderNodePtr{gtk_snapshot_free_to_node(scale_tile)};
@@ -371,7 +400,7 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
 
         // Align text to pixel
         int x = position + 3;
-        int y = 3;
+        int y = 2;
         if (rotate) {
             std::swap(x, y);
         }
@@ -395,54 +424,6 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     }
 
     snapshot->restore();
-
-    // Draw a selection bar
-    if (_sel_lower != _sel_upper && _sel_visible) {
-        constexpr auto radius = 3.0;
-        constexpr auto line_width = 2.0;
-        auto const delta = _sel_upper - _sel_lower;
-        auto const dxy = delta > 0 ? radius : -radius;
-        double sy0 = _sel_lower;
-        double sy1 = _sel_upper;
-        double sx0 = std::floor(aperp * 0.7);
-        double sx1 = sx0;
-
-        if (_orientation == Gtk::Orientation::HORIZONTAL) {
-            std::swap(sy0, sx0);
-            std::swap(sy1, sx1);
-        }
-
-        if (std::abs(delta) > 2 * radius) {
-            Geom::Rect rect;
-            if (_orientation == Gtk::Orientation::HORIZONTAL) {
-                auto const y = std::round(sy0 - line_width / 2);
-                rect = Geom::Rect(sx0 + dxy, y, sx1 - dxy, y + line_width);
-            } else {
-                auto const x = std::round(sx0 - line_width / 2);
-                rect = Geom::Rect(x, sy0 + dxy, x + line_width, sy1 - dxy);
-            }
-            snapshot->append_color(_select_stroke, geom_to_gtk(rect).gobj());
-        }
-
-        static auto const path = [] {
-            auto builder = gsk_path_builder_new();
-            gsk_path_builder_add_circle(builder, Gdk::Graphene::Point{0.0, 0.0}.gobj(), radius);
-            return gsk_path_builder_free_to_path(builder);
-        }();
-
-        static auto const stroke = [] {
-            return gsk_stroke_new(line_width);
-        }();
-
-        // Markers
-        for (auto pt : {Geom::Point(sx0, sy0), Geom::Point(sx1, sy1)}) {
-            snapshot->save();
-            snapshot->translate(geom_to_gtk(pt));
-            gtk_snapshot_append_fill(snapshot->gobj(), path, GSK_FILL_RULE_WINDING, _select_fill.gobj());
-            gtk_snapshot_append_stroke(snapshot->gobj(), path, stroke, _select_stroke.gobj());
-            snapshot->restore();
-        }
-    }
 }
 
 // Draw position marker, we use doubles here.
@@ -489,18 +470,21 @@ void Ruler::css_changed(GtkCssStyleChange *change)
     // Cache all our colors to speed up rendering.
     _foreground = get_color();
     _font_size = get_font_size(*this);
+    _major = get_color_with_class(*this, "ticks");
+    _minor = _major;
+    _minor.set_alpha(_major.get_alpha() * 0.6f);
 
-    _shadow = get_color_with_class(*this, "shadow");
     _page_fill = get_color_with_class(*this, "page");
 
     add_css_class("selection");
     _select_fill = get_color_with_class(*this, "background");
     _select_stroke = get_color_with_class(*this, "border");
+    _select_bgnd = _select_fill;
     remove_css_class("selection");
 
     redraw_ruler();
-    _shadow_node.reset();
     _label_nodes.clear();
+    _scale_tile_node.reset();
 }
 
 /**
