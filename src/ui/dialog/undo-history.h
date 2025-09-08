@@ -21,20 +21,18 @@
 
 namespace Inkscape::UI::Dialog {
 
-/* Custom cell renderers */
-
-class CellRendererInt : public Gtk::CellRendererText {
+class CellRendererInt : public Gtk::CellRendererText
+{
 public:
     struct Filter
     {
         virtual bool operator()(const int&) const = 0;
     };
 
-    CellRendererInt(const Filter &filter = no_filter) :
-        Glib::ObjectBase{"CellRendererInt"},
-        Gtk::CellRendererText(),
-        _property_number(*this, "number", 0),
-        _filter (filter)
+    CellRendererInt(const Filter &filter = no_filter)
+        : Glib::ObjectBase{"CellRendererInt"}
+        , _property_number(*this, "number", 0)
+        , _filter(filter)
     {
         auto const set_text = [this]{
             Glib::ustring text;
@@ -47,16 +45,13 @@ public:
         property_number().signal_changed().connect(set_text);
     }
 
-    Glib::PropertyProxy<int>
-    property_number() { return _property_number.get_proxy(); }
+    Glib::PropertyProxy<int> property_number() { return _property_number.get_proxy(); }
 
     static const Filter &no_filter;
 
 private:
     Glib::Property<int> _property_number;
     const Filter &_filter;
-
-    struct NoFilter : Filter { bool operator()(const int &/*x*/) const override { return true; } };
 };
 
 /**
@@ -82,8 +77,6 @@ private:
     Gtk::TreeView _event_list_view;
     Glib::RefPtr<Gtk::TreeSelection> _event_list_selection;
 
-    EventLog::CallbackMap _callback_connections;
-
     void disconnectEventLog();
     void connectEventLog();
 
@@ -91,19 +84,15 @@ private:
     void _onExpandEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _onCollapseEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
 
-    struct GreaterThan : CellRendererInt::Filter
-    {
-        GreaterThan(int _i) : i (_i) {}
-        bool operator()(const int &x) const override { return x > i; }
-        int i;
-    };
+    sigc::connection _row_changed_conn;
+    void _onRowChanged();
 
-    static const CellRendererInt::Filter &greater_than_1;
+    OperationBlocker _blocker;
 };
 
 } // namespace Inkscape::UI::Dialog
 
-#endif //INKSCAPE_UI_DIALOG_UNDO_HISTORY_H
+#endif // INKSCAPE_UI_DIALOG_UNDO_HISTORY_H
 
 /*
   Local Variables:

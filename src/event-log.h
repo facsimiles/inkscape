@@ -18,14 +18,13 @@
 #include <gtkmm/treeview.h>
 #include <sigc++/trackable.h>
 
+#include "ui/operation-blocker.h"
 #include "undo-stack-observer.h"
 #include "event.h"
 
 class SPDocument;
 
 namespace Inkscape {
-
-class EventLogPrivate;
 
 /**
  * A simple log for maintaining a history of committed, undone and redone events along with their
@@ -40,15 +39,19 @@ class EventLogPrivate;
  * expanded/collapsed state will be updated as events are committed, undone and redone. Whenever
  * this happens, the event log will block the TreeView's callbacks to prevent circular updates.
  */
-class EventLog : public UndoStackObserver, public sigc::trackable
+class EventLog
+    : public UndoStackObserver
+    , public sigc::trackable
 {
-        
 public:
-    typedef Gtk::TreeModel::iterator iterator;
-    typedef Gtk::TreeModel::const_iterator const_iterator;
+    using iterator = Gtk::TreeModel::iterator;
+    using const_iterator = Gtk::TreeModel::const_iterator;
 
-    EventLog(SPDocument* document);
+    explicit EventLog(SPDocument *document);
     ~EventLog() override;
+
+    EventLog(EventLog &&) = delete;
+    EventLog &operator=(EventLog &&) = delete;
 
     /**
      * Event datatype
@@ -61,8 +64,11 @@ public:
         Gtk::TreeModelColumn<int> child_count;
 
         EventModelColumns()
-        { 
-            add(event); add(icon_name); add(description); add(child_count);
+        {
+            add(event);
+            add(icon_name);
+            add(description);
+            add(child_count);
         }
     };
 
@@ -82,69 +88,41 @@ public:
 
     Glib::RefPtr<Gtk::TreeModel> getEventListStore() const { return _event_list_store; }
     static const EventModelColumns& getColumns();
-    iterator getCurrEvent() const                          { return _curr_event; }
-    iterator getCurrEventParent() const                    { return _curr_event_parent; }
+    iterator getCurrEvent() const { return _curr_event; }
 
-    void setCurrEvent(iterator event)          { _curr_event = event; }
-    void setCurrEventParent(iterator event)    { _curr_event_parent = event; }
-    void blockNotifications(bool status=true)  { _notifications_blocked = status; }
-    void rememberFileSave()                    { _last_saved = _curr_event; }
+    void rememberFileSave() { _last_saved = _curr_event; }
 
-    // Callback types for TreeView changes.
-
-    enum CallbackTypes { 
-        CALLB_SELECTION_CHANGE, 
-        CALLB_EXPAND, 
-        CALLB_COLLAPSE, 
-        CALLB_LAST 
-    };
-
-    typedef std::map<const CallbackTypes, sigc::connection> CallbackMap;
-
-    /**
-     * Connect with a TreeView.
-     */
-    void addDialogConnection(Gtk::TreeView *event_list_view, CallbackMap *callback_connections);
-
-    /**
-     * Disconnect from a TreeView.
-     */
-    void removeDialogConnection(Gtk::TreeView *event_list_view, CallbackMap *callback_connections);
-
-    /*
-     * Updates the sensitivity of undo and redo actions.
-     */
+    /// Update the sensitivity of undo and redo actions.
     void updateUndoVerbs();
 
-private:
-    EventLogPrivate *_priv;
+    /// Seek the document to a given item in the undo history.
+    void seekTo(iterator target);
 
+    /// Emitted when the current event changed.
+    sigc::connection connectRowChanged(sigc::slot<void ()> slot) { return _row_changed.connect(std::move(slot)); }
+
+private:
     SPDocument *_document;       //< document that is logged
 
-    Glib::RefPtr<Gtk::TreeStore> _event_list_store; 
+    Glib::RefPtr<Gtk::TreeStore> _event_list_store;
 
     iterator _first_event;       //< first non-event in _event_list_store
     iterator _curr_event;        //< current event in _event_list_store
     iterator _last_event;        //< end position in _event_list_store
-    iterator _curr_event_parent; //< parent to current event, if any
-
+    iterator _curr_event_parent{nullptr}; //< parent to current event, if any
     iterator _last_saved;        //< position where last document save occurred
 
-    bool _notifications_blocked; //< if notifications should be handled
+    OperationBlocker _blocker;
+    sigc::signal<void ()> _row_changed;
 
     // Helper functions
 
     const_iterator _getUndoEvent() const; //< returns the current undoable event or NULL if none
     const_iterator _getRedoEvent() const; //< returns the current redoable event or NULL if none
 
-    void _clearUndo();  //< erase all previously committed events
     void _clearRedo();  //< erase all previously undone events
 
-    void checkForVirginity(); //< marks the document as untouched if undo/redo reaches a previously saved state
-
-    // noncopyable, nonassignable
-    EventLog(EventLog const &other) = delete;
-    EventLog& operator=(EventLog const &other) = delete;
+    void _checkForVirginity(); //< marks the document as untouched if undo/redo reaches a previously saved state
 };
 
 } // namespace Inkscape

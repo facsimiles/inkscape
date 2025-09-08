@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-/**
- * @file
+/** @file
  * Undo History dialog - implementation.
  */
 /* Author:
@@ -16,22 +15,36 @@
 
 #include "document-undo.h"
 #include "document.h"
-#include "ui/pack.h"
-#include "util/signal-blocker.h"
 
 namespace Inkscape::UI::Dialog {
+namespace {
 
-const CellRendererInt::Filter &CellRendererInt::no_filter = CellRendererInt::NoFilter();
+struct NoFilter : CellRendererInt::Filter
+{
+    bool operator()(const int &) const override { return true; }
+};
+
+struct GreaterThan : CellRendererInt::Filter
+{
+    explicit GreaterThan(int _i) : i(_i) {}
+    bool operator()(const int &x) const override { return x > i; }
+    int i;
+};
+
+auto const greater_than_1 = GreaterThan{1};
+
+} // namespace
+
+CellRendererInt::Filter const &CellRendererInt::no_filter = NoFilter{};
 
 UndoHistory::UndoHistory()
-    : DialogBase("/dialogs/undo-history", "UndoHistory"),
-      _event_list_selection(_event_list_view.get_selection())
+    : DialogBase{"/dialogs/undo-history", "UndoHistory"}
+    , _event_list_selection{_event_list_view.get_selection()}
 {
     auto const columns = &EventLog::getColumns();
 
-    set_size_request(-1, -1);
-
-    UI::pack_start(*this, _scrolled_window);
+    append(_scrolled_window);
+    _scrolled_window.set_vexpand();
     _scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);
 
     _event_list_view.set_enable_search(false);
@@ -65,19 +78,14 @@ UndoHistory::UndoHistory()
     description_column->set_sizing(Gtk::TreeViewColumn::Sizing::AUTOSIZE);
     description_column->set_min_width (150);
 
-    _event_list_view.set_expander_column( *_event_list_view.get_column(cols_count - 1) );
+    _event_list_view.set_expander_column(*_event_list_view.get_column(cols_count - 1));
 
     _scrolled_window.set_child(_event_list_view);
     _scrolled_window.set_overlay_scrolling(false);
-    // connect EventLog callbacks
-    _callback_connections[EventLog::CALLB_SELECTION_CHANGE] =
-        _event_list_selection->signal_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onListSelectionChange));
 
-    _callback_connections[EventLog::CALLB_EXPAND] =
-        _event_list_view.signal_row_expanded().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onExpandEvent));
-
-    _callback_connections[EventLog::CALLB_COLLAPSE] =
-        _event_list_view.signal_row_collapsed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onCollapseEvent));
+    _event_list_selection->signal_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onListSelectionChange));
+    _event_list_view.signal_row_expanded().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onExpandEvent));
+    _event_list_view.signal_row_collapsed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onCollapseEvent));
 }
 
 UndoHistory::~UndoHistory()
@@ -88,20 +96,16 @@ UndoHistory::~UndoHistory()
 void UndoHistory::documentReplaced()
 {
     disconnectEventLog();
-    if (auto document = getDocument()) {
-        g_assert (document->get_event_log() != nullptr);
-        auto blocker = SignalBlocker{_callback_connections[EventLog::CALLB_SELECTION_CHANGE]};
-        _event_list_view.unset_model();
-        connectEventLog();
-    }
+    connectEventLog();
 }
 
 void UndoHistory::disconnectEventLog()
 {
     if (_event_log) {
-        _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
+        auto guard = _blocker.block();
+        _row_changed_conn.disconnect();
         _event_list_view.unset_model();
-        _event_list_store.reset();
+        _event_list_store = {};
         _event_log = nullptr;
     }
 }
@@ -109,146 +113,93 @@ void UndoHistory::disconnectEventLog()
 void UndoHistory::connectEventLog()
 {
     if (auto document = getDocument()) {
+        auto guard = _blocker.block();
         _event_log = document->get_event_log();
         _event_list_store = _event_log->getEventListStore();
         _event_list_view.set_model(_event_list_store);
-        _event_log->addDialogConnection(&_event_list_view, &_callback_connections);
-        _event_list_view.scroll_to_row(_event_list_store->get_path(_event_list_selection->get_selected()));
+        auto path = _event_list_store->get_path(_event_log->getCurrEvent());
+        _event_list_view.expand_to_path(path);
+        _event_list_selection->select(path);
+        _event_list_view.scroll_to_row(path);
+        _row_changed_conn = _event_log->connectRowChanged([this] { _onRowChanged(); });
     }
 }
 
-void
-UndoHistory::_onListSelectionChange()
+// Called when the document's undo history position just moved to a new place.
+void UndoHistory::_onRowChanged()
 {
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
+    auto old_iter = _event_list_selection->get_selected();
+    auto old_parent = old_iter->parent() ? old_iter->parent() : old_iter;
+
+    auto iter = _event_log->getCurrEvent();
+    auto new_parent = iter->parent() ? iter->parent() : iter;
+
+    if (old_parent && (!new_parent || old_parent != new_parent)) {
+        // Collapse branches upon leaving them.
+        _event_list_view.collapse_row(_event_list_store->get_path(old_parent));
+    }
+
+    auto path = _event_list_store->get_path(iter);
+    _event_list_view.expand_to_path(path);
+    _event_list_selection->select(path);
+    _event_list_view.scroll_to_row(path);
+}
+
+// Called when the user just selected a new item in the undo history tree view.
+void UndoHistory::_onListSelectionChange()
+{
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
     auto selected = _event_list_selection->get_selected();
-
-    /* If no event is selected in the view, find the right one and select it. This happens whenever
-     * a branch we're currently in is collapsed.
-     */
     if (!selected) {
-        auto curr_event = _event_log->getCurrEvent();
-        auto const curr_event_parent = curr_event->parent();
-
-        if (curr_event_parent) {
-            _event_log->blockNotifications();
-
-            auto const last = --curr_event_parent->children().end();
-            for (; curr_event != last ; ++curr_event ) {
-                DocumentUndo::redo(getDocument());
-            }
-
-            _event_log->blockNotifications(false);
-
-            _event_log->setCurrEvent(curr_event);
-            _event_list_selection->select(curr_event_parent);
-        } else {  // this should not happen
-            _event_list_selection->select(curr_event);
-        }
-
+        // Can happen when collapsing a section that contained the selection, causing the selection to become null.
+        // In this case _onCollapseEvent() will be called immediately after and re-select the correct item.
         return;
     }
 
-    /* Selecting a collapsed parent event is equal to selecting the last child
-     * of that parent's branch.
-     */
-    if ( !selected->children().empty() &&
-         !_event_list_view.row_expanded(_event_list_store->get_path(selected)) )
-    {
-        selected = selected->children().end();
-        --selected;
+    // Selecting a collapsed parent event is equal to selecting the last child of that parent's branch.
+    if (!selected->children().empty() && !_event_list_view.row_expanded(_event_list_store->get_path(selected))) {
+        selected = --selected->children().end();
     }
 
-    // An event before the current one has been selected. Undo to the selected event.
-    auto last_selected = _event_log->getCurrEvent();
-    if ( _event_list_store->get_path(selected) <
-         _event_list_store->get_path(last_selected) )
-    {
-        _event_log->blockNotifications();
-
-        while ( selected != last_selected ) {
-            DocumentUndo::undo(getDocument());
-
-            if ( last_selected->parent() &&
-                 last_selected == last_selected->parent()->children().begin() )
-            {
-                last_selected = last_selected->parent();
-                _event_log->setCurrEventParent({});
-            } else {
-                --last_selected;
-                if ( !last_selected->children().empty() ) {
-                    _event_log->setCurrEventParent(last_selected);
-                    last_selected = last_selected->children().end();
-                    --last_selected;
-                }
-            }
-        }
-
-        _event_log->blockNotifications(false);
-
-        _event_log->updateUndoVerbs();
-    } else { // An event after the current one has been selected. Redo to the selected event.
-        _event_log->blockNotifications();
-
-        while (last_selected && selected != last_selected ) {
-            DocumentUndo::redo(getDocument());
-
-            if ( !last_selected->children().empty() ) {
-                _event_log->setCurrEventParent(last_selected);
-                last_selected = last_selected->children().begin();
-            } else {
-                ++last_selected;
-
-                if ( last_selected->parent() &&
-                     last_selected == last_selected->parent()->children().end() )
-                {
-                    last_selected = last_selected->parent();
-                    ++last_selected;
-                    _event_log->setCurrEventParent({});
-                }
-            }
-        }
-
-        _event_log->blockNotifications(false);
-
-    }
-
-    _event_log->setCurrEvent(selected);
-    _event_log->updateUndoVerbs();
+    _event_log->seekTo(selected);
 }
 
-void
-UndoHistory::_onExpandEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &/*path*/)
+void UndoHistory::_onExpandEvent(Gtk::TreeModel::iterator const &iter, Gtk::TreeModel::Path const &)
 {
-    if ( iter == _event_list_selection->get_selected() ) {
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block(); // block _onListSelectionChange()
+
+    if (iter == _event_list_selection->get_selected()) {
         _event_list_selection->select(_event_log->getCurrEvent());
     }
 }
 
-void
-UndoHistory::_onCollapseEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &/*path*/)
+void UndoHistory::_onCollapseEvent(Gtk::TreeModel::iterator const &iter, Gtk::TreeModel::Path const &)
 {
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block(); // block _onListSelectionChange()
+
     // Collapsing a branch we're currently in is equal to stepping to the last event in that branch
-    auto const curr_event_parent = _event_log->getCurrEvent();
-    if (iter == curr_event_parent) {
-        _event_log->blockNotifications();
-
-        DocumentUndo::redo(getDocument());
-
-        auto curr_event = curr_event_parent->children().begin();
-        auto const last = --curr_event_parent->children().end();
-        for (; curr_event != last ; ++curr_event) {
-            DocumentUndo::redo(getDocument());
-        }
-
-        _event_log->blockNotifications(false);
-
-        _event_log->setCurrEvent(curr_event);
-        _event_log->setCurrEventParent(curr_event_parent);
-        _event_list_selection->select(curr_event_parent);
+    auto old_iter = _event_log->getCurrEvent();
+    auto old_parent = old_iter->parent() ? old_iter->parent() : old_iter;
+    if (old_parent && old_parent == iter) {
+        _event_log->seekTo(--iter->children().end());
+        _event_list_selection->select(iter);
     }
 }
-
-const CellRendererInt::Filter &UndoHistory::greater_than_1 = UndoHistory::GreaterThan(1);
 
 } // namespace Inkscape::UI::Dialog
 
