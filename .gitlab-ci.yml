@@ -108,11 +108,8 @@ appimage:linux:
       - Inkscape*.AppImage
 
 
-inkscape:macos:
+.macos:
   stage: build
-  parallel:
-    matrix:
-      - ARCHITECTURE: [ "arm64" ]
   rules:
     - *do_not_run_for_schedules
     # Create macOS jobs only for the "inkscape" namespace as the runner is
@@ -128,10 +125,9 @@ inkscape:macos:
         - ccache
   tags:
     - macos
-    - ${ARCHITECTURE}
+    - arm64
   variables:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
-    CCACHE_MAXSIZE: "800Mi"
     # ICM = inkscape ci macos
     # https://gitlab.com/inkscape/infra/inkscape-ci-macos
     ICM_REPO_REF: e33bb8e753acd06a2c1c4c5215f99b83e403aada
@@ -143,21 +139,28 @@ inkscape:macos:
     PACKAGE_URL_PREFIX: ${PACKAGE_REGISTRY_URL}/icm/${ICM_REPO_REF}
     # directory and SDK settings for ICM
     REP_DIR: $CI_PROJECT_DIR
-    SDKROOT: /opt/sdks/MacOSX11.3.sdk
     WRK_DIR: /Users/Shared/work
-  script:
+  before_script:
     # Clone the repo containing all the build scripts.
     - |
       git clone $ICM_REPO_URL icm
       git -C icm checkout $ICM_REPO_REF
       git -C icm submodule update --init --recursive
-    # Build the dependencies and then Inkscape. Dependencies are uploaded to the
-    # package registry so they don't have to be rebuilt every time if there
-    # haven't been any changes.
+
+
+deps:macos:
+  extends: .macos
+  variables:
+    CCACHE_MAXSIZE: "500Mi"
+    ORKA_RUNNER: sonoma
+    SDKROOT: /opt/sdks/MacOSX11.3.sdk
+  script:
+    # Build dependencies and upload to the package registry.
     - |
       VER_DIR=$(icm/jhb/usr/bin/config get VER_DIR)
-      PACKAGE_URL=${PACKAGE_URL_PREFIX}/$(basename $VER_DIR)_${ARCHITECTURE}.dmg
-      if ! curl -H "JOB-TOKEN: $CI_JOB_TOKEN" -fLO $PACKAGE_URL; then
+      PACKAGE_URL=${PACKAGE_URL_PREFIX}/$(basename $VER_DIR)_$(uname -m).dmg
+      if curl --max-filesize 1M -H "JOB-TOKEN: $CI_JOB_TOKEN" -sLO $PACKAGE_URL 2>/dev/null; then
+        # rc=0 as GitLab returns a 404 page
         icm/110-bootstrap_jhb.sh
         icm/120-build_gtk4.sh
         icm/130-build_inkdeps.sh
@@ -168,13 +171,31 @@ inkscape:macos:
         icm/jhb/usr/bin/archive create_dmg
         curl --fail-with-body -H "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file $(basename $PACKAGE_URL) $PACKAGE_URL
         rm -rf ${VER_DIR:?}
+      else
+        # rc=56 because the artifact size exceeds the specified max-filesize
+        echo "Found dependencies in package registry."
       fi
-    - icm/jhb/usr/bin/archive install_dmg
+
+
+inkscape:macos:
+  extends: .macos
+  needs: ["deps:macos"]
+  variables:
+    CCACHE_MAXSIZE: "200Mi"
+    MACOSX_DEPLOYMENT_TARGET: 11.3
+    ORKA_RUNNER: sequoia
+    SDKROOT: /opt/sdks/MacOSX15.5.sdk
+  script:
     - |
-      icm/210-inkscape_build.sh
-      icm/220-inkscape_package.sh
-      icm/230-inkscape_distrib.sh
-    - icm/jhb/usr/bin/archive uninstall_dmg
+      VER_DIR=$(icm/jhb/usr/bin/config get VER_DIR)
+      PACKAGE_URL=${PACKAGE_URL_PREFIX}/$(basename $VER_DIR)_$(uname -m).dmg
+      if curl -H "JOB-TOKEN: $CI_JOB_TOKEN" -fLO $PACKAGE_URL; then
+        icm/jhb/usr/bin/archive install_dmg
+        icm/210-inkscape_build.sh
+        icm/220-inkscape_package.sh
+        icm/230-inkscape_distrib.sh
+        icm/jhb/usr/bin/archive uninstall_dmg
+      fi
     # Replace the command above with this one to keep the shadow file.
     # This will be used in the test job.
     #- icm/jhb/usr/bin/archive uninstall_dmg archive
@@ -297,16 +318,9 @@ test:linux:
     when: on_failure
 
 .test:macos:
-  extends: inkscape:macos
+  extends: .macos
   stage: test
-  parallel:
-    matrix:
-      - ARCHITECTURE: [ "arm64" ]
-  needs:
-    - job: inkscape:macos
-      parallel:
-        matrix:
-          - ARCHITECTURE: arm64
+  needs: ["inkscape:macos"]
   script:
     - icm/jhb/usr/bin/archive install_dmg
     - |
