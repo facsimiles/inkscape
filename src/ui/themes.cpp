@@ -452,7 +452,8 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         } catch (const Gtk::CssParserError &ex) {
             g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", macstyle.c_str(), ex.what());
         }
-        Gtk::StyleProvider::add_provider_for_display(display, _macstyleprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        // increased priority to be able to override Inkscape style.css
+        Gtk::StyleProvider::add_provider_for_display(display, _macstyleprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 20);
     }
 #endif
 
@@ -470,7 +471,8 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
             g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
                        ex.what());
         }
-        Gtk::StyleProvider::add_provider_for_display(display, _userprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        // increased priority to be able to override Inkscape style.css
+        Gtk::StyleProvider::add_provider_for_display(display, _userprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 20);
     }
 }
 
