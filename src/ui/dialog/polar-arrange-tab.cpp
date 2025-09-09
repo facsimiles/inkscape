@@ -167,22 +167,14 @@ static void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &r
  * of objects, the index of the objects as well as the arc start and end
  * points
  * @param arcBegin angle at which the arc begins
- * @param arcEnd angle at which the arc ends
+ * @param arcLength signed arc length
  * @param count number of objects in the selection
  * @param n index of the object in the selection
  */
-static float calcAngle(float arcBegin, float arcEnd, int count, int n)
+static float calcAngle(float arcBegin, float arcLength, int count, int n)
 {
-    float arcLength = arcEnd - arcBegin;
-    float delta = std::abs(std::abs(arcLength) - 2*M_PI);
-    if(delta > 0.01) count--; // If not a complete circle, put an object also at the extremes of the arc;
-
-    float angle = n / (float)count;
-    // Normalize for arcLength:
-    angle = angle * arcLength;
-    angle += arcBegin;
-
-    return angle;
+    float angleFraction = n / (float)std::max(1, count);
+    return arcBegin + angleFraction * arcLength;
 }
 
 /**
@@ -203,6 +195,10 @@ static Geom::Point getAnchorPoint(int anchor, SPItem *item)
 {
     Geom::Point source;
     Geom::OptRect bbox = item->documentVisualBounds();
+
+    if (!bbox.has_value()) {
+        return Geom::Point(0, 0) * item->i2dt_affine();
+    }
 
     switch(anchor)
     {
@@ -292,7 +288,9 @@ void PolarArrangeTab::arrange()
 
     float cx, cy; // Center of the ellipse
     float rx, ry; // Radiuses of the ellipse in x and y direction
-    float arcBeg, arcEnd; // begin and end angles for arcs
+    float arcBeg;
+    float arcLength;
+    bool whole = false;
     Geom::Affine transformation; // Any additional transformation to apply to the objects
     if (arrangeOnEllipse) {
         if (!referenceEllipse) {
@@ -306,7 +304,15 @@ void PolarArrangeTab::arrange()
             rx = referenceEllipse->rx.value;
             ry = referenceEllipse->ry.value;
             arcBeg = referenceEllipse->start;
-            arcEnd = referenceEllipse->end;
+            if (referenceEllipse->is_whole()) {
+                arcLength = M_PI * 2;
+                whole = true;
+            } else {
+                arcLength = referenceEllipse->end - arcBeg;
+                if (arcLength < 0) {
+                    arcLength += M_PI * 2;
+                }
+            };
 
             transformation = referenceEllipse->i2dt_affine();
 
@@ -321,7 +327,11 @@ void PolarArrangeTab::arrange()
         rx = radiusX.getValue("px");
         ry = radiusY.getValue("px");
         arcBeg = angleX.getValue("rad");
-        arcEnd = angleY.getValue("rad") * yaxisdir;
+        float arcEnd = angleY.getValue("rad");
+        arcLength = arcEnd - arcBeg;
+        if (std::abs(arcLength - M_PI * 2) < 0.00001) {
+            whole = true;
+        }
         transformation.setIdentity();
         referenceEllipse = nullptr;
     }
@@ -341,6 +351,8 @@ void PolarArrangeTab::arrange()
     }
 
     Geom::Point realCenter = Geom::Point(cx, cy) * transformation;
+    // for whole circle space them evenly, otherwise place an object at the start and end of arc
+    int steps = count - (whole ? 0 : 1);
 
     int i = 0;
     for(auto item : tmp)
@@ -348,7 +360,7 @@ void PolarArrangeTab::arrange()
             // Ignore the reference ellipse if any
         if(item != referenceEllipse)
         {
-            float angle = calcAngle(arcBeg, arcEnd, count, i);
+            float angle = calcAngle(arcBeg, arcLength, steps, i);
             Geom::Point newLocation = calcPoint(cx, cy, rx, ry, angle) * transformation;
 
             moveToPoint(anchor, item, newLocation);
