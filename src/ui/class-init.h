@@ -3,6 +3,7 @@
 #ifndef INK_CLASS_INIT_H
 #define INK_CLASS_INIT_H
 
+#include <utility>
 #include <glibmm/extraclassinit.h>
 #include <gtkmm.h>
 #include <sigc++/scoped_connection.h>
@@ -13,12 +14,13 @@ namespace Inkscape::Util {
 // It allows us to modify element name of our new custom widget.
 // Element name will replace generic <widget> name and can be used in CSS style sheets.
 
-class ClassExtraInit : public Glib::ExtraClassInit {
+class ClassExtraInit : public Glib::ExtraClassInit
+{
 public:
-    ClassExtraInit(const Glib::ustring& css_name)
-      : Glib::ExtraClassInit(my_extra_class_init_function, &_css_name,
-                             my_instance_init_function),
-        _css_name(css_name) {}
+    explicit ClassExtraInit(Glib::ustring css_name)
+        : Glib::ExtraClassInit(my_extra_class_init_function, &_css_name, my_instance_init_function)
+        , _css_name{std::move(css_name)}
+    {}
 
 private:
     static void my_extra_class_init_function(void* g_class, void* class_data) {

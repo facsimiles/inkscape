@@ -3,7 +3,7 @@
 
 #include "string-convert.h"
 
-#include <assert.h>
+#include <cassert>
 #include <codecvt>
 #include <locale>
 #include <string>
