@@ -100,6 +100,7 @@ $ARCH-python-tinycss2 \
 $ARCH-python-pillow \
 $ARCH-python-six \
 $ARCH-python-gobject \
+$ARCH-python-pyparsing \
 $ARCH-python-pyserial \
 $ARCH-python-coverage \
 $ARCH-python-packaging \
