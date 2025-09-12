@@ -218,6 +218,7 @@ inline Gdk::Graphene::Point geom_to_gtk(Geom::IntPoint const &point) {
 inline Gdk::Graphene::Point geom_to_gtk(Geom::Point const &point) {
     return Gdk::Graphene::Point(point.x(), point.y());
 }
+Geom::Affine gtk_to_2geom(graphene_matrix_t const &mat);
 
 // create a gradient with multiple steps to approximate profile described by given cubic spline
 std::vector<GskColorStop> create_cubic_gradient(
@@ -265,6 +266,19 @@ Gtk::Button* create_button(const char* label, const char* icon);
 // Get a display name for the given object using its type and ID.
 // This name can be used if the object's label is not set.
 Glib::ustring get_synthetic_object_name(SPObject const* object);
+
+/// Simply wraps Gtk::Native::get_surface_transform().
+Geom::Point get_surface_transform(Gtk::Native const &native);
+
+/// Simply wraps Gtk::Widget::compute_transform(). (Missing in GTKmm.)
+Geom::Affine compute_transform(Gtk::Widget const &widget, Gtk::Widget const &target);
+
+/**
+ * Given an event received by a widget, return the coordinate transformation that brings the event's
+ * coordinates into the widget's coordinate system. This is not necessary when using event controllers,
+ * but is necessary when accessing Gdk::Event::get_position() or Gdk::Event::get_history() directly.
+ */
+Geom::Affine get_event_transform(Glib::RefPtr<Gdk::Surface const> const &event_surface, Gtk::Widget const &target);
 
 #endif // UI_UTIL_SEEN
 

@@ -56,6 +56,11 @@ struct EraseTarget
 
 class EraserTool : public DynamicBase
 {
+public:
+    explicit EraserTool(SPDesktop *desktop);
+
+    bool root_handler(CanvasEvent const &event) override;
+
 private:
     // non-static data:
     EraserToolMode mode = DEFAULT_ERASER_MODE;
@@ -88,12 +93,6 @@ private:
     static constexpr double max_tilt     = 1.0;
     static constexpr double default_tilt = 0.0;
 
-public:
-    // public member functions
-    EraserTool(SPDesktop *desktop);
-    ~EraserTool() override;
-    bool root_handler(CanvasEvent const &event) final;
-
     using Error = std::uint64_t;
     static constexpr Error ALL_GOOD     = 0x0;
     static constexpr Error NON_EXISTENT = 0x1 << 1;
@@ -101,7 +100,6 @@ public:
     static constexpr Error RASTER_IMAGE = 0x1 << 3;
     static constexpr Error ERROR_GROUP  = 0x1 << 4;
 
-private:
     // private member functions
     void _accumulate();
     bool _apply(Geom::Point const &p);

@@ -113,7 +113,6 @@ ToolBase::ToolBase(SPDesktop *desktop, std::string &&prefs_path, std::string &&c
 
     sp_event_context_read(this, "changelayer");
     sp_event_context_read(this, "changepage");
-
 }
 
 ToolBase::~ToolBase()

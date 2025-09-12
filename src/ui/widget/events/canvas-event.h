@@ -12,8 +12,10 @@
 #define INKSCAPE_UI_WIDGET_EVENTS_CANVAS_EVENT_H
 
 #include <2geom/point.h>
+#include <gdkmm/devicetool.h>
 #include <gdkmm/event.h>
 #include <optional>
+#include <vector>
 
 #include "enums.h"
 #include "util/variant-visitor.h"
@@ -32,13 +34,34 @@ struct ExtendedInput
 };
 
 /**
+ * An item of high-resolution motion history.
+ */
+struct FineMotionInput
+{
+    /// Location of the cursor, in world coordinates.
+    Geom::Point pos;
+
+    /// Timestamp of the event in milliseconds.
+    uint32_t time = 0;
+
+    /// Extended input data for graphics tablet input. Fields may be empty.
+    ExtendedInput extinput;
+};
+
+/**
  * Read the extended input data from a Gdk::Event.
  */
 inline ExtendedInput extinput_from_gdkevent(Gdk::Event const &event)
 {
+    auto const tool = event.get_device_tool();
+    if (!tool) {
+        return {};
+    }
+    auto const axes = tool->get_axes();
+
     auto read = [&] (Gdk::AxisUse axis) -> std::optional<double> {
         double tmp;
-        if (event.get_axis(axis, tmp)) {
+        if ((GdkAxisFlags)axes & (1 << (GdkAxisUse)axis) && event.get_axis(axis, tmp)) {
             return tmp;
         } else {
             return {};
@@ -50,6 +73,50 @@ inline ExtendedInput extinput_from_gdkevent(Gdk::Event const &event)
         .xtilt = read(Gdk::AxisUse::XTILT),
         .ytilt = read(Gdk::AxisUse::YTILT)
     };
+}
+
+/**
+ * Read the high-resolution motion history from a Gdk::Event.
+ */
+inline std::vector<FineMotionInput> finemotionhistory_from_gdkevent(Gdk::Event const &event)
+{
+    std::vector<FineMotionInput> result;
+
+    // Get flags indicating which axes are present.
+    auto const tool = event.get_device_tool();
+    auto const flags = tool ? (GdkAxisFlags)tool->get_axes() : 0;
+
+    for (auto const &hist : event.get_history()) {
+        // Require x and y axes to be present.
+        if (!(flags & GDK_AXIS_FLAG_X && flags & GDK_AXIS_FLAG_Y)) {
+            continue;
+        }
+
+        // Create a new item of fine motion history.
+        auto &m = result.emplace_back();
+        m.pos = {
+            hist.get_value_at_axis(GDK_AXIS_X),
+            hist.get_value_at_axis(GDK_AXIS_Y)
+        };
+        m.time = hist.get_time();
+
+        // Extract the extended input.
+        auto read = [&] (GdkAxisUse axis) -> std::optional<double> {
+            if (flags & (1 << axis)) {
+                return hist.get_value_at_axis(axis);
+            } else {
+                return {};
+            }
+        };
+
+        m.extinput = {
+            .pressure = read(GDK_AXIS_PRESSURE),
+            .xtilt    = read(GDK_AXIS_XTILT),
+            .ytilt    = read(GDK_AXIS_YTILT)
+        };
+    }
+
+    return result;
 }
 
 /**
@@ -209,6 +276,9 @@ struct MotionEvent final : CanvasEvent
 
     /// Extended input data for graphics tablet input. Fields may be empty.
     ExtendedInput extinput;
+
+    /// High-resolution motion history. May be empty.
+    std::vector<FineMotionInput> history;
 };
 
 /**

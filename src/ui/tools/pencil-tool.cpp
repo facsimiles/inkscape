@@ -22,28 +22,29 @@
 #include <numeric> // std::accumulate
 #include <2geom/circle.h>
 
+#include "bezier-utils.h"
 #include "context-fns.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/snap-indicator.h"
 #include "display/curve.h"
 #include "layer-manager.h"
 #include "livarot/Path.h" // Simplify paths
-#include "live_effects/lpe-powerstroke-interpolators.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-simplify.h"
 #include "message-context.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "path/path-boolop.h"
+#include "sbasis-to-bezier.h"
 #include "selection.h"
 #include "style.h"
 #include "svg/svg.h"
 #include "ui/draw-anchor.h"
 #include "ui/widget/events/canvas-event.h"
 
-#define DDC_MIN_PRESSURE      0.0
-#define DDC_MAX_PRESSURE      1.0
-#define DDC_DEFAULT_PRESSURE  1.0
+constexpr double DDC_MIN_PRESSURE     = 0.0;
+constexpr double DDC_MAX_PRESSURE     = 1.0;
+constexpr double DDC_DEFAULT_PRESSURE = 1.0;
 
 namespace Inkscape::UI::Tools {
 
@@ -55,12 +56,10 @@ static bool in_svg_plane(Geom::Point const &p) { return Geom::LInfty(p) < 1e18; 
 PencilTool::PencilTool(SPDesktop *desktop)
     : FreehandBase(desktop, "/tools/freehand/pencil", "pencil.svg")
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/freehand/pencil/selcue")) {
-        this->enableSelectionCue();
+        enableSelectionCue();
     }
-    this->_is_drawing = false;
-    this->anchor_statusbar = false;
 }
 
 PencilTool::~PencilTool() = default;
@@ -233,7 +232,7 @@ bool PencilTool::_handleMotionNotify(MotionEvent const &event) {
         return false;
     }
     
-    if ( ( event.modifiers & GDK_BUTTON1_MASK ) && this->_is_drawing) {
+    if ((event.modifiers & GDK_BUTTON1_MASK) && _is_drawing) {
         /* Grab mouse, so release will not pass unnoticed */
         grabCanvasEvents();
     }
@@ -241,7 +240,7 @@ bool PencilTool::_handleMotionNotify(MotionEvent const &event) {
     /* Find desktop coordinates */
     Geom::Point p = _desktop->w2d(event.pos);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     if (pencil_within_tolerance) {
         gint const tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
         if ( Geom::LInfty(event.pos - pencil_drag_origin_w ) < tolerance ) {
@@ -268,29 +267,27 @@ bool PencilTool::_handleMotionNotify(MotionEvent const &event) {
             if (anchor) {
                 p = anchor->dp;
             } else {
-                Geom::Point ptnr(p);
-                _endpointSnap(ptnr, event.modifiers);
-                p = ptnr;
+                _endpointSnap(p, event.modifiers);
             }
             _setEndpoint(p);
             ret = true;
             break;
         default:
             /* We may be idle or already freehand */
-            if ( (event.modifiers & GDK_BUTTON1_MASK) && _is_drawing ) {
+            if ((event.modifiers & GDK_BUTTON1_MASK) && _is_drawing) {
                 if (_state == SP_PENCIL_CONTEXT_IDLE) {
                     discard_delayed_snap_event();
                 }
                 _state = SP_PENCIL_CONTEXT_FREEHAND;
 
-                if ( !sa && !green_anchor ) {
+                if (!sa && !green_anchor) {
                     /* Create green anchor */
                     green_anchor = std::make_unique<SPDrawAnchor>(this, green_curve, true, p_array[0]);
                 }
                 if (anchor) {
                     p = anchor->dp;
                 }
-                if ( _npoints != 0) { // buttonpress may have happened before we entered draw context!
+                if (_npoints != 0) { // buttonpress may have happened before we entered draw context!
                     if (ps.empty()) {
                         // Only in freehand mode we have to add the first point also to ps (apparently)
                         // - We cannot add this point in spdc_set_startpoint, because we only need it for freehand
@@ -301,6 +298,11 @@ bool PencilTool::_handleMotionNotify(MotionEvent const &event) {
                             _wps.emplace_back(0, 0);
                         }
                     }
+                    for (auto const &hist : event.history) {
+                        _extinput(hist.extinput);
+                        _addFreehandPoint(_desktop->w2d(hist.pos), event.modifiers, false);
+                    }
+                    _extinput(event.extinput);
                     _addFreehandPoint(p, event.modifiers, false);
                     ret = true;
                 }
@@ -366,14 +368,11 @@ bool PencilTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                 }
                 /*Or select the down item if we are in tablet mode*/
                 if (is_tablet) {
-                    using namespace Inkscape::LivePathEffect;
-                    SPItem *item = sp_event_context_find_item(_desktop, event.pos, false, false);
+                    auto item = sp_event_context_find_item(_desktop, event.pos, false, false);
                     if (item && (!white_item || item != white_item)) {
-                        if (is<SPLPEItem>(item)) {
-                            Effect* lpe = cast<SPLPEItem>(item)->getCurrentLPE();
-                            if (lpe) {
-                                LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
-                                if (ps) {
+                        if (auto lpeitem = cast<SPLPEItem>(item)) {
+                            if (auto lpe = lpeitem->getCurrentLPE()) {
+                                if (dynamic_cast<Inkscape::LivePathEffect::LPEPowerStroke *>(lpe)) {
                                     _desktop->getSelection()->clear();
                                     _desktop->getSelection()->add(item);
                                 }
@@ -426,11 +425,11 @@ bool PencilTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                     /* Write curves to object */
                     _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
                     _interpolate();
-                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                    auto prefs = Inkscape::Preferences::get();
                     if (tablet_enabled) {
-                        gint shapetype = prefs->getInt("/tools/freehand/pencil/shape", 0);
-                        gint simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
-                        gint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+                        int shapetype = prefs->getInt("/tools/freehand/pencil/shape", 0);
+                        int simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
+                        int mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
                         prefs->setInt("/tools/freehand/pencil/shape", 0);
                         prefs->setInt("/tools/freehand/pencil/simplify", 0);
                         prefs->setInt("/tools/freehand/pencil/freehand-mode", 0);

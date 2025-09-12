@@ -398,7 +398,6 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
 
         [&] (MotionEvent const &event) {
             auto motion_dt = _desktop->w2d(event.pos);
-            extinput(event.extinput);
 
             message_context->clear();
 
@@ -418,9 +417,9 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
 
                     if (selected != hatch_item) {
                         hatch_item = selected;
-                        hatch_livarot_path = Path_for_item(hatch_item, true, true);
-                        if (hatch_livarot_path) {
-                            hatch_livarot_path->ConvertWithBackData(0.01);
+                        if (auto pv = curve_for_item(hatch_item)) {
+                            hatch_path = std::move(*pv);
+                            hatch_path *= hatch_item->i2doc_affine();
                         }
                     }
 
@@ -429,12 +428,11 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
                     pointer = motion_dt * motion_to_curve;
 
                     // calculate the nearest point on the guide path
-                    std::optional<Path::cut_position> position = get_nearest_position_on_Path(hatch_livarot_path.get(), pointer);
-                    if (position) {
-                        nearest = get_point_on_Path(hatch_livarot_path.get(), position->piece, position->t);
+                    if (auto time = hatch_path.nearestTime(pointer)) {
+                        nearest = hatch_path.pointAt(*time);
 
                         // distance from pointer to nearest
-                        hatch_dist = Geom::L2(pointer - nearest);
+                        hatch_dist = Geom::distance(pointer, nearest);
                         // unit-length vector
                         hatch_unit_vector = (pointer - nearest) / hatch_dist;
 
@@ -581,21 +579,30 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
                     message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> a calligraphic stroke"));
                 }
 
-                if (just_started_drawing) {
-                    just_started_drawing = false;
-                    reset(motion_dt);
-                }
+                auto handle_motion = [&, this] (Geom::Point const &pt) {
+                    if (just_started_drawing) {
+                        just_started_drawing = false;
+                        reset(pt);
+                    }
 
-                if (!apply(motion_dt)) {
-                    ret = true;
-                    return;
-                }
+                    if (!apply(pt)) {
+                        return;
+                    }
 
-                if (cur != last) {
-                    brush();
-                    g_assert(npoints > 0);
-                    fit_and_split(false);
+                    if (cur != last) {
+                        brush();
+                        g_assert(npoints > 0);
+                        fit_and_split(false);
+                    }
+                };
+
+                for (auto const &hist : event.history) {
+                    extinput(hist.extinput);
+                    handle_motion(_desktop->w2d(hist.pos));
                 }
+                extinput(event.extinput);
+                handle_motion(motion_dt);
+
                 ret = true;
             }
 
@@ -688,7 +695,7 @@ bool CalligraphicTool::root_handler(CanvasEvent const &event)
             hatch_last_pointer = {};
             hatch_escaped = false;
             hatch_item = nullptr;
-            hatch_livarot_path.reset();
+            hatch_path = {};
             just_started_drawing = false;
 
             if (hatch_spacing != 0 && !keep_selected) {

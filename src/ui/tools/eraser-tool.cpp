@@ -92,8 +92,6 @@ EraserTool::EraserTool(SPDesktop *desktop)
     enableSelectionCue();
 }
 
-EraserTool::~EraserTool() = default;
-
 /**  Reads the current Eraser mode from Preferences and sets `mode` accordingly. */
 void EraserTool::_updateMode()
 {
@@ -365,7 +363,6 @@ bool EraserTool::root_handler(CanvasEvent const &event)
         [&] (MotionEvent const &event) {
             auto const motion_w = event.pos;
             auto const motion_dt = _desktop->w2d(motion_w);
-            _extinput(event.extinput);
 
             message_context->clear();
 
@@ -374,16 +371,24 @@ bool EraserTool::root_handler(CanvasEvent const &event)
 
                 message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
 
-                if (!_apply(motion_dt)) {
-                    ret = true;
-                    return;
-                }
+                auto handle_motion = [&, this] (Geom::Point const &pt) {
+                    if (!_apply(motion_dt)) {
+                        return;
+                    }
 
-                if (cur != last) {
-                    _brush();
-                    g_assert(npoints > 0);
-                    _fitAndSplit(false);
+                    if (cur != last) {
+                        _brush();
+                        g_assert(npoints > 0);
+                        _fitAndSplit(false);
+                    }
+                };
+
+                for (auto const &hist : event.history) {
+                    _extinput(hist.extinput);
+                    handle_motion(_desktop->w2d(hist.pos));
                 }
+                _extinput(event.extinput);
+                handle_motion(motion_dt);
 
                 ret = true;
             }

@@ -19,6 +19,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <deque>
+#include <2geom/pathvector.h>
 #include "ui/tools/dynamic-base.h"
 
 class SPItem;
@@ -48,12 +50,12 @@ private:
     double hatch_spacing = 0.0;
     double hatch_spacing_step = 0.0;
     SPItem *hatch_item = nullptr;
-    std::unique_ptr<Path> hatch_livarot_path;
-    std::list<double> hatch_nearest_past;
-    std::list<double> hatch_pointer_past;
-    std::list<Geom::Point> inertia_vectors;
+    Geom::PathVector hatch_path;
+    std::deque<double> hatch_nearest_past;
+    std::deque<double> hatch_pointer_past;
+    std::deque<Geom::Point> inertia_vectors;
     Geom::Point hatch_last_nearest, hatch_last_pointer;
-    std::list<Geom::Point> hatch_vectors;
+    std::deque<Geom::Point> hatch_vectors;
     bool hatch_escaped = false;
     CanvasItemPtr<CanvasItemBpath> hatch_area;
     bool just_started_drawing = false;

@@ -968,7 +968,7 @@ Gtk::EventSequenceState Canvas::on_button_pressed(Gtk::GestureClick const &contr
     auto event = ButtonPressEvent();
     event.modifiers = _state;
     event.device = controller.get_current_event_device();
-    event.pos = *d->last_mouse;
+    event.orig_pos = *d->last_mouse;
     event.button = controller.get_current_button();
     event.time = controller.get_current_event_time();
     event.num_press = 1;
@@ -1036,7 +1036,7 @@ Gtk::EventSequenceState Canvas::on_button_released(Gtk::GestureClick const &cont
     auto event = ButtonReleaseEvent();
     event.modifiers = _state;
     event.device = controller.get_current_event_device();
-    event.pos = *d->last_mouse;
+    event.orig_pos = *d->last_mouse;
     event.button = controller.get_current_button();
     event.time = controller.get_current_event_time();
 
@@ -1111,7 +1111,7 @@ bool Canvas::on_key_pressed(Gtk::EventControllerKey const &controller,
     event.keycode = keycode;
     event.group = controller.get_group();
     event.time = controller.get_current_event_time();
-    event.pos = d->last_mouse;
+    event.orig_pos = d->last_mouse;
 
     return d->process_event(event);
 }
@@ -1128,7 +1128,7 @@ void Canvas::on_key_released(Gtk::EventControllerKey const &controller,
     event.keycode = keycode;
     event.group = controller.get_group();
     event.time = controller.get_current_event_time();
-    event.pos = d->last_mouse;
+    event.orig_pos = d->last_mouse;
 
     d->process_event(event);
 }
@@ -1212,12 +1212,25 @@ void Canvas::on_motion(Gtk::EventControllerMotion const &controller, double x, d
         d->autoscroll_end();
     }
 
+    auto gdkevent = controller.get_current_event();
+
     auto event = MotionEvent();
     event.modifiers = _state;
     event.device = controller.get_current_event_device();
     event.pos = *d->last_mouse;
     event.time = controller.get_current_event_time();
-    event.extinput = extinput_from_gdkevent(*controller.get_current_event());
+    event.extinput = extinput_from_gdkevent(*gdkevent);
+    event.history = finemotionhistory_from_gdkevent(*gdkevent);
+
+    auto hist_transform = get_event_transform(gdkevent->get_surface(), *this);
+    hist_transform *= Geom::Translate{_pos};
+    if (d->stores.mode() == Stores::Mode::Decoupled) {
+        hist_transform *= _affine.inverse() * d->canvasitem_ctx->affine();
+    }
+
+    for (auto &hist : event.history) {
+        hist.pos *= hist_transform;
+    }
 
     d->process_event(event);
 }
@@ -1442,12 +1455,7 @@ bool CanvasPrivate::emit_event(CanvasEvent &event)
     }
 
     // Convert to world coordinates.
-    auto conv = [&, this](Geom::Point &p, Geom::Point *orig_pos = nullptr) {
-        // Store orig point in case anyone needs it for widget-relative positioning.
-        if (orig_pos) {
-            *orig_pos = p;
-        }
-
+    auto conv = [&, this] (Geom::Point &p) {
         p += q->_pos;
         if (stores.mode() == Stores::Mode::Decoupled) {
             p = p * q->_affine.inverse() * canvasitem_ctx->affine();
@@ -1456,18 +1464,17 @@ bool CanvasPrivate::emit_event(CanvasEvent &event)
 
     inspect_event(event,
         [&] (EnterEvent &event) { conv(event.pos); },
-        [&] (MotionEvent &event) { conv(event.pos); },
-        [&] (ButtonPressEvent &event) {
-            // on_button_pressed() will call process_event() and therefore also emit_event() twice, on the same event
-            if (event.num_press == 1) { // Only convert the coordinates once, on the first call
-                conv(event.pos, &event.orig_pos);
-            }
+        [&] (MotionEvent &event) {
+            conv(event.pos);
         },
-        [&] (ButtonReleaseEvent &event) { conv(event.pos); },
+        [&] (ButtonEvent &event) {
+            event.pos = event.orig_pos;
+            conv(event.pos);
+        },
         [&] (KeyEvent &event) {
+            event.pos = event.orig_pos;
             if (event.pos) {
-                event.orig_pos.emplace();
-                conv(*event.pos, &*event.orig_pos);
+                conv(*event.pos);
             }
         },
         [&] (CanvasEvent &event) {}

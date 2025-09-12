@@ -368,6 +368,15 @@ Geom::IntPoint dimensions(const Gdk::Rectangle &allocation)
     return Geom::IntPoint(allocation.get_width(), allocation.get_height());
 }
 
+Geom::Affine gtk_to_2geom(graphene_matrix_t const &mat)
+{
+    Geom::Affine aff;
+    if (!graphene_matrix_to_2d(&mat, &aff[0], &aff[1], &aff[2], &aff[3], &aff[4], &aff[5])) {
+        std::cerr << "graphene_matrix_to_2d: not convertible" << std::endl;
+    }
+    return aff;
+}
+
 std::vector<GskColorStop> create_cubic_gradient(
     const Gdk::RGBA& from,
     const Gdk::RGBA& to,
@@ -585,6 +594,29 @@ Glib::ustring get_synthetic_object_name(SPObject const* object) {
         return Glib::ustring::compose("<%1>", repr->name());
     }
     return "object";
+}
+
+Geom::Point get_surface_transform(Gtk::Native const &native)
+{
+    double x, y;
+    const_cast<Gtk::Native &>(native).get_surface_transform(x, y);
+    return {x, y};
+}
+
+Geom::Affine compute_transform(Gtk::Widget const &widget, Gtk::Widget const &target)
+{
+    graphene_matrix_t mat;
+    if (!gtk_widget_compute_transform(const_cast<GtkWidget *>(widget.gobj()), const_cast<GtkWidget *>(target.gobj()), &mat)) {
+        std::cerr << "compute_transform(): not convertible" << std::endl;
+    }
+    return gtk_to_2geom(mat);
+}
+
+Geom::Affine get_event_transform(Glib::RefPtr<Gdk::Surface const> const &event_surface, Gtk::Widget const &target)
+{
+    auto native = Gtk::Native::get_for_surface(event_surface);
+    auto &event_widget = dynamic_cast<Gtk::Widget const &>(*native);
+    return Geom::Translate{-get_surface_transform(*native)} * compute_transform(event_widget, target);
 }
 
 /*
