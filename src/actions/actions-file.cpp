@@ -35,6 +35,9 @@ file_open(const Glib::VariantBase& value, InkscapeApplication *app)
         return;
     }
     auto document = app->document_open(file).first;
+    if (!document) {
+        return;
+    }
 
     app->set_active_document(document);
     app->set_active_selection(document->getSelection());

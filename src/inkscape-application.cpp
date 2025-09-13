@@ -999,8 +999,6 @@ void InkscapeApplication::on_startup()
 // Open document window with default document or pipe. Either this or on_open() is called.
 void InkscapeApplication::on_activate()
 {
-    using Inkscape::UI::Dialog::StartScreen;
-
     std::string output;
     // Create new document, either from pipe or from template.
     SPDocument *document = nullptr;
@@ -1022,6 +1020,10 @@ void InkscapeApplication::on_activate()
         document = document_new();
     } else {
         std::cerr << "InkscapeApplication::on_activate: failed to create document!" << std::endl;
+        return;
+    }
+
+    if (!document) {
         return;
     }
 
