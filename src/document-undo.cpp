@@ -188,23 +188,23 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc,
         return;
     }
 
-    bool expired = doc->undo_timer.is_active() && doc->undo_timer.elapsed() > doc->action_expires;
+    bool expired = doc->undo_timer && std::chrono::steady_clock::now() - *doc->undo_timer > std::chrono::duration<double>(doc->action_expires);
     if (key && !expired && !doc->actionkey.empty() && (doc->actionkey == key) && !doc->undo.empty()) {
-        (doc->undo.back())->event = sp_repr_coalesce_log ((doc->undo.back())->event, log);
+        doc->undo.back()->event = sp_repr_coalesce_log(doc->undo.back()->event, log);
     } else {
         Inkscape::Event *event = new Inkscape::Event(log, event_description, icon_name);
         doc->undo.push_back(event);
         doc->undoStackObservers.notifyUndoCommitEvent(event);
     }
 
-    if ( key ) {
+    if (key) {
         doc->actionkey = key;
         // Action key will expire in 10 seconds by default
-        doc->undo_timer.start();
+        doc->undo_timer = std::chrono::steady_clock::now();
         doc->action_expires = 10.0;
     } else {
         doc->actionkey.clear();
-        doc->undo_timer.stop();
+        doc->undo_timer = {};
     }
 
     doc->virgin = FALSE;

@@ -113,7 +113,6 @@ SPDocument::SPDocument()
     , document_base(nullptr)
     , document_name(nullptr)
     , console_output_undo_observer{create_console_output_observer()}
-    , actionkey()
     , object_id_counter(1)
     , _router(std::make_unique<Avoid::Router>(Avoid::PolyLineRouting | Avoid::OrthogonalRouting))
     , current_persp3d(nullptr)

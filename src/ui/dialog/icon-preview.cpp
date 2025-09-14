@@ -19,6 +19,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
+#include <glibmm/timer.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/image.h>
 #include <gtkmm/snapshot.h>

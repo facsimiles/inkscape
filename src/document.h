@@ -18,6 +18,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <chrono>
 #include <cstddef>                             // for size_t
 #include <deque>                               // for deque
 #include <map>                                 // for map
@@ -32,7 +33,6 @@
 #include <giomm/simpleactiongroup.h>           // for SimpleActionGroup
 #include <glib.h>                              // for GQuark, gboolean, gchar
 #include <glibmm/refptr.h>                     // for RefPtr
-#include <glibmm/timer.h>
 #include <glibmm/ustring.h>                    // for ustring
 #include <sigc++/connection.h>                 // for connection
 #include <sigc++/signal.h>                     // for signal
@@ -458,7 +458,7 @@ private:
     unsigned long _serial; // Unique document number (used by undo/redo).
     Glib::ustring actionkey; // Last action key, used to combine actions in undo.
     double action_expires; // Expire time for last action key
-    Glib::Timer undo_timer; // Timer for last action key
+    std::optional<std::chrono::steady_clock::time_point> undo_timer; // Timer for last action key
     unsigned long object_id_counter; // Steadily-incrementing counter used to assign unique ids to objects.
 
     // Garbage collecting ----------------------
@@ -470,18 +470,18 @@ private:
 
     /*********** Signals **************/
 
-    typedef sigc::signal<void (SPObject *)> IDChangedSignal;
-    typedef sigc::signal<void ()> ResourcesChangedSignal;
-    typedef sigc::signal<void (unsigned)> ModifiedSignal;
-    typedef sigc::signal<void (char const *)> FilenameSetSignal;
-    typedef sigc::signal<void (double, double)> ResizedSignal;
-    typedef sigc::signal<void ()> ReconstructionStart;
-    typedef sigc::signal<void ()> ReconstructionFinish;
-    typedef sigc::signal<void ()> CommitSignal;
-    typedef sigc::signal<void ()> BeforeCommitSignal; // allow to add actions berfore commit to include in undo
+    using IDChangedSignal = sigc::signal<void (SPObject *)>;
+    using ResourcesChangedSignal = sigc::signal<void ()>;
+    using ModifiedSignal = sigc::signal<void (unsigned)>;
+    using FilenameSetSignal = sigc::signal<void (char const *)> ;
+    using ResizedSignal = sigc::signal<void (double, double)>;
+    using ReconstructionStart = sigc::signal<void ()>;
+    using ReconstructionFinish = sigc::signal<void ()>;
+    using CommitSignal = sigc::signal<void ()>;
+    using BeforeCommitSignal = sigc::signal<void ()>; // allow to add actions berfore commit to include in undo
 
-    typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
-    typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
+    using IDChangedSignalMap = std::map<GQuark, SPDocument::IDChangedSignal>;
+    using ResourcesChangedSignalMap = std::map<GQuark, SPDocument::ResourcesChangedSignal>;
 
     /** Dictionary of signals for id changes */
     IDChangedSignalMap id_changed_signals;
