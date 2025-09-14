@@ -608,7 +608,7 @@ bool EraserTool::_doWork()
     bool was_selection = !selection->isEmpty();
 
     // Find items to work on as well as items that will be needed to restore the selection afterwards.
-    _survivers.clear();
+    _survivors.clear();
     _clearStatusBar();
 
     std::vector<EraseTarget> to_erase = _findItemsToErase();
@@ -617,8 +617,17 @@ bool EraserTool::_doWork()
     if (!to_erase.empty()) {
         selection->clear();
         work_done = _performEraseOperation(to_erase, true);
-        if (was_selection && !_survivers.empty()) {
-            selection->add(_survivers.begin(), _survivers.end());
+
+        if (was_selection && !_survivors.empty()) {
+            // Discard survivors which have since been deleted.
+            std::vector<SPItem *> items;
+            for (auto const &s : _survivors) {
+                if (s) {
+                    items.push_back(s.get());
+                }
+            }
+
+            selection->setList(items);
         }
     }
     // Clean up the eraser stroke repr:
@@ -631,29 +640,29 @@ bool EraserTool::_doWork()
 /**
  * @brief Erases from a shape by cutting (boolean difference or cut operation).
  * @param target - the item to be erased
- * @param store_survivers - whether the surviving selected items and their remains should be stored.
+ * @param store_survivors - whether the surviving selected items and their remains should be stored.
  * @return whether the target was successfully processed.
  */
-bool EraserTool::_cutErase(EraseTarget target, bool store_survivers)
+bool EraserTool::_cutErase(EraseTarget target, bool store_survivors)
 {
     // If the item is a clone, we check if the original is cuttable before unlinking it
     if (auto use = cast<SPUse>(target.item)) {
         auto original = use->trueOriginal();
         if (_uncuttableItemType(original)) {
-            if (store_survivers && target.was_selected) {
-                _survivers.push_back(target.item);
+            if (store_survivors && target.was_selected) {
+                _survivors.emplace_back(target.item);
             }
             return false;
         } else if (auto *group = cast<SPGroup>(original)) {
-            return _probeUnlinkCutClonedGroup(target, use, group, store_survivers);
+            return _probeUnlinkCutClonedGroup(target, use, group, store_survivors);
         }
         // A simple clone of a cuttable item: unlink and erase it.
         target.item = use->unlink();
-        if (target.was_selected && store_survivers) { // Reselect the freshly unlinked item
-            _survivers.push_back(target.item);
+        if (target.was_selected && store_survivors) { // Reselect the freshly unlinked item
+            _survivors.emplace_back(target.item);
         }
     }
-    return _booleanErase(target, store_survivers);
+    return _booleanErase(target, store_survivors);
 }
 
 /**
@@ -667,11 +676,11 @@ bool EraserTool::_cutErase(EraseTarget target, bool store_survivers)
  * @param original_target - the original erase target which turned out to be a clone.
  * @param clone - the pointer to the SPUse object representing the clone (assument non-null).
  * @param cloned_group - the original group that is cloned (at the origin of the USE chain).
- * @param store_survivers - whether the surviving selected items and their remains should be stored.
+ * @param store_survivors - whether the surviving selected items and their remains should be stored.
  * @return whether the clone was unlinked and something was erased from the resulting new group.
  */
 bool EraserTool::_probeUnlinkCutClonedGroup(EraseTarget &original_target, SPUse *clone, SPGroup *cloned_group,
-                                            bool store_survivers)
+                                            bool store_survivors)
 {
     std::vector<EraseTarget> children;
     children.reserve(cloned_group->getItemCount());
@@ -714,14 +723,14 @@ bool EraserTool::_probeUnlinkCutClonedGroup(EraseTarget &original_target, SPUse 
         auto overlapping = _filterCutEraseables(_filterByCollision(unlinked_children, _acid));
 
         // If the clone was selected, the newly unlinked group should stay selected
-        if (original_target.was_selected && store_survivers) {
-            _survivers.push_back(unlinked);
+        if (original_target.was_selected && store_survivors) {
+            _survivors.emplace_back(unlinked);
         }
 
         return _performEraseOperation(overlapping, false);
     } else {
-        if (original_target.was_selected && store_survivers) {
-            _survivers.push_back(original_target.item); // If the clone was selected, it should stay so
+        if (original_target.was_selected && store_survivors) {
+            _survivors.emplace_back(original_target.item); // If the clone was selected, it should stay so
         }
         if (filtered_children.size() < children.size()) {
             auto non_eraseable_touched = [&](EraseTarget const &t) -> bool {
@@ -755,10 +764,10 @@ EraserTool::Error EraserTool::_uncuttableItemType(SPItem *item)
 /**
  * @brief Performs a boolean difference or cut operation which implements the CUT mode erasure.
  * @param target - the item to be erased.
- * @param store_survivers - whether the surviving selected items and their remains should be stored.
+ * @param store_survivors - whether the surviving selected items and their remains should be stored.
  * @return true on success, false on failure
  */
-bool EraserTool::_booleanErase(EraseTarget target, bool store_survivers)
+bool EraserTool::_booleanErase(EraseTarget target, bool store_survivors)
 {
     if (!target.item) {
         return false;
@@ -793,8 +802,10 @@ bool EraserTool::_booleanErase(EraseTarget target, bool store_survivers)
     } else if (!nowidth) {
         operands.breakApart(true, false, true);
     }
-    if (store_survivers && target.was_selected) {
-        _survivers.insert(_survivers.end(), operands.items().begin(), operands.items().end());
+    if (store_survivors && target.was_selected) {
+        for (auto o : operands.items()) {
+            _survivors.emplace_back(o);
+        }
     }
     return true;
 }
@@ -804,15 +815,15 @@ bool EraserTool::_booleanErase(EraseTarget target, bool store_survivers)
  *        In CUT mode, the optional survivers vector will be populated with leftover pieces of
  *        partially erased shapes that used to be selected.
  * @param items_to_erase - a non-empty vector of erase targets.
- * @param store_survivers - whether the surviving selected items and their remains should be stored.
+ * @param store_survivors - whether the surviving selected items and their remains should be stored.
  * @return whether something was actually erased.
  */
-bool EraserTool::_performEraseOperation(std::vector<EraseTarget> const &items_to_erase, bool store_survivers)
+bool EraserTool::_performEraseOperation(std::vector<EraseTarget> const &items_to_erase, bool store_survivors)
 {
     if (mode == EraserToolMode::CUT) {
         bool erased_something = false;
         for (auto const &target : items_to_erase) {
-            erased_something = _cutErase(target, store_survivers) || erased_something;
+            erased_something = _cutErase(target, store_survivors) || erased_something;
         }
         return erased_something;
     } else if (mode == EraserToolMode::CLIP) {
@@ -1088,7 +1099,7 @@ std::vector<EraseTarget> EraserTool::_filterByCollision(std::vector<EraseTarget>
  * @brief Prepares a list of items in the current document containing the items which qualify
  *        for the erase operation (based on selection & collision detection).
  *        Additionally, the selected items which are going to survive the erase operation (and
- *        should be used to restore the selection afterwards) will be added to the _survivers member.
+ *        should be used to restore the selection afterwards) will be added to the _survivors member.
  *        If the user attempts to erase an illegal item, a warning message is shown in the status bar.
  * @return items that should undergo the erase operation
  */
@@ -1105,7 +1116,7 @@ std::vector<EraseTarget> EraserTool::_findItemsToErase()
     if (mode == EraserToolMode::DELETE) {
         // In DELETE mode, the classification is based on having been touched by the mouse cursor:
         // * result     should contain touched items;
-        // * _survivers should contain selected but untouched items.
+        // * _survivors should contain selected but untouched items.
         auto *r = Rubberband::get(_desktop);
         std::vector<SPItem *> touched = document->getItemsAtPoints(_desktop->dkey, r->getPoints());
         if (selection->isEmpty()) {
@@ -1115,7 +1126,7 @@ std::vector<EraseTarget> EraserTool::_findItemsToErase()
         } else {
             for (auto *item : selection->items()) {
                 if (std::find(touched.begin(), touched.end(), item) == touched.end()) {
-                    _survivers.push_back(item);
+                    _survivors.emplace_back(item);
                 } else {
                     result.emplace_back(item, true);
                 }
@@ -1157,12 +1168,12 @@ std::vector<EraseTarget> EraserTool::_findItemsToErase()
                     }
                 }
                 if (!included_for_erase) {
-                    _survivers.push_back(selected);
+                    _survivors.emplace_back(selected);
                 }
             }
             // The filtering is based on a precise collision detection procedure:
             // * result     will contain all eraseable items that overlap with the eraser stroke;
-            // * _survivers will contain all selected items that were rejected during this filtering.
+            // * _survivors will contain all selected items that were rejected during this filtering.
             auto overlapping = _filterByCollision(allowed, _acid);
             auto valid = _filterCutEraseables(overlapping); // Sets status bar messages
 
@@ -1170,7 +1181,7 @@ std::vector<EraseTarget> EraserTool::_findItemsToErase()
                 if (element.item && element.was_selected &&
                     std::find(valid.begin(), valid.end(), element) == valid.end())
                 {
-                    _survivers.push_back(element.item);
+                    _survivors.emplace_back(element.item);
                 }
             }
             result.insert(result.end(), valid.begin(), valid.end());
@@ -1184,10 +1195,12 @@ std::vector<EraseTarget> EraserTool::_findItemsToErase()
 
             // The classification is also based on the precise collision detection:
             // * result     will contain all items that overlap with the eraser stroke;
-            // * _survivers will contain all selected items, since CLIP mode is always non-destructive.
+            // * _survivors will contain all selected items, since CLIP mode is always non-destructive.
             auto overlapping = _filterByCollision(allowed, _acid);
             result.insert(result.end(), overlapping.begin(), overlapping.end());
-            _survivers.insert(_survivers.end(), all_selected.begin(), all_selected.end());
+            for (auto item : all_selected) {
+                _survivors.emplace_back(item);
+            }
         }
     }
     return result;

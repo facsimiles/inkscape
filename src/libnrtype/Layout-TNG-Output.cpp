@@ -866,7 +866,7 @@ Geom::PathVector Layout::convertToSVG(iterator const &from_glyph, iterator const
             auto svg = font->GlyphSvg(glyph_id);
             if (!svg.empty()) {
                 auto scale = 1.0 / font->GetDesignUnits();
-                svgOut.push_back({std::move(svg), Geom::Scale(scale, -scale) * glyph_matrix});
+                svgOut.emplace_back(std::move(svg), Geom::Scale(scale, -scale) * glyph_matrix);
             }
             continue;
         }

@@ -21,6 +21,7 @@
  */
 
 #include "message.h"
+#include "object/weakptr.h"
 #include "style-enums.h"
 #include "ui/tools/dynamic-base.h"
 #include "object/sp-use.h"
@@ -61,7 +62,7 @@ private:
     bool nowidth = false;
     std::vector<MessageId> _our_messages;
     SPItem *_acid = nullptr;
-    std::vector<SPItem *> _survivers;
+    std::vector<SPWeakPtr<SPItem>> _survivors;
     Pref<bool> _break_apart;
     Pref<int> _mode_int;
 
@@ -104,14 +105,14 @@ private:
     // private member functions
     void _accumulate();
     bool _apply(Geom::Point const &p);
-    bool _booleanErase(EraseTarget target, bool store_survivers);
+    bool _booleanErase(EraseTarget target, bool store_survivors);
     void _brush();
     void _cancel();
     void _clearCurrent();
     void _clearStatusBar();
     void _clipErase(SPItem *item) const;
     void _completeBezier(double tolerance_sq, bool releasing);
-    bool _cutErase(EraseTarget target, bool store_survivers);
+    bool _cutErase(EraseTarget target, bool store_survivors);
     bool _doWork();
     void _drawTemporaryBox();
     void _extinput(ExtendedInput const &ext);
@@ -124,7 +125,7 @@ private:
     bool _handleKeypress(KeyPressEvent const &key);
     void _handleStrokeStyle(SPItem *item) const;
     SPItem *_insertAcidIntoDocument(SPDocument *document);
-    bool _performEraseOperation(std::vector<EraseTarget> const &items_to_erase, bool store_survivers);
+    bool _performEraseOperation(std::vector<EraseTarget> const &items_to_erase, bool store_survivors);
     void _reset(Geom::Point p);
     void _setStatusBarMessage(char *message);
     void _updateMode();
@@ -135,7 +136,7 @@ private:
     static bool _isStraightSegment(SPItem *path);
     static Error _uncuttableItemType(SPItem *item);
     bool _probeUnlinkCutClonedGroup(EraseTarget &original_target, SPUse* clone, SPGroup* cloned_group,
-                                    bool store_survivers = true);
+                                    bool store_survivors = true);
 };
 
 } // namespace Inkscape::UI::Tools
