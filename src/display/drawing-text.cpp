@@ -620,7 +620,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                         double scale = g->design_units;
                         if (scale <= 0) scale = 1000;
                         Inkscape::DrawingContext::Save save(dc);
-                        dc.translate(0, 1);
+                        dc.translate(g->bbox_draw.corner(3));
                         dc.scale(1.0 / scale, -1.0 / scale);
                         dc.setSource(g->pixbuf->getSurfaceRaw(), 0, 0);
                         dc.paint(1);

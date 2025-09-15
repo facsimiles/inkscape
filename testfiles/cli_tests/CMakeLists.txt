@@ -1020,6 +1020,13 @@ add_cli_test(actions-svginot-text-topath
     FUZZYREF_FILENAME ../../rendering_tests/expected_rendering/text-gzipped-svg-glyph.png
     FUZZ_PERCENTAGE 3
 )
+add_cli_test(actions-svginot-text-topath2
+        INPUT_FILENAME ../../rendering_tests/text-svg-glyph-custom.svg
+        PARAMETERS --actions=select-all$<SEMICOLON>object-to-path$<SEMICOLON>select-clear$<SEMICOLON>select-by-element:text$<SEMICOLON>delete
+        OUTPUT_FILENAME actions-svginot-text-topath-output.png
+        FUZZYREF_FILENAME ../../rendering_tests/expected_rendering/text-svg-glyph-custom.png
+        FUZZ_PERCENTAGE 1
+)
 
 # The export area type should be the last set value
 add_cli_test(actions-export-area-drawing-then-page

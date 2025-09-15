@@ -75,3 +75,5 @@ if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     # .otf font with compressed SVG glyphs
     add_rendering_test(text-gzipped-svg-glyph FUZZ 0.03)
 endif()
+# custom .otf font with SVG glyphs for testing various edge cases
+add_rendering_test(text-svg-glyph-custom FUZZ 0.3)

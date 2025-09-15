@@ -14,8 +14,9 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
+#include <sstream>
 
 #ifndef PANGO_ENABLE_ENGINE
 #define PANGO_ENABLE_ENGINE
@@ -29,19 +30,18 @@
 #include FT_GLYPH_H
 #include FT_MULTIPLE_MASTERS_H
 
-#include <pango/pangoft2.h>
-#include <harfbuzz/hb.h>
+#include <glibmm/regex.h>
+#include <glibmm/stringutils.h>
 #include <harfbuzz/hb-ft.h>
 #include <harfbuzz/hb-ot.h>
-
-#include <glibmm/regex.h>
-
-#include <2geom/pathvector.h>
+#include <harfbuzz/hb.h>
+#include <pango/pangoft2.h>
 #include <2geom/path-sink.h>
+#include <2geom/pathvector.h>
+
+#include "display/cairo-utils.h" // Inkscape::Pixbuf
 #include "libnrtype/font-glyph.h"
 #include "libnrtype/font-instance.h"
-
-#include "display/cairo-utils.h"  // Inkscape::Pixbuf
 
 /*
  * Outline extraction
@@ -619,14 +619,18 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
 
     Glib::ustring svg = data->openTypeSVGData[glyph_iter->second.entry_index];
 
+    auto glyphBox = BBoxDraw(glyph_id) * Geom::Scale(_design_units);
+    // Don't use Rect.roundOutwards/Inwards, most dimensions in font description are in design_units which are integers.
+    // Multiplying by design_units should give close to original integers and should use traditional rounding.
+    Geom::IntRect box(std::lround(glyphBox.left()), std::lround(glyphBox.top()), std::lround(glyphBox.right()),
+                      std::lround(glyphBox.bottom()));
+
     // Create new viewbox which determines pixbuf size.
-    Glib::ustring viewbox("viewBox=\"0 ");
-    viewbox += std::to_string(-_design_units);
-    viewbox += " ";
-    viewbox += std::to_string(_design_units*2); // Noto emoji leaks outside of em-box.
-    viewbox += " ";
-    viewbox += std::to_string(_design_units*2);
-    viewbox += "\"";
+    std::ostringstream svg_stream;
+    svg_stream.imbue(std::locale::classic());
+    svg_stream << "viewBox=\"" << box.min().x() << " " << -box.max().y() << " " << box.width() << " " << box.height()
+               << "\"";
+    Glib::ustring viewbox = svg_stream.str();
 
     // Search for existing viewbox
     static auto regex = Glib::Regex::create("viewBox=\"\\s*(\\d*\\.?\\d+)\\s*,?\\s*(\\d*\\.?\\d+)\\s*,?\\s*(\\d+\\.?\\d+)\\s*,?\\s*(\\d+\\.?\\d+)\\s*\"", Glib::Regex::CompileFlags::OPTIMIZE);
@@ -640,10 +644,11 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
         svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::Regex::MatchFlags>(0));
 
         // Insert group with required transform to map glyph to new viewbox.
-        double x = std::stod(matchInfo.fetch(1).raw());
-        double y = std::stod(matchInfo.fetch(2).raw());
-        double w = std::stod(matchInfo.fetch(3).raw());
-        double h = std::stod(matchInfo.fetch(4).raw());
+
+        double x = Glib::Ascii::strtod(matchInfo.fetch(1));
+        double y = Glib::Ascii::strtod(matchInfo.fetch(2));
+        double w = Glib::Ascii::strtod(matchInfo.fetch(3));
+        double h = Glib::Ascii::strtod(matchInfo.fetch(4));
         // std::cout << " x: " << x
         //           << " y: " << y
         //           << " w: " << w
@@ -658,18 +663,15 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
             double xtrans = _design_units/w * x;
             double ytrans = _design_units/h * y;
 
-            if (xscale != 1.0 || yscale != 1.0) {
-                Glib::ustring group = "<g transform=\"matrix(";
-                group += std::to_string(xscale);
-                group += ", 0, 0, ";
-                group += std::to_string(yscale);
-                group += std::to_string(-xtrans);
-                group += ", ";
-                group += std::to_string(-ytrans);
-                group += ")\">";
+            if (xscale != 1.0 || yscale != 1.0 || xtrans != 0 || ytrans != 0) {
+                svg_stream.str("");
+                svg_stream << "<g transform=\"matrix(" << xscale << ", 0, 0, " << yscale << ", " << -xtrans << ", "
+                           << -ytrans << ")\">";
+                Glib::ustring group = svg_stream.str();
 
                 // Insert start group tag after initial <svg>
-                Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("<\\s*svg.*?>");
+                Glib::RefPtr<Glib::Regex> regex =
+                    Glib::Regex::create("<\\s*svg.*?>", Glib::Regex::CompileFlags::DOTALL);
                 regex->match(svg, matchInfo);
                 if (matchInfo.matches()) {
                     int start = -1;
@@ -708,6 +710,10 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
 
     // Finally create pixbuf!
     auto pixbuf = Inkscape::Pixbuf::create_from_buffer(svg.raw());
+    if (!pixbuf) {
+        std::cerr << "Bad svg data for glyph " << glyph_id << "\n";
+        pixbuf = new Pixbuf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1));
+    }
 
     // Ensure exists in cairo format before locking it down. (Rendering code requires cairo format.)
     pixbuf->ensurePixelFormat(Inkscape::Pixbuf::PF_CAIRO);
