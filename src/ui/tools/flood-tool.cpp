@@ -732,6 +732,7 @@ static void sp_flood_do_flood_fill(SPDesktop *desktop, Geom::Point const &cursor
         // make color transparent for 'alpha' flood mode to work
         auto bgcolor = document->getPageManager().getBackgroundColor();
         bgcolor.setOpacity(0.0);
+        dtc = bgcolor.toARGB();
 
         dc.setSource(bgcolor);
         dc.setOperator(CAIRO_OPERATOR_SOURCE);
