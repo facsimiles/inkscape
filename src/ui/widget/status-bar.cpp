@@ -66,17 +66,30 @@ StatusBar::StatusBar()
     zoom_popover = std::make_unique<Gtk::PopoverMenu>(zoom_menu, Gtk::PopoverMenu::Flags::NESTED);
     zoom_popover->set_parent(*_zoom);
 
+    _zoom->set_trim_zeros(false);
+    _zoom->set_min_size("12345%");
+    // Show zoom as a percentage, where 1:1 is 100%.
+    // Internally use log2(zoom_factor) values, so step up/down operates in log space.
     _zoom->set_transformers(
         [] (double value) { return std::log(value / 100.0) / std::log(2); },
-        [] (double value) { return std::floor(10 * (std::pow(2, value) * 100.0 + 0.05)) / 10; }
+        [this] (double value) {
+            auto zoom = std::pow(2, value) * 100.0;
+            if (zoom >= 10 - 0.05) {
+                _zoom->set_digits(0);
+            }
+            else if (zoom >= 2 - 0.005) {
+                _zoom->set_digits(1);
+            }
+            else {
+                _zoom->set_digits(2);
+            }
+            return zoom;
+        }
     );
     _zoom->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::zoom_value_changed));
     on_popup_menu(*_zoom, sigc::mem_fun(*this, &StatusBar::zoom_popup));
     _zoom->setDefocusTarget(this);
-
-    auto zoom_adjustment = _zoom->get_adjustment();
-    zoom_adjustment->set_lower(log(SP_DESKTOP_ZOOM_MIN)/log(2));
-    zoom_adjustment->set_upper(log(SP_DESKTOP_ZOOM_MAX)/log(2));
+    _zoom->set_range(log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2));
 
     // ******* Rotate *******
 
@@ -202,7 +215,6 @@ void StatusBar::zoom_value_changed(double value)
     auto guard = _blocker.block();
 
     double const zoom_factor = std::pow(2, value);
-
     if (auto const window = dynamic_cast<Gtk::ApplicationWindow *>(get_root())) {
         auto variant = Glib::Variant<double>::create(zoom_factor);
         window->activate_action("win.canvas-zoom-absolute", variant);

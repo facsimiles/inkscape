@@ -219,12 +219,14 @@ SelectedStyle::SelectedStyle()
     opacity_sb = Gtk::make_managed<Inkscape::UI::Widget::InkSpinButton>();
     opacity_sb->set_step(0.02);
     opacity_sb->set_digits(0);
-    opacity_sb->set_label(C_("Opacity", "O"));
+    opacity_sb->set_icon("transparency");
+    opacity_sb->add_css_class("symbolic");
     opacity_sb->set_suffix(_("%"));
     opacity_sb->set_adjustment(opacity_adjustment);
     opacity_sb->set_size_request(SELECTED_STYLE_SB_WIDTH);
     opacity_sb->set_sensitive(false);
     opacity_sb->setDefocusTarget(this);
+    opacity_sb->set_valign(Gtk::Align::CENTER);
 
     auto opacity_box = Gtk::make_managed<Gtk::Box>();
     opacity_box->append(*opacity_sb);

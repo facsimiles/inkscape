@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <placeholder width="704" height="17"></placeholder>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="statusbar-zoom-adjustment">
     <property name="step-increment">0.1</property>
     <property name="page-increment">10</property>
@@ -40,10 +41,10 @@
     <property name="lower">-180</property>
     <property name="upper">180</property>
   </object>
-  <menu id="statusbar-rotate-menu"/>
+  <menu id="statusbar-rotate-menu"></menu>
   <object class="GtkBox" id="statusbar">
     <property name="name">Statusbar</property>
-    <property name="margin-end">10</property>
+    <property name="margin-end">15</property>
     <child>
       <object class="GtkBox" id="statusbar-selected-style">
         <property name="halign">center</property>
@@ -58,8 +59,8 @@
         <property name="margin-end">6</property>
       </object>
     </child>
-    <child>
-      <!-- avoid resizes with external scrolls-->
+    <child>      <!-- avoid resizes with external scrolls-->
+
       <object class="GtkScrolledWindow">
         <property name="can-focus">True</property>
         <property name="hexpand">True</property>
@@ -93,27 +94,33 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_InkSpinButton" id="statusbar-zoom">
+        <property name="margin-bottom">2</property>
+        <property name="margin-top">2</property>
+        <property name="margin-end">10</property>
+        <property name="margin-start">0</property>
+        <property name="valign">center</property>
         <property name="tooltip-text" translatable="yes">Zoom (also Ctrl+scroll)</property>
-        <property name="label" translatable="yes" context="Abbreviation for canvas zoom level">Z</property>
+        <property name="icon" translatable="no">zoom</property>
         <property name="name">StatusbarZoomValue</property>
         <property name="focusable">True</property>
         <property name="adjustment">statusbar-zoom-adjustment</property>
         <property name="digits">1</property>
         <property name="value">100</property>
-        <property name="margin-end">10</property>
         <property name="suffix" translatable="yes">%</property>
       </object>
     </child>
     <child>
       <object class="gtkmm__CustomObject_InkSpinButton" id="statusbar-rotate">
+        <property name="valign">center</property>
         <property name="tooltip-text" translatable="yes">Rotation (also Ctrl+Shift+scroll)</property>
-        <property name="label" translatable="yes" context="Abbreviation for canvas rotation">R</property>
+        <property name="icon" translatable="no">rotate-canvas</property>
         <property name="name">StatusbarRotateValue</property>
         <property name="focusable">True</property>
         <property name="adjustment">statusbar-rotate-adjustment</property>
         <property name="digits">1</property>
         <property name="suffix" translatable="yes">°</property>
         <property name="wrap-around">True</property>
+        <property name="valign">center</property>
       </object>
     </child>
   </object>

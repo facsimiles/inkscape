@@ -39,6 +39,7 @@ ink-spinbutton.frame { border: 1px solid @border-color; }
 ink-spinbutton:hover button { opacity: 1; }
 ink-spinbutton:focus-within { outline: 2px solid @focus-color; outline-offset: -2px; }
 ink-spinbutton label#InkSpinButton-Label { opacity: 0.5; margin-left: 3px; margin-right: 3px; }
+ink-spinbutton image#InkSpinButton-Icon { opacity: 0.5; }
 ink-spinbutton button { border: 0 solid alpha(@border-color, 0.30); border-radius: 2px; padding: 1px; min-width: 6px; min-height: 8px; -gtk-icon-size: 10px; background-image: none; }
 ink-spinbutton button.left  { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 1px; }
 ink-spinbutton button.right { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-width: 1px; }
@@ -91,6 +92,8 @@ void InkSpinButton::construct() {
     _icon.set_can_target(false);
     _icon.set_valign(Gtk::Align::CENTER);
     _icon.set_visible(false);
+    // use symbolic icons as labels
+    _icon.add_css_class("symbolic");
 
     _minus.set_icon_name("go-previous-symbolic");
     _plus.set_icon_name("go-next-symbolic");
@@ -232,7 +235,7 @@ void InkSpinButton::construct() {
         _min_value.set_value(_adjustment->get_lower());
         _max_value.set_value(_adjustment->get_upper());
     });
-    property_digits().signal_changed().connect([this] { queue_resize(); update(); });
+    property_digits().signal_changed().connect([this] { queue_resize(); update(false); });
     property_has_frame().signal_changed().connect([this]{ set_has_frame(_has_frame); });
     property_show_arrows().signal_changed().connect([this]{ set_has_arrows(_show_arrows); });
     property_scaling_factor().signal_changed().connect([this]{ set_scaling_factor(_scaling_factor); });
@@ -240,8 +243,8 @@ void InkSpinButton::construct() {
     property_min_value().signal_changed().connect([this]{ _adjustment->set_lower(_min_value); });
     property_max_value().signal_changed().connect([this]{ _adjustment->set_upper(_max_value); });
     property_value().signal_changed().connect([this]{ set_value(_num_value); });
-    property_prefix().signal_changed().connect([this]{ update(); });
-    property_suffix().signal_changed().connect([this]{ update(); });
+    property_prefix().signal_changed().connect([this]{ update(false); });
+    property_suffix().signal_changed().connect([this]{ update(false); });
 
     // if the adjustment property has been set, it takes precedence over min/max values and step
     if (auto adj = _adjust.get_value()) {
@@ -445,8 +448,10 @@ void InkSpinButton::set_adjustment(const Glib::RefPtr<Gtk::Adjustment>& adjustme
 }
 
 void InkSpinButton::set_digits(int digits) {
-    _digits = digits;
-    update();
+    if (_digits != digits) {
+        _digits = digits;
+        update(false);
+    }
 }
 
 int InkSpinButton::get_digits() const {
@@ -456,6 +461,8 @@ int InkSpinButton::get_digits() const {
 void InkSpinButton::set_range(double min, double max) {
     _adjustment->set_lower(min);
     _adjustment->set_upper(max);
+    // enable/disable plus/minus buttons
+    update(false);
 }
 
 void InkSpinButton::set_step(double step_increment) {
@@ -469,7 +476,7 @@ void InkSpinButton::set_prefix(const std::string& prefix, bool add_space) {
     else {
         _prefix.set_value(prefix);
     }
-    update();
+    update(false);
 }
 
 void InkSpinButton::set_suffix(const std::string& suffix, bool add_half_space) {
@@ -480,7 +487,7 @@ void InkSpinButton::set_suffix(const std::string& suffix, bool add_half_space) {
     else {
         _suffix.set_value(suffix);
     }
-    update();
+    update(false);
 }
 
 void InkSpinButton::set_has_frame(bool frame) {
@@ -495,7 +502,7 @@ void InkSpinButton::set_has_frame(bool frame) {
 void InkSpinButton::set_trim_zeros(bool trim) {
     if (_trim_zeros != trim) {
         _trim_zeros = trim;
-        update();
+        update(false);
     }
 }
 
@@ -563,7 +570,8 @@ std::string InkSpinButton::format(double value, bool with_prefix_suffix, bool wi
 void InkSpinButton::update(bool fire_change_notification) {
     if (!_adjustment) return;
 
-    auto value = _adjustment->get_value();
+    auto original_value = _adjustment->get_value();
+    auto value = original_value;
     if (_output_transformer) {
         value = _output_transformer(value);
     }
@@ -581,7 +589,7 @@ void InkSpinButton::update(bool fire_change_notification) {
     _plus .set_sensitive(wrap || _adjustment->get_value() < _adjustment->get_upper());
 
     if (fire_change_notification) {
-        _signal_value_changed.emit(value / _fmt_scaling_factor);
+        _signal_value_changed.emit(original_value / _fmt_scaling_factor);
     }
 }
 
