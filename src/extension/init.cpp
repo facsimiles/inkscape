@@ -112,9 +112,9 @@
 #include "internal/bitmap/wave.h"
 #endif /* WITH_MAGICK */
 
-#include "internal/filter/filter.h"
-
 #include "init.h"
+#include "internal/filter/filter.h"
+#include "util/statics.h"
 
 using namespace Inkscape::IO::Resource;
 
@@ -158,6 +158,27 @@ void shallow_init()
     Internal::Svg::init();
     Internal::PngOutput::init();
 }
+
+#ifdef WITH_MAGICK
+class MagickInit : public Util::EnableSingleton<MagickInit>
+{
+public:
+    MagickInit() { Magick::InitializeMagick(nullptr); }
+    ~MagickInit()
+    {
+#ifdef WITH_GRAPHICS_MAGICK
+        // Need to manually deinitialize GraphicMagick during exit from main
+        // Otherwise it will fall back doing cleanup triggered by static variable destructors (MagickCleanup),
+        // which is prone to global var destructor order problems.
+        MagickLib::DestroyMagick();
+#elif defined(WITH_IMAGE_MAGICK)
+        Magick::TerminateMagick();
+#else
+#error "Expected Graphics or Image magic"
+#endif
+    }
+};
+#endif
 
 /**
  * Invokes the init routines for internal modules.
@@ -219,7 +240,7 @@ init()
 
     /* Raster Effects */
 #ifdef WITH_MAGICK
-    Magick::InitializeMagick(NULL);
+    MagickInit::get();
 
     Internal::Bitmap::AdaptiveThreshold::init();
     Internal::Bitmap::AddNoise::init();

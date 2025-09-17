@@ -74,6 +74,11 @@
 /* Image/Graphics Magick++ support for bitmap effects */
 #cmakedefine WITH_MAGICK 1
 
+/* There are some API difference between Image and Graphics magick */
+#cmakedefine WITH_GRAPHICS_MAGICK 1
+#cmakedefine WITH_IMAGE_MAGICK 1
+
+
 /* Use libjpeg */
 #cmakedefine HAVE_JPEG 1
 
