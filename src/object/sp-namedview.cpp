@@ -631,19 +631,19 @@ void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop)
     if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !std::isnan(nv->zoom)
         && nv->cx != HUGE_VAL && !std::isnan(nv->cx)
         && nv->cy != HUGE_VAL && !std::isnan(nv->cy)) {
-        desktop->zoom_absolute( Geom::Point(nv->cx, nv->cy), nv->zoom, false );
+        desktop->zoom_absolute(Geom::Point(nv->cx, nv->cy), nv->zoom, false);
     } else if (auto document = desktop->getDocument()) {
         // document without saved zoom, zoom to its page
         document->getPageManager().zoomToSelectedPage(desktop);
     }
-    if (nv->rotation != 0 && nv->rotation != HUGE_VAL && !std::isnan(nv->rotation)) {
+    if (nv->rotation != HUGE_VAL && !std::isnan(nv->rotation)) {
         Geom::Point p;
         if (nv->cx != HUGE_VAL && !std::isnan(nv->cx) && nv->cy != HUGE_VAL && !std::isnan(nv->cy)) {
             p = Geom::Point(nv->cx, nv->cy);
         }else{
             p = desktop->current_center();
         }
-        desktop->rotate_absolute_keep_point(p, nv->rotation * M_PI / 180.0);
+        desktop->rotate_absolute_keep_point(p, Geom::rad_from_deg(nv->rotation));
     }
 }
 
