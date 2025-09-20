@@ -20,7 +20,6 @@
 class SPFeDistantLight;
 class SPFePointLight;
 class SPFeSpotLight;
-struct SVGICCColor;
 
 namespace Inkscape {
 namespace Filters {
