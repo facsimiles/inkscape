@@ -165,6 +165,7 @@ private:
 
     bool rotating = false;
     double start_angle, current_angle;
+    bool check_lost_button_up = false;
 
 public:
     bool start_root_handler(CanvasEvent const &event);

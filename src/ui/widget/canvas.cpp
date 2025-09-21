@@ -316,11 +316,31 @@ Canvas::Canvas()
     scroll->signal_scroll().connect([this, &scroll = *scroll](auto &&...args) { return on_scroll(scroll, args...); }, true);
     add_controller(scroll);
 
-    auto const click = Gtk::GestureClick::create();
-    click->set_button(0);
-    click->signal_pressed().connect(Controller::use_state([this](auto &&...args) { return on_button_pressed(args...); }, *click));
-    click->signal_released().connect(Controller::use_state([this](auto &&...args) { return on_button_released(args...); }, *click));
-    add_controller(click);
+    unsigned const MAX_BUTTON = 5;
+    for (unsigned int i = 1; i <= MAX_BUTTON; i++) {
+        auto const click = Gtk::GestureClick::create();
+        // Intentionally use separate gestures for each button instead of common one with set_button(0)
+        // For sequence Left_down, Middle_down, Middle_up, Left_down the common mode would produce:
+        // pressed(left), cancelled, unpaired_release(middle), unpaired_release(left)
+        // The middle click interrupts gesture but doesn't produce a button down event.
+        // With separate gestures second click still interrupts first one but the pressed signal doesn't get lost.
+        click->set_button(i);
+        click->signal_pressed().connect(
+            Controller::use_state([this](auto &&...args) { return on_button_pressed(args...); }, *click));
+        click->signal_released().connect(Controller::use_state(
+            [this](Gtk::GestureClick &gesture, auto &&...args) {
+                return on_button_released(gesture, args..., gesture.get_current_button());
+            },
+            *click));
+        // smallest deviation from normal flow will interrupt gesture and classify release as unpaired
+        click->signal_unpaired_release().connect(
+            [this, i, &controller = *click](double x, double y, guint button, Gdk::EventSequence *) {
+                if (i == button) {
+                    on_button_released(controller, 0, x, y, button);
+                }
+            });
+        add_controller(click);
+    }
 
     auto const key = Gtk::EventControllerKey::create();
     key->signal_key_pressed().connect([this, &key = *key](auto &&...args) { return on_key_pressed(key, args...); }, true);
@@ -995,12 +1015,12 @@ Gtk::EventSequenceState Canvas::on_button_pressed(Gtk::GestureClick const &contr
     return result ? Gtk::EventSequenceState::CLAIMED : Gtk::EventSequenceState::NONE;
 }
 
-Gtk::EventSequenceState Canvas::on_button_released(Gtk::GestureClick const &controller,
-                                                   int /*n_press*/, double x, double y)
+Gtk::EventSequenceState Canvas::on_button_released(Gtk::GestureClick const &controller, int /*n_press*/, double x,
+                                                   double y, int button)
 {
     _state = (int)controller.get_current_event_state();
     d->last_mouse = Geom::Point(x, y);
-    d->unreleased_presses &= ~(1 << controller.get_current_button());
+    d->unreleased_presses &= ~(1 << button);
 
     // Drag the split view controller.
     if (_split_mode == SplitMode::SPLIT && _split_dragging) {
@@ -1039,7 +1059,6 @@ Gtk::EventSequenceState Canvas::on_button_released(Gtk::GestureClick const &cont
         }
     }
 
-    auto const button = controller.get_current_button();
     if (button == 1) {
         d->autoscroll_end();
     }
@@ -1048,7 +1067,7 @@ Gtk::EventSequenceState Canvas::on_button_released(Gtk::GestureClick const &cont
     event.modifiers = _state;
     event.device = controller.get_current_event_device();
     event.orig_pos = *d->last_mouse;
-    event.button = controller.get_current_button();
+    event.button = button;
     event.time = controller.get_current_event_time();
 
     auto result = d->process_event(event) ? Gtk::EventSequenceState::CLAIMED : Gtk::EventSequenceState::NONE;

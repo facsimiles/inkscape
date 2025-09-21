@@ -338,7 +338,6 @@ bool ToolBase::root_handler(CanvasEvent const &event)
 
     inspect_event(event,
     [&] (ButtonPressEvent const &event) {
-
         if (event.num_press == 2) {
             if (panning) {
                 panning = PANNING_NONE;
@@ -351,6 +350,8 @@ bool ToolBase::root_handler(CanvasEvent const &event)
             within_tolerance = true;
 
             button_w = event.pos;
+
+            check_lost_button_up = !(event.device && event.device->get_source() != Gdk::InputSource::TABLET_PAD);
 
             switch (event.button) {
             case 1:
@@ -432,10 +433,9 @@ bool ToolBase::root_handler(CanvasEvent const &event)
                                  EventType::MOTION);
             }
 
-            if ((panning == 2 && !(event.modifiers & GDK_BUTTON2_MASK)) ||
-                (panning == 1 && !(event.modifiers & GDK_BUTTON1_MASK)) ||
-                (panning == 3 && !(event.modifiers & GDK_BUTTON3_MASK)))
-            {
+            if (check_lost_button_up && ((panning == 2 && !(event.modifiers & GDK_BUTTON2_MASK)) ||
+                                         (panning == 1 && !(event.modifiers & GDK_BUTTON1_MASK)) ||
+                                         (panning == 3 && !(event.modifiers & GDK_BUTTON3_MASK)))) {
                 // Gdk seems to lose button release for us sometimes :-(
                 panning = PANNING_NONE;
                 ungrabCanvasEvents();
@@ -1151,10 +1151,15 @@ bool ToolBase::tool_root_handler(CanvasEvent const &event)
 
     // Panning has priority over tool-specific event handling
     if (is_panning()) {
-        return ToolBase::root_handler(event);
-    } else {
-        return root_handler(event);
+        if (ToolBase::root_handler(event)) {
+            return true;
+        }
+        if (event.type() != EventType::BUTTON_RELEASE) {
+            return false;
+        }
+        // still try to deliver button release events not consumed by panning
     }
+    return root_handler(event);
 }
 
 /**

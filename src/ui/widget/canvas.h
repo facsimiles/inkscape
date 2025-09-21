@@ -154,8 +154,8 @@ private:
     // GestureClick
     Gtk::EventSequenceState on_button_pressed (Gtk::GestureClick const &controller,
                                                int n_press, double x, double y);
-    Gtk::EventSequenceState on_button_released(Gtk::GestureClick const &controller,
-                                               int n_press, double x, double y);
+    Gtk::EventSequenceState on_button_released(Gtk::GestureClick const &controller, int n_press, double x, double y,
+                                               int button);
 
     // EventControllerMotion
     void on_motion(Gtk::EventControllerMotion const &controller, double x, double y);
