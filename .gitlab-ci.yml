@@ -183,7 +183,7 @@ inkscape:macos:
   variables:
     CCACHE_MAXSIZE: "200Mi"
     MACOSX_DEPLOYMENT_TARGET: 11.3
-    ORKA_RUNNER: sequoia
+    ORKA_RUNNER: sequoia-2
     SDKROOT: /opt/sdks/MacOSX15.5.sdk
   script:
     - |
