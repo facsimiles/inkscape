@@ -146,14 +146,10 @@ protected:
     std::string _pdf_group_by = "by-xobject";
 
     // Documents are owned by the application which is responsible for opening/saving/exporting.
-    // Not supported by Apple Clang yet:
-    // std::unordered_map<std::unique_ptr<SPDocument>,
-    //                    std::vector<std::unique_ptr<InkscapeWindow>>,
-    //                    TransparentPtrHash<SPDocument>,
-    //                    TransparentPtrEqual<SPDocument>> _documents;
-    std::map<std::unique_ptr<SPDocument>,
-             std::vector<std::unique_ptr<SPDesktop>>,
-             TransparentPtrLess<SPDocument>> _documents;
+    std::unordered_map<std::unique_ptr<SPDocument>,
+                       std::vector<std::unique_ptr<SPDesktop>>,
+                       TransparentPtrHash<SPDocument>,
+                       TransparentPtrEqual<SPDocument>> _documents;
 
     std::vector<std::unique_ptr<InkscapeWindow>> _windows;
 

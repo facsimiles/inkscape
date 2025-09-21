@@ -310,7 +310,7 @@ bool Export::exportVector(
     doc->fitToRect(area, false);
     doc->getPageManager().enablePages();
     auto page = doc->getPageManager().getFirstPage();
-    return exportVector(extension, doc, filename, overwrite, {}, {page});
+    return exportVector(extension, doc, filename, overwrite, {}, page);
 }
 
 bool Export::exportVector(

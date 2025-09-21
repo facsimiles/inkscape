@@ -306,17 +306,15 @@ std::string Profile::get_id() const
 std::string Profile::generate_id() const
 {
     auto s = get_id();
-#ifdef __APPLE__
-    if (std::count_if(s.begin(), s.end(), [](char c){ return c == '0'; }) < 24)
-#else
-    if (std::ranges::count(s, '0') < 24)
-#endif
+    if (std::ranges::count(s, '0') < 24) {
         return s; // Done
+    }
     // If there's no path, then what we have is a generated or in-memory profile
     // which is unlikely to ever need to be matched with anything via id but it's
     // also true that this id would change between computers, and creation date.
-    if (_path.empty())
+    if (_path.empty()) {
         return "";
+    }
     return generate_checksum();
 }
 

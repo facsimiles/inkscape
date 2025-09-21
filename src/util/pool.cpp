@@ -26,9 +26,7 @@ std::byte *Pool::allocate(std::size_t size, std::size_t alignment)
     }
 
     cursize = std::max(nextsize, size + alignment - 1);
-    buffers.push_back(std::make_unique<std::byte[]>(cursize));
-    // TODO: C++20: *once* Apple+AppImage support it: Use std::make_unique_for_overwrite()
-    // buffers.push_back(std::make_unique_for_overwrite<std::byte[]>(cursize));
+    buffers.push_back(std::make_unique_for_overwrite<std::byte[]>(cursize));
 
     resetblock();
     nextsize = cursize * 3 / 2;

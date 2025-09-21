@@ -18,11 +18,6 @@ struct VariantVisitor : Fs...
     using Fs::operator()...;
 };
 
-// Todo: Delete in C++20.
-// …BUT only once all CI runners, etc. support C++20 changes to deduction guides
-template <typename... Fs>
-VariantVisitor(Fs...) -> VariantVisitor<Fs...>;
-
 } // namespace
 
 #endif // VARIANT_VISITOR_H_SEEN

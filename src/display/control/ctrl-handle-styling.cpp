@@ -2,6 +2,7 @@
 #include "ctrl-handle-styling.h"
 
 #include <optional>
+#include <ranges>
 #include <boost/functional/hash.hpp>
 #include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
@@ -258,9 +259,7 @@ std::optional<std::pair<TypeState, int>> configure_selector(CRSelector *a_select
     }
 
     auto selector = TypeState{type_it->second};
-    // for (auto &tok : tokens | std::views::drop(1)) { // Todo: When supported by CI Apple Clang.
-    for (int i = 1; i < tokens.size(); i++) {
-        auto &tok = tokens[i];
+    for (auto &tok : tokens | std::views::drop(1)) {
         if (tok == "*") {
             continue;
         } else if (tok == "selected") {
