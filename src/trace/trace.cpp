@@ -81,7 +81,7 @@ std::optional<std::pair<SPImage*, std::vector<SPItem*>>> getImageAndItems(bool s
     auto sel = getActiveSelection();
 
     if (sioxEnabled) {
-        auto selection = std::vector<SPItem*>(sel->items().begin(), sel->items().end());
+        auto selection = sel->items_vector();
         std::sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
 
         SPImage *img = nullptr;

@@ -669,7 +669,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
 
         if (_check_move_relative.get_active()) {
             // shift each object relatively to the previous one
-            std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
+            auto selected = selection->items_vector();
             if (selected.empty()) return;
 
             if (fabs(x) > 1e-6) {

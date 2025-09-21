@@ -1229,7 +1229,7 @@ void CloneTiler::change_selection(Inkscape::Selection *selection)
         return;
     }
 
-    if (boost::distance(selection->items()) > 1) {
+    if (std::ranges::distance(selection->items()) > 1) {
         _buttons_on_tiles->set_sensitive(false);
         _status->set_markup(_("<small>More than one object selected.</small>"));
         return;
@@ -1955,12 +1955,12 @@ void CloneTiler::unclump()
         return;
 
     // check if something is selected
-    if (selection->isEmpty() || boost::distance(selection->items()) > 1) {
+    auto obj = selection->singleItem();
+    if (!obj) {
         getDesktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
         return;
     }
 
-    auto obj = selection->singleItem();
     auto parent = obj->parent;
 
     std::vector<SPItem*> to_unclump; // not including the original
@@ -2000,12 +2000,12 @@ void CloneTiler::remove(bool do_undo/* = true*/)
         return;
 
     // check if something is selected
-    if (selection->isEmpty() || boost::distance(selection->items()) > 1) {
+    auto obj = selection->singleItem();
+    if (!obj) {
         getDesktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
         return;
     }
 
-    SPObject *obj = selection->singleItem();
     SPObject *parent = obj->parent;
 
 // remove old tiling
@@ -2073,7 +2073,7 @@ void CloneTiler::apply()
     }
 
     // Check if more than one object is selected.
-    if (boost::distance(selection->items()) > 1) {
+    if (std::ranges::distance(selection->items()) > 1) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, <b>group</b> them and <b>clone the group</b>."));
         return;
     }

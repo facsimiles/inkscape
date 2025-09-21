@@ -1270,10 +1270,10 @@ void DocumentProperties::editEmbeddedScript(){
         if (id == obj->getId()) {
             //XML Tree being used directly here while it shouldn't be.
             Inkscape::XML::Node *repr = obj->getRepr();
-            if (repr){
-                auto tmp = obj->children | boost::adaptors::transformed([](SPObject& o) { return &o; });
+            if (repr) {
+                auto tmp = obj->children | std::views::transform([] (SPObject &o) { return &o; });
                 std::vector<SPObject*> vec(tmp.begin(), tmp.end());
-                for (auto const child: vec) {
+                for (auto const child : vec) {
                     child->deleteObject();
                 }
                 obj->appendChildRepr(document->getReprDoc()->createTextNode(_EmbeddedContent.get_buffer()->get_text().c_str()));

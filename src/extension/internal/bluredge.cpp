@@ -63,7 +63,7 @@ void BlurEdge::effect(Inkscape::Extension::Effect *module, ExecutionEnv * /*exec
     double old_offset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
 
     // TODO need to properly refcount the items, at least
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
     selection->clear();
 
     for(auto spitem : items) {

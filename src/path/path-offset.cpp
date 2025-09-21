@@ -275,8 +275,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     }
 
     bool did = false;
-    std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
-    for (auto item : il){
+    for (auto item : selection->items_vector()) {
         if (auto shape = cast<SPShape>(item)) {
             if (!shape->curve())
                 continue;

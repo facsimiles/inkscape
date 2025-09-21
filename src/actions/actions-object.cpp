@@ -413,7 +413,7 @@ object_add_corners_lpe(InkscapeApplication *app) {
     // We should not have to do this!
     auto document  = app->get_active_document();
     selection->setDocument(document);
-    std::vector<SPItem *> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
     selection->clear();
     for (auto i : items) {
         if (auto lpeitem = cast<SPLPEItem>(i)) {

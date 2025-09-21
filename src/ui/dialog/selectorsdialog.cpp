@@ -647,7 +647,7 @@ Glib::ustring SelectorsDialog::_getSelectorClasses(Glib::ustring selector)
 
 std::vector<SPObject *> SelectorsDialog::getSelectedObjects()
 {
-    auto const objects = getDesktop()->getSelection()->objects();
+    auto &objects = getDesktop()->getSelection()->objects();
     return std::vector<SPObject *>(objects.begin(), objects.end());
 }
 

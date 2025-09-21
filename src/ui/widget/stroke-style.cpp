@@ -918,10 +918,9 @@ StrokeStyle::updateLine()
         setPaintOrder (nullptr);
     }
 
-    std::vector<SPItem*> const objects(sel->items().begin(), sel->items().end());
-    if (objects.size()) {
-        SPObject *const object = objects[0];
-        SPStyle *const style = object->style;
+    auto const objects = sel->items_vector();
+    if (!objects.empty()) {
+        auto const style = objects.front()->style;
         /* Markers */
         updateAllMarkers(objects, true); // FIXME: make this desktop query too
 

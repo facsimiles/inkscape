@@ -717,7 +717,8 @@ void SingleExport::onExport()
 
         setExporting(true, Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), filename_label, width, height));
 
-        std::vector<SPItem const *> selected(selection->items().begin(), selection->items().end());
+        auto items = selection->items();
+        auto selected = std::vector<SPItem const *>(items.begin(), items.end());
 
         exportSuccessful = Export::exportRaster(area, width, height, dpi,
                                                 _background_color.get_current_color(), filename_utf8, false,
@@ -730,8 +731,8 @@ void SingleExport::onExport()
 
         std::vector<SPItem const *> items;
         if (selected_only) {
-            auto itemlist = selection->items();
-            items.insert(items.end(), itemlist.begin(), itemlist.end());
+            auto item_range = selection->items();
+            items = std::vector<SPItem const *>(item_range.begin(), item_range.end());
         }
 
         if (current_key == SELECTION_PAGE && page_manager.hasPages()) {

@@ -414,19 +414,18 @@ layer_to_group (InkscapeWindow* win)
     Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to group"), INKSCAPE_ICON("dialog-objects"));
 }
 
-void
-layer_from_group (InkscapeWindow* win)
+void layer_from_group(InkscapeWindow *win)
 {
-    SPDesktop* dt = win->get_desktop();
+    auto dt = win->get_desktop();
     auto selection = dt->getSelection();
 
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    if (items.size() != 1) {
+    auto obj = selection->single();
+    if (!obj) {
         show_output("layer_to_group: only one selected item allowed!");
         return;
     }
     
-    if (auto group = cast<SPGroup>(items[0])) {
+    if (auto group = cast<SPGroup>(obj)) {
         if (!group->isLayer()) {
             group->setLayerMode(SPGroup::LAYER);
             group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
@@ -441,34 +440,32 @@ layer_from_group (InkscapeWindow* win)
 }
 
 // Does not change XML.
-void
-group_enter (InkscapeWindow* win)
+void group_enter(InkscapeWindow *win)
 {
-    SPDesktop* dt = win->get_desktop();
+    auto dt = win->get_desktop();
     auto selection = dt->getSelection();
 
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    if (items.size() == 1 && cast<SPGroup>(items[0])) {
+    auto obj = selection->single();
+    if (is<SPGroup>(obj)) {
         // Only one item and it is a group!
-        dt->layerManager().setCurrentLayer(items[0]);
+        dt->layerManager().setCurrentLayer(obj);
         selection->clear();
     }
 }
 
 // Does not change XML.
-void
-group_exit (InkscapeWindow* win)
+void group_exit(InkscapeWindow *win)
 {
-    SPDesktop* dt = win->get_desktop();
+    auto dt = win->get_desktop();
     auto selection = dt->getSelection();
 
     auto parent = dt->layerManager().currentLayer()->parent;
     dt->layerManager().setCurrentLayer(parent);
 
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    if (items.size() == 1 && cast<SPGroup>(items[0]->parent) ) {
+    auto obj = selection->single();
+    if (obj && is<SPGroup>(obj->parent)) {
         // Only one item selected and the parent is a group!
-        selection->set(items[0]->parent);
+        selection->set(obj->parent);
     } else {
         selection->clear();
     }

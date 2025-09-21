@@ -201,14 +201,12 @@ select_invert(Glib::ustring condition, InkscapeApplication* app)
     get_all_items_recursive(objects, document->getRoot(), condition);
 
     // Get current selection.
-    std::vector<SPObject *> current(selection->items().begin(), selection->items().end());
+    auto current = selection->items_vector();
 
-    // Remove current selection from object vector (using "erase remove_if idiom").
-    objects.erase(
-        std::remove_if(std::begin(objects), std::end(objects), [&current](const SPObject *x)
-            {
-                return (std::find(current.begin(), current.end(), x) != current.end());
-            }), objects.end());
+    // Remove current selection from object vector.
+    std::erase_if(objects, [&current] (SPObject const *x) {
+        return std::find(current.begin(), current.end(), x) != current.end();
+    });
 
     // Set selection to object vector.
     selection->setList(objects);

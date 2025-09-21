@@ -355,7 +355,7 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
     auto const doc = document();
 
     // Grab the items list.
-    auto const il = std::vector<SPItem*>(items().begin(), items().end());
+    auto const il = items_vector();
 
     // Validate number of items.
     switch (bop) {
@@ -713,10 +713,8 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         }
     } else {
         // find out the bottom object
-        std::vector<Inkscape::XML::Node*> sorted(xmlNodes().begin(), xmlNodes().end());
-
-        sort(sorted.begin(),sorted.end(),sp_repr_compare_position_bool);
-
+        auto sorted = xmlNodes_vector();
+        std::sort(sorted.begin(), sorted.end(), sp_repr_compare_position_bool);
         source = doc->getObjectByRepr(sorted.front());
     }
 

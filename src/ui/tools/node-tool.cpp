@@ -236,9 +236,8 @@ void sp_update_helperpath(SPDesktop *desktop)
         desktop->remove_temporary_canvasitem(hp);
     }
     nt->_helperpath_tmpitem.clear();
-    std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
     std::vector<std::pair<Geom::PathVector, Geom::Affine>> cs;
-    for (auto item : vec) {
+    for (auto item : selection->items_vector()) {
         auto lpeitem = cast<SPLPEItem>(item);
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
             Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();

@@ -57,7 +57,7 @@ ImageMagickDocCache::ImageMagickDocCache(SPDesktop *desktop)
     : Inkscape::Extension::Implementation::ImplementationDocumentCache(desktop)
 {
     auto selected_item_list = desktop->getSelection()->items();
-    images.reserve(boost::distance(selected_item_list));
+    images.reserve(std::ranges::distance(selected_item_list));
 
     // Loop through selected items
     for (auto item : selected_item_list) {

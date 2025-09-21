@@ -28,54 +28,50 @@
 
 using Inkscape::ObjectSet;
 
-bool
-ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
+bool ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
 {
-  if (desktop() && isEmpty()) {
-    desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>stroked path(s)</b> to convert stroke to path."));
-    return false;
-  }
-
-  bool did = false;
-
-  Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-  if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
-      did = unlinkRecursive(true);
-  }
-
-  // Need to turn on stroke scaling to ensure stroke is scaled when transformed!
-  bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
-  prefs->setBool("/options/transform/stroke", true);
-
-
-  std::vector<SPItem *> my_items(items().begin(), items().end());
-
-  for (auto item : my_items) {
-    // Do not remove the object from the selection here 
-    // as we want to keep it selected if the whole operation fails
-    Inkscape::XML::Node *new_node = item_to_paths(item, legacy);
-    if (new_node) {
-      SPObject* new_item = document()->getObjectByRepr(new_node);
-
-      add(new_item); // Add to selection.
-      did = true;
+    if (desktop() && isEmpty()) {
+        desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>stroked path(s)</b> to convert stroke to path."));
+        return false;
     }
-  }
 
-  // Reset
-  prefs->setBool("/options/transform/stroke", scale_stroke);
+    bool did = false;
 
-  if (desktop() && !did) {
-    desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No stroked paths</b> in the selection."));
-  }
+    auto prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+        did = unlinkRecursive(true);
+    }
 
-  if (did && !skip_undo) {
-    Inkscape::DocumentUndo::done(document(), _("Convert stroke to path"), "");
-  } else if (!did && !skip_undo) {
-    Inkscape::DocumentUndo::cancel(document());
-  }
+    // Need to turn on stroke scaling to ensure stroke is scaled when transformed!
+    bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
+    prefs->setBool("/options/transform/stroke", true);
 
-  return did;
+    for (auto item : items_vector()) {
+        // Do not remove the object from the selection here
+        // as we want to keep it selected if the whole operation fails
+        Inkscape::XML::Node *new_node = item_to_paths(item, legacy);
+        if (new_node) {
+            SPObject* new_item = document()->getObjectByRepr(new_node);
+
+            add(new_item); // Add to selection.
+            did = true;
+        }
+    }
+
+    // Reset
+    prefs->setBool("/options/transform/stroke", scale_stroke);
+
+    if (desktop() && !did) {
+        desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No stroked paths</b> in the selection."));
+    }
+
+    if (did && !skip_undo) {
+        Inkscape::DocumentUndo::done(document(), _("Convert stroke to path"), "");
+    } else if (!did && !skip_undo) {
+        Inkscape::DocumentUndo::cancel(document());
+    }
+
+    return did;
 }
 
 bool
@@ -125,8 +121,7 @@ ObjectSet::simplifyPaths(bool skip_undo)
     double size = L2(selectionBbox->dimensions());
 
     int pathsSimplified = 0;
-    std::vector<SPItem *> my_items(items().begin(), items().end());
-    for (auto item : my_items) {
+    for (auto item : items_vector()) {
         pathsSimplified += path_simplify(item, threshold, justCoalesce, size);
     }
 

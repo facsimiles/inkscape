@@ -31,7 +31,6 @@
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowregion.h"
 #include "object/sp-flowtext.h"
-#include "object/sp-rect.h"
 #include "object/sp-textpath.h"
 #include "object/sp-tspan.h"
 #include "style.h"
@@ -41,13 +40,12 @@
 
 using Inkscape::DocumentUndo;
 
-static SPItem *
-text_or_flowtext_in_selection(Inkscape::Selection *selection)
+static SPItem *text_or_flowtext_in_selection(Inkscape::Selection *selection)
 {
-    auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        if (is<SPText>(*i) || is<SPFlowtext>(*i))
-            return *i;
+    for (auto item : selection->items()) {
+        if (is<SPText>(item) || is<SPFlowtext>(item)) {
+            return item;
+        }
     }
     return nullptr;
 }
@@ -55,10 +53,10 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
 static SPItem *
 shape_in_selection(Inkscape::Selection *selection)
 {
-    auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        if (is<SPShape>(*i))
-            return *i;
+    for (auto item : selection->items()) {
+        if (is<SPShape>(item)) {
+            return item;
+        }
     }
     return nullptr;
 }
@@ -77,7 +75,7 @@ text_put_on_path()
 
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
 
-    if (!text || !shape || boost::distance(selection->items()) != 2) {
+    if (!text || !shape || std::ranges::distance(selection->items()) != 2) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text and a path</b> to put text on path."));
         return;
     }
@@ -313,7 +311,7 @@ text_flow_into_shape()
     SPItem *text = text_or_flowtext_in_selection(selection);
     SPItem *shape = shape_in_selection(selection);
 
-    if (!text || !shape || boost::distance(selection->items()) < 2) {
+    if (!text || !shape || std::ranges::distance(selection->items()) < 2) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text."));
         return;
     }
@@ -437,7 +435,7 @@ text_unflow ()
 
     Inkscape::Selection *selection = desktop->getSelection();
 
-    if (!text_or_flowtext_in_selection(selection) || boost::distance(selection->items()) < 1) {
+    if (!text_or_flowtext_in_selection(selection) || std::ranges::distance(selection->items()) < 1) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a flowed text</b> to unflow it."));
         return;
     }
@@ -659,18 +657,18 @@ flowtext_to_text()
     bool ignored = false;
 
     std::vector<Inkscape::XML::Node*> reprs;
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    for(auto item : items){
-
-        if (!is<SPFlowtext>(item))
+    for (auto item : selection->items_vector()) {
+        auto flowtext = cast<SPFlowtext>(item);
+        if (!flowtext) {
             continue;
+        }
 
-        if (!cast_unsafe<SPFlowtext>(item)->layout.outputExists()) {
+        if (!flowtext->layout.outputExists()) {
             ignored = true;
             continue;
         }
 
-        Inkscape::XML::Node *repr = cast<SPFlowtext>(item)->getAsText();
+        Inkscape::XML::Node *repr = flowtext->getAsText();
 
         if (!repr) break;
 
@@ -679,7 +677,7 @@ flowtext_to_text()
         Inkscape::XML::Node *parent = item->getRepr()->parent();
         parent->addChild(repr, item->getRepr());
 
-        SPItem *new_item = reinterpret_cast<SPItem *>(desktop->getDocument()->getObjectByRepr(repr));
+        SPItem *new_item = cast_unsafe<SPItem>(desktop->getDocument()->getObjectByRepr(repr));
         new_item->doWriteTransform(item->transform);
         new_item->updateRepr();
 

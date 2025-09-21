@@ -252,18 +252,20 @@ TEST_F(ObjectSetTest, Ranges) {
     set->add(rect2);
     set->add(rect3);
     EXPECT_EQ(7, set->size());
-    auto xmlNode = set->xmlNodes().begin();
-    EXPECT_EQ(3, boost::distance(set->xmlNodes()));
+    auto xmlNodes = set->xmlNodes();
+    auto xmlNode = xmlNodes.begin();
+    EXPECT_EQ(3, std::ranges::distance(set->xmlNodes()));
     EXPECT_EQ(rect1->getRepr(), *xmlNode++);
     EXPECT_EQ(rect2->getRepr(), *xmlNode++);
     EXPECT_EQ(rect3->getRepr(), *xmlNode++);
-    EXPECT_EQ(set->xmlNodes().end(), xmlNode);
-    auto item = set->items().begin();
-    EXPECT_EQ(3, boost::distance(set->items()));
+    EXPECT_EQ(xmlNodes.end(), xmlNode);
+    auto items = set->items();
+    auto item = items.begin();
+    EXPECT_EQ(3, std::ranges::distance(set->items()));
     EXPECT_EQ(rect1, *item++);
     EXPECT_EQ(rect2, *item++);
     EXPECT_EQ(rect3, *item++);
-    EXPECT_EQ(set->items().end(), item);
+    EXPECT_EQ(items.end(), item);
 }
 
 TEST_F(ObjectSetTest, Autoremoving) {
@@ -426,27 +428,27 @@ TEST_F(ObjectSetTest, Ops) {
     set->clone();
     EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
-    EXPECT_NE(nullptr,cast<SPUse>(*(set->items().begin())));
-    EXPECT_EQ(nullptr,cast<SPRect>(*(set->items().begin())));
+    EXPECT_TRUE(is<SPUse>(set->items().front()));
+    EXPECT_FALSE(is<SPRect>(set->items().front()));
     set->unlink();
     EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
-    EXPECT_EQ(nullptr,cast<SPUse>(*(set->items().begin())));
-    EXPECT_NE(nullptr,cast<SPRect>(*(set->items().begin())));
+    EXPECT_FALSE(is<SPUse>(set->items().front()));
+    EXPECT_TRUE(is<SPRect>(set->items().front()));
     set->clone(); //creates 3 clones
     set->clone(); //creates 3 clones of clones
     EXPECT_EQ(N + 12, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
-    EXPECT_NE(nullptr,cast<SPUse>( ((SPUse*)(*(set->items().begin())))->get_original()));//"original is a Use"
+    EXPECT_TRUE(is<SPUse>(cast_unsafe<SPUse>(set->items().front())->get_original())); // original is a Use
     set->unlink(); //clone of clone of rect -> rect
-    EXPECT_EQ(nullptr,cast<SPUse>(*(set->items().begin())));
-    EXPECT_NE(nullptr,cast<SPRect>(*(set->items().begin())));
+    EXPECT_FALSE(is<SPUse>(set->items().front()));
+    EXPECT_TRUE(is<SPRect>(set->items().front()));
     set->clone();
-    set->set(*(set->items().begin()));
+    set->set(set->items().front());
     set->cloneOriginal();//get clone original
     EXPECT_EQ(N + 15, _doc->getRoot()->children.size());
     EXPECT_EQ(1, set->size());
-    EXPECT_NE(nullptr,cast<SPRect>(*(set->items().begin())));
+    EXPECT_TRUE(is<SPRect>(set->items().front()));
     //let's stop here.
     // TODO: write a hundred more tests to check clone (non-)displacement when grouping, ungrouping and unlinking...
     TearDownTestCase();
@@ -497,32 +499,32 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_TRUE(containsClone(set));
     EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
-    EXPECT_NE(nullptr, cast<SPUse>(*(set->items().begin())));
-    EXPECT_EQ(nullptr, cast<SPRect>(*(set->items().begin())));
+    EXPECT_TRUE(is<SPUse>(set->items().front()));
+    EXPECT_FALSE(is<SPRect>(set->items().front()));
     set->unlinkRecursive(false, true);
     EXPECT_FALSE(containsClone(set));
     EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
-    EXPECT_EQ(nullptr, cast<SPUse>(*(set->items().begin())));
-    EXPECT_NE(nullptr, cast<SPRect>(*(set->items().begin())));
+    EXPECT_FALSE(is<SPUse>(set->items().front()));
+    EXPECT_TRUE(is<SPRect>(set->items().front()));
     set->clone(); //creates 3 clones
     EXPECT_TRUE(containsClone(set));
     set->clone(); //creates 3 clones of clones
     EXPECT_TRUE(containsClone(set));
     EXPECT_EQ(N + 12, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
-    EXPECT_NE(nullptr, cast<SPUse>( ((SPUse*)(*(set->items().begin())))->get_original()));//"original is a Use"
+    EXPECT_TRUE(is<SPUse>(cast_unsafe<SPUse>(set->items().front())->get_original())); // original is a Use
     set->unlinkRecursive(false, true); //clone of clone of rect -> rect
     EXPECT_FALSE(containsClone(set));
-    EXPECT_EQ(nullptr, cast<SPUse>(*(set->items().begin())));
-    EXPECT_NE(nullptr, cast<SPRect>(*(set->items().begin())));
+    EXPECT_FALSE(is<SPUse>(set->items().front()));
+    EXPECT_TRUE(is<SPRect>(set->items().front()));
     set->clone();
     EXPECT_TRUE(containsClone(set));
-    set->set(*(set->items().begin()));
+    set->set(set->items().front());
     set->cloneOriginal();//get clone original
     EXPECT_EQ(N + 15, _doc->getRoot()->children.size());
     EXPECT_EQ(1, set->size());
-    EXPECT_NE(nullptr, cast<SPRect>(*(set->items().begin())));
+    EXPECT_TRUE(is<SPRect>(set->items().front()));
     TearDownTestCase();
     SetUpTestCase();
 }
@@ -617,8 +619,8 @@ TEST_F(ObjectSetTest, Combine) {
     set->toCurves();
     r3.release();
     auto x = set->singleItem();
-    EXPECT_NE(nullptr,cast<SPPath>(x));
-    EXPECT_EQ(nullptr,cast<SPRect>(x));
+    EXPECT_TRUE(is<SPPath>(x));
+    EXPECT_FALSE(is<SPRect>(x));
     set->deleteItems();
 }
 

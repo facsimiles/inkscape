@@ -191,11 +191,10 @@ void FillNStroke::performUpdate()
     SPIPaint& paint = *query.getFillOrStroke(kind == FILL);
     auto stop = cast<SPStop>(paint.getTag());
     if (stop) {
-       // there's a stop selected, which is part of subselection, now query selection only to find selected gradient
-       if (auto selection = _desktop->getSelection()) {
-          std::vector<SPItem*> vec(selection->items().begin(), selection->items().end());
-          result = sp_desktop_query_style_from_list(vec, &query, property);
-       }
+        // there's a stop selected, which is part of subselection, now query selection only to find selected gradient
+        if (auto selection = _desktop->getSelection()) {
+            result = sp_desktop_query_style_from_list(selection->items_vector(), &query, property);
+        }
     }
     SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
     double targOpacity = kind == FILL ? query.fill_opacity : query.stroke_opacity;
@@ -414,7 +413,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
     auto document  = _desktop->getDocument();
     auto selection = _desktop->getSelection();
 
-    std::vector<SPItem *> const items(selection->items().begin(), selection->items().end());
+    auto const items = selection->items_vector();
 
     switch (_psel->get_mode()) {
         case UI::Widget::PaintSelector::MODE_EMPTY:

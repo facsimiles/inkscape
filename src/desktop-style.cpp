@@ -1770,13 +1770,13 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
     // Used by text tool and in gradient dragging. See connectQueryStyle.
     int ret = desktop->_query_style_signal.emit(style, property);
 
-    if (ret != QUERY_STYLE_NOTHING)
+    if (ret != QUERY_STYLE_NOTHING) {
         return ret; // subselection returned a style, pass it on
+    }
 
     // otherwise, do querying and averaging over selection
     if (auto selection = desktop->getSelection()) {
-        std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
-        return sp_desktop_query_style_from_list (vec, style, property);
+        return sp_desktop_query_style_from_list(selection->items_vector(), style, property);
     }
 
     return QUERY_STYLE_NOTHING;

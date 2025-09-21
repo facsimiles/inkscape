@@ -105,14 +105,15 @@ const gchar *ms_handle_descr [] = {
     N_("Mesh gradient <b>tensor</b>")
 };
 
-void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
+void MeshTool::selection_changed(Inkscape::Selection *)
+{
     Inkscape::Selection *selection = _desktop->getSelection();
 
-    if (selection == nullptr) {
+    if (!selection) {
         return;
     }
 
-    guint n_obj = (guint) boost::distance(selection->items());
+    guint n_obj = std::ranges::distance(selection->items());
 
     if (!_grdrag->isNonEmpty() || selection->isEmpty()) {
         return;
@@ -880,7 +881,7 @@ void MeshTool::new_default()
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
-        int n_objects = (int) boost::distance(selection->items());
+        int n_objects = std::ranges::distance(selection->items());
         message_context->setF(Inkscape::NORMAL_MESSAGE,
                                   ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
                                            "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),

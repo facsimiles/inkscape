@@ -15,9 +15,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
+#include <ranges>
 #include <string>
-#include <boost/range/adaptor/reversed.hpp>
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
@@ -73,7 +72,7 @@ static std::vector<SPItem*> sp_degroup_list(std::vector<SPItem*> const &items)
 void ObjectSet::combine(bool skip_undo, bool silent)
 {
     auto doc = document();
-    auto items_copy = std::vector<SPItem*>(items().begin(), items().end());
+    auto items_copy = items_vector();
     
     if (items_copy.empty()) {
         if (desktop() && !silent) {
@@ -93,7 +92,7 @@ void ObjectSet::combine(bool skip_undo, bool silent)
     items_copy = sp_degroup_list(items_copy); // descend into any groups in selection
 
     std::vector<SPItem*> to_paths;
-    for (auto item : boost::adaptors::reverse(items_copy)) {
+    for (auto item : items_copy | std::views::reverse) {
         if (!is<SPPath>(item) && !is<SPGroup>(item)) {
             to_paths.emplace_back(item);
         }
@@ -124,7 +123,7 @@ void ObjectSet::combine(bool skip_undo, bool silent)
         clear();
     }
 
-    for (auto item : boost::adaptors::reverse(items_copy)) {
+    for (auto item : items_copy | std::views::reverse) {
         auto path = cast<SPPath>(item);
         if (!path) {
             continue;
@@ -220,8 +219,7 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
 
     bool did = false;
 
-    std::vector<SPItem*> itemlist(items().begin(), items().end());
-    for (auto item : itemlist){
+    for (auto item : items_vector()) {
 
         auto path = cast<SPPath>(item);
         if (!path) {
@@ -318,9 +316,9 @@ void ObjectSet::toCurves(bool skip_undo, bool clonesjustunlink)
     if (!clonesjustunlink) {
         unlinkRecursive(true, false, true);
     }
-    std::vector<SPItem*> selected(items().begin(), items().end());
+    auto selected = items_vector();
     std::vector<Inkscape::XML::Node*> to_select;
-    std::vector<SPItem*> items(selected);
+    auto items = selected;
 
     did = sp_item_list_to_curves(items, selected, to_select);
     if (did) {
@@ -351,11 +349,10 @@ void ObjectSet::toLPEItems()
         return;
     }
     unlinkRecursive(true);
-    std::vector<SPItem*> selected(items().begin(), items().end());
+    auto selected = items_vector();
     std::vector<Inkscape::XML::Node*> to_select;
     clear();
-    std::vector<SPItem*> items(selected);
-
+    auto items = selected;
 
     sp_item_list_to_curves(items, selected, to_select, true);
 
@@ -693,9 +690,8 @@ ObjectSet::pathReverse()
     
     bool did = false;
 
-    for (auto i = items().begin(); i != items().end(); ++i){
-
-        auto path = cast<SPPath>(*i);
+    for (auto item : items_vector()) {
+        auto path = cast<SPPath>(item);
         if (!path) {
             continue;
         }

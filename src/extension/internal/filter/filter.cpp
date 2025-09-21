@@ -138,25 +138,25 @@ void Filter::effect(Inkscape::Extension::Effect *module, ExecutionEnv * /*execut
                     Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     Inkscape::XML::Document *filterdoc = get_filter(module);
-    if (filterdoc == nullptr) {
+    if (!filterdoc) {
         return; // could not parse the XML source of the filter; typically parser will stderr a warning
     }
 
     Inkscape::Selection * selection = desktop->getSelection();
 
     // TODO need to properly refcount the items, at least
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
 
     Inkscape::XML::Document * xmldoc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node * defsrepr = desktop->doc()->getDefs()->getRepr();
 
-    for(auto spitem : items) {
+    for (auto spitem : items) {
         Inkscape::XML::Node *node = spitem->getRepr();
 
         SPCSSAttr * css = sp_repr_css_attr(node, "style");
         gchar const * filter = sp_repr_css_property(css, "filter", nullptr);
 
-        if (filter == nullptr) {
+        if (!filter) {
             create_and_apply_filter(spitem, filterdoc);
         } else {
             if (strncmp(filter, "url(#", strlen("url(#")) || filter[strlen(filter) - 1] != ')') {
@@ -176,12 +176,12 @@ void Filter::effect(Inkscape::Extension::Effect *module, ExecutionEnv * /*execut
             g_free(lfilter);
 
             // no filter
-            if (filternode == nullptr) {
+            if (!filternode) {
                 g_warning("no assigned filter found!");
                 continue;
             }
 
-            if (filternode->lastChild() == nullptr) {
+            if (!filternode->lastChild()) {
                 // empty filter, we insert
                 merge_filters(filternode, filterdoc->root(), xmldoc);
             } else {
@@ -200,8 +200,6 @@ void Filter::effect(Inkscape::Extension::Effect *module, ExecutionEnv * /*execut
             }
         }
     }
-
-    return;
 }
 
 #include "extension/internal/clear-n_.h"

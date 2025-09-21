@@ -1193,7 +1193,7 @@ std::vector<EraseTarget> EraserTool::_findItemsToErase()
 
         } else if (mode == EraserToolMode::CLIP) {
             // In CLIP mode, we don't check descendants, because clip can be set to an entire group.
-            auto const all_selected = selection->items();
+            auto all_selected = selection->items();
             for (auto *item : all_selected) {
                 allowed.emplace_back(item, true);
             }

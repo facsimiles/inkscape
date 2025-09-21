@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 #include "treeify.h"
 
-#include <iostream>
 #include <cassert>
 
 namespace Inkscape::Util {
@@ -36,7 +35,6 @@ TreeifyResult treeify(int N, std::function<bool(int, int)> const &contains)
 
             for (int i = 0; i < N; i++) {
                 if (data[i].num_containers != -1) {
-                    std::cerr << "Problem in treeify(): missed node" << std::endl;
                     result.preorder.emplace_back(i);
                 }
             }

@@ -16,6 +16,7 @@
 #include <2geom/path-sink.h>
 #include "manipulator.h"
 #include "node.h"
+#include "object/sp-object.h"
 
 class SPPath;
 

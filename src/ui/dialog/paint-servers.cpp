@@ -558,14 +558,13 @@ void PaintServersDialog::_unpackGroups(SPObject *parent, std::vector<SPObject *>
  */
 std::vector<SPObject *> PaintServersDialog::_unpackSelection(Selection *selection) const
 {
-    std::vector<SPObject *> result;
     if (!selection) {
-        return result;
+        return {};
     }
 
-    auto const &selected_range = selection->items();
-    for (auto const item : selected_range) {
-        _unpackGroups(static_cast<SPObject *>(item), result);
+    std::vector<SPObject *> result;
+    for (auto const item : selection->items()) {
+        _unpackGroups(item, result);
     }
     return result;
 }

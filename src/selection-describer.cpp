@@ -97,8 +97,9 @@ SelectionDescriber::SelectionDescriber(Inkscape::Selection *selection, MessageSt
 
 SelectionDescriber::~SelectionDescriber() = default;
 
-void SelectionDescriber::updateMessage(Inkscape::Selection *selection) {
-	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+void SelectionDescriber::updateMessage(Inkscape::Selection *selection)
+{
+    auto items = selection->items_vector();
 
     if (items.empty()) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);

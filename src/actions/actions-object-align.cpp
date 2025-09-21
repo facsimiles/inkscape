@@ -280,8 +280,7 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     auto document  = app->get_active_document();
     selection->setDocument(document);
 
-    std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
-    if (selected.size() < 2) {
+    if (std::ranges::distance(selection->items()) < 2) {
         return;
     }
 
@@ -306,8 +305,8 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
 
     // Make a list of objects, sorted by anchors.
     std::vector<BBoxSort> sorted;
-    for (auto item : selected) {
-        Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
+    for (auto item : selection->items()) {
+        Geom::OptRect bbox = !prefs_bbox ? item->desktopVisualBounds() : item->desktopGeometricBounds();
         if (bbox) {
             sorted.emplace_back(item, *bbox, orientation, a, b);
         }
@@ -606,7 +605,7 @@ static bool PositionCompare(const SPItem* a, const SPItem* b) {
 
 void exchange(Inkscape::Selection* selection, SortOrder order)
 {
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
 
     // Reorder items.
     switch (order) {
@@ -640,7 +639,7 @@ void exchange(Inkscape::Selection* selection, SortOrder order)
  */
 void randomize(Inkscape::Selection* selection)
 {
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
 
     // Do 'x' and 'y' independently.
     for (int i = 0; i < 2; i++) {
@@ -701,10 +700,10 @@ object_rearrange(const Glib::VariantBase& value, InkscapeApplication *app)
     auto selection = app->get_active_selection();
 
     // We should not have to do this!
-    auto document  = app->get_active_document();
+    auto document = app->get_active_document();
     selection->setDocument(document);
 
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
     if (items.size() < 2) {
         return;
     }
@@ -741,7 +740,7 @@ object_remove_overlaps(const Glib::VariantBase& value, InkscapeApplication *app)
     auto document  = app->get_active_document();
     selection->setDocument(document);
 
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
     if (items.size() < 2) {
         return;
     }

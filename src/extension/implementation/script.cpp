@@ -16,7 +16,7 @@
 #include "script.h"
 
 #include <memory>
-#include <boost/range/adaptor/reversed.hpp>
+#include <ranges>
 #include <glib/gstdio.h>
 #include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
@@ -40,15 +40,11 @@
 #include "extension/template.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
-#include "io/dir-util.h"
 #include "io/file.h"
-#include "io/resource.h"
 #include "layer-manager.h"
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
-#include "object/sp-path.h"
 #include "object/sp-root.h"
-#include "path-prefix.h"
 #include "preferences.h"
 #include "selection.h"
 #include "ui/desktop/menubar.h"
@@ -56,11 +52,9 @@
 #include "ui/dialog-run.h"
 #include "ui/pack.h"
 #include "ui/tool/control-point-selection.h"
-#include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/util.h"
-#include "xml/attribute-record.h"
 #include "xml/event.h"
 #include "xml/rebase-hrefs.h"
 #include "xml/repr.h"
@@ -1010,7 +1004,7 @@ void Script::PreviewObserver::notifyUndoCommitEvent(Event *ee)
     }
 
     // Process events in reverse order (chronological order)
-    for (auto e : events | boost::adaptors::reversed) {
+    for (auto e : events | std::views::reverse) {
         createAndSendEvent([&](Inkscape::XML::Document *doc, Inkscape::XML::Node *event_node) {
             if (auto eadd = dynamic_cast<XML::EventAdd *>(e)) {
                 event_node->setAttribute("type", "add");

@@ -176,7 +176,7 @@ SprayTool::SprayTool(SPDesktop *desktop)
     sp_event_context_read(this, "no_overlap");
 
     // Construct the object_set we'll be using for this spray operation
-    auto const selected_objects = _desktop->getSelection()->objects();
+    auto &selected_objects = _desktop->getSelection()->objects();
     object_set.add(selected_objects.begin(), selected_objects.end());
 }
 

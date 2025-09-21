@@ -125,7 +125,7 @@ void TweakTool::update_cursor (bool with_shift) {
     gchar *sel_message = nullptr;
 
     if (!_desktop->getSelection()->isEmpty()) {
-        num = (guint)boost::distance(_desktop->getSelection()->items());
+        num = std::ranges::distance(_desktop->getSelection()->items());
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -945,9 +945,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-    //    auto items= selection->items();
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    for(auto item : items){
+    for (auto item : selection->items_vector()) {
         if (is_color_mode (tc->mode)) {
             if (fill_goal || stroke_goal || do_opacity) {
                 if (sp_tweak_color_recursive (tc->mode, item, item_at_point,
@@ -1068,7 +1066,7 @@ bool TweakTool::root_handler(CanvasEvent const &event)
 
             unsigned num = 0;
             if (!_desktop->getSelection()->isEmpty()) {
-                num = (unsigned)boost::distance(_desktop->getSelection()->items());
+                num = std::ranges::distance(_desktop->getSelection()->items());
             }
             if (num == 0) {
                 message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));

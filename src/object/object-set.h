@@ -14,6 +14,8 @@
 #ifndef INKSCAPE_PROTOTYPE_OBJECTSET_H
 #define INKSCAPE_PROTOTYPE_OBJECTSET_H
 
+#include <ranges>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
 
@@ -22,12 +24,6 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
-#include <boost/range/adaptor/filtered.hpp>
-#include <boost/range/adaptor/transformed.hpp>
-#include <boost/range/sub_range.hpp>
-#include <boost/range/any_range.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp>
 
 #include <sigc++/connection.h>
 
@@ -66,15 +62,11 @@ class Node;
 struct hashed{};
 struct random_access{};
 
-namespace {
-
 inline constexpr auto object_to_node = [] (SPObject *obj) {
     return obj->getRepr();
 };
 
-}
-
-typedef boost::multi_index_container<
+using MultiIndexContainer = boost::multi_index_container<
         SPObject*,
         boost::multi_index::indexed_by<
                 boost::multi_index::sequenced<>,
@@ -83,33 +75,24 @@ typedef boost::multi_index_container<
                 boost::multi_index::hashed_unique<
                         boost::multi_index::tag<hashed>,
                         boost::multi_index::identity<SPObject*>>
-        >> MultiIndexContainer;
+        >>;
 
-typedef boost::any_range<
-        SPObject*,
-        boost::random_access_traversal_tag,
-        SPObject* const&,
-        std::ptrdiff_t> SPObjectRange;
-
-class ObjectSet {
+class ObjectSet
+{
 public:
     enum CompareSize {HORIZONTAL, VERTICAL, AREA};
-    using SPItemRange = decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is<SPItem>) | boost::adaptors::transformed(cast_unsafe<SPItem>));
-    using SPGroupRange = decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is<SPGroup>) | boost::adaptors::transformed(cast_unsafe<SPGroup>));
-    using XMLNodeRange = decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is<SPItem>) | boost::adaptors::transformed(object_to_node));
 
-    ObjectSet(SPDesktop* desktop);
-    ObjectSet(SPDocument* doc): _desktop(nullptr), _document(doc) {};
-    ObjectSet(): _desktop(nullptr), _document(nullptr) {}; // Used in spray-tool.h.
+    ObjectSet() = default;
+    explicit ObjectSet(SPDesktop *desktop);
+    explicit ObjectSet(SPDocument *document) : _document{document} {}
     virtual ~ObjectSet();
 
     ObjectSet(ObjectSet const &) = delete;
     ObjectSet &operator=(ObjectSet const &) = delete;
 
-    void setDocument(SPDocument* doc){
-        _document = doc;
+    void setDocument(SPDocument *document) {
+        _document = document;
     }
-
 
     /**
      * Add an SPObject to the set of selected objects.
@@ -224,32 +207,43 @@ public:
     SPItem *largestItem(CompareSize compare);
 
     /** Returns the list of selected objects. */
-    SPObjectRange objects();
+    auto &objects() {
+        return _container.get<random_access>();
+    }
+
+    template <typename T>
+    requires std::is_base_of_v<SPObject, T>
+    auto objects_of_type() {
+        return objects()
+            | std::views::filter(is<T>)
+            | std::views::transform(cast_unsafe<T>);
+    }
 
     /** Returns a range of selected SPItems. */
-    SPItemRange items() {
-        return SPItemRange(_container.get<random_access>()
-           | boost::adaptors::filtered(is<SPItem>)
-           | boost::adaptors::transformed(cast_unsafe<SPItem>));
-    };
+    auto items() {
+        return objects_of_type<SPItem>();
+    }
 
-    std::vector<SPItem*> items_vector() {
+    std::vector<SPItem *> items_vector() {
         auto i = items();
         return {i.begin(), i.end()};
     }
 
     /** Returns a range of selected groups. */
-    SPGroupRange groups() {
-        return SPGroupRange (_container.get<random_access>()
-            | boost::adaptors::filtered(is<SPGroup>)
-            | boost::adaptors::transformed(cast_unsafe<SPGroup>));
+    auto groups() {
+        return objects_of_type<SPGroup>();
     }
 
-    /** Returns a range of the xml nodes of all selected objects. */
-    XMLNodeRange xmlNodes() {
-        return XMLNodeRange(_container.get<random_access>()
-                            | boost::adaptors::filtered(is<SPItem>)
-                            | boost::adaptors::transformed(object_to_node));
+    /** Returns a range of the xml nodes of all selected items. */
+    auto xmlNodes() {
+        return objects()
+            | std::views::filter(is<SPItem>)
+            | std::views::transform(object_to_node);
+    }
+
+    std::vector<XML::Node *> xmlNodes_vector() {
+        auto i = xmlNodes();
+        return {i.begin(), i.end()};
     }
 
     /**
@@ -270,8 +264,8 @@ public:
      * @param objs the objects to select
      */
     template <class T>
-    typename boost::enable_if<boost::is_base_of<SPObject, T>, void>::type
-    setList(const std::vector<T*> &objs) {
+    requires std::is_base_of_v<SPObject, T>
+    void setList(std::vector<T *> const &objs) {
         _clear();
         addList(objs);
     }
@@ -297,8 +291,8 @@ public:
      * @param objs the objects to select
      */
     template <class T>
-    typename boost::enable_if<boost::is_base_of<SPObject, T>, void>::type
-    addList(const std::vector<T*> &objs) {
+    requires std::is_base_of_v<SPObject, T>
+    void addList(std::vector<T *> const &objs) {
         for (auto obj: objs) {
             if (!includes(obj)) {
                 add(obj, true);
@@ -313,8 +307,8 @@ public:
      * @param objs the objects to select
      */
     template <class T>
-    typename boost::enable_if<boost::is_base_of<SPObject, T>, void>::type
-    removeList(const std::vector<T*> &objs) {
+    requires std::is_base_of_v<SPObject, T>
+    void removeList(std::vector<T *> const &objs) {
         for (auto obj: objs) {
             remove(obj);
         }
@@ -502,7 +496,7 @@ protected:
     virtual void _remove3DBoxesRecursively(SPObject *obj);
 
     MultiIndexContainer _container;
-    SPDesktop * _desktop = nullptr;
+    SPDesktop *_desktop = nullptr;
     SPDocument *_document = nullptr;
     std::list<SPBox3D *> _3dboxes;
     std::unordered_map<SPObject*, sigc::connection> _releaseConnections;
@@ -516,10 +510,6 @@ private:
 
     Geom::Affine _last_affine;
 };
-
-using SPItemRange = ObjectSet::SPItemRange;
-using SPGroupRange = ObjectSet::SPGroupRange;
-using XMLNodeRange = ObjectSet::XMLNodeRange;
 
 } // namespace Inkscape
 

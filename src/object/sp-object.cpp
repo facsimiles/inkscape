@@ -17,12 +17,11 @@
  */
 
 #include <cstring>
+#include <ranges>
 #include <string>
 #include <vector>
 #include <limits>
 #include <glibmm.h>
-
-#include <boost/range/adaptor/transformed.hpp>
 
 #include "attributes.h"
 #include "attribute-rel-util.h"
@@ -738,8 +737,8 @@ void SPObject::release() {
     style->shape_inside.clear();
     style->shape_subtract.clear();
 
-    auto tmp = children | boost::adaptors::transformed([](SPObject& obj){return &obj;});
-    std::vector<SPObject *> toRelease(tmp.begin(), tmp.end());
+    auto tmp = children | std::views::transform([] (SPObject &obj) { return &obj; });
+    auto toRelease = std::vector<SPObject *>(tmp.begin(), tmp.end());
 
     for (auto& p: toRelease) {
         object->detach(p);
@@ -1739,7 +1738,7 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
 
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
 
-    if (elem == nullptr) {
+    if (!elem) {
         // create a new 'title' or 'desc' element, putting it at the
         // beginning (in accordance with the spec's recommendations)
         Inkscape::XML::Node *xml_elem = xml_doc->createElement(svg_tagname);
@@ -1749,7 +1748,7 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
     }
     else {
         // remove the current content of the 'text' or 'desc' element
-        auto tmp = elem->children | boost::adaptors::transformed([](SPObject& obj) { return &obj; });
+        auto tmp = elem->children | std::views::transform([] (SPObject &obj) { return &obj; });
         std::vector<SPObject*> vec(tmp.begin(), tmp.end());
         for (auto &child: vec) {
             child->deleteObject();

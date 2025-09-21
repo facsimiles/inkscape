@@ -587,14 +587,14 @@ void VPDrag::updateBoxHandles()
     if (sel.empty())
         return; // no selection
 
-    if (boost::distance(sel) > 1) {
+    if (std::ranges::distance(sel) > 1) {
         // Currently we only show handles if a single box is selected
         return;
     }
 
     auto const tool = SP_ACTIVE_DESKTOP->getTool();
-    g_assert(tool != nullptr);
-    if (tool->shape_editor != nullptr) {
+    g_assert(tool);
+    if (tool->shape_editor) {
         tool->shape_editor->update_knotholder();
     }
 }

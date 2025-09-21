@@ -36,9 +36,9 @@
 #include "document.h"
 
 #include <cstring>
+#include <ranges>
 #include <string>
 #include <vector>
-#include <boost/range/adaptor/reversed.hpp>
 #include <glibmm/main.h>
 #include <glibmm/miscutils.h>
 #include <2geom/transforms.h>
@@ -1924,7 +1924,7 @@ static SPItem *find_group_at_point(unsigned dkey, SPGroup *group, Geom::Point co
     double const delta = Inkscape::Preferences::get()->getDouble("/options/cursortolerance/value", 1.0);
     std::optional<bool> outline;
 
-    for (auto &c : boost::adaptors::reverse(group->children)) {
+    for (auto &c : group->children | std::views::reverse) {
         if (auto group = cast<SPGroup>(&c)) {
             if (group->effectiveLayerMode(dkey) == SPGroup::LAYER) {
                 if (auto ret = find_group_at_point(dkey, group, p)) {

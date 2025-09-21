@@ -13,8 +13,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <boost/range/adaptor/reversed.hpp>
 #include "canvas-item-group.h"
+
+#include <ranges>
 
 constexpr bool DEBUG_LOGGING = false;
 
@@ -94,7 +95,7 @@ CanvasItem *CanvasItemGroup::pick_item(Geom::Point const &p)
         std::cout << "  PICKING: In group: " << _name << "  bounds: " << _bounds << std::endl;
     }
 
-    for (auto &item : boost::adaptors::reverse(items)) {
+    for (auto &item : items | std::views::reverse) {
         if constexpr (DEBUG_LOGGING) std::cout << "    PICKING: Checking: " << item.get_name() << "  bounds: " << item.get_bounds() << std::endl;
 
         if (item.is_visible() && item.is_pickable() && item.contains(p)) {

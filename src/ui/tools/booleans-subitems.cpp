@@ -14,8 +14,7 @@
 #include "booleans-subitems.h"
 
 #include <random>
-
-#include <boost/range/adaptor/reversed.hpp>
+#include <ranges>
 
 #include "style.h"
 #include "helper/geom-pathstroke.h"
@@ -78,7 +77,7 @@ using PathvectorItems = std::vector<PathvectorItem>;
 static void extract_pathvectors_recursive(SPItem *root, SPItem *item, PathvectorItems &result, Geom::Affine const &transform)
 {
     if (is<SPGroup>(item)) {
-        for (auto &child : item->children | boost::adaptors::reversed) {
+        for (auto &child : item->children | std::views::reverse) {
             if (auto child_item = cast<SPItem>(&child)) {
                 extract_pathvectors_recursive(root, child_item, result, child_item->transform * transform);
             }

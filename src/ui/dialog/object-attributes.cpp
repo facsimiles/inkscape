@@ -2191,9 +2191,8 @@ if constexpr (INCLUDE_EXPERIMENTAL_PANELS) {
         _stroke_width.get_signal_value_changed().connect([this](auto id, auto orig, auto value) {
             printf("val chg: %s %.8f -> %.8f\n", id.c_str(), orig, value);
             auto selection = _desktop->getSelection();
-            auto objects = selection->objects();
             bool changed = false;
-            for (auto obj: objects) {
+            for (auto obj : selection->objects()) {
                 visit_objects(obj, [&](SPObject* o) {
                     if (auto item = cast<SPItem>(o)) {
                         if (item->style->stroke_width.computed == orig) {
@@ -2230,7 +2229,6 @@ private:
         if (!_desktop) return;
 
         auto selection = _desktop->getSelection();
-        auto objects = selection->objects();
 
         return; // not used for now
 
@@ -2280,7 +2278,7 @@ private:
             //todo: groups and text
         };
 
-        for (auto obj: objects) {
+        for (auto obj : selection->objects()) {
             visit_objects(obj, collect_attr);
         }
 

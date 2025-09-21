@@ -911,18 +911,14 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
     return l;
 }
 
-std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
+std::vector<SPItem*> &Find::all_selection_items(Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
     auto desktop = getDesktop();
-    auto itemlist = s->items();
-    for (auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
-        SPObject *obj = *i;
-        auto item = cast<SPItem>(obj);
-        g_assert(item != nullptr);
-        if (item && !item->cloned && !desktop->layerManager().isLayer(item)) {
+    for (auto item : s->items() | std::views::reverse) {
+        if (!item->cloned && !desktop->layerManager().isLayer(item)) {
             if (!ancestor || ancestor->isAncestorOf(item)) {
                 if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
-                    l.push_back(*i);
+                    l.push_back(item);
                 }
             }
         }
@@ -932,8 +928,6 @@ std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::ve
     }
     return l;
 }
-
-
 
 /*########################################################################
 # BUTTON CLICK HANDLERS    (callbacks)

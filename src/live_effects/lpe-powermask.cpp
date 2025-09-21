@@ -302,50 +302,41 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
         if (!document) {
             return;
         }
-        auto selList = sel->items();
-        for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
-            auto lpeitem = cast<SPLPEItem>(*i);
-            if (lpeitem) {
-                SPMask *mask = lpeitem->getMaskObject();
-                if (mask) {
-                    Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
-                    Effect* lpe = lpeitem->getCurrentLPE();
-                    if (lpe) {
-                        lpe->getRepr()->setAttribute("invert", "false");
-                        lpe->getRepr()->setAttribute("is_visible", "true");
-                        lpe->getRepr()->setAttribute("hide_mask", "false");
-                        lpe->getRepr()->setAttribute("background", "true");
-                        lpe->getRepr()->setAttribute("background_color", "#ffffffff");
-                    }
+        for (auto lpeitem : sel->objects_of_type<SPLPEItem>() | std::views::reverse) {
+            if (lpeitem->getMaskObject()) {
+                Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
+                if (auto lpe = lpeitem->getCurrentLPE()) {
+                    lpe->getRepr()->setAttribute("invert", "false");
+                    lpe->getRepr()->setAttribute("is_visible", "true");
+                    lpe->getRepr()->setAttribute("hide_mask", "false");
+                    lpe->getRepr()->setAttribute("background", "true");
+                    lpe->getRepr()->setAttribute("background_color", "#ffffffff");
                 }
             }
         }
     }
 }
 
-void sp_remove_powermask(Inkscape::Selection *sel) {
+void sp_remove_powermask(Inkscape::Selection *sel)
+{
     if (!sel->isEmpty()) {
-        auto selList = sel->items();
-        for (auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
-            auto lpeitem = cast<SPLPEItem>(*i);
-            if (lpeitem) {
-                if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    PathEffectList path_effect_list(*lpeitem->path_effect_list);
-                    for (auto &lperef : path_effect_list) {
-                        LivePathEffectObject *lpeobj = lperef->lpeobject;
-                        if (!lpeobj) {
-                            /** \todo Investigate the cause of this.
-                             * For example, this happens when copy pasting an object with LPE applied. Probably because
-                             * the object is pasted while the effect is not yet pasted to defs, and cannot be found.
-                             */
-                            g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
-                            return;
-                        }
-                        if (LPETypeConverter.get_key(lpeobj->effecttype) == "powermask") {
-                            lpeitem->setCurrentPathEffect(lperef);
-                            lpeitem->removeCurrentPathEffect(false);
-                            break;
-                        }
+        for (auto lpeitem : sel->objects_of_type<SPLPEItem>() | std::views::reverse) {
+            if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
+                PathEffectList path_effect_list(*lpeitem->path_effect_list);
+                for (auto &lperef : path_effect_list) {
+                    LivePathEffectObject *lpeobj = lperef->lpeobject;
+                    if (!lpeobj) {
+                        /** \todo Investigate the cause of this.
+                         * For example, this happens when copy pasting an object with LPE applied. Probably because
+                         * the object is pasted while the effect is not yet pasted to defs, and cannot be found.
+                         */
+                        g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
+                        return;
+                    }
+                    if (LPETypeConverter.get_key(lpeobj->effecttype) == "powermask") {
+                        lpeitem->setCurrentPathEffect(lperef);
+                        lpeitem->removeCurrentPathEffect(false);
+                        break;
                     }
                 }
             }
@@ -353,8 +344,8 @@ void sp_remove_powermask(Inkscape::Selection *sel) {
     }
 }
 
-}; //namespace LivePathEffect
-}; /* namespace Inkscape */
+} // namespace LivePathEffect
+} // namespace Inkscape
 
 /*
   Local Variables:

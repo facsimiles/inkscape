@@ -267,7 +267,7 @@ void GridArrangeTab::on_col_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->getSelection() : nullptr;
     if (!selection) return;
 
-    int selcount = (int) boost::distance(selection->items());
+    int selcount = std::ranges::distance(selection->items());
     if (selcount == 0) {
         return;
     }
@@ -288,7 +288,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->getSelection() : nullptr;
     if (!selection) return;
 
-    int selcount = (int) boost::distance(selection->items());
+    int selcount = std::ranges::distance(selection->items());
     if (selcount == 0) {
         return;
     }
@@ -425,22 +425,20 @@ void GridArrangeTab::updateSelection()
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->getSelection() : nullptr;
-    std::vector<SPItem*> items;
+    int selcount = 0;
     if (selection) {
-        items.insert(items.end(), selection->items().begin(), selection->items().end());
+        selcount = std::ranges::distance(selection->items());
     }
 
-    if (!items.empty()) {
-        int selcount = items.size();
-
+    if (selcount != 0) {
         if (NoOfColsSpinner.get_value() > 1 && NoOfRowsSpinner.get_value() > 1){
             // Update the number of rows assuming number of columns wanted remains same.
-            double NoOfRows = ceil(selcount / NoOfColsSpinner.get_value());
+            double NoOfRows = std::ceil(selcount / NoOfColsSpinner.get_value());
             NoOfRowsSpinner.set_value(NoOfRows);
 
             // if the selection has less than the number set for one row, reduce it appropriately
             if (selcount < NoOfColsSpinner.get_value()) {
-                double NoOfCols = ceil(selcount / NoOfRowsSpinner.get_value());
+                double NoOfCols = std::ceil(selcount / NoOfRowsSpinner.get_value());
                 NoOfColsSpinner.set_value(NoOfCols);
             }
         } else {

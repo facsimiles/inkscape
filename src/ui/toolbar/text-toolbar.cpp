@@ -28,7 +28,7 @@
 
 #include "text-toolbar.h"
 
-#include <boost/range/adaptor/reversed.hpp>
+#include <ranges>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/listbox.h>
 #include <gtkmm/separator.h>
@@ -146,8 +146,7 @@ void sp_text_toolbox_select_cb(Gtk::Entry const &entry)
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = desktop->getDocument();
-    auto allList = get_all_items(document->getRoot(), desktop, false, false, true);
-    for (auto item : boost::adaptors::reverse(allList)) {
+    for (auto item : get_all_items(document->getRoot(), desktop, false, false, true) | std::views::reverse) {
         auto style = item->style;
         if (!style) {
             continue;

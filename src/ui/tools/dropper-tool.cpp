@@ -238,7 +238,7 @@ bool DropperTool::root_handler(CanvasEvent const &event)
             auto selection = _desktop->getSelection();
             g_assert(selection);
 
-            auto old_selection = std::vector<SPItem*>(selection->items().begin(), selection->items().end());
+            auto old_selection = selection->items_vector();
 
             if (dropping) {
                 auto const button_w = event.pos;

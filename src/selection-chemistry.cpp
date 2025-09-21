@@ -25,10 +25,10 @@
 #include "selection-chemistry.h"
 
 #include <2geom/numeric/symmetric-matrix-fs-operation.h>
-#include <boost/range/adaptor/reversed.hpp>
 #include <cstring>
 #include <glibmm/i18n.h>
 #include <map>
+#include <ranges>
 #include <string>
 
 #include "display/control/canvas-item-drawing.h"
@@ -241,7 +241,7 @@ void SelectionHelper::fixSelection(SPDesktop *dt)
 
     auto selList = selection->items();
 
-    for (auto item : selList | boost::adaptors::reversed) {
+    for (auto item : selList | std::views::reverse) {
         if (item &&
             !dt->layerManager().isLayer(item) &&
             !item->isLocked())
@@ -354,7 +354,7 @@ void ObjectSet::deleteItems(bool skip_undo)
         return;
     }
 
-    std::vector<SPItem*> selected(items().begin(), items().end());
+    auto selected = items_vector();
     clear();
     sp_selection_delete_impl(selected);
 
@@ -414,11 +414,12 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
         selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to duplicate."));
         return;
     }
-    std::vector<Inkscape::XML::Node*> reprs(xmlNodes().begin(), xmlNodes().end());
 
-    if(duplicateLayer){
-        reprs.clear();
-        reprs.push_back(desktop()->layerManager().currentLayer()->getRepr());
+    std::vector<Inkscape::XML::Node *> reprs;
+    if (duplicateLayer) {
+        reprs = {desktop()->layerManager().currentLayer()->getRepr()};
+    } else {
+        reprs = xmlNodes_vector();
     }
 
     clear();
@@ -684,15 +685,16 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
     bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
     bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
 
-    std::vector<SPItem*> items ;
-
-    std::vector<SPItem*> exclude;
+    std::vector<SPItem *> exclude;
     if (invert) {
-        exclude.insert(exclude.end(), selection->items().begin(), selection->items().end());
+        exclude = selection->items_vector();
     }
 
-    if (force_all_layers)
+    if (force_all_layers) {
         inlayer = PREFS_SELECTION_ALL;
+    }
+
+    std::vector<SPItem *> items;
 
     switch (inlayer) {
         case PREFS_SELECTION_LAYER: {
@@ -700,9 +702,8 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
                 return;
             }
 
-            auto const item_list = layer->item_list();
-            for (auto item : item_list | boost::adaptors::reversed) {
-                if (item && (!onlysensitive || !item->isLocked())) {
+            for (auto item : layer->item_list() | std::views::reverse) {
+                if (!onlysensitive || !item->isLocked()) {
                     if (!onlyvisible || !dt->itemIsHidden(item)) {
                         if (!dt->layerManager().isLayer(item)) {
                             if (!invert || exclude.end() == std::find(exclude.begin(),exclude.end(),item)) {
@@ -759,9 +760,9 @@ Inkscape::XML::Node* ObjectSet::group(bool is_anchor) {
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *group = xml_doc->createElement(is_anchor ? "svg:a" : "svg:g");
 
-    std::vector<Inkscape::XML::Node*> p(xmlNodes().begin(), xmlNodes().end());
+    auto p = xmlNodes_vector();
     std::sort(p.begin(), p.end(), sp_repr_compare_position_bool);
-    this->clear();
+    clear();
 
     // Remember the position and parent of the topmost object.
     Inkscape::XML::Node *topmost = p.back();
@@ -869,7 +870,7 @@ void ObjectSet::popFromGroup(){
  * Return NULL if no such clone is found.
  */
 template <typename Objects>
-static SPUse *find_clone_to_group(Objects const &objects, std::set<SPGroup *> const &groups)
+static SPUse *find_clone_to_group(Objects &&objects, std::set<SPGroup *> const &groups)
 {
     assert(!groups.count(nullptr));
 
@@ -901,7 +902,8 @@ static SPUse *find_clone_to_group(Objects const &objects, std::set<SPGroup *> co
  */
 static void ungroup_impl(ObjectSet *set)
 {
-    std::set<SPGroup *> const groups(set->groups().begin(), set->groups().end());
+    auto groups_range = set->groups();
+    auto const groups = std::set<SPGroup *>(groups_range.begin(), groups_range.end());
 
     while (auto *use = find_clone_to_group(set->items(), groups)) {
         bool const readd = set->includes(use);
@@ -928,15 +930,17 @@ void ObjectSet::ungroup(bool skip_undo)
         return;
     }
 
-    if (boost::distance(groups()) == 0) {
-        if(desktop())
+    if (groups().empty()) {
+        if (desktop()) {
             selection_display_message(desktop(), Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
+        }
         return;
     }
 
     ungroup_impl(this);
-    if(document() && !skip_undo)
+    if (document() && !skip_undo) {
         DocumentUndo::done(document(), _("Ungroup"), INKSCAPE_ICON("object-ungroup"));
+    }
 }
 
 /**
@@ -953,7 +957,7 @@ void ObjectSet::ungroup_all(bool skip_undo)
 
 /** If items in the list have a common parent, return it, otherwise return NULL */
 static SPGroup *
-sp_item_list_common_parent_group(const SPItemRange &items)
+sp_item_list_common_parent_group(decltype(ObjectSet{}.items()) items)
 {
     if (items.empty()) {
         return nullptr;
@@ -1012,12 +1016,12 @@ void ObjectSet::raise(bool skip_undo){
         return;
     }
 
-    std::vector<SPItem*> items_copy(items().begin(), items().end());
+    auto items_copy = items_vector();
     Inkscape::XML::Node *grepr = const_cast<Inkscape::XML::Node *>(items_copy.front()->parent->getRepr());
 
     /* Construct reverse-ordered list of selected children. */
-    std::vector<SPItem*> rev(items_copy);
-    sort(rev.begin(),rev.end(),sp_item_repr_compare_position_bool);
+    auto rev = items_copy;
+    std::sort(rev.begin(), rev.end(), sp_item_repr_compare_position_bool);
 
     // Determine the common bbox of the selected items.
     Geom::OptRect selected = enclose_items(items_copy);
@@ -1061,8 +1065,8 @@ void ObjectSet::raiseToTop(bool skip_undo) {
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> rl(xmlNodes().begin(), xmlNodes().end());
-    sort(rl.begin(),rl.end(),sp_repr_compare_position_bool);
+    auto rl = xmlNodes_vector();
+    std::sort(rl.begin(), rl.end(), sp_repr_compare_position_bool);
 
     for (auto repr : rl) {
         repr->setPosition(-1);
@@ -1085,19 +1089,19 @@ void ObjectSet::lower(bool skip_undo)
         return;
     }
 
-    std::vector<SPItem*> items_copy(items().begin(), items().end());
+    auto items_copy = items_vector();
     Inkscape::XML::Node *grepr = const_cast<Inkscape::XML::Node *>(items_copy.front()->parent->getRepr());
 
     // Determine the common bbox of the selected items.
     Geom::OptRect selected = enclose_items(items_copy);
 
     /* Construct direct-ordered list of selected children. */
-    std::vector<SPItem*> rev(items_copy);
-    sort(rev.begin(),rev.end(),sp_item_repr_compare_position_bool);
+    auto rev = items_copy;
+    std::sort(rev.begin(), rev.end(), sp_item_repr_compare_position_bool);
 
     // Iterate over all objects in the selection (starting from top).
     if (selected) {
-        for (auto child : rev | boost::adaptors::reversed) {
+        for (auto child : rev | std::views::reverse) {
             // for each selected object, find the prev sibling
             for (SPObject *newref = prev_sibling(child); newref; newref = prev_sibling(newref)) {
                 // if the sibling is an item AND overlaps our selection,
@@ -1139,10 +1143,10 @@ void ObjectSet::lowerToBottom(bool skip_undo)
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> rl(xmlNodes().begin(), xmlNodes().end());
-    sort(rl.begin(),rl.end(),sp_repr_compare_position_bool);
+    auto rl = xmlNodes_vector();
+    std::sort(rl.begin(), rl.end(), sp_repr_compare_position_bool);
 
-    for (auto const repr : rl | boost::adaptors::reversed) {
+    for (auto const repr : rl | std::views::reverse) {
         int minpos = 0;
         auto const pp = document()->getObjectByRepr(repr->parent());
         g_assert(is<SPGroup>(pp));
@@ -1165,20 +1169,22 @@ void ObjectSet::stackUp(bool skip_undo) {
         return;
     }
 
-    std::vector<SPItem*> selection(items().begin(), items().end());
-    sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
+    auto selection = items_vector();
+    std::sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
 
-    for (auto item : selection | boost::adaptors::reversed) {
+    for (auto item : selection | std::views::reverse) {
         if (!item->raiseOne()) { // stop if top was reached
-            if(document() && !skip_undo)
+            if(document() && !skip_undo) {
                 DocumentUndo::cancel(document());
+            }
             selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("We hit top."));
             return;
         }
     }
 
-    if(document() && !skip_undo)
+    if (document() && !skip_undo) {
         DocumentUndo::done(document(), C_("Undo action", "stack up"), INKSCAPE_ICON("layer-raise"));
+    }
 }
 
 void ObjectSet::stackDown(bool skip_undo) {
@@ -1187,13 +1193,14 @@ void ObjectSet::stackDown(bool skip_undo) {
         return;
     }
 
-    std::vector<SPItem*> selection(items().begin(), items().end());
-    sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
+    auto selection = items_vector();
+    std::sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
 
-    for (auto item: selection) {
+    for (auto item : selection) {
         if (!item->lowerOne()) { // stop if bottom was reached
-            if(document() && !skip_undo)
+            if (document() && !skip_undo) {
                 DocumentUndo::cancel(document());
+            }
             selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("We hit bottom."));
             return;
         }
@@ -1246,7 +1253,7 @@ take_style_from_item(SPObject *object)
         (is<SPText>(object) && object->firstChild() && !object->firstChild()->getNext())) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
-        for (auto &element : object->children | boost::adaptors::reversed) {
+        for (auto &element : object->children | std::views::reverse) {
             if (element.style) {
                 if (auto temp = sp_css_attr_from_object(&element, SP_STYLE_FLAG_IFSET)) {
                     sp_repr_css_merge(css, temp);
@@ -1266,8 +1273,7 @@ take_style_from_item(SPObject *object)
     }
 
 
-    auto item = cast<SPItem>(object);
-    if (item) {
+    if (auto item = cast<SPItem>(object)) {
         // FIXME: also transform gradient/pattern fills, by forking? NO, this must be nondestructive
         double ex = item->i2doc_affine().descrim();
         if (ex != 1.0) {
@@ -1416,7 +1422,7 @@ void ObjectSet::toNextLayer(bool skip_undo)
         return;
     }
 
-    std::vector<SPItem*> items_copy(items().begin(), items().end());
+    auto items_copy = items_vector();
 
     bool no_more = false; // Set to true, if no more layers above
     SPObject *next=Inkscape::next_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
@@ -1462,7 +1468,7 @@ void ObjectSet::toPrevLayer(bool skip_undo)
         return;
     }
 
-    std::vector<SPItem*> items_copy(items().begin(), items().end());
+    auto items_copy = items_vector();
 
     bool no_more = false; // Set to true, if no more layers below
     SPObject *next=Inkscape::previous_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
@@ -1542,7 +1548,7 @@ void ObjectSet::toLayer(SPObject *moveto, Inkscape::XML::Node *after)
         after = after->prev();
     }
 
-    std::vector<SPItem*> items_copy(items().begin(), items().end());
+    auto items_copy = items_vector();
 
     if (moveto) {
         clear();
@@ -2441,7 +2447,7 @@ sp_selection_item_next(SPDesktop *desktop)
         root = desktop->layerManager().currentRoot();
     }
 
-    std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
+    auto vec = selection->items_vector();
     SPItem *item=next_item_from_list<Forward>(desktop, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
 
     if (item) {
@@ -2472,7 +2478,7 @@ sp_selection_item_prev(SPDesktop *desktop)
         root = desktop->layerManager().currentRoot();
     }
 
-    std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
+    auto vec = selection->items_vector();
     SPItem *item=next_item_from_list<ListReverse>(desktop, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
 
     if (item) {
@@ -2545,7 +2551,7 @@ void ObjectSet::clone(bool skip_undo)
     // Assign IDs to selected objects that don't have an ID attribute
     enforceIds();
 
-    std::vector<Inkscape::XML::Node*> reprs(xmlNodes().begin(), xmlNodes().end());
+    auto reprs = xmlNodes_vector();
 
     clear();
 
@@ -2669,11 +2675,8 @@ bool ObjectSet::unlink(const bool skip_undo, const bool silent)
     // Get a copy of current selection.
     std::vector<SPItem*> new_select;
     bool unlinked = false;
-    std::vector<SPItem *> items_(items().begin(), items().end());
 
-    for (auto i=items_.rbegin();i!=items_.rend();++i){
-        SPItem *item = *i;
-
+    for (auto item : items_vector() | std::views::reverse) {
         ObjectSet tmp_set(document());
         tmp_set.set(item);
         auto *clip_obj = item->getClipObject();
@@ -2767,15 +2770,15 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo, const bool force, const bo
     }
     bool unlinked = false;
     ObjectSet tmp_set(document());
-    std::vector<SPItem*> items_(items().begin(), items().end());
-    for (auto& it:items_) {
-        tmp_set.set(it);
-        unlinked = tmp_set.unlink(true, silent) || unlinked;
-        it = tmp_set.singleItem();
-        if (is<SPGroup>(it)) {
-            std::vector<SPObject*> c = it->childList(false);
+    auto items_vec = items_vector();
+    for (auto &item : items_vec) {
+        tmp_set.set(item);
+        unlinked |= tmp_set.unlink(true, silent);
+        item = tmp_set.singleItem();
+        if (is<SPGroup>(item)) {
+            std::vector<SPObject*> c = item->childList(false);
             tmp_set.setList(c);
-            unlinked = tmp_set.unlinkRecursive(skip_undo, force, silent) || unlinked;
+            unlinked |= tmp_set.unlinkRecursive(skip_undo, force, silent);
         }
     }
     if (!unlinked) {
@@ -2785,7 +2788,7 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo, const bool force, const bo
     if (!skip_undo) {
         DocumentUndo::done(document(), _("Unlink clone recursively"), INKSCAPE_ICON("edit-clone-unlink"));
     }
-    setList(items_);
+    setList(items_vec);
     return unlinked;
 }
 
@@ -2795,17 +2798,14 @@ void ObjectSet::removeLPESRecursive(bool keep_paths) {
     }
 
     ObjectSet tmp_set(document());
-    std::vector<SPItem *> items_(items().begin(), items().end());
-    std::vector<SPItem *> itemsdone_;
-    for (auto& it:items_) {
-        auto splpeitem = cast<SPLPEItem>(it);
-        auto spgroup = cast<SPGroup>(it);
-        if (spgroup) {
+    std::vector<SPItem *> items_done;
+    for (auto item : items_vector()) {
+        if (auto spgroup = cast<SPGroup>(item)) {
             std::vector<SPObject*> c = spgroup->childList(false);
             tmp_set.setList(c);
             tmp_set.removeLPESRecursive(keep_paths);
         }
-        if (splpeitem) {
+        if (auto splpeitem = cast<SPLPEItem>(item)) {
             // Maybe the item is changed from SPShape to SPPath invalidating selection
             // fix issue Inkscape#2321
             char const *id = splpeitem->getAttribute("id");
@@ -2813,14 +2813,13 @@ void ObjectSet::removeLPESRecursive(bool keep_paths) {
             splpeitem->removeAllPathEffects(keep_paths);
             auto upditem = cast<SPItem>(document->getObjectById(id));
             if (upditem) {
-                itemsdone_.push_back(upditem);
+                items_done.push_back(upditem);
             }
         } else {
-            itemsdone_.push_back(it);
+            items_done.push_back(item);
         }
-        
     }
-    setList(itemsdone_);
+    setList(items_done);
 }
 
 void ObjectSet::cloneOriginal()
@@ -2831,10 +2830,10 @@ void ObjectSet::cloneOriginal()
 
     // Check if other than two objects are selected
 
-    auto items_= items();
-    if (boost::distance(items_) != 1 || !item) {
-        if(desktop())
+    if (!item) {
+        if (desktop()) {
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, error);
+        }
         return;
     }
 
@@ -3014,11 +3013,11 @@ void ObjectSet::toMarker(bool apply)
         return;
     }
 
-    std::vector<SPItem*> items_(items().begin(), items().end());
-    sort(items_.begin(), items_.end(), sp_item_repr_compare_position_bool);
+    auto items_vec = items_vector();
+    std::sort(items_vec.begin(), items_vec.end(), sp_item_repr_compare_position_bool);
 
     // bottommost object, after sorting
-    SPObject *parent = items_.front()->parent;
+    SPObject *parent = items_vec.front()->parent;
 
     Geom::Affine parent_transform;
     {
@@ -3032,7 +3031,7 @@ void ObjectSet::toMarker(bool apply)
 
     // Create a list of duplicates, to be pasted inside marker element.
     std::vector<Inkscape::XML::Node*> repr_copies;
-    for (auto *item : items_) {
+    for (auto *item : items_vec) {
         auto *dup = item->getRepr()->duplicate(xml_doc);
         repr_copies.push_back(dup);
     }
@@ -3047,7 +3046,7 @@ void ObjectSet::toMarker(bool apply)
     if (apply) {
         // Delete objects so that their clones don't get alerted;
         // the objects will be restored inside the marker element.
-        for (auto item : items_){
+        for (auto item : items_vec) {
             item->deleteObject(false);
         }
     }
@@ -3064,8 +3063,6 @@ void ObjectSet::toMarker(bool apply)
 
     // restore compensation setting
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
-
-
 
     DocumentUndo::done(doc, _("Objects to marker"), "");
 }
@@ -3086,7 +3083,7 @@ void ObjectSet::toGuides()
 {
     SPDocument *doc = document();
     // we need to copy the list because it gets reset when objects are deleted
-    std::vector<SPItem*> items_(items().begin(), items().end());
+    auto items_vec = items_vector();
 
     if (isEmpty()) {
         if(desktop())
@@ -3102,13 +3099,13 @@ void ObjectSet::toGuides()
     // and its entry in the selection list is invalid (crash).
     // Therefore: first convert all, then delete all.
 
-    for (auto item : items_){
+    for (auto item : items_vec) {
         sp_selection_to_guides_recursive(item, wholegroups);
     }
 
     if (deleteitems) {
         clear();
-        sp_selection_delete_impl(items_);
+        sp_selection_delete_impl(items_vec);
     }
 
     DocumentUndo::done(doc, _("Objects to guides"), "");
@@ -3300,30 +3297,26 @@ void ObjectSet::tile(bool apply)
         return;
     }
 
-    std::vector<SPItem*> items_(items().begin(), items().end());
+    auto items_vec = items_vector();
 
-    sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
+    std::sort(items_vec.begin(), items_vec.end(), sp_object_compare_position_bool);
 
     // bottommost object, after sorting
-    SPObject *parent = items_[0]->parent;
-
+    SPObject *parent = items_vec[0]->parent;
 
     Geom::Affine parent_transform;
-    {
-        auto parentItem = cast<SPItem>(parent);
-        if (parentItem) {
-            parent_transform = parentItem->i2doc_affine();
-        } else {
-            g_assert_not_reached();
-        }
+    if (auto parentItem = cast<SPItem>(parent)) {
+        parent_transform = parentItem->i2doc_affine();
+    } else {
+        g_assert_not_reached();
     }
 
     // remember the position of the first item
-    gint pos = items_[0]->getRepr()->position();
+    int pos = items_vec[0]->getRepr()->position();
 
     // create a list of duplicates
     std::vector<Inkscape::XML::Node*> repr_copies;
-    for (auto item : items_){
+    for (auto item : items_vec) {
         Inkscape::XML::Node *dup = item->getRepr()->duplicate(xml_doc);
         repr_copies.push_back(dup);
     }
@@ -3332,7 +3325,7 @@ void ObjectSet::tile(bool apply)
 
     if (apply) {
         // delete objects so that their clones don't get alerted; this object will be restored shortly
-        for (auto item : items_){
+        for (auto item : items_vec) {
             item->deleteObject(false);
         }
     }
@@ -3396,14 +3389,12 @@ void ObjectSet::untile()
 
     bool did = false;
 
-    std::vector<SPItem*> items_(items().begin(), items().end());
-    for (std::vector<SPItem*>::const_reverse_iterator i=items_.rbegin();i!=items_.rend();++i){
-        SPItem *item = *i;
-
+    for (auto item : items_vector() | std::views::reverse) {
         SPStyle *style = item->style;
 
-        if (!style || !style->fill.isPaintserver())
+        if (!style || !style->fill.isPaintserver()) {
             continue;
+        }
 
         SPPaintServer *server = item->style->getFillPaintServer();
 
@@ -3484,14 +3475,15 @@ void ObjectSet::createBitmapCopy()
     }
 
     // List of the items to show; all others will be hidden
-    std::vector<SPItem const *> items_{items().begin(), items().end()};
+    auto items_range = items();
+    auto items_vec = std::vector<SPItem const *>(items_range.begin(), items_range.end());
 
     // Sort items so that the topmost comes last
-    sort(items_.begin(), items_.end(), sp_item_repr_compare_position_bool);
+    std::sort(items_vec.begin(), items_vec.end(), sp_item_repr_compare_position_bool);
 
     // Remember parent and z-order of the topmost one
-    gint pos = items_.back()->getRepr()->position();
-    SPObject *parent_object = items_.back()->parent;
+    int pos = items_vec.back()->getRepr()->position();
+    SPObject *parent_object = items_vec.back()->parent;
     Inkscape::XML::Node *parent = parent_object->getRepr();
 
     // Calculate resolution
@@ -3509,7 +3501,7 @@ void ObjectSet::createBitmapCopy()
 
         // Get export DPI from the first item available
         auto dpi = Geom::Point(0, 0);
-        for (auto &item : items_) {
+        for (auto item : items_vec) {
             dpi = item->getExportDpi();
             if (dpi.x()) break;
         }
@@ -3537,7 +3529,7 @@ void ObjectSet::createBitmapCopy()
         }
     }
 
-    Inkscape::Pixbuf *pb = sp_generate_internal_bitmap(doc, *bbox, res, items_, false, nullptr, 1, antialias);
+    Inkscape::Pixbuf *pb = sp_generate_internal_bitmap(doc, *bbox, res, items_vec, false, nullptr, 1, antialias);
 
     if (pb) {
         // Create the repr for the image
@@ -3590,7 +3582,7 @@ void ObjectSet::setClipGroup()
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> p(xmlNodes().begin(), xmlNodes().end());
+    auto p = xmlNodes_vector();
 
     sort(p.begin(),p.end(),sp_repr_compare_position_bool);
 
@@ -3734,7 +3726,7 @@ void ObjectSet::chameleonFill()
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to create clippath or mask from."));
         return;
-    } else if (!apply_to_layer && ( is_empty || boost::distance(items())==1 )) {
+    } else if (!apply_to_layer && (is_empty || std::ranges::distance(items()) == 1)) {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select mask object and <b>object(s)</b> to apply clippath or mask to."));
         return;
@@ -3751,9 +3743,9 @@ void ObjectSet::chameleonFill()
 
     doc->ensureUpToDate();
 
-    std::vector<SPItem*> items_(items().begin(), items().end());
+    auto items_vec = items_vector();
 
-    sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
+    std::sort(items_vec.begin(), items_vec.end(), sp_object_compare_position_bool);
 
     // See lp bug #542004
     clear();
@@ -3773,11 +3765,11 @@ void ObjectSet::chameleonFill()
         apply_to_items.push_back(desktop()->layerManager().currentLayer());
     }
 
-    for (auto i : items_) {
-        if((!topmost && !apply_to_layer && i == items_.front())
-                || (topmost && !apply_to_layer && i == items_.back())
-                || apply_to_layer){
-
+    for (auto i : items_vec) {
+        if ((!topmost && !apply_to_layer && i == items_vec.front())
+                || (topmost && !apply_to_layer && i == items_vec.back())
+                || apply_to_layer)
+        {
             Inkscape::XML::Node *dup = i->getRepr()->duplicate(xml_doc);
             mask_items.emplace_back(dup, i->i2doc_affine());
 
@@ -3794,7 +3786,7 @@ void ObjectSet::chameleonFill()
         }
     }
 
-    items_.clear();
+    items_vec.clear();
 
     if (grouping == PREFS_MASKOBJECT_GROUPING_ALL) {
         // group all those objects into one group
@@ -3819,8 +3811,8 @@ void ObjectSet::chameleonFill()
         items_to_select.clear();
     }
 
-    gchar const *attributeName = apply_clip_path ? "clip-path" : "mask";
-    for (auto item : apply_to_items | boost::adaptors::reversed) {
+    char const *attributeName = apply_clip_path ? "clip-path" : "mask";
+    for (auto item : apply_to_items | std::views::reverse) {
         std::vector<Inkscape::XML::Node*> mask_items_dup;
         std::map<Inkscape::XML::Node*, Geom::Affine> dup_transf;
         for (auto const &mask_item : mask_items) {
@@ -3900,15 +3892,15 @@ void ObjectSet::unsetMask(const bool apply_clip_path,
     gchar const *attributeName = apply_clip_path ? "clip-path" : "mask";
     std::map<SPObject*,SPItem*> referenced_objects;
 
-    std::vector<SPItem*> items_(items().begin(), items().end());
+    auto items_vec = items_vector();
     clear();
 
     std::vector<SPGroup *> items_to_ungroup;
-    std::vector<SPItem*> items_to_select(items_);
+    auto items_to_select = items_vec;
 
     // SPObject* refers to a group containing the clipped path or mask itself,
     // whereas SPItem* refers to the item being clipped or masked
-    for (auto i : items_){
+    for (auto i : items_vec) {
         if (remove_original) {
             // remember referenced mask/clippath, so orphaned masks can be moved back to document
             SPItem *item = i;
@@ -3969,7 +3961,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path,
         Inkscape::XML::Node *ref_repr = referenced_object.second->getRepr();
 
         // Iterate through all clipped paths / masks
-        for (auto const repr : items_to_move | boost::adaptors::reversed) {
+        for (auto const repr : items_to_move | std::views::reverse) {
             // insert into parent, restore pos
             parent->addChild(repr, ref_repr);
 
@@ -3985,7 +3977,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path,
     }
 
     // ungroup marked groups added when setting mask
-    for (auto group : items_to_ungroup | boost::adaptors::reversed) {
+    for (auto group : items_to_ungroup | std::views::reverse) {
         if (group) {
             items_to_select.erase(std::remove(items_to_select.begin(), items_to_select.end(), group), items_to_select.end());
             std::vector<SPItem*> children;
@@ -4151,8 +4143,8 @@ void ObjectSet::fillBetweenMany()
     fillRepr->setAttribute("d", "M 0,0");
 
     // Get bottommost element in selection to create fill underneath
-    auto&& items_ = std::vector<SPObject*>(items().begin(), items().end());
-    SPObject *first = *std::min_element(items_.begin(), items_.end(), sp_object_compare_position_bool);
+    auto items_vec = items_vector();
+    SPObject *first = *std::min_element(items_vec.begin(), items_vec.end(), sp_object_compare_position_bool);
     SPObject *prev  = first->getPrev();
 
     first->parent->addChild(fillRepr, prev ? prev->getRepr() : nullptr);

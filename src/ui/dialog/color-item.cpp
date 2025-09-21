@@ -436,7 +436,7 @@ void ColorItem::action_edit()
 
     auto desktop = dialog->getDesktop();
     auto selection = desktop->getSelection();
-    auto items = std::vector<SPItem*>(selection->items().begin(), selection->items().end());
+    auto items = selection->items_vector();
 
     if (!items.empty()) {
         auto query = SPStyle(desktop->doc());

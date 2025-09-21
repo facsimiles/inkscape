@@ -21,7 +21,6 @@
 #include "object/sp-defs.h"
 #include "object/sp-item-group.h"
 #include "object/sp-item.h"
-#include "object/sp-path.h"
 #include "object/sp-shape.h"
 #include "object/sp-use.h"
 #include "svg/svg.h"
@@ -274,27 +273,23 @@ void LPEPowerClip::doOnVisibilityToggled(SPLPEItem const *lpeitem) { upd(); }
 void sp_remove_powerclip(Inkscape::Selection *sel)
 {
     if (!sel->isEmpty()) {
-        auto selList = sel->items();
-        for (auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
-            auto lpeitem = cast<SPLPEItem>(*i);
-            if (lpeitem) {
-                if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    PathEffectList path_effect_list(*lpeitem->path_effect_list);
-                    for (auto &lperef : path_effect_list) {
-                        LivePathEffectObject *lpeobj = lperef->lpeobject;
-                        if (!lpeobj) {
-                            /** \todo Investigate the cause of this.
-                             * For example, this happens when copy pasting an object with LPE applied. Probably because
-                             * the object is pasted while the effect is not yet pasted to defs, and cannot be found.
-                             */
-                            g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
-                            return;
-                        }
-                        if (LPETypeConverter.get_key(lpeobj->effecttype) == "powerclip") {
-                            lpeitem->setCurrentPathEffect(lperef);
-                            lpeitem->removeCurrentPathEffect(false);
-                            break;
-                        }
+        for (auto lpeitem : sel->objects_of_type<SPLPEItem>() | std::views::reverse) {
+            if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
+                PathEffectList path_effect_list(*lpeitem->path_effect_list);
+                for (auto &lperef : path_effect_list) {
+                    LivePathEffectObject *lpeobj = lperef->lpeobject;
+                    if (!lpeobj) {
+                        /** \todo Investigate the cause of this.
+                         * For example, this happens when copy pasting an object with LPE applied. Probably because
+                         * the object is pasted while the effect is not yet pasted to defs, and cannot be found.
+                         */
+                        g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
+                        return;
+                    }
+                    if (LPETypeConverter.get_key(lpeobj->effecttype) == "powerclip") {
+                        lpeitem->setCurrentPathEffect(lperef);
+                        lpeitem->removeCurrentPathEffect(false);
+                        break;
                     }
                 }
             }
@@ -304,33 +299,25 @@ void sp_remove_powerclip(Inkscape::Selection *sel)
 
 void sp_inverse_powerclip(Inkscape::Selection *sel) {
     if (!sel->isEmpty()) {
-        auto selList = sel->items();
-        for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
-            auto lpeitem = cast<SPLPEItem>(*i);
-            if (lpeitem) {
-                SPClipPath *clip_path = lpeitem->getClipObject();
-                if(clip_path) {
-                    std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-                    for (auto iter : clip_path_list) {
-                        auto use = cast<SPUse>(iter);
-                        if (use) {
-                            g_warning("We can`t add inverse clip on clones");
-                            return;
-                        }
+        for (auto lpeitem : sel->objects_of_type<SPLPEItem>() | std::views::reverse) {
+            if (auto clip_path = lpeitem->getClipObject()) {
+                for (auto iter : clip_path->childList(true)) {
+                    if (is<SPUse>(iter)) {
+                        g_warning("We can`t add inverse clip on clones");
+                        return;
                     }
-                    Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
-                    Effect* lpe = lpeitem->getCurrentLPE();
-                    if (lpe) {
-                        lpe->getRepr()->setAttribute("inverse", "true");
-                    }
+                }
+                Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
+                if (auto lpe = lpeitem->getCurrentLPE()) {
+                    lpe->getRepr()->setAttribute("inverse", "true");
                 }
             }
         }
     }
 }
 
-}; //namespace LivePathEffect
-}; /* namespace Inkscape */
+} // namespace LivePathEffect
+} // namespace Inkscape
 
 /*
   Local Variables:

@@ -540,13 +540,12 @@ void Inkscape::SelTrans::stamp(bool clone)
             l = _stamp_cache;
         } else {
             /* Build cache */
-            l.insert(l.end(), selection->items().begin(), selection->items().end());
-            sort(l.begin(), l.end(), sp_object_compare_position_bool);
+            l = selection->items_vector();
+            std::sort(l.begin(), l.end(), sp_object_compare_position_bool);
             _stamp_cache = l;
             // we disable LPE while stamping and reenable on ungrab with _stamped bool
             for (auto old_obj : l) {
-                auto oldLPEObj = cast<SPLPEItem>(old_obj);
-                if (oldLPEObj) {
+                if (auto oldLPEObj = cast<SPLPEItem>(old_obj)) {
                     sp_lpe_item_enable_path_effects(oldLPEObj, false);
                 }
             }
@@ -734,8 +733,7 @@ void Inkscape::SelTrans::_updateVolatileState()
         return;
     }
 
-    std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
-    _strokewidth = stroke_average_width(vec);
+    _strokewidth = stroke_average_width(selection->items_vector());
 }
 
 void Inkscape::SelTrans::_showHandles(SPSelTransType type)
@@ -1485,7 +1483,7 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     // items will share a single center. While dragging that single center, it should never snap to the
     // centers of any of the selected objects. Therefore we will have to pass the list of selected items
     // to the snapper, to avoid self-snapping of the rotation center
-    std::vector<SPItem *> items(_selection->items().begin(), _selection->items().end());
+    auto items = _selection->items_vector();
     SnapManager &m = _desktop->getNamedView()->snap_manager;
     m.setup(_desktop);
     m.setRotationCenterSource(items);

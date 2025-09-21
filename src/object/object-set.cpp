@@ -12,8 +12,6 @@
 
 #include "object-set.h"
 
-#include <boost/range/adaptor/filtered.hpp>
-#include <boost/range/adaptor/transformed.hpp>
 #include <glib.h>
 #include <sigc++/sigc++.h>
 
@@ -226,32 +224,25 @@ void ObjectSet::toggle(SPObject *obj) {
 }
 
 bool ObjectSet::isEmpty() {
-    return _container.size() == 0;
+    return _container.empty();
 }
 
 SPObject *ObjectSet::single() {
-    return _container.size() == 1 ? *_container.begin() : nullptr;
+    return _container.size() == 1 ? _container.front() : nullptr;
 }
 
 SPItem *ObjectSet::singleItem() {
-    if (_container.size() == 1) {
-        SPObject* obj = *_container.begin();
-        if (is<SPItem>(obj)) {
-            return cast<SPItem>(obj);
-        }
-    }
-
-    return nullptr;
+    return _container.size() == 1 ? cast<SPItem>(_container.front()) : nullptr;
 }
 
 SPItem *ObjectSet::firstItem() const
 {
-    return _container.size() ? cast<SPItem>(_container.front()) : nullptr;
+    return !_container.empty() ? cast<SPItem>(_container.front()) : nullptr;
 }
 
 SPItem *ObjectSet::lastItem() const
 {
-    return _container.size() ? cast<SPItem>(_container.back()) : nullptr;
+    return !_container.empty() ? cast<SPItem>(_container.back()) : nullptr;
 }
 
 SPItem *ObjectSet::smallestItem(CompareSize compare) {
@@ -287,10 +278,6 @@ SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
     return ist;
 }
 
-SPObjectRange ObjectSet::objects() {
-    return SPObjectRange(_container.get<random_access>().begin(), _container.get<random_access>().end());
-}
-
 Inkscape::XML::Node *ObjectSet::singleRepr() {
     SPObject *obj = single();
     return obj ? obj->getRepr() : nullptr;
@@ -298,7 +285,7 @@ Inkscape::XML::Node *ObjectSet::singleRepr() {
 
 Inkscape::XML::Node *ObjectSet::topRepr() const
 {
-    auto const &nodes = const_cast<ObjectSet *>(this)->xmlNodes();
+    auto nodes = const_cast<ObjectSet *>(this)->xmlNodes();
 
     if (nodes.empty()) {
         return nullptr;
@@ -307,9 +294,9 @@ Inkscape::XML::Node *ObjectSet::topRepr() const
 #ifdef _LIBCPP_VERSION
     // workaround for
     // static_assert(__is_cpp17_forward_iterator<_ForwardIterator>::value
-    auto const n = std::vector<Inkscape::XML::Node *>(nodes.begin(), nodes.end());
+    auto n = std::vector<Inkscape::XML::Node *>(nodes.begin(), nodes.end());
 #else
-    auto const& n = nodes;
+    auto &n = nodes;
 #endif
 
     return *std::max_element(n.begin(), n.end(), sp_repr_compare_position_bool);

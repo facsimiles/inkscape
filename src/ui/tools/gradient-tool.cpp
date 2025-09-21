@@ -95,7 +95,7 @@ void GradientTool::selection_changed()
     if (!selection) {
         return;
     }
-    unsigned const n_obj = boost::distance(selection->items());
+    unsigned const n_obj = std::ranges::distance(selection->items());
 
     if (!_grdrag->isNonEmpty() || selection->isEmpty()) {
         return;
@@ -715,7 +715,7 @@ void GradientTool::drag(Geom::Point const &pt, uint32_t etime)
         } else {
             // Starting from empty space:
             // Sort items so that the topmost comes last
-            auto items = std::vector<SPItem*>(selection->items().begin(), selection->items().end());
+            auto items = selection->items_vector();
             std::sort(items.begin(), items.end(), sp_item_repr_compare_position_bool);
             // take topmost
             vector = sp_gradient_vector_for_object(document, _desktop, items.back(), fill_or_stroke);
@@ -760,7 +760,7 @@ void GradientTool::drag(Geom::Point const &pt, uint32_t etime)
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
-        int const n_objects = boost::distance(selection->items());
+        int const n_objects = std::ranges::distance(selection->items());
         message_context->setF(NORMAL_MESSAGE,
                                   ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
                                            "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),

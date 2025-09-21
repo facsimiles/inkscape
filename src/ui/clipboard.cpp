@@ -545,15 +545,14 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place, bool on_page
     if (target == "image/x-inkscape-svg") {
         SPDocument *doc = nullptr;
         desktop->getSelection()->ungroup(true);
-        std::vector<SPItem *> vec2(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
+        auto vec2 = desktop->getSelection()->items_vector();
         for (auto item : vec2) {
             // just a bit beauty on paste hidden items unselect
             doc = item->document;
             if (vec2.size() > 1 && item->isHidden()) {
                 desktop->getSelection()->remove(item);
             }
-            auto pasted_lpe_item = cast<SPLPEItem>(item);
-            if (pasted_lpe_item) {
+            if (auto pasted_lpe_item = cast<SPLPEItem>(item)) {
                 remove_hidder_filter(pasted_lpe_item);
             }
         }

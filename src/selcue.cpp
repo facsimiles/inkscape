@@ -20,7 +20,6 @@
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-guideline.h"
 #include "display/control/canvas-item-rect.h"
-#include "libnrtype/Layout-TNG.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-text.h"
 #include "selection.h"
@@ -85,7 +84,7 @@ void SelCue::_updateItemBboxes(Preferences *prefs)
 void SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
 {
     auto items = _selection->items();
-    if (_item_bboxes.size() != (unsigned int)boost::distance(items)) {
+    if (_item_bboxes.size() != std::ranges::distance(items)) {
         _newItemBboxes();
         return;
     }
