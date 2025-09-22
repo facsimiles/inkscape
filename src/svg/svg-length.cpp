@@ -49,6 +49,10 @@ unsigned int sp_svg_number_read_f(gchar const *str, float *val)
 
 unsigned int sp_svg_number_read_d(gchar const *str, double *val)
 {
+    if (!str) {
+        return 0;
+    }
+
     char *e;
     double const v = g_ascii_strtod(str, &e);
     if ((gchar const *) e == str) {
