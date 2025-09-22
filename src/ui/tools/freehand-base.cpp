@@ -888,7 +888,7 @@ void spdc_create_single_dot(ToolBase *tool, Geom::Point const &pt, char const *p
         sp_repr_css_set_property_string(css,   "fill",   fill ?   fill->toString() : "none");
         sp_repr_css_set_property_string(css, "stroke", stroke ? stroke->toString() : "none");
     } else {
-        // Not calligraphic: unset stroke and set fill color to former stroke color
+        // Not calligraphic: Make a dot with no stroke and filled with current stroke color
         sp_repr_css_set_property_string(css,   "fill", stroke ? stroke->toString() : "none");
         sp_repr_css_set_property_string(css, "stroke", "none");
     }
