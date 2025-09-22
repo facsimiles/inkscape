@@ -885,11 +885,11 @@ void spdc_create_single_dot(ToolBase *tool, Geom::Point const &pt, char const *p
     if (!strcmp(path, "/tools/calligraphic")) {
         // Calligraphic: Preserve fill and stroke
         auto fill = sp_desktop_get_color_tool(desktop, path, true);
-        sp_repr_css_set_property_string(css,   "fill",   fill ?   fill->toString() : "none");
+        sp_repr_css_set_property_string(css, "fill", fill ? fill->toString() : "none");
         sp_repr_css_set_property_string(css, "stroke", stroke ? stroke->toString() : "none");
     } else {
         // Not calligraphic: Make a dot with no stroke and filled with current stroke color
-        sp_repr_css_set_property_string(css,   "fill", stroke ? stroke->toString() : "none");
+        sp_repr_css_set_property_string(css, "fill", stroke ? stroke->toString() : "none");
         sp_repr_css_set_property_string(css, "stroke", "none");
     }
     sp_repr_css_set(repr, css, "style");
