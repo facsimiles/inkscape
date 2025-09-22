@@ -879,14 +879,19 @@ void spdc_create_single_dot(ToolBase *tool, Geom::Point const &pt, char const *p
         stroke_width = style.stroke_width.computed;
     }
 
-    // unset stroke and set fill color to former stroke color
-    bool cali = strcmp(path, "/tools/calligraphic");
-    auto fill = sp_desktop_get_color_tool(desktop, path, cali);
-    auto stroke = sp_desktop_get_color_tool(desktop, path, false);
 
     SPCSSAttr *css = sp_repr_css_attr_new();
-    sp_repr_css_set_property_string(css, "fill", fill ? fill->toString() : "none");
-    sp_repr_css_set_property_string(css, "stroke", !cali && stroke ? stroke->toString() : "none");
+    auto stroke = sp_desktop_get_color_tool(desktop, path, false);
+    if (!strcmp(path, "/tools/calligraphic")) {
+        // Calligraphic: Preserve fill and stroke
+        auto fill = sp_desktop_get_color_tool(desktop, path, true);
+        sp_repr_css_set_property_string(css,   "fill",   fill ?   fill->toString() : "none");
+        sp_repr_css_set_property_string(css, "stroke", stroke ? stroke->toString() : "none");
+    } else {
+        // Not calligraphic: unset stroke and set fill color to former stroke color
+        sp_repr_css_set_property_string(css,   "fill", stroke ? stroke->toString() : "none");
+        sp_repr_css_set_property_string(css, "stroke", "none");
+    }
     sp_repr_css_set(repr, css, "style");
     sp_repr_css_attr_unref(css);
 
