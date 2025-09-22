@@ -646,7 +646,7 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     root_repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(parent->i2doc_affine().inverse()));
 
     /* Set style */
-    sp_desktop_apply_style_tool(desktop, root_repr, "/tools/text", true);
+    desktop->applyCurrentOrToolStyle(root_repr, "/tools/text", true);
 
     auto ft_item = cast<SPItem>(parent->appendChildRepr(root_repr));
     g_assert(ft_item != nullptr);

@@ -77,28 +77,28 @@ static char const preferences_skeleton[] =
   <group id="tools" bounding_box="0">
 
     <group id="shapes" style="fill-rule:evenodd;" selcue="1" gradientdrag="1">
-      <eventcontext id="rect" style="fill:blue;" usecurrent="1"/>
-      <eventcontext id="3dbox" style="stroke:none;stroke-linejoin:round;" usecurrent="1">
-        <side id="XYfront"  style="fill:#8686bf;stroke:none;stroke-linejoin:round;" usecurrent="0"/>
-        <side id="XYrear"   style="fill:#e9e9ff;stroke:none;stroke-linejoin:round;" usecurrent="0"/>
-        <side id="XZtop"    style="fill:#4d4d9f;stroke:none;stroke-linejoin:round;" usecurrent="0"/>
-        <side id="XZbottom" style="fill:#afafde;stroke:none;stroke-linejoin:round;" usecurrent="0"/>
-        <side id="YZright"  style="fill:#353564;stroke:none;stroke-linejoin:round;" usecurrent="0"/>
-        <side id="YZleft"   style="fill:#d7d7ff;stroke:none;stroke-linejoin:round;" usecurrent="0"/>
+      <eventcontext id="rect" style="fill:blue;" usecurrent="rect"/>
+      <eventcontext id="3dbox" style="stroke:none;stroke-linejoin:round;" usecurrent="3dbox">
+        <side id="XYfront"  style="fill:#8686bf;stroke:none;stroke-linejoin:round;"/>
+        <side id="XYrear"   style="fill:#e9e9ff;stroke:none;stroke-linejoin:round;"/>
+        <side id="XZtop"    style="fill:#4d4d9f;stroke:none;stroke-linejoin:round;"/>
+        <side id="XZbottom" style="fill:#afafde;stroke:none;stroke-linejoin:round;"/>
+        <side id="YZright"  style="fill:#353564;stroke:none;stroke-linejoin:round;"/>
+        <side id="YZleft"   style="fill:#d7d7ff;stroke:none;stroke-linejoin:round;"/>
       </eventcontext>
-      <eventcontext id="arc" style="fill:red;" end="0" start="0" usecurrent="1"/>
-      <eventcontext id="star" magnitude="5" style="fill:yellow;" usecurrent="1"/>
-      <eventcontext id="spiral" style="fill:none;stroke:black" expansion="1" usecurrent="0"/>
+      <eventcontext id="arc" style="fill:red;" end="0" start="0" usecurrent="arc"/>
+      <eventcontext id="star" magnitude="5" style="fill:yellow;" usecurrent="star"/>
+      <eventcontext id="spiral" style="fill:none;stroke:black" expansion="1" usecurrent="spiral"/>
     </group>
 
     <group id="freehand"
          style="fill:none;stroke:black;stroke-opacity:1;stroke-linejoin:miter;stroke-linecap:butt;">
-      <eventcontext id="pencil" tolerance="15.0" selcue="1" style="stroke-width:1px;" usecurrent="1" average_all_sketches="1"/>
-      <eventcontext id="pen" mode="drag" selcue="1" style="stroke-width:1px;" usecurrent="1"/>
+      <eventcontext id="pencil" tolerance="15.0" selcue="1" style="stroke-width:1px;" usecurrent="path" average_all_sketches="1"/>
+      <eventcontext id="pen" mode="drag" selcue="1" style="stroke-width:1px;" usecurrent="path"/>
     </group>
 
     <eventcontext id="calligraphic" style="fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;"
-                       mass="2" angle="30" width="15.118" thinning="10" flatness="-90" cap_rounding="0.0" usecurrent="1"
+                       mass="2" angle="30" width="15.118" thinning="10" flatness="-90" cap_rounding="0.0" usecurrent="path"
                        tracebackground="0" usepressure="1" usetilt="0" keep_selected="1" abs_width="1" unit="mm">
 
       <group id="preset">
@@ -119,7 +119,7 @@ static char const preferences_skeleton[] =
     <eventcontext id="lpetool" mode="drag" style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;">
     </eventcontext>
 
-    <eventcontext id="text"  usecurrent="1" gradientdrag="1"
+    <eventcontext id="text"  usecurrent="text" gradientdrag="1"
                        font_sample="AaBbCcIiPpQq12369$€¢?.;/()"
                        show_sample_in_list="1" use_svg2="1"
                   style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;" selcue="1"/>

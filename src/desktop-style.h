@@ -75,13 +75,11 @@ void sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines
 void sp_desktop_set_color(SPDesktop *desktop, Color const &color, bool is_relative, bool fill);
 void sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *css, bool change = true, bool write_current = true, bool switch_style = false);
 void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change = true, bool write_current = true, bool switch_style = false);
-SPCSSAttr *sp_desktop_get_style(SPDesktop *desktop, bool with_text);
 double sp_desktop_get_master_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool* has_opacity = nullptr);
 double sp_desktop_get_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill);
 std::optional<Color> sp_desktop_get_color (SPDesktop *desktop, bool is_fill);
 std::optional<Color> sp_desktop_get_color_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill);
 double sp_desktop_get_font_size_tool (SPDesktop *desktop);
-void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, Glib::ustring const &tool, bool with_text);
 
 gdouble stroke_average_width (const std::vector<SPItem*> &objects);
 

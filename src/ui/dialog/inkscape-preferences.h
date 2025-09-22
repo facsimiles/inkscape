@@ -642,7 +642,7 @@ protected:
     static void AddFirstAndLastCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddDotSizeSpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddBaseSimplifySpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = nullptr);
+    static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, Glib::ustring const &item_type = "", const gchar* banner = nullptr);
 
     void on_pagelist_selection_changed();
     void show_not_found();

@@ -1302,7 +1302,7 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     defs_repr->addChild(rect_repr, nullptr);
 
     // Apply desktop style (do before adding "shape-inside").
-    sp_desktop_apply_style_tool(desktop, text_repr, "/tools/text", true);
+    desktop->applyCurrentOrToolStyle(text_repr, "/tools/text", true);
     SPCSSAttr *css = sp_repr_css_attr(text_repr, "style" );
     sp_repr_css_set_property (css, "white-space", "pre");  // Respect new lines.
 

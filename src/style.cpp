@@ -1505,6 +1505,7 @@ sp_css_attr_unset_blacklist(SPCSSAttr *css)
     sp_repr_css_set_property(css, "visibility",          nullptr);
     sp_repr_css_set_property(css, "isolation",           nullptr);
     sp_repr_css_set_property(css, "mix-blend-mode",      nullptr);
+    sp_repr_css_set_property(css, "filter",              nullptr);
     sp_repr_css_set_property(css, "color-interpolation", nullptr);
     sp_repr_css_set_property(css, "color-interpolation-filters", nullptr);
     sp_repr_css_set_property(css, "solid-color",         nullptr);
@@ -1515,6 +1516,10 @@ sp_css_attr_unset_blacklist(SPCSSAttr *css)
     sp_repr_css_set_property(css, "shape-rendering",     nullptr);
     sp_repr_css_set_property(css, "text-rendering",      nullptr);
     sp_repr_css_set_property(css, "enable-background",   nullptr);
+    sp_repr_css_set_property(css, "shape-inside",        nullptr); // Don't want this in a style even if it doesn't contain a uri
+    sp_repr_css_set_property(css, "shape-subtract",      nullptr);
+    sp_repr_css_set_property(css, "stop-color",          nullptr);
+    sp_repr_css_set_property(css, "stop-opacity",        nullptr);
 
     return css;
 }

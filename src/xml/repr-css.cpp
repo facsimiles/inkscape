@@ -309,7 +309,7 @@ void sp_repr_css_print(SPCSSAttr *css)
 /**
  * Merges two SPCSSAttr's. Properties in src overwrite properties in dst if present in both.
  */
-void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src)
+void sp_repr_css_merge(SPCSSAttr *dst, const SPCSSAttr *src)
 {
     g_assert(dst != nullptr);
     g_assert(src != nullptr);

@@ -246,7 +246,7 @@ void TextTool::_setupText()
     rtext->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
 
     /* Set style */
-    sp_desktop_apply_style_tool(_desktop, rtext, "/tools/text", true);
+    _desktop->applyCurrentOrToolStyle(rtext, "/tools/text", true);
 
     rtext->setAttributeSvgDouble("x", pdoc.x());
     rtext->setAttributeSvgDouble("y", pdoc.y());

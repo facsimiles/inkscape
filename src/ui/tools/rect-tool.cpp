@@ -304,7 +304,7 @@ void RectTool::drag(Geom::Point const pt, unsigned state) {
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:rect");
 
         // Set style
-        sp_desktop_apply_style_tool(_desktop, repr, "/tools/shapes/rect", false);
+        _desktop->applyCurrentOrToolStyle(repr, "/tools/shapes/rect", false);
 
         this->rect = cast<SPRect>(currentLayer()->appendChildRepr(repr));
         Inkscape::GC::release(repr);

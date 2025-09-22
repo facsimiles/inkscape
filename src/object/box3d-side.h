@@ -43,7 +43,7 @@ public:
 
     void position_set(); // FIXME: Replace this by Box3DSide::set_shape??
 
-    Glib::ustring axes_string() const;
+    const Glib::ustring &axes_string() const;
 
     Persp3D *perspective() const;
 

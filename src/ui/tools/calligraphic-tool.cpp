@@ -833,7 +833,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
             /* Set style */
-            sp_desktop_apply_style_tool(_desktop, repr, "/tools/calligraphic", false);
+            _desktop->applyCurrentOrToolStyle(repr, "/tools/calligraphic", false);
 
             this->repr = repr;
 

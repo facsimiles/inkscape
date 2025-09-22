@@ -599,7 +599,7 @@ bool EraserTool::_doWork()
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
         Inkscape::XML::Node *eraser_repr = xml_doc->createElement("svg:path");
 
-        sp_desktop_apply_style_tool(_desktop, eraser_repr, "/tools/eraser", false);
+        _desktop->applyCurrentOrToolStyle(eraser_repr, "/tools/eraser", false);
         repr = eraser_repr;
     }
     if (!repr) {
@@ -921,7 +921,7 @@ void EraserTool::_clipErase(SPItem *item) const
         }
     } else {
         Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
-        sp_desktop_apply_style_tool(_desktop, rect_repr, "/tools/eraser", false);
+        _desktop->applyCurrentOrToolStyle(rect_repr, "/tools/eraser", false);
         auto rect = cast<SPRect>(item->parent->appendChildRepr(rect_repr));
         Inkscape::GC::release(rect_repr);
         rect->setPosition(bbox->left(), bbox->top(), bbox->width(), bbox->height());

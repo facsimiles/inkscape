@@ -838,7 +838,7 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
 
 
     /* Set style */
-    sp_desktop_apply_style_tool(_desktop, rtext, "/tools/text", true);
+    _desktop->applyCurrentOrToolStyle(rtext, "/tools/text", true);
     if(measure_repr) {
         rtext->setAttributeSvgDouble("x", 2);
         rtext->setAttributeSvgDouble("y", 2);

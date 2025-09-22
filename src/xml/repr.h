@@ -98,7 +98,7 @@ void sp_repr_css_set_property_string(SPCSSAttr *css, char const *name, std::stri
 
 void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str);
 void sp_repr_css_set(Inkscape::XML::Node *repr, SPCSSAttr *css, char const *key);
-void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src);
+void sp_repr_css_merge(SPCSSAttr *dst, const SPCSSAttr *src);
 void sp_repr_css_attr_add_from_string(SPCSSAttr *css, const char *data);
 void sp_repr_css_change(Inkscape::XML::Node *repr, SPCSSAttr *css, char const *key);
 void sp_repr_css_change_recursive(Inkscape::XML::Node *repr, SPCSSAttr *css, char const *key);

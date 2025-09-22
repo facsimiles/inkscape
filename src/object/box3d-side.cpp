@@ -121,7 +121,7 @@ Box3DSide * Box3DSide::createBox3DSide(SPBox3D *box)
 }
 
 /*
- * Function which return the type attribute for Box3D. 
+ * Function which return the type attribute for Box3D.
  * Acts as a replacement for directly accessing the XML Tree directly.
  */
 int Box3DSide::getFaceId()
@@ -201,28 +201,51 @@ void Box3DSide::set_shape() {
     setCurveInsync(std::move(c));
 }
 
-Glib::ustring Box3DSide::axes_string() const
+constexpr std::string axis_string(Box3D::Axis dirs, bool rear)
 {
-    Glib::ustring result(Box3D::string_from_axes((Box3D::Axis) (this->dir1 ^ this->dir2)));
+    std::string result(Box3D::string_from_axes(dirs));
 
-    switch ((Box3D::Axis) (this->dir1 ^ this->dir2)) {
+    switch (dirs) {
         case Box3D::XY:
-            result += ((this->front_or_rear == Box3D::FRONT) ? "front" : "rear");
+            result += (!rear ? "front" : "rear");
             break;
 
         case Box3D::XZ:
-            result += ((this->front_or_rear == Box3D::FRONT) ? "top" : "bottom");
+            result += (!rear ? "top" : "bottom");
             break;
 
         case Box3D::YZ:
-            result += ((this->front_or_rear == Box3D::FRONT) ? "right" : "left");
+            result += (!rear ? "right" : "left");
             break;
 
         default:
             break;
     }
-
     return result;
+}
+
+const Glib::ustring & Box3DSide::axes_string() const
+{
+    static const Glib::ustring strings[16] = {
+        axis_string((Box3D::Axis)0, 0).c_str(),
+        axis_string((Box3D::Axis)1, 0).c_str(),
+        axis_string((Box3D::Axis)2, 0).c_str(),
+        axis_string((Box3D::Axis)3, 0).c_str(),
+        axis_string((Box3D::Axis)4, 0).c_str(),
+        axis_string((Box3D::Axis)5, 0).c_str(),
+        axis_string((Box3D::Axis)6, 0).c_str(),
+        axis_string((Box3D::Axis)7, 0).c_str(),
+        axis_string((Box3D::Axis)0, 1).c_str(),
+        axis_string((Box3D::Axis)1, 1).c_str(),
+        axis_string((Box3D::Axis)2, 1).c_str(),
+        axis_string((Box3D::Axis)3, 1).c_str(),
+        axis_string((Box3D::Axis)4, 1).c_str(),
+        axis_string((Box3D::Axis)5, 1).c_str(),
+        axis_string((Box3D::Axis)6, 1).c_str(),
+        axis_string((Box3D::Axis)7, 1).c_str(),
+    };
+
+    return strings[ ((this->dir1 ^ this->dir2) | this->front_or_rear) ];
 }
 
 static void

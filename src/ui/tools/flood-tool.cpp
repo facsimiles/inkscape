@@ -356,7 +356,7 @@ static void do_trace(BitmapCoordsInfo const &bci, unsigned char *trace_px, SPDes
 
         Inkscape::XML::Node *pathRepr = xml_doc->createElement("svg:path");
         /* Set style */
-        sp_desktop_apply_style_tool (desktop, pathRepr, "/tools/paintbucket", false);
+        desktop->applyCurrentOrToolStyle(pathRepr, "/tools/paintbucket", false);
 
         Path path;
         path.LoadPathVector(result.path);

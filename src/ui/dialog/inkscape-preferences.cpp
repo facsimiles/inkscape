@@ -64,6 +64,8 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "style.h"
+#include "object/box3d.h"
+#include "object/box3d-side.h"
 #include "ui/builder-utils.h"
 #include "ui/modifiers.h"
 #include "ui/pack.h"
@@ -169,6 +171,9 @@ static int get_num_matches(Glib::ustring const &key, Gtk::Widget *widget)
 
     return matches;
 }
+
+static void StyleFromItemToTool(SPItem *item, Glib::ustring const &prefs_path, StyleSwatch *swatch);
+static void StyleFrom3DBox(SPBox3D *item, Glib::ustring const &prefs_path);
 
 // Shortcuts model =============
 
@@ -777,7 +782,6 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
-
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -801,6 +805,11 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
         return;
     }
 
+    StyleFromItemToTool(item, prefs_path, swatch);
+}
+
+static void StyleFromItemToTool(SPItem *item, Glib::ustring const &prefs_path, StyleSwatch *swatch)
+{
     SPCSSAttr *css = take_style_from_item (item);
 
     if (!css) return;
@@ -820,6 +829,11 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
     prefs->setStyle(prefs_path + "/style", css);
     sp_repr_css_attr_unref (css);
 
+    // Special case for 3DBox objects: Sample all six faces.
+    if (auto *box3d = cast<SPBox3D>(item)) {
+        StyleFrom3DBox(box3d, prefs_path);
+    }
+
     // update the swatch
     if (swatch) {
         SPCSSAttr *css = prefs->getInheritedStyle(prefs_path + "/style");
@@ -828,20 +842,37 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
     }
 }
 
-void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const &prefs_path, const gchar *banner)
+static void StyleFrom3DBox(SPBox3D *item, Glib::ustring const &prefs_path)
+{
+    for (auto& child : item->children) {
+        if (auto *side = cast<Box3DSide>(&child)) {
+            StyleFromItemToTool(side, prefs_path + "/" + side->axes_string(), nullptr);
+        }
+    }
+}
+
+
+void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const &prefs_path, Glib::ustring const &item_type, const gchar *banner)
 {
     if (banner)
         p.add_group_header(banner);
     else
         p.add_group_header( _("Style of new objects"));
     auto const current = Gtk::make_managed<PrefRadioButton>();
-    current->init ( _("Last used style"), prefs_path + "/usecurrent", 1, true, nullptr);
+    current->init ( _("Last used style"), prefs_path + "/usecurrent", "1", true, nullptr);
     p.add_line( true, "", *current, "",
                 _("Apply the style you last set on an object"));
 
+    if (item_type.size() >= 2) {
+        auto const current_tool = Gtk::make_managed<PrefRadioButton>();
+        current_tool->init ( _("Object type's last used style"), prefs_path + "/usecurrent", item_type, false, current);
+        p.add_line( true, "", *current_tool, "",
+                    _("Apply the style you last set on an object of the same type that this tool creates"));
+    }
+
     auto const own = Gtk::make_managed<PrefRadioButton>();
     auto const hb = Gtk::make_managed<Gtk::Box>();
-    own->init ( _("This tool's own style:"), prefs_path + "/usecurrent", 0, false, current);
+    own->init ( _("This tool's own style:"), prefs_path + "/usecurrent", "0", false, current);
     own->set_halign(Gtk::Align::START);
     own->set_valign(Gtk::Align::START);
     hb->append(*own);
@@ -854,9 +885,7 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
     StyleSwatch *swatch = nullptr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    if (prefs->getInt(prefs_path + "/usecurrent")) {
-        button->set_sensitive(false);
-    }
+    button->set_sensitive(own->get_active());
 
     SPCSSAttr *css = prefs->getStyle(prefs_path + "/style");
     swatch = Gtk::make_managed<StyleSwatch>(css, _("This tool's style of new objects"));
@@ -1018,7 +1047,7 @@ void InkscapePreferences::initPageTools()
     _page_node.add_line( false, _("Cut Mode:"), _t_node_cut_mode, "", _("What happens when nodes are cut."), false);
 
     //Tweak
-    this->AddNewObjectsStyle(_page_tweak, "/tools/tweak", _("Object paint style"));
+    this->AddNewObjectsStyle(_page_tweak, "/tools/tweak", "", _("Object paint style"));
     AddSelcueCheckbox(_page_tweak, "/tools/tweak", true);
     AddGradientCheckbox(_page_tweak, "/tools/tweak", false);
 
@@ -1036,25 +1065,25 @@ void InkscapePreferences::initPageTools()
     this->AddGradientCheckbox(_page_shapes, "/tools/shapes", true);
 
     //Rectangle
-    this->AddNewObjectsStyle(_page_rectangle, "/tools/shapes/rect");
+    this->AddNewObjectsStyle(_page_rectangle, "/tools/shapes/rect", "rect");
     this->AddConvertGuidesCheckbox(_page_rectangle, "/tools/shapes/rect", true);
 
     //3D box
-    this->AddNewObjectsStyle(_page_3dbox, "/tools/shapes/3dbox");
+    this->AddNewObjectsStyle(_page_3dbox, "/tools/shapes/3dbox", "3dbox");
     this->AddConvertGuidesCheckbox(_page_3dbox, "/tools/shapes/3dbox", true);
 
     //Ellipse
-    this->AddNewObjectsStyle(_page_ellipse, "/tools/shapes/arc");
+    this->AddNewObjectsStyle(_page_ellipse, "/tools/shapes/arc", "arc");
 
     //Star
-    this->AddNewObjectsStyle(_page_star, "/tools/shapes/star");
+    this->AddNewObjectsStyle(_page_star, "/tools/shapes/star", "star");
 
     //Spiral
-    this->AddNewObjectsStyle(_page_spiral, "/tools/shapes/spiral");
+    this->AddNewObjectsStyle(_page_spiral, "/tools/shapes/spiral", "spiral");
 
     //Pencil
     this->AddSelcueCheckbox(_page_pencil, "/tools/freehand/pencil", true);
-    this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil");
+    this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil", "path");
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
     _page_pencil.add_group_header( _("Sketch mode"));
@@ -1063,12 +1092,12 @@ void InkscapePreferences::initPageTools()
 
     //Pen
     this->AddSelcueCheckbox(_page_pen, "/tools/freehand/pen", true);
-    this->AddNewObjectsStyle(_page_pen, "/tools/freehand/pen");
+    this->AddNewObjectsStyle(_page_pen, "/tools/freehand/pen", "path");
     this->AddDotSizeSpinbutton(_page_pen, "/tools/freehand/pen", 3.0);
 
     //Calligraphy
     this->AddSelcueCheckbox(_page_calligraphy, "/tools/calligraphic", false);
-    this->AddNewObjectsStyle(_page_calligraphy, "/tools/calligraphic");
+    this->AddNewObjectsStyle(_page_calligraphy, "/tools/calligraphic", "path");
     _page_calligraphy.add_line( false, "", _calligrapy_keep_selected, "",
                             _("If on, each newly created object will be selected (deselecting previous selection)"));
 
@@ -1110,7 +1139,7 @@ void InkscapePreferences::initPageTools()
     _page_text.add_line(true, _("Additional font directories"), _font_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
 
 
-    this->AddNewObjectsStyle(_page_text, "/tools/text");
+    this->AddNewObjectsStyle(_page_text, "/tools/text", "text");
 
     //Spray
     AddSelcueCheckbox(_page_spray, "/tools/spray", true);
@@ -1121,7 +1150,7 @@ void InkscapePreferences::initPageTools()
 
     //Paint Bucket
     this->AddSelcueCheckbox(_page_paintbucket, "/tools/paintbucket", false);
-    this->AddNewObjectsStyle(_page_paintbucket, "/tools/paintbucket");
+    this->AddNewObjectsStyle(_page_paintbucket, "/tools/paintbucket", "path");
 
     //Gradient
     this->AddSelcueCheckbox(_page_gradient, "/tools/gradient", true);
@@ -1962,7 +1991,7 @@ void InkscapePreferences::initPageUI()
                 button->set_active(visible);
                 button->signal_clicked().connect([=](){
                     bool new_state = !button->get_active();
-                    button->set_active(new_state);                    
+                    button->set_active(new_state);
                     Inkscape::Preferences::get()->setBool(path, button->get_active());
                 });
                 auto *iapp = InkscapeApplication::instance();
@@ -2661,7 +2690,7 @@ void InkscapePreferences::initPageBehavior()
                                _("If possible, apply transformation to objects without adding a transform= attribute"));
     _page_transforms.add_line( true, "", _trans_preserved, "",
                                _("Always store transformation as a transform= attribute on objects"));
-    
+
     this->AddPage(_page_transforms, _("Transforms"), iter_behavior, PREFS_PAGE_BEHAVIOR_TRANSFORMS);
 
     // Scrolling options
@@ -3053,7 +3082,7 @@ void InkscapePreferences::initPageRendering()
         grid->attach_next_to(*label_widget, Gtk::PositionType::BOTTOM);
     };
 
-    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers, 
+    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers,
     //find more explanations at https://gitlab.com/inkscape/inbox/-/issues/6544#note_886540227
     add_devmode_group_header(_("Low-level tuning options"));
     _canvas_tile_size.init("/options/rendering/tile_size", 1.0, 10000.0, 1.0, 0.0, 300.0, true, false);

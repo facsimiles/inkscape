@@ -430,7 +430,10 @@ public:
 
     void onWindowStateChanged(Gdk::Toplevel::State changed, Gdk::Toplevel::State new_toplevel_state);
 
-    void applyCurrentOrToolStyle(SPObject *obj, Glib::ustring const &tool_path, bool with_text);
+    void applyCurrentOrToolStyle(SPObject *obj, Glib::ustring const &tool_path, bool with_text, const Glib::ustring &use_current = "") const;
+    void applyCurrentOrToolStyle(Inkscape::XML::Node *repr, Glib::ustring const &tool_path, bool with_text, const Glib::ustring &use_current = "") const;
+    SPCSSAttr *getCurrentOrToolStyle(Glib::ustring const &tool_path, bool with_text, const Glib::ustring &use_current = "") const;
+    Glib::ustring getCurrentOrToolStylePath(Glib::ustring const &tool_path);
 
 private:
     SPDesktopWidget *_widget = nullptr;

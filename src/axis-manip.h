@@ -136,7 +136,7 @@ inline Box3D::Axis toAffine(Proj::Axis axis) {
 
 namespace Box3D {
 
-/* 
+/*
  * Identify the axes X, Y, Z with the numbers 0, 1, 2.
  * A box's face is identified by the axis perpendicular to it.
  * For a rear face, add 3.
@@ -240,7 +240,17 @@ inline Box3D::Axis get_perpendicular_axis_direction (Box3D::Axis dirs) {
     return Box3D::NONE;
 }
 
-Glib::ustring string_from_axes (Box3D::Axis axis);
+constexpr std::string string_from_axes(Box3D::Axis axis)
+{
+    std::string result;
+    if (axis & Box3D::X)
+        result += "X";
+    if (axis & Box3D::Y)
+        result += "Y";
+    if (axis & Box3D::Z)
+        result += "Z";
+    return result;
+}
 std::pair <Axis, Axis> get_remaining_axes (Axis axis);
 
 } // namespace Box3D

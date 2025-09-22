@@ -715,11 +715,9 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
 
     // From preferences
     if (fontspec.empty()) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (prefs->getBool("/tools/text/usecurrent")) {
-            query.mergeCSS(sp_desktop_get_style(SP_ACTIVE_DESKTOP, true));
-        } else {
-            query.readFromPrefs("/tools/text");
+        if (SPCSSAttr *css = SP_ACTIVE_DESKTOP->getCurrentOrToolStyle("/tools/text", true)) {
+            query.mergeCSS(css);
+            sp_repr_css_attr_unref(css);
         }
         fontspec = fontspec_from_style(&query);
     }

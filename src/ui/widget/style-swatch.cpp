@@ -51,30 +51,14 @@ void style_obs_callback(StyleSwatch &_style_swatch, Preferences::Entry const &va
  */
 void tool_obs_callback(StyleSwatch &_style_swatch, Preferences::Entry const &val)
 {
-    auto const prefs = Preferences::get();
-    Glib::ustring path;
-    SPCSSAttr *css = nullptr;
+    Glib::ustring path = _style_swatch._desktop->getCurrentOrToolStylePath(_style_swatch._tool_path);
+    SPCSSAttr *css = _style_swatch._desktop->getCurrentOrToolStyle(_style_swatch._tool_path, true);
 
-    bool usecurrent = val.getBool();
-    if (usecurrent) {
-        path = "/desktop/style";
-        css = prefs->getStyle(path);
-        const auto &al = css->attributeList();
-        if (al.empty()) {
-            // Fallback to own style if desktop style empty (does this ever happen?).
-            sp_repr_css_attr_unref(css);
-            css = nullptr;
-        }
+    if (css) {
+        // Set style at least once.
+        _style_swatch.setStyle(css);
+        sp_repr_css_attr_unref(css);
     }
-
-    if (!css) {
-        path = _style_swatch._tool_path + "/style";
-        css = prefs->getInheritedStyle(path);
-    }
-
-    // Set style at least once.
-    _style_swatch.setStyle(css);
-    sp_repr_css_attr_unref(css);
 
     auto callback = sigc::bind<0>(&style_obs_callback, std::ref(_style_swatch));
     _style_swatch._style_obs = StyleSwatch::PrefObs::create(std::move(path), std::move(callback));

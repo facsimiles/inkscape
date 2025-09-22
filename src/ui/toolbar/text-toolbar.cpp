@@ -1527,10 +1527,9 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
         result_wmode   == QUERY_STYLE_NOTHING)
     {
         // There are no texts in selection, read from preferences.
-        if (prefs->getBool("/tools/text/usecurrent")) {
-            query.mergeCSS(sp_desktop_get_style(desktop, true));
-        } else {
-            query.readFromPrefs("/tools/text");
+        if (SPCSSAttr *css = SP_ACTIVE_DESKTOP->getCurrentOrToolStyle("/tools/text", true)) {
+            query.mergeCSS(css);
+            sp_repr_css_attr_unref(css);
         }
 
         if constexpr (DEBUG_TEXT) {

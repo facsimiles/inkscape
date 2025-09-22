@@ -191,7 +191,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> const &points,
             if ((elemref = document->getObjectById("power_stroke_preview"))) {
                 elemref->getRepr()->removeAttribute("style");
                 auto successor = cast<SPItem>(elemref);
-                sp_desktop_apply_style_tool(desktop, successor->getRepr(),
+                desktop->applyCurrentOrToolStyle(successor->getRepr(),
                                             Glib::ustring("/tools/freehand/pencil").data(), false);
                 spdc_apply_style(successor);
                 sp_object_ref(item);
@@ -756,7 +756,7 @@ static void spdc_flush_white(FreehandBase *dc, std::shared_ptr<Geom::PathVector>
         } else {
             repr = xml_doc->createElement("svg:path");
             // Set style
-            sp_desktop_apply_style_tool(desktop, repr, dc->getPrefsPath(), false);
+            desktop->applyCurrentOrToolStyle(repr, dc->getPrefsPath(), false);
         }
 
         auto str = sp_svg_write_path(*c);
@@ -868,7 +868,7 @@ void spdc_create_single_dot(ToolBase *tool, Geom::Point const &pt, char const *p
     Inkscape::GC::release(repr);
 
     // apply the tool's current style
-    sp_desktop_apply_style_tool(desktop, repr, path, false);
+    desktop->applyCurrentOrToolStyle(repr, path, false);
 
     // find out stroke width (TODO: is there an easier way??)
     double stroke_width = 3.0;

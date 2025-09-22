@@ -282,7 +282,7 @@ void ArcTool::drag(Geom::Point const &pt, unsigned state)
         repr->setAttribute("sodipodi:type", "arc");
 
         // Set style
-        sp_desktop_apply_style_tool(_desktop, repr, "/tools/shapes/arc", false);
+        _desktop->applyCurrentOrToolStyle(repr, "/tools/shapes/arc", false);
 
         auto layer = currentLayer();
         this->arc = cast<SPGenericEllipse>(layer->appendChildRepr(repr));

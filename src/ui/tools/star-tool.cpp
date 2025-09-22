@@ -297,7 +297,7 @@ void StarTool::drag(Geom::Point p, unsigned state)
         repr->setAttribute("sodipodi:type", "star");
 
         // Set style
-        sp_desktop_apply_style_tool(_desktop, repr, "/tools/shapes/star", false);
+        _desktop->applyCurrentOrToolStyle(repr, "/tools/shapes/star", false);
 
         this->star = cast<SPStar>(currentLayer()->appendChildRepr(repr));
         Inkscape::GC::release(repr);

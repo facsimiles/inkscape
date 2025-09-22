@@ -799,7 +799,7 @@ void ConnectorTool::_flushWhite(Geom::PathVector &c)
 
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
         /* Set style */
-        sp_desktop_apply_style_tool(_desktop, repr, "/tools/connector", false);
+        _desktop->applyCurrentOrToolStyle(repr, "/tools/connector", false);
 
         repr->setAttribute("d", sp_svg_write_path(c));
 

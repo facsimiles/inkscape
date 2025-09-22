@@ -433,6 +433,7 @@ void Box3dTool::drag()
         _desktop->applyCurrentOrToolStyle(newbox3d, "/tools/shapes/3dbox", false);
 
         box3d = newbox3d;
+        auto use_current = Preferences::get()->getString("/tools/shapes/3dbox/usecurrent", "0"); // "0", "1", or "3dbox"
 
         // TODO: Incorporate this in box3d-side.cpp!
         for (int i = 0; i < 6; ++i) {
@@ -446,25 +447,11 @@ void Box3dTool::drag()
             side->front_or_rear = front_or_rear;
 
             // Set style
-            auto prefs = Preferences::get();
-
-            Glib::ustring descr = "/desktop/";
-            descr += side->axes_string();
-            descr += "/style";
-
-            Glib::ustring cur_style = prefs->getString(descr);    
-    
-            bool use_current = prefs->getBool("/tools/shapes/3dbox/usecurrent", false);
-
-            if (use_current && !cur_style.empty()) {
-                // use last used style 
-                side->setAttribute("style", cur_style);
-            } else {
-                // use default style 
-                auto tool_path = Glib::ustring::compose("/tools/shapes/3dbox/%1", side->axes_string());
-                _desktop->applyCurrentOrToolStyle(side, tool_path, false);
-            }
-
+            _desktop->applyCurrentOrToolStyle(side,
+                Glib::ustring("/tools/shapes/3dbox/") + side->axes_string(),
+                true,
+                (use_current.size() == 1) ? use_current : side->axes_string()
+            );
             side->updateRepr(); // calls Box3DSide::write() and updates, e.g., the axes string description
         }
 

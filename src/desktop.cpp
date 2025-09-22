@@ -38,6 +38,7 @@
 #include "layer-manager.h"
 #include "message-context.h"
 #include "message-stack.h"
+#include "style.h"
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-transform.h"
 #include "actions/actions-view-mode.h" // To update View menu
@@ -65,6 +66,7 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tool/control-point-selection.h"
 #include "util/enums.h"
+#include "xml/sp-css-attr.h"
 
 namespace Inkscape::XML { class Node; }
 
@@ -1107,22 +1109,81 @@ SPDesktop::onWindowStateChanged(Gdk::Toplevel::State const changed,
 /**
   * Apply the desktop's current style or the tool style to the object.
   */
-void SPDesktop::applyCurrentOrToolStyle(SPObject *obj, Glib::ustring const &tool_path, bool with_text)
+void SPDesktop::applyCurrentOrToolStyle(SPObject *obj, Glib::ustring const &tool_path, bool with_text, const Glib::ustring &use_current) const
 {
-    SPCSSAttr *css_current = sp_desktop_get_style(this, with_text);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    if (prefs->getBool(tool_path + "/usecurrent") && css_current) {
-        obj->setCSS(css_current,"style");
-    } else {
-        SPCSSAttr *css = prefs->getInheritedStyle(tool_path + "/style");
-        obj->setCSS(css,"style");
+    applyCurrentOrToolStyle(obj->getRepr(), tool_path, with_text, use_current);
+}
+void SPDesktop::applyCurrentOrToolStyle(Inkscape::XML::Node *repr, Glib::ustring const &tool_path, bool with_text, const Glib::ustring &use_current) const
+{
+    if (SPCSSAttr *css = getCurrentOrToolStyle(tool_path, with_text, use_current)) {
+        sp_repr_css_set(repr, css, "style");
         sp_repr_css_attr_unref(css);
     }
-    if (css_current) {
-        sp_repr_css_attr_unref(css_current);
+}
+
+SPCSSAttr *
+SPDesktop::getCurrentOrToolStyle(Glib::ustring const &tool_path, bool with_text, const Glib::ustring &use_current_arg) const
+{
+    // use_current = "": Read tool_path/usecurrent preference to decide which style to fetch.
+    // Or, force one of the options with a non-empty string (used by 3dbox to specify faces):
+    // "0": Use tools/tool_path/style (Tool's own style)
+    // "1": Use desktop/style (Last used style)
+    // "itemtype": Use desktop/itemtype/style (Last used style of same object type)
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    Glib::ustring use_current_pref;
+    const Glib::ustring *use_current = &use_current_arg;
+    if (use_current_arg.empty()) {
+        use_current_pref = prefs->getString(tool_path + "/usecurrent");
+        use_current = &use_current_pref;
+    }
+
+    // Start with per-tool style, then apply current style on top if required
+    if (SPCSSAttr *css_tool = prefs->getInheritedStyle(tool_path + "/style")) {
+        sp_repr_css_merge(css, css_tool);
+        sp_repr_css_attr_unref(css_tool);
+    }
+    if (!use_current->empty() && *use_current != "0") { // use_current should never be empty, but treat empty as "0"
+        if (*use_current == "1") {
+            sp_repr_css_merge(css, this->current);
+        }
+        else {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            auto *css_new = prefs->getStyle(Glib::ustring("/desktop/") + *use_current + "/style"); // getStyle never returns nullptr
+            sp_repr_css_merge(css, css_new);
+            sp_repr_css_attr_unref(css_new);
+        }
+    }
+    if (css->attributeList().empty()) {
+        sp_repr_css_attr_unref(css);
+        return nullptr;
+    }
+
+    // Remove unwanted attributes
+    sp_css_attr_unset_blacklist(css);
+    sp_css_attr_unset_uris(css);
+    if (!with_text) {
+        sp_css_attr_unset_text(css);
+    }
+
+    return css; // Caller is responsible for sp_repr_css_attr_unref(css)
+}
+
+Glib::ustring
+SPDesktop::getCurrentOrToolStylePath(Glib::ustring const &tool_path)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (auto use_current = prefs->getString(tool_path + "/usecurrent"); !use_current.empty() && use_current != "0") {
+        if (use_current == "1") {
+            return "/desktop/style";
+        } else {
+            return Glib::ustring("/desktop/") + use_current + "/style";
+        }
+    } else {
+        return tool_path + "/style";
     }
 }
+
 
 void
 SPDesktop::setToolboxFocusTo(char const * const label)
