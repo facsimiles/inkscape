@@ -14,7 +14,6 @@
 
 #include "colors/color.h"
 #include "colors/parser.h"
-#include "document.h"
 
 // Each Internal space should be imported here.
 #include "spaces/cms.h"

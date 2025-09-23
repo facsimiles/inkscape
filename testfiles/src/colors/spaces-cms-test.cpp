@@ -13,7 +13,6 @@
 #include "colors/color.h"
 #include "colors/parser.h"
 #include "colors/spaces/cms.h"
-#include "colors/document-cms.h"
 
 using namespace Inkscape::Colors;
 
@@ -93,23 +92,6 @@ TEST(ColorsSpacesCms, realColor)
     color = Color(0x2c292aff);
     EXPECT_TRUE(color.convert(cmyk));
     EXPECT_EQ(color.toString(), "#1f1b1c icc-color(Artifex-CMYK-SWOP-Profile, 0.688, 0.694, 0.648, 0.866)");
-}
-
-TEST(ColorsSpacesCms, fallbackColor)
-{
-    auto tr = DocumentCMS(nullptr);
-    auto color = *tr.parse("#0080ff icc-color(missing-profile, 1, 2, 3)");
-    EXPECT_EQ(color.toString(), "#0080ff icc-color(missing-profile, 1, 2, 3)");
-    EXPECT_EQ(color.toRGBA(), 0x0080ffff);
-    EXPECT_EQ(color.toRGBA(0.5), 0x0080ff80);
-    EXPECT_EQ(color.converted(Space::Type::RGB)->toString(), "#0080ff");
-    EXPECT_FALSE(color.hasOpacity());
-    EXPECT_EQ(color.getOpacity(), 1.0);
-
-    color.addOpacity(0.5);
-    EXPECT_EQ(color.toString(), "#0080ff icc-color(missing-profile, 1, 2, 3)");
-    EXPECT_EQ(color.toRGBA(), 0x0080ff80);
-    EXPECT_EQ(color.toRGBA(0.5), 0x0080ff40);
 }
 
 TEST(ColorsSpacesCms, renderingIntent)

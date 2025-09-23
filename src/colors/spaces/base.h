@@ -33,7 +33,8 @@ constexpr double SCALE_DOWN(double v, double a, double b)
 namespace Inkscape::Colors {
 namespace CMS {
 class Profile;
-class Transform;
+class TransformColor;
+class GamutChecker;
 } // namespace CMS
 class Color;
 class Manager;
@@ -101,8 +102,8 @@ protected:
     RenderingIntent _intent = RenderingIntent::UNKNOWN;
     int _intent_priority = 0;
 private:
-    mutable std::map<std::string, std::shared_ptr<Colors::CMS::Transform>> _transforms;
-    mutable std::map<std::string, std::shared_ptr<Colors::CMS::Transform>> _gamut_checkers;
+    mutable std::map<std::string, std::shared_ptr<Colors::CMS::TransformColor>> _transforms;
+    mutable std::map<std::string, std::shared_ptr<Colors::CMS::GamutChecker>> _gamut_checkers;
     std::string _name;
     std::string _shortName;
     std::string _icon;

@@ -77,6 +77,18 @@ public:
     std::string generate_checksum() const;
 };
 
+class CmsProfileError : public std::exception
+{
+public:
+    CmsProfileError(std::string &&msg)
+        : _msg(std::move(msg))
+    {}
+    char const *what() const noexcept override { return _msg.c_str(); }
+
+private:
+    std::string _msg;
+};
+
 } // namespace Inkscape::Colors::CMS
 
 #endif // SEEN_COLORS_CMS_PROFILE_H

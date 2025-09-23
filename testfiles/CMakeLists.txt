@@ -61,33 +61,11 @@ set(TEST_SOURCES
     async_funclog-test
     async_progress-test
     boolop-attr-test
-    colors/cms-test
-    colors/color-test
+    colors/cms-system-test
+    colors/cms-transform-color-test
     colors/document-cms-test
     colors/dragndrop-test
-    colors/gamut-test
-    colors/manager-test
-    colors/parser-test
-    colors/printer-test
     colors/color-set-test
-    colors/spaces-cms-test
-    colors/spaces-cmyk-test
-    colors/spaces-gray-test
-    colors/spaces-hsl-test
-    colors/spaces-hsluv-test
-    colors/spaces-hsv-test
-    colors/spaces-lab-test
-    colors/spaces-lch-test
-    colors/spaces-linear-rgb-test
-    colors/spaces-luv-test
-    colors/spaces-named-test
-    colors/spaces-okhsl-test
-    colors/spaces-okhsv-test
-    colors/spaces-oklab-test
-    colors/spaces-oklch-test
-    colors/spaces-rgb-test
-    colors/spaces-xyz-test
-    colors/utils-test
     colors/xml-color-test
     uri-test
     util-test
@@ -171,6 +149,36 @@ include(${CMAKE_SOURCE_DIR}/CMakeScripts/UnitTest.cmake)
 add_unit_test(assertions-in-tests TEST_SOURCE "assertions-in-tests.cpp")
 add_unit_test(version-test TEST_SOURCE "version-test.cpp"
                                SOURCES "version.cpp")
+
+include("${CMAKE_SOURCE_DIR}/src/colors/CMakeUnit.txt")
+get_color_unit_lib()
+
+add_unit_tests(TEST_SOURCES "colors/cms-profile-test.cpp"
+                            "colors/color-test.cpp"
+                            "colors/gamut-test.cpp"
+                            "colors/manager-test.cpp"
+                            "colors/parser-test.cpp"
+                            "colors/printer-test.cpp"
+                            "colors/spaces-cms-test.cpp"
+                            "colors/spaces-cmyk-test.cpp"
+                            "colors/spaces-gray-test.cpp"
+                            "colors/spaces-hsl-test.cpp"
+                            "colors/spaces-hsluv-test.cpp"
+                            "colors/spaces-hsv-test.cpp"
+                            "colors/spaces-lab-test.cpp"
+                            "colors/spaces-lch-test.cpp"
+                            "colors/spaces-linear-rgb-test.cpp"
+                            "colors/spaces-luv-test.cpp"
+                            "colors/spaces-named-test.cpp"
+                            "colors/spaces-okhsl-test.cpp"
+                            "colors/spaces-okhsv-test.cpp"
+                            "colors/spaces-oklab-test.cpp"
+                            "colors/spaces-oklch-test.cpp"
+                            "colors/spaces-rgb-test.cpp"
+                            "colors/spaces-xyz-test.cpp"
+                            "colors/utils-test.cpp"
+                 EXTRA_LIBS colors_unit_lib)
+
 add_unit_test(css-syntactic-decomposition-test TEST_SOURCE "css-syntactic-decomposition-test.cpp"
                                                    SOURCES "css/syntactic-decomposition.cpp"
                                                 EXTRA_LIBS croco_LIB)

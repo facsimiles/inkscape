@@ -1,76 +1,21 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+# Non-unit testable files
 set(colors_SRC
-	cms/profile.cpp
-	cms/system.cpp
-	cms/transform.cpp
-	color.cpp
-	document-cms.cpp
-	dragndrop.cpp
-	manager.cpp
-	parser.cpp
-	printer.cpp
-	color-set.cpp
-	spaces/base.cpp
-	spaces/cms.cpp
-	spaces/cmyk.cpp
-	spaces/components.cpp
-	spaces/gamut.cpp
-	spaces/gray.cpp
-	spaces/hsl.cpp
-	spaces/hsluv.cpp
-	spaces/hsv.cpp
-	spaces/lab.cpp
-	spaces/lch.cpp
-	spaces/linear-rgb.cpp
-	spaces/luv.cpp
-	spaces/ok-color.cpp
-	spaces/okhsl.cpp
-	spaces/okhsv.cpp
-	spaces/oklab.cpp
-	spaces/oklch.cpp
-	spaces/named.cpp
-	spaces/rgb.cpp
-	spaces/xyz.cpp
-	utils.cpp
-	xml-color.cpp
+	cms/system.cpp   # Needs preferences
+	document-cms.cpp # Links to sp-object tree
+	dragndrop.cpp    # Uses xml-color
+	color-set.cpp    # Uses unnlinkable sigc+
+	xml-color.cpp    # sp-document and document-cms
 
-	# -------
-	# Headers
 	cms/profile.h
-	cms/system.h
-	cms/transform.h
-	color.h
 	document-cms.h
 	dragndrop.h
-	manager.h
-	parser.h
-	printer.h
 	color-set.h
-	spaces/base.h
-	spaces/cms.h
-	spaces/cmyk.h
-	spaces/components.h
-	spaces/enum.h
-	spaces/gamut.h
-	spaces/gray.h
-	spaces/hsl.h
-	spaces/hsluv.h
-	spaces/hsv.h
-	spaces/lab.h
-	spaces/lch.h
-	spaces/linear-rgb.h
-	spaces/luv.h
-	spaces/ok-color.h
-	spaces/okhsl.h
-	spaces/okhsv.h
-	spaces/oklab.h
-	spaces/oklch.h
-	spaces/named.h
-	spaces/rgb.h
-	spaces/xyz.h
-	utils.h
 	xml-color.h
 )
 
+include("${CMAKE_CURRENT_LIST_DIR}/CMakeUnit.txt")
+
+add_inkscape_source("${colors_unit_SRC}")
 add_inkscape_source("${colors_SRC}")

@@ -31,7 +31,7 @@
 #include "canvas/stores.h"
 #include "canvas/synchronizer.h"
 #include "canvas/util.h"
-#include "colors/cms/transform.h"
+#include "colors/cms/transform-cairo.h"
 #include "colors/cms/system.h"
 #include "desktop.h"
 #include "desktop-events.h"
@@ -142,7 +142,7 @@ struct RedrawData
     Fragment store;
     bool decoupled_mode;
     Cairo::RefPtr<Cairo::Region> snapshot_drawn;
-    std::shared_ptr<Colors::CMS::Transform> cms_transform;
+    std::shared_ptr<Colors::CMS::TransformCairo> cms_transform;
 
     // Saved prefs
     int coarsener_min_size;

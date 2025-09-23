@@ -16,7 +16,7 @@
 #include <utility>
 
 #include "colors/cms/profile.h"
-#include "colors/cms/transform.h"
+#include "colors/cms/transform-color.h"
 #include "colors/color.h"
 #include "colors/manager.h"
 #include "components.h"
@@ -100,7 +100,7 @@ bool AnySpace::profileToProfile(std::vector<double> &io, std::shared_ptr<AnySpac
 
     if (!_transforms.contains(to_profile_id)) {
         // Create a new transform for this one way profile-pair
-        _transforms.emplace(to_profile_id, Colors::CMS::Transform::create_for_cms(from_profile, to_profile, intent));
+        _transforms.emplace(to_profile_id, std::make_shared<Colors::CMS::TransformColor>(from_profile, to_profile, intent));
     }
 
     // Use the transform to convert the output colors.
@@ -162,7 +162,7 @@ bool AnySpace::outOfGamut(std::vector<double> const &input, std::shared_ptr<AnyS
     if (_gamut_checkers.find(to_profile_id) == _gamut_checkers.end()) {
         // 2. Create a new transform for this one way profile-pair
         _gamut_checkers.emplace(to_profile_id,
-                                Colors::CMS::Transform::create_for_cms_checker(from_profile, to_profile));
+                                std::make_shared<Colors::CMS::GamutChecker>(from_profile, to_profile));
     }
 
     return _gamut_checkers[to_profile_id]->check_gamut(input);

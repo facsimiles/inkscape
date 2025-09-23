@@ -15,7 +15,7 @@
 
 #include "io/resource.h"
 #include "profile.h"
-#include "transform.h"
+#include "transform-cairo.h"
 
 // clang-format off
 #ifdef _WIN32
@@ -237,7 +237,7 @@ const std::shared_ptr<Profile> &System::getProfile(std::string const &name) cons
  *
  * Transform immutably shared between System and Canvas.
  */
-const std::shared_ptr<Transform> &System::getDisplayTransform()
+const std::shared_ptr<TransformCairo> &System::getDisplayTransform()
 {
     bool need_to_update = false;
 
@@ -255,7 +255,7 @@ const std::shared_ptr<Transform> &System::getDisplayTransform()
 
     if (need_to_update) {
         if (display_profile) {
-            _display_transform = Transform::create_for_cairo(Profile::create_srgb(), display_profile);
+            _display_transform = std::make_shared<TransformCairo>(Profile::create_srgb(), display_profile);
         } else {
             _display_transform = nullptr;
         }

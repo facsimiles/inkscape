@@ -18,8 +18,8 @@
 #include <iomanip>
 #include <map>
 #include <sstream>
+#include <unistd.h>
 
-#include "system.h"
 #include "util-string/string-convert.h"
 
 namespace Inkscape::Colors::CMS {
@@ -29,14 +29,16 @@ namespace Inkscape::Colors::CMS {
  */
 bool _cmsWriteTag(cmsHPROFILE hProfile, cmsTagSignature tag, std::string const &value)
 {
+    bool result = false;
     auto ContextID = cmsGetProfileContextID(hProfile);
     if (auto mlu = cmsMLUalloc(ContextID, 1)) {
         std::wstring wide_string = utf8_to_wstring(value);
         if (cmsMLUsetWide(mlu,  "en", "US", wide_string.c_str())) {
-            return cmsWriteTag(hProfile, tag,  mlu);
+            result = cmsWriteTag(hProfile, tag,  mlu);
         }
+        cmsMLUfree(mlu);
     }
-    return false;
+    return result;
 }
 
 /**
@@ -106,6 +108,9 @@ std::shared_ptr<Profile> Profile::create_linearrgb()
     linear[2] = cmsBuildGamma(NULL, 1);
     auto hProfile = cmsCreateRGBProfile(&D65, &Rec709Primaries, linear);
     _cmsWriteTag(hProfile, cmsSigProfileDescriptionTag, "linearRGB identity with D65");
+    cmsFreeToneCurve(linear[0]);
+    cmsFreeToneCurve(linear[1]);
+    cmsFreeToneCurve(linear[2]);
     return Profile::create(hProfile);
 }
 
@@ -357,7 +362,7 @@ std::vector<unsigned char> Profile::dumpData(cmsHPROFILE profile)
 {
     cmsUInt32Number len = 0;
     if (!cmsSaveProfileToMem(profile, nullptr, &len)) {
-        throw CmsError("Can't extract profile data");
+        throw CmsProfileError("Can't extract profile data");
     }
     auto buf = std::vector<unsigned char>(len);
     cmsSaveProfileToMem(profile, &buf.front(), &len);

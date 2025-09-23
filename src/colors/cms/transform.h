@@ -8,31 +8,24 @@
 #ifndef SEEN_COLORS_CMS_TRANSFORM_H
 #define SEEN_COLORS_CMS_TRANSFORM_H
 
-#include <cairomm/surface.h>
 #include <cassert>
-#include <lcms2.h> // cmsHTRANSFORM
+#include <lcms2.h>
 #include <memory>
-#include <vector>
 
 #include "colors/spaces/enum.h"
 
 namespace Inkscape::Colors::CMS {
 
+enum class Alpha {
+    NONE,
+    PRESENT,
+    PREMULTIPLIED,
+};
+
 class Profile;
 class Transform
 {
 public:
-    static std::shared_ptr<Transform> const create(cmsHTRANSFORM handle, bool global = false);
-    static std::shared_ptr<Transform> const create_for_cairo(std::shared_ptr<Profile> const &from,
-                                                             std::shared_ptr<Profile> const &to,
-                                                             std::shared_ptr<Profile> const &proof = nullptr,
-                                                             RenderingIntent proof_intent = RenderingIntent::AUTO,
-                                                             bool with_gamut_warn = false);
-    static std::shared_ptr<Transform> const create_for_cms(std::shared_ptr<Profile> const &from,
-                                                           std::shared_ptr<Profile> const &to, RenderingIntent intent);
-    static std::shared_ptr<Transform> const create_for_cms_checker(std::shared_ptr<Profile> const &from,
-                                                                   std::shared_ptr<Profile> const &to);
-
     Transform(cmsHTRANSFORM handle, bool global = false)
         : _handle(handle)
         , _context(!global ? cmsGetTransformContextID(handle) : nullptr)
@@ -40,8 +33,6 @@ public:
         , _format_out(cmsGetTransformOutputFormat(handle))
         , _channels_in(T_CHANNELS(_format_in))
         , _channels_out(T_CHANNELS(_format_out))
-        , _float_in(FLOAT_SH(_format_in))
-        , _float_out(FLOAT_SH(_format_out))
     {
         assert(_handle);
     }
@@ -54,29 +45,22 @@ public:
     Transform(Transform const &) = delete;
     Transform &operator=(Transform const &) = delete;
 
+    bool isValid() const { return _handle; }
     cmsHTRANSFORM getHandle() const { return _handle; }
 
-    void do_transform(unsigned char *inBuf, unsigned char *outBuf, unsigned size) const;
-    void do_transform(cairo_surface_t *in, cairo_surface_t *out) const;
-    void do_transform(Cairo::RefPtr<Cairo::ImageSurface> &in, Cairo::RefPtr<Cairo::ImageSurface> &out) const;
-    bool do_transform(std::vector<double> &io) const;
-
-    void set_gamut_warn(std::vector<double> const &input);
-    bool check_gamut(std::vector<double> const &input) const;
-
-private:
+protected:
     cmsHTRANSFORM _handle;
     cmsContext _context;
 
-    static unsigned int lcms_intent(RenderingIntent intent, unsigned int &flags);
+    static int lcms_color_format(std::shared_ptr<Profile> const &profile, bool small = false, Alpha alpha = Alpha::NONE);
+    static int lcms_intent(RenderingIntent intent);
+    static int lcms_bpc(RenderingIntent intent);
 
 public:
     cmsUInt32Number _format_in;
     cmsUInt32Number _format_out;
-    unsigned int _channels_in;
-    unsigned int _channels_out;
-    bool _float_in;
-    bool _float_out;
+    int _channels_in;
+    int _channels_out;
 };
 
 } // namespace Inkscape::Colors::CMS

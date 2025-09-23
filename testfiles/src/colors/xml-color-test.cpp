@@ -21,6 +21,7 @@
 using namespace Inkscape;
 using namespace Inkscape::Colors;
 
+static std::string icc_dir = INKSCAPE_TESTS_DIR "/data/colors";
 static std::string cmyk_profile = INKSCAPE_TESTS_DIR "/data/colors/default_cmyk.icc";
 
 namespace {
@@ -29,6 +30,12 @@ class ColorXmlColor : public ::testing::Test
 {
     void SetUp() override
     {
+        // Isolate the CMS system from the OS
+        auto cms = &CMS::System::get();
+        cms->clearDirectoryPaths();
+        cms->addDirectoryPath(icc_dir, false);
+        cms->refreshProfiles();
+
         auto prefs = Inkscape::Preferences::get();
         prefs->setBool("/options/svgoutput/inlineattrs", false);
     }
@@ -70,8 +77,14 @@ TEST_F(ColorXmlColor, test_paint_to_xml_string)
 TEST_F(ColorXmlColor, test_icc_paint_xml)
 {
     auto profile = CMS::Profile::create_from_uri(cmyk_profile);
+    ASSERT_EQ(profile->getPath(), cmyk_profile);
+
     CMS::System::get().addProfile(profile);
     auto space = std::make_shared<Space::CMS>(profile);
+
+    auto other = space->getProfile();
+    ASSERT_EQ(other->getId(), profile->getId());
+
     space->setIntent(RenderingIntent::AUTO);
     std::vector<double> vals = {0.5, 0.2, 0.1, 0.23};
     auto color = Color(space, vals);
