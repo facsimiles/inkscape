@@ -41,6 +41,10 @@ StatusBar::StatusBar()
 
     coordinates  = &UI::get_widget<Gtk::Label> (builder, "statusbar-coordinates");
 
+    // **** Snapshot  ****
+
+    snapshot  = &UI::get_widget<Gtk::Box> (builder, "statusbar-snapshot");
+   
     // ******** Zoom ********
 
     _zoom = &UI::get_derived_widget<UI::Widget::InkSpinButton>(builder, "statusbar-zoom");
@@ -288,6 +292,7 @@ void StatusBar::update_visibility()
     selected_style->set_visible(prefs->getBool(path + "style",       true));
     coordinates->set_visible(   prefs->getBool(path + "coordinates", true));
     _rotate->set_visible(       prefs->getBool(path + "rotation",    true));
+    snapshot->set_visible(      prefs->getBool(path + "snapshot",    true));
 }
 
 } // namespace Inkscape::UI::Widget

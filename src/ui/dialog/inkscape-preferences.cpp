@@ -1694,6 +1694,9 @@ void InkscapePreferences::initPageUI()
     auto const sb_coords = Gtk::make_managed<UI::Widget::PrefCheckButton>();
     sb_coords->init(_("Show mouse coordinates"), "/statusbar/visibility/coordinates", true);
     _page_ui.add_line(false, "", *sb_coords, "", _("Control visibility of mouse coordinates X & Y in status bar."), true);
+    auto const sb_snapshot = Gtk::make_managed<UI::Widget::PrefCheckButton>();
+    sb_snapshot->init(_("Show snapshot buttons"), "/statusbar/visibility/snapshot", true);
+    _page_ui.add_line(false, "", *sb_snapshot, "", _("Control visibility of canvas snapshot controls."), true);
     auto const sb_rotate = Gtk::make_managed<UI::Widget::PrefCheckButton>();
     sb_rotate->init(_("Show canvas rotation"), "/statusbar/visibility/rotation", true);
     _page_ui.add_line(false, "", *sb_rotate, "", _("Control visibility of canvas rotation in status bar."), true);

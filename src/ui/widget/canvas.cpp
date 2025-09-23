@@ -534,7 +534,18 @@ void Canvas::on_unrealize()
     d->deactivate_graphics();
     parent_type::on_unrealize();
 }
-
+/*
+ * Blink canvas
+ */
+void Canvas::blink() {
+    get_style_context()->add_class("snapshot");
+    if (blinking) return;
+    blinking = Glib::signal_timeout().connect([this] {
+        this->get_style_context()->remove_class("snapshot");
+        return false; 
+    }, 300);
+}
+ 
 /*
  * Redraw process managment
  */

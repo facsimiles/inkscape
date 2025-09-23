@@ -78,6 +78,7 @@ private:
     Gtk::Label*     coordinates = nullptr;
     UI::Widget::InkSpinButton *_zoom = nullptr;
     UI::Widget::InkSpinButton *_rotate = nullptr;
+    Gtk::Box*      snapshot = nullptr;
 
     SPDesktopWidget* desktop_widget = nullptr;
     std::unique_ptr<Gtk::Popover> zoom_popover;

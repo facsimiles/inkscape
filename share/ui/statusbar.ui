@@ -93,6 +93,51 @@
       </object>
     </child>
     <child>
+      <object class="GtkBox" id="statusbar-snapshot">
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">vertical</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-end">6</property>
+          </object>
+        </child>
+        <child>  
+          <object class="GtkButton" id="snapshot-set">
+            <property name="valign">center</property>
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="tooltip-text" translatable="yes">Set snapshot canvas</property>
+            <property name="action-name">win.canvas-snapshot-set</property>
+            <property name="has-frame">False</property>
+            <child>
+              <object class="GtkImage" id="image-snapshot-set">
+                <property name="icon-name">canvas-snapshot-set</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="snapshot-toggle">
+            <property name="valign">center</property>
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="tooltip-text" translatable="yes">Toggle snapshot canvas</property>
+            <property name="action-name">win.canvas-snapshot-toggle</property>
+            <property name="has-frame">False</property>
+            <child>
+              <object class="GtkImage" id="image-snapshot-toggle">
+                <property name="icon-name">canvas-snapshot-toggle</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="gtkmm__CustomObject_InkSpinButton" id="statusbar-zoom">
         <property name="margin-bottom">2</property>
         <property name="margin-top">2</property>

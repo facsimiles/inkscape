@@ -422,6 +422,18 @@
         </section>
         <section>
           <item>
+            <attribute name="label" translatable="yes">Take Canvas Snapshot</attribute>
+            <attribute name="action">win.canvas-snapshot-set</attribute>
+            <attribute name="icon">canvas-snapshot-set</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Toggle Canvas Snapshot</attribute>
+            <attribute name="action">win.canvas-snapshot-toggle</attribute>
+            <attribute name="icon">canvas-snapshot-toggle</attribute>
+          </item>
+        </section>
+        <section>
+          <item>
             <attribute name="label" translatable="yes">Zoom Previous</attribute>
             <attribute name="action">win.canvas-zoom-prev</attribute>
             <attribute name="icon">zoom-previous</attribute>

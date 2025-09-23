@@ -44,6 +44,9 @@ enum {
     INK_CANVAS_ZOOM_PREV,
     INK_CANVAS_ZOOM_NEXT,
 
+    INK_CANVAS_SNAPSHOT_SET,
+    INK_CANVAS_SNAPSHOT_TOGGLE,
+
     INK_CANVAS_ROTATE_CW,
     INK_CANVAS_ROTATE_CCW,
     INK_CANVAS_ROTATE_RESET,
@@ -137,6 +140,36 @@ canvas_transform(InkscapeWindow *win, const int& option)
 
         case INK_CANVAS_ZOOM_NEXT:
             dt->next_transform(); // Is this only zoom? Yes!
+            break;
+
+        case INK_CANVAS_SNAPSHOT_SET:
+            prefs->setDouble("/options/snapshot/zoom/value", dt->current_zoom());
+            prefs->setDouble("/options/snapshot/angle/value", dt->current_rotation().angle());
+            prefs->setPoint("/options/snapshot/pointbase/value", dt->getCanvas()->get_pos());
+            prefs->setPoint("/options/snapshot/midpoint/value", midpoint);
+            prefs->setBool("/options/snapshot/toggled/value", false);
+            dt->getCanvas()->blink();
+            break;
+
+        case INK_CANVAS_SNAPSHOT_TOGGLE:
+            if (prefs->getDouble("/options/snapshot/zoom/value",0) != 0) {
+                if (prefs->getBool("/options/snapshot/toggled/value", false)) {
+                    if (Geom::are_near(dt->current_center(), prefs->getPoint("/options/snapshot/midpoint/value"),4) &&
+                        Geom::are_near(dt->current_zoom(), prefs->getDouble("/options/snapshot/zoom/value"),1) &&
+                        Geom::are_near(dt->current_rotation().angle(), prefs->getDouble("/options/snapshot/angle/value"),1)) 
+                    { //when status bar or other bars dont resize we can reduce 4
+                        prefs->setBool("/options/snapshot/toggled/value", false);
+                        dt->prev_transform();
+                        dt->prev_transform();
+                        dt->scroll_absolute(prefs->getPoint("/options/snapshot/pointbase/value"));
+                        break;
+                    }
+                }
+                prefs->setBool("/options/snapshot/toggled/value", true);
+                prefs->setPoint("/options/snapshot/pointbase/value", dt->getCanvas()->get_pos());
+                dt->rotate_absolute_center_point(prefs->getPoint("/options/snapshot/midpoint/value"), prefs->getDouble("/options/snapshot/angle/value"));
+                dt->zoom_absolute(prefs->getPoint("/options/snapshot/midpoint/value"), prefs->getDouble("/options/snapshot/zoom/value"), true);
+            }
             break;
 
         case INK_CANVAS_ROTATE_CW:
@@ -281,6 +314,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
     {"win.canvas-zoom-prev",          N_("Zoom Prev"),           SECTION, N_("Go back to previous zoom (from the history of zooms)")},
     {"win.canvas-zoom-next",          N_("Zoom Next"),           SECTION, N_("Go to next zoom (from the history of zooms)")},
 
+    {"win.canvas-snapshot-set",       N_("Take Snapshot"),       SECTION, N_("Take canvas snapshot")                       },
+    {"win.canvas-snapshot-toggle",    N_("Toggle Snapshot"),     SECTION, N_("Toggle canvas snapshot")                     },
+
     {"win.canvas-rotate-cw",          N_("Rotate Clockwise"),    SECTION, N_("Rotate canvas clockwise")                    },
     {"win.canvas-rotate-ccw",         N_("Rotate Counter-CW"),   SECTION, N_("Rotate canvas counter-clockwise")            },
     {"win.canvas-rotate-reset",       N_("Reset Rotation"),      SECTION, N_("Reset canvas rotation")                      },
@@ -323,6 +359,9 @@ add_actions_canvas_transform(InkscapeWindow* win)
     win->add_action( "canvas-zoom-center-page",sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_CENTER_PAGE));
     win->add_action( "canvas-zoom-prev",       sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PREV));
     win->add_action( "canvas-zoom-next",       sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_NEXT));
+
+    win->add_action( "canvas-snapshot-set",    sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_SNAPSHOT_SET));
+    win->add_action( "canvas-snapshot-toggle", sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_SNAPSHOT_TOGGLE));
 
     win->add_action( "canvas-rotate-cw",       sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ROTATE_CW));
     win->add_action( "canvas-rotate-ccw",      sigc::bind(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ROTATE_CCW));

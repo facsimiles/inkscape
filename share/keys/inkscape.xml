@@ -198,6 +198,8 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-zoom-drawing"                keys="4,                   KP_4"/>
   <bind gaction="win.canvas-zoom-page"                   keys="5,                   KP_5"/>
   <bind gaction="win.canvas-zoom-page-width"             keys="6, &lt;primary&gt;e, KP_6"/>
+  <bind gaction="win.canvas-snapshot-toggle"             keys="7,                   KP_7"/>
+  <bind gaction="win.canvas-snapshot-set"                keys="&lt;alt&gt;7,        &lt;alt&gt;KP_7"/>
   <bind gaction="win.canvas-zoom-center-page"            keys="&lt;primary&gt;4,    &lt;primary&gt;KP_4"/>
   <bind gaction="win.canvas-zoom-prev"                   keys="grave,               KP_8"/> <!-- ` -->
   <bind gaction="win.canvas-zoom-next"                   keys="asciitilde,          KP_9"/> <!-- ~ -->
@@ -382,7 +384,7 @@ override) the bindings in the main default.xml.
   <bind gaction="win.path-reverse"/>
   <bind gaction="app.paste-path-effect"                  keys="ampersand, &lt;primary&gt;7" />
   <bind gaction="app.remove-path-effect"/>
-  <bind gaction="win.path-effect-parameter-next"         keys="7"/>
+  <bind gaction="win.path-effect-parameter-next"         keys="&lt;alt&gt;&lt;shift&gt;7"/>
 
   <!-- Text -->
   <bind gaction="app.text-flow-into-frame"               keys="&lt;alt&gt;w" />

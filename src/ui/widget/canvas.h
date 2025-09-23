@@ -22,6 +22,8 @@
 #include "events/enums.h"
 #include "optglarea.h"
 
+#include <sigc++/scoped_connection.h>
+
 namespace Gdk {
 class Rectangle;
 } // namespace Gdk
@@ -111,6 +113,7 @@ public:
     // State
     bool is_dragging() const { return _is_dragging; } // selection-chemistry.cpp
 
+    void blink();
     // Mouse
     std::optional<Geom::Point> get_last_mouse() const; // desktop-widget.cpp
 
@@ -162,6 +165,8 @@ private:
     // EventControllerFocus
     void on_focus_in();
     void on_focus_out();
+
+    sigc::scoped_connection blinking;
 
     // EventControllerKey
     bool on_key_pressed (Gtk::EventControllerKey const &controller,
