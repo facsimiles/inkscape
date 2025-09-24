@@ -45,6 +45,7 @@ public:
 
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     bool doOnOpen(SPLPEItem const *lpeitem) override;
+    void doOnApply(SPLPEItem const *lpeitem) override;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
     void resetDefaults(SPItem const* item) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;

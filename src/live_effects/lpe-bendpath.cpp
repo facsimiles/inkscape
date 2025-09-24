@@ -96,6 +96,11 @@ LPEBendPath::~LPEBendPath()
     }
 }
 
+void 
+LPEBendPath::doOnApply(SPLPEItem const *lpeitem)
+{
+    lpeversion.param_setValue("1.5", true);
+}
 
 bool 
 LPEBendPath::doOnOpen(SPLPEItem const *lpeitem)
@@ -182,9 +187,13 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
     Interval bboxHorizontal = vertical_pattern.get_value() ? boundingbox_Y : boundingbox_X;
     Interval bboxVertical = vertical_pattern.get_value() ? boundingbox_X : boundingbox_Y;
     
-    //+0.1 in x fix bug #1658855
     //We use the group bounding box size or the path bbox size to translate well x and y
-    x-= bboxHorizontal.min() + 0.1;
+    if (lpeversion.param_getSVGValue() >= "1.5") {
+        x-= bboxHorizontal.min();
+    } else {
+        //+0.1 in x fix bug #1658855
+        x-= bboxHorizontal.min() + 0.1;
+    }
     y-= bboxVertical.middle();
 
     double scaling = uskeleton.cuts.back()/bboxHorizontal.extent();
