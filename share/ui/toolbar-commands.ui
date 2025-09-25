@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="commands-toolbar">
-    <property name="halign">center</property>
+    <property name="halign">start</property>
     <property name="valign">start</property>
     <property name="orientation">vertical</property>
     <child>
