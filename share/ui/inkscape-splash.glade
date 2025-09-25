@@ -17,15 +17,9 @@
             <property name="transition-duration">1500</property>
             <property name="transition-type">crossfade</property>
             <child>
-              <object class="GtkFixed">
+              <object class="GtkOverlay" id="start-welcome-overlay">
                 <child>
                   <object class="GtkPicture" id="start-welcome">
-                    <property name="width-request">700</property>
-                    <property name="height-request">220</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkPicture" id="welcome_text">
                     <property name="width-request">700</property>
                     <property name="height-request">220</property>
                   </object>

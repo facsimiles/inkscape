@@ -19,6 +19,8 @@
 #include <gtkmm/filefilter.h>
 #include <gtkmm/infobar.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/overlay.h>
+#include <gtkmm/picture.h>
 #include <gtkmm/settings.h>
 #include <gtkmm/switch.h>
 #include <gtkmm/windowhandle.h>
@@ -198,12 +200,16 @@ StartScreen::StartScreen()
     auto const start_support_time  = Resource::get_filename(Resource::SCREENS, "start-support-time.png");
     auto const start_support_money = Resource::get_filename(Resource::SCREENS, "start-support-money.png");
 
-    get_widget<Gtk::Picture>(build_splash, "welcome_text"  ).set_filename(welcome_text_file);
     get_widget<Gtk::Picture>(build_splash, "start-welcome" ).set_filename(start_welcome_file);
     get_widget<Gtk::Picture>(build_splash, "start-support" ).set_filename(start_support_file);
     get_widget<Gtk::Picture>(build_splash, "start-splash"  ).set_filename(start_splash_file);
     get_widget<Gtk::Picture>(build_welcome, "start-support-time" ).set_filename(start_support_time);
     get_widget<Gtk::Picture>(build_welcome, "start-support-money").set_filename(start_support_money);
+
+    // Set overlay on the Welcome tab
+    auto const welcome_text = Gtk::make_managed<Gtk::Picture>();
+    welcome_text->set_filename(welcome_text_file);
+    get_widget<Gtk::Overlay>(build_splash, "start-welcome-overlay").add_overlay(*welcome_text);
 
     // Welcome! tab
     canvas->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::canvas_changed));
