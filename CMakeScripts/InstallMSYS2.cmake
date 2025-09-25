@@ -27,7 +27,7 @@ if(WIN32)
     ${MINGW_BIN}/libcrypto-3*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libngtcp2-[0-9]*.dll
-    ${MINGW_BIN}/libngtcp2_crypto_ossl.dll
+    ${MINGW_BIN}/libngtcp2_crypto_ossl-[0-9]*.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
     ${MINGW_BIN}/libdav1d.dll
     ${MINGW_BIN}/libdav1d-[0-9]*.dll
