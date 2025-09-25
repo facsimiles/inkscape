@@ -380,9 +380,6 @@ void NodeTool::selection_changed(Inkscape::Selection *sel)
         }
     }
 
-    std::vector<SPItem *> vec(sel->items().begin(), sel->items().end());
-    _previous_selection = std::move(_current_selection);
-    _current_selection = std::move(vec);
     _multipath->setItems(shapes);
     update_tip();
     sp_update_helperpath(_desktop);
@@ -562,25 +559,6 @@ bool NodeTool::root_handler(CanvasEvent const &event)
             rband->start(_desktop, desktop_pt, true);
             ret = true;
             return;
-
-        } else if (event.num_press == 2) {
-
-            // If the selector received the doubleclick event, then we're at some distance from
-            // the path; otherwise, the doubleclick event would have been received by
-            // CurveDragPoint
-            if (!(event.modifiers & GDK_SHIFT_MASK)) {
-                // The first click of the double click will have cleared the path selection, because
-                // we clicked aside of the path. We need to undo this on double click
-                auto selection = _desktop->getSelection();
-                selection->addList(_previous_selection);
-
-                // The selection has been restored, and the signal selection_changed has been emitted,
-                // which has again forced a restore of the _mmap variable of the MultiPathManipulator (this->_multipath)
-                // Now we can insert the new nodes as if nothing has happened!
-                _multipath->insertNode(desktop_pt);
-                ret = true;
-                return;
-            }
 
         }
     },
