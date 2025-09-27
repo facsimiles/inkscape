@@ -176,18 +176,21 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
     }
 
     // add newly selected items
-    for (const auto & r : shapes) {
+    for (auto const &r : shapes) {
+        auto path = cast<SPPath>(r.object);
         auto lpobj = cast<LivePathEffectObject>(r.object);
-        if (!is<SPPath>(r.object) && !lpobj) continue;
-        std::shared_ptr<PathManipulator> newpm(new PathManipulator(*this, (SPPath*) r.object,
-            r.edit_transform, _getOutlineColor(r.role, r.object), r.lpe_key));
+        if (!path && !lpobj) {
+            continue;
+        }
+        auto newpm = std::make_shared<PathManipulator>(*this, path,
+            r.edit_transform, _getOutlineColor(r.role, r.object), r.lpe_key);
         newpm->showHandles(_show_handles);
         // always show outlines for clips and masks
         newpm->showOutline(_show_outline || r.role != SHAPE_ROLE_NORMAL);
         newpm->showPathDirection(_show_path_direction);
         newpm->setLiveOutline(_live_outline);
         newpm->setLiveObjects(_live_objects);
-        _mmap.insert(std::make_pair(r, newpm));
+        _mmap.emplace(r, std::move(newpm));
     }
 }
 

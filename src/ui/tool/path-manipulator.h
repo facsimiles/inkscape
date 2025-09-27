@@ -61,7 +61,9 @@ enum class NodeDeleteMode
  * Currently only cubic bezier and linear segments are supported, but this might change
  * some time in the future.
  */
-class PathManipulator : public PointManipulator
+class PathManipulator
+    : public PointManipulator
+    , public std::enable_shared_from_this<PathManipulator>
 {
 public:
     using ItemType = SPPath*;
