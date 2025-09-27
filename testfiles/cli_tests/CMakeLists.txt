@@ -843,6 +843,11 @@ add_cli_test(actions-object-get-attribute              INPUT_FILENAME rects.svg
 add_cli_test(actions-object-get-attribute_nonexistant  INPUT_FILENAME rects.svg
                                                        PARAMETERS --actions=select-by-id:rect1$<SEMICOLON>object-get-attribute:z
                                                        PASS_FOR_OUTPUT "\n$")
+# object-remove-attribute
+add_cli_test(actions-object-remove-attribute    INPUT_FILENAME export-mask-on-transformed-image.svg
+                                                PARAMETERS --actions=select-by-id:circle-48$<SEMICOLON>object-remove-attribute:style
+                                                OUTPUT_FILENAME actions-object-remove-attribute.svg
+                                                TEST_SCRIPT match_regex_fail.sh actions-object-remove-attribute.svg "style=\"fill: #ffff00; stroke: none;\"")
 
 # object-set-property
 add_cli_test(actions-object-set-property        INPUT_FILENAME areas.svg
@@ -863,6 +868,12 @@ add_cli_test(actions-object-get-property               INPUT_FILENAME areas.svg
 add_cli_test(actions-object-get-property_nonexistant   INPUT_FILENAME areas.svg
                                                        PARAMETERS --actions=select-by-id:MyStar$<SEMICOLON>object-get-attribute:full
                                                        PASS_FOR_OUTPUT "\n$")
+
+# object-remove-attribute
+add_cli_test(actions-object-remove-property     INPUT_FILENAME export-mask-on-transformed-image.svg
+                                                PARAMETERS --actions=select-by-id:circle-48$<SEMICOLON>object-remove-property:fill
+                                                OUTPUT_FILENAME actions-object-remove-property.svg
+                                                TEST_SCRIPT match_regex_fail.sh actions-object-remove-property.svg "fill: #ffff00;")
 
 # path-simplify
 add_cli_test(actions-path-simplify         INPUT_FILENAME path.svg
