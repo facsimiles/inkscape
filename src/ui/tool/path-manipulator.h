@@ -12,6 +12,9 @@
 #ifndef INKSCAPE_UI_TOOL_PATH_MANIPULATOR_H
 #define INKSCAPE_UI_TOOL_PATH_MANIPULATOR_H
 
+#include <memory>
+#include <2geom/path-sink.h>
+#include "manipulator.h"
 #include "node.h"
 
 class SPPath;
@@ -55,7 +58,9 @@ enum class NodeDeleteMode
  * Currently only cubic bezier and linear segments are supported, but this might change
  * some time in the future.
  */
-class PathManipulator : public PointManipulator
+class PathManipulator
+    : public PointManipulator
+    , public std::enable_shared_from_this<PathManipulator>
 {
 public:
     using ItemType = SPPath*;

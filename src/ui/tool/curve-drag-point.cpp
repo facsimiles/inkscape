@@ -171,6 +171,7 @@ bool CurveDragPoint::doubleclicked(ButtonReleaseEvent const &event)
 {
     if (event.button != 1 || !first || !first.next()) return false;
     if (mod_ctrl(event)) {
+        auto ref = _pm.shared_from_this(); // hold ref during possible deletion of _pm.
         _pm.deleteSegments();
         _pm.update(true);
         _pm._commit(_("Remove segment"));

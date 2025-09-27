@@ -31,10 +31,10 @@ struct PathSharedData;
 class CurveDragPoint : public ControlPoint
 {
 public:
-    CurveDragPoint(PathManipulator &pm);
+    explicit CurveDragPoint(PathManipulator &pm);
     void setSize(double sz) { _setSize(sz); }
     void setTimeValue(double t) { _t = t; }
-    double getTimeValue() { return _t; }
+    double getTimeValue() const { return _t; }
     void setIterator(NodeList::iterator i) { first = i; }
     NodeList::iterator getIterator() { return first; }
     bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, CanvasEvent const &event) override;

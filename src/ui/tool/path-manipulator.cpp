@@ -192,7 +192,6 @@ void PathManipulator::writeXML()
         node->setAttribute(_nodetypesKey(), _createTypeString());
     } else {
         // this manipulator will have to be destroyed right after this call
-        node->removeObserver(*_observer);
         _path->deleteObject(true, true);
         _path = nullptr;
     }
