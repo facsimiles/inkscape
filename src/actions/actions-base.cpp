@@ -209,6 +209,16 @@ no_convert_baseline()
     sp_no_convert_text_baseline_spacing = true;
 }
 
+void 
+active_document_file_name(InkscapeApplication *app)
+{
+    if (SPDocument* doc = app->get_active_document()) {
+        show_output(doc->getDocumentFilename());
+    } else {
+        show_output("active_document_file_name: no document!");
+    }
+}
+
 const Glib::ustring SECTION_BASE = NC_("Action Section", "Base");
 const Glib::ustring SECTION_IMPORT = NC_("Action Section", "Import");
 const Glib::ustring SECTION_QUERY = NC_("Action Section", "Query");
@@ -217,6 +227,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_base =
 {
     // clang-format off
     {"app.inkscape-version",      N_("Inkscape Version"),           SECTION_BASE,    N_("Print Inkscape version and exit")                   },
+    {"app.active-document-file-name", N_("Active Document File Name"), SECTION_BASE, N_("Print active document file name")                   },
     {"app.active-window-start",   N_("Active Window: Start Call"),  SECTION_BASE,    N_("Start execution in active window")                  },
     {"app.active-window-end",     N_("Active Window: End Call"),    SECTION_BASE,    N_("End execution in active window")                    },
     {"app.save-preferences",      N_("Save preferences"),           SECTION_BASE,    N_("Make sure the preferences are saved")               },
@@ -248,6 +259,7 @@ add_actions_base(InkscapeApplication* app)
     // Note: "radio" actions are just an easy way to set type without using templating.
     // clang-format off
     gapp->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
+    gapp->add_action(               "active-document-file-name",                           sigc::bind(sigc::ptr_fun(&active_document_file_name), app) );
     gapp->add_action(               "active-window-start",                                 sigc::ptr_fun(&active_window_start)                    );
     gapp->add_action(               "active-window-end",                                   sigc::ptr_fun(&active_window_end)                      );
     gapp->add_action(               "save-preferences",                                    sigc::ptr_fun(&save_preferences)                       );
