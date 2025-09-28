@@ -408,8 +408,7 @@ static char const preferences_skeleton[] =
      org.inkscape.output.png.inkscape.png_compression="6"
      org.inkscape.output.png.inkscape.png_antialias="2" />
 
-  <group id="desktop"
-         style="fill:#000000">
+  <group id="desktop">
     <group
        width="640"
        height="480"
