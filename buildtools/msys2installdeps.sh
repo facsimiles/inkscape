@@ -52,23 +52,23 @@ pacman -Sy
 eval pacman -S $PACMAN_OPTIONS \
 git \
 base-devel \
-$ARCH-toolchain \
 $ARCH-autotools \
+$ARCH-ccache \
 $ARCH-cmake \
 $ARCH-meson \
 $ARCH-ninja \
-$ARCH-ccache
+$ARCH-toolchain
 
 # install Inkscape dependencies (required)
 eval pacman -S $PACMAN_OPTIONS \
+$ARCH-boost \
 $ARCH-double-conversion \
 $ARCH-gc \
 $ARCH-gsl \
-$ARCH-libxslt \
-$ARCH-boost \
 $ARCH-gtk4 \
 $ARCH-gtk-doc \
-$ARCH-gtkmm4
+$ARCH-gtkmm4 \
+$ARCH-libxslt
 
 # install packaging tools (required for dist-win-* targets)
 eval pacman -S $PACMAN_OPTIONS \
@@ -78,32 +78,32 @@ $ARCH-ntldd
 
 # install Inkscape dependencies (optional)
 eval pacman -S $PACMAN_OPTIONS \
-$ARCH-poppler \
-$ARCH-potrace \
+$ARCH-enchant \
+$ARCH-gtksourceview5 \
 $ARCH-libcdr \
+$ARCH-libjxl \
+$ARCH-libspelling \
 $ARCH-libvisio \
 $ARCH-libwpg \
-$ARCH-gtksourceview5 \
-$ARCH-libjxl \
-$ARCH-enchant \
-$ARCH-libspelling
+$ARCH-poppler \
+$ARCH-potrace
 
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \
 $ARCH-python \
-$ARCH-python-pip \
+$ARCH-python-coverage \
+$ARCH-python-cssselect \
+$ARCH-python-gobject \
 $ARCH-python-lxml \
 $ARCH-python-numpy \
-$ARCH-python-cssselect \
-$ARCH-python-webencodings \
-$ARCH-python-tinycss2 \
+$ARCH-python-packaging \
 $ARCH-python-pillow \
-$ARCH-python-six \
-$ARCH-python-gobject \
+$ARCH-python-pip \
 $ARCH-python-pyparsing \
 $ARCH-python-pyserial \
-$ARCH-python-coverage \
-$ARCH-python-packaging \
+$ARCH-python-six \
+$ARCH-python-tinycss2 \
+$ARCH-python-webencodings \
 $ARCH-python-zstandard \
 $ARCH-scour
 
@@ -111,14 +111,14 @@ $ARCH-scour
 eval pacman -S $PACMAN_OPTIONS \
 $ARCH-python-appdirs \
 $ARCH-python-beautifulsoup4 \
-$ARCH-python-filelock \
-$ARCH-python-msgpack \
 $ARCH-python-cachecontrol \
-$ARCH-python-idna \
-$ARCH-python-urllib3 \
-$ARCH-python-chardet \
 $ARCH-python-certifi \
-$ARCH-python-requests
+$ARCH-python-chardet \
+$ARCH-python-filelock \
+$ARCH-python-idna \
+$ARCH-python-msgpack \
+$ARCH-python-requests \
+$ARCH-python-urllib3
 
 # install packages for testing Inkscape
 eval pacman -S $PACMAN_OPTIONS \
