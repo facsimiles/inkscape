@@ -31,6 +31,7 @@
 #include "message-stack.h"
 
 
+#include "object/box3d.h"
 #include "object/box3d-side.h"
 #include "object/filters/blend.h"
 #include "object/filters/gaussian-blur.h"
@@ -195,7 +196,15 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
             SPItem *obj = *i;
             if (auto *side = cast<Box3DSide>(obj)) {
                 selected_item_types.emplace(side->axes_string().data());
-            } else {
+            } else if (auto *box = cast<SPBox3D>(obj)) {
+                // Applied a style to an entire box. Update the box and all faces of the box.
+                for (auto *maybe_side : box->item_list()) {
+                    if (auto *side = cast<Box3DSide>(maybe_side)) {
+                        selected_item_types.emplace(side->axes_string().data());
+                    }
+                }
+            }
+            else {
                 selected_item_types.emplace(obj->typeName());
             }
         }
@@ -205,14 +214,16 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
         static const std::unordered_map<std::string, const char*> item_type_map = {
             {"circle", "arc"},
             {"polygon", "star"},
-            {"text-flow", "text"}
+            {"text-flow", "text"},
+            {"group", nullptr}
         };
         for (const char* item_type : selected_item_types) {
             if (auto i = item_type_map.find(item_type) ; i != item_type_map.end()) {
                 item_type = i->second;
             }
-            prefs->mergeStyle(
-                    Glib::ustring("/desktop/") + item_type + "/style", css_write);
+            if (item_type) {
+                prefs->mergeStyle(Glib::ustring("/desktop/") + item_type + "/style", css_write);
+            }
         }
 
         sp_repr_css_attr_unref(css_write);
