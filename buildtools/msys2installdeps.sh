@@ -40,10 +40,7 @@ case "$MSYSTEM" in
     ;;
 esac
 
-# set default options for invoking pacman (in CI this variable is already set globally)
-if [ -z $CI ]; then
-    PACMAN_OPTIONS="--needed --noconfirm"
-fi
+PACMAN_OPTIONS="--needed --noconfirm"
 
 # sync package databases
 pacman -Sy
