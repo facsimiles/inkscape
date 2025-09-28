@@ -25,6 +25,7 @@ if(WIN32)
     ${MINGW_BIN}/libcdr-0.[0-9]*.dll
     ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcrypto-3*.dll
+    ${MINGW_BIN}/libcryptopp.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libngtcp2-[0-9]*.dll
     ${MINGW_BIN}/libngtcp2_crypto_ossl-[0-9]*.dll
@@ -72,10 +73,13 @@ if(WIN32)
     ${MINGW_BIN}/libicuuc[0-9]*.dll
     ${MINGW_BIN}/libidn2-[0-9]*.dll
     ${MINGW_BIN}/libintl-[0-9]*.dll
+    ${MINGW_BIN}/libjasper.dll
     ${MINGW_BIN}/libjbig-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
+    ${MINGW_BIN}/libkvazaar-[0-9]*.dll
     ${MINGW_BIN}/liblqr-1-[0-9]*.dll
+    ${MINGW_BIN}/libltdl-[0-9]*.dll
     ${MINGW_BIN}/liblzma-[0-9]*.dll
     ${MINGW_BIN}/liblzo2-[0-9].dll
     ${MINGW_BIN}/libmpdec-[0-9]*.dll
@@ -84,7 +88,9 @@ if(WIN32)
     ${MINGW_BIN}/libnghttp[0-9]*.dll
     ${MINGW_BIN}/libnspr[0-9]*.dll
     ${MINGW_BIN}/libopenblas.dll
+    ${MINGW_BIN}/libopenh264-[0-9]*.dll
     ${MINGW_BIN}/libopenjp2-[0-9]*.dll
+    ${MINGW_BIN}/libopenjph-0.[0-9]*.dll
     ${MINGW_BIN}/libpango-1.0-[0-9]*.dll
     ${MINGW_BIN}/libpangocairo-1.0-[0-9]*.dll
     ${MINGW_BIN}/libpangoft2-1.0-[0-9]*.dll
@@ -128,7 +134,7 @@ if(WIN32)
     ${MINGW_BIN}/libwpg-0.[0-9]*.dll
     ${MINGW_BIN}/libxml2-[0-9]*.dll
     ${MINGW_BIN}/libxslt-[0-9]*.dll
-    ${MINGW_BIN}/libx265.dll
+    ${MINGW_BIN}/libx265-[0-9]*.dll
     ${MINGW_BIN}/libyuv.dll
     ${MINGW_BIN}/libzstd.dll
     ${MINGW_BIN}/nss[0-9]*.dll
@@ -161,7 +167,7 @@ if(WIN32)
 
   # Install graphics-magick dlls
   if(WITH_GRAPHICS_MAGICK)
-    install (DIRECTORY ${MINGW_LIB}/GraphicsMagick-1.3.38
+    install (DIRECTORY ${MINGW_LIB}/GraphicsMagick-1.3.45
       DESTINATION lib
       FILES_MATCHING
       PATTERN "*.dll"
