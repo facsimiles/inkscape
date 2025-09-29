@@ -221,7 +221,7 @@ inkscape:macos:
   before_script:
     - $drive = (Split-Path "${Env:CI_PROJECT_DIR}" -Qualifier)
     - |
-      if (-not (Test-Path -Path "R:/${Env:ICW_NAME}/usr/bin/bash.exe")) {
+      if (-not (Test-Path -Path "$drive/${Env:ICW_NAME}/usr/bin/bash.exe")) {
         (New-Object System.Net.WebClient).DownloadFile("${Env:ICW_RELEASE_URL}", "${drive}/${Env:ICW_NAME}_${Env:MSYSTEM}.wim")
         md "${drive}/${Env:ICW_NAME}"
         dism /Mount-Wim /MountDir:"${drive}/${Env:ICW_NAME}" /wimfile:"${drive}/${Env:ICW_NAME}_${Env:MSYSTEM}.wim" /Index:1 /ReadOnly
