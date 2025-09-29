@@ -336,6 +336,24 @@ bool ToolBase::root_handler(CanvasEvent const &event)
         return Geom::deg_from_rad(Geom::atan2(cursor - Geom::Point(_desktop->getCanvas()->get_dimensions()) / 2.0));
     };
 
+    auto compute_zoom = [&](Geom::Point const &pt, Geom::Point const &rel) {
+        // Calculate zoom scaling based on vertical drag distance relative to start position.
+        auto start = rel * _desktop->getCanvas()->get_geom_affine().inverse() * _desktop->getCanvas()->get_affine() - _desktop->getCanvas()->get_pos();
+        auto current = pt * _desktop->getCanvas()->get_geom_affine().inverse() * _desktop->getCanvas()->get_affine() - _desktop->getCanvas()->get_pos();
+
+        double vertical_drag = start[Geom::Y] - current[Geom::Y];
+        
+        // Make zoom sensitivity relative to window height, better for High Res displays 
+        double const window_height = (double) _desktop->getCanvas()->get_height();
+        double scale = 5 * vertical_drag / window_height;
+
+        scale = std::clamp(scale, -3.0, 3.0); 
+        scale = std::pow(M_SQRT2, scale);
+
+        return scale;
+    };
+
+
     inspect_event(event,
     [&] (ButtonPressEvent const &event) {
 
@@ -351,6 +369,10 @@ bool ToolBase::root_handler(CanvasEvent const &event)
             within_tolerance = true;
 
             button_w = event.pos;
+
+            using Modifiers::Type;
+            using Modifiers::Triggers;
+            auto const action = Modifiers::Modifier::which(Triggers::CANVAS | Triggers::DRAG, event.modifiers);
 
             switch (event.button) {
             case 1:
@@ -372,8 +394,8 @@ bool ToolBase::root_handler(CanvasEvent const &event)
                 break;
 
             case 2:
-                if (event.modifiers & GDK_CONTROL_MASK && !_desktop->get_rotation_lock()) {
-                    // Canvas ctrl + middle-click to rotate
+                if (action == Type::CANVAS_ROTATE_TABLET && !_desktop->get_rotation_lock()) {
+                    // Canvas modifier (default: ctrl) + middle-click to rotate
                     rotating = true;
 
                     start_angle = current_angle = compute_angle(event.pos);
@@ -383,7 +405,17 @@ bool ToolBase::root_handler(CanvasEvent const &event)
                                      EventType::BUTTON_RELEASE |
                                      EventType::MOTION);
 
-                } else if (event.modifiers & GDK_SHIFT_MASK) {
+                } else if (action == Type::CANVAS_ZOOM_TABLET) {
+                    // Start zooming
+                    zooming = true;
+
+                    start_scale = _desktop->current_zoom();
+                    center = _desktop->w2d(xyp);
+                    grabCanvasEvents(EventType::KEY_PRESS | 
+                                    EventType::KEY_RELEASE | 
+                                    EventType::BUTTON_RELEASE |
+                                    EventType::MOTION);
+                } else if (action == Type::CANVAS_BOX_ZOOM) {
                     zoom_rb = 2;
                 } else {
                     // When starting panning, make sure there are no snap events pending because these might disable the panning again
@@ -496,24 +528,11 @@ bool ToolBase::root_handler(CanvasEvent const &event)
             if (zoom_rb == 2) {
                 gobble_motion_events(GDK_BUTTON2_MASK);
             }
+        } else if (zooming) {
+            auto const current_scale = compute_zoom(event.pos, xyp) * start_scale; 
+            _desktop->zoom_absolute(center, current_scale);
         } else if (rotating) {
             auto angle = compute_angle(event.pos);
-
-            double constexpr rotation_snap = 15.0;
-            double delta_angle = angle - start_angle;
-            if (event.modifiers & GDK_SHIFT_MASK &&
-                event.modifiers & GDK_CONTROL_MASK) {
-                delta_angle = 0.0;
-            } else if (event.modifiers & GDK_SHIFT_MASK) {
-                delta_angle = std::round(delta_angle / rotation_snap) * rotation_snap;
-            } else if (event.modifiers & GDK_CONTROL_MASK) {
-                // ?
-            } else if (event.modifiers & GDK_ALT_MASK) {
-                // Decimal raw angle
-            } else {
-                delta_angle = std::floor(delta_angle);
-            }
-            angle = start_angle + delta_angle;
 
             _desktop->rotate_relative_keep_point(_desktop->w2d(Geom::Rect(_desktop->getCanvas()->get_area_world()).midpoint()),
                                                  Geom::rad_from_deg(angle - current_angle));
@@ -532,7 +551,10 @@ bool ToolBase::root_handler(CanvasEvent const &event)
             dynamic_cast<Gtk::Window &>(*_desktop->getCanvas()->get_root()).set_cursor(_cursor);
         }
 
-        if (event.button == 2 && rotating) {
+        if (event.button == 2 && zooming) {
+            zooming = false;
+            ungrabCanvasEvents();
+        } else if (event.button == 2 && rotating) {
             rotating = false;
             ungrabCanvasEvents();
         }

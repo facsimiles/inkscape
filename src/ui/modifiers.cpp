@@ -30,6 +30,9 @@ ModifierIdToTypeMap const &modifier_type_from_id()
         {"canvas-pan-x", Type::CANVAS_PAN_X},
         {"canvas-zoom", Type::CANVAS_ZOOM},
         {"canvas-rotate", Type::CANVAS_ROTATE},
+        {"canvas-box-zoom", Type::CANVAS_BOX_ZOOM},
+        {"canvas-zoom-tablet", Type::CANVAS_ZOOM_TABLET},
+        {"canvas-rotate-tablet", Type::CANVAS_ROTATE_TABLET},
         {"select-add-to", Type::SELECT_ADD_TO},
         {"select-in-groups", Type::SELECT_IN_GROUPS},
         {"select-touch-path", Type::SELECT_TOUCH_PATH},
@@ -88,6 +91,9 @@ Modifier::Container &Modifier::_modifiers()
         make_modifier("canvas-pan-x", _("Horizontal pan"), _("Pan/Scroll left and right"), SHIFT, CANVAS, SCROLL),
         make_modifier("canvas-zoom", _("Canvas zoom"), _("Zoom in and out with scroll wheel"), CTRL, CANVAS, SCROLL),
         make_modifier("canvas-rotate", _("Canvas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT | CTRL, CANVAS, SCROLL),
+        make_modifier("canvas-box-zoom", _("Canvas box zoom"), _("Middle-click + drag to zoom into selection"), SHIFT, CANVAS, DRAG),
+        make_modifier("canvas-zoom-tablet", _("Canvas zoom tablet"), _("Rotate the canvas with middle mouse button"), SHIFT, CANVAS, DRAG),
+        make_modifier("canvas-rotate-tablet", _("Canvas rotate tablet"), _("Rotate the canvas with middle mouse button"), CTRL, CANVAS, DRAG),
 
     // Select tool modifiers (minus transforms)
         make_modifier("select-add-to", _("Add to selection"), _("Add items to existing selection"), SHIFT, SELECT, CLICK),
