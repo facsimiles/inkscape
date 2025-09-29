@@ -54,7 +54,7 @@ void CanvasItemSquiggle::_rebuild_squiggle()
     }
 
     // Parameters for squiggle in canvas units (screen size)
-    double amplitude = 3.0;
+    double amplitude = 3.5;
     double wavelength = 8.0;
     int n = std::max(1, int(len / wavelength));
     double step = len / n;

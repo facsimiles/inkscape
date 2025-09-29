@@ -43,6 +43,44 @@ void ensure_file_exists(const std::string& path)
     std::ofstream f(path, std::ios::app);
 }
 
+static inline double safe_pow(double x, double p) {
+    return std::pow(x < 0.0 ? 0.0 : x, p);
+}
+
+Geom::Point catmull_rom_centripetal(const Geom::Point &P0,
+                                    const Geom::Point &P1,
+                                    const Geom::Point &P2,
+                                    const Geom::Point &P3,
+                                    double u,
+                                    double alpha = 0.5)
+{
+    // knot parameters
+    double t0 = 0.0;
+    double t1 = t0 + safe_pow(Geom::distance(P0, P1), alpha);
+    double t2 = t1 + safe_pow(Geom::distance(P1, P2), alpha);
+    double t3 = t2 + safe_pow(Geom::distance(P2, P3), alpha);
+
+    // avoid degenerate denominators
+    const double eps = 1e-8;
+    if (t1 - t0 < eps) t1 = t0 + eps;
+    if (t2 - t1 < eps) t2 = t1 + eps;
+    if (t3 - t2 < eps) t3 = t2 + eps;
+
+    // tangents (Hermite form)
+    Geom::Point m1 = ((P2 - P1) / (t2 - t1) - (P1 - P0) / (t1 - t0)) * ((t2 - t1) / (t2 - t0));
+    Geom::Point m2 = ((P3 - P2) / (t3 - t2) - (P2 - P1) / (t2 - t1)) * ((t2 - t1) / (t3 - t1));
+
+    // Hermite basis
+    double u2 = u * u;
+    double u3 = u2 * u;
+    double h1 =  2.0*u3 - 3.0*u2 + 1.0;
+    double h2 = -2.0*u3 + 3.0*u2;
+    double h3 =      u3 - 2.0*u2 + u;
+    double h4 =      u3 -     u2;
+
+    return P1 * h1 + P2 * h2 + m1 * h3 + m2 * h4;
+}
+
 }
 
 
@@ -265,15 +303,27 @@ void OnCanvasSpellCheck::createSquiggle(MisspelledWord& misspelled, SPItem* item
     }
 
     // Replace Bottom Left and Bottom Right points with midpoints to create smooth squiggle
-    std::vector<Geom::Point> squiggle_points;
-    squiggle_points.push_back(squiggle_points_temp[0]);
+    std::vector<Geom::Point> squiggle_points_temp2;
+    squiggle_points_temp2.push_back(squiggle_points_temp[0]);
 
     for(int i=1; i<squiggle_points_temp.size()-1; i+=2)
     {
-        squiggle_points.push_back((squiggle_points_temp[i]+squiggle_points_temp[i+1])/2);
+        squiggle_points_temp2.push_back((squiggle_points_temp[i]+squiggle_points_temp[i+1])/2);
     }
-    squiggle_points.push_back(squiggle_points_temp.back());
+    squiggle_points_temp2.push_back(squiggle_points_temp.back());
 
+    std::vector<Geom::Point> squiggle_points;
+    // Create Catmull-Rom spline points for smooth squiggle
+    squiggle_points.push_back(squiggle_points_temp2[0]);
+    for(int i=1; i<squiggle_points_temp2.size()-2;i++)
+    {
+        squiggle_points.push_back(squiggle_points_temp2[i]);
+        squiggle_points.push_back(catmull_rom_centripetal(
+            squiggle_points_temp2[i-1], squiggle_points_temp2[i], squiggle_points_temp2[i+1], squiggle_points_temp2[i+2], 0.5));
+    }
+    squiggle_points.push_back(squiggle_points_temp2[squiggle_points_temp2.size()-2]);
+    squiggle_points.push_back(squiggle_points_temp2.back());
+    
     // Create the squiggle segments between the points
     for(int i=0; i<squiggle_points.size()-1; i++) {
         misspelled.squiggle.push_back( CanvasItemPtr<CanvasItemSquiggle>(
