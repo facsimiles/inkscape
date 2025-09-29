@@ -204,10 +204,10 @@ std::string sp_tweak_background_colors(std::string cssstring, double crossfade, 
         } else if (cssstring.find("background-image") != std::string::npos) {
             if (dark) {
                 contrast = std::clamp((int)((contrast) * 27), 0, 100);
-                sub = "background-image:cross-fade(" + Inkscape::ustring::format_classic(contrast) + "% image(rgb(255,255,255)), image($2));";
+                sub = "background-image:cross-fade(" + Inkscape::ustring::format_classic(contrast) + "% image(rgb(255,255,255)), $2);";
             } else {
                 contrast = std::clamp((int)((contrast) * 90), 0 , 100);
-                sub = "background-image:cross-fade(" + Inkscape::ustring::format_classic(contrast) + "% image(rgb(0,0,0)), image($2));";
+                sub = "background-image:cross-fade(" + Inkscape::ustring::format_classic(contrast) + "% image(rgb(0,0,0)), $2);";
             }
             cssstring = std::regex_replace(cssstring, re_image, sub);
         }
@@ -253,18 +253,19 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
     // Add style sheet (GTK3)
     auto const display = Gdk::Display::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gchar *gtkThemeName = nullptr;
-    gchar *gtkIconThemeName = nullptr;
     Glib::ustring themeiconname;
-    gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
     if (settings && !only_providers) {
+        gchar *gtkThemeName = nullptr;
+        gchar *gtkIconThemeName = nullptr;
+        gboolean gtkApplicationPreferDarkTheme = false;
+
         g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, nullptr);
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, nullptr);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, nullptr);
         prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
-        prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName));
-        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
+        prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName ? gtkThemeName : ""));
+        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName ? gtkIconThemeName : ""));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
             g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), nullptr);
@@ -275,10 +276,11 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), nullptr);
         }
+
+        g_free(gtkThemeName);
+        g_free(gtkIconThemeName);
     }
 
-    g_free(gtkThemeName);
-    g_free(gtkIconThemeName);
 
     int themecontrast = prefs->getInt("/theme/contrast", 10);
     if (!_contrastthemeprovider) {
@@ -292,11 +294,8 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         Glib::ustring css_contrast = "";
         double contrast = (10 - themecontrast) / 30.0;
         double shade = 1 - contrast;
-        const gchar *variant = nullptr;
-        if (prefs->getBool("/theme/preferDarkTheme", false)) {
-            variant = "dark";
-        }
         bool dark = prefs->getBool("/theme/darkTheme", false);
+        const gchar *variant = dark ? "dark" : "";
         if (dark) {
             contrast *= 2.5;
             shade = 1 + contrast;
