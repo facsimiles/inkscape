@@ -1582,15 +1582,14 @@ SPIPaint::read( gchar const *str ) {
                 std::cerr << "SPIPaint::read: url with empty SPStyle pointer" << std::endl;
             } else {
                 set = true;
-                SPDocument *document = (style->object) ? style->object->document : nullptr;
 
                 // Create href if not done already
                 if (!value.href) {
 
                     if (style->object) {
                         value.href = std::make_shared<SPPaintServerReference>(style->object);
-                    } else if (document) {
-                        value.href = std::make_shared<SPPaintServerReference>(document);
+                    } else if (style->document) {
+                        value.href = std::make_shared<SPPaintServerReference>(style->document);
                     } else {
                         std::cerr << "SPIPaint::read: No valid object or document!" << std::endl;
                         return;
