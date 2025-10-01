@@ -729,6 +729,15 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         }
 
         double start_offset = offset + span.x_start + _characters[char_index].x;
+        Geom::PathVector pathv = path.MakePathVector();
+        if (pathv.empty()) {
+            return;
+        }
+
+        if (pathv[0].closed()) {
+            start_offset = const_cast<Path&>(path).Length() + start_offset;
+        }
+
         double cluster_width = 0.0;
         size_t const current_cluster_glyph_index = _characters[char_index].in_glyph;
         for (size_t glyph_index = current_cluster_glyph_index ; glyph_index < next_cluster_glyph_index ; glyph_index++)
