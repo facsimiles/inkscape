@@ -27,6 +27,8 @@ public:
 protected:
     friend class Inkscape::Colors::Color;
 
+    Lab(Type type, int components, std::string name, std::string shortName, std::string icon, bool spaceIsUnbounded = false);
+
     std::shared_ptr<Inkscape::Colors::CMS::Profile> const getProfile() const override;
     std::string toString(std::vector<double> const &values, bool opacity) const override;
 
@@ -50,3 +52,14 @@ public:
 } // namespace Inkscape::Colors::Space
 
 #endif // SEEN_COLORS_SPACES_LAB_H
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -14,7 +14,7 @@
 #include <2geom/line.h>
 #include <2geom/ray.h>
 
-#include "lch.h"
+#include "luv.h"
 
 #include <2geom/line.h>
 #include <2geom/ray.h>
@@ -32,20 +32,18 @@ protected:
 
     void spaceToProfile(std::vector<double> &output) const override
     {
-        HSLuv::toLch(output);
-        Lch::toLuv(output);
+        HSLuv::toLuv(output);
         Luv::toXYZ(output);
     }
     void profileToSpace(std::vector<double> &output) const override
     {
         Luv::fromXYZ(output);
-        Lch::fromLuv(output);
-        HSLuv::fromLch(output);
+        HSLuv::fromLuv(output);
     }
 
 public:
-    static void toLch(std::vector<double> &output);
-    static void fromLch(std::vector<double> &output);
+    static void toLuv(std::vector<double> &output);
+    static void fromLuv(std::vector<double> &output);
     static std::array<Geom::Line, 6> get_bounds(double l);
 };
 

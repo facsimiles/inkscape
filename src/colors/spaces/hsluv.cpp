@@ -87,7 +87,7 @@ static double max_chroma_for_lh(double l, double h)
  *
  * @param in_out[in,out] The HSLuv color converted to a LCH color.
  */
-void HSLuv::toLch(std::vector<double> &in_out)
+void HSLuv::toLuv(std::vector<double> &in_out)
 {
     double h = in_out[0] * 360;
     double s = in_out[1] * 100;
@@ -106,9 +106,14 @@ void HSLuv::toLch(std::vector<double> &in_out)
         h = 0.0;
     }
 
+    double sinhrad, coshrad;
+    Geom::sincos(Geom::rad_from_deg(h), sinhrad, coshrad);
+    double u = coshrad * c;
+    double v = sinhrad * c;
+
     in_out[0] = l;
-    in_out[1] = c;
-    in_out[2] = h;
+    in_out[1] = u;
+    in_out[2] = v;
 }
 
 /**
@@ -116,11 +121,23 @@ void HSLuv::toLch(std::vector<double> &in_out)
  *
  * @param in_out[in,out] The LCH color converted to a HSLuv color.
  */
-void HSLuv::fromLch(std::vector<double> &in_out)
+void HSLuv::fromLuv(std::vector<double> &in_out)
 {
     double l = in_out[0];
-    double c = in_out[1];
-    double h = in_out[2];
+    auto uv = Geom::Point(in_out[1], in_out[2]);
+    double h;
+    double const c = uv.length();
+
+    /* Grays: disambiguate hue */
+    if (c < 0.00000001) {
+        h = 0;
+    } else {
+        h = Geom::deg_from_rad(Geom::atan2(uv));
+        if (h < 0.0) {
+            h += 360.0;
+        }
+    }
+
     double s;
 
     /* White and black: disambiguate saturation */
@@ -128,11 +145,6 @@ void HSLuv::fromLch(std::vector<double> &in_out)
         s = 0.0;
     } else {
         s = c / max_chroma_for_lh(l, h) * 100.0;
-    }
-
-    /* Grays: disambiguate hue */
-    if (c < 0.00000001) {
-        h = 0.0;
     }
 
     in_out[0] = h / 360;

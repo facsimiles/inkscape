@@ -23,6 +23,10 @@ constexpr double LUMA_SCALE = 100;
 constexpr double MIN_SCALE = -128;
 constexpr double MAX_SCALE = 127;
 
+Lab::Lab(Type type, int components, std::string name, std::string shortName, std::string icon, bool spaceIsUnbounded):
+    AnySpace(type, components, std::move(name), std::move(shortName), std::move(icon), spaceIsUnbounded) {
+}
+
 /**
  * Return the RGB color profile, this is static for all RGB sub-types
  */

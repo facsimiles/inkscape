@@ -11,14 +11,14 @@
 #ifndef SEEN_COLORS_SPACES_LCH_H
 #define SEEN_COLORS_SPACES_LCH_H
 
-#include "luv.h"
+#include "lab.h"
 
 namespace Inkscape::Colors::Space {
 
-class Lch : public XYZ
+class Lch : public Lab
 {
 public:
-    Lch(): XYZ(Type::LCH, 3, "Lch", "Lch", "color-selector-lch", true) {}
+    Lch(): Lab(Type::LCH, 3, "Lch", "Lch", "color-selector-lch", true) {}
     ~Lch() override = default;
 
 protected:
@@ -27,13 +27,13 @@ protected:
     void spaceToProfile(std::vector<double> &output) const override
     {
         Lch::scaleUp(output);
-        Lch::toLuv(output);
-        Luv::toXYZ(output);
+        Lch::toLab(output);
+        Lab::scaleDown(output);
     }
     void profileToSpace(std::vector<double> &output) const override
     {
-        Luv::fromXYZ(output);
-        Lch::fromLuv(output);
+        Lab::scaleUp(output);
+        Lch::fromLab(output);
         Lch::scaleDown(output);
     }
 
@@ -49,8 +49,8 @@ public:
         bool parse(std::istringstream &input, std::vector<double> &output) const override;
     };
 
-    static void toLuv(std::vector<double> &output);
-    static void fromLuv(std::vector<double> &output);
+    static void toLab(std::vector<double> &output);
+    static void fromLab(std::vector<double> &output);
 
     static void scaleDown(std::vector<double> &in_out);
     static void scaleUp(std::vector<double> &in_out);
@@ -59,3 +59,14 @@ public:
 } // namespace Inkscape::Colors::Space
 
 #endif // SEEN_COLORS_SPACES_LCH_H
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

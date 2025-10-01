@@ -18,11 +18,11 @@ using Space::Type::RGB;
 
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesLCH, fromString, testing::Values(
-    _P(in, "lch(50% 20 180)",      { 0.5,  0.133, 0.5        }, 0x557f79ff),
+    _P(in, "lch(50% 20 180)",      { 0.5,  0.133, 0.5        }, 0x4d8176ff),
     // this color is outside sRGB gamut, it will be naively clipped to fit
-    _P(in, "lch(100 150 360)",     { 1.0,  1.0,   1.0        }, 0xffb4ecff),
+    _P(in, "lch(100 150 360)",     { 1.0,  1.0,   1.0        }, 0xff00ffff),
     _P(in, "lch(0 0 0)",           { 0.0,  0.0,   0.0        }, 0x000000ff),
-    _P(in, "lch(20% 20 72 / 20%)", { 0.2,  0.133, 0.2,   0.2 }, 0x38300933)
+    _P(in, "lch(20% 20 72 / 20%)", { 0.2,  0.133, 0.2,   0.2 }, 0x3f2d1433)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesLCH, badColorString, testing::Values(
@@ -38,16 +38,12 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesLCH, toString, testing::Values(
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesLCH, convertColorSpace, testing::Values(
-    // Example from w3c css-color-4 documentation
-    // None of these conversions match, so a manual comparison was done between
-    // the old hsluv conversion and the new code, these match ok. So our lch code
-    // never matched the expected output in css land and this might be a future bug.
-    //_P(inb, LCH, { 0.0, 0.667, 0.945 }, RGB, { 0.0, 0.14,  0.5   }),
-    //_P(inb, LCH, { 1.0, 0.667, 0.945 }, RGB, { 0.0, 1.0,   1.0   }),
-    //_P(inb, LCH, { 0.5, 0.867, 0.055 }, RGB, { 1.0, 0.0,   0.230 }),
-    //_P(inb, LCH, { 1.0, 0.2,   0.055 }, RGB, { 1.0, 0.918, 0.926 }),
-    //_P(inb, LCH, { 0.5, 0.88,  0.361 }, RGB, { 0.0, 0.574, 0.0   }),
-    //_P(inb, LCH, { 0.5, 0.88,  0.5   }, RGB, { 0.0, 0.609, 0.453 }),
+    _P(inb, LCH, { 0.181, 0.399, 0.810 }, RGB, { 0.0, 0.14,  0.5   }),
+    _P(inb, LCH, { 0.907, 0.352, 0.546 }, RGB, { 0.0, 1.0,   1.0   }),
+    _P(inb, LCH, { 0.546, 0.623, 0.0817}, RGB, { 1.0, 0.0,   0.230 }),
+    _P(inb, LCH, { 0.945, 0.052, 0.035 }, RGB, { 1.0, 0.918, 0.926 }),
+    _P(inb, LCH, { 0.526, 0.500, 0.373 }, RGB, { 0.0, 0.574, 0.0   }),
+    _P(inb, LCH, { 0.567, 0.300, 0.4617}, RGB, { 0.0, 0.609, 0.453 }),
     // No conversion
     _P(inb, LCH, { 1.0, 0.400, 0.200 }, LCH, { 1.0, 0.400, 0.200 })
 ));
@@ -64,7 +60,7 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesLCH, normalize, testing::Values(
 TEST(ColorsSpacesLCH, randomConversion)
 {
     // Isolate conversion functions
-    EXPECT_TRUE(RandomPassFunc(Space::Lch::fromLuv, Space::Lch::toLuv, 1000));
+    EXPECT_TRUE(RandomPassFunc(Space::Lch::fromLab, Space::Lch::toLab, 1000));
 
     // Full stack conversion, can not be enabled until clamp is taken off.
     //EXPECT_TRUE(RandomPassthrough(LCH, XYZ, 1000));

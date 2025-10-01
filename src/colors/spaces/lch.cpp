@@ -47,38 +47,38 @@ void Lch::scaleDown(std::vector<double> &in_out)
 }
 
 /**
- * Convert a color from the the LCH colorspace to the Luv colorspace.
+ * Convert a color from the the LCH colorspace to the Lab colorspace.
  *
- * @param in_out[in,out] The LCH color converted to a Luv color.
+ * @param in_out[in,out] The LCH color converted to a Lab color.
  */
-void Lch::toLuv(std::vector<double> &in_out)
+void Lch::toLab(std::vector<double> &in_out)
 {
     double sinhrad, coshrad;
     Geom::sincos(Geom::rad_from_deg(in_out[2]), sinhrad, coshrad);
-    double u = coshrad * in_out[1];
-    double v = sinhrad * in_out[1];
+    double a = coshrad * in_out[1];
+    double b = sinhrad * in_out[1];
 
-    in_out[1] = u;
-    in_out[2] = v;
+    in_out[1] = a;
+    in_out[2] = b;
 }
 
 /**
- * Convert a color from the the Luv colorspace to the LCH colorspace.
+ * Convert a color from the the Lab colorspace to the LCH colorspace.
  *
- * @param in_out[in,out] The Luv color converted to a LCH color.
+ * @param in_out[in,out] The Lab color converted to a LCH color.
  */
-void Lch::fromLuv(std::vector<double> &in_out)
+void Lch::fromLab(std::vector<double> &in_out)
 {
     double l = in_out[0];
-    auto uv = Geom::Point(in_out[1], in_out[2]);
+    auto ab = Geom::Point(in_out[1], in_out[2]);
     double h;
-    double const c = uv.length();
+    double const c = ab.length();
 
     /* Grays: disambiguate hue */
     if (c < 0.00000001) {
         h = 0;
     } else {
-        h = Geom::deg_from_rad(Geom::atan2(uv));
+        h = Geom::deg_from_rad(Geom::atan2(ab));
         if (h < 0.0) {
             h += 360.0;
         }
@@ -118,3 +118,14 @@ bool Lch::Parser::parse(std::istringstream &ss, std::vector<double> &output) con
 }
 
 }; // namespace Inkscape::Colors::Space
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
