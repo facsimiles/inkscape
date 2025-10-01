@@ -212,8 +212,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
         }
     }
 
-    std::cout<<spellcheck_enabled << std::endl;
-
     bool has_hidden_below_cursor = false;
     bool has_locked_below_cursor = false;
     for (auto item : items_under_cursor) {
@@ -251,7 +249,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
         AppendItemFromAction(gmenu_section, "doc.page-move-forward", _("Move Page _Forward"), "pages-order-forwards");
         gmenu->append_section(gmenu_section);
 
-    } else if (!spellcheck_enabled && !layer || desktop->getSelection()->includes(layer)) {
+    } else if (!spellcheck_enabled && (!layer || desktop->getSelection()->includes(layer))) {
         // "item" is the object that was under the mouse when right-clicked. It determines what is shown
         // in the menu thus it makes the most sense that it is either selected or part of the current
         // selection.
