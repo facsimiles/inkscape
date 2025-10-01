@@ -29,7 +29,9 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesRgb, fromString, testing::Values(
     _P(in, "rgb(100% ,50% , 102 / 50%)",  { 1.0,   0.5,   0.4,   0.5  }, 0xff806680),
     _P(in, "   rgb(128, 128, 128)",       { 0.501, 0.501, 0.501       }, 0x808080ff),
     _P(in, "rgba(255, 255, 128,   0.5) ", { 1.0,   1.0,   0.501, 0.5  }, 0xffff8080),
-    _P(in, "color(srgb 1 0.5 0.4 / 50%)", { 1.0,   0.5,   0.4,   0.5  }, 0xff806680)
+    _P(in, "RGBA(255, 255, 128,   0.5) ", { 1.0,   1.0,   0.501, 0.5  }, 0xffff8080),
+    _P(in, "color(srgb 1 0.5 0.4 / 50%)", { 1.0,   0.5,   0.4,   0.5  }, 0xff806680),
+    _P(in, "color(sRGb 1 0.5 0.4 / 50%)", { 1.0,   0.5,   0.4,   0.5  }, 0xff806680)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesRgb, badColorString, testing::Values(

@@ -7,6 +7,8 @@
 
 #include "parser.h"
 
+#include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <sstream>
 
@@ -229,6 +231,10 @@ std::string Parser::getCssPrefix(std::istringstream &ss)
         // CSS Color module 4 color() function
         ss >> token;
     }
+
+    // CSS is case insensitive.
+    std::transform(token.begin(), token.end(), token.begin(), ::tolower);
+
     return token;
 }
 
