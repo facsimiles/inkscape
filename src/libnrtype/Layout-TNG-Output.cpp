@@ -725,8 +725,11 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         }
 
         double start_offset = offset + span.x_start + _characters[char_index].x;
-
         Geom::PathVector pathv = path.MakePathVector();
+        if (pathv.empty()) {
+            return;
+        }
+
         if (pathv[0].closed()) {
             start_offset = const_cast<Path&>(path).Length() + start_offset;
         }
