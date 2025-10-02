@@ -113,12 +113,13 @@ bool HSV::fromHwbParser::parse(std::istringstream &ss, std::vector<double> &outp
  */
 std::string HSV::toString(std::vector<double> const &values, bool opacity) const
 {
+    static constexpr double CSS_WB_SCALE = 100.0;
     auto oo = CssLegacyPrinter(3, "hwb", opacity && values.size() == 4);
-    // First entry is Hue, which is in degrees, white and black are dirived
-    return oo << (int)(values[0] * 360)        // Hue, degrees, 0..360
-              << (1.0 - values[1]) * values[2] // White
-              << 1.0 - values[2]               // Black
-              << values.back();                // Opacity
+    // First entry is Hue, which is in degrees, white and black are derived
+    return oo << (int)(values[0] * 360)                         // Hue, degrees, 0..360
+              << ((1.0 - values[1]) * values[2]) * CSS_WB_SCALE // White,        0..100
+              << (1.0 - values[2]) * CSS_WB_SCALE               // Black,        0..100
+              << values.back();                                 // Opacity
 }
 
 }; // namespace Inkscape::Colors::Space

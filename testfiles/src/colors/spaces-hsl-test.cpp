@@ -16,13 +16,13 @@ using Space::Type::RGB;
 
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, fromString, testing::Values(
-    _P(in, "hsl(80, 1, 0.5)",             { 0.222, 1,     0.5         }, 0xaaff00ff),
-    _P(in, "hsl(360,0.5,0)",              { 1.0,   0.5,   0           }, 0x000000ff),
+    _P(in, "hsl(80, 100, 50)",            { 0.222, 1,     0.5         }, 0xaaff00ff),
+    _P(in, "hsl(360, 50, 0)",             { 1.0,   0.5,   0           }, 0x000000ff),
     _P(in, "hsl(180deg, 100%, 50%)",      { 0.5,   1,     0.5         }, 0x00ffffff),
     _P(in, "hsl(0.5turn 100% 50%)",       { 0.5,   1,     0.5         }, 0x00ffffff),
-    _P(in, "   hsl(20,   1,   0.5)",      { 0.055, 1,     0.5         }, 0xff5500ff),
+    _P(in, "   hsl(20,  100,  50)",       { 0.055, 1,     0.5         }, 0xff5500ff),
     _P(in, "hsl(50%, 100%, 50% / 50%)",   { 0.5,   1,     0.5,   0.5  }, 0x00ffff80),
-    _P(in, "hsla(30, 0, 0.5, 0.5)",       { 0.083, 0,     0.5,   0.5  }, 0x80808080)
+    _P(in, "hsla(30, 0,  50, 0.5)",       { 0.083, 0,     0.5,   0.5  }, 0x80808080)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, badColorString, testing::Values(
@@ -30,11 +30,11 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, badColorString, testing::Values(
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, toString, testing::Values(
-    _P(out, HSL, { 0.333, 0.2,   0.8         }, "hsl(119, 0.2, 0.8)"),
-    _P(out, HSL, { 0.333, 0.8,   0.258       }, "hsl(119, 0.8, 0.258)"),
-    _P(out, HSL, { 1.0,   0.5,   0.004       }, "hsl(360, 0.5, 0.004)"),
-    _P(out, HSL, { 0,     1,     0.2,   0.8  }, "hsla(0, 1, 0.2, 0.8)", true),
-    _P(out, HSL, { 0,     1,     0.2,   0.8  }, "hsl(0, 1, 0.2)", false)
+    _P(out, HSL, { 0.333, 0.2,   0.8         }, "hsl(119, 20, 80)"),
+    _P(out, HSL, { 0.333, 0.8,   0.258       }, "hsl(119, 80, 25.8)"),
+    _P(out, HSL, { 1.0,   0.5,   0.004       }, "hsl(360, 50, 0.4)"),
+    _P(out, HSL, { 0,     1,     0.2,   0.8  }, "hsla(0, 100, 20, 0.8)", true),
+    _P(out, HSL, { 0,     1,     0.2,   0.8  }, "hsl(0, 100, 20)", false)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, convertColorSpace, testing::Values(

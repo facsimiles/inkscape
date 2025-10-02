@@ -34,7 +34,7 @@ public:
     {
     public:
         Parser(bool alpha)
-            : HueParser("hsl", Type::HSL, alpha)
+	     : HueParser("hsl", Type::HSL, alpha, 100.0)
         {}
     };
 };

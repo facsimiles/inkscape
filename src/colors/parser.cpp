@@ -155,8 +155,8 @@ std::string Parser::parseColor(std::istringstream &ss, std::vector<double> &outp
 bool HueParser::parse(std::istringstream &ss, std::vector<double> &output) const
 {
     bool end = false;
-    return append_css_value(ss, output, end, ',', 360) && append_css_value(ss, output, end, ',') &&
-           append_css_value(ss, output, end, !_alpha ? '/' : ',') && (append_css_value(ss, output, end) || !_alpha) &&
+    return append_css_value(ss, output, end, ',', 360) && append_css_value(ss, output, end, ',', _scale) &&
+           append_css_value(ss, output, end, !_alpha ? '/' : ',', _scale) && (append_css_value(ss, output, end) || !_alpha) &&
            end;
 }
 

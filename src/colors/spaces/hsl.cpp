@@ -109,9 +109,10 @@ void HSL::profileToSpace(std::vector<double> &output) const
  */
 std::string HSL::toString(std::vector<double> const &values, bool opacity) const
 {
+    static constexpr double CSS_SL_SCALE = 100.0;
     auto oo = CssLegacyPrinter(3, "hsl", opacity && values.size() == 4);
     // First entry is Hue, which is in degrees
-    return oo << (int)(values[0] * 360) << values[1] << values[2] << values.back();
+    return oo << (int)(values[0] * 360) << values[1] * CSS_SL_SCALE << values[2] * CSS_SL_SCALE << values.back();
 }
 
 }; // namespace Inkscape::Colors::Space

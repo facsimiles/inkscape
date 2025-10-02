@@ -56,7 +56,7 @@ TEST_F(ColorXmlColor, test_paint_to_xml_string)
      b="0.07058824" />
 </paint>
 )");
-    ASSERT_EQ(paint_to_xml_string(*Color::parse("hsl(180,1,1)")), R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    ASSERT_EQ(paint_to_xml_string(*Color::parse("hsl(180,100,100)")), R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <paint>
   <color
      space="HSL"
@@ -128,7 +128,7 @@ TEST_F(ColorXmlColor, test_xml_string_to_paint)
 )",
                                   nullptr)
                 ).toString(),
-              "hsl(180, 1, 1)");
+              "hsl(180, 100, 100)");
 }
 
 } // namespace

@@ -156,7 +156,7 @@
          offset="0"
          id="stop7" />
       <stop
-         style="stop-color:hsl(345, 0.974, 0.438);stop-opacity:1;"
+         style="stop-color:hsl(345, 97.4, 43.8);stop-opacity:1;"
          offset="0.52961266"
          id="stop8" />
       <stop
@@ -196,15 +196,15 @@
        id="linearGradient23"
        inkscape:collect="always">
       <stop
-         style="stop-color:hsl(0, 1, 0.459);stop-opacity:1;"
+         style="stop-color:hsl(0, 100, 45.9);stop-opacity:1;"
          offset="0"
          id="stop21" />
       <stop
-         style="stop-color:hsl(0, 0.343, 1);stop-opacity:0;"
+         style="stop-color:hsl(0, 34.3, 100);stop-opacity:0;"
          offset="0.48304605"
          id="stop22" />
       <stop
-         style="stop-color:hsl(0, 0.294, 0);stop-opacity:1;"
+         style="stop-color:hsl(0, 29.4, 0);stop-opacity:1;"
          offset="1"
          id="stop23" />
     </linearGradient>
@@ -216,7 +216,7 @@
          offset="0"
          id="stop18" />
       <stop
-         style="stop-color:hsl(273, 0.983, 0.459);stop-opacity:0;"
+         style="stop-color:hsl(273, 98.3, 45.9);stop-opacity:0;"
          offset="0.52961266"
          id="stop19" />
       <stop
@@ -228,7 +228,7 @@
        id="linearGradient16"
        inkscape:collect="always">
       <stop
-         style="stop-color:hsl(360, 0.99, 0.475);stop-opacity:1;"
+         style="stop-color:hsl(360, 99, 47.5);stop-opacity:1;"
          offset="0"
          id="stop14" />
       <stop
@@ -244,15 +244,15 @@
        id="linearGradient39"
        inkscape:collect="always">
       <stop
-         style="stop-color:hsl(0, 1, 0.459);stop-opacity:1;"
+         style="stop-color:hsl(0, 100, 45.9);stop-opacity:1;"
          offset="0"
          id="stop39" />
       <stop
-         style="stop-color:hsl(0, 0.343, 1);stop-opacity:1;"
+         style="stop-color:hsl(0, 34.3, 100);stop-opacity:1;"
          offset="0.48304605"
          id="stop2" />
       <stop
-         style="stop-color:hsl(0, 0.294, 0);stop-opacity:1;"
+         style="stop-color:hsl(0, 29.4, 0);stop-opacity:1;"
          offset="1"
          id="stop40" />
     </linearGradient>
@@ -264,7 +264,7 @@
          offset="0"
          id="stop37" />
       <stop
-         style="stop-color:hsl(345, 0.974, 0.438);stop-opacity:1;"
+         style="stop-color:hsl(345, 97.4, 43.8);stop-opacity:1;"
          offset="0.52961266"
          id="stop1" />
       <stop
@@ -479,7 +479,7 @@
              id="stop4478" />
           <stop
              path="c 0,2.57985  0,5.1597  0,7.73955"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4479" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,0"
@@ -487,7 +487,7 @@
              id="stop4480" />
           <stop
              path="c 0,-2.57985  0,-5.1597  0,-7.73955"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4481" />
         </meshpatch>
         <meshpatch
@@ -511,7 +511,7 @@
              id="stop4485" />
           <stop
              path="c 0,2.57985  -0.120589,2.09832  -0.120584,4.67816"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4486" />
           <stop
              path="c -2.57985,2.48731e-06  -5.03913,3.06139  -7.61897,3.06139"
@@ -529,7 +529,7 @@
              id="stop4489" />
           <stop
              path="c -2.57985,0  -5.28027,-3.06138  -7.86013,-3.06139"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4490" />
         </meshpatch>
       </meshrow>
@@ -542,7 +542,7 @@
              id="stop4491" />
           <stop
              path="c -2.57985,8.29526e-05  -5.54045,-2.53072  -8.1203,-2.53072"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4492" />
           <stop
              path="c 0,-2.57985  0,-5.1597  -5e-06,-7.73968"
@@ -566,7 +566,7 @@
              id="stop4496" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,4e-05"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4497" />
         </meshpatch>
         <meshpatch
@@ -593,7 +593,7 @@
              id="stop4501" />
           <stop
              path="c 0,-2.57985  0,-5.1597  5e-06,-7.73955"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4502" />
         </meshpatch>
         <meshpatch
@@ -623,7 +623,7 @@
              id="stop4507" />
           <stop
              path="c -2.57985,0  -5.11951,2.74055  -7.69936,2.74056"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4508" />
         </meshpatch>
       </meshrow>
@@ -636,7 +636,7 @@
              id="stop4509" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,0"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4510" />
           <stop
              path="c 0,-2.57985  0,-5.1597  0,-7.73955"
@@ -660,7 +660,7 @@
              id="stop4514" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,-4e-05"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4515" />
         </meshpatch>
         <meshpatch
@@ -692,7 +692,7 @@
              id="stop4478-1" />
           <stop
              path="c 0,2.57985  0,5.1597  0,7.73955"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4479-8" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,0"
@@ -700,7 +700,7 @@
              id="stop4480-7" />
           <stop
              path="c 0,-2.57985  0,-5.1597  0,-7.73955"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4481-9" />
         </meshpatch>
         <meshpatch
@@ -724,7 +724,7 @@
              id="stop4485-5" />
           <stop
              path="c 0,2.57985  -0.120589,2.09832  -0.120584,4.67816"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4486-9" />
           <stop
              path="c -2.57985,2.48731e-06  -5.03913,3.06139  -7.61897,3.06139"
@@ -742,7 +742,7 @@
              id="stop4489-9" />
           <stop
              path="c -2.57985,0  -5.28027,-3.06138  -7.86013,-3.06139"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4490-7" />
         </meshpatch>
       </meshrow>
@@ -755,7 +755,7 @@
              id="stop4491-1" />
           <stop
              path="c -2.57985,8.29526e-05  -5.54045,-2.53072  -8.1203,-2.53072"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4492-2" />
           <stop
              path="c 0,-2.57985  0,-5.1597  -5e-06,-7.73968"
@@ -779,7 +779,7 @@
              id="stop4496-7" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,4e-05"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4497-8" />
         </meshpatch>
         <meshpatch
@@ -806,7 +806,7 @@
              id="stop4501-0" />
           <stop
              path="c 0,-2.57985  0,-5.1597  5e-06,-7.73955"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4502-6" />
         </meshpatch>
         <meshpatch
@@ -836,7 +836,7 @@
              id="stop4507-4" />
           <stop
              path="c -2.57985,0  -5.11951,2.74055  -7.69936,2.74056"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4508-7" />
         </meshpatch>
       </meshrow>
@@ -849,7 +849,7 @@
              id="stop4509-6" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,0"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4510-9" />
           <stop
              path="c 0,-2.57985  0,-5.1597  0,-7.73955"
@@ -873,7 +873,7 @@
              id="stop4514-5" />
           <stop
              path="c -2.57985,0  -5.1597,0  -7.73955,-4e-05"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop4515-4" />
         </meshpatch>
         <meshpatch
@@ -908,7 +908,7 @@
              id="stop9160" />
           <stop
              path="c 6.41166,0  11.6093,-5.19768  11.6093,-11.6093"
-             style="stop-color:hsl(0, 0.75, 0.594);stop-opacity:1"
+             style="stop-color:hsl(0, 75, 59.4);stop-opacity:1"
              id="stop9161" />
           <stop
              path="l 3.8698,-2e-05"
@@ -940,7 +940,7 @@
              id="stop9167" />
           <stop
              path="c -6.41166,0  -11.6093,5.19768  -11.6093,11.6093"
-             style="stop-color:hsl(0, 0.75, 0.594);stop-opacity:1"
+             style="stop-color:hsl(0, 75, 59.4);stop-opacity:1"
              id="stop9168" />
         </meshpatch>
         <meshpatch
@@ -967,7 +967,7 @@
              id="stop9172" />
           <stop
              path="c 4.27444,0  7.73955,-3.46512  7.73955,-7.73955"
-             style="stop-color:hsl(0, 0.5, 0.73);stop-opacity:1"
+             style="stop-color:hsl(0, 50, 73);stop-opacity:1"
              id="stop9173" />
           <stop
              path="l 3.86975,3e-05"
@@ -991,7 +991,7 @@
              id="stop9177" />
           <stop
              path="c -4.27444,0  -7.73955,3.46512  -7.73954,7.73954"
-             style="stop-color:hsl(0, 0.5, 0.73);stop-opacity:1"
+             style="stop-color:hsl(0, 50, 73);stop-opacity:1"
              id="stop9178" />
         </meshpatch>
         <meshpatch
@@ -1014,7 +1014,7 @@
              id="stop9181" />
           <stop
              path="c 2.13722,0  3.86978,-1.73256  3.86978,-3.86978"
-             style="stop-color:hsl(0, 0.25, 0.865);stop-opacity:1"
+             style="stop-color:hsl(0, 25, 86.5);stop-opacity:1"
              id="stop9182" />
           <stop
              path="l 3.86977,1e-05"
@@ -1038,7 +1038,7 @@
              id="stop9186" />
           <stop
              path="c -2.13722,0  -3.86978,1.73256  -3.86976,3.86976"
-             style="stop-color:hsl(0, 0.25, 0.865);stop-opacity:1"
+             style="stop-color:hsl(0, 25, 86.5);stop-opacity:1"
              id="stop9187" />
         </meshpatch>
         <meshpatch
@@ -1065,7 +1065,7 @@
              id="stop9191" />
           <stop
              path="l 3.86978,0"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop9192" />
         </meshpatch>
         <meshpatch
@@ -1075,7 +1075,7 @@
              id="stop9193" />
           <stop
              path="l -2e-05,-2e-05"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop9194" />
         </meshpatch>
         <meshpatch
@@ -1095,7 +1095,7 @@
              id="stop9197" />
           <stop
              path="l 2e-05,2e-05"
-             style="stop-color:hsl(0, 1, 0.459);stop-opacity:1"
+             style="stop-color:hsl(0, 100, 45.9);stop-opacity:1"
              id="stop9198" />
         </meshpatch>
       </meshrow>

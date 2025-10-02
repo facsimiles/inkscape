@@ -37,7 +37,7 @@ TEST(ColorUtils, test_color_to_id)
     EXPECT_EQ(color_to_id(Color::parse("red")), "css-red");
     EXPECT_EQ(color_to_id(Color::parse("#0000ff")), "rgb-0000ff");
 
-    auto color = Color::parse("hsl(0.5, 0.5, 1.0)");
+    auto color = Color::parse("hsl(0.5, 50, 100)");
     EXPECT_EQ(color_to_id(color), "hsl-007fff");
 
     color->setName("Huey // Dewy_! Lewy");

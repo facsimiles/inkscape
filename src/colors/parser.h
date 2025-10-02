@@ -60,10 +60,13 @@ protected:
 class HueParser : public LegacyParser
 {
 public:
-    HueParser(std::string const &prefix, Space::Type type, bool alpha)
+    HueParser(std::string const &prefix, Space::Type type, bool alpha, double scale = 1.0)
         : LegacyParser(prefix, type, alpha)
+	, _scale(scale)
     {}
     bool parse(std::istringstream &ss, std::vector<double> &output) const override;
+protected:
+    double _scale = 1.0;
 };
 
 class HexParser : public Parser

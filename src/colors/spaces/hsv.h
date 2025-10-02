@@ -34,7 +34,7 @@ public:
     {
     public:
         fromHwbParser(bool alpha)
-            : HueParser("hwb", Space::Type::HSV, alpha)
+	     : HueParser("hwb", Space::Type::HSV, alpha, 100.0)
         {}
         bool parse(std::istringstream &input, std::vector<double> &output) const override;
     };
