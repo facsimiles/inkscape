@@ -1068,7 +1068,7 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
             rec = U_WMRELLIPSE_set(rcl);
         }
         if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-            g_error("Fatal programming error in PrintWmf::print_simple_shape at retangle/ellipse/polygon");
+            g_error("Fatal programming error in PrintWmf::print_simple_shape at rectangle/ellipse/polygon");
         }
 
         done = true;

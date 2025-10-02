@@ -1,11 +1,11 @@
-# This is called by cmake as an extermal process from
+# This is called by cmake as an external process from
 # ./src/CMakeLists.txt and creates inkscape-version.cpp
 #
 # It's also included directly in ./CMakeScripts/Dist.cmake to
 # determine INKSCAPE_REVISION, INKSCAPE_REVISION_HASH and INKSCAPE_REVISION_DATE
 # for the 'dist' targets
 #
-# These variables are defined by the caller, matching the CMake equivilents.
+# These variables are defined by the caller, matching the CMake equivalents.
 # - ${INKSCAPE_SOURCE_DIR}
 # - ${INKSCAPE_BINARY_DIR}
 

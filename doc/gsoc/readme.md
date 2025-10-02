@@ -298,12 +298,12 @@ A successful proposal would include a UI plan worked out ahead of time with the 
     depending on the format: some reverse engineering
 -   Prerequisites: minimal knowledge of test-driven development
 
-**Detailed Description:** Inkscape is alway looking
+**Detailed Description:** Inkscape is always looking
 to improve compatibility! Some ideas of relevant file formats - each of
 them more than enough for one GSoC:
 
 - Refactor our **DXF input and output** extensions, and improve their test coverage / correctness
--   Rewrite the **XAML importer** in Python (currenly XSLT) to match the
+-   Rewrite the **XAML importer** in Python (currently XSLT) to match the
     capabilities of the new XAML exporter (i.e. support for different
     target frameworks, better text support...) - would have to select
     carefully what to support (drawing primitives) and what not (control
@@ -434,7 +434,7 @@ ideas and help bring shiny new stuff to life!
     -   Javascript support improvements
     -   CSS support improvements
 -   2012
-    -   Usibility Improvements for Guides
+    -   Usability Improvements for Guides
     -   [On-canvas support for Tessellations](https://wiki.inkscape.org/wiki/Tiling_tool)
     -   Creating python bindings for lib2geom
 -   [2013](https://wiki.inkscape.org/wiki/Google_Summer_of_Code_2013)
