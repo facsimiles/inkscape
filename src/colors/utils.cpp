@@ -156,7 +156,7 @@ Color make_theme_color(Color const &orig, bool dark)
         // make a darker shade and limit to remove extremes
         color.set(2, std::min(color[2] * 0.7, 0.3));
     } else {
-        // make a lighter shade and limit to remove extemes
+        // make a lighter shade and limit to remove extremes
         color.set(2, std::max(color[2] + (1.0 - color[2]) * 0.5, 0.8));
     }
 

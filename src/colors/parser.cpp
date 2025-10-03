@@ -170,7 +170,7 @@ bool HexParser::parse(std::istringstream &ss, std::vector<double> &output, bool 
 
     size = ss.tellg();
     ss >> std::hex >> hex;
-    // This mess is required because istream countg is inconsistant
+    // This mess is required because istream counting is inconsistent
     size = (ss.tellg() == -1 ? ss.str().size() : (int)ss.tellg()) - size;
 
     if (size == 3 || size == 4) { // #rgb(a)
@@ -243,9 +243,9 @@ std::string Parser::getCssPrefix(std::istringstream &ss)
  *
  * @arg ss - The string stream to read
  * @returns value - The value read in without adjustment
- * @returns unit - The unit, ususally an empty string
+ * @returns unit - The unit, usually an empty string
  * @returns end - True if this is the end of the css function
- * @arg sep - An optional seperator argument
+ * @arg sep - An optional separator argument
  *
  * @returns true if a number and unit was parsed correctly.
  */

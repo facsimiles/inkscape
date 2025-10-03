@@ -183,7 +183,7 @@ LC find_cusp(float a, float b)
 // a and b must be normalized so a^2 + b^2 == 1
 float find_gamut_intersection(float a, float b, float L1, float C1, float L0, LC cusp)
 {
-	// Find the intersection for upper and lower half seprately
+	// Find the intersection for upper and lower half separately
 	float t;
 	if (((L1 - L0) * cusp.C - (cusp.L - L0) * C1) <= 0.f)
 	{

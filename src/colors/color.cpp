@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
@@ -42,7 +43,7 @@ Color::Color(Space::Type space_type, std::vector<double> values)
 {}
 
 /**
- * Compatability layer for making blind RGB colors
+ * Compatibility layer for making blind RGB colors
  */
 Color::Color(uint32_t rgba, bool opacity)
     : Color(Space::Type::RGB, rgba_to_values(rgba, opacity))
@@ -54,7 +55,7 @@ Color::Color(uint32_t rgba, bool opacity)
  * @arg space - The color space these channel values exist in.
  * @arg colors - Each channel in the color space must have a value between 0.0 and 1.0
  *               an extra value may be appended to indicate the opacity to support CSS
- *               formatted opacity parsing but is not expected to be writen by Inkscape
+ *               formatted opacity parsing but is not expected to be written by Inkscape
  *               when being generated.
  */
 Color::Color(std::shared_ptr<Space::AnySpace> space, std::vector<double> colors)
@@ -73,7 +74,7 @@ Color::Color(std::shared_ptr<Space::AnySpace> space, std::vector<double> colors)
 bool Color::operator==(Color const &other) const
 {
     // TODO: Adjust epsilon value to ignore roundtrip conversion rounding errors,
-    // but still keep high precision of color comparision.
+    // but still keep high precision of color comparison.
     //
     // I arrived at this value empirically. If it is too big, then sometimes changes (by the user) are not picked up,
     // and no refresh happens. If it is too small, then roundtrip conversions will also trigger changes, while they ideally should not.

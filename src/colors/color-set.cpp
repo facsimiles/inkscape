@@ -20,8 +20,8 @@ namespace Inkscape::Colors {
  * Construct a new ColorSet object to contain a group of colors which will
  * be modified collectively.
  *
- * @arg space - optionally contrain each color added to be in this color space
- * @arg alpha - optionally contrain each color to have or not have an alpha channel
+ * @arg space - optionally constrain each color added to be in this color space
+ * @arg alpha - optionally constrain each color to have or not have an alpha channel
  */
 ColorSet::ColorSet(std::shared_ptr<Space::AnySpace> space, std::optional<bool> alpha)
     : _space_constraint(std::move(space))
@@ -198,7 +198,7 @@ std::optional<Color> ColorSet::get() const
 }
 
 /*
- * Internal function for setting a color by id without calling the changed singal.
+ * Internal function for setting a color by id without calling the changed signal.
  */
 bool ColorSet::_set(std::string id, Color const &other)
 {

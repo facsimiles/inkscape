@@ -47,7 +47,7 @@ void DeviceCMYK::profileToSpace(std::vector<double> &io) const
     io.insert(io.begin() + 3, 1.0 - std::max(std::max(io[0], io[1]), io[2]));
     double const white = 1.0 - io[3];
 
-    // Each channel is it's color chart oposite (cyan->red) with a bit of white removed.
+    // Each channel is its color chart opposite (cyan->red) with a bit of white removed.
     io[0] = white ? (1.0 - io[0] - io[3]) / white : 0.0;
     io[1] = white ? (1.0 - io[1] - io[3]) / white : 0.0;
     io[2] = white ? (1.0 - io[2] - io[3]) / white : 0.0;

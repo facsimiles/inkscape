@@ -75,7 +75,7 @@ void AnySpace::spaceToProfile(std::vector<double> &io) const {}
 void AnySpace::profileToSpace(std::vector<double> &io) const {}
 
 /**
- * Step two in coverting a color, convert it's profile to another profile (if needed)
+ * Step two in converting a color, convert its profile to another profile (if needed)
  */
 bool AnySpace::profileToProfile(std::vector<double> &io, std::shared_ptr<AnySpace> to_space) const
 {
@@ -144,7 +144,7 @@ uint32_t AnySpace::toRGBA(std::vector<double> const &values, double opacity) con
  * Return true if the color would be out of gamut in the target color space.
  *
  * NOTE: This can NOT work if the base color spaces are exactly the same. i.e. device-cmyk(sRGB)
- * will always return false despite not being reversable with RGB (which is also sRGB).
+ * will always return false despite not being reversible with RGB (which is also sRGB).
  *
  * If you want gamut checking via lcms2, you must use different icc profiles.
  *

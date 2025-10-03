@@ -25,7 +25,7 @@ public:
     static std::shared_ptr<Profile> create_from_uri(std::string path, bool in_home = false);
     static std::shared_ptr<Profile> create_from_data(std::string const &contents);
 
-    /* LittleCMS based indentity profiles */
+    /* LittleCMS based identity profiles */
     static std::shared_ptr<Profile> create_srgb();
     static std::shared_ptr<Profile> create_linearrgb();
     static std::shared_ptr<Profile> create_xyz65();

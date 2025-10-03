@@ -230,7 +230,7 @@ const std::shared_ptr<Profile> &System::getProfile(std::string const &name) cons
 }
 
 /**
- * Get the color managed trasform for the screen.
+ * Get the color managed transform for the screen.
  *
  * There is one transform for all displays, anything more complex and the user should
  * use their operating system CMS configurations instead of the Inkscape display cms.
