@@ -17,17 +17,17 @@ using Space::Type::RGB;
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsv, fromString, testing::Values(
     // Taken from the w3c hwb example chart
-    _P(in, "hwb(0, 20, 20)",              { 0.0,   0.75,  0.8         }, 0xcc3333ff),
-    _P(in, "hwb(30, 20.0, 20.0)",         { 0.083, 0.75,  0.8         }, 0xcc7f33ff),
-    _P(in, "hwb(90, 20, 20)",             { 0.25,  0.75,  0.8         }, 0x80cc33ff),
-    _P(in, "hwb(0, 40, 40)",              { 0.0,   0.333, 0.6         }, 0x996666ff),
-    _P(in, "hwb(30deg, 40, 40)",          { 0.083, 0.333, 0.6         }, 0x997f66ff),
-    _P(in, "hwb(0.25turn, 40, 40)",       { 0.25,  0.333, 0.6         }, 0x809966ff),
-    _P(in, "hwb(0, 60, 60%)",             { 0.0,   0,     0.5         }, 0x808080ff),
-    _P(in, "hwb(30, 60%, 60)",            { 0.083, 0,     0.5         }, 0x808080ff),
-    _P(in, "   hwb(90, 60, 60)   ",       { 0.25,  0,     0.5         }, 0x808080ff),
-    _P(in, "hwb(0, 80, 80)",              { 0.0,   0,     0.5         }, 0x808080ff),
-    _P(in, "hwb(0, 100, 100 / 0.5)",      { 0.0,   0,     0.5,   0.5  }, 0x80808080)
+    _P(in, "hwb(0 20 20)",              { 0.0,   0.75,  0.8         }, 0xcc3333ff),
+    _P(in, "hwb(30 20.0 20.0)",         { 0.083, 0.75,  0.8         }, 0xcc7f33ff),
+    _P(in, "hwb(90 20 20)",             { 0.25,  0.75,  0.8         }, 0x80cc33ff),
+    _P(in, "hwb(0 40 40)",              { 0.0,   0.333, 0.6         }, 0x996666ff),
+    _P(in, "hwb(30deg 40 40)",          { 0.083, 0.333, 0.6         }, 0x997f66ff),
+    _P(in, "hwb(0.25turn 40 40)",       { 0.25,  0.333, 0.6         }, 0x809966ff),
+    _P(in, "hwb(0 60 60%)",             { 0.0,   0,     0.5         }, 0x808080ff),
+    _P(in, "hwb(30 60% 60)",            { 0.083, 0,     0.5         }, 0x808080ff),
+    _P(in, "   hwb(90 60 60)   ",       { 0.25,  0,     0.5         }, 0x808080ff),
+    _P(in, "hwb(0 80 80)",              { 0.0,   0,     0.5         }, 0x808080ff),
+    _P(in, "hwb(0 100 100 / 0.5)",      { 0.0,   0,     0.5,   0.5  }, 0x80808080)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsv, badColorString, testing::Values(
@@ -35,11 +35,11 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsv, badColorString, testing::Values(
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsv, toString, testing::Values(
-    _P(out, HSV, { 0.333, 0.2,   0.8         }, "hwb(119, 64, 20)"),
-    _P(out, HSV, { 0.333, 0.8,   0.258       }, "hwb(119, 5.16, 74.2)"),
-    _P(out, HSV, { 1.0,   0.5,   0.004       }, "hwb(360, 0.2, 99.6)"),
-    _P(out, HSV, { 0,     1,     0.2,   0.8  }, "hwba(0, 0, 80, 0.8)"),
-    _P(out, HSV, { 0,     1,     0.2,   0.8  }, "hwb(0, 0, 80)", false)
+    _P(out, HSV, { 0.333, 0.2,   0.8         }, "hwb(119 64 20)"),
+    _P(out, HSV, { 0.333, 0.8,   0.258       }, "hwb(119 5.16 74.2)"),
+    _P(out, HSV, { 1.0,   0.5,   0.004       }, "hwb(360 0.2 99.6)"),
+    _P(out, HSV, { 0,     1,     0.2,   0.8  }, "hwb(0 0 80 / 80%)"),
+    _P(out, HSV, { 0,     1,     0.2,   0.8  }, "hwb(0 0 80)", false)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsv, convertColorSpace, testing::Values(

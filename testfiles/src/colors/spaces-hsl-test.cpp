@@ -20,9 +20,12 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, fromString, testing::Values(
     _P(in, "hsl(360, 50, 0)",             { 1.0,   0.5,   0           }, 0x000000ff),
     _P(in, "hsl(180deg, 100%, 50%)",      { 0.5,   1,     0.5         }, 0x00ffffff),
     _P(in, "hsl(0.5turn 100% 50%)",       { 0.5,   1,     0.5         }, 0x00ffffff),
+    _P(in, "hsl(0.5turn 100  50)",        { 0.5,   1,     0.5         }, 0x00ffffff),
     _P(in, "   hsl(20,  100,  50)",       { 0.055, 1,     0.5         }, 0xff5500ff),
-    _P(in, "hsl(50%, 100%, 50% / 50%)",   { 0.5,   1,     0.5,   0.5  }, 0x00ffff80),
-    _P(in, "hsla(30, 0,  50, 0.5)",       { 0.083, 0,     0.5,   0.5  }, 0x80808080)
+    _P(in, "hsl(50% 100% 50% / 50%)",     { 0.5,   1,     0.5,   0.5  }, 0x00ffff80),
+    _P(in, "hsla(30, 0,  50, 0.5)",       { 0.083, 0,     0.5,   0.5  }, 0x80808080),
+    _P(in, "hsla(30  0   50 / 0.5)",      { 0.083, 0,     0.5,   0.5  }, 0x80808080),
+    _P(in, "hsla(30  0   50)",            { 0.083, 0,     0.5         }, 0x808080ff)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesHsl, badColorString, testing::Values(

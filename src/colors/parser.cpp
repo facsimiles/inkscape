@@ -11,6 +11,7 @@
 #include <cctype>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include "spaces/cms.h"
 #include "spaces/cmyk.h"
@@ -92,8 +93,9 @@ bool Parsers::_parse(std::istringstream &ss, Space::Type &type, std::string &nam
 {
     auto ptype = Parser::getCssPrefix(ss);
     auto iter = _parsers.find(ptype);
-    if (iter == _parsers.end())
+    if (iter == _parsers.end()) {
         return false;
+    }
 
     for (auto &parser : iter->second) {
         auto pos = ss.tellg();
@@ -154,10 +156,27 @@ std::string Parser::parseColor(std::istringstream &ss, std::vector<double> &outp
 
 bool HueParser::parse(std::istringstream &ss, std::vector<double> &output) const
 {
+    // Modern CSS syntax
+    char sep0 = 0x0;
+    char sep1 = '/'; // alpha separator
+    int max_count = 4;
+
+    // Legacy CSS syntax (only allowed for HSL)
+    if (ss.str().find(',') != std::string::npos && getPrefix().starts_with("hsl")) {
+        sep0 = ',';
+        sep1 = ',';
+	max_count = _alpha ? 4 : 3; // hsl() must have 3 and hsla() 4
+    }
+
     bool end = false;
-    return append_css_value(ss, output, end, ',', 360) && append_css_value(ss, output, end, ',', _scale) &&
-           append_css_value(ss, output, end, !_alpha ? '/' : ',', _scale) && (append_css_value(ss, output, end) || !_alpha) &&
-           end;
+    while (!end && output.size() < max_count) {
+        auto scale = _scale;
+        if (output.size() == 0) scale = 360.0;
+        if (output.size() == 3) scale = 1.0;
+        if (!append_css_value(ss, output, end, output.size() == 2 ? sep1 : sep0, scale))
+            break;
+    }
+    return end;
 }
 
 /**

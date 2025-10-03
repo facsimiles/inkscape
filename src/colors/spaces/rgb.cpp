@@ -10,6 +10,7 @@
 #include "rgb.h"
 
 #include <sstream>
+#include <string>
 
 #include "colors/cms/profile.h"
 #include "colors/color.h"
@@ -49,12 +50,24 @@ std::string RGB::toString(std::vector<double> const &values, bool opacity) const
  */
 bool RGB::Parser::parse(std::istringstream &ss, std::vector<double> &output) const
 {
+    // Modern CSS syntax
+    char sep0 = 0x0;
+    char sep1 = '/'; // alpha separator
+    int max_count = 4;
+
+    // Legacy CSS syntax
+    if (ss.str().find(',') != std::string::npos) {
+        sep0 = ',';
+        sep1 = ',';
+	max_count = _alpha ? 4 : 3; // rgb() must have 3 and rgba() 4
+    }
+
     bool end = false;
-    return append_css_value(ss, output, end, ',', 255)                    // Red
-           && append_css_value(ss, output, end, ',', 255)                 // Green
-           && append_css_value(ss, output, end, !_alpha ? '/' : ',', 255) // Blue
-           && (append_css_value(ss, output, end) || !_alpha)              // Opacity
-           && end;
+    while (!end && output.size() < max_count) {
+        if (!append_css_value(ss, output, end, output.size() == 2 ? sep1 : sep0, output.size() == 3 ? 1.0 : 255.0))
+            break;
+    }
+    return end;
 }
 
 } // namespace Inkscape::Colors::Space

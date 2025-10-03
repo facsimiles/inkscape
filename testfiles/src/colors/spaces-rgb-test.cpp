@@ -26,18 +26,19 @@ INSTANTIATE_TEST_SUITE_P(ColorsSpacesRgb, fromString, testing::Values(
     _P(in, "rgb(100%, 50%, 1)",           { 1.0,   0.5,   0.004       }, 0xff8001ff),
     _P(in, "rgb(100% 50% 51)",            { 1.0,   0.5,   0.2         }, 0xff8033ff),
     _P(in, "rgb(100% ,50% , 51   )",      { 1.0,   0.5,   0.2         }, 0xff8033ff),
-    _P(in, "rgb(100% ,50% , 102 / 50%)",  { 1.0,   0.5,   0.4,   0.5  }, 0xff806680),
+    _P(in, "rgb(100% 50% 102 / 50%)",     { 1.0,   0.5,   0.4,   0.5  }, 0xff806680),
     _P(in, "   rgb(128, 128, 128)",       { 0.501, 0.501, 0.501       }, 0x808080ff),
     _P(in, "rgba(255, 255, 128,   0.5) ", { 1.0,   1.0,   0.501, 0.5  }, 0xffff8080),
     _P(in, "RGBA(255, 255, 128,   0.5) ", { 1.0,   1.0,   0.501, 0.5  }, 0xffff8080),
+    _P(in, "rgba(255  255  128)",         { 1.0,   1.0,   0.501       }, 0xffff80ff),
     _P(in, "color(srgb 1 0.5 0.4 / 50%)", { 1.0,   0.5,   0.4,   0.5  }, 0xff806680),
     _P(in, "color(sRGb 1 0.5 0.4 / 50%)", { 1.0,   0.5,   0.4,   0.5  }, 0xff806680)
 ));
 
 INSTANTIATE_TEST_SUITE_P(ColorsSpacesRgb, badColorString, testing::Values(
     "", "#", "#1", "#12",
-    "rgb", "rgb(", "rgb(255,", "rgb(1 2 3", "rgb(1 2 3 4",
-    "rgba(1 2 3)",
+    "rgb", "rgb(", "rgb(255,", "rgb(1 2 3", "rgb(1 2 3 / 4",
+    "rgba(1 2 3",
     "color(srgb 3"
 ));
 
