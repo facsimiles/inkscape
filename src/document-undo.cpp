@@ -310,7 +310,6 @@ gboolean Inkscape::DocumentUndo::undo(SPDocument *doc)
     doc->update_lpobjs();
     doc->sensitive = TRUE;
     doc->seeking = false;
-    if (ret) INKSCAPE.external_change();
     return ret;
 }
 
@@ -349,7 +348,6 @@ gboolean Inkscape::DocumentUndo::redo(SPDocument *doc)
 	doc->sensitive = TRUE;
     doc->seeking = false;
 	if (ret) {
-		INKSCAPE.external_change();
         doc->emitReconstructionFinish();
     }
 	return ret;

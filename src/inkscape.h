@@ -61,22 +61,9 @@ public:
     static Application& instance();
     static bool exists();
     static void create(bool use_gui);
-    
-    // returns the mask of the keyboard modifier to map to Alt, zero if no mapping
-    // Needs to be a guint because gdktypes.h does not define a 'no-modifier' value
-    guint mapalt() const { return _mapalt; }
-    
-    // Sets the keyboard modifier to map to Alt. Zero switches off mapping, as does '1', which is the default 
-    void mapalt(guint maskvalue);
-    
-    guint trackalt() const { return _trackalt; }
-    void trackalt(guint trackvalue) { _trackalt = trackvalue; }
 
     bool use_gui() const { return _use_gui; }
     void use_gui(gboolean guival) { _use_gui = guival; }
-
-    // no setter for this -- only we can control this variable
-    static bool isCrashing() { return _crashIsHappening; }
 
     SPDocument * active_document();
     SPDesktop * active_desktop();
@@ -89,15 +76,11 @@ public:
     void activate_desktop (SPDesktop * desktop);
     void switch_desktops_next ();
     void switch_desktops_prev ();
-    void get_all_desktops (std::list< SPDesktop* >& listbuf);
-    void reactivate_desktop (SPDesktop * desktop);
     SPDesktop * find_desktop_by_dkey (unsigned int dkey);
     unsigned int maximum_dkey();
     SPDesktop * next_desktop ();
     SPDesktop * prev_desktop ();
     std::vector<SPDesktop *> * get_desktops() { return _desktops; };
-    
-    void external_change ();
     
     // Moved document add/remove functions into public inkscape.h as they are used
     // (rightly or wrongly) by console-mode functions
@@ -112,28 +95,6 @@ public:
     // nobody should be accessing our reference count, so it's made private.
     friend void ::inkscape_ref  (Application & in);
     friend void ::inkscape_unref(Application & in);
-
-    // signals
-    
-    // one of selections changed
-    sigc::signal<void (Inkscape::Selection *)> signal_selection_changed;
-    // one of subselections (text selection, gradient handle, etc) changed
-    sigc::signal<void (SPDesktop *)> signal_subselection_changed;
-    // one of selections modified
-    sigc::signal<void (Inkscape::Selection *, guint /*flags*/)> signal_selection_modified;
-    // one of selections set
-    sigc::signal<void (Inkscape::Selection *)> signal_selection_set;
-    // some desktop got focus
-    sigc::signal<void (SPDesktop *)> signal_activate_desktop;
-    // some desktop lost focus
-    sigc::signal<void (SPDesktop *)> signal_deactivate_desktop;
-    
-    // these are orphaned signals (nothing emits them and nothing connects to them)
-    sigc::signal<void (SPDocument *)> signal_destroy_document;
-    
-    // a document was changed by some external means (undo or XML editor); this
-    // may not be reflected by a selection change and thus needs a separate signal
-    sigc::signal<void ()> signal_external_change;
 
     void set_pdf_poppler(bool p) {
         _pdf_poppler = p;
@@ -181,9 +142,6 @@ public:
     std::string _pages;
 
     unsigned refCount = 1;
-    guint _mapalt = GDK_ALT_MASK;
-    guint _trackalt = false;
-    static bool _crashIsHappening;
     bool _use_gui = false;
     bool _pdf_poppler = false;
     int _pdf_font_strategy = 0;

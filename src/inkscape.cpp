@@ -66,7 +66,6 @@
 
 // Inkscape::Application static members
 Inkscape::Application * Inkscape::Application::_S_inst = nullptr;
-bool Inkscape::Application::_crashIsHappening = false;
 
 #define DESKTOP_IS_ACTIVE(d) (INKSCAPE._desktops != nullptr && !INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
 
@@ -243,9 +242,6 @@ Application::Application(bool use_gui) :
     if (use_gui)
     {
         Inkscape::UI::Tools::init_latin_keys_group();
-        /* Check for global remapping of Alt key */
-        mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
-        trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
 
         /* update highlight colors when theme changes */
         themecontext->getChangeThemeSignal().connect([this](){
@@ -288,19 +284,6 @@ Application::~Application()
     refCount = 0;
 }
 
-/** Sets the keyboard modifier to map to Alt.
- *
- * Zero switches off mapping, as does '1', which is the default.
- */
-void Application::mapalt(guint maskvalue)
-{
-    if ( maskvalue < 2 || maskvalue > 5 ) {  // MOD5 is the highest defined in gdktypes.h
-        _mapalt = 0;
-    } else {
-        _mapalt = (GDK_ALT_MASK << (maskvalue-1));
-    }
-}
-
 void
 Application::crash_handler (int /*signum*/)
 {
@@ -327,8 +310,6 @@ Application::crash_handler (int /*signum*/)
         abort ();
     }
     recursion = true;
-
-    _crashIsHappening = true;
 
     EventTracker<SimpleEvent<Inkscape::Debug::Event::CORE> > tracker("crash");
     tracker.set<SimpleEvent<> >("emergency-save");
@@ -555,13 +536,7 @@ Application::add_desktop (SPDesktop * desktop)
     }
 
     _desktops->insert(_desktops->begin(), desktop);
-
-    signal_activate_desktop.emit(desktop);
-    signal_selection_set.emit(desktop->getSelection());
-    signal_selection_changed.emit(desktop->getSelection());
 }
-
-
 
 void
 Application::remove_desktop (SPDesktop * desktop)
@@ -572,17 +547,11 @@ Application::remove_desktop (SPDesktop * desktop)
         g_error("Attempted to remove desktop not in list.");
     }
 
-
     if (DESKTOP_IS_ACTIVE (desktop)) {
-        signal_deactivate_desktop.emit(desktop);
         if (_desktops->size() > 1) {
             SPDesktop * new_desktop = *(++_desktops->begin());
             _desktops->erase(std::find(_desktops->begin(), _desktops->end(), new_desktop));
             _desktops->insert(_desktops->begin(), new_desktop);
-
-            signal_activate_desktop.emit(new_desktop);
-            signal_selection_set.emit(new_desktop->getSelection());
-            signal_selection_changed.emit(new_desktop->getSelection());
         } else {
             if (desktop->getSelection())
                 desktop->getSelection()->clear();
@@ -616,33 +585,9 @@ Application::activate_desktop (SPDesktop * desktop)
         g_error("Tried to activate desktop not added to list.");
     }
 
-    SPDesktop *current = _desktops->front();
-
-    signal_deactivate_desktop.emit(current);
-
     _desktops->erase (i);
     _desktops->insert (_desktops->begin(), desktop);
-
-    signal_activate_desktop.emit(desktop);
-    signal_selection_set(desktop->getSelection());
-    signal_selection_changed(desktop->getSelection());
 }
-
-
-/**
- *  Resends ACTIVATE_DESKTOP for current desktop; needed when a new desktop has got its window that dialogs will transientize to
- */
-void
-Application::reactivate_desktop (SPDesktop * desktop)
-{
-    g_return_if_fail (desktop != nullptr);
-
-    if (DESKTOP_IS_ACTIVE (desktop)) {
-        signal_activate_desktop.emit(desktop);
-    }
-}
-
-
 
 SPDesktop *
 Application::find_desktop_by_dkey (unsigned int dkey)
@@ -739,12 +684,6 @@ Application::switch_desktops_prev()
     prev_desktop()->presentWindow();
 }
 
-void
-Application::external_change()
-{
-    signal_external_change.emit();
-}
-
 void Application::add_document(SPDocument *document)
 {
     _document_set.emplace(document);
@@ -790,12 +729,6 @@ Application::active_document()
 void Application::exit()
 {
     Inkscape::Preferences::unload();
-}
-
-void
-Application::get_all_desktops(std::list< SPDesktop* >& listbuf)
-{
-    listbuf.insert(listbuf.end(), _desktops->begin(), _desktops->end());
 }
 
 } // namespace Inkscape
