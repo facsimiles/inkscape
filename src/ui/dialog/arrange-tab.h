@@ -12,9 +12,9 @@
 #ifndef INKSCAPE_UI_DIALOG_ARRANGE_TAB_H
 #define INKSCAPE_UI_DIALOG_ARRANGE_TAB_H
 
-namespace Inkscape {
-namespace UI {
-namespace Dialog {
+#include <gtkmm/box.h>
+
+namespace Inkscape::UI::Dialog {
 
 /**
  * This interface should be implemented by each arrange mode.
@@ -24,8 +24,9 @@ namespace Dialog {
 class ArrangeTab : public Gtk::Box
 {
 public:
-	ArrangeTab() : Gtk::Box(Gtk::Orientation::VERTICAL) {}
-	~ArrangeTab() override = default;
+    ArrangeTab()
+        : Gtk::Box(Gtk::Orientation::VERTICAL)
+    {}
 
 	/**
 	 * Do the actual work! This method is invoked to actually arrange the
@@ -34,10 +35,7 @@ public:
 	virtual void arrange() = 0;
 };
 
-} //namespace Dialog
-} //namespace UI
-} //namespace Inkscape
-
+} // namespace Inkscape::UI::Dialog
 
 #endif /* INKSCAPE_UI_DIALOG_ARRANGE_TAB_H */
 

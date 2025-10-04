@@ -17,8 +17,6 @@
 
 #include <unistd.h>
 
-#include <fstream>
-#include <map>
 #include <boost/stacktrace.hpp>
 #undef near
 #undef IGNORE
@@ -39,8 +37,6 @@
 #include "inkscape-application.h"
 #include "inkscape-version-info.h"
 #include "inkscape-window.h"
-#include "message-stack.h"
-#include "path-prefix.h"
 #include "selection.h"
 
 #include "debug/simple-event.h"
@@ -48,21 +44,17 @@
 #include "io/resource.h"
 #include "io/sys.h"
 #include "libnrtype/font-factory.h"
-#include "object/sp-item-group.h"
 #include "object/sp-root.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
 #include "ui/themes.h"
 #include "ui/dialog-events.h"
-#include "ui/dialog-run.h"
 #include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/dialog-window.h"
 #include "ui/themes.h"
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
 #include "ui/widget/ink-spin-button.h"
 #include "util/font-discovery.h"
-#include "util/units.h"
 
 static bool desktop_is_active(SPDesktop const *d)
 {
@@ -90,15 +82,6 @@ struct Application::ConstructibleApplication : Application
 };
 
 /**
- * Defined only for debugging purposes. If we are certain the bugs are gone we can remove this
- * and the references in inkscape_ref and inkscape_unref.
- */
-Application*
-Application::operator &() const
-{
-    return const_cast<Application*>(this);
-}
-/**
  *  Creates a new Inkscape::Application global object.
  */
 void Application::create(bool use_gui)
@@ -108,12 +91,10 @@ void Application::create(bool use_gui)
     }
 }
 
-
 /**
  *  Checks whether the current Inkscape::Application global object exists.
  */
-bool
-Application::exists()
+bool Application::exists()
 {
     return _get().has_value();
 }
@@ -482,10 +463,9 @@ std::optional<Application::ConstructibleApplication> &Application::_get()
     return instance;
 }
 
-void
-Application::add_desktop (SPDesktop * desktop)
+void Application::add_desktop(SPDesktop *desktop)
 {
-    g_return_if_fail (desktop != nullptr);
+    g_return_if_fail(desktop);
 
     if (std::find(_desktops.begin(), _desktops.end(), desktop) != _desktops.end()) {
         g_error("Attempted to add desktop already in list.");
@@ -494,10 +474,9 @@ Application::add_desktop (SPDesktop * desktop)
     _desktops.insert(_desktops.begin(), desktop);
 }
 
-void
-Application::remove_desktop (SPDesktop * desktop)
+void Application::remove_desktop(SPDesktop *desktop)
 {
-    g_return_if_fail (desktop != nullptr);
+    g_return_if_fail(desktop);
 
     if (std::find (_desktops.begin(), _desktops.end(), desktop) == _desktops.end() ) {
         g_error("Attempted to remove desktop not in list.");
@@ -517,53 +496,46 @@ Application::remove_desktop (SPDesktop * desktop)
     _desktops.erase(std::find(_desktops.begin(), _desktops.end(), desktop));
 }
 
-
-
-void
-Application::activate_desktop (SPDesktop * desktop)
+void Application::activate_desktop(SPDesktop *desktop)
 {
-    g_return_if_fail (desktop != nullptr);
+    g_return_if_fail(desktop);
 
     if (desktop_is_active(desktop)) {
         return;
     }
 
-    std::vector<SPDesktop*>::iterator i;
-
-    if ((i = std::find (_desktops.begin(), _desktops.end(), desktop)) == _desktops.end()) {
+    auto it = std::find(_desktops.begin(), _desktops.end(), desktop);
+    if (it == _desktops.end()) {
         g_error("Tried to activate desktop not added to list.");
     }
 
-    _desktops.erase(i);
+    _desktops.erase(it);
     _desktops.insert(_desktops.begin(), desktop);
 }
 
 SPDesktop *
 Application::find_desktop_by_dkey (unsigned int dkey)
 {
-    for (auto & _desktop : _desktops) {
-        if (_desktop->dkey == dkey){
-            return _desktop;
+    for (auto desktop : _desktops) {
+        if (desktop->dkey == dkey) {
+            return desktop;
         }
     }
     return nullptr;
 }
-
 
 unsigned int
 Application::maximum_dkey()
 {
     unsigned int dkey = 0;
 
-    for (auto & _desktop : _desktops) {
-        if (_desktop->dkey > dkey){
-            dkey = _desktop->dkey;
+    for (auto desktop : _desktops) {
+        if (desktop->dkey > dkey) {
+            dkey = desktop->dkey;
         }
     }
     return dkey;
 }
-
-
 
 SPDesktop *
 Application::next_desktop ()
@@ -593,8 +565,6 @@ Application::next_desktop ()
     return d;
 }
 
-
-
 SPDesktop *
 Application::prev_desktop ()
 {
@@ -618,8 +588,6 @@ Application::prev_desktop ()
     g_assert (d);
     return d;
 }
-
-
 
 void
 Application::switch_desktops_next ()

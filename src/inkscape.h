@@ -19,11 +19,6 @@
 #include <string>
 #include <vector>
 
-#include <gdk/gdk.h>  // GDK_ALT_MASK
-#include <glib-object.h>
-#include <glib.h>
-#include <sigc++/signal.h>
-
 class SPDesktop;
 class SPDocument;
 
@@ -34,34 +29,17 @@ class Selection;
 
 namespace UI {
 class ThemeContext;
-namespace Tools {
-
-class ToolBase;
-
-} // namespace Tools
 } // namespace UI
 
-namespace XML {
-class Node;
-struct Document;
-} // namespace XML
-
-} // namespace Inkscape
-
-#define INKSCAPE (Inkscape::Application::instance())
-#define SP_ACTIVE_DOCUMENT (INKSCAPE.active_document())
-#define SP_ACTIVE_DESKTOP (INKSCAPE.active_desktop())
-
-namespace Inkscape {
-
-class Application {
+class Application
+{
 public:
-    static Application& instance();
+    static Application &instance();
     static bool exists();
     static void create(bool use_gui);
 
     bool use_gui() const { return _use_gui; }
-    void use_gui(gboolean guival) { _use_gui = guival; }
+    void use_gui(bool guival) { _use_gui = guival; }
 
     SPDocument * active_document();
     SPDesktop * active_desktop();
@@ -119,16 +97,16 @@ public:
         return _pages;
     }
 
-  private:
+private:
     class ConstructibleApplication;
     static std::optional<ConstructibleApplication> &_get();
 
-    Application(bool use_gui);
+    explicit Application(bool use_gui);
     ~Application();
 
-    Application(Application const&) = delete; // no copy
-    Application& operator=(Application const&) = delete; // no assign
-    Application* operator&() const; // no pointer access
+    Application(Application const &) = delete;
+    Application &operator=(Application const &) = delete;
+
     std::set<SPDocument *> _document_set;
     std::vector<SPDesktop *> _desktops;
     std::string _pages;
@@ -141,6 +119,10 @@ public:
 };
 
 } // namespace Inkscape
+
+#define INKSCAPE (Inkscape::Application::instance())
+#define SP_ACTIVE_DOCUMENT (INKSCAPE.active_document())
+#define SP_ACTIVE_DESKTOP (INKSCAPE.active_desktop())
 
 #endif
 

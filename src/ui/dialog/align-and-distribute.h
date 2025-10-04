@@ -52,7 +52,6 @@ public:
 
     void desktop_changed(SPDesktop* desktop);
     void tool_changed(SPDesktop* desktop); // Need to show different widgets for node vs. other tools.
-    void tool_changed_callback(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* tool);
 
 private:
 

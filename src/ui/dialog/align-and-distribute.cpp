@@ -167,13 +167,13 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
     set_icon_size_prefs();
 }
 
-void
-AlignAndDistribute::desktop_changed(SPDesktop* desktop)
+void AlignAndDistribute::desktop_changed(SPDesktop *desktop)
 {
     tool_connection.disconnect();
     if (desktop) {
-        tool_connection =
-            desktop->connectEventContextChanged(sigc::mem_fun(*this, &AlignAndDistribute::tool_changed_callback));
+        tool_connection = desktop->connectEventContextChanged([this] (auto desktop, auto) {
+            tool_changed(desktop);
+        });
         tool_changed(desktop);
     }
 }
@@ -186,13 +186,6 @@ AlignAndDistribute::tool_changed(SPDesktop* desktop)
     align_and_distribute_object.set_visible(!is_node);
     remove_overlap_frame.set_visible(!is_node);
 }
-
-void
-AlignAndDistribute::tool_changed_callback(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* tool)
-{
-    tool_changed(desktop);
-}
-
 
 void
 AlignAndDistribute::on_align_as_group_clicked()

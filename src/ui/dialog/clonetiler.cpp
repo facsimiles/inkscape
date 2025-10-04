@@ -55,19 +55,16 @@ namespace Widget {
  * Simple extension of Gtk::CheckButton, which adds a flag
  * to indicate whether the box should be unticked when reset
  */
-class CheckButtonInternal final : public Gtk::CheckButton {
-
-    bool _uncheckable = false;
-
+class CheckButtonInternal : public Gtk::CheckButton
+{
 public:
     CheckButtonInternal() = default;
 
-    CheckButtonInternal(const Glib::ustring &label)
+    explicit CheckButtonInternal(Glib::ustring const &label)
         : Gtk::CheckButton(label)
     {}
 
-    void set_uncheckable(const bool val = true) { _uncheckable = val; }
-    bool get_uncheckable() const { return _uncheckable; }
+    bool uncheckable = false;
 };
 
 } // namespace Widget
@@ -789,7 +786,7 @@ CloneTiler::CloneTiler()
             UI::pack_start(*vb, *hb, false, false);
 
             _b = Gtk::make_managed<UI::Widget::CheckButtonInternal>(_("Trace the drawing under the clones/sprayed items"));
-            _b->set_uncheckable();
+            _b->uncheckable = true;
             bool old = prefs->getBool(prefs_path + "dotrace");
             _b->set_active(old);
             _b->set_tooltip_text(_("For each clone/sprayed item, pick a value from the drawing in its location and apply it"));
@@ -2491,7 +2488,7 @@ Gtk::Widget * CloneTiler::checkbox(const char          *tip,
     UI::pack_start(*hb, *b, false, true);
     b->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &CloneTiler::checkbox_toggled), b, attr));
 
-    b->set_uncheckable();
+    b->uncheckable = true;
 
     return hb;
 }
@@ -2601,7 +2598,7 @@ void CloneTiler::reset_recursive(Gtk::Widget *w)
             }
         }
         {
-            if (tb && tb->get_uncheckable()) { // checkbox
+            if (tb && tb->uncheckable) { // checkbox
                 tb->set_active(false);
             }
         }

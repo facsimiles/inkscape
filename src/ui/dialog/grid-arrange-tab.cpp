@@ -477,7 +477,6 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
       PaddingTable(Gtk::make_managed<Gtk::Grid>())
 {
      // bool used by spin button callbacks to stop loops where they change each other.
-    updating = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     auto _col1 = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
@@ -627,11 +626,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     UI::pack_start(*contents, TileBox);
 
     double SpacingType = prefs->getDouble("/dialogs/gridtiler/SpacingType", 15);
-    if (SpacingType>0) {
-        ManualSpacing=true;
-    } else {
-        ManualSpacing=false;
-    }
+    ManualSpacing = SpacingType > 0;
     SpaceManualRadioButton.set_active(ManualSpacing);
     SpaceByBBoxRadioButton.set_active(!ManualSpacing);
     XPadding.set_sensitive (ManualSpacing);

@@ -36,15 +36,18 @@ class ArrangeDialog;
 /**
  * Dialog for tiling an object
  */
-class GridArrangeTab : public ArrangeTab {
+class GridArrangeTab : public ArrangeTab
+{
 public:
-    GridArrangeTab(ArrangeDialog *parent);
+    explicit GridArrangeTab(ArrangeDialog *parent);
     ~GridArrangeTab() override;
 
     /**
      * Do the actual work
      */
     void arrange() override;
+
+    void setDesktop(SPDesktop *);
 
     /**
      * Respond to selection change
@@ -63,14 +66,10 @@ public:
     void Spacing_button_changed();
     void Align_changed();
 
-
 private:
-    GridArrangeTab(GridArrangeTab const &d) = delete; // no copy
-    void operator=(GridArrangeTab const &d) = delete; // no assign
-
     ArrangeDialog         *Parent;
 
-    bool updating;
+    bool updating = false;
 
     Gtk::Box               TileBox;
 
@@ -125,9 +124,6 @@ private:
     sigc::connection _selection_changed_connection;
     sigc::connection _rows_changed_connection;
     sigc::connection _cols_changed_connection;
-
-  public:
-    void setDesktop(SPDesktop *);
 };
 
 } // namespace Inkscape::UI::Dialog
