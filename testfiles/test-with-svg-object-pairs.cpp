@@ -46,7 +46,7 @@ TestWithSvgObjectPairs::TestWithSvgObjectPairs(char const *const svg_path, size_
 
 void TestWithSvgObjectPairs::SetUp()
 {
-    _doc = SPDocument::createNewDoc(_filename.c_str(), false);
+    _doc = SPDocument::createNewDoc(_filename.c_str());
     if (!_doc) {
         throw SVGTestError(std::string("Could not open test file \"") + _filename + "\"!");
     }

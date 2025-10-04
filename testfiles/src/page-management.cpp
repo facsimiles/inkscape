@@ -42,7 +42,7 @@ public:
     <rect id="rect2" x="-200" y="145" width="5" height="95" fill="green"/>
   </g>
 </svg>)A"sv;
-        doc = SPDocument::createNewDocFromMem(docString, false);
+        doc = SPDocument::createNewDocFromMem(docString);
 
         ASSERT_TRUE(doc);
         ASSERT_TRUE(doc->getRoot());

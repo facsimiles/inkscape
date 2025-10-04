@@ -127,7 +127,7 @@ std::unique_ptr<SPDocument> XSLT::open(Inkscape::Extension::Input *, char const 
     }
     g_free(s);
 
-    auto doc = SPDocument::createDoc(rdoc, filename, base, name, true);
+    auto doc = SPDocument::createDoc(rdoc, filename, base, name);
 
     g_free(base);
     g_free(name);

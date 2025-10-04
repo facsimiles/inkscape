@@ -562,7 +562,7 @@ Inkscape::XML::Node *sp_text_to_curve_repr(SPItem *item)
         }
 
         for (auto &svgSnippet : svgSnippets) {
-            auto doc = SPDocument::createNewDocFromMem(svgSnippet.first, false);
+            auto doc = SPDocument::createNewDocFromMem(svgSnippet.first);
             if (!doc) {
                 continue;
             }

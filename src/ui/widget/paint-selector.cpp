@@ -657,7 +657,7 @@ static void ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // if (meshes_doc == NULL) {
     //     char *meshes_source = g_build_filename(INKSCAPE_MESHESDIR, "meshes.svg", NULL);
     //     if (Inkscape::IO::file_test(meshes_source, G_FILE_TEST_IS_REGULAR)) {
-    //         meshes_doc = SPDocument::createNewDoc(meshes_source, FALSE);
+    //         meshes_doc = SPDocument::createNewDoc(meshes_source);
     //     }
     //     g_free(meshes_source);
     // }

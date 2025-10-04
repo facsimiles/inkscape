@@ -104,8 +104,7 @@ static int doc_mem_count = 0;
 static unsigned long next_serial = 0;
 
 SPDocument::SPDocument()
-    : keepalive(false)
-    , virgin(true)
+    : virgin(true)
     , rdoc(nullptr)
     , rroot(nullptr)
     , root(nullptr)
@@ -195,11 +194,6 @@ SPDocument::~SPDocument() {
 
     modified_connection.disconnect();
     rerouting_connection.disconnect();
-
-    if (keepalive) {
-        inkscape_unref(INKSCAPE);
-        keepalive = false;
-    }
 
     if (this->current_persp3d_impl)
         delete this->current_persp3d_impl;
@@ -336,14 +330,11 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
     char const *filename,
     char const *document_base,
     char const *document_name,
-    bool keepalive,
     SPDocument *parent)
 {
     auto document = std::make_unique<SPDocument>();
 
     Inkscape::XML::Node *rroot = rdoc->root();
-
-    document->keepalive = keepalive;
 
     document->rdoc = rdoc;
     document->rroot = rroot;
@@ -431,10 +422,6 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
     /* Default RDF */
     rdf_set_defaults(document.get());
 
-    if (keepalive) {
-        inkscape_ref(INKSCAPE);
-    }
-
     // Check if the document already has a perspective (e.g., when opening an existing
     // document). If not, create a new one and set it as the current perspective.
     document->setCurrentPersp3D(Persp3D::document_first_persp(document.get()));
@@ -507,7 +494,7 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
 std::unique_ptr<SPDocument> SPDocument::copy() const
 {
     auto *new_rdoc = rdoc->duplicate(nullptr);
-    auto doc = createDoc(new_rdoc, document_filename, document_base, document_name, keepalive);
+    auto doc = createDoc(new_rdoc, document_filename, document_base, document_name);
     doc->_original_document = this;
     return doc;
 }
@@ -795,7 +782,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &filename)
                     ? filename
                     : document_base + filename;
 
-    auto doc = createNewDoc(path.c_str(), false, false, this);
+    auto doc = createNewDoc(path.c_str(), false, this);
     return _child_documents.emplace_back(std::move(doc)).get();
 }
 
@@ -827,7 +814,7 @@ void SPDocument::update_lpobjs() {
  * Fetches document from filename, or creates new, if NULL; public document
  * appears in document list.
  */
-std::unique_ptr<SPDocument> SPDocument::createNewDoc(char const *filename, bool keepalive, bool make_new, SPDocument *parent)
+std::unique_ptr<SPDocument> SPDocument::createNewDoc(char const *filename, bool make_new, SPDocument *parent)
 {
     Inkscape::XML::Document *rdoc = nullptr;
     gchar *document_base = nullptr;
@@ -869,7 +856,7 @@ std::unique_ptr<SPDocument> SPDocument::createNewDoc(char const *filename, bool 
     //# These should be set by now
     g_assert(document_name);
 
-    auto doc = createDoc(rdoc, filename, document_base, document_name, keepalive, parent);
+    auto doc = createDoc(rdoc, filename, document_base, document_name, parent);
 
     g_free(document_base);
     g_free(document_name);
@@ -877,7 +864,7 @@ std::unique_ptr<SPDocument> SPDocument::createNewDoc(char const *filename, bool 
     return doc;
 }
 
-std::unique_ptr<SPDocument> SPDocument::createNewDocFromMem(std::span<char const> buffer, bool keepalive, std::string const &filename)
+std::unique_ptr<SPDocument> SPDocument::createNewDocFromMem(std::span<char const> buffer, std::string const &filename)
 {
     auto rdoc = sp_repr_read_mem(buffer.data(), buffer.size(), SP_SVG_NS_URI);
     if (!rdoc) {
@@ -896,7 +883,7 @@ std::unique_ptr<SPDocument> SPDocument::createNewDocFromMem(std::span<char const
 
     auto document_name = Glib::ustring::compose(_("Memory document %1"), ++doc_mem_count);
 
-    return createDoc(rdoc, filename.c_str(), document_base.c_str(), document_name.c_str(), keepalive);
+    return createDoc(rdoc, filename.c_str(), document_base.c_str(), document_name.c_str());
 }
 
 /// guaranteed not to return nullptr

@@ -23,7 +23,7 @@ void DocPerCaseTest::SetUpTestCase()
         Inkscape::Application::create(false);
     }
 
-    _doc = SPDocument::createNewDoc(nullptr, true, true);
+    _doc = SPDocument::createNewDoc(nullptr, true);
     ASSERT_TRUE(_doc);
 }
 

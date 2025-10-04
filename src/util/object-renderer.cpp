@@ -93,7 +93,7 @@ static std::unique_ptr<SPDocument> symbols_preview_doc()
   <use id="the_use" xlink:href="#the_symbol"/>
 </svg>
 )A"sv;
-    return SPDocument::createNewDocFromMem(buffer, false);
+    return SPDocument::createNewDocFromMem(buffer);
 }
 
 Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double box_h, double device_scale, SPDocument* preview_document, bool style_from_use) {
@@ -301,7 +301,7 @@ std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_i
   </svg>
 )A"sv;
 
-    auto document = SPDocument::createNewDocFromMem(buffer, false);
+    auto document = SPDocument::createNewDocFromMem(buffer);
     // only leave a requested group, so nothing else gets rendered
     for (auto&& group : document->getObjectsByClass("group")) {
         assert(group->getId());

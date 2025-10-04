@@ -571,7 +571,7 @@ void MarkerComboBox::init_combo() {
         // find and load markers.svg
         using namespace Inkscape::IO::Resource;
         auto markers_source = get_path_string(SYSTEM, MARKERS, "markers.svg");
-        return SPDocument::createNewDoc(markers_source.c_str(), false);
+        return SPDocument::createNewDoc(markers_source.c_str());
     });
 
     // load markers from markers.svg

@@ -38,7 +38,7 @@ public:
   </g>
 </svg>
         )A"sv;
-        doc = SPDocument::createNewDocFromMem(docString, false);
+        doc = SPDocument::createNewDocFromMem(docString);
     }
 
     std::unique_ptr<SPDocument> doc;

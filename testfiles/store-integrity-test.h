@@ -63,8 +63,8 @@ protected:
     // you can override custom threshold from svg file using in 
     // root svg from global and override with per shape "inkscape:test-threshold"
     void testDoc(std::string file, StoreIntegrityMode mode) 
-    {        
-        std::unique_ptr<SPDocument> doc{SPDocument::createNewDoc(file.c_str(), false)};
+    {
+        std::unique_ptr<SPDocument> doc{SPDocument::createNewDoc(file.c_str())};
         ASSERT_TRUE(doc != nullptr);
         doc->ensureUpToDate();
         SPLPEItem *lpeitem = doc->getRoot();
@@ -95,7 +95,7 @@ protected:
         if (!errortext.empty()) {
             g_warning("%s", errortext.c_str());
         }
-        std::unique_ptr<SPDocument> doc_out{SPDocument::createNewDoc(svg_out.c_str(), false)};
+        std::unique_ptr<SPDocument> doc_out{SPDocument::createNewDoc(svg_out.c_str())};
         doc_out->ensureUpToDate();
         if (mode == StoreIntegrityMode::UPDATE_SAVED || mode == StoreIntegrityMode::UPDATE_BOTH) {
             doc_out->getRoot()->updateRepr(SP_OBJECT_CHILD_MODIFIED_FLAG);

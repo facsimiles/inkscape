@@ -41,7 +41,7 @@ StockPaintDocuments::StockPaintDocuments()
     files.insert(files.end(), share.begin(), share.end());
     for (auto const &file : files) {
         if (Glib::file_test(file, Glib::FileTest::IS_REGULAR)) {
-            if (auto doc = SPDocument::createNewDoc(file.c_str(), false)) {
+            if (auto doc = SPDocument::createNewDoc(file.c_str())) {
                 doc->ensureUpToDate(); // update, so patterns referencing clippaths render properly
                 documents.push_back(std::move(doc));
             } else {
@@ -71,7 +71,7 @@ static std::unique_ptr<SPDocument> load_paint_doc(char const *basename, Inkscape
     for (Domain const domain : {SYSTEM, CREATE}) {
         auto const filename = get_path_string(domain, type, basename);
         if (Glib::file_test(filename, Glib::FileTest::IS_REGULAR)) {
-            if (auto doc = SPDocument::createNewDoc(filename.c_str(), false)) {
+            if (auto doc = SPDocument::createNewDoc(filename.c_str())) {
                 doc->ensureUpToDate();
                 return doc;
             }

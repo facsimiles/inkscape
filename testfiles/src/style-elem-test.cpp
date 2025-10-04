@@ -38,7 +38,7 @@ rect { fill: green; opacity:1.0; }
 .cls2 { fill: green; opacity:0.5; }
 </style>
 </svg>)A"sv;
-        doc = SPDocument::createNewDocFromMem(docString, false);
+        doc = SPDocument::createNewDocFromMem(docString);
     }
 
     std::unique_ptr<SPDocument> doc;

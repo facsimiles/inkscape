@@ -55,7 +55,7 @@ PaintServersDialog::PaintServersDialog()
     store[ALLDOCS] = Gtk::ListStore::create(columns);
 
     // Get wrapper document (rectangle to fill with paint server).
-    preview_document = SPDocument::createNewDocFromMem(wrapper, true);
+    preview_document = SPDocument::createNewDocFromMem(wrapper);
     SPObject *rect = preview_document->getObjectById("Rect");
     SPObject *defs = preview_document->getObjectById("Defs");
     if (!rect || !defs) {
@@ -215,7 +215,7 @@ void PaintServersDialog::_loadStockPaints()
     // Extract out paints from files in share/paint.
     for (auto const &path : get_filenames(Inkscape::IO::Resource::PAINT, {".svg"})) {
         try { // createNewDoc throws
-            auto doc = SPDocument::createNewDoc(path.c_str(), false);
+            auto doc = SPDocument::createNewDoc(path.c_str());
             if (!doc) {
                 throw std::exception();
             }

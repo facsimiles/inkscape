@@ -40,10 +40,10 @@ public:
         Application::create(false);
 
         auto target_file = std::get<0>(GetParam());
-        target_doc = SPDocument::createNewDoc((TEST_DIR + target_file.file).c_str(), false);
+        target_doc = SPDocument::createNewDoc((TEST_DIR + target_file.file).c_str());
         ASSERT_NE(target_doc.get(), nullptr);
         source_file = std::get<1>(GetParam());
-        source_doc = SPDocument::createNewDoc((TEST_DIR + source_file.file).c_str(), false);
+        source_doc = SPDocument::createNewDoc((TEST_DIR + source_file.file).c_str());
         ASSERT_NE(source_doc.get(), nullptr);
     }
     std::unique_ptr<SPDocument> target_doc;
@@ -150,9 +150,9 @@ class SPDocumentTestSVGPair : public ::testing::Test
 public:
     void Init(char const *target, char const *source)
     {
-        target_doc = SPDocument::createNewDoc((TEST_DIR + target).c_str(), false);
+        target_doc = SPDocument::createNewDoc((TEST_DIR + target).c_str());
         ASSERT_NE(target_doc.get(), nullptr) << target;
-        source_doc = SPDocument::createNewDoc((TEST_DIR + source).c_str(), false);
+        source_doc = SPDocument::createNewDoc((TEST_DIR + source).c_str());
         ASSERT_NE(source_doc.get(), nullptr) << source;
     }
     bool InitCheck(char const *target, char const *source)

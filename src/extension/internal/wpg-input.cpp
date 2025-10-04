@@ -101,7 +101,7 @@ std::unique_ptr<SPDocument> WpgInput::open(Inkscape::Extension::Input *, char co
     RVNGString output("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
     output.append(vec[0]);
 
-    auto doc = SPDocument::createNewDocFromMem(as_span(output), true);
+    auto doc = SPDocument::createNewDocFromMem(as_span(output));
     
     // Set viewBox if it doesn't exist
     if (doc && !doc->getRoot()->viewBox_set) {

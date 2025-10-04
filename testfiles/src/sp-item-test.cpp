@@ -56,7 +56,7 @@ TEST_F(SPItemTest, getClipPathVector)
   </g>
 </svg>)"""sv;
 
-    auto doc = SPDocument::createNewDocFromMem(svg, true);
+    auto doc = SPDocument::createNewDocFromMem(svg);
 
     // This has to be run or all the path vectors are empty.
     doc->ensureUpToDate();

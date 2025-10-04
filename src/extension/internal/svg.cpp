@@ -189,10 +189,10 @@ std::unique_ptr<SPDocument> Svg::open(Inkscape::Extension::Input *mod, char cons
         // We import!
 
         // New wrapper document.
-        auto doc = SPDocument::createNewDoc(nullptr, true, true);
+        auto doc = SPDocument::createNewDoc(nullptr, true);
 
         // Imported document
-        auto ret = SPDocument::createNewDoc(uri, true);
+        auto ret = SPDocument::createNewDoc(uri);
 
         if (!ret) {
             return nullptr;
@@ -274,7 +274,7 @@ std::unique_ptr<SPDocument> Svg::open(Inkscape::Extension::Input *mod, char cons
                 char *contents;
                 gsize length;
                 file->load_contents(contents, length);
-                return SPDocument::createNewDocFromMem({contents, length}, true);
+                return SPDocument::createNewDocFromMem({contents, length});
             } catch (Gio::Error &e) {
                 g_warning("Could not load contents of non-local URI %s\n", uri);
                 return nullptr;
@@ -285,7 +285,7 @@ std::unique_ptr<SPDocument> Svg::open(Inkscape::Extension::Input *mod, char cons
         }
     }
 
-    auto doc = SPDocument::createNewDoc(uri, true);
+    auto doc = SPDocument::createNewDoc(uri);
 
     // Page selection is achieved by removing any page not in the found list, the exports
     // Can later figure out how they'd like to process the remaining pages.

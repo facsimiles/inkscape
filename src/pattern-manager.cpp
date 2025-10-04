@@ -41,7 +41,7 @@ std::unique_ptr<SPDocument> get_preview_document() {
   </g>
 </svg>
 )A"sv;
-    return SPDocument::createNewDocFromMem(buffer, false);
+    return SPDocument::createNewDocFromMem(buffer);
 }
 
 // pattern preview document without a background
@@ -60,7 +60,7 @@ std::unique_ptr<SPDocument> get_big_preview_document() {
   </g>
 </svg>
 )A"sv;
-    return SPDocument::createNewDocFromMem(buffer, false);
+    return SPDocument::createNewDocFromMem(buffer);
 }
 
 PatternManager::PatternManager() {

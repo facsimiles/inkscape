@@ -112,10 +112,10 @@ public:
 
     // Document creation ------------------
     static std::unique_ptr<SPDocument> createDoc(Inkscape::XML::Document *rdoc, char const *filename,
-            char const *base, char const *name, bool keepalive, SPDocument *parent = nullptr);
-    static std::unique_ptr<SPDocument> createNewDoc(char const *filename, bool keepalive,
+            char const *base, char const *name, SPDocument *parent = nullptr);
+    static std::unique_ptr<SPDocument> createNewDoc(char const *filename,
             bool make_new = false, SPDocument *parent = nullptr);
-    static std::unique_ptr<SPDocument> createNewDocFromMem(std::span<char const> buffer, bool keepalive,
+    static std::unique_ptr<SPDocument> createNewDocFromMem(std::span<char const> buffer,
             std::string const &filename = "");
     SPDocument *createChildDoc(std::string const &filename);
 
@@ -396,7 +396,6 @@ private:
 
     // Document status -----------------------
 
-    bool keepalive; ///< false if temporary document (e.g. to generate a PNG for display in a dialog).
     bool virgin ;   ///< Has the document never been touched?
     bool modified_since_save = false;
     bool modified_since_autosave = false;

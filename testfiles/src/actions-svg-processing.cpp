@@ -60,7 +60,7 @@ public:
     </g>
   </g>
 </svg>)A"sv;
-        doc = SPDocument::createNewDocFromMem(docString, false);
+        doc = SPDocument::createNewDocFromMem(docString);
 
         ASSERT_TRUE(doc);
         ASSERT_TRUE(doc->getRoot());

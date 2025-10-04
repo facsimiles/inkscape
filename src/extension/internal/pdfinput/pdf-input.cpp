@@ -698,7 +698,7 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
     bool saved = false;
     if (import_method == PdfImportType::PDF_IMPORT_INTERNAL) {
         // Create document
-        doc = SPDocument::createNewDoc(nullptr, true, true);
+        doc = SPDocument::createNewDoc(nullptr, true);
         saved = DocumentUndo::getUndoSensitive(doc.get());
         DocumentUndo::setUndoSensitive(doc.get(), false); // No need to undo in this temporary document
 
@@ -775,7 +775,7 @@ std::unique_ptr<SPDocument> PdfInput::open(Input *mod, char const *uri, bool)
             cairo_destroy(cr);
             cairo_surface_destroy(surface);
 
-            doc = SPDocument::createNewDocFromMem(output.raw(), true);
+            doc = SPDocument::createNewDocFromMem(output.raw());
 
             g_object_unref(G_OBJECT(page));
         } else if (document) {

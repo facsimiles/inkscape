@@ -64,9 +64,6 @@
 #include "util/font-discovery.h"
 #include "util/units.h"
 
-// Inkscape::Application static members
-Inkscape::Application * Inkscape::Application::_S_inst = nullptr;
-
 static bool desktop_is_active(SPDesktop const *d)
 {
     return !INKSCAPE.get_desktops().empty() && d == INKSCAPE.get_desktops().front();
@@ -82,35 +79,15 @@ static void (* bus_handler)  (int) = SIG_DFL;
 
 static constexpr int SP_INDENT = 8;
 
-/**  C++ification TODO list
- * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break.
- * - These functions are calling Application::create for no good reason I can determine:
- *
- *   Inkscape::UI::Dialog::SVGPreview::SVGPreview()
- *       src/ui/dialog/filedialogimpl-gtkmm.cpp:542:9
- */
-
-
-void inkscape_ref(Inkscape::Application & in)
-{
-    in.refCount++;
-}
-
-void inkscape_unref(Inkscape::Application & in)
-{
-    in.refCount--;
-
-    if (&in == Inkscape::Application::_S_inst) {
-        if (in.refCount <= 0) {
-            delete Inkscape::Application::_S_inst;
-        }
-    } else {
-        g_error("Attempt to unref an Application (=%p) not the current instance (=%p) (maybe it's already been destroyed?)",
-                &in, Inkscape::Application::_S_inst);
-    }
-}
-
 namespace Inkscape {
+
+// Expose constructor to allow use with std::optional.
+struct Application::ConstructibleApplication : Application
+{
+    explicit ConstructibleApplication(bool use_gui)
+        : Application(use_gui)
+    {}
+};
 
 /**
  * Defined only for debugging purposes. If we are certain the bugs are gone we can remove this
@@ -124,13 +101,10 @@ Application::operator &() const
 /**
  *  Creates a new Inkscape::Application global object.
  */
-void
-Application::create(bool use_gui)
+void Application::create(bool use_gui)
 {
-   if (!Application::exists()) {
-        new Application(use_gui);
-    } else {
-       // g_assert_not_reached();  Can happen with InkscapeApplication
+    if (!_get()) { // block multiple calls by test suite
+        _get().emplace(use_gui);
     }
 }
 
@@ -141,27 +115,17 @@ Application::create(bool use_gui)
 bool
 Application::exists()
 {
-    return Application::_S_inst != nullptr;
+    return _get().has_value();
 }
 
 /**
  *  Returns the current Inkscape::Application global object.
- *  \pre Application::_S_inst != NULL
+ *  \pre Application::exists()
  */
-Application&
-Application::instance()
+Application &Application::instance()
 {
-    if (!exists()) {
-         g_error("Inkscape::Application does not yet exist.");
-    }
-    return *Application::_S_inst;
+    return *_get();
 }
-
-/* \brief Constructor for the application.
- *  Creates a new Inkscape::Application.
- *
- *  \pre Application::_S_inst == NULL
- */
 
 Application::Application(bool use_gui) :
     _use_gui(use_gui)
@@ -186,10 +150,6 @@ Application::Application(bool use_gui) :
 #ifndef _WIN32
     bus_handler  = signal (SIGBUS,  Application::crash_handler);
 #endif
-
-    // \TODO: this belongs to Application::init but if it isn't here
-    // then the Filters and Extensions menus don't work.
-    _S_inst = this;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     ErrorReporter* handler = new ErrorReporter(use_gui);
@@ -275,14 +235,10 @@ Application::Application(bool use_gui) :
 Application::~Application()
 {
     if (!_desktops.empty()) {
-        g_error("FATAL: desktops still in list on application destruction!");
+        g_critical("desktops still in list on application destruction!");
     }
 
     Inkscape::Preferences::unload();
-
-    _S_inst = nullptr; // this will probably break things
-
-    refCount = 0;
 }
 
 void
@@ -523,6 +479,11 @@ Application::crash_handler (int /*signum*/)
     /* on exit, allow restored signal handler to take over and crash us */
 }
 
+std::optional<Application::ConstructibleApplication> &Application::_get()
+{
+    static std::optional<Application::ConstructibleApplication> instance;
+    return instance;
+}
 
 void
 Application::add_desktop (SPDesktop * desktop)

@@ -14,6 +14,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
@@ -46,9 +47,6 @@ struct Document;
 } // namespace XML
 
 } // namespace Inkscape
-
-void inkscape_ref  (Inkscape::Application & in);
-void inkscape_unref(Inkscape::Application & in);
 
 #define INKSCAPE (Inkscape::Application::instance())
 #define SP_ACTIVE_DOCUMENT (INKSCAPE.active_document())
@@ -92,10 +90,6 @@ public:
     
     static void crash_handler(int signum);
 
-    // nobody should be accessing our reference count, so it's made private.
-    friend void ::inkscape_ref  (Application & in);
-    friend void ::inkscape_unref(Application & in);
-
     void set_pdf_poppler(bool p) {
         _pdf_poppler = p;
     }
@@ -129,7 +123,8 @@ public:
     }
 
   private:
-    static Inkscape::Application * _S_inst;
+    class ConstructibleApplication;
+    static std::optional<ConstructibleApplication> &_get();
 
     Application(bool use_gui);
     ~Application();
@@ -141,7 +136,6 @@ public:
     std::vector<SPDesktop *> _desktops;
     std::string _pages;
 
-    unsigned refCount = 1;
     bool _use_gui = false;
     bool _pdf_poppler = false;
     int _pdf_font_strategy = 0;

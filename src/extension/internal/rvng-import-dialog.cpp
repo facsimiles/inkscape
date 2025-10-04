@@ -117,7 +117,7 @@ void RvngImportDialog::_setPreviewPage()
 
     _preview.setDocument(nullptr);
 
-    _doc = SPDocument::createNewDocFromMem(as_span(_pages[_current_page - 1]), false);
+    _doc = SPDocument::createNewDocFromMem(as_span(_pages[_current_page - 1]));
     if (!_doc) {
         g_warning("CDR import: Could not create preview for page %d", _current_page);
         auto no_preview_template = R"A(
@@ -128,7 +128,7 @@ void RvngImportDialog::_setPreviewPage()
            </svg>
         )A";
         auto no_preview = Glib::ustring::compose(no_preview_template, _("No preview"));
-        _doc = SPDocument::createNewDocFromMem(no_preview.raw(), false);
+        _doc = SPDocument::createNewDocFromMem(no_preview.raw());
     }
 
     if (!_doc) {
@@ -190,7 +190,7 @@ std::unique_ptr<SPDocument> rvng_open(
         page_num = std::clamp<int>(dlg.getSelectedPage(), 1, tmpSVGOutput.size());
     }
 
-    auto doc = SPDocument::createNewDocFromMem(as_span(tmpSVGOutput[page_num - 1]), true);
+    auto doc = SPDocument::createNewDocFromMem(as_span(tmpSVGOutput[page_num - 1]));
 
     if (doc && !doc->getRoot()->viewBox_set) {
         // Scales the document to account for 72dpi scaling in librevenge(<=0.0.4)

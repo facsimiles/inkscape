@@ -39,13 +39,13 @@ public:
     ~SPDocument();
 
     static std::unique_ptr<SPDocument> createDoc(Inkscape::XML::Document *, char const *, char const *, char const *,
-                                                 bool, SPDocument * = nullptr);
+                                                 SPDocument * = nullptr);
     static void rebase(Inkscape::XML::Document *, bool keep_namedview = true);
 };
 SPDocument::~SPDocument() {}
 
 std::unique_ptr<SPDocument> SPDocument::createDoc(Inkscape::XML::Document *, char const *, char const *, char const *,
-                                                  bool, SPDocument *)
+                                                  SPDocument *)
 {
     return {};
 }

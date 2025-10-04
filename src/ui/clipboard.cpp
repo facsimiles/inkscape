@@ -1827,7 +1827,7 @@ void ClipboardManagerImpl::_onGet(char const *mime_type, Glib::RefPtr<Gio::Outpu
  */
 void ClipboardManagerImpl::_createInternalClipboard()
 {
-    _clipboardSPDoc = SPDocument::createNewDoc(nullptr, false, true);
+    _clipboardSPDoc = SPDocument::createNewDoc(nullptr, true);
     assert(_clipboardSPDoc);
     _defs = _clipboardSPDoc->getDefs()->getRepr();
     _doc = _clipboardSPDoc->getReprDoc();

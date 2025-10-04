@@ -64,7 +64,7 @@ std::unique_ptr<SPDocument> GdkpixbufInput::open(Inkscape::Extension::Input *mod
     // Find a way to create the pixbuf only once.
 
     if (pb) {
-        doc = SPDocument::createNewDoc(nullptr, true, true);
+        doc = SPDocument::createNewDoc(nullptr, true);
         DocumentUndo::ScopedInsensitive _no_undo(doc.get());
 
         double width = pb->width();

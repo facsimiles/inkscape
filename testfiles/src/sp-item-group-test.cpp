@@ -41,7 +41,7 @@ TEST_F(SPGroupTest, applyingPowerClipEffectToGroupWithoutClipIsIgnored)
     </g>
 </svg>)A"sv;
 
-    auto doc = SPDocument::createNewDocFromMem(svg, true);
+    auto doc = SPDocument::createNewDocFromMem(svg);
 
     auto group = cast<SPGroup>(doc->getObjectById("group1"));
     Effect::createAndApply(POWERCLIP, doc.get(), group);

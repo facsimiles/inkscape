@@ -33,7 +33,7 @@ TEST(DrawingPatternTest, fragments)
         Inkscape::Application::create(false);
     }
 
-    auto doc = std::unique_ptr<SPDocument>(SPDocument::createNewDoc(INKSCAPE_TESTS_DIR "/rendering_tests/drawing-pattern-test.svg", false));
+    auto doc = std::unique_ptr<SPDocument>(SPDocument::createNewDoc(INKSCAPE_TESTS_DIR "/rendering_tests/drawing-pattern-test.svg"));
     ASSERT_TRUE((bool)doc);
     ASSERT_TRUE((bool)doc->getRoot());
 

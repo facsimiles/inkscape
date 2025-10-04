@@ -224,7 +224,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
     if ((*data) && type == Base64Data::SVG) {
         gsize decoded_len = 0;
         guchar *decoded = g_base64_decode(data, &decoded_len);
-        auto svgDoc = SPDocument::createNewDocFromMem({reinterpret_cast<char const *>(decoded), decoded_len}, false);
+        auto svgDoc = SPDocument::createNewDocFromMem({reinterpret_cast<char const *>(decoded), decoded_len});
         // Check the document loaded properly
         if (!svgDoc || !svgDoc->getRoot()) {
             return nullptr;
@@ -366,7 +366,7 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
         if(idx != std::string::npos)
         {
             if (boost::iequals(fn.substr(idx+1).c_str(), "svg")) {
-                auto svgDoc = SPDocument::createNewDocFromMem({data, len}, true, fn.c_str());
+                auto svgDoc = SPDocument::createNewDocFromMem({data, len}, fn.c_str());
 
                 // Check the document loaded properly
                 if (!svgDoc || !svgDoc->getRoot()) {

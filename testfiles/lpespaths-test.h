@@ -63,7 +63,7 @@ protected:
     // root svg from global and override with per shape "inkscape:test-threshold"
     void testDoc(std::string file) 
     {
-        std::unique_ptr<SPDocument> doc{SPDocument::createNewDoc(file.c_str(), false)};
+        std::unique_ptr<SPDocument> doc{SPDocument::createNewDoc(file.c_str())};
         ASSERT_TRUE(doc != nullptr);
         SPLPEItem *lpeitem = doc->getRoot();
         std::vector<SPObject *> objs;

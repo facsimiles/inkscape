@@ -3523,7 +3523,7 @@ std::unique_ptr<SPDocument> Emf::open(Inkscape::Extension::Input *, char const *
 
     std::unique_ptr<SPDocument> doc;
     if (good) {
-        doc = SPDocument::createNewDocFromMem(d.outsvg.raw(), true);
+        doc = SPDocument::createNewDocFromMem(d.outsvg.raw());
     }
 
     free_emf_strings(d.hatches);

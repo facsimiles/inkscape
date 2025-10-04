@@ -46,7 +46,7 @@ rect { fill: #808080; opacity:0.5; }
   <rect id='eight' class='fosize' style='stroke-width: 50%;'/>
 </g>
 </svg>)A"sv;
-        doc = SPDocument::createNewDocFromMem(docString, false);
+        doc = SPDocument::createNewDocFromMem(docString);
         doc->ensureUpToDate();
     }
 

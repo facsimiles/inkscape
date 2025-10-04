@@ -33,7 +33,7 @@
  */
 std::unique_ptr<SPDocument> ink_file_new(std::string const &Template)
 {
-    auto doc = SPDocument::createNewDoc(Template.empty() ? nullptr : Template.c_str(), true, true);
+    auto doc = SPDocument::createNewDoc(Template.empty() ? nullptr : Template.c_str(), true);
 
     if (!doc) {
         std::cerr << "ink_file_new: Did not create new document!" << std::endl;
@@ -59,7 +59,7 @@ std::unique_ptr<SPDocument> ink_file_new(std::string const &Template)
  */
 std::unique_ptr<SPDocument> ink_file_open(std::span<char const> buffer)
 {
-    auto doc = SPDocument::createNewDocFromMem(buffer, true);
+    auto doc = SPDocument::createNewDocFromMem(buffer);
 
     if (!doc) {
         std::cerr << "ink_file_open: cannot open file in memory (pipe?)" << std::endl;

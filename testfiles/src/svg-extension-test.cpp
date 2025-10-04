@@ -103,7 +103,7 @@ TEST_F(SvgExtensionTest, hiddenSvg2TextIsSaved)
   </g>
 </svg>
 )"""sv;
-    auto doc = SPDocument::createNewDocFromMem(docString, false);
+    auto doc = SPDocument::createNewDocFromMem(docString);
     ASSERT_TRUE(doc);
 
     std::map<std::string,std::string> textMap;

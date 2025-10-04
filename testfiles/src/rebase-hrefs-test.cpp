@@ -60,7 +60,7 @@ constexpr auto docString = R"""(
 class ObjectTest : public DocPerCaseTest
 {
 public:
-    std::unique_ptr<SPDocument> doc = SPDocument::createNewDocFromMem(docString, false);
+    std::unique_ptr<SPDocument> doc = SPDocument::createNewDocFromMem(docString);
 
     void assert_nonfile_unchanged() const
     {

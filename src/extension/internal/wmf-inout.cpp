@@ -3111,7 +3111,7 @@ std::unique_ptr<SPDocument> Wmf::open(Inkscape::Extension::Input *, char const *
 
     std::unique_ptr<SPDocument> doc;
     if (good) {
-        doc = SPDocument::createNewDocFromMem(d.outsvg.raw(), true);
+        doc = SPDocument::createNewDocFromMem(d.outsvg.raw());
     }
 
     free_wmf_strings(d.hatches);

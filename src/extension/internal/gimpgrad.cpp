@@ -237,7 +237,7 @@ std::unique_ptr<SPDocument> GimpGrad::open(Inkscape::Extension::Input *, char co
 
         fclose(gradient);
 
-        return SPDocument::createNewDocFromMem(outsvg.raw(), true);
+        return SPDocument::createNewDocFromMem(outsvg.raw());
     }
 
 error:

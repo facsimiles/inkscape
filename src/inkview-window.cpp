@@ -171,7 +171,7 @@ SPDocument *InkviewWindow::load_document()
 
     if (!document) {
         // We need to load document. ToDo: Pass Gio::File. Is get_base_name() better?
-        document = SPDocument::createNewDoc(_files[_index]->get_parse_name().c_str(), true, false);
+        document = SPDocument::createNewDoc(_files[_index]->get_parse_name().c_str(), false);
     }
 
     if (!document) {
@@ -186,7 +186,7 @@ SPDocument *InkviewWindow::load_document()
 void InkviewWindow::preload_documents()
 {
     for (auto it =_files.begin(); it != _files.end(); ) {
-        auto document = SPDocument::createNewDoc((*it)->get_parse_name().c_str(), true, false);
+        auto document = SPDocument::createNewDoc((*it)->get_parse_name().c_str(), false);
         if (document) {
             _documents.emplace_back(std::move(document));
             ++it;

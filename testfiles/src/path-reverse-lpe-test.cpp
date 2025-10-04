@@ -35,7 +35,7 @@ constexpr auto docString = R"""(<?xml version="1.0"?>
 
 TEST_F(DocPerCaseTest, PathReverse)
 {
-    auto doc = SPDocument::createNewDocFromMem(docString, false);
+    auto doc = SPDocument::createNewDocFromMem(docString);
     doc->ensureUpToDate();
 
     auto path1 = cast<SPShape>(doc->getObjectById("path1"));

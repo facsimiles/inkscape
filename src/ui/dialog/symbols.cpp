@@ -944,7 +944,7 @@ static std::unique_ptr<SPDocument> read_vss(std::string filename, std::string na
 
   tmpSVGOutput += "  </defs>\n";
   tmpSVGOutput += "</svg>\n";
-  return SPDocument::createNewDocFromMem(tmpSVGOutput.raw(), false);
+  return SPDocument::createNewDocFromMem(tmpSVGOutput.raw());
 }
 #endif
 
@@ -1010,7 +1010,7 @@ SPDocument *load_symbol_set(std::string const &filename)
         symbol_doc = read_vss(filename, symbol_sets[filename].title);
 #endif
     } else if (Glib::str_has_suffix(filename, ".svg")) {
-        symbol_doc = SPDocument::createNewDoc(filename.c_str(), false);
+        symbol_doc = SPDocument::createNewDoc(filename.c_str());
     }
 
     if (!symbol_doc) {
@@ -1307,7 +1307,7 @@ std::unique_ptr<SPDocument> SymbolsDialog::symbolsPreviewDoc()
   <use id="the_use" xlink:href="#the_symbol"/>
 </svg>
 )A"sv;
-    return SPDocument::createNewDocFromMem(buffer, false);
+    return SPDocument::createNewDocFromMem(buffer);
 }
 
 Cairo::RefPtr<Cairo::Surface> SymbolsDialog::render_icon(SPDocument* document, const std::string& symbol_id, Geom::Point icon_size, int device_scale) {

@@ -307,7 +307,7 @@ std::unique_ptr<SPDocument> Script::new_from_template(Inkscape::Extension::Templ
         auto rdoc = sp_repr_read_mem(svg.c_str(), svg.length(), SP_SVG_NS_URI);
         if (rdoc) {
             auto name = Glib::ustring::compose(_("New document %1"), SPDocument::get_new_doc_number());
-            return SPDocument::createDoc(rdoc, nullptr, nullptr, name.c_str(), false);
+            return SPDocument::createDoc(rdoc, nullptr, nullptr, name.c_str());
         }
     }
 

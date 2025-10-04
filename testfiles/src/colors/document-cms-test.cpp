@@ -44,7 +44,7 @@ protected:
         cms.refreshProfiles();
 
         // Load the test svg file with a bunch of icc profiles
-        doc = SPDocument::createNewDoc(getDocFilename().c_str(), false);
+        doc = SPDocument::createNewDoc(getDocFilename().c_str());
     }
     std::unique_ptr<SPDocument> doc;
 

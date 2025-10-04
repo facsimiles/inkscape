@@ -80,7 +80,7 @@ void DrawContext::paint_raster(SPImage const *image)
         try {
             auto uri = image->getURI();
             if (uri.getMimeType() == "image/svg+xml") {
-                svg = SPDocument::createNewDoc(uri.toNativeFilename().c_str(), false);
+                svg = SPDocument::createNewDoc(uri.toNativeFilename().c_str());
             } else {
                 auto image = _doc._gen.load_image(uri.toNativeFilename().c_str());
                 raster_id = _doc._gen.add_image(image, props);
@@ -106,7 +106,7 @@ void DrawContext::paint_raster(SPImage const *image)
     if (decoded && base64_type == Base64Data::SVG) {
         // Sizing and painting the loaded document depends on the SVG being
         // up to date and having a viewBox and width/height that makes sense.
-        svg = SPDocument::createNewDocFromMem({decoded, decoded_len}, false);
+        svg = SPDocument::createNewDocFromMem({decoded, decoded_len});
     }
 
     if (svg) {

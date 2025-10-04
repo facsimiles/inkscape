@@ -61,7 +61,7 @@ TEST_F(LPETest, Bool_canBeApplyedToNonSiblingPaths)
   </g>
 </svg>)A"sv;
 
-    auto doc = SPDocument::createNewDocFromMem(svg, true);
+    auto doc = SPDocument::createNewDocFromMem(svg);
     doc->ensureUpToDate();
 
     auto lpe_item = cast<SPLPEItem>(doc->getObjectById("rect1"));
