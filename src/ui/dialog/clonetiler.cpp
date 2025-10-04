@@ -1179,14 +1179,6 @@ CloneTiler::CloneTiler()
                     b->signal_clicked().connect(sigc::mem_fun(*this, &CloneTiler::on_remove_button_clicked));
                     UI::pack_end(*sb, *b, false, false);
                 }
-
-                // connect to global selection changed signal (so we can change desktops) and
-                // external_change (so we're not fooled by undo)
-                selectChangedConn = INKSCAPE.signal_selection_changed.connect(sigc::mem_fun(*this, &CloneTiler::change_selection));
-                externChangedConn = INKSCAPE.signal_external_change.connect(sigc::mem_fun(*this, &CloneTiler::external_change));
-
-                // update now
-                change_selection(SP_ACTIVE_DESKTOP->getSelection());
             }
 
             {
@@ -1198,14 +1190,10 @@ CloneTiler::CloneTiler()
             }
         }
     }
-
-    set_visible(true);
 }
 
 CloneTiler::~CloneTiler ()
 {
-    selectChangedConn.disconnect();
-    externChangedConn.disconnect();
     color_changed_connection.disconnect();
 }
 
@@ -1221,8 +1209,20 @@ void CloneTiler::on_picker_color_changed(Colors::Color const &color)
     is_updating = false;
 }
 
-void CloneTiler::change_selection(Inkscape::Selection *selection)
+void CloneTiler::selectionChanged(Inkscape::Selection *)
 {
+    _update();
+}
+
+void CloneTiler::selectionModified(Inkscape::Selection *, unsigned)
+{
+    _update();
+}
+
+void CloneTiler::_update()
+{
+    auto selection = getSelection();
+
     if (selection->isEmpty()) {
         _buttons_on_tiles->set_sensitive(false);
         _status->set_markup(_("<small>Nothing selected.</small>"));
@@ -1245,11 +1245,6 @@ void CloneTiler::change_selection(Inkscape::Selection *selection)
         _buttons_on_tiles->set_sensitive(false);
         _status->set_markup(_("<small>Object has no tiled clones.</small>"));
     }
-}
-
-void CloneTiler::external_change()
-{
-    change_selection(SP_ACTIVE_DESKTOP->getSelection());
 }
 
 Geom::Affine CloneTiler::get_transform(
@@ -2020,8 +2015,6 @@ void CloneTiler::remove(bool do_undo/* = true*/)
         obj->deleteObject();
     }
 
-    change_selection (selection);
-
     if (do_undo) {
         DocumentUndo::done(getDocument(), _("Delete tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
     }
@@ -2461,10 +2454,8 @@ void CloneTiler::apply()
     }
 
     if (dotrace) {
-        trace_finish ();
+        trace_finish();
     }
-
-    change_selection(selection);
 
     desktop->clearWaitingCursor();
     DocumentUndo::done(getDocument(), _("Create tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
@@ -2760,9 +2751,7 @@ void CloneTiler::show_page_trace()
     _b->set_active(false);
 }
 
-
 } // namespace Dialog
-
 } // namespace Inkscape::UI
 
 /*

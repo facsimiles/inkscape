@@ -74,6 +74,9 @@ protected:
         PICK_L
     };
 
+    void selectionChanged(Inkscape::Selection *selection) override;
+    void selectionModified(Inkscape::Selection *selection, unsigned flags) override;
+
     Gtk::Box * new_tab(Gtk::Notebook *nb, const gchar *label);
     Gtk::Grid * table_x_y_rand(int values);
     Gtk::Widget * spinbox(const char          *tip,
@@ -98,11 +101,10 @@ protected:
     double     randomize01(double val, double rand);
 
     void apply();
-    void change_selection(Inkscape::Selection *selection);
+    void _update();
     void checkbox_toggled(Gtk::CheckButton    *tb,
                           Glib::ustring const &attr);
     void do_pick_toggled();
-    void external_change();
     void fill_width_changed();
     void fill_height_changed();
     void keep_bbox_toggled();
@@ -169,8 +171,6 @@ private:
     Glib::RefPtr<Gtk::Adjustment> fill_width;
     Glib::RefPtr<Gtk::Adjustment> fill_height;
 
-    sigc::connection selectChangedConn;
-    sigc::connection externChangedConn;
     sigc::connection color_changed_connection;
     sigc::connection unitChangedConn;
 
