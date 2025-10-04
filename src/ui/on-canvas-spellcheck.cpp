@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <glibmm.h>
+#include <glibmm/i18n.h>
 #include <fstream>
 
 #include "on-canvas-spellcheck.h"
@@ -16,8 +17,8 @@
 #include "object/sp-text.h"
 #include "object/sp-flowtext.h"
 #include "display/control/canvas-item-squiggle.h"
-
-
+#include "document-undo.h"
+#include "ui/icon-names.h"
 
 namespace Inkscape::UI {
 
@@ -212,7 +213,6 @@ void OnCanvasSpellCheck::checkTextItem(SPItem* item)
         }
 
         if (!_word.empty() && !spelling_checker_check_word(_checker.get(), _word.c_str(), _word.length())) {
-            std::cout<<"Misspelled word: " << _word << std::endl;
             // auto squiggle = createSquiggle(item, _word, begin, end);
             // _misspelled_words.push_back({item, _word, begin, end, std::move(squiggle)});
             misspelled_words.push_back(MisspelledWord{_word, begin, end, {}});
@@ -345,6 +345,9 @@ void OnCanvasSpellCheck::replaceWord(SPItem *item, Text::Layout::iterator begin,
 {
     // Replace the word in the text item
     sp_te_replace(item, begin, end, replacement.c_str());
+
+    // Store the undo action
+    DocumentUndo::done(_desktop->getDocument(), _("Fix spelling (live)"), INKSCAPE_ICON("draw-text"));
 
     // After replacing, we need to re-check the item for misspelled words
     checkTextItem(item);
