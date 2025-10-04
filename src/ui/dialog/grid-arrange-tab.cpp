@@ -457,10 +457,10 @@ void GridArrangeTab::setDesktop(SPDesktop *desktop)
     _selection_changed_connection.disconnect();
 
     if (desktop) {
+        _selection_changed_connection = desktop->getSelection()->connectChanged([this] (auto) {
+            updateSelection();
+        });
         updateSelection();
-
-        _selection_changed_connection = INKSCAPE.signal_selection_changed.connect(
-            sigc::hide<0>(sigc::mem_fun(*this, &GridArrangeTab::updateSelection)));
     }
 }
 
