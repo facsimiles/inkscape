@@ -130,10 +130,12 @@ appimage:linux:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     # ICM = inkscape ci macos
     # https://gitlab.com/inkscape/infra/inkscape-ci-macos
-    ICM_REPO_REF: e33bb8e753acd06a2c1c4c5215f99b83e403aada
+    ICM_REPO_REF: 51926b27afb84e0d2a0a97a99131892b097f0a15
     ICM_REPO_URL: https://gitlab.com/inkscape/infra/inkscape-ci-macos.git
     # build number
     INK_BUILD: $CI_PIPELINE_IID
+    # build host
+    ORKA_RUNNER: sequoia-3
     # package registry to upload dependencies
     PACKAGE_REGISTRY_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic
     PACKAGE_URL_PREFIX: ${PACKAGE_REGISTRY_URL}/icm/${ICM_REPO_REF}
@@ -152,7 +154,6 @@ deps:macos:
   extends: .macos
   variables:
     CCACHE_MAXSIZE: "500Mi"
-    ORKA_RUNNER: sonoma
     SDKROOT: /opt/sdks/MacOSX11.3.sdk
   script:
     # Build dependencies and upload to the package registry.
@@ -164,7 +165,6 @@ deps:macos:
         icm/110-bootstrap_jhb.sh
         icm/120-build_gtk4.sh
         icm/130-build_inkdeps.sh
-        icm/140-build_packaging.sh
         rm $VER_DIR/var/cache/pkg/.skip
         icm/jhb/usr/bin/jhb run rustup self uninstall -y || true
         icm/jhb/usr/bin/archive remove_nonessentials
@@ -183,7 +183,6 @@ inkscape:macos:
   variables:
     CCACHE_MAXSIZE: "200Mi"
     MACOSX_DEPLOYMENT_TARGET: 11.3
-    ORKA_RUNNER: sequoia-2
     SDKROOT: /opt/sdks/MacOSX15.5.sdk
   script:
     - |
