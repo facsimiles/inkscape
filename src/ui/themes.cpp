@@ -518,13 +518,11 @@ ThemeContext::themechangecallback() {
     for (auto wnd : Inkscape::UI::Dialog::DialogManager::singleton().get_all_floating_dialog_windows()) {
         winds.push_back(dynamic_cast<Gtk::Window *>(wnd));
     }
-    if (auto desktops = INKSCAPE.get_desktops()) {
-        for (auto & desktop : *desktops) {
-            if (desktop == SP_ACTIVE_DESKTOP) {
-                winds.emplace_back(desktop->getInkscapeWindow());
-            } else {
-                winds.insert(winds.begin(), desktop->getInkscapeWindow());
-            }
+    for (auto desktop : INKSCAPE.get_desktops()) {
+        if (desktop == SP_ACTIVE_DESKTOP) {
+            winds.emplace_back(desktop->getInkscapeWindow());
+        } else {
+            winds.insert(winds.begin(), desktop->getInkscapeWindow());
         }
     }
     for (auto wnd : winds) {

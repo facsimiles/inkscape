@@ -80,7 +80,7 @@ public:
     unsigned int maximum_dkey();
     SPDesktop * next_desktop ();
     SPDesktop * prev_desktop ();
-    std::vector<SPDesktop *> * get_desktops() { return _desktops; };
+    std::vector<SPDesktop *> &get_desktops() { return _desktops; };
     
     // Moved document add/remove functions into public inkscape.h as they are used
     // (rightly or wrongly) by console-mode functions
@@ -138,7 +138,7 @@ public:
     Application& operator=(Application const&) = delete; // no assign
     Application* operator&() const; // no pointer access
     std::set<SPDocument *> _document_set;
-    std::vector<SPDesktop *> *_desktops = nullptr;
+    std::vector<SPDesktop *> _desktops;
     std::string _pages;
 
     unsigned refCount = 1;

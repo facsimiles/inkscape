@@ -67,7 +67,10 @@
 // Inkscape::Application static members
 Inkscape::Application * Inkscape::Application::_S_inst = nullptr;
 
-#define DESKTOP_IS_ACTIVE(d) (INKSCAPE._desktops != nullptr && !INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
+static bool desktop_is_active(SPDesktop const *d)
+{
+    return !INKSCAPE.get_desktops().empty() && d == INKSCAPE.get_desktops().front();
+}
 
 static void (* segv_handler) (int) = SIG_DFL;
 static void (* abrt_handler) (int) = SIG_DFL;
@@ -81,8 +84,6 @@ static constexpr int SP_INDENT = 8;
 
 /**  C++ification TODO list
  * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break.
- * - Application::_deskops has to be a pointer because of a signal bug somewhere else. Basically, it will attempt to access a deleted object in sp_ui_close_all(),
- *   but if it's a pointer we can stop and return NULL in Application::active_desktop()
  * - These functions are calling Application::create for no good reason I can determine:
  *
  *   Inkscape::UI::Dialog::SVGPreview::SVGPreview()
@@ -273,7 +274,7 @@ Application::Application(bool use_gui) :
 
 Application::~Application()
 {
-    if (_desktops) {
+    if (!_desktops.empty()) {
         g_error("FATAL: desktops still in list on application destruction!");
     }
 
@@ -527,15 +528,12 @@ void
 Application::add_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != nullptr);
-    if (_desktops == nullptr) {
-        _desktops = new std::vector<SPDesktop*>;
-    }
 
-    if (std::find(_desktops->begin(), _desktops->end(), desktop) != _desktops->end()) {
+    if (std::find(_desktops.begin(), _desktops.end(), desktop) != _desktops.end()) {
         g_error("Attempted to add desktop already in list.");
     }
 
-    _desktops->insert(_desktops->begin(), desktop);
+    _desktops.insert(_desktops.begin(), desktop);
 }
 
 void
@@ -543,28 +541,26 @@ Application::remove_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != nullptr);
 
-    if (std::find (_desktops->begin(), _desktops->end(), desktop) == _desktops->end() ) {
+    if (std::find (_desktops.begin(), _desktops.end(), desktop) == _desktops.end() ) {
         g_error("Attempted to remove desktop not in list.");
     }
 
-    if (DESKTOP_IS_ACTIVE (desktop)) {
-        if (_desktops->size() > 1) {
-            SPDesktop * new_desktop = *(++_desktops->begin());
-            _desktops->erase(std::find(_desktops->begin(), _desktops->end(), new_desktop));
-            _desktops->insert(_desktops->begin(), new_desktop);
+    if (desktop_is_active(desktop)) {
+        if (_desktops.size() > 1) {
+            SPDesktop * new_desktop = *(++_desktops.begin());
+            _desktops.erase(std::find(_desktops.begin(), _desktops.end(), new_desktop));
+            _desktops.insert(_desktops.begin(), new_desktop);
         } else {
             if (desktop->getSelection())
                 desktop->getSelection()->clear();
         }
     }
 
-    _desktops->erase(std::find(_desktops->begin(), _desktops->end(), desktop));
+    _desktops.erase(std::find(_desktops.begin(), _desktops.end(), desktop));
 
     // if this was the last desktop, shut down the program
-    if (_desktops->empty()) {
-        this->exit();
-        delete _desktops;
-        _desktops = nullptr;
+    if (_desktops.empty()) {
+        exit();
     }
 }
 
@@ -575,24 +571,24 @@ Application::activate_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != nullptr);
 
-    if (DESKTOP_IS_ACTIVE (desktop)) {
+    if (desktop_is_active(desktop)) {
         return;
     }
 
     std::vector<SPDesktop*>::iterator i;
 
-    if ((i = std::find (_desktops->begin(), _desktops->end(), desktop)) == _desktops->end()) {
+    if ((i = std::find (_desktops.begin(), _desktops.end(), desktop)) == _desktops.end()) {
         g_error("Tried to activate desktop not added to list.");
     }
 
-    _desktops->erase (i);
-    _desktops->insert (_desktops->begin(), desktop);
+    _desktops.erase(i);
+    _desktops.insert(_desktops.begin(), desktop);
 }
 
 SPDesktop *
 Application::find_desktop_by_dkey (unsigned int dkey)
 {
-    for (auto & _desktop : *_desktops) {
+    for (auto & _desktop : _desktops) {
         if (_desktop->dkey == dkey){
             return _desktop;
         }
@@ -606,7 +602,7 @@ Application::maximum_dkey()
 {
     unsigned int dkey = 0;
 
-    for (auto & _desktop : *_desktops) {
+    for (auto & _desktop : _desktops) {
         if (_desktop->dkey > dkey){
             dkey = _desktop->dkey;
         }
@@ -620,7 +616,7 @@ SPDesktop *
 Application::next_desktop ()
 {
     SPDesktop *d = nullptr;
-    unsigned int dkey_current = (_desktops->front())->dkey;
+    unsigned int dkey_current = _desktops.front()->dkey;
 
     if (dkey_current < maximum_dkey()) {
         // find next existing
@@ -650,7 +646,7 @@ SPDesktop *
 Application::prev_desktop ()
 {
     SPDesktop *d = nullptr;
-    unsigned int dkey_current = (_desktops->front())->dkey;
+    unsigned int dkey_current = (_desktops.front())->dkey;
 
     if (dkey_current > 0) {
         // find prev existing
@@ -697,11 +693,11 @@ void Application::remove_document(SPDocument *document)
 SPDesktop *
 Application::active_desktop()
 {
-    if (!_desktops || _desktops->empty()) {
+    if (_desktops.empty()) {
         return nullptr;
     }
 
-    return _desktops->front();
+    return _desktops.front();
 }
 
 SPDocument *
