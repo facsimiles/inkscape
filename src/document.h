@@ -375,7 +375,7 @@ public:
     unsigned long serial() const { return _serial; }  // Returns document's unique number.
     bool isSeeking() const {return seeking;} // In a transition between two "good" states of document?
     bool isPartial() const {return partial != nullptr;} // In partianl undo/redo transaction
-    void reset_key(void *dummy) { actionkey.clear(); }
+    void resetKey() { actionkey.clear(); }
     Glib::ustring const &action_key() const { return actionkey; }
     bool isSensitive() const { return sensitive; }
 
@@ -493,8 +493,6 @@ private:
     SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
     SPDocument::CommitSignal commit_signal; // Used by friend Inkscape::DocumentUndo
     SPDocument::BeforeCommitSignal before_commit_signal; // Used by friend Inkscape::DocumentUndo
-
-    sigc::connection _desktop_activated_connection;
 
     sigc::signal<void ()> destroySignal;
     sigc::signal<void ()> _saved_or_modified_signal;

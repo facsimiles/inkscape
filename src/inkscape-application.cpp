@@ -1854,6 +1854,9 @@ void InkscapeApplication::set_active_desktop(SPDesktop *desktop)
     _active_desktop = desktop;
     if (desktop) {
         INKSCAPE.activate_desktop(desktop);
+
+        // Don't coalesce undo events across leaving then returning to a desktop.
+        desktop->getDocument()->resetKey();
     }
 }
 

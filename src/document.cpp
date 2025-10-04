@@ -126,10 +126,6 @@ SPDocument::SPDocument()
     _event_log = std::make_unique<Inkscape::EventLog>(this);
     _selection = std::make_unique<Inkscape::Selection>(this);
 
-    _desktop_activated_connection = INKSCAPE.signal_activate_desktop.connect(
-                sigc::hide(sigc::bind(
-                sigc::ptr_fun(&DocumentUndo::resetKey), this)));
-
     // Penalise libavoid for choosing paths with needless extra segments.
     // This results in much better looking orthogonal connector paths.
     _router->setRoutingPenalty(Avoid::segmentPenalty);
@@ -160,9 +156,6 @@ SPDocument::SPDocument()
 
 SPDocument::~SPDocument() {
     destroySignal.emit();
-
-    // kill/unhook this first
-    _desktop_activated_connection.disconnect();
 
     if (partial) {
         sp_repr_free_log(partial);
