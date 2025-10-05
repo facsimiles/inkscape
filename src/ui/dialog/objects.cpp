@@ -1709,7 +1709,8 @@ Gtk::EventSequenceState ObjectsPanel::on_click(Gtk::GestureClick const &gesture,
             // to scroll to it. Also, if the item is the parent group of a selected object,
             // it won't get selected by ContextMenu's constructor.
             // See https://gitlab.com/inkscape/inkscape/-/issues/5243
-            if (!selection->includes(item)) {
+            // Layers are also not selected, and layer specific contextmenus are used instead.
+            if (!selection->includes(item) && !layer ) {
                 selectCursorItem(state);
             }
 
