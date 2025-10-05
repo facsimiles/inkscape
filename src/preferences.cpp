@@ -1150,13 +1150,9 @@ void Preferences::setErrorHandler(ErrorReporter* handler)
     _errorHandler = handler;
 }
 
-void Preferences::unload(bool save)
+void Preferences::unload()
 {
-    if (_instance)
-    {
-        if (save) {
-            _instance->save();
-        }
+    if (_instance) {
         delete _instance;
         _instance = nullptr;
     }

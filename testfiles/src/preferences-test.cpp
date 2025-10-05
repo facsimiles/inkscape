@@ -35,16 +35,18 @@ public:
 
 class PreferencesTest : public ::testing::Test
 {
+public:
+    Inkscape::Preferences *prefs = nullptr;
+
 protected:
     void SetUp() override {
         prefs = Inkscape::Preferences::get();
     }
+
     void TearDown() override {
-        prefs = NULL;
+        prefs = nullptr;
         Inkscape::Preferences::unload();
     }
-public:
-    Inkscape::Preferences *prefs;
 };
 
 TEST_F(PreferencesTest, testStartingState)
@@ -225,8 +227,6 @@ TEST_F(PreferencesTest, testKeyObserverNotification)
 TEST_F(PreferencesTest, testKeyObserverNotificationAddRemove)
 {
     Glib::ustring const path = "/some/random/path";
-    // Initial state: pref key ("folder") to be observed exists before adding observer
-    prefs->remove("/some/random");
     prefs->setInt("/some/random/whatever", 42);
 
     // Set up observer
@@ -265,8 +265,6 @@ TEST_F(PreferencesTest, testKeyObserverNotificationAddRemove)
 
 TEST_F(PreferencesTest, testEntryObserverNotificationAddRemove)
 {
-    // initial state: path to be observed exists
-    prefs->remove("/some/random");
     Glib::ustring const path = "/some/random/path";
     prefs->setInt(path, 2);
 

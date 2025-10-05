@@ -386,9 +386,6 @@ Application::crash_handler (int /*signum*/)
         }
     }
 
-    // do not save the preferences since they can be in a corrupted state
-    Inkscape::Preferences::unload(false);
-
     fprintf (stderr, "Emergency save completed. Inkscape will close now.\n");
     fprintf (stderr, "If you can reproduce this crash, please file a bug at https://inkscape.org/report\n");
     fprintf (stderr, "with a detailed description of the steps leading to the crash, so we can fix it.\n");
@@ -518,11 +515,6 @@ Application::remove_desktop (SPDesktop * desktop)
     }
 
     _desktops.erase(std::find(_desktops.begin(), _desktops.end(), desktop));
-
-    // if this was the last desktop, shut down the program
-    if (_desktops.empty()) {
-        exit();
-    }
 }
 
 
@@ -673,19 +665,6 @@ Application::active_document()
     }
 
     return nullptr;
-}
-
-/*#####################
-# HELPERS
-#####################*/
-
-/**
- *  Handler for Inkscape's Exit verb.  This emits the shutdown signal,
- *  saves the preferences if appropriate, and quits.
- */
-void Application::exit()
-{
-    Inkscape::Preferences::unload();
 }
 
 } // namespace Inkscape

@@ -23,6 +23,7 @@
 
 #include "inkscape-application.h"
 #include "path-prefix.h"
+#include "preferences.h"
 #include "io/resource.h"
 #include "util/statics.h"
 
@@ -216,6 +217,7 @@ int main(int argc, char *argv[])
 
     auto ret = InkscapeApplication().gio_app()->run(argc, argv);
 
+    Inkscape::Preferences::get()->save();
     Inkscape::Util::StaticsBin::get().destroy();
 
 #ifdef _WIN32

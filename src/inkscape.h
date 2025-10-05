@@ -85,9 +85,6 @@ public:
     void add_document(SPDocument *document);
     void remove_document(SPDocument *document);
     
-    // Fixme: This has to be rethought
-    void exit();
-    
     static void crash_handler(int signum);
 
     void set_pdf_poppler(bool p) {

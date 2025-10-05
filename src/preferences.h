@@ -684,13 +684,11 @@ public:
     /**
      * Unload all preferences.
      *
-     * @param save Whether to save the preferences; defaults to true.
-     *
      * This deletes the singleton object. Calling get() after this function
-     * will reinstate it, so you shouldn't. Pass false as the parameter
-     * to suppress automatic saving.
+     * will reinstate it, so you shouldn't. Call save() beforehand or the
+     * preferences will not be saved.
      */
-    static void unload(bool save=true);
+    static void unload();
     /*@}*/
 
     /**
