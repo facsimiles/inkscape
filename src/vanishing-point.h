@@ -16,6 +16,7 @@
 #include <2geom/point.h>
 #include <list>
 #include <set>
+#include <unordered_set>
 
 #include "selection.h"
 
@@ -88,7 +89,7 @@ public:
     }
 
     /* returns all selected boxes sharing this perspective */
-    std::list<SPBox3D *> selectedBoxes(Inkscape::Selection *sel);
+    std::unordered_set<SPBox3D *> selectedBoxes(Inkscape::Selection *sel);
 
     inline void updateBoxDisplays() const {
         g_return_if_fail (_persp);

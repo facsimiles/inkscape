@@ -102,7 +102,7 @@ public:
     void update_box_reprs ();
     void update_z_orders ();
     unsigned int num_boxes () const { return perspective_impl->boxes.size(); }
-    std::list<SPBox3D *> list_of_boxes() const;
+    std::vector<SPBox3D *> list_of_boxes() const;
 
     bool perspectives_coincide(Persp3D const *rhs) const;
     void absorb(Persp3D *persp2);

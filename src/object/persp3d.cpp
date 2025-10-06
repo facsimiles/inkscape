@@ -471,18 +471,9 @@ Persp3D::update_z_orders () {
     }
 }
 
-// FIXME: For some reason we seem to require a vector instead of a list in Persp3D, but in vp_knot_moved_handler()
-//        we need a list of boxes. If we can store a list in Persp3D right from the start, this function becomes
-//        obsolete. We should do this.
-std::list<SPBox3D *>
+std::vector<SPBox3D *>
 Persp3D::list_of_boxes() const {
-    auto persp_impl = perspective_impl.get();
-
-    std::list<SPBox3D *> bx_lst;
-    for (auto & boxe : persp_impl->boxes) {
-        bx_lst.push_back(boxe);
-    }
-    return bx_lst;
+    return perspective_impl.get()->boxes;
 }
 
 bool
@@ -498,7 +489,7 @@ Persp3D::absorb(Persp3D *other) {
 
     // Note: We first need to copy the boxes of other into a separate list;
     //       otherwise the loop below gets confused when perspectives are reattached.
-    std::list<SPBox3D *> boxes_of_persp2 = other->list_of_boxes();
+    std::vector<SPBox3D *> boxes_of_persp2 = other->list_of_boxes();
 
     for (auto & box : boxes_of_persp2) {
         box->switch_perspectives(other, this, true);

@@ -90,23 +90,20 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
         if (dragger->numberOfBoxes() > 1) { // FIXME: Don't do anything if *all* boxes of a VP are selected
             std::set<VanishingPoint *> sel_vps = dragger->VPsOfSelectedBoxes();
 
-            std::list<SPBox3D *> sel_boxes;
             for (auto sel_vp : sel_vps) {
                 // for each VP that has selected boxes:
                 Persp3D *old_persp = sel_vp->get_perspective();
-                sel_boxes = sel_vp->selectedBoxes(SP_ACTIVE_DESKTOP->getSelection());
+                auto sel_boxes = sel_vp->selectedBoxes(SP_ACTIVE_DESKTOP->getSelection());
 
-                // we create a new perspective ...
-                Persp3D *new_persp = Persp3D::create_xml_element(dragger->parent->document);
+                // create a copy of the existing perspective
+                Persp3D *new_persp = Persp3D::create_copy(*old_persp);
 
-                /* ... unlink the boxes from the old one and
-                   FIXME: We need to unlink the _un_selected boxes of each VP so that
-                          the correct boxes are kept with the VP being moved */
-                std::list<SPBox3D *> bx_lst = old_persp->list_of_boxes();
-                for (auto & box : bx_lst) {
-                    if (std::find(sel_boxes.begin(), sel_boxes.end(), box) == sel_boxes.end()) {
+                /* ... unlink unselected boxes of each VP so that
+                          the selected boxes are kept with the VP being moved */
+                for (auto *box : old_persp->list_of_boxes()) {
+                    if (!sel_boxes.contains(box)) {
                         /* if a box in the VP is unselected, move it to the
-                           newly created perspective so that it doesn't get dragged **/
+                           newly created perspective so that it doesn't get dragged */
                         box->switch_perspectives(old_persp, new_persp);
                     }
                 }
@@ -238,15 +235,15 @@ void VanishingPoint::set_pos(Proj::Pt2 const &pt)
     _persp->perspective_impl->tmat.set_image_pt(_axis, pt);
 }
 
-std::list<SPBox3D *> VanishingPoint::selectedBoxes(Inkscape::Selection *sel)
+std::unordered_set<SPBox3D *> VanishingPoint::selectedBoxes(Inkscape::Selection *sel)
 {
-    std::list<SPBox3D *> sel_boxes;
+    std::unordered_set<SPBox3D *> sel_boxes;
     auto itemlist = sel->items();
     for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
         SPItem *item = *i;
-        auto box = cast<SPBox3D>(item);
+        auto *box = cast<SPBox3D>(item);
         if (box && this->hasBox(box)) {
-            sel_boxes.push_back(box);
+            sel_boxes.emplace(box);
         }
     }
     return sel_boxes;
