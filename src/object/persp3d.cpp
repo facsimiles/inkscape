@@ -245,6 +245,14 @@ Persp3D::create_xml_element(SPDocument *document) {
 }
 
 Persp3D *
+Persp3D::create_copy(const Persp3D &copy_from)
+{
+    auto *p = create_xml_element(copy_from.document);
+    p->perspective_impl->tmat = copy_from.perspective_impl->tmat;
+    return p;
+}
+
+Persp3D *
 Persp3D::document_first_persp(SPDocument *document)
 {
     Persp3D *first = nullptr;

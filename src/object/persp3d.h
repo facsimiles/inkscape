@@ -109,6 +109,7 @@ public:
 
     static Persp3D * create_xml_element (SPDocument *document);
     static Persp3D * document_first_persp (SPDocument *document);
+    static Persp3D * create_copy(const Persp3D &copy_from);
 
     bool has_all_boxes_in_selection (Inkscape::ObjectSet *set) const;
 

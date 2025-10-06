@@ -1649,7 +1649,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         if (persp) {
             if (!persp->has_all_boxes_in_selection (this)) {
                 // create a new perspective as a copy of the current one
-                transf_persp = Persp3D::create_xml_element (persp->document);
+                transf_persp = Persp3D::create_copy(*persp);
 
                 std::list<SPBox3D *> selboxes = box3DList(persp);
 
