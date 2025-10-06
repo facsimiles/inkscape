@@ -6,6 +6,7 @@
     <property name="vexpand">True</property>
     <property name="hscrollbar-policy">never</property>
     <property name="vscrollbar-policy">external</property>
+    <property name="can-focus">false</property>
     <property name="child">
       <object class="GtkBox">
         <property name="name">tool-toolbar</property>
