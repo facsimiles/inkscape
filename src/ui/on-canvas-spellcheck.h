@@ -75,6 +75,9 @@ private:
 
     std::vector<Glib::ustring> _added_words;
 
+    // Initialize spell checker and tracked items and start spellchecking
+    void initialize();
+
     // Get all text items in the document
     void allTextItems(SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked);
 
@@ -109,6 +112,8 @@ public:
     void ignore(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end);
 
     void addToDictionary(SPItem *item, Text::Layout::iterator begin, Text::Layout::iterator end);
+
+    void reinitialize();
 
 };
 

@@ -59,6 +59,11 @@ OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
     if (!doc) return;
     _root = static_cast<SPObject*>(doc->getRoot());
 
+    initialize();
+}
+
+void OnCanvasSpellCheck::initialize()
+{
     // Get the default spelling provider
     _provider = spelling_provider_get_default();
 
@@ -101,6 +106,18 @@ OnCanvasSpellCheck::OnCanvasSpellCheck(SPDesktop *desktop)
     if(prefs->getBool("/dialogs/spellcheck/live", false)) {   
         scanDocument();
     }
+}
+
+void OnCanvasSpellCheck::reinitialize()
+{
+    // Clear previous data
+    _ignored_words.clear();
+    _added_words.clear();
+    _tracked_items.clear();
+    _checker.reset();
+
+    // Re-initialize
+    initialize();
 }
 
 void OnCanvasSpellCheck::allTextItems(SPObject *root, std::vector<SPItem *> &list, bool hidden, bool locked)

@@ -703,6 +703,7 @@ private:
   void resetIconsColorsWrapper();
   void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
                             guint32 &colorseterror);
+  void spellcheckPreferencesChanged();
 
   std::map<Glib::ustring, bool> dark_themes;
   bool _init;

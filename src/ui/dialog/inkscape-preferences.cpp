@@ -83,6 +83,7 @@
 #include "widgets/spw-utilities.h"
 
 #include "ui/libspelling-wrapper.h"
+#include "ui/tools/text-tool.h"
 
 namespace Inkscape::UI::Dialog {
 
@@ -3749,17 +3750,41 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     }
 }
 
+void InkscapePreferences::spellcheckPreferencesChanged()
+{
+#if WITH_LIBSPELLING
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool());
+
+    if (!text_tool) {
+        return;
+    }
+
+    auto spellcheck = text_tool->getSpellcheck();
+    if (!spellcheck) {
+        return;
+    }
+
+    spellcheck->reinitialize();
+#endif
+}
+
 void InkscapePreferences::initPageSpellcheck()
 {
 #if WITH_LIBSPELLING
     _spell_ignorenumbers.init(_("Ignore words with digits"), "/dialogs/spellcheck/ignorenumbers", true);
     _page_spellcheck.add_line(false, "", _spell_ignorenumbers, "", _("Ignore words containing digits, such as \"R2D2\""), true);
+    _spell_ignorenumbers.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::spellcheckPreferencesChanged));
 
     _spell_ignoreallcaps.init(_("Ignore words in ALL CAPITALS"), "/dialogs/spellcheck/ignoreallcaps", false);
     _page_spellcheck.add_line(false, "", _spell_ignoreallcaps, "", _("Ignore words in all capitals, such as \"IUPAC\""), true);
+    _spell_ignoreallcaps.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::spellcheckPreferencesChanged));
 
     _spell_live.init(_("Turn On live spellchecking"), "/dialogs/spellcheck/live", true);
     _page_spellcheck.add_line(false, "", _spell_live, "", _("Enable live spellchecking while typing"), true);
+    _spell_live.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::spellcheckPreferencesChanged));
+
 
     std::vector<Glib::ustring> lang_labels;
     std::vector<Glib::ustring> lang_codes;
@@ -3785,6 +3810,7 @@ void InkscapePreferences::initPageSpellcheck()
         int idx = _spell_live_lang.get_selected();
         if (idx >= 0 && idx < (int)lang_codes.size()) {
             prefs->setString("/dialogs/spellcheck/live_lang", lang_codes[idx]);
+            this->spellcheckPreferencesChanged();
         }
     });
 
