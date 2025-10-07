@@ -504,7 +504,7 @@ Gtk::EventSequenceState SelectedStyle::on_fill_click(Gtk::GestureClick const &cl
                                                      double /*y*/)
 {
     auto const button = click.get_current_button();
-    if (button == 1 && !dragging) { // click, open fill&stroke
+    if (button == 1) { // click, open fill&stroke
         if (Dialog::FillAndStroke *fs = get_fill_and_stroke_panel(_desktop))
             fs->showPageFill();
     } else if (button == 3) { // right-click, popup menu
@@ -524,7 +524,7 @@ Gtk::EventSequenceState SelectedStyle::on_stroke_click(Gtk::GestureClick const &
                                                        double /*y*/)
 {
     auto const button = click.get_current_button();
-    if (button == 1 && !dragging) { // click, open fill&stroke
+    if (button == 1) { // click, open fill&stroke
         if (Dialog::FillAndStroke *fs = get_fill_and_stroke_panel(_desktop))
             fs->showPageStrokePaint();
     } else if (button == 3) { // right-click, popup menu
@@ -543,7 +543,7 @@ Gtk::EventSequenceState SelectedStyle::on_stroke_click(Gtk::GestureClick const &
 Gtk::EventSequenceState SelectedStyle::on_sw_click(Gtk::GestureClick const &click, int n_press, double, double)
 {
     auto const button = click.get_current_button();
-    if (button == 1 && !dragging) { // click, open fill&stroke
+    if (button == 1) { // click, open fill&stroke
         if (Dialog::FillAndStroke *fs = get_fill_and_stroke_panel(_desktop))
             fs->showPageStrokeStyle();
     } else if (button == 3) { // right-click, popup menu
@@ -1018,7 +1018,6 @@ void RotateableSwatch::do_motion(double by, guint modifier)
     if (parent->_mode[fillstroke] != SS_COLOR) {
         return;
     }
-    parent->dragging = true;
 
     if (!scrolling && modifier != cursor_state) {
         std::string cursor_filename = "adjust_hue.svg";
@@ -1045,28 +1044,28 @@ void RotateableSwatch::do_motion(double by, guint modifier)
         parent->getDesktop()->getTool()->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
             _("Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, with <b>Shift</b> to adjust saturation, without modifiers to adjust hue"),
-            ret.first - ret.second, ret.first, ret.second);
+            ret.first, ret.first + ret.second, ret.second);
 
     } else if (modifier == 2) { // saturation
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey, (_("Adjust saturation")), INKSCAPE_ICON("dialog-fill-and-stroke"));
         parent->getDesktop()->getTool()->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
             _("Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"),
-            ret.first - ret.second, ret.first, ret.second);
+            ret.first, ret.first + ret.second, ret.second);
 
     } else if (modifier == 1) { // lightness
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey, (_("Adjust lightness")), INKSCAPE_ICON("dialog-fill-and-stroke"));
         parent->getDesktop()->getTool()->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
             _("Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"),
-            ret.first - ret.second, ret.first, ret.second);
+            ret.first, ret.first + ret.second, ret.second);
 
     } else { // hue
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey, (_("Adjust hue")), INKSCAPE_ICON("dialog-fill-and-stroke"));
         parent->getDesktop()->getTool()->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
             _("Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> to adjust lightness"),
-            ret.first - ret.second, ret.first, ret.second);
+            ret.first, ret.first + ret.second, ret.second);
     }
 }
 
@@ -1081,13 +1080,12 @@ void RotateableSwatch::do_release(double by, guint modifier)
     if (parent->_mode[fillstroke] != SS_COLOR)
         return;
 
-    parent->dragging = false;
-    color_adjust(*startcolor, by, modifier);
+    if (startcolor) {
+        color_adjust(*startcolor, by, modifier);
+    }
 
     if (cursor_state != -1) {
-        if (auto window = dynamic_cast<Gtk::Window *>(get_root())) {
-            window->set_cursor(); // Use parent window cursor.
-        }
+        set_cursor();
         cursor_state = -1;
     }
 
@@ -1162,7 +1160,6 @@ void RotateableStrokeWidth::do_motion(double by, guint modifier)
             startvalue = 1;
         startvalue_set = true;
     }
-    parent->dragging = true;
 
     if (modifier == 3) { // Alt, do nothing
     } else {
@@ -1174,8 +1171,6 @@ void RotateableStrokeWidth::do_motion(double by, guint modifier)
 
 void RotateableStrokeWidth::do_release(double by, guint modifier)
 {
-    parent->dragging = false;
-
     if (modifier == 3) { // do nothing
 
     } else {

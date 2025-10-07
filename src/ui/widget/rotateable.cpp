@@ -8,11 +8,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "rotateable.h"
+
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/eventcontrollerscroll.h>
-#include <gtkmm/gestureclick.h>
+#include <gtkmm/gesturedrag.h>
 
-#include "rotateable.h"
 #include "ui/controller.h"
 #include "ui/tools/tool-base.h"
 
@@ -27,15 +28,12 @@ Rotateable::Rotateable():
     modifier(0),
     current_axis(axis)
 {
-    auto const click = Gtk::GestureClick::create();
+    auto const click = Gtk::GestureDrag::create();
     click->set_button(1); // left
-    click->signal_pressed().connect(Controller::use_state(sigc::mem_fun(*this, &Rotateable::on_click), *click));
-    click->signal_released().connect(Controller::use_state(sigc::mem_fun(*this, &Rotateable::on_release), *click));
+    click->signal_drag_begin().connect(Controller::use_state(sigc::mem_fun(*this, &Rotateable::on_click), *click));
+    click->signal_drag_end().connect(Controller::use_state(sigc::mem_fun(*this, &Rotateable::on_release), *click));
+    click->signal_drag_update().connect(Controller::use_state(sigc::mem_fun(*this, &Rotateable::on_motion), *click));
     add_controller(click);
-
-    auto const motion = Gtk::EventControllerMotion::create();
-    motion->signal_motion().connect([this, &motion = *motion](auto &&...args) { on_motion(motion, args...); });
-    add_controller(motion);
 
     auto const scroll = Gtk::EventControllerScroll::create();
     scroll->set_flags(Gtk::EventControllerScroll::Flags::VERTICAL);
@@ -43,8 +41,7 @@ Rotateable::Rotateable():
     add_controller(scroll);
 }
 
-Gtk::EventSequenceState Rotateable::on_click(Gtk::GestureClick const &click,
-                                             int /*n_press*/, double x, double y)
+Gtk::EventSequenceState Rotateable::on_click(Gtk::GestureDrag const &click, double x, double y)
 {
     drag_started_x = x;
     drag_started_y = y;
@@ -53,7 +50,7 @@ Gtk::EventSequenceState Rotateable::on_click(Gtk::GestureClick const &click,
     dragging = true;
     working = false;
     current_axis = axis;
-    return Gtk::EventSequenceState::NONE; // no claim, would stop release being fired
+    return Gtk::EventSequenceState::NONE; // immediately claiming would prevent non dragging clicks
 }
 
 unsigned Rotateable::get_single_modifier(unsigned old, unsigned state)
@@ -94,17 +91,17 @@ unsigned Rotateable::get_single_modifier(unsigned old, unsigned state)
     return old;
 }
 
-void Rotateable::on_motion(Gtk::EventControllerMotion const &motion, double x, double y)
+Gtk::EventSequenceState Rotateable::on_motion(Gtk::GestureDrag const &motion, double x, double y)
 {
     if (!dragging) {
-        return;
+        return Gtk::EventSequenceState::NONE;
     }
 
-    double dist = Geom::L2(Geom::Point(x, y) - Geom::Point(drag_started_x, drag_started_y));
+    double dist = Geom::L2(Geom::Point(x, y));
     if (dist > 20) {
         working = true;
 
-        double angle = atan2(y - drag_started_y, x - drag_started_x);
+        double angle = atan2(y, x);
         double force = CLAMP (-(angle - current_axis)/maxdecl, -1, 1);
         if (fabs(force) < 0.002)
             force = 0; // snap to zero
@@ -120,17 +117,17 @@ void Rotateable::on_motion(Gtk::EventControllerMotion const &motion, double x, d
         } else {
             do_motion(force, modifier);
         }
+        return Gtk::EventSequenceState::CLAIMED;
     }
 
     Inkscape::UI::Tools::gobble_motion_events(GDK_BUTTON1_MASK);
+    return Gtk::EventSequenceState::NONE;
 }
 
-
-Gtk::EventSequenceState Rotateable::on_release(Gtk::GestureClick const & /*click*/,
-                                               int /*n_press*/, double x, double y)
+Gtk::EventSequenceState Rotateable::on_release(Gtk::GestureDrag const & /*click*/, double x, double y)
 {
     if (dragging && working) {
-        double angle = atan2(y - drag_started_y, x - drag_started_x);
+        double angle = atan2(y, x);
         double force = CLAMP(-(angle - current_axis) / maxdecl, -1, 1);
         if (fabs(force) < 0.002)
             force = 0; // snap to zero
@@ -152,11 +149,6 @@ bool Rotateable::on_scroll(Gtk::EventControllerScroll const &scroll, double /*dx
     double change = 0.0;
     double delta_y_clamped = CLAMP(dy, -1.0, 1.0); // values > 1 result in excessive changes
     change = 1.0 * -delta_y_clamped;
-
-#if 0 // We can't (easily) get this from a scroll controller. Do we need it?
-    drag_started_x = event->x;
-    drag_started_y = event->y;
-#endif
 
     auto const state = scroll.get_current_event_state();
     modifier = get_single_modifier(modifier, static_cast<unsigned>(state));

@@ -115,7 +115,6 @@ class SelectedStyle
     , private DefocusTarget
 {
 public:
-    bool dragging = false;
     SelectedStyle();
     ~SelectedStyle() override;
 

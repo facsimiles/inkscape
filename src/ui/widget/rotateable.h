@@ -12,10 +12,10 @@
 #define INKSCAPE_UI_ROTATEABLE_H
 
 #include <gtkmm/box.h>
+#include <gtkmm/gesture.h>
 
 namespace Gtk {
-class GestureClick;
-class EventControllerMotion;
+class GestureDrag;
 class EventControllerScroll;
 } // namespace Gtk
 
@@ -44,11 +44,9 @@ private:
 
     static unsigned get_single_modifier(unsigned old, unsigned state);
 
-    Gtk::EventSequenceState on_click  (Gtk::GestureClick const &click,
-                                       int n_press, double x, double y);
-    Gtk::EventSequenceState on_release(Gtk::GestureClick const &click,
-                                       int n_press, double x, double y);
-    void on_motion(Gtk::EventControllerMotion const &motion, double  x, double  y);
+    Gtk::EventSequenceState on_click(Gtk::GestureDrag const &click, double x, double y);
+    Gtk::EventSequenceState on_release(Gtk::GestureDrag const &click, double x, double y);
+    Gtk::EventSequenceState on_motion(Gtk::GestureDrag const &motion, double x, double y);
     bool on_scroll(Gtk::EventControllerScroll const &scroll, double dx, double dy);
 
     virtual void do_motion (double /*by*/, unsigned /*state*/) {}
