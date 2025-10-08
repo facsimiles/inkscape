@@ -95,7 +95,7 @@ Effect::Effect(Inkscape::XML::Node *in_repr, ImplementationHolder implementation
                 }
                 if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "menu-tip") ||
                         !strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "_menu-tip")) {
-                    _menu_tip = effect_child->firstChild()->content();
+                    _menu_tip = get_translation(effect_child->firstChild()->content());
                 }
                 if (streq(effect_child->name(), INKSCAPE_EXTENSION_NS "icon")) {
                     _icon_path = effect_child->firstChild()->content();
