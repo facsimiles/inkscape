@@ -2613,10 +2613,6 @@ void InkscapePreferences::initPageBehavior()
     _undo_limit.changed_signal.connect(sigc::mem_fun(_undo_size, &Gtk::Widget::set_sensitive));
     _undo_size.set_sensitive(_undo_limit.get_active());
 
-    _markers_color_stock.init ( _("Color stock markers the same color as object"), "/options/markers/colorStockMarkers", true);
-    _markers_color_custom.init ( _("Color custom markers the same color as object"), "/options/markers/colorCustomMarkers", false);
-    _markers_color_update.init ( _("Update marker color when object color changes"), "/options/markers/colorUpdateMarkers", true);
-
     // Selecting options
     _sel_all.init ( _("Select in all layers"), "/options/kbselection/inlayer", PREFS_SELECTION_ALL, false, nullptr);
     _sel_current.init ( _("Select only within current layer"), "/options/kbselection/inlayer", PREFS_SELECTION_LAYER, true, &_sel_all);
@@ -2906,17 +2902,6 @@ void InkscapePreferences::initPageBehavior()
                         _("Ungroup groups created when setting clip/mask"));
 
     this->AddPage(_page_mask, _("Clippaths and masks"), iter_behavior, PREFS_PAGE_BEHAVIOR_MASKS);
-
-    // Markers options
-    _page_markers.add_group_header( _("Stroke Style Markers"));
-    _page_markers.add_line( true, "", _markers_color_stock, "",
-                           _("Stroke color same as object, fill color either object fill color or marker fill color"));
-    _page_markers.add_line( true, "", _markers_color_custom, "",
-                           _("Stroke color same as object, fill color either object fill color or marker fill color"));
-    _page_markers.add_line( true, "", _markers_color_update, "",
-                           _("Update marker color when object color changes"));
-
-    this->AddPage(_page_markers, _("Markers"), iter_behavior, PREFS_PAGE_BEHAVIOR_MARKERS);
 
     // Clipboard options
     _clipboard_style_computed.init(_("Copy computed style"), "/options/copycomputedstyle/value", 1, true, nullptr);

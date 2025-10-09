@@ -177,7 +177,6 @@ protected:
     UI::Widget::DialogPage _page_steps;
     UI::Widget::DialogPage _page_clones;
     UI::Widget::DialogPage _page_mask;
-    UI::Widget::DialogPage _page_markers;
     UI::Widget::DialogPage _page_clipboard;
     UI::Widget::DialogPage _page_cleanup;
     UI::Widget::DialogPage _page_lpe;
@@ -393,10 +392,6 @@ protected:
     UI::Widget::PrefCheckButton _sel_layer_deselects;
     UI::Widget::PrefCheckButton _sel_cycle;
     UI::Widget::PrefCheckButton _sel_zero_opacity;
-
-    UI::Widget::PrefCheckButton _markers_color_stock;
-    UI::Widget::PrefCheckButton _markers_color_custom;
-    UI::Widget::PrefCheckButton _markers_color_update;
 
     UI::Widget::PrefRadioButton _clipboard_style_computed;
     UI::Widget::PrefRadioButton _clipboard_style_verbatim;
