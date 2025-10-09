@@ -490,7 +490,7 @@ void ColorPalette::set_up_scrolling() {
 
     auto alloc_width = _normal_box.get_parent()->get_allocated_width();
     // if page-size is defined, align color tiles in columns
-    if (_page_size > 1 && alloc_width > 1 && !_show_labels && !colors.empty()) {
+    if (!(_rows == 1 && _force_scrollbar) && _page_size > 1 && alloc_width > 1 && !_show_labels && !colors.empty()) {
         int width = get_tile_width();
         if (width > 1) {
             int cols = alloc_width / (width + _border);
