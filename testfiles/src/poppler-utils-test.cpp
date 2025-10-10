@@ -28,6 +28,15 @@ TEST(PopplerUtilsTest, SanitizeId)
 }
 } // namespace Inkscape
 
+TEST(PopplerUtilsTest, GetNameWithoutSubsetTag)
+{
+  ASSERT_EQ(getNameWithoutSubsetTag("AAAAAA+aff65d+OpenSans"), "OpenSans");
+  ASSERT_EQ(getNameWithoutSubsetTag("AAAAAA+OpenSans"), "OpenSans");
+  ASSERT_EQ(getNameWithoutSubsetTag("OpenSn+Regular"), "Regular");
+  ASSERT_EQ(getNameWithoutSubsetTag("AAAAAAAAAAAAAA+OpenSans-Regular"), "AAAAAAAAAAAAAA+OpenSans-Regular");
+  ASSERT_EQ(getNameWithoutSubsetTag("AAAAA0+NotoSans-Regular"), "NotoSans-Regular");
+}
+
 /*
   Local Variables:
   mode:c++

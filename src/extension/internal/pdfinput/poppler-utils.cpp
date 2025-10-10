@@ -215,21 +215,25 @@ void InkFontDict::hashFontObject1(const Object *obj, FNVHash *h)
     }
 }
 
-std::string getNameWithoutSubsetTag(FontPtr font)
+std::string getNameWithoutSubsetTag(std::string name)
 {
-    if (!font->getName())
-        return {};
+    // there should only be a single tag AAAAAA+FontName, but in edge cases there may
+    // be multiple. This also relaxes the uppercase letter specification.
+    auto start = name.begin();
 
-    std::string tagname = font->getName()->c_str();
-    unsigned int i;
-    for (i = 0; i < tagname.size(); ++i) {
-        if (tagname[i] < 'A' || tagname[i] > 'Z') {
-            break;
+    for (auto iter = name.begin(); iter != name.end(); ++iter) {
+        int diff = iter - start;
+        if (*iter == '+' && diff == 6) {
+            // found the plus sign, shift the start to the next char
+            start = iter + 1;
+        } else if (iter - start > 6 || ((*iter < '0' || *iter > '9') && 
+                                        (*iter < 'A' || *iter > 'Z') && 
+                                        (*iter < 'a' || *iter > 'z'))) {
+            break; // not a valid postScript Tag
         }
     }
-    if (i != 6 || tagname.size() <= 7 || tagname[6] != '+')
-        return tagname;
-    return tagname.substr(7);
+
+    return std::string(start, name.end());
 }
 
 /**
@@ -292,9 +296,12 @@ FontData::FontData(FontPtr font)
             break;
     }
 
-    name = validateString(getNameWithoutSubsetTag(font));
-    // Use this when min-poppler version is newer:
-    // name = font->getNameWithoutSubsetTag();
+    if (font->getName()) {
+        name = validateString(getNameWithoutSubsetTag(font->getName()->c_str()));
+    } else {
+        g_warning("Font has no name");
+        name = "";
+    }
 
     PangoFontDescription *desc = FontFactory::get().parsePostscriptName(name, false);
 
