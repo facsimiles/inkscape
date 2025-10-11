@@ -530,8 +530,10 @@ void SingleExport::setFilename(std::string filename, bool is_user_input)
         si_filename_entry.set_text(filename_label);
         si_filename_entry.set_position(filename_label.length());
         filenameConn.block(old_block_state);
-        filename_entry_original_value = filename_label;
     }
+
+    // Unconditionally update the original value to prevent it from becoming stale.
+    filename_entry_original_value = filename_label;
 }
 
 void SingleExport::saveExportHints(SPObject *target)
