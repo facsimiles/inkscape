@@ -82,6 +82,7 @@ PatternEditor::PatternEditor(const char* prefs, PatternManager& manager) :
     _prefs(prefs)
 {
     reparent_properties(_input_grid, _main);
+    _main.set_hexpand();
 
     _color_picker.connectChanged([this](Colors::Color const &color){
         if (_update.pending()) return;

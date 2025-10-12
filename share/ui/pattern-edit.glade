@@ -3,8 +3,8 @@
   <placeholder width="219" height="291"></placeholder>
   <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="adjustment-angle">
-    <property name="lower">-360</property>
-    <property name="upper">360.00999999999999</property>
+    <property name="lower">-180</property>
+    <property name="upper">180</property>
     <property name="step-increment">1</property>
     <property name="page-increment">15</property>
   </object>
@@ -319,6 +319,7 @@
             <property name="focusable">True</property>
             <property name="adjustment">adjustment-angle</property>
             <property name="digits">2</property>
+            <property name="wrap-around">True</property>
             <layout>
               <property name="column">2</property>
               <property name="row">5</property>
@@ -364,7 +365,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="yes" context="patter tile gap" comments="A gap between pattern tiles">Gap</property>
+            <property name="label" translatable="yes" context="pattern tile gap" comments="A gap between pattern tiles">Gap</property>
             <layout>
               <property name="column">0</property>
               <property name="row">7</property>
