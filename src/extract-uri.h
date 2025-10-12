@@ -12,6 +12,7 @@
 
 #include <optional>
 #include <string>
+#include <tuple>
 
 /**
  * Parse functional URI notation, as per 4.3.4 of CSS 2.1
