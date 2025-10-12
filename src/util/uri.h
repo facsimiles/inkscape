@@ -14,6 +14,7 @@
 
 #include <optional>
 #include <string>
+#include <tuple>
 
 enum class Base64Data
 {
