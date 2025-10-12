@@ -6999,7 +6999,7 @@ msgstr "Convertir la selección a un rectángulo con un relleno de mosaico"
 
 #: ../src/actions/actions-edit.cpp:288
 msgid "Pattern to Objects"
-msgstr "Patrón a objetos"
+msgstr "Capas y objetos"
 
 #: ../src/actions/actions-edit.cpp:288
 msgid "Extract objects from a tiled pattern fill"
@@ -21478,7 +21478,7 @@ msgstr "No hay <b>rellenos de mosaico</b> en la selección."
 
 #: ../src/selection-chemistry.cpp:3607
 msgid "Pattern to objects"
-msgstr "Patrón a objetos"
+msgstr "Capas y objetos"
 
 #: ../src/selection-chemistry.cpp:3621
 msgid "Select <b>object(s)</b> to make a bitmap copy."
