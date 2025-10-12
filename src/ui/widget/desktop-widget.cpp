@@ -179,6 +179,9 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     command_toolbar = std::make_unique<Inkscape::UI::Toolbar::CommandToolbar>();
     _top_toolbars->attach(*command_toolbar, 0, 0);
+
+    // Applying the saved settings after all the toolbars have been created.
+    apply_ctrlbar_settings();
 }
 
 void SPDesktopWidget::addDesktop(SPDesktop *desktop, int pos)
