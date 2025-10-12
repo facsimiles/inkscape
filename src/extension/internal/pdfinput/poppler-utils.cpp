@@ -168,7 +168,7 @@ void InkFontDict::hashFontObject1(const Object *obj, FNVHash *h)
         case objString:
             h->hash('s');
             s = obj->getString();
-            h->hash(s->c_str(), s->getLength());
+            h->hash(s->c_str(), get_goostring_length(*s));
             break;
         case objName:
             h->hash('n');
@@ -586,10 +586,10 @@ std::string getDictString(Dict *dict, const char *key)
 std::string getString(const GooString *value)
 {
     if (_POPPLER_HAS_UNICODE_BOM(value)) {
-        return g_convert(value->getCString () + 2, value->getLength () - 2,
+        return g_convert(value->getCString () + 2, get_goostring_length(*value) - 2,
                          "UTF-8", "UTF-16BE", NULL, NULL, NULL);
     } else if (_POPPLER_HAS_UNICODE_BOMLE(value)) {
-        return g_convert(value->getCString () + 2, value->getLength () - 2,
+        return g_convert(value->getCString () + 2, get_goostring_length(*value) - 2,
                          "UTF-8", "UTF-16LE", NULL, NULL, NULL);
     }
     return value->toStr();

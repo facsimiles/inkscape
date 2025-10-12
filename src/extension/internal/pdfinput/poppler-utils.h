@@ -19,6 +19,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <goo/GooString.h>
 
 #include "poppler-transition-api.h"
 
@@ -103,5 +104,13 @@ private:
     int hashFontObject(Object *obj);
     void hashFontObject1(const Object *obj, FNVHash *h);
 };
+
+inline size_t get_goostring_length(const GooString& str) {
+#if POPPLER_CHECK_VERSION(25, 10, 0)
+    return str.size();
+#else
+    return str.getLength();
+#endif
+}
 
 #endif /* POPPLER_UTILS_H */
