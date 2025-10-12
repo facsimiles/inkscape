@@ -2262,7 +2262,7 @@ void PdfParser::doShowText(GooString *s) {
     auto font = state->getFont();
     int wMode = font->getWMode(); // Vertical/Horizontal/Invalid
 
-    builder->beginString(state, s->getLength());
+    builder->beginString(state, get_goostring_length(*s));
 
     // handle a Type 3 char
     if (font->getType() == fontType3) {
@@ -2273,7 +2273,7 @@ void PdfParser::doShowText(GooString *s) {
     state->textTransformDelta(0, state->getRise(), &riseX, &riseY);
 
     auto p = s->getCString(); // char* or const char*
-    int len = s->getLength();
+    int len = get_goostring_length(*s);
 
     while (len > 0) {
 
