@@ -24,9 +24,15 @@ namespace GC {
 
 namespace {
 
+#if GC_VERSION_MAJOR >= 8 and GC_VERSION_MINOR >=3
+void display_warning(const char *msg, GC_word arg) {
+    g_warning(msg, arg);
+}
+#else
 void display_warning(char *msg, GC_word arg) {
     g_warning(msg, arg);
 }
+#endif
 
 void do_init() {
     GC_set_no_dls(1);
