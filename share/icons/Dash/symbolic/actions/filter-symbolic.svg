@@ -6,7 +6,7 @@
    height="16"
    viewBox="0 0 16 16"
    version="1.1"
-   id="svg5"
+   class="svg5"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
    sodipodi:docname="filter-symbolic.svg"
    xml:space="preserve"
@@ -14,7 +14,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
-     id="namedview7"
+     class="namedview7"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -23,7 +23,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
-     showgrid="true"
+     showgrclass="true"
      inkscape:zoom="16"
      inkscape:cx="10.5"
      inkscape:cy="7.25"
@@ -34,11 +34,11 @@
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1"><inkscape:grid
        type="xygrid"
-       id="grid132" /></sodipodi:namedview><defs
-     id="defs2" /><g
+       class="grid132" /></sodipodi:namedview><defs
+     class="defs2" /><g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1"><path
-       id="path6435"
+     class="layer1"><path
+       class="path6435"
        style="stroke-width:1.00157"
        d="M 1,0.5 V 2 H 14 V 0.5 Z M 1.5,3 6,10 6.5,16 H 6.5059 L 8.648438,14.210938 9,10 13.5,3 Z" /></g></svg>

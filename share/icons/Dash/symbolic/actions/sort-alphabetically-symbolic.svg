@@ -1,6 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="sort-alphabetically">
-<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M8.33765 4V5.1H8.93765H12.4383L8 11.1252V12H13.9999V10.9H13.6255H9.65631L13.9999 5.0033V4H8.33765Z" fill="black"/>
-<path id="Subtract_2" fill-rule="evenodd" clip-rule="evenodd" d="M6.11222 4H4.83078L1.91951 11.7895L1.84082 12H3.12189L3.83219 10.0995H7.11081L7.38175 10.8244L8.23675 9.68442L6.11222 4ZM6.66232 8.89951L5.4715 5.71334L4.28069 8.89951H6.66232Z" fill="black"/>
+<g id=".text-sort-alphabetically">
+<path id="Subtract" d="M14 4V5.00391L9.65625 10.9004H14V12H8V11.125L12.4395 5.09961H8.33789V4H14Z" fill="black"/>
+<path id="Subtract_2" d="M8.23633 9.68457L7.38086 10.8242L7.11035 10.0996H3.83203L3.12207 12H1.84082L1.91895 11.79L4.83105 4H6.11133L8.23633 9.68457ZM4.28027 8.90039H6.66211L5.4707 5.71289L4.28027 8.90039Z" fill="black"/>
+</g>
 </g>
 </svg>

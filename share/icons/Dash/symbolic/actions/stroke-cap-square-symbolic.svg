@@ -1,5 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="stroke-cap-square">
-<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M15 3H3V13H15V8.75H9.54267L7.99989 10.2928L5.70699 7.99989L7.99989 5.70699L9.54289 7.25H15V3Z" fill="black"/>
+<g id=".stroke-cap-square">
+<rect id="Rectangle 736" opacity="0.3" x="1" y="1" width="15" height="14" fill="black"/>
+<path id="Union" d="M16 1H1V15H16V16H0V0H16V1ZM10 7H16V9H10L8 11L5 8L8 5L10 7Z" fill="black"/>
+</g>
 </g>
 </svg>

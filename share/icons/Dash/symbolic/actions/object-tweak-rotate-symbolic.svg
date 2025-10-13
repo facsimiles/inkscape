@@ -1,18 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="object-tweak-rotate" clip-path="url(#clip0_241_9699)">
-<rect id="rectangle" opacity="0.25" x="2.00098" y="1" width="2" height="4" rx="0.2" fill="black"/>
-<rect id="rectangle_2" opacity="0.37" x="2.84253" y="5.76953" width="2" height="4" rx="0.2" transform="rotate(22.5 2.84253 5.76953)" fill="black"/>
-<rect id="rectangle_3" opacity="0.5" x="3.70825" y="10.877" width="2" height="4" rx="0.2" transform="rotate(45 3.70825 10.877)" fill="black"/>
-<rect id="rectangle_4" opacity="0.37" x="7.84253" y="0.769531" width="2" height="4" rx="0.2" transform="rotate(22.5 7.84253 0.769531)" fill="black"/>
-<rect id="rectangle_5" opacity="0.5" x="8.70825" y="5.88086" width="2" height="4" rx="0.2" transform="rotate(45 8.70825 5.88086)" fill="black"/>
-<rect id="rectangle_6" opacity="0.75" x="9.46606" y="11.3105" width="2" height="4" rx="0.2" transform="rotate(67.5 9.46606 11.3105)" fill="black"/>
-<rect id="rectangle_7" opacity="0.5" x="13.708" y="0.878906" width="2" height="4" rx="0.2" transform="rotate(45 13.708 0.878906)" fill="black"/>
-<rect id="rectangle_8" opacity="0.75" x="14.4661" y="6.31055" width="2" height="4" rx="0.2" transform="rotate(67.5 14.4661 6.31055)" fill="black"/>
-<rect id="rectangle_9" x="15.001" y="11.998" width="2" height="4" rx="0.2" transform="rotate(90 15.001 11.998)" fill="black"/>
+<g id="object-tweak-rotate">
+<g id=".transform-rotate-clockwise">
+<path id="Union" d="M4.70703 11L4 11.707L3 10.707V12.5C3 12.7761 3.22389 13 3.5 13H6V14H3.5C2.67161 14 2 13.3284 2 12.5V10.707L1 11.707L0.292969 11L2.5 8.79297L4.70703 11ZM11.707 8L8 11.707L4.29297 8L8 4.29297L11.707 8ZM5.70703 8L8 10.293L10.293 8L8 5.70703L5.70703 8ZM12.5 2C13.3284 2 14 2.67157 14 3.5V5.79297L15 4.79297L15.707 5.5L13.5 7.70703L11.293 5.5L12 4.79297L13 5.79297V3.5C13 3.22386 12.7761 3 12.5 3H10V2H12.5Z" fill="black"/>
+<rect id="Rectangle 823" opacity="0.2" x="8" y="5.17163" width="4" height="4" transform="rotate(45 8 5.17163)" fill="black"/>
 </g>
-<defs>
-<clipPath id="clip0_241_9699">
-<rect width="16" height="16" fill="white"/>
-</clipPath>
-</defs>
+</g>
 </svg>

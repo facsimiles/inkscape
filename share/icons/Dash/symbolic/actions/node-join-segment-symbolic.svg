@@ -1,6 +1,14 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="node-join-segment">
-<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M3.29289 9.70711L4 9L4.70711 9.70711L6.29289 11.2929L6.5 11.5H9.5L9.70711 11.2929L11.2929 9.70711L12 9L12.7071 9.70711L14.2929 11.2929L14.5 11.5H16V12.5H14.5L14.2929 12.7071L12.7071 14.2929L12 15L11.2929 14.2929L9.70711 12.7071L9.5 12.5H6.5L6.29289 12.7071L4.70711 14.2929L4 15L3.29289 14.2929L1.70711 12.7071L1.5 12.5H0V11.5H1.5L1.70711 11.2929L3.29289 9.70711ZM2.41421 12L4 13.5858L5.58579 12L4 10.4142L2.41421 12ZM10.4142 12L12 13.5858L13.5858 12L12 10.4142L10.4142 12Z" fill="black"/>
-<path id="Union_2" opacity="0.4" fill-rule="evenodd" clip-rule="evenodd" d="M6.5 4L4 1.5L2 3.5H0V4.5H2L4 6.5L6.5 4ZM14 3.5L12 1.5L9.5 4L12 6.5L14 4.5H16V3.5H14Z" fill="black"/>
+<g id=".node-operation-join-segment" clip-path="url(#clip0_3684_42831)">
+<path id="Union" d="M6.5 2.5L4 5L2 3H0V2H2L4 0L6.5 2.5ZM14 2H16V3H14L12 5L9.5 2.5L12 0L14 2ZM2.91406 2.5L4 3.58594L5.08594 2.5L4 1.41406L2.91406 2.5ZM10.9141 2.5L12 3.58594L13.0859 2.5L12 1.41406L10.9141 2.5Z" fill="black"/>
+<path id="neutral" d="M2 13L1.74846e-07 13L2.62268e-07 12L2 12L4 10L6 12L10 12L12 10L14 12L16 12L16 13L14 13L12 15L10 13L6 13L4 15L2 13Z" fill="black"/>
+<path id="Subtract" opacity="0.6" d="M8 9L6 7H7L8 8L9 7H10L8 9Z" fill="black"/>
 </g>
+</g>
+<defs>
+<clipPath id="clip0_3684_42831">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
 </svg>

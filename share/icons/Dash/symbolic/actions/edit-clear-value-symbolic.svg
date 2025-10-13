@@ -1,12 +1,7 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="edit-clear-value" clip-path="url(#clip0_241_9740)">
-<g id="paint-none">
-<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M2 2H13.2929L2 13.2929V2ZM2.70711 14H14V2.70711L2.70711 14ZM1 2C1 1.44772 1.44772 1 2 1H14C14.5523 1 15 1.44772 15 2V14C15 14.5523 14.5523 15 14 15H2C1.44772 15 1 14.5523 1 14V2Z" fill="black"/>
+<g id="edit-clear-value">
+<g id=".clear">
+<path id="Union" d="M12.8535 3.85327L8.70703 7.99976L12.8535 12.1462L12.1465 12.8533L8 8.70679L3.85352 12.8533L3.14648 12.1462L7.29297 7.99976L3.14648 3.85327L3.85352 3.14624L8 7.29272L12.1465 3.14624L12.8535 3.85327Z" fill="black"/>
 </g>
 </g>
-<defs>
-<clipPath id="clip0_241_9740">
-<rect width="16" height="16" fill="white"/>
-</clipPath>
-</defs>
 </svg>

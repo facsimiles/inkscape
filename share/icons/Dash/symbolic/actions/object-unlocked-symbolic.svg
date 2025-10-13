@@ -1,6 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="object-unlocked">
-<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M10 4C10 2.89543 9.10457 2 8 2C6.89543 2 6 2.89543 6 4H5C5 2.34315 6.34315 1 8 1C9.65685 1 11 2.34315 11 4V7C11.5523 7 12 7.44772 12 8V13C12 13.5523 11.5523 14 11 14H5C4.44772 14 4 13.5523 4 13V8C4 7.44772 4.44772 7 5 7H10V4ZM11 8H10H5V13H11V8Z" fill="black"/>
-<rect id="rectangle" opacity="0.2" x="5" y="8" width="6" height="5" fill="black"/>
+<g id=".lock-open">
+<path id="Union" d="M8 1C10.2091 1.00002 12 2.79087 12 5V8H13V15H3V8H11V5C11 3.34316 9.65684 2.00002 8 2C6.69417 2.00002 5.58594 2.83534 5.17383 4H4.12598C4.57002 2.27479 6.13618 1.00002 8 1ZM4 14H12V9H4V14Z" fill="black"/>
+<rect id="Rectangle 776" opacity="0.3" x="4" y="9" width="8" height="5" fill="black"/>
+</g>
 </g>
 </svg>

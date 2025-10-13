@@ -1,13 +1,7 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="rotate-random">
-<rect id="rectangle" x="2.00098" y="1" width="2" height="4" rx="0.4" fill="black"/>
-<rect id="rectangle_2" x="4.41504" y="11.5105" width="2" height="4" rx="0.4" transform="rotate(65.7898 4.41504 11.5105)" fill="black"/>
-<rect id="rectangle_3" x="5.09058" y="8.68726" width="2" height="4" rx="0.4" transform="rotate(137.431 5.09058 8.68726)" fill="black"/>
-<rect id="rectangle_4" x="7.00098" y="11.2427" width="2" height="4" rx="0.4" fill="black"/>
-<rect id="rectangle_5" width="2" height="4" rx="0.4" transform="matrix(-0.92388 0.382683 0.382683 0.92388 8.15942 5.76953)" fill="black"/>
-<rect id="rectangle_6" x="7.95166" y="0.885742" width="2" height="4" rx="0.4" transform="rotate(25.306 7.95166 0.885742)" fill="black"/>
-<rect id="rectangle_7" x="14.49" y="6.79272" width="2" height="4" rx="0.4" transform="rotate(68.3185 14.49 6.79272)" fill="black"/>
-<rect id="rectangle_8" x="12.8425" y="1" width="2" height="4" rx="0.4" transform="rotate(22.5 12.8425 1)" fill="black"/>
-<rect id="rectangle_9" x="13.708" y="10.8789" width="2" height="4" rx="0.4" transform="rotate(45 13.708 10.8789)" fill="black"/>
+<g id=".dice">
+<path id="Union" d="M15 15H1V1H15V15ZM2 14H14V2H2V14ZM11 10C11.5523 10 12 10.4477 12 11C12 11.5523 11.5523 12 11 12C10.4477 12 10 11.5523 10 11C10 10.4477 10.4477 10 11 10ZM8 7C8.55228 7 9 7.44772 9 8C9 8.55228 8.55228 9 8 9C7.44772 9 7 8.55228 7 8C7 7.44772 7.44772 7 8 7ZM5 4C5.55228 4 6 4.44772 6 5C6 5.55228 5.55228 6 5 6C4.44772 6 4 5.55228 4 5C4 4.44772 4.44772 4 5 4Z" fill="black"/>
+</g>
 </g>
 </svg>

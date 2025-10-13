@@ -2,14 +2,7 @@
 Name=Dash by hperticarati
 Comment=Dash icon theme
 Hidden=true
-Directories=scalable/actions,symbolic/actions
-
-[scalable/actions]
-MinSize=16
-Size=20
-MaxSize=256
-Context=Actions
-Type=Scalable
+Directories=symbolic/actions
 
 [symbolic/actions]
 MinSize=16

@@ -1,10 +1,12 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="bspline" clip-path="url(#clip0_241_9652)">
-<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M0 0.5C0 0.223858 0.223858 0 0.5 0H1.5C1.77614 0 2 0.223858 2 0.5V1H11.2112C10.2914 1.24832 9.40784 1.58486 8.57012 2H2.00195V8.56618C1.58701 9.40287 1.25047 10.2853 1.00195 11.204V2H0.5C0.223858 2 0 1.77614 0 1.5V0.5Z" fill="#9E9E9E"/>
-<path class="warning" fill-rule="evenodd" clip-rule="evenodd" d="M14.9999 2.5999C8.15157 2.5999 2.5999 8.15157 2.5999 14.9999C2.5999 15.3313 2.33127 15.5999 1.9999 15.5999C1.66853 15.5999 1.3999 15.3313 1.3999 14.9999C1.3999 7.48883 7.48883 1.3999 14.9999 1.3999C15.3313 1.3999 15.5999 1.66853 15.5999 1.9999C15.5999 2.33127 15.3313 2.5999 14.9999 2.5999Z" fill="black" fill-opacity="0.9"/>
+<g id="bspline">
+<g id=".path-mode-bspline" clip-path="url(#clip0_3684_42464)">
+<path id="Union" d="M16 2H15.5C8.04416 2 2 8.04416 2 15.5V16H1V15.5C1 7.49187 7.49187 1 15.5 1H16V2Z" fill="black"/>
+<path id="Union_2" opacity="0.4" d="M2 7.88086C1.61503 8.56151 1.28002 9.27399 1 10.0137V3H0V0H3V1H10.0146C9.27466 1.28008 8.56178 1.61488 7.88086 2H3V3H2V7.88086ZM1 2H2V1H1V2Z" fill="black"/>
+</g>
 </g>
 <defs>
-<clipPath id="clip0_241_9652">
+<clipPath id="clip0_3684_42464">
 <rect width="16" height="16" fill="white"/>
 </clipPath>
 </defs>

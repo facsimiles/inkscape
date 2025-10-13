@@ -1,6 +1,13 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="offset">
-<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12ZM8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11Z" fill="black"/>
-<path class="warning" fill-rule="evenodd" clip-rule="evenodd" d="M8.00098 15C11.867 15 15.001 11.866 15.001 8C15.001 4.13401 11.867 1 8.00098 1C4.13498 1 1.00098 4.13401 1.00098 8C1.00098 11.866 4.13498 15 8.00098 15ZM8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12Z" fill="#9E9E9E"/>
+<g id=".stroke-arrow-out" clip-path="url(#clip0_3684_42542)">
+<path id="Union" d="M0 8C4.41828 8 8 11.5817 8 16H7C7 12.134 3.86599 9 0 9V8ZM0 3C7.1797 3 13 8.8203 13 16H12C12 9.37258 6.62742 4 0 4V3ZM16 5H15V1.70801L11.001 5.70703L10.2939 5L14.2939 1H11V0H16V5Z" fill="black"/>
+<path id="Intersect" opacity="0.2" d="M0.000976562 3C7.18068 3 13.001 8.8203 13.001 16H8C8 11.5817 4.41828 8 0 8V3H0.000976562Z" fill="black"/>
 </g>
+</g>
+<defs>
+<clipPath id="clip0_3684_42542">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
 </svg>

@@ -1,13 +1,40 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="bitmap-trace">
-<rect id="neutral" opacity="0.3" x="2.00098" y="5" width="3" height="3" fill="black"/>
-<path id="rectangle" opacity="0.5" d="M5.00098 5H7.50098V8H5.00098V5Z" fill="black"/>
-<path id="rectangle_2" opacity="0.6" d="M5.00098 8H7.50098V11H5.00098V8Z" fill="black"/>
-<rect id="rectangle_3" opacity="0.15" x="2.00098" y="2" width="3" height="3" fill="black"/>
-<path id="rectangle_4" opacity="0.4" d="M5.00098 2H7.50098V5H5.00098V2Z" fill="black"/>
-<rect id="rectangle_5" opacity="0.35" x="2.00098" y="8" width="3" height="3" fill="black"/>
-<rect id="rectangle_6" opacity="0.15" x="2.00098" y="11" width="3" height="3" fill="black"/>
-<path id="rectangle_7" opacity="0.4" d="M5.00098 11H7.50098V14H5.00098V11Z" fill="black"/>
-<path id="Intersect" fill-rule="evenodd" clip-rule="evenodd" d="M8.50098 2.02039C11.5807 2.27446 14.001 4.85452 14.001 7.99985C14.001 11.1452 11.5807 13.7252 8.50098 13.9793V2.02039Z" fill="black"/>
+<g id=".transform-bitmap-trace">
+<path id="Ellipse 363" d="M15 8C15 11.3137 12.3137 14 9 14V2C12.3137 2 15 4.68629 15 8Z" fill="black"/>
+<g id="Mask group">
+<mask id="mask0_3684_42773" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="0" width="7" height="16">
+<rect id="Rectangle 964" x="1" width="7" height="16" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_3684_42773)">
+<g id="Group 308">
+<rect id="Rectangle 955" opacity="0.5" x="6" y="3" width="2" height="2" fill="black"/>
+<rect id="Rectangle 977" opacity="0.5" x="6" y="2" width="2" height="1" fill="black"/>
+<rect id="Rectangle 978" opacity="0.5" x="5" y="3" width="1" height="2" fill="black"/>
+<rect id="Rectangle 956" x="5" y="5" width="3" height="3" fill="black"/>
+<rect id="Rectangle 962" opacity="0.05" x="2" y="2" width="1" height="1" fill="black"/>
+<rect id="Rectangle 968" opacity="0.4" x="2" y="3" width="1" height="1" fill="black"/>
+<rect id="Rectangle 969" opacity="0.6" x="3" y="2" width="1" height="1" fill="black"/>
+<rect id="Rectangle 967" opacity="0.05" x="2" y="4" width="1" height="1" fill="black"/>
+<rect id="Rectangle 966" opacity="0.05" x="4" y="2" width="1" height="1" fill="black"/>
+<rect id="Rectangle 979" opacity="0.2" x="5" y="2" width="1" height="1" fill="black"/>
+<rect id="Rectangle 964_2" opacity="0.2" x="3" y="3" width="2" height="2" fill="black"/>
+<rect id="Rectangle 965" opacity="0.2" x="3" y="11" width="2" height="2" fill="black"/>
+<rect id="Rectangle 959" opacity="0.4" x="2" y="5" width="3" height="3" fill="black"/>
+<rect id="Rectangle 957" opacity="0.7" x="5" y="8" width="3" height="3" fill="black"/>
+<rect id="Rectangle 960" opacity="0.5" x="2" y="8" width="3" height="3" fill="black"/>
+<rect id="Rectangle 958" opacity="0.55" x="6" y="11" width="2" height="2" fill="black"/>
+<rect id="Rectangle 980" opacity="0.55" x="5" y="11" width="1" height="2" fill="black"/>
+<rect id="Rectangle 981" opacity="0.55" x="6" y="13" width="2" height="1" fill="black"/>
+<rect id="Rectangle 970" opacity="0.7" x="2" y="12" width="1" height="1" fill="black"/>
+<rect id="Rectangle 975" opacity="0.4" x="3" y="13" width="1" height="1" fill="black"/>
+<rect id="Rectangle 982" opacity="0.4" x="5" y="13" width="1" height="1" fill="black"/>
+<rect id="Rectangle 971" opacity="0.05" x="2" y="11" width="1" height="1" fill="black"/>
+<rect id="Rectangle 974" opacity="0.05" x="2" y="13" width="1" height="1" fill="black"/>
+<rect id="Rectangle 976" opacity="0.05" x="4" y="13" width="1" height="1" fill="black"/>
+</g>
+</g>
+</g>
+</g>
 </g>
 </svg>

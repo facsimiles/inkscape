@@ -1,52 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
-   version="1.1"
-   id="svg1"
-   inkscape:version="1.5-dev (d04b2a0436, 2024-09-08, custom)"
-   xml:space="preserve"
-   sodipodi:docname="pan-end-symbolic.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="false"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="px"
-     inkscape:zoom="29.3125"
-     showgrid="true"
-     inkscape:cx="8"
-     inkscape:cy="7.9658849"
-     inkscape:current-layer="layer1"><inkscape:grid
-       type="xygrid"
-       id="grid1"
-       units="px"
-       originx="0"
-       originy="0"
-       spacingx="1"
-       spacingy="1"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="4"
-       enabled="true"
-       visible="true" /></sodipodi:namedview><defs
-     id="defs1" /><g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"><path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.60000005;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;paint-order:fill markers stroke"
-       d="M 6.5,11.5 10,8 6.5,4.5"
-       id="path2"
-       sodipodi:nodetypes="ccc" /></g></svg>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="pan-end">
+<g id=". chevron-small-right">
+<path id="Union" d="M9.92407 8.4248L6.42407 11.9238L5.99927 11.5L5.57544 11.0762L8.65259 8L5.57544 4.92383L5.99927 4.5L6.42407 4.07617L9.92407 7.57617L10.3489 8L9.92407 8.4248Z" fill="black"/>
+</g>
+</g>
+</svg>

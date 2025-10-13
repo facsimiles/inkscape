@@ -1,6 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="export-single">
-<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M13 3H3L3 13H13V3ZM3 2C2.44772 2 2 2.44772 2 3V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2H3Z" fill="black"/>
-<path id="Union_2" opacity="0.6" fill-rule="evenodd" clip-rule="evenodd" d="M6 7C6.55228 7 7 6.55228 7 6C7 5.44772 6.55228 5 6 5C5.44772 5 5 5.44772 5 6C5 6.55228 5.44772 7 6 7ZM4 12H12V8L10 6L7 9L6 8L4 10V12Z" fill="black"/>
+<g id=".image">
+<path id="Union" d="M15 15H1V1H15V15ZM2 14H14V2H2V14Z" fill="black"/>
+<path id="Union_2" opacity="0.5" d="M13 8V13H3V11L6 8L7.5 9.5L11 6L13 8ZM5 4C5.55228 4 6 4.44772 6 5C6 5.55228 5.55228 6 5 6C4.44772 6 4 5.55228 4 5C4 4.44772 4.44772 4 5 4Z" fill="black"/>
+</g>
 </g>
 </svg>
