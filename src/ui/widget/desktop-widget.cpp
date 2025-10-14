@@ -26,7 +26,9 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/gestureclick.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/popovermenu.h>
 
 #include "conn-avoid-ref.h"
 #include "document.h"
@@ -40,6 +42,7 @@
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/swatches.h"
 #include "ui/monitor.h" // Monitor aspect ratio
+#include "ui/popup-menu.h"
 #include "ui/themes.h"
 #include "ui/toolbar/command-toolbar.h"
 #include "ui/toolbar/snap-toolbar.h"
@@ -62,6 +65,26 @@ using Inkscape::UI::Dialog::DialogContainer;
 using Inkscape::UI::Dialog::DialogMultipaned;
 using Inkscape::UI::Dialog::DialogWindow;
 using Inkscape::UI::Widget::UnitTracker;
+
+Gtk::PopoverMenu create_toolbar_context_menu()
+{
+    auto menu = Gio::Menu::create();
+
+    auto section = Gio::Menu::create();
+    section->append_item(Gio::MenuItem::create(_("Commands Bar"), "win.canvas-commands-bar"));
+    section->append_item(Gio::MenuItem::create(_("Snap Controls Bar"), "win.canvas-snap-controls-bar"));
+    section->append_item(Gio::MenuItem::create(_("Tool Controls Bar"), "win.canvas-tool-control-bar"));
+    section->append_item(Gio::MenuItem::create(_("Toolbox"), "win.canvas-toolbox"));
+    section->append_item(Gio::MenuItem::create(_("Rulers"), "win.canvas-rulers"));
+    section->append_item(Gio::MenuItem::create(_("Scroll bars"), "win.canvas-scroll-bars"));
+    section->append_item(Gio::MenuItem::create(_("Palette"), "win.canvas-palette"));
+    section->append_item(Gio::MenuItem::create(_("Statusbar"), "win.canvas-statusbar"));
+    menu->append_section(section);
+
+    auto popovermenu = Gtk::PopoverMenu{menu};
+    popovermenu.set_has_arrow(false);
+    return popovermenu;
+}
 
 //---------------------------------------------------------------------
 /* SPDesktopWidget */
@@ -98,6 +121,17 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     _top_toolbars = Gtk::make_managed<Gtk::Grid>();
     _top_toolbars->set_name("TopToolbars");
+
+    auto click = Gtk::GestureClick::create();
+    click->set_button(GDK_BUTTON_SECONDARY);
+    click->set_propagation_phase(Gtk::PropagationPhase::BUBBLE);
+    click->signal_pressed().connect([this](int, double x, double y) {
+        auto menu = create_toolbar_context_menu();
+        menu.set_parent(*_top_toolbars);
+        UI::popup_at(menu, *_top_toolbars, x, y);
+    });
+    _top_toolbars->add_controller(click);
+
     prepend(*_top_toolbars);
 
     /* Toolboxes */
@@ -121,6 +155,16 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
         }
     };
     _tbbox->property_position().signal_changed().connect([=](){ adjust_pos(); });
+
+    auto toolbox_click = Gtk::GestureClick::create();
+    toolbox_click->set_button(GDK_BUTTON_SECONDARY);
+    toolbox_click->set_propagation_phase(Gtk::PropagationPhase::BUBBLE);
+    toolbox_click->signal_pressed().connect([this](int, double x, double y) {
+        auto menu = create_toolbar_context_menu();
+        menu.set_parent(*_tbbox);
+        UI::popup_at(menu, *_tbbox, x, y);
+    });
+    _tbbox->add_controller(toolbox_click);
 
     snap_toolbar = std::make_unique<Inkscape::UI::Toolbar::SnapToolbar>(_window);
     _hbox->append(*snap_toolbar); // May be moved later.
