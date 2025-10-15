@@ -251,7 +251,6 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
     _popover(get_widget<Gtk::Popover>(builder, "popup")),
     _color_preview(get_derived_widget<ColorPreview>(builder, "paint-color-preview")),
     _paint_icon(get_widget<Gtk::Image>(builder, "paint-icon-preview")),
-    _stack(get_widget<Gtk::Stack>(builder, "paint-preview-stack")),
     _label(get_widget<Gtk::Label>(builder, "paint-label")),
     _alpha(get_widget<InkSpinButton>(builder, "paint-alpha")),
     _define(get_widget<Gtk::Button>(builder, "paint-add")),
@@ -496,6 +495,9 @@ void PaintAttribute::PaintStrip::set_preview(const SPIPaint& paint, double paint
 
     if (mode == PaintMode::Solid || mode == PaintMode::Swatch || mode == PaintMode::Gradient || mode == PaintMode::Pattern) {
         _alpha.set_value(paint_opacity);
+        _paint_icon.set_visible(false);
+        _color_preview.set_visible();
+
         if (mode == PaintMode::Solid) {
             auto color = paint.getColor();
             color.setOpacity(paint_opacity);
@@ -540,16 +542,18 @@ void PaintAttribute::PaintStrip::set_preview(const SPIPaint& paint, double paint
                     gradient.push_back({stop.offset, SP_RGBA32_R_F(c), SP_RGBA32_G_F(c), SP_RGBA32_B_F(c), SP_RGBA32_A_F(c)});
                 }
             }
+            _paint_icon.set_from_icon_name(is<SPRadialGradient>(server) ? "paint-gradient-radial" : "paint-gradient-linear");
+            _paint_icon.set_visible();
             _color_preview.set_gradient(gradient);
-            _color_preview.setIndicator(is<SPRadialGradient>(server) ? ColorPreview::RadialGradient : ColorPreview::LinearGradient);
+            _color_preview.setIndicator(ColorPreview::None);
         }
-        _stack.set_visible_child(_color_preview);
         show();
     }
     else {
         auto icon = get_paint_mode_icon(mode);
         _paint_icon.set_from_icon_name(icon);
-        _stack.set_visible_child(_paint_icon);
+        _paint_icon.set_visible();
+        _color_preview.set_visible(false);
         show();
     }
 }

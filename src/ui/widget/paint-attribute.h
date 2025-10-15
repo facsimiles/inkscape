@@ -89,7 +89,6 @@ private:
         std::unique_ptr<PaintSwitch> _switch;
         ColorPreview& _color_preview;
         Gtk::Image& _paint_icon;
-        Gtk::Stack& _stack;
         Gtk::Label& _label;
         InkSpinButton& _alpha;
         Gtk::Box& _box;

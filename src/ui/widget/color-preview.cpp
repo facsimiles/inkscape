@@ -42,8 +42,6 @@ void ColorPreview::construct() {
 }
 
 void ColorPreview::setRgba32(std::uint32_t const rgba) {
-    if (_rgba == rgba && !_pattern) return;
-
     _rgba = rgba;
     _pattern = {};
     _gradient.clear();
@@ -143,9 +141,6 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         // if preview is disabled, render colors with reduced saturation and intensity
         if (disabled) {
             color = make_disabled_color(color, dark_theme);
-// =======
-//             auto color = Colors::Color(_rgba);
-//             rgba = rgb.toRGBA();
         }
 
         width = rect.width() / 2;
