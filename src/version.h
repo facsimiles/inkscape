@@ -39,9 +39,16 @@ public:
     }
     bool operator==(Version const &other) const { return _major == other._major && _minor == other._minor; }
 
+    // Run Inclusive check on version [min_version, max_version]
     bool isInsideRangeInclusive(Version const &min_version, Version const &max_version) const
     {
         return min_version <= *this && *this <= max_version;
+    }
+
+    // Run Exclusive check on version (min_version, max_version)
+    bool isInsideRangeExclusive(Version const &min_version, Version const &max_version) const
+    {
+        return min_version < *this && *this < max_version;
     }
     std::string const &str() const;
 

@@ -663,7 +663,7 @@ void SPShape::update_patheffect(bool write)
         if (hasPathEffect() && pathEffectsEnabled()) {
             success = this->performPathEffect(c_lpe, this);
             if (success) {
-                if (!document->getRoot()->inkscape_version.isInsideRangeInclusive({0, 1}, {0, 92})) {
+                if (!document->getRoot()->inkscape_version.isInsideRangeExclusive({0, 1}, {0, 92})) {
                     resetClipPathAndMaskLPE();
                 }
                 setCurveInsync(c_lpe);
