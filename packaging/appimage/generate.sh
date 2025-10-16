@@ -89,13 +89,9 @@ goappimage_url="https://github.com/$(wget -q https://github.com/probonopd/go-app
 wget -c "$goappimage_url" -O goappimage
 chmod +x goappimage
 
-# Can't use goappimage for second step since internal copy of appstreamcli is too old
-wget -c "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool
-chmod +x appimagetool
-
-./goappimage -s deploy ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop
+./goappimage -s --preserve_cwd deploy ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop
 sed -i -e 's|/usr/lib/x86_64-linux-gnu/gdk-pixbuf-.*/.*/loaders/||g' ./appdir/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
-ARCH=x86_64 ./appimagetool -n ./appdir
+ARCH=x86_64 VERSION=1.0 ./goappimage ./appdir
 
 sha="$(git rev-parse --short HEAD)"
 mv Inkscape*.AppImage* "../Inkscape-$sha.AppImage"
