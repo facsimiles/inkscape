@@ -33,6 +33,7 @@ X(SPObject,\
         X(SPFeConvolveMatrix)\
         X(SPFeDiffuseLighting)\
         X(SPFeDisplacementMap)\
+        X(SPFeDropShadow)\
         X(SPFeFlood)\
         X(SPFeImage)\
         X(SPFeMerge)\

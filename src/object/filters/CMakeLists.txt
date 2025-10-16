@@ -11,6 +11,7 @@ set(filters_SRC
   diffuselighting.cpp
   displacementmap.cpp
   distantlight.cpp
+  dropshadow.cpp
   flood.cpp
   gaussian-blur.cpp
   image.cpp
@@ -38,6 +39,7 @@ set(filters_SRC
   diffuselighting.h
   displacementmap.h
   distantlight.h
+  dropshadow.h
   flood.h
   gaussian-blur.h
   image.h

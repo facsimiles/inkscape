@@ -28,6 +28,8 @@ enum
 };
 
 namespace Inkscape {
+class dispatch_pool;
+
 namespace Filters {
 
 class FilterGaussian : public FilterPrimitive
@@ -65,6 +67,19 @@ private:
     double _deviation_x;
     double _deviation_y;
 };
+
+// High-level blur function for reuse by other filter primitives (e.g. feDropShadow)
+typedef struct _cairo_surface cairo_surface_t;
+
+/**
+ * Apply Gaussian blur to a cairo surface in-place.
+ * Automatically selects optimal algorithm (IIR for σ > 3, FIR otherwise)
+ * and handles threading via dispatch_pool.
+ *
+ * @param surface Surface to blur (modified in-place)
+ * @param stdDeviation Blur radius (standard deviation)
+ */
+void blur_surface(cairo_surface_t *surface, double stdDeviation);
 
 } // namespace Filters
 } // namespace Inkscape

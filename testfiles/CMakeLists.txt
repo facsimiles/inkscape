@@ -107,6 +107,7 @@ set(TEST_SOURCES
     svg-extension-test
     curve-test
     2geom-characterization-test
+    test-feDropShadow
     xml-test
     sp-item-group-test
     store-test

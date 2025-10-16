@@ -82,6 +82,7 @@
 #include "filters/diffuselighting.h"
 #include "filters/displacementmap.h"
 #include "filters/distantlight.h"
+#include "filters/dropshadow.h"
 #include "filters/flood.h"
 #include "filters/gaussian-blur.h"
 #include "filters/image.h"
@@ -257,6 +258,7 @@ private:
         { "svg:feDiffuseLighting", make<SPFeDiffuseLighting> },
         { "svg:feDisplacementMap", make<SPFeDisplacementMap> },
         { "svg:feDistantLight", make<SPFeDistantLight> },
+        { "svg:feDropShadow", make<SPFeDropShadow> },
         { "svg:feFlood", make<SPFeFlood> },
         { "svg:feGaussianBlur", make<SPGaussianBlur> },
         { "svg:feImage", make<SPFeImage> },

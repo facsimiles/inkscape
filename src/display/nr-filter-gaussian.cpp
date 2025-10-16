@@ -707,6 +707,52 @@ void FilterGaussian::set_deviation(double x, double y)
     }
 }
 
+void blur_surface(cairo_surface_t *surface, double stdDeviation)
+{
+    if (!surface || stdDeviation <= 0.0) {
+        g_warning("blur_surface: invalid surface or deviation");
+        return;
+    }
+
+    auto const pool = get_global_dispatch_pool();
+    int threads = pool->size();
+
+    int w = cairo_image_surface_get_width(surface);
+    int h = cairo_image_surface_get_height(surface);
+    cairo_format_t fmt = cairo_image_surface_get_format(surface);
+    int bytes_per_pixel = (fmt == CAIRO_FORMAT_A8) ? 1 : 4;
+
+    // Decide which filter to use (threshold: σ > 3)
+    bool use_IIR = stdDeviation > 3;
+
+    // Use RAII for temporary buffer management (exception-safe)
+    std::vector<std::unique_ptr<IIRValue[]>> tmpdata_owned;
+    std::vector<IIRValue *> tmpdata_raw;
+
+    if (use_IIR) {
+        tmpdata_owned.reserve(threads);
+        tmpdata_raw.reserve(threads);
+        for (int i = 0; i < threads; ++i) {
+            tmpdata_owned.push_back(std::make_unique<IIRValue[]>(std::max(w, h) * bytes_per_pixel));
+            tmpdata_raw.push_back(tmpdata_owned.back().get());
+        }
+    }
+
+    cairo_surface_flush(surface);
+
+    if (use_IIR) {
+        gaussian_pass_IIR(Geom::X, stdDeviation, surface, surface, tmpdata_raw.data(), *pool);
+        gaussian_pass_IIR(Geom::Y, stdDeviation, surface, surface, tmpdata_raw.data(), *pool);
+    } else {
+        gaussian_pass_FIR(Geom::X, stdDeviation, surface, surface, *pool);
+        gaussian_pass_FIR(Geom::Y, stdDeviation, surface, surface, *pool);
+    }
+
+    // tmpdata_owned automatically cleaned up here
+
+    cairo_surface_mark_dirty(surface);
+}
+
 } // namespace Filters
 } // namespace Inkscape
 

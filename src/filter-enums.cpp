@@ -27,6 +27,7 @@ const EnumData<Inkscape::Filters::FilterPrimitiveType> FPData[Inkscape::Filters:
     {Inkscape::Filters::NR_FILTER_CONVOLVEMATRIX,    _("Convolve Matrix"),    "svg:feConvolveMatrix"},
     {Inkscape::Filters::NR_FILTER_DIFFUSELIGHTING,   _("Diffuse Lighting"),   "svg:feDiffuseLighting"},
     {Inkscape::Filters::NR_FILTER_DISPLACEMENTMAP,   _("Displacement Map"),   "svg:feDisplacementMap"},
+    {Inkscape::Filters::NR_FILTER_DROPSHADOW,        _("Drop Shadow"),        "svg:feDropShadow"},
     {Inkscape::Filters::NR_FILTER_FLOOD,             _("Flood"),              "svg:feFlood"},
     {Inkscape::Filters::NR_FILTER_GAUSSIANBLUR,      _("Gaussian Blur"),      "svg:feGaussianBlur"},
     {Inkscape::Filters::NR_FILTER_IMAGE,             _("Image"),              "svg:feImage"},

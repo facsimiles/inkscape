@@ -22,6 +22,7 @@ set(display_SRC
     nr-filter-convolve-matrix.cpp
     nr-filter-diffuselighting.cpp
     nr-filter-displacement-map.cpp
+    nr-filter-dropshadow.cpp
     nr-filter-flood.cpp
     nr-filter-gaussian.cpp
     nr-filter-image.cpp
@@ -90,6 +91,7 @@ set(display_SRC
     nr-filter-convolve-matrix.h
     nr-filter-diffuselighting.h
     nr-filter-displacement-map.h
+    nr-filter-dropshadow.h
     nr-filter-flood.h
     nr-filter-gaussian.h
     nr-filter-image.h

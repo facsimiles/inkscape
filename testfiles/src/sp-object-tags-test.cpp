@@ -70,6 +70,7 @@
 #include "object/filters/diffuselighting.h"
 #include "object/filters/displacementmap.h"
 #include "object/filters/distantlight.h"
+#include "object/filters/dropshadow.h"
 #include "object/filters/flood.h"
 #include "object/filters/gaussian-blur.h"
 #include "object/filters/image.h"
@@ -153,6 +154,7 @@ TEST(SPObjectTagsTest, compare_dynamic_cast)
         SPFeConvolveMatrix,
         SPFeDiffuseLighting,
         SPFeDisplacementMap,
+        SPFeDropShadow,
         SPFeFlood,
         SPFeImage,
         SPFeMerge,

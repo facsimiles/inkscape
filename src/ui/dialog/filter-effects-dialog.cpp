@@ -2561,6 +2561,8 @@ static const std::map<Inkscape::Filters::FilterPrimitiveType, EffectMetadata>& g
         _("Performs a convolution on the input image enabling effects like blur, sharpening, embossing and edge detection.") }},
     { NR_FILTER_DISPLACEMENTMAP,   { EffectCategory::Effect,     "feDisplacementMap-icon",
         _("Displaces pixels from the first input using the second as a map of displacement intensity. Classical examples are whirl and pinch effects.") }},
+    { NR_FILTER_DROPSHADOW,        { EffectCategory::Effect,     "feDropShadow-icon",
+        _("Creates a drop shadow of the input image. Combines offset, blur, and compositing in a single convenient primitive.") }},
     { NR_FILTER_TILE,              { EffectCategory::Effect,     "feTile-icon",
         _("Tiles a region with an input graphic. The source tile is defined by the filter primitive subregion of the input.") }},
     { NR_FILTER_COMPOSITE,         { EffectCategory::Compose,    "feComposite-icon",
