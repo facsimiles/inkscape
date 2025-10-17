@@ -290,6 +290,7 @@ void SPDesktopWidget::switchDesktop(SPDesktop *desktop)
         auto set_tool = [this] {
             tool_toolbars->setTool(_desktop->getTool());
             tool_toolbars->setActiveUnit(_desktop->getNamedView()->getDisplayUnit());
+            apply_ctrlbar_settings(); // Apply size settings after populating the tool_toolbars
         };
         _tool_changed_conn = _desktop->connectEventContextChanged([=] (auto, auto) { set_tool(); });
         set_tool();
