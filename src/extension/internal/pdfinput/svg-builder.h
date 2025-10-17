@@ -183,9 +183,8 @@ public:
 
     // Layers i.e Optional Groups
     void addOptionalGroup(const std::string &oc, const std::string &label, bool visible = true);
-    Inkscape::XML::Node *beginLayer(const std::string &label, bool visible);
+    void beginXObjectLayer(const std::string &label);
     void beginMarkedContent(const char *name = nullptr, const char *group = nullptr);
-    void endLayer(Inkscape::XML::Node *save);
     void endMarkedContent();
 
     void addColorProfile(unsigned char *profBuf, int length);

@@ -1000,6 +1000,10 @@ void SvgBuilder::beginMarkedContent(const char *name, const char *group)
             if (_ocgs.find(group) != _ocgs.end()) {
                 auto pair = _ocgs[group];
                 setAsLayer(pair.first.c_str(), pair.second);
+            } else {
+                // assume visible
+                g_warning("Found undefined marked content group in PDF!");
+                setAsLayer(group, true);
             }
         }
     } else {
@@ -1015,28 +1019,23 @@ void SvgBuilder::addOptionalGroup(const std::string &oc, const std::string &labe
     _ocgs[oc] = {label, visible};
 }
 
-Inkscape::XML::Node *SvgBuilder::beginLayer(const std::string &label, bool visible)
+void SvgBuilder::beginXObjectLayer(const std::string &label)
 {
-    auto id = sanitizeId(label);
-    Inkscape::XML::Node *save_current_location = _container;
-    if (auto existing = _doc->getObjectById(id)) {
-        _container = existing->getRepr();
-        _node_stack.push_back(_container);
-    } else {
-        while (_container != _root) {
-            _popGroup();
+    // find the group key for the label (reverse map search)
+    auto group = label;
+    for (const auto& [key, value] : _ocgs) {
+        if (value.first == label) {
+            group = key;
+            break;
         }
-        auto node = _pushGroup();
-        node->setAttribute("id", id);
-        setAsLayer(label.c_str(), visible);
     }
-    return save_current_location;
-}
 
-void SvgBuilder::endLayer(Inkscape::XML::Node *save)
-{
-    _popGroup();
-    _node_stack.push_back(save);
+    // Reset to root
+    while (_container != _root) {
+        _popGroup();
+    }
+    
+    beginMarkedContent("OC", group.c_str());
 }
 
 void SvgBuilder::endMarkedContent()

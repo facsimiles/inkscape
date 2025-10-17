@@ -16,31 +16,31 @@
      id="defs1">
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath2">
+       id="clipPath1">
       <path
          d="M 100,100 H 200.00001 V 200.00001 H 100 Z"
-         id="path2" />
+         id="path1" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath4">
+       id="clipPath3">
       <path
          d="m 300.00001,300.00001 h 100 v 100 h -100 z"
-         id="path4" />
+         id="path3" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath6">
+       id="clipPath5">
       <path
          d="M 100,100 H 200.00001 V 200.00001 H 100 Z"
-         id="path6" />
+         id="path5" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath8">
+       id="clipPath7">
       <path
          d="m 300.00001,300.00001 h 100 v 100 h -100 z"
-         id="path8" />
+         id="path7" />
     </clipPath>
   </defs>
   <sodipodi:namedview
@@ -65,54 +65,46 @@
        x="836"
        y="0"
        inkscape:label="2"
-       id="page5"
+       id="page4"
        width="816"
        height="1056" />
   </sodipodi:namedview>
   <g
-     id="g1"
-     inkscape:groupmode="layer"
-     inkscape:label="1" />
-  <g
-     id="Red_20Rectangles"
+     id="layer-OC2"
      inkscape:groupmode="layer"
      inkscape:label="Red Rectangles">
     <path
        d="M 100,100 H 200 V 200 H 100 Z"
        style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,0,1056)"
-       clip-path="url(#clipPath2)"
+       clip-path="url(#clipPath1)"
        opacity="1"
-       id="path3" />
+       id="path2" />
     <path
        d="M 100,100 H 200 V 200 H 100 Z"
        style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,836,1056)"
-       clip-path="url(#clipPath6)"
+       clip-path="url(#clipPath5)"
        opacity="1"
-       id="path7" />
+       id="path6" />
   </g>
   <g
-     id="Blue_20Rectangles"
+     id="layer-OC1"
      inkscape:groupmode="layer"
      inkscape:label="Blue Rectangles">
     <path
        d="M 300,300 H 400 V 400 H 300 Z"
        style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,0,1056)"
-       clip-path="url(#clipPath4)"
+       clip-path="url(#clipPath3)"
        opacity="1"
-       id="path5" />
+       id="path4" />
     <path
        d="M 300,300 H 400 V 400 H 300 Z"
        style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,836,1056)"
-       clip-path="url(#clipPath8)"
+       clip-path="url(#clipPath7)"
        opacity="1"
-       id="path9" />
+       id="path8" />
   </g>
-  <g
-     id="g5"
-     inkscape:groupmode="layer"
-     inkscape:label="2" />
 </svg>

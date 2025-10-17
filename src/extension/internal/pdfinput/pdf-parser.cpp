@@ -2340,7 +2340,6 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
 {
     Object obj1, obj2, obj3, refObj;
     bool layered = false;
-    Inkscape::XML::Node *save;
 
 #if POPPLER_CHECK_VERSION(0,64,0)
     const char *name = args[0].getName();
@@ -2363,15 +2362,7 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
         auto type_dict = obj2.getDict();
         if (type_dict->lookup("Type").isName("OCG")) {
             std::string label = getDictString(type_dict, "Name");
-            auto visible = true;
-            if (type_dict->lookup("Usage").isDict()){
-                auto usage_dict = type_dict->lookup("Usage").getDict();
-                if (usage_dict->lookup("Print").isDict()){
-                    auto print_dict = usage_dict->lookup("Print").getDict();
-                    visible = print_dict->lookup("PrintState").isName("ON");
-                }
-            }
-            save = builder->beginLayer(label, visible);
+            builder->beginXObjectLayer(label);
             layered = true;
         }
     }
@@ -2393,7 +2384,7 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
 
     //End XObject layer if OC of type OCG is present
     if (layered) {
-        builder->endLayer(save);
+        builder->endMarkedContent();
     }
 
     _POPPLER_FREE(obj2);
@@ -3141,10 +3132,11 @@ void PdfParser::loadOptionalContentLayers(Dict *resources)
         return;
 
     auto props = resources->lookup("Properties");
-    if (props.isDict()) {
-        // could have top-level OCGs
-        auto cat = _pdf_doc->getCatalog();
-        auto ocgs = cat->getOptContentConfig();
+    auto cat = _pdf_doc->getCatalog();
+    auto ocgs = cat->getOptContentConfig();
+
+    // map from page-level OCG names (e.g. MC0, MC1) to layer names
+    if (props.isDict() && ocgs) {
         auto dict = props.getDict();
 
         for (auto j = 0; j < dict->getLength(); j++) {
@@ -3152,7 +3144,7 @@ void PdfParser::loadOptionalContentLayers(Dict *resources)
             if (!val.isDict())
                 continue;
             auto dict2 = val.getDict();
-            if (dict2->lookup("Type").isName("OCG") && ocgs) {
+            if (dict2->lookup("Type").isName("OCG")) {
                 std::string label = getDictString(dict2, "Name");
                 auto visible = true;
                 // Normally we'd use poppler optContentIsVisible, but these dict
@@ -3163,6 +3155,15 @@ void PdfParser::loadOptionalContentLayers(Dict *resources)
                 }
                 builder->addOptionalGroup(dict->getKey(j), label, visible);
             }
+        }
+    } else if (ocgs) {
+        // OCGs defined in the document root, but not mapped at the page level.
+        // Add them to the builder with arbitrary names. Order doesn't really matter, as they don't
+        // get created in the SVG until encountered in the content stream.
+        int layer = 1;
+        for (auto &[ref, ocg] : ocgs->getOCGs()) {
+            auto key = "OC" + std::to_string(layer++);
+            builder->addOptionalGroup(key, ocg->getName()->c_str(), ocg->getState() == OptionalContentGroup::On);
         }
     }
 
@@ -3224,7 +3225,6 @@ void PdfParser::build_annots(const Object &annot, int page_num)
     Object AP_obj, N_obj, Rect_obj, xy_obj, first_state_obj;
     double offset[2];
     Dict *annot_dict;
-    Inkscape::XML::Node *current_node;
 
     if (!annot.isDict())
         return;
@@ -3242,7 +3242,11 @@ void PdfParser::build_annots(const Object &annot, int page_num)
             first_state_obj = N_obj.copy();
         }
         if (first_state_obj.isStream()) {
-            current_node = builder->beginLayer(std::to_string(page_num) + " - Annotations", true);
+            // even though these aren't defined in OCProperties, add them to the ocgs map of the builder
+            auto annot_label = std::to_string(page_num) + " - Annotations";
+            auto annot_group = "A" + std::to_string(page_num);  
+            builder->addOptionalGroup(annot_group, annot_label);
+            builder->beginXObjectLayer(annot_label);
             _POPPLER_CALL_ARGS(Rect_obj, annot_dict->lookup, "Rect");
             if (Rect_obj.isArray()) {
                 for (int i = 0; i < 2; i++) {
@@ -3251,7 +3255,7 @@ void PdfParser::build_annots(const Object &annot, int page_num)
                 }
                 doForm(&first_state_obj, offset);
             }
-            builder->endLayer(current_node);
+            builder->endMarkedContent();
         }
         _POPPLER_FREE(AP_obj);
         _POPPLER_FREE(N_obj);
