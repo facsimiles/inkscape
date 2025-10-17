@@ -125,7 +125,7 @@ bool Box3dTool::root_handler(CanvasEvent const &event)
     auto selection = _desktop->getSelection();
 
     auto prefs = Preferences::get();
-    int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double const snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
     auto cur_persp = document->getCurrentPersp3D();

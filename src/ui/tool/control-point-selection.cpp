@@ -607,7 +607,7 @@ bool ControlPointSelection::_keyboardRotate(KeyPressEvent const &event, int dir)
         angle = atan2(1.0 / _desktop->current_zoom(), radius) * dir;
     } else {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
+        double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
         angle = M_PI * dir / snaps;
     }
 

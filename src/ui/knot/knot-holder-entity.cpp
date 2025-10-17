@@ -252,7 +252,7 @@ Geom::Point PatternKnotHolderEntityAngle::knot_get() const
 void PatternKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned state)
 {
     auto prefs = Inkscape::Preferences::get();
-    int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double const snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     // get the angle from pattern 0,0 to the cursor pos
     Geom::Point transform_origin = _get_pos(0, 0);
@@ -381,7 +381,7 @@ void HatchKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &
 void HatchKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned state)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double const snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     SPHatch *hatch = _hatch();
 

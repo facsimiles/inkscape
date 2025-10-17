@@ -95,7 +95,8 @@ transform_rotate_step(const Glib::VariantBase& value, InkscapeApplication *app)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     auto angle = (Glib::VariantBase::cast_dynamic<Glib::Variant<double>>(value)).get();
-    app->get_active_selection()->rotateAnchored(angle / prefs->getInt("/options/rotationsnapsperpi/value", 12));
+    double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
+    app->get_active_selection()->rotateAnchored(angle / snaps);
 }
 
 void

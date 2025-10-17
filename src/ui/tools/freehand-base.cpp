@@ -572,7 +572,7 @@ void FreehandBase::_attachSelection()
 void spdc_endpoint_snap_rotation(ToolBase *tool, Geom::Point &p, Geom::Point const &o, unsigned state)
 {
     auto prefs = Preferences::get();
-    unsigned const snaps = abs(prefs->getInt("/options/rotationsnapsperpi/value", 12));
+    unsigned const snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     SnapManager &m = tool->getDesktop()->getNamedView()->snap_manager;
     m.setup(tool->getDesktop());

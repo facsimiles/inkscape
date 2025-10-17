@@ -271,7 +271,7 @@ static char const preferences_skeleton[] =
     <group id="switchonextinput" value="0" />
     <group id="useextinput" value="1" />
     <group id="nudgedistance" value="2px"/>
-    <group id="rotationsnapsperpi" value="12"/>
+    <group id="rotationsnapsperpi" value="12.0"/>
     <group id="cursortolerance" value="8.0"/>
     <group id="dragtolerance" value="4.0"/>
     <group id="grabsize" value="4"/>

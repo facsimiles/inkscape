@@ -857,7 +857,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
         IntermSnapResults isr;
         Inkscape::SnapCandidatePoint scp = Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        unsigned snaps = abs(prefs->getInt("/options/rotationsnapsperpi/value", 12));
+        unsigned snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
         /* 0 means no snapping. */
 
         for (std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin(); i != dragger->draggables.end(); ++i) {

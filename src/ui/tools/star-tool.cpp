@@ -282,7 +282,7 @@ bool StarTool::root_handler(CanvasEvent const &event)
 void StarTool::drag(Geom::Point p, unsigned state)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double const snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     if (!this->star) {
         if (Inkscape::have_viable_layer(_desktop, defaultMessageContext()) == false) {
@@ -325,8 +325,8 @@ void StarTool::drag(Geom::Point p, unsigned state)
 
     if (state & GDK_CONTROL_MASK) {
         /* Snap angle */
-        double snaps_radian = M_PI/snaps;
-        arg1 = std::round(arg1/snaps_radian) * snaps_radian;
+        double snaps_radian = M_PI / snaps;
+        arg1 = std::round(arg1 / snaps_radian) * snaps_radian;
     }
 
     sp_star_position_set(star.get(), this->magnitude, p0, r1, r1 * this->proportion,

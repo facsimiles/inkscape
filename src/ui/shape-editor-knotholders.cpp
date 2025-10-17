@@ -1432,7 +1432,7 @@ sp_genericellipse_side(SPGenericEllipse *ellipse, Geom::Point const &p)
 void
 ArcKnotHolderEntityStart::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
 {
-    int snaps = Preferences::get()->getInt("/options/rotationsnapsperpi/value", 12);
+    double snaps = Preferences::get()->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     auto arc = cast<SPGenericEllipse>(item);
     g_assert(arc != nullptr);
@@ -1449,8 +1449,8 @@ ArcKnotHolderEntityStart::knot_set(Geom::Point const &p, Geom::Point const &/*or
     arc->start -= offset;
 
     if ((state & GDK_CONTROL_MASK) && snaps) {
-        double snaps_radian = M_PI/snaps;
-        arc->start = std::round(arc->start/snaps_radian) * snaps_radian;
+        double snaps_radian = M_PI / snaps;
+        arc->start = std::round(arc->start / snaps_radian) * snaps_radian;
     }
     if (state & GDK_SHIFT_MASK) {
         arc->end -= offset;
@@ -1484,7 +1484,7 @@ ArcKnotHolderEntityStart::knot_click(unsigned int state)
 void
 ArcKnotHolderEntityEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
 {
-    int snaps = Preferences::get()->getInt("/options/rotationsnapsperpi/value", 12);
+    double snaps = Preferences::get()->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     auto arc = cast<SPGenericEllipse>(item);
     g_assert(arc != nullptr);
@@ -1894,7 +1894,7 @@ void
 SpiralKnotHolderEntityInner::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state)
 {
     Preferences *prefs = Preferences::get();
-    int snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     auto spiral = cast<SPSpiral>(item);
     g_assert(spiral != nullptr);
@@ -1943,7 +1943,7 @@ SpiralKnotHolderEntityInner::knot_set(Geom::Point const &p, Geom::Point const &o
  */
 void SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const & /*origin*/, unsigned int state)
 {
-    auto const snaps = Preferences::get()->getInt("/options/rotationsnapsperpi/value", 12);
+    auto const snaps = Preferences::get()->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
     auto const spiral = cast<SPSpiral>(item);
     g_assert(spiral != nullptr);
 

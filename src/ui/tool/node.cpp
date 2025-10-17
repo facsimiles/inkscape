@@ -466,7 +466,7 @@ void Handle::dragged(Geom::Point &new_pos, MotionEvent const &event)
     // and the original position.
     if (mod_ctrl(event)) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        int snaps = 2 * prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
+        double snaps = 2 * prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
         // note: if snapping to the original position is only desired in the original
         // direction of the handle, use Geom::Ray instead of Geom::Line
@@ -607,7 +607,7 @@ Handle *Handle::other()
 static double snap_increment_degrees()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
+    double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
     return 180.0 / snaps;
 }
 
@@ -1476,7 +1476,7 @@ void Node::dragged(Geom::Point &new_pos, MotionEvent const &event)
         std::vector<Inkscape::Snapper::SnapConstraint> constraints;
         if (mod_alt(event)) { // with Ctrl+Alt, constrain to handle lines
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
+            double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
             double min_angle = M_PI / snaps;
 
             if (front_direction) { // We only have a front_point if the front handle is extracted, or if it is not

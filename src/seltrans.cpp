@@ -1338,14 +1338,12 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
     if (increments) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         // Snap to defined angle increments
-        int snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
-        if (snaps) {
-            double sections = floor(radians * snaps / M_PI + .5);
-            if (fabs(sections) >= snaps / 2) {
-                sections = sign(sections) * (snaps / 2 - 1);
-            }
-            radians = (M_PI / snaps) * sections;
+        double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
+        double sections = floor(radians * snaps / M_PI + .5);
+        if (fabs(sections) >= snaps / 2) {
+            sections = sign(sections) * (snaps / 2 - 1);
         }
+        radians = (M_PI / snaps) * sections;
         skew[dim_a] = tan(radians) * scale[dim_a];
     } else {
         // Snap to objects, grids, guides
@@ -1408,7 +1406,7 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
      */
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     // rotate affine in rotate
     Geom::Point const d1 = _point - _origin;
@@ -1433,9 +1431,7 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
         double cos_t = Geom::dot(q1, q2);
         double sin_t = Geom::dot(Geom::rot90(q1), q2);
         radians = atan2(sin_t, cos_t);
-        if (snaps) {
-            radians = ( M_PI / snaps ) * floor( radians * snaps / M_PI + .5 );
-        }
+        radians = ( M_PI / snaps ) * floor( radians * snaps / M_PI + .5 );
         r1 = Geom::Rotate(0); //q1 = Geom::Point(1, 0);
         r2 = Geom::Rotate(radians); //q2 = Geom::Point(cos(radians), sin(radians));
     } else {

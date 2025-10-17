@@ -149,16 +149,15 @@ bool sp_dt_guide_event(Inkscape::CanvasEvent const &event, Inkscape::CanvasItemG
                 auto angle = Geom::Angle(event_dt - guide->getPoint());
                 if (modifiers & GDK_CONTROL_MASK) {
                     auto prefs = Inkscape::Preferences::get();
-                    if (auto snaps = std::abs(prefs->getInt("/options/rotationsnapsperpi/value", 12))) {
-                        if (prefs->getBool("/options/relativeguiderotationsnap/value", false)) {
-                            auto orig_angle = Geom::Angle(guide->getNormal());
-                            auto snap_angle = angle - orig_angle;
-                            double sections = std::floor(snap_angle.radians0() * snaps / M_PI + 0.5);
-                            angle = M_PI / snaps * sections + orig_angle.radians0();
-                        } else {
-                            double sections = std::floor(angle.radians0() * snaps / M_PI + 0.5);
-                            angle = M_PI / snaps * sections;
-                        }
+                    auto snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
+                    if (prefs->getBool("/options/relativeguiderotationsnap/value", false)) {
+                        auto orig_angle = Geom::Angle(guide->getNormal());
+                        auto snap_angle = angle - orig_angle;
+                        double sections = std::floor(snap_angle.radians0() * snaps / M_PI + 0.5);
+                        angle = M_PI / snaps * sections + orig_angle.radians0();
+                    } else {
+                        double sections = std::floor(angle.radians0() * snaps / M_PI + 0.5);
+                        angle = M_PI / snaps * sections;
                     }
                 }
                 guide->set_normal(Geom::Point::polar(angle).cw(), flag);

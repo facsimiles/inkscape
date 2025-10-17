@@ -28,6 +28,7 @@
 #include "preferences.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/preferences-widget.h"
+#include "ui/widget/spinbutton.h"
 
 // UPDATE THIS IF YOU'RE ADDING PREFS PAGES.
 // Otherwise the commands that open the dialog with the new page will fail.
@@ -135,6 +136,7 @@ protected:
     };
     PageListModelColumns _page_list_columns;
 
+    // clang-format off
     UI::Widget::DialogPage _page_tools;
     UI::Widget::DialogPage _page_selector;
     UI::Widget::DialogPage _page_node;
@@ -222,7 +224,7 @@ protected:
     UI::Widget::PrefCheckButton _snap_always_align;
     UI::Widget::PrefCheckButton _snap_always_dist;
 
-    UI::Widget::PrefCombo       _steps_rot_snap;
+    UI::Widget::SpinButton   _steps_rot_snap;
     UI::Widget::PrefCheckButton _steps_rot_relative;
     UI::Widget::PrefCheckButton _steps_compass;
     UI::Widget::PrefSpinUnit    _steps_arrow;
@@ -559,7 +561,7 @@ protected:
     UI::Widget::PrefCheckButton   _svgexport_insert_hatch_polyfill;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_auto_start_reverse;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_context_paint;
-
+    // clang-format on
 
     Gtk::Notebook _kb_notebook;
     UI::Widget::DialogPage _kb_page_shortcuts;

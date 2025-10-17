@@ -272,7 +272,7 @@ bool SpiralTool::root_handler(CanvasEvent const &event)
 void SpiralTool::drag(Geom::Point const &p, guint state) {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    double const snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
 
     if (!this->spiral) {
         if (Inkscape::have_viable_layer(_desktop, defaultMessageContext()) == false) {
@@ -309,8 +309,8 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
 
     if (state & GDK_CONTROL_MASK) {
         /* Snap start angle */
-        double snaps_radian = M_PI/snaps;
-        arg = std::round(arg/snaps_radian) * snaps_radian;
+        double snaps_radian = M_PI / snaps;
+        arg = std::round(arg / snaps_radian) * snaps_radian;
     }
 
     /* Fixme: these parameters should be got from dialog box */

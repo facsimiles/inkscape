@@ -254,6 +254,9 @@ InkscapePreferences::InkscapePreferences()
         remove(sb);
     }
 
+    // prefs variable
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     //Main HBox
     auto const hbox_list_page = Gtk::make_managed<Gtk::Box>();
     hbox_list_page->set_margin(12);
@@ -391,7 +394,6 @@ InkscapePreferences::InkscapePreferences()
     _page_list.collapse_all();
 
     // Set Custom theme
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _theme_oberver = prefs->createObserver("/theme/", [=]() {
         prefs->setString("/options/boot/theme", "custom");
     });
@@ -2598,6 +2600,7 @@ void InkscapePreferences::initPageIO()
 
 void InkscapePreferences::initPageBehavior()
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Gtk::TreeModel::iterator iter_behavior = this->AddPage(_page_behavior, _("Behavior"), PREFS_PAGE_BEHAVIOR);
 
     _misc_simpl.init("/options/simplifythreshold/value", 0.0001, 1.0, 0.0001, 0.0010, 0.0010, false, false);
@@ -2790,13 +2793,16 @@ void InkscapePreferences::initPageBehavior()
     _page_steps.add_line( false, "", _steps_compass, "",
                             _("When on, angles are displayed with 0 at north, 0 to 360 range, positive clockwise; otherwise with 0 at east, -180 to 180 range, positive counterclockwise"));
 
-    {
-        Glib::ustring const labels[] = {"90", "60", "45", "36", "30", "22.5", "18", "15", "12", "10",
-                                        "7.5", "6", "5", "3", "2", "1", "0.5", C_("Rotation angle", "None")};
-        int const values[] = {2, 3, 4, 5, 6, 8, 10, 12, 15, 18, 24, 30, 36, 60, 90, 180, 360, 0};
-        _steps_rot_snap.init("/options/rotationsnapsperpi/value", labels, values, 12);
-    }
+    // Custom implementation of rotation snap degrees
+    _steps_rot_snap.set_range(0.1, 180.0);
+    _steps_rot_snap.set_increments(1.0, 0);
+    _steps_rot_snap.set_value(180.0 / prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0));
+    _steps_rot_snap.set_width_chars(6);
+    _steps_rot_snap.set_digits(2);
     _steps_rot_snap.set_size_request(_sb_width);
+    _steps_rot_snap.signal_value_changed().connect([=, this]() {
+        prefs->setDouble("/options/rotationsnapsperpi/value", 180.0 / _steps_rot_snap.get_value());
+    });
     _page_steps.add_line( false, _("_Rotation snaps every:"), _steps_rot_snap, _("degrees"),
                            _("Rotating with Ctrl pressed snaps every that much degrees; also, pressing [ or ] rotates by this amount"), false);
 

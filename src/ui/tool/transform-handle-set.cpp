@@ -53,14 +53,14 @@ SPAnchorType side_to_anchor(unsigned s) {
 // TODO move those two functions into a common place
 double snap_angle(double a) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
+    double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
     double unit_angle = M_PI / snaps;
     return CLAMP(unit_angle * round(a / unit_angle), -M_PI, M_PI);
 }
 
 double snap_increment_degrees() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
+    double snaps = prefs->getDoubleLimited("/options/rotationsnapsperpi/value", 12.0, 0.1, 1800.0);
     return 180.0 / snaps;
 }
 
