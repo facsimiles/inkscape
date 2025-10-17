@@ -17,6 +17,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "fill-or-stroke.h"
 #define noSP_FS_VERBOSE
 
 #include "fill-style.h"
@@ -513,12 +514,17 @@ void FillNStroke::updateFromPaint(bool switch_style)
 
             if (!items.empty()) {
                 SPCSSAttr *css = nullptr;
+                // HACK: reset fill-opacity and stroke-opacity
+                // TODO: Remove this when we have an opacity slider
+
+                // for all tabs
+                css = sp_repr_css_attr_new();
                 if (kind == FILL) {
-                    // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider
-                    // for all tabs
-                    css = sp_repr_css_attr_new();
-                    sp_repr_css_set_property(css, "fill-opacity", "1.0");
+                    sp_repr_css_unset_property(css, "fill-opacity");
+                } else if (kind == STROKE) {
+                    sp_repr_css_unset_property(css, "stroke-opacity");
                 }
+
 
                 Inkscape::XML::Document *xml_doc = document->getReprDoc();
                 SPDefs *defs = document->getDefs();
@@ -528,9 +534,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                 for (auto item : items) {
 
                     // FIXME: see above
-                    if (kind == FILL) {
-                        sp_repr_css_change_recursive(item->getRepr(), css, "style");
-                    }
+                    sp_repr_css_change_recursive(item->getRepr(), css, "style");
 
                     // Check if object already has mesh.
                     bool has_mesh = false;
@@ -638,10 +642,14 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     gchar *urltext = g_strdup_printf("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", urltext);
 
-                    // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider
+                    // HACK: reset fill-opacity and stroke-opacity.
+                    // TODO: Remove this when we have an opacity slider
+
                     // for all tabs
                     if (kind == FILL) {
-                        sp_repr_css_set_property(css, "fill-opacity", "1.0");
+                        sp_repr_css_unset_property(css, "fill-opacity");
+                    } else if (kind == STROKE) {
+                        sp_repr_css_unset_property(css, "stroke-opacity");
                     }
 
                     // cannot just call sp_desktop_set_style, because we don't want to touch those
