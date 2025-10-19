@@ -97,6 +97,7 @@
 #include "object/sp-root.h"         // Inkscape version.
 #include "ui/desktop/document-check.h"    // Check for data loss on closing document window.
 #include "ui/dialog/dialog-manager.h"     // Save state
+#include "ui/dialog/dialog-window.h"
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/dialog/startup.h"
 #include "ui/interface.h"                 // sp_ui_error_dialog
@@ -1038,11 +1039,19 @@ void InkscapeApplication::on_activate()
 
 void InkscapeApplication::windowClose(InkscapeWindow *window)
 {
-    auto win_it = std::find_if(_windows.begin(), _windows.end(), [=] (auto &w) { return w.get() == window; });
-    _windows.erase(win_it);
     if (window == _active_window) {
         _active_window = nullptr;
+
+        // Detach floating dialogs from about-to-be-deleted window.
+        for (auto const &win : gtk_app()->get_windows()) {
+            if (auto dialog = dynamic_cast<Inkscape::UI::Dialog::DialogWindow *>(win)) {
+                dialog->set_inkscape_window(nullptr);
+            }
+        }
     }
+
+    auto win_it = std::find_if(_windows.begin(), _windows.end(), [=] (auto &w) { return w.get() == window; });
+    _windows.erase(win_it);
 }
 
 // Open document window for each file. Either this or on_activate() is called.

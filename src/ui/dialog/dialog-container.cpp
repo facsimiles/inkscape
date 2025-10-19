@@ -511,11 +511,10 @@ void DialogContainer::update_dialogs()
     for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->update(); });
 }
 
-void DialogContainer::set_inkscape_window(InkscapeWindow* inkscape_window)
+void DialogContainer::set_inkscape_window(InkscapeWindow *inkscape_window)
 {
-    g_assert(inkscape_window != nullptr);
     _inkscape_window = inkscape_window;
-    auto desktop = _inkscape_window->get_desktop();
+    auto desktop = _inkscape_window ? _inkscape_window->get_desktop() : nullptr;
     for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->setDesktop(desktop); });
 }
 
@@ -574,6 +573,8 @@ void DialogContainer::unlink_dialog(DialogBase *dialog)
  */
 void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_floating)
 {
+    assert(_inkscape_window);
+
     // Step 1: check if we want to load the state
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 

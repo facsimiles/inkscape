@@ -44,13 +44,10 @@ namespace Inkscape::UI::Dialog {
 
 // Create a dialog window and move page from old notebook.
 DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
-    : Gtk::Window()
-    , _app(InkscapeApplication::instance())
+    : _app(InkscapeApplication::instance())
     , _inkscape_window(inkscape_window)
-    , _title(_("Dialog Window"))
 {
     g_assert(_app != nullptr);
-    g_assert(_inkscape_window != nullptr);
 
     // ============ Initialization ===============
     set_name("DialogWindow");
@@ -64,8 +61,7 @@ DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
     }, false); // before GTKʼs default handler, so it wonʼt try to double-delete
 
     // ================ Window ==================
-    set_title(_title);
-    set_name(_title);
+    set_title(_("Dialog Window"));
     int window_width = INITIAL_WINDOW_WIDTH;
     int window_height = INITIAL_WINDOW_HEIGHT;
 
@@ -103,8 +99,7 @@ DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
         // Set window title
         DialogBase *dialog = dynamic_cast<DialogBase *>(page);
         if (dialog) {
-            _title = dialog->get_name();
-            set_title(_title);
+            set_title(dialog->get_name());
         }
 
         // Set window size considering what the dialog needs
@@ -144,11 +139,6 @@ DialogWindow::DialogWindow(InkscapeWindow *inkscape_window, Gtk::Widget *page)
  */
 void DialogWindow::set_inkscape_window(InkscapeWindow* inkscape_window)
 {
-    if (!inkscape_window) {
-        std::cerr << "DialogWindow::set_inkscape_window: no inkscape_window!" << std::endl;
-        return;
-    }
-
     _inkscape_window = inkscape_window;
     update_dialogs();
 }
@@ -160,37 +150,35 @@ void DialogWindow::update_dialogs()
 {
     g_assert(_app != nullptr);
     g_assert(_container != nullptr);
-    g_assert(_inkscape_window != nullptr);
 
     _container->set_inkscape_window(_inkscape_window);
     _container->update_dialogs(); // Updating dialogs is not using the _app reference here.
 
     // Set window title.
     auto const &dialogs = _container->get_dialogs();
+    Glib::ustring title;
     if (dialogs.size() > 1) {
-        _title = "Multiple dialogs";
+        title = "Multiple dialogs";
     } else if (dialogs.size() == 1) {
-        _title = dialogs.begin()->second->get_name();
+        title = dialogs.begin()->second->get_name();
     } else {
         // Should not happen... but does on closing a window!
-        // std::cerr << "DialogWindow::update_dialogs(): No dialogs!" << std::endl;
-        _title = "";
     }
 
-    auto document_name = _inkscape_window->get_document()->getDocumentName();
-    if (document_name) {
-        set_title(_title + " - " + Glib::ustring(document_name));
-    }
+    if (_inkscape_window) {
+        if (auto document_name = _inkscape_window->get_document()->getDocumentName()) {
+            title += " - ";
+            title += document_name;
+        }
 
-    auto win_action_group = dynamic_cast<Gio::ActionGroup *>(_inkscape_window);
-    if (win_action_group) {
         // C++ API requires Glib::RefPtr<Gio::ActionGroup>, use C API here.
-        gtk_widget_insert_action_group(Gtk::Widget::gobj(), "win", win_action_group->gobj());
-    } else {
-        std::cerr << "DialogWindow::DialogWindow: Can't find InkscapeWindow Gio:ActionGroup!" << std::endl;
+        gtk_widget_insert_action_group(Gtk::Widget::gobj(), "win", _inkscape_window->Gio::ActionGroup::gobj());
+
+        insert_action_group("doc", _inkscape_window->get_document()->getActionGroup());
     }
 
-    insert_action_group("doc", _inkscape_window->get_document()->getActionGroup());
+    set_title(title);
+    set_sensitive(_inkscape_window);
 }
 
 /**
@@ -241,8 +229,7 @@ void DialogWindow::update_window_size_to_fit_children()
 bool DialogWindow::on_key_pressed(Gtk::EventControllerKey &controller,
                                   unsigned keyval, unsigned keycode, Gdk::ModifierType state)
 {
-    assert(_inkscape_window);
-    return controller.forward(*_inkscape_window);
+    return _inkscape_window && controller.forward(*_inkscape_window);
 }
 
 } // namespace Inkscape::UI::Dialog

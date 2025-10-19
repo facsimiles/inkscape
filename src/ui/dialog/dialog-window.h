@@ -54,8 +54,6 @@ private:
     InkscapeWindow *_inkscape_window = nullptr;
 
     DialogContainer *_container = nullptr;
-
-    Glib::ustring _title;
 };
 
 } // namespace Inkscape::UI::Dialog
