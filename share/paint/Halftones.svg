@@ -417,6 +417,7 @@
        height="10"
        patternTransform="translate(0,0) scale(10,10)"
        preserveAspectRatio="xMidYMid"
+       style="fill:#000000"
        id="Polkadots-med"
        inkscape:stockid="Polka dots, medium"
        inkscape:label="Polka dots medium">
@@ -696,6 +697,7 @@
        height="10"
        patternTransform="translate(0,0) scale(10,10)"
        preserveAspectRatio="xMidYMid"
+       style="fill:#000000"
        id="Polkadots-large"
        inkscape:stockid="Polka dots, large"
        inkscape:label="Polka dots large">
