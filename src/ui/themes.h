@@ -95,7 +95,6 @@ private:
     Glib::RefPtr<Gtk::CssProvider> _macstyleprovider;
 #endif
     std::unique_ptr<Preferences::Observer> _spinbutton_observer;
-    Glib::RefPtr<Gtk::CssProvider> _fontsizeprovider;
 };
 
 } // namespace Inkscape::UI

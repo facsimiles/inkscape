@@ -36,12 +36,14 @@
 #   include <gtksourceview/gtksource.h>
 #endif
 
+#ifdef __APPLE__
+#include <gdk/macos/gdkmacos.h>
+#endif
+
 namespace Inkscape::UI {
 
 ThemeContext::ThemeContext()
-    : _fontsizeprovider{Gtk::CssProvider::create()}
-{
-}
+{ }
 
 ThemeContext::~ThemeContext() = default;
 
@@ -590,39 +592,30 @@ std::vector<guint32> ThemeContext::getHighlightColors(Gtk::Window *window)
     return colors;
 }
 
+// That's what Gtk Inspector does to determine 100% scale, i.e. "normal" dpi
+static double get_dpi_ratio(Gdk::Display* display) {
+#ifdef __APPLE__
+    if (GDK_IS_MACOS_DISPLAY(display ? display->gobj() : nullptr)) {
+        return 72.0 * 1024.0;
+    }
+#endif
+    return 96.0 * 1024.0;
+}
+
 void ThemeContext::adjustGlobalFontScale(double factor) {
     if (factor < 0.1 || factor > 10) {
         g_warning("Invalid font scaling factor %f in ThemeContext::adjust_global_font_scale", factor);
         return;
     }
 
-    auto display = Gdk::Display::get_default();
-    Gtk::StyleProvider::remove_provider_for_display(display, _fontsizeprovider);
-
-    Inkscape::CSSOStringStream os;
-    os.precision(3);
-    os << "widget, menubar, menuitem, popover, box { font-size: " << factor << "rem; }\n";
-
-    os << ".mono-font {";
-    auto desc = getMonospacedFont();
-    os << "font-family: " << desc.get_family() << ";";
-    switch (desc.get_style()) {
-        case Pango::Style::ITALIC:
-            os << "font-style: italic;";
-            break;
-        case Pango::Style::OBLIQUE:
-            os << "font-style: oblique;";
-            break;
+    if (auto settings = Gtk::Settings::get_default()) {
+        auto display = Gdk::Display::get_default();
+        auto normal_dpi = get_dpi_ratio(display.get());
+        settings->property_gtk_xft_dpi().set_value(int(factor * normal_dpi));
     }
-    os << "font-weight: " << static_cast<int>(desc.get_weight()) << ";";
-    double size = desc.get_size();
-    os << "font-size: " << factor * (desc.get_size_is_absolute() ? size : size / Pango::SCALE) << "px;";
-    os << "}";
-
-    _fontsizeprovider->load_from_data(os.str());
-
-    // note: priority set to APP - 1 to make sure styles.css take precedence over generic font-size
-    Gtk::StyleProvider::add_provider_for_display(display, _fontsizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
+    else {
+        g_warning("Cannot obtain application settings to change text scale.\n");
+    }
 }
 
 void ThemeContext::initialize_source_syntax_styles() {

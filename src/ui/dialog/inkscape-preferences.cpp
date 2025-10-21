@@ -1776,36 +1776,19 @@ void InkscapePreferences::initPageUI()
 
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     {
-        auto const font_scale = Gtk::make_managed<UI::Widget::PrefSlider>();
-        font_scale->init(ThemeContext::get_font_scale_pref_path(), 50, 150, 5, 5, 100, 0); // 50% to 150%
-        font_scale->getSlider()->set_format_value_func([=](double const val) {
-            return Inkscape::ustring::format_classic(std::fixed, std::setprecision(0), val) + "%";
+        auto const font_scale = Gtk::make_managed<UI::Widget::PrefSpinButton>();
+        font_scale->init(ThemeContext::get_font_scale_pref_path(), 50, 200, 5, 5, 100, true, false); // 50% to 200%
+        font_scale->changed_signal.connect([](auto val) {
+            INKSCAPE.themecontext->adjustGlobalFontScale(val / 100.0);
         });
-        // Live updates commented out; too disruptive
-        // font_scale->getSlider()->signal_value_changed().connect([=](){
-            // INKSCAPE.themecontext->adjust_global_font_scale(font_scale->getSlider()->get_value() / 100.0);
-        // });
-        auto const space = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
-        space->set_valign(Gtk::Align::CENTER);
         auto const reset = Gtk::make_managed<Gtk::Button>();
         reset->set_tooltip_text(_("Reset font size to 100%"));
         reset->set_image_from_icon_name("reset-settings-symbolic");
-        reset->set_size_request(30, -1);
-        auto const apply = Gtk::make_managed<Gtk::Button>(_("Apply"));
-        apply->set_tooltip_text(_("Apply font size changes to the UI"));
-        apply->set_valign(Gtk::Align::FILL);
-        apply->set_margin_end(5);
         reset->set_valign(Gtk::Align::FILL);
-        space->append(*apply);
-        space->append(*reset);
         reset->signal_clicked().connect([=](){
-            font_scale->getSlider()->set_value(100);
-            INKSCAPE.themecontext->adjustGlobalFontScale(1.0);
+            font_scale->set_value(100);
         });
-        apply->signal_clicked().connect([=](){
-            INKSCAPE.themecontext->adjustGlobalFontScale(font_scale->getSlider()->get_value() / 100.0);
-        });
-        _page_theme.add_line(false, _("_Font scale:"), *font_scale, "", _("Adjust size of UI fonts"), true, space);
+        _page_theme.add_line(false, _("_Font scale:"), *font_scale, "", _("Adjust size of UI fonts"), false, reset);
     }
     auto const space = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     space->set_size_request(_sb_width / 3, -1);
