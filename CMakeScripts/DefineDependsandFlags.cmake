@@ -181,7 +181,7 @@ if(WITH_INTERNAL_2GEOM)
 endif()
 
 if(WITH_CAPYPDF)
-  pkg_check_modules(CAPYPDF capypdf>=0.16)
+  pkg_check_modules(CAPYPDF capypdf>=0.18)
   if(CAPYPDF_FOUND)
     sanitize_ldflags_for_libs(CAPYPDF_LDFLAGS)
     list(APPEND INKSCAPE_INCS_SYS ${CAPYPDF_INCLUDE_DIRS})
@@ -196,8 +196,8 @@ if(WITH_CAPYPDF)
       set(CAPY_LIBDIR ${CAPY_PREFIX}/${CMAKE_INSTALL_LIBDIR})
       include(ExternalProject)
       ExternalProject_Add(capypdf
-          URL https://github.com/jpakkane/capypdf/archive/refs/tags/0.16.0.zip
-          URL_HASH SHA512=24b80a384ee2a78c17b3591a8c78a4677867bc3474771ad8e9dc245dfc960959689f0b19a9dbae3cf78d8b4aaaa66f5e7c924e5650341de0af74f654e3259027
+          URL https://github.com/jpakkane/capypdf/releases/download/0.18.0/capypdf-0.18.0.tar.xz
+          URL_HASH SHA256=bda2c0cbbc60b461b1c5d64c50cdecfee6e90b3c9ee28d33212412771caaafd4
           DOWNLOAD_EXTRACT_TIMESTAMP TRUE
           CONFIGURE_COMMAND meson setup . ../capypdf --libdir=${CAPY_LIBDIR} --prefix=${CAPY_PREFIX}
           BUILD_COMMAND meson compile

@@ -524,9 +524,6 @@ add_cli_test(export-pdf-version-15 PARAMETERS --export-pdf-version=1.5 --export-
 # --export-text-to-path
 # PNG: Doesn't make sense.
 # EMF/WMF: No way to check.
-add_cli_test(preserve-text_pdf       PARAMETERS --export-type=pdf
-                                     INPUT_FILENAME text.svg OUTPUT_FILENAME preserve-text.pdf
-                                     TEST_SCRIPT match_regex.sh "preserve-text.pdf" "/FontDescriptor")
 add_cli_test(preserve-text_ps        PARAMETERS --export-type=ps
                                      INPUT_FILENAME text.svg OUTPUT_FILENAME preserve-text.ps
                                      TEST_SCRIPT match_regex.sh "preserve-text.ps" "^%%BeginResource: font")

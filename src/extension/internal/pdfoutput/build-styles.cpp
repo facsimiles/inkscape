@@ -286,18 +286,26 @@ std::optional<CapyPDF_GraphicsStateId> Document::get_shape_graphics_state(SPStyl
  *
  * @returns the FontId in capypdf to use.
  */
-std::optional<CapyPDF_FontId> Document::get_font(std::string const &filename)
+std::optional<CapyPDF_FontId> Document::get_font(std::string const &filename, SPIFontVariationSettings &var)
 {
+    auto key = filename;
+    if (!var.axes.empty()) {
+        key += "-" + var.toString();
+    }
     // TODO: It's possible for the font loading to fail but we don't know how yet.
-    if (!_font_cache.contains(filename)) {
+    if (!_font_cache.contains(key)) {
         try {
-            _font_cache[filename] = _gen.load_font(filename.c_str());
+            auto fontprops = capypdf::FontProperties();
+            for (auto &[name, value] : var.axes) {
+                fontprops.set_variation(name, (int)value);
+            }
+            _font_cache[key] = _gen.load_font(filename.c_str(), fontprops);
         } catch (std::exception const &err) {
             std::cerr << "Can't load font: '" << filename.c_str() << "'\n";
             return {};
         }
     }
-    return _font_cache[filename];
+    return _font_cache[key];
 }
 
 /**

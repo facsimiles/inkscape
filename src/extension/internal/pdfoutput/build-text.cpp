@@ -58,7 +58,7 @@ bool TextContext::set_text_style(std::shared_ptr<FontInstance> const &font, SPSt
 {
     auto font_filename = font->GetFilename();
     if (font_filename != last_font) {
-        if (auto font_id = _doc.get_font(font_filename)) {
+        if (auto font_id = _doc.get_font(font_filename, style->font_variation_settings)) {
             // Transformation has consumed the font size
             _tx.cmd_Tf(*font_id, 1); // style->font_size.computed);
             last_font = font_filename;
