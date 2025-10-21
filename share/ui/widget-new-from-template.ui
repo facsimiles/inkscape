@@ -51,6 +51,8 @@
         <child>
           <object class="GtkCellRendererText">
             <property name="alignment">center</property>
+            <property name="xalign">0.5</property>
+            <property name="yalign">0.5</property>
             <property name="wrap-mode">word</property>
             <property name="wrap-width">16</property>
           </object>
@@ -61,6 +63,8 @@
         <child>
           <object class="GtkCellRendererText">
             <property name="alignment">center</property>
+            <property name="xalign">0.5</property>
+            <property name="yalign">0.5</property>
             <property name="scale">0.90</property>
             <property name="wrap-mode">word</property>
             <property name="wrap-width">32</property>
