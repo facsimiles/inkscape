@@ -176,7 +176,6 @@ StartScreen::StartScreen()
 
 void StartScreen::show_now()
 {
-    set_default_size(700, 0);
     set_resizable(false);
 
     // Show the main banner when already welcomed for the first time
@@ -205,7 +204,6 @@ void StartScreen::setup_welcome()
 
     auto prefs = Inkscape::Preferences::get();
 
-    set_default_size(700, 360);
     messages.hide();
     grab_default();
     grab_focus();
@@ -281,7 +279,6 @@ void StartScreen::setup_welcome()
     }
 
     set_modal(true);
-    set_default_size(700, 360);
     set_position(Gtk::WIN_POS_CENTER_ALWAYS);
     property_resizable() = false;
     set_visible(true);
