@@ -16,7 +16,14 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
-     id="defs1" />
+     id="defs1">
+    <view
+       inkscape:label="1"
+       id="view1"
+       viewBox="0 0 287.99999 456.00001"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+  </defs>
   <sodipodi:namedview
      id="namedview1"
      pagecolor="#ffffff"
@@ -25,17 +32,7 @@
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1">
-    <inkscape:page
-       x="0"
-       y="0"
-       inkscape:label="1"
-       id="page1"
-       width="287.99999"
-       height="456.00001"
-       margin="0"
-       bleed="0" />
-  </sodipodi:namedview>
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata1">
     <rdf:RDF>

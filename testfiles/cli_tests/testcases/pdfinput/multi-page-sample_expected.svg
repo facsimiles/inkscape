@@ -18,6 +18,12 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs1">
+    <view
+       inkscape:label="Page One A4"
+       id="view1"
+       viewBox="0 0 794.66667 1122.6667"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
     <mask
        maskUnits="userSpaceOnUse"
        x="0"
@@ -188,6 +194,24 @@
          d="M 1.196814e-5,-3.3451287e-6 H 1.0000141 V 0.99998944 H 1.196814e-5 Z"
          id="path37" />
     </clipPath>
+    <view
+       inkscape:label="Page Two US Letter 2mm bleed 10mm margin"
+       id="view37"
+       viewBox="814.66667 0 833.33333 1072"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       inkscape:label="100px Square"
+       id="view102"
+       viewBox="1668 0 101.33333 100"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       inkscape:label="4"
+       id="view104"
+       viewBox="1789.3333 0 734.66667 933.33333"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath105">
@@ -420,38 +444,7 @@
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1">
-    <inkscape:page
-       x="0"
-       y="0"
-       inkscape:label="Page One A4"
-       id="page1"
-       width="794.66667"
-       height="1122.6667"
-       margin="0"
-       bleed="0" />
-    <inkscape:page
-       x="814.66667"
-       y="0"
-       inkscape:label="Page Two US Letter 2mm bleed 10mm margin"
-       id="page37"
-       width="833.33333"
-       height="1072" />
-    <inkscape:page
-       x="1668"
-       y="0"
-       inkscape:label="100px Square"
-       id="page102"
-       width="101.33333"
-       height="100" />
-    <inkscape:page
-       x="1789.3333"
-       y="0"
-       inkscape:label="4"
-       id="page104"
-       width="734.66667"
-       height="933.33333" />
-  </sodipodi:namedview>
+     inkscape:deskcolor="#d1d1d1" />
   <g
      id="g1"
      inkscape:groupmode="layer"

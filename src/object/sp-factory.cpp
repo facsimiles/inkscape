@@ -174,7 +174,7 @@ private:
         { "svg:hkern", make<SPHkern> },
         { "svg:vkern", make<SPVkern> },
         { "sodipodi:guide", make<SPGuide> },
-        { "inkscape:page", make<SPPage> },
+        { "svg:view", make<SPPage> },
         { "svg:hatch", make<SPHatch> },
         { "svg:hatchpath", make<SPHatchPath> },
         { "svg:hatchPath", [] () -> SPObject* {

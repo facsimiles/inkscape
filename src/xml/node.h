@@ -260,6 +260,8 @@ public:
 
     bool setAttributePoint(Util::const_char_ptr key, Geom::Point const &val);
 
+    bool setAttributeRect(Util::const_char_ptr key, Geom::Rect const &val);
+
     Geom::Point getAttributePoint(Util::const_char_ptr key, Geom::Point default_value = {}) const;
 
     /**

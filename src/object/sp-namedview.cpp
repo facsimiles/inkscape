@@ -109,7 +109,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     readAttr(SPAttr::INKSCAPE_ORIGIN_CORRECTION);
     readAttr(SPAttr::INKSCAPE_Y_AXIS_DOWN);
 
-    /* Construct guideline and pages list */
+    /* Construct guideline list */
     for (auto &child : children) {
         if (auto guide = cast<SPGuide>(&child)) {
             guides.push_back(guide);
@@ -117,13 +117,19 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             guide->setHiColor(getGuideHiColor().toRGBA());
             guide->readAttr(SPAttr::INKSCAPE_COLOR);
         }
-        if (auto page = cast<SPPage>(&child)) {
-            document->getPageManager().addPage(page);
-        }
         if (auto grid = cast<SPGrid>(&child)) {
             grids.emplace_back(grid);
         }
     }
+
+    _page_added = document->getPageManager().connectPagesChanged([this](SPPage *page){
+        if (page) { // Page being added
+            for (auto view : views) {
+                page->showPage(view->getCanvasPagesBg(), view->getCanvasPagesFg());
+            }
+        }
+        updateViewPort();
+    });
 }
 
 void SPNamedView::release() {
@@ -436,13 +442,6 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
         for (auto view : views) {
             grid->show(view);
         }
-    } else if (!strcmp(child->name(), "inkscape:page")) {
-        if (auto page = cast<SPPage>(no)) {
-            document->getPageManager().addPage(page);
-            for (auto view : views) {
-                page->showPage(view->getCanvasPagesBg(), view->getCanvasPagesFg());
-            }
-        }
     } else {
         if (auto g = cast<SPGuide>(no)) {
             guides.push_back(g);
@@ -468,9 +467,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
 }
 
 void SPNamedView::remove_child(Inkscape::XML::Node *child) {
-    if (!strcmp(child->name(), "inkscape:page")) {
-        document->getPageManager().removePage(child);
-    } else if (!strcmp(child->name(), "inkscape:grid")) {
+    if (!strcmp(child->name(), "inkscape:grid")) {
         for (auto it = grids.begin(); it != grids.end(); ++it) {
             auto grid = *it;
             if (grid->getRepr() == child) {
@@ -497,9 +494,6 @@ void SPNamedView::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node 
                                 Inkscape::XML::Node *new_repr)
 {
     SPObjectGroup::order_changed(child, old_repr, new_repr);
-    if (!strcmp(child->name(), "inkscape:page")) {
-        document->getPageManager().reorderPage(child);
-    }
 }
 
 Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

@@ -74,7 +74,7 @@ private:
     SPDocument *_document = nullptr;
 
     void toolChanged(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *tool);
-    void pagesChanged();
+    void pagesChanged(SPPage *new_page);
     void selectionChanged(SPPage *page);
     void selectionModified(SPPage *page);
     void populate_sizes();

@@ -763,7 +763,15 @@ void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * /
     g_return_if_fail(ochild != nullptr);
     SPObject *prev = get_closest_child_by_repr(*object, new_ref);
     object->reorder(ochild, prev);
-    ochild->_position_changed_signal.emit(ochild);
+    ochild->position_changed(prev);
+}
+
+/**
+ * The order of this object has changed
+ */
+void SPObject::position_changed(SPObject *prev)
+{
+    _position_changed_signal.emit(this);
 }
 
 void SPObject::tag_name_changed(gchar const* oldname, gchar const* newname) {

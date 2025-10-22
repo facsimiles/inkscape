@@ -17,6 +17,12 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs1">
+    <view
+       inkscape:label="1"
+       id="view1"
+       viewBox="0 0 452 452"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
     <linearGradient
        x1="166.67274"
        y1="-179.20593"
@@ -142,17 +148,7 @@
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1">
-    <inkscape:page
-       x="0"
-       y="0"
-       inkscape:label="1"
-       id="page1"
-       width="452"
-       height="452"
-       margin="0"
-       bleed="0" />
-  </sodipodi:namedview>
+     inkscape:deskcolor="#d1d1d1" />
   <g
      id="g1"
      inkscape:groupmode="layer"

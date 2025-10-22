@@ -11,6 +11,7 @@
  */
 
 #include "sp-page.h"
+#include "page-manager.h"
 
 #include <glibmm/i18n.h>
 
@@ -39,16 +40,16 @@ void SPPage::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr(SPAttr::INKSCAPE_LABEL);
-    this->readAttr(SPAttr::PAGE_SIZE_NAME);
-    this->readAttr(SPAttr::X);
-    this->readAttr(SPAttr::Y);
-    this->readAttr(SPAttr::WIDTH);
-    this->readAttr(SPAttr::HEIGHT);
+    // SVG 2.0 Attributes
+    this->readAttr(SPAttr::VIEWBOX);
+
+    // Inkscape attributes
     this->readAttr(SPAttr::PAGE_MARGIN);
     this->readAttr(SPAttr::PAGE_BLEED);
+    this->readAttr(SPAttr::INKSCAPE_LABEL);
+    this->readAttr(SPAttr::PAGE_SIZE_NAME);
 
-    /* Register */
+    /* Register, this creates a delayed signal for page-manager */
     document->addResource("page", this);
 }
 
@@ -56,6 +57,7 @@ void SPPage::release()
 {
     if (this->document) {
         // Unregister ourselves
+        hidePage();
         this->document->removeResource("page", this);
     }
 
@@ -65,17 +67,8 @@ void SPPage::release()
 void SPPage::set(SPAttr key, const gchar *value)
 {
     switch (key) {
-        case SPAttr::X:
-            this->x.readOrUnset(value);
-            break;
-        case SPAttr::Y:
-            this->y.readOrUnset(value);
-            break;
-        case SPAttr::WIDTH:
-            this->width.readOrUnset(value);
-            break;
-        case SPAttr::HEIGHT:
-            this->height.readOrUnset(value);
+        case SPAttr::VIEWBOX:
+            set_viewBox(value);
             break;
         case SPAttr::PAGE_MARGIN:
             this->margin.readOrUnset(value, document->getDocumentScale());
@@ -94,16 +87,22 @@ void SPPage::set(SPAttr key, const gchar *value)
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+void SPPage::position_changed(SPObject *prev)
+{
+    document->getPageManager().reorderPages();
+}
+
 /**
  * Update the percentage values of the svg boxes
  */
 void SPPage::update_relatives()
 {
-    if (this->width && this->height) {
+    if (viewBox_set) {
+        auto rect = getRect();
         if (this->margin)
-            this->margin.update(12, 6, this->width.computed, this->height.computed);
+            this->margin.update(12, 6, rect.width(), rect.height());
         if (this->bleed)
-            this->bleed.update(12, 6, this->width.computed, this->height.computed);
+            this->bleed.update(12, 6, rect.width(), rect.height());
     }
 }
 
@@ -123,7 +122,7 @@ bool SPPage::isBarePage() const
  */
 Geom::Rect SPPage::getRect() const
 {
-    return Geom::Rect::from_xywh(x.computed, y.computed, width.computed, height.computed);
+    return viewBox;
 }
 
 /**
@@ -217,10 +216,7 @@ Geom::Rect SPPage::getSensitiveRect() const
  */
 void SPPage::setRect(Geom::Rect rect)
 {
-    this->x = rect.left();
-    this->y = rect.top();
-    this->width = rect.width();
-    this->height = rect.height();
+    viewBox = rect;
 
     // always clear size label, toolbar is responsible for putting it back if needed.
     this->_size_label = "";
@@ -424,6 +420,7 @@ bool SPPage::isViewportPage() const
 void SPPage::showPage(Inkscape::CanvasItemGroup *fg, Inkscape::CanvasItemGroup *bg)
 {
     _canvas_item->add(getDesktopRect(), fg, bg);
+    setDefaultAttributes();
     // The final steps are completed in an update cycle
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -505,34 +502,6 @@ bool SPPage::setPageIndex(int index, bool swap_page)
         return true;
     }
     return false;
-}
-
-/**
- * Returns the sibling page next to this one in the stack order.
- */
-SPPage *SPPage::getNextPage()
-{
-    SPObject *item = this;
-    while ((item = item->getNext())) {
-        if (auto next = cast<SPPage>(item)) {
-            return next;
-        }
-    }
-    return nullptr;
-}
-
-/**
- * Returns the sibling page previous to this one in the stack order.
- */
-SPPage *SPPage::getPreviousPage()
-{
-    SPObject *item = this;
-    while ((item = item->getPrev())) {
-        if (auto prev = cast<SPPage>(item)) {
-            return prev;
-        }
-    }
-    return nullptr;
 }
 
 /**
@@ -627,16 +596,13 @@ void SPPage::update(SPCtx * /*ctx*/, unsigned int /*flags*/)
 Inkscape::XML::Node *SPPage::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = xml_doc->createElement("inkscape:page");
+        repr = xml_doc->createElement("svg:view");
     }
 
-    repr->setAttributeSvgDouble("x", this->x.computed);
-    repr->setAttributeSvgDouble("y", this->y.computed);
-    repr->setAttributeSvgDouble("width", this->width.computed);
-    repr->setAttributeSvgDouble("height", this->height.computed);
-    repr->setAttributeOrRemoveIfEmpty("margin", this->margin.write());
-    repr->setAttributeOrRemoveIfEmpty("bleed", this->bleed.write());
-    repr->setAttributeOrRemoveIfEmpty("page-size", this->_size_label);
+    write_viewBox(repr);
+    repr->setAttributeOrRemoveIfEmpty("inkscape:margin", margin.write());
+    repr->setAttributeOrRemoveIfEmpty("inkscape:bleed", bleed.write());
+    repr->setAttributeOrRemoveIfEmpty("inkscape:page-size", _size_label);
 
     return SPObject::write(xml_doc, repr, flags);
 }

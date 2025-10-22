@@ -885,6 +885,7 @@ protected:
 
     virtual void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_repr,
                                Inkscape::XML::Node *new_repr);
+    virtual void position_changed(SPObject *prev);
     virtual void tag_name_changed(gchar const *oldname, gchar const *newname);
 
     virtual void set(SPAttr key, const char *value);

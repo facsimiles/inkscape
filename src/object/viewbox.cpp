@@ -289,13 +289,7 @@ SPItemCtx SPViewBox::get_rctx(const SPItemCtx* ictx, double scale_none) {
 void SPViewBox::write_viewBox(Inkscape::XML::Node *repr) const
 {
     if (viewBox_set) {
-        Inkscape::SVGOStringStream os;
-        os << viewBox.left() << " "  //
-           << viewBox.top() << " "   //
-           << viewBox.width() << " " //
-           << viewBox.height();
-
-        repr->setAttribute("viewBox", os.str());
+        repr->setAttributeRect("viewBox", viewBox);
     }
 }
 

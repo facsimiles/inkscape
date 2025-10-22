@@ -202,7 +202,7 @@ void PageToolbar::setDesktop(SPDesktop *desktop)
         _pages_changed = page_manager.connectPagesChanged(sigc::mem_fun(*this, &PageToolbar::pagesChanged));
         _page_selected = page_manager.connectPageSelected(sigc::mem_fun(*this, &PageToolbar::selectionChanged));
         // Update everything now.
-        pagesChanged();
+        pagesChanged(nullptr);
     }
 }
 
@@ -448,7 +448,7 @@ void PageToolbar::setMarginText(SPPage *page)
     _text_page_margins.set_sensitive(true);
 }
 
-void PageToolbar::pagesChanged()
+void PageToolbar::pagesChanged(SPPage *new_page)
 {
     selectionChanged(_document->getPageManager().getSelected());
 }

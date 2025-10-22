@@ -722,6 +722,47 @@ void sp_file_fix_lpe(SPDocument *doc)
     }
 }
 
+void sp_file_fix_page_elements(std::unique_ptr<SPDocument> &doc)
+{
+    std::vector<XML::Node *> to_delete;
+    std::vector<XML::Node *> to_add;
+
+    if (auto nv = doc->getNamedView()) {
+        bool done = false;
+        auto defs = doc->getDefs()->getRepr();
+        for (auto child = nv->getRepr()->firstChild() ; child != nullptr; child = child->next()) {
+            if (child->name() && std::string(child->name()) == "inkscape:page") {
+                auto page = doc->getReprDoc()->createElement("svg:view");
+                auto rect = Geom::Rect::from_xywh(
+                    child->getAttributeDouble("x"),
+                    child->getAttributeDouble("y"),
+                    child->getAttributeDouble("width"),
+                    child->getAttributeDouble("height"));
+                page->setAttributeRect("viewBox", rect);
+                page->copyAttribute("id", child, true);
+                page->copyAttribute("inkscape:label", child, true);
+                page->setAttributeOrRemoveIfEmpty("inkscape:margin", child->attribute("margin"));
+                page->setAttributeOrRemoveIfEmpty("inkscape:bleed", child->attribute("bleed"));
+                page->setAttributeOrRemoveIfEmpty("inkscape:page-size", child->attribute("page-size"));
+                to_delete.push_back(child);
+                to_add.push_back(page);
+                done = true;
+            }
+        }
+        if (done) {
+            for (auto &i : to_delete) {
+                nv->getRepr()->removeChild(i);
+            }
+            // To preserve ids, we remove and then add replacements
+            for (auto &i : to_add) {
+                defs->appendChild(i);
+                Inkscape::GC::release(i);
+            }
+            DocumentUndo::done(doc.get(), _("Convert Pages to SVG2"), "");
+        }
+    }
+}
+
 /*
   Local Variables:
   mode:c++

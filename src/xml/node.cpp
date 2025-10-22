@@ -14,6 +14,7 @@
 #include "node.h"
 
 #include <2geom/point.h>
+#include <2geom/rect.h>
 
 #include "svg/stringstream.h"
 #include "svg/css-ostringstream.h"
@@ -139,6 +140,17 @@ bool Node::setAttributePoint(Util::const_char_ptr key, Geom::Point const &val)
     Inkscape::SVGOStringStream os;
     os << val[Geom::X] << "," << val[Geom::Y];
 
+    this->setAttribute(key, os.str());
+    return true;
+}
+
+bool Node::setAttributeRect(Util::const_char_ptr key, Geom::Rect const &val)
+{
+    Inkscape::SVGOStringStream os;
+        os << val.left() << " "  //
+           << val.top() << " "   //
+           << val.width() << " " //
+           << val.height();
     this->setAttribute(key, os.str());
     return true;
 }

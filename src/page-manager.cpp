@@ -18,6 +18,7 @@
 #include "extension/template.h"
 #include "object/object-set.h"
 #include "object/sp-item.h"
+#include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
 #include "object/sp-root.h"
@@ -50,11 +51,35 @@ PageManager::PageManager(SPDocument *document)
     , border_color{default_border_color}
 {
     _document = document;
+
+    // We use resource signals to avoid adding pages which are not built yet (have no id)
+    _resources_changed = _document->connectResourcesChanged("page", [this]() {
+        if (_document) {
+            auto res = _document->getResourceList("page");
+            for (auto obj : res) { // Additions
+                if (auto page = cast<SPPage>(obj)) {
+                    if (std::find(_pages.begin(), _pages.end(), page) == _pages.end()) {
+                        addPage(page);
+                    }
+                }
+            }
+            for (auto page : _pages) {
+                if (std::find(res.begin(), res.end(), cast<SPObject>(page)) == res.end()) {
+                    removePage(page->getRepr());
+                }
+            }
+        }
+    });
 }
 
 PageManager::~PageManager()
 {
-    pages.clear();
+    deactivate();
+}
+
+void PageManager::deactivate()
+{
+    _pages.clear();
     _selected_page = nullptr;
     _document = nullptr;
 }
@@ -65,34 +90,30 @@ PageManager::~PageManager()
 void PageManager::addPage(SPPage *page)
 {
     g_assert(page->document == _document);
-    if (std::find(pages.begin(), pages.end(), page) != pages.end()) {
+    if (std::find(_pages.begin(), _pages.end(), page) != _pages.end()) {
         // Refuse to double add pages to list.
         return;
     }
-    if (auto next = page->getNextPage()) {
-        // Inserted in the middle, probably an undo.
-        auto it = std::find(pages.begin(), pages.end(), next);
-        if (it != pages.end()) {
-            pages.insert(it, page);
-        } else {
-            // This means the next page is not yet added either
-            pages.push_back(page);
-        }
-    } else {
-        pages.push_back(page);
-    }
-    pagesChanged();
+    page->_updateTotalHRefCount(1);
+    _pages.push_back(page);
+    reorderPages();
+    pagesChanged(page);
 }
 
 /**
- * Remove a page from this manager, called from namedview parent.
+ * Remove a page from this manager
  */
 void PageManager::removePage(Inkscape::XML::Node *child)
 {
-    for (auto it = pages.begin(); it != pages.end(); ++it) {
-        SPPage *page = *it;
+    for (unsigned i = 0; i < _pages.size(); i++) {
+        SPPage *page = _pages[i];
         if (page->getRepr() == child) {
-            pages.erase(it);
+            _pages.erase(_pages.begin() + i);
+
+            // Document is being destroyed
+            if (!_document) {
+                return;
+            }
 
             if (hasPages() && page->isViewportPage()) {
                 _document->fitToRect(getFirstPage()->getDesktopRect(), {});
@@ -100,34 +121,36 @@ void PageManager::removePage(Inkscape::XML::Node *child)
 
             // Reselect because this page is gone.
             if (_selected_page == page) {
-                if (auto next = page->getNextPage()) {
-                    selectPage(next);
-                } else if (auto prev = page->getPreviousPage()) {
-                    selectPage(prev);
+                if (i < _pages.size()) {
+                    selectPage(_pages[i]);
+                } else if (!_pages.empty()) {
+                    selectPage(_pages[i - 1]);
                 } else {
                     selectPage(nullptr);
                 }
             }
 
-            pagesChanged();
+            pagesChanged(nullptr);
             break;
         }
     }
 }
 
 /**
- * Reorder page within the internal list to keep it up to date.
+ * Reorder pages within the internal list to keep it up to date by tracking
+ * their order in the object tree.
  */
-void PageManager::reorderPage(Inkscape::XML::Node *child)
+void PageManager::reorderPages()
 {
-    auto nv = _document->getNamedView();
-    pages.clear();
-    for (auto &child : nv->children) {
-        if (auto page = cast<SPPage>(&child)) {
-            pages.push_back(page);
-        }
+    bool changes = false;
+    std::sort(_pages.begin(), _pages.end(), [this, &changes](SPPage *first, SPPage *second) {
+        auto ret = sp_repr_compare_position_bool(first->getRepr(), second->getRepr());
+        changes |= ret;
+        return ret;
+    });
+    if (changes) {
+        pagesChanged(nullptr);
     }
-    pagesChanged();
 }
 
 /**
@@ -139,7 +162,7 @@ void PageManager::enablePages()
     if (!hasPages()) {
         _selected_page = newDocumentPage(*_document->preferredBounds(), true);
     } else if (!_selected_page) {
-        _selected_page = pages.back();
+        _selected_page = _pages.back();
     }
 }
 
@@ -174,7 +197,7 @@ Geom::Point PageManager::nextPageLocation() const
     // Get a new location for the page.
     double top = 0.0;
     double left = 0.0;
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         auto rect = page->getRect();
         if (rect.right() > left) {
             left = rect.right() + 10;
@@ -195,13 +218,11 @@ SPPage *PageManager::newPage(Geom::Rect rect, bool first_page)
     }
 
     auto xml_doc = _document->getReprDoc();
-    auto repr = xml_doc->createElement("inkscape:page");
-    repr->setAttributeSvgDouble("x", rect.left());
-    repr->setAttributeSvgDouble("y", rect.top());
-    repr->setAttributeSvgDouble("width", rect.width());
-    repr->setAttributeSvgDouble("height", rect.height());
-    if (auto nv = _document->getNamedView()) {
-        if (auto page = cast<SPPage>(nv->appendChildRepr(repr))) {
+    auto repr = xml_doc->createElement("svg:view");
+    repr->setAttributeRect("viewBox", rect);
+
+    if (auto defs = _document->getDefs()) {
+        if (auto page = cast<SPPage>(defs->appendChildRepr(repr))) {
             Inkscape::GC::release(repr);
             return page;
         }
@@ -300,9 +321,9 @@ void PageManager::disablePages()
 int PageManager::getPageIndex(const SPPage *page) const
 {
     if (page) {
-        auto it = std::find(pages.begin(), pages.end(), page);
-        if (it != pages.end()) {
-            return it - pages.begin();
+        auto it = std::find(_pages.begin(), _pages.end(), page);
+        if (it != _pages.end()) {
+            return it - _pages.begin();
         }
         g_warning("Can't get page index for %s", page->getId());
     }
@@ -334,16 +355,16 @@ Geom::Affine PageManager::getSelectedPageAffine() const
  * Called when the pages vector is updated, either page
  * deleted or page created (but not if the page is modified)
  */
-void PageManager::pagesChanged()
+void PageManager::pagesChanged(SPPage *new_page)
 {
-    if (pages.empty() || getSelectedPageIndex() == -1) {
+    if (_pages.empty() || getSelectedPageIndex() == -1) {
         selectPage(nullptr);
     }
 
-    _pages_changed_signal.emit();
+    _pages_changed_signal.emit(new_page);
 
     if (!_selected_page) {
-        for (auto &page : pages) {
+        for (auto &page : _pages) {
             selectPage(page);
             break;
         }
@@ -400,10 +421,10 @@ bool PageManager::selectPage(SPItem *item, bool contains)
  */
 SPPage *PageManager::getPage(int index) const
 {
-    if (index < 0 || index >= pages.size()) {
+    if (index < 0 || index >= _pages.size()) {
         return nullptr;
     }
-    return pages[index];
+    return _pages[index];
 }
 
 /**
@@ -430,7 +451,7 @@ std::vector<SPPage *> PageManager::getPages(const std::string &pages, bool inver
 std::vector<SPPage *> PageManager::getPages(std::set<unsigned int> page_pos, bool inverse) const
 {
     std::vector<SPPage *> ret;
-    for (auto page : pages) {
+    for (auto page : _pages) {
         bool contains = page_pos.find(page->getPagePosition()) != page_pos.end();
         if (contains != inverse) {
             ret.push_back(page);
@@ -445,7 +466,7 @@ std::vector<SPPage *> PageManager::getPages(std::set<unsigned int> page_pos, boo
 std::vector<SPPage *> PageManager::getPagesFor(SPItem *item, bool contains) const
 {
     std::vector<SPPage *> ret;
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         if (page->itemOnPage(item, contains)) {
             ret.push_back(page);
         }
@@ -458,7 +479,7 @@ std::vector<SPPage *> PageManager::getPagesFor(SPItem *item, bool contains) cons
  */
 SPPage *PageManager::getPageFor(SPItem *item, bool contains) const
 {
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         if (page->itemOnPage(item, contains))
             return page;
     }
@@ -470,7 +491,7 @@ SPPage *PageManager::getPageFor(SPItem *item, bool contains) const
  */
 SPPage *PageManager::getPageAt(Geom::Point pos) const
 {
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         if (page->getDesktopRect().corner(0) == pos) {
             return page;
         }
@@ -505,7 +526,7 @@ SPPage *PageManager::findPageAt(Geom::Point pos) const
  */
 SPPage *PageManager::getViewportPage() const
 {
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         if (page->isViewportPage()) {
             return page;
         }
@@ -519,7 +540,7 @@ SPPage *PageManager::getViewportPage() const
 Geom::OptRect PageManager::getDesktopRect() const
 {
     Geom::OptRect total_area;
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         if (total_area) {
             total_area->unionWith(page->getDesktopRect());
         } else {
@@ -558,7 +579,7 @@ void PageManager::centerToPage(SPDesktop *desktop, SPPage *page)
  */
 void PageManager::scalePages(Geom::Scale const &scale)
 {
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         page->setRect(page->getRect() * scale);
         for (int side = 0; side < 4; side++) {
             page->setMarginSide(side, page->getMarginSide(side) * scale.vector()[0]);
@@ -574,9 +595,9 @@ void PageManager::resizePage(double width, double height)
 
 void PageManager::resizePage(SPPage *page, double width, double height)
 {
-    if (pages.empty() || page) {
+    if (_pages.empty() || page) {
         // Resizing the Viewport, means the page gets updated automatically
-        if (pages.empty() || (page && page->isViewportPage())) {
+        if (_pages.empty() || (page && page->isViewportPage())) {
             auto rect = Geom::Rect(Geom::Point(0, 0), Geom::Point(width, height));
             _document->fitToRect(rect, false);
         } else if (page) {
@@ -796,7 +817,7 @@ std::string PageManager::getSizeLabel(double width, double height)
 void PageManager::movePages(Geom::Affine tr)
 {
     // Adjust each page against the change in position of the viewbox.
-    for (auto &page : pages) {
+    for (auto &page : _pages) {
         page->movePage(tr, false);
     }
 }

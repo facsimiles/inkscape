@@ -190,7 +190,7 @@ private:
     /**
      * Page functions
      */
-    void onPagesChanged();
+    void onPagesChanged(SPPage *new_page);
     void onPagesModified(SPPage *page);
     void onPagesSelected(SPPage *page);
     void setPagesMode(bool multi);

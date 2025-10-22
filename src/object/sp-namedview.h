@@ -17,6 +17,8 @@
 
 #include <vector>
 
+#include <sigc++/scoped_connection.h>
+
 #include "attributes.h"
 #include "snap.h"
 #include "sp-object-group.h"
@@ -150,6 +152,8 @@ private:
     // if true, move coordinate system origin to the current page; if false - keep origin on front page
     SVGBool _origin_correction{true};
     SVGBool _y_axis_down{true};
+
+    sigc::scoped_connection _page_added;
 
 protected:
     void build(SPDocument *document, Inkscape::XML::Node *repr) override;

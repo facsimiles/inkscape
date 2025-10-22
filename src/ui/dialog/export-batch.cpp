@@ -957,7 +957,7 @@ void BatchExport::setDocument(SPDocument *document)
     _pages_changed_connection.disconnect();
     if (document) {
         // when the page selected is changed, update the export area
-        _pages_changed_connection = document->getPageManager().connectPagesChanged([this]() { pagesChanged(); });
+        _pages_changed_connection = document->getPageManager().connectPagesChanged([this](SPPage *) { pagesChanged(); });
         _background_color.setColor(get_export_bg_color(document->getNamedView(), Colors::Color(0xffffff00)));
         pagesChanged();
 

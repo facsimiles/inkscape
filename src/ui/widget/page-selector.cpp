@@ -90,11 +90,11 @@ void PageSelector::setDocument(SPDocument *document)
             page_manager.connectPagesChanged(sigc::mem_fun(*this, &PageSelector::pagesChanged));
         _page_selected_connection =
             page_manager.connectPageSelected(sigc::mem_fun(*this, &PageSelector::selectonChanged));
-        pagesChanged();
+        pagesChanged(nullptr);
     }
 }
 
-void PageSelector::pagesChanged()
+void PageSelector::pagesChanged(SPPage *new_page)
 {
     _selector_changed_connection.block();
     auto &page_manager = _document->getPageManager();

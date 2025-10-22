@@ -7,6 +7,8 @@
 #ifndef SEEN_DOCUMENT_UPDATE_H
 #define SEEN_DOCUMENT_UPDATE_H
 
+#include <memory>
+
 class SPDocument;
 class SPObject;
 class SPRoot;
@@ -19,6 +21,7 @@ void sp_file_fix_osb(SPObject *doc);
 void sp_file_fix_feComposite(SPObject *doc);
 void sp_file_fix_hotspot(SPRoot *o);
 void sp_file_fix_lpe(SPDocument *doc);
+void sp_file_fix_page_elements(std::unique_ptr<SPDocument> &doc);
 enum File_DPI_Fix { FILE_DPI_UNCHANGED = 0, FILE_DPI_VIEWBOX_SCALED, FILE_DPI_DOCUMENT_SCALED };
 extern int sp_file_convert_dpi_method_commandline;
 

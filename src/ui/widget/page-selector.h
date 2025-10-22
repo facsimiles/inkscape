@@ -57,7 +57,7 @@ private:
     sigc::connection _doc_replaced_connection;
 
     void setDocument(SPDocument *document);
-    void pagesChanged();
+    void pagesChanged(SPPage *new_page);
     void selectonChanged(SPPage *page);
 
     void renderPageLabel(Gtk::TreeModel::const_iterator const &row);

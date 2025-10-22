@@ -151,15 +151,12 @@ void SvgBuilder::pushPage(const std::string &label, GfxState *state)
     }
 
     if (_as_pages) {
-        _page = _xml_doc->createElement("inkscape:page");
-        _page->setAttributeSvgDouble("x", _page_left);
-        _page->setAttributeSvgDouble("y", _page_top);
+        _page = _xml_doc->createElement("svg:view");
 
         if (!label.empty()) {
             _page->setAttribute("inkscape:label", validateString(label));
         }
-        auto _nv = _doc->getNamedView()->getRepr();
-        _nv->appendChild(_page);
+        _doc->getDefs()->getRepr()->appendChild(_page);
     }
 
     // Page translation is somehow lost in the way we're using poppler and the state management
@@ -203,8 +200,8 @@ void SvgBuilder::setDocumentSize(double width, double height) {
         _root->setAttributeSvgDouble("height", height);
     }
     if (_page) {
-        _page->setAttributeSvgDouble("width", width);
-        _page->setAttributeSvgDouble("height", height);
+        auto rect = Geom::Rect::from_xywh(_page_left, _page_top, _width, _height);
+        _page->setAttributeRect("viewBox", rect);
     }
 }
 
@@ -249,7 +246,7 @@ void SvgBuilder::setMargins(const Geom::Rect &page, const Geom::Rect &margins, c
             << page.right() - margins.right() << " "
             << page.bottom() - margins.bottom() << " "
             << margins.left() - page.left();
-        _page->setAttribute("margin", val.str());
+        _page->setAttribute("inkscape:margin", val.str());
     }
     if (_as_pages && page != bleed) {
         if (!_page) {
@@ -261,7 +258,7 @@ void SvgBuilder::setMargins(const Geom::Rect &page, const Geom::Rect &margins, c
             << bleed.right() - page.right() << " "
             << bleed.bottom() - page.bottom() << " "
             << page.left() - bleed.left();
-        _page->setAttribute("bleed", val.str());
+        _page->setAttribute("inkscape:bleed", val.str());
     }
 }
 

@@ -20,6 +20,7 @@
 #include "sp-object.h"
 #include "svg/svg-length.h"
 #include "svg/svg-box.h"
+#include "viewbox.h"
 
 class SPDesktop;
 class SPItem;
@@ -27,7 +28,7 @@ namespace Inkscape {
     class ObjectSet;
 }
 
-class SPPage final : public SPObject
+class SPPage final : public SPObject, private SPViewBox
 {
 public:
     SPPage();
@@ -77,9 +78,6 @@ public:
         }
     };
 
-    SPPage *getNextPage();
-    SPPage *getPreviousPage();
-
     Geom::Rect getRect() const;
     Geom::Rect getDesktopRect() const;
     Geom::Rect getDocumentRect() const;
@@ -113,16 +111,13 @@ protected:
     void release() override;
     void update(SPCtx *ctx, unsigned int flags) override;
     void set(SPAttr key, const char *value) override;
+    void position_changed(SPObject *prev) override;
     Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) override;
 
     void update_relatives();
 private:
     Inkscape::CanvasPage *_canvas_item = nullptr;
 
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
     SVGBox margin;
     SVGBox bleed;
     std::string _size_label;

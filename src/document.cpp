@@ -155,6 +155,9 @@ SPDocument::SPDocument()
 SPDocument::~SPDocument() {
     destroySignal.emit();
 
+    // Prevent page manager from activating itself
+    _page_manager->deactivate();
+
     if (partial) {
         sp_repr_free_log(partial);
         partial = nullptr;
@@ -467,6 +470,7 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(
     if (docver.isInsideRangeExclusive(lowest_version, {1, 5})) {
         sp_file_fix_hotspot(document->getRoot());
     }
+    sp_file_fix_page_elements(document);
 
     /** Fix d missing on shapes (1.3.1 files) **/
     std::string version = docver.str();
@@ -2032,7 +2036,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
         [this check should be more generally presend on emit() calls since
         the backtrace is unusable with crashed from this cause]
         */
-        if (object->getId() || is<SPGroup>(object) || is<SPPage>(object)) {
+        if (object->getId() || is<SPGroup>(object)) {
             resources_changed_signals[q].emit();
         } else {
             pending_resource_changes.emplace(q);

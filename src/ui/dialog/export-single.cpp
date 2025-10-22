@@ -359,7 +359,7 @@ std::vector<SPPage const *> SingleExport::getSelectedPages() const
     return pages;
 }
 
-void SingleExport::onPagesChanged()
+void SingleExport::onPagesChanged(SPPage *new_page)
 {
     std::map<std::string, SPObject*> itemsList;
 
@@ -1115,14 +1115,14 @@ void SingleExport::setDocument(SPDocument *document)
         preview.setDrawing(_preview_drawing);
 
         // Refresh values to sync them with defaults.
-        onPagesChanged();
+        onPagesChanged(nullptr);
         refreshArea();
         filename_modified_by_user = false;
         loadExportHints();
     } else {
         preview.setDrawing({});
         _preview_drawing.reset();
-        onPagesChanged();
+        onPagesChanged(nullptr);
     }
 }
 

@@ -39,27 +39,29 @@ public:
     PageManager(SPDocument *document);
     ~PageManager();
 
+    void deactivate();
+
     static bool move_objects();
-    const std::vector<SPPage *> &getPages() const { return pages; }
+    const std::vector<SPPage *> &getPages() const { return _pages; }
     std::vector<SPPage *> getPages(const std::string &pages, bool inverse) const;
     std::vector<SPPage *> getPages(std::set<unsigned int> indexes, bool inverse = false) const;
 
     void addPage(SPPage *page);
     void removePage(Inkscape::XML::Node *child);
-    void reorderPage(Inkscape::XML::Node *child);
+    void reorderPages();
 
     // Returns None if no page selected
     SPPage *getSelected() const { return _selected_page; }
     SPPage *getPage(int index) const;
     SPPage *getPageAt(Geom::Point pos) const;
     SPPage *getFirstPage() const { return getPage(0); }
-    SPPage *getLastPage() const { return getPage(pages.size() - 1); }
+    SPPage *getLastPage() const { return getPage(_pages.size() - 1); }
     SPPage *getViewportPage() const;
     std::vector<SPPage *> getPagesFor(SPItem *item, bool contains) const;
     SPPage *getPageFor(SPItem *item, bool contains) const;
     Geom::OptRect getDesktopRect() const;
-    bool hasPages() const { return !pages.empty(); }
-    int getPageCount() const { return pages.size(); }
+    bool hasPages() const { return !_pages.empty(); }
+    int getPageCount() const { return _pages.size(); }
     int getPageIndex(const SPPage *page) const;
     int getSelectedPageIndex() const;
     Geom::Rect getSelectedPageRect() const;
@@ -69,13 +71,13 @@ public:
 
     void enablePages();
     void disablePages();
-    void pagesChanged();
+    void pagesChanged(SPPage *new_page);
     bool selectPage(SPPage *page);
     bool selectPage(SPItem *item, bool contains);
     bool selectPage(int index) { return selectPage(getPage(index)); }
     bool selectNextPage() { return selectPage(getSelectedPageIndex() + 1); }
     bool selectPrevPage() { return selectPage(getSelectedPageIndex() - 1); }
-    bool hasNextPage() const { return getSelectedPageIndex() + 1 < pages.size(); }
+    bool hasNextPage() const { return getSelectedPageIndex() + 1 < _pages.size(); }
     bool hasPrevPage() const { return getSelectedPageIndex() - 1 >= 0; }
 
     Colors::Color const &getDefaultBackgroundColor() const { return background_color; }
@@ -119,7 +121,7 @@ public:
     {
         return _page_modified_signal.connect(slot);
     }
-    sigc::connection connectPagesChanged(const sigc::slot<void ()> &slot)
+    sigc::connection connectPagesChanged(const sigc::slot<void (SPPage *)> &slot)
     {
         return _pages_changed_signal.connect(slot);
     }
@@ -146,13 +148,14 @@ protected:
 private:
     SPDocument *_document;
     SPPage *_selected_page = nullptr;
-    std::vector<SPPage *> pages;
+    std::vector<SPPage *> _pages;
 
     sigc::signal<void (SPPage *)> _page_selected_signal;
     sigc::signal<void (SPPage *)> _page_modified_signal;
-    sigc::signal<void ()> _pages_changed_signal;
+    sigc::signal<void (SPPage *)> _pages_changed_signal;
 
     sigc::connection _page_modified_connection;
+    sigc::scoped_connection _resources_changed;
 
     Colors::Color background_color;
     Colors::Color margin_color;

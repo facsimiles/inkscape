@@ -140,9 +140,9 @@ static SPStyleProp const props[] = {
     {SPAttr::INKSCAPE_COLOR, "inkscape:color"},
     {SPAttr::INKSCAPE_LOCKED, "inkscape:locked"},
     /* SPPage */
-    {SPAttr::PAGE_MARGIN, "margin"},
-    {SPAttr::PAGE_BLEED, "bleed"},
-    {SPAttr::PAGE_SIZE_NAME, "page-size"},
+    {SPAttr::PAGE_MARGIN, "inkscape:margin"},
+    {SPAttr::PAGE_BLEED, "inkscape:bleed"},
+    {SPAttr::PAGE_SIZE_NAME, "inkscape:page-size"},
     /* SPGrid */
     {SPAttr::ORIGINX, "originx"},
     {SPAttr::ORIGINY, "originy"},
