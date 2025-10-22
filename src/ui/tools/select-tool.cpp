@@ -215,15 +215,14 @@ bool SelectTool::item_handler(SPItem *local_item, CanvasEvent const &event)
 
                 // remember what modifiers were on before button press
                 button_press_state = event.modifiers;
-                bool remove_from = Modifier::get(Modifiers::Type::SELECT_REMOVE_FROM)->active(button_press_state);
+                bool in_groups = Modifier::get(Modifiers::Type::SELECT_IN_GROUPS)->active(button_press_state);
                 bool force_drag = Modifier::get(Modifiers::Type::SELECT_FORCE_DRAG)->active(button_press_state);
                 bool always_box = Modifier::get(Modifiers::Type::SELECT_ALWAYS_BOX)->active(button_press_state);
                 bool touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(button_press_state);
 
                 // if shift or ctrl was pressed, do not move objects;
                 // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
-                if (!(always_box || remove_from || touch_path)) {
-
+                if (!(always_box || in_groups || touch_path)) {
                     dragging = true;
                     moved = false;
 
