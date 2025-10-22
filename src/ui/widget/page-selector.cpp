@@ -57,6 +57,9 @@ PageSelector::PageSelector()
     UI::pack_start(*this, _prev_button, UI::PackOptions::expand_padding);
     UI::pack_start(*this, _selector, UI::PackOptions::expand_widget);
     UI::pack_start(*this, _next_button, UI::PackOptions::expand_padding);
+
+    show_all();
+    set_no_show_all();
 }
 
 PageSelector::~PageSelector()
