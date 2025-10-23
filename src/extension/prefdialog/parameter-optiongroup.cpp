@@ -261,7 +261,10 @@ Gtk::Widget *ParamOptionGroup::get_widget(sigc::signal<void ()> *changeSignal)
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, GUI_PARAM_WIDGETS_SPACING);
 
     auto const label = Gtk::make_managed<Gtk::Label>(_text, Gtk::Align::START);
-    UI::pack_start(*hbox, *label, false, false);
+    // to ensure application of alignment
+    // for some reason set_align is not enough
+    label->set_xalign(0);
+    UI::pack_start(*hbox, *label, true, false);
 
     if (_mode == COMBOBOX) {
         auto const combo = Gtk::make_managed<ComboWidget>(this, changeSignal);

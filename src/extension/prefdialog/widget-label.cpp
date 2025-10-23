@@ -109,7 +109,7 @@ Gtk::Widget *WidgetLabel::get_widget(sigc::signal<void ()> * /*changeSignal*/)
     label->set_width_chars(len > GUI_MAX_LINE_LENGTH ? GUI_MAX_LINE_LENGTH : len);
 
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
-    UI::pack_start(*hbox, *label, true, true);
+    UI::pack_start(*hbox, *label);
     return hbox;
 }
 

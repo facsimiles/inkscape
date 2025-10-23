@@ -149,6 +149,9 @@ ParamInt::get_widget(sigc::signal<void ()> *changeSignal)
         UI::pack_start(*hbox, *scale, true, true);
     } else if (_mode == DEFAULT) {
         auto const label = Gtk::make_managed<Gtk::Label>(_text, Gtk::Align::START);
+        // to ensure application of alignment
+        // for some reason set_align is not enough
+        label->set_xalign(0);
         UI::pack_start(*hbox, *label, true, true);
 
         auto const spin = Gtk::make_managed<Inkscape::UI::Widget::SpinButton>(fadjust, 1.0, 0);
