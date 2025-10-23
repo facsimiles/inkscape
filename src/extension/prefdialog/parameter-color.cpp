@@ -84,6 +84,9 @@ Gtk::Widget *ParamColor::get_widget(sigc::signal<void ()> *changeSignal)
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING);
     if (_mode == COLOR_BUTTON) {
         auto const label = Gtk::make_managed<Gtk::Label>(_text, Gtk::ALIGN_START);
+        // to ensure application of alignment
+        // for some reason set_align is not enough
+        label->set_xalign(0);
         label->set_visible(true);
         UI::pack_start(*hbox, *label, true, true);
 

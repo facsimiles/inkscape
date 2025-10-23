@@ -111,9 +111,8 @@ Gtk::Widget *WidgetLabel::get_widget(sigc::signal<void ()> * /*changeSignal*/)
     label->set_visible(true);
 
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
-    UI::pack_start(*hbox, *label, true, true);
+    UI::pack_start(*hbox, *label);
     hbox->set_visible(true);
-
     return hbox;
 }
 
