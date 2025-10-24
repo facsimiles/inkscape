@@ -140,16 +140,20 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
     }
 
     /** Change the layer selection to the item selection
-      * TODO: Should it only change if there's a single object?
+      * Only change if there's a single object
       */
     if (_document && _desktop) {
         if (auto item = singleItem()) {
+            // whether to change the layer with the selection
+            // defaults to true (see src/ui/tools/tool-base)
             if (_change_layer) {
                 auto layer = _desktop->layerManager().layerForObject(item);
                 if (layer && layer != _selection_context) {
                     _desktop->layerManager().setCurrentLayer(layer);
                 }
             }
+            // whether to change the page with the selection
+            // defaults to true (see src/ui/tools/tool-base)
             if (_change_page) {
                 // This could be more complex if we want to be smarter.
                 _document->getPageManager().selectPage(item, false);
