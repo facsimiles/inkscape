@@ -14,8 +14,10 @@
 #define INKSCAPE_UI_TOOLS_BOOLEANS_TOOL_H
 
 #include "ui/tools/tool-base.h"
+#include <vector>
 
 class SPDesktop;
+class SPItem;
 
 namespace Inkscape {
 class BooleanBuilder;
@@ -64,6 +66,8 @@ private:
 
     bool to_commit = false;
     std::optional<Geom::Point> last_cursor_position;
+
+    std::vector<SPItem*> _items_to_manage; // Stores the original items on tool activation.
 };
 
 } // namespace Tools
