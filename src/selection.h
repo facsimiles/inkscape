@@ -251,9 +251,23 @@ public:
     void setState(SelectionState const &state);
 
     /**
-     * Decide if the selection changing should change the layer and page selection too
+     * Get whether the layer changes with the current selection
+     */
+    bool getChangeLayer() { return _change_layer; }
+
+    /**
+     * Get whether the page changes with the current selection
+     */
+    bool getChangePage() { return _change_page; }
+
+    /**
+     * Set whether the selection changing should change the layer selection
      */
     void setChangeLayer(bool option) { _change_layer = option; }
+
+    /**
+     * Set whether the selection changing should change the page selection
+     */
     void setChangePage(bool option) { _change_page = option; }
 
 protected:

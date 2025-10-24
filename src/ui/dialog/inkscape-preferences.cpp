@@ -989,6 +989,7 @@ void InkscapePreferences::initPageTools()
     AddSelcueCheckbox(_page_node, "/tools/nodes", true);
     AddGradientCheckbox(_page_node, "/tools/nodes", true);
     AddLayerChangeCheckbox(_page_node, "/tools/nodes", false);
+    AddPageChangeCheckbox(_page_node, "/tools/nodes", false);
 
     _page_node.add_group_header( _("Path outline"));
     _t_node_pathoutline_color.init(_("Path outline color"), "/tools/nodes/highlight_color", "#ff0000ff");

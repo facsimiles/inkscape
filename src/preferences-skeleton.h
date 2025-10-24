@@ -124,7 +124,7 @@ static char const preferences_skeleton[] =
                        show_sample_in_list="1" use_svg2="1"
                   style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;" selcue="1"/>
 
-    <eventcontext id="nodes" selcue="1" gradientdrag="1"
+    <eventcontext id="nodes" selcue="1" gradientdrag="1" changelayer="0" changepage="0"
       pathflash_enabled="1" pathflash_unselected="0" pathflash_timeout="500" show_handles="1" show_outline="0"
       sculpting_profile="1" single_node_transform_handles="0" show_transform_handles="0" live_outline="1" live_objects="1" show_helperpath="0" edit_clipping_paths="0" edit_masks="0" />
     <eventcontext id="marker" selcue="1" gradientdrag="1" />

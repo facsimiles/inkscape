@@ -126,11 +126,13 @@ ToolBase::~ToolBase()
  */
 void ToolBase::set(Inkscape::Preferences::Entry const &value)
 {
+    // whether the layer and page should be changed with the selection
+    // defaults to true
     Glib::ustring entry_name = value.getEntryName();
     if (entry_name == "changelayer") {
-        _desktop->getSelection()->setChangeLayer(value.getBool(false));
+        _desktop->getSelection()->setChangeLayer(value.getBool(true));
     } else if (entry_name == "changepage") {
-        _desktop->getSelection()->setChangePage(value.getBool(false));
+        _desktop->getSelection()->setChangePage(value.getBool(true));
     }
 }
 
