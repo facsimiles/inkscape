@@ -130,10 +130,9 @@ private:
     WidgetGroup _widgets;
     Gtk::CellRendererPixbuf _image_renderer;
 
-    UI::Widget::RecolorArtManager* _recolorManager = nullptr;
     SPDesktop *_desktop = nullptr;
     sigc::scoped_connection _selection_changed_connection;
-    Gtk::Button *_recolorButtonTrigger = nullptr;
+    Gtk::MenuButton *_recolorButtonTrigger = nullptr;
 
     class MarkerColumns : public Gtk::TreeModel::ColumnRecord
     {

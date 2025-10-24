@@ -760,21 +760,9 @@ bool ColorWheelHSLuv::setColor(Color const &color,
 
 /* Multi-marker Color Wheel */
 
-/**
- * takes the color parameter and push it into the _values_vectors vector
- * them if emit is true it calls the color_changed() to emit signal changed then queue redraw the area
- */
-bool MultiMarkerWheel::setColor(Color const &color, bool /*overrideHue*/, bool emit)
+bool MultiMarkerWheel::setColor(Color const &, bool, bool)
 {
-    if (_values.set(color, true)) {
-        _values_vector.push_back(_values);
-        if (emit) {
-            color_changed();
-        } else {
-            queue_drawing_area_draw();
-        }
-        return true;
-    }
+    // Doesn't make sense to set the colour for a multi-colour wheel.
     return false;
 }
 

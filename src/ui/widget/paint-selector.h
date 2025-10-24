@@ -16,8 +16,9 @@
 #ifndef SEEN_SP_PAINT_SELECTOR_H
 #define SEEN_SP_PAINT_SELECTOR_H
 
+#include <gtkmm/menubutton.h>
+
 #include "fill-or-stroke.h"
-#include "ui/operation-blocker.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/swatch-selector.h"
 #include "selection.h"
@@ -102,13 +103,9 @@ class PaintSelector : public Gtk::Box {
     SwatchSelector   *_selector_swatch = nullptr;
     PatternEditor* _selector_pattern = nullptr;
     
-    UI::Widget::RecolorArtManager *_recolorManager = nullptr;
-    std::array<std::unique_ptr<Gtk::Button>, 5> _recolorButtonTrigger;
-    OperationBlocker _blocker;
+    std::array<std::unique_ptr<Gtk::MenuButton>, 5> _recolorButtonTrigger;
     SPDesktop *_desktop = nullptr;
     void onSelectionChanged(Inkscape::Selection *selection);
-    bool checkSelection(Inkscape::Selection *selection);
-    void hideAllExcept(Gtk::Button *recolorButtonTrigger = nullptr);
     Gtk::Label *_label;
     GtkWidget *_patternmenu = nullptr;
     bool _patternmenu_update = false;

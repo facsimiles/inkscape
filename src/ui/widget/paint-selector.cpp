@@ -24,6 +24,7 @@
 #include <gtkmm/combobox.h>
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
+#include <gtkmm/menubutton.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
@@ -128,7 +129,7 @@ PaintSelector::PaintSelector(FillOrStroke kind, std::shared_ptr<Colors::ColorSet
     _mode = static_cast<PaintSelector::Mode>(-1); // huh?  do you mean 0xff?  --  I think this means "not in the enum"
 
     for (int i = 0; i < 5; i++) {
-        _recolorButtonTrigger[i] = std::make_unique<Gtk::Button>();
+        _recolorButtonTrigger[i] = std::make_unique<Gtk::MenuButton>();
     }
 
     /* Paint style button box */
@@ -209,25 +210,13 @@ PaintSelector::PaintSelector(FillOrStroke kind, std::shared_ptr<Colors::ColorSet
         b->set_halign(Gtk::Align::CENTER);
         b->set_valign(Gtk::Align::START);
         b->set_margin_top(8);
+        b->set_direction(Gtk::ArrowType::NONE);
         b->set_visible(false);
 
-        b->signal_clicked().connect([b = b.get(), this] {
-            auto guard = _blocker.block();
-            if (!_recolorManager) {
-                // Lazy-load the recolour widget and popover.
-                _recolorManager = &RecolorArtManager::get();
-                if (_recolorManager->getPopOver().get_parent()) {
-                    _recolorManager->getPopOver().unparent();
-                }
-                _recolorManager->getPopOver().set_parent(*b);
-                _recolorManager->setDesktop(_desktop);
-            } else if (_recolorManager->getPopOver().get_parent() != b) {
-                // Reparent the popover to this button if necessary.
-                _recolorManager->getPopOver().unparent();
-                _recolorManager->getPopOver().set_parent(*b);
-            }
-            _recolorManager->getPopOver().popup();
-            _recolorManager->performUpdate();
+        b->set_create_popup_func([b = b.get(), this] {
+            auto &mgr = RecolorArtManager::get();
+            mgr.reparentPopoverTo(*b);
+            mgr.widget.showForSelection(_desktop);
         });
     }
 
@@ -239,10 +228,8 @@ void PaintSelector::setDesktop(SPDesktop *desktop)
     if (_desktop == desktop) {
         return;
     }
-    
-    if (_recolorManager) {
-        _recolorManager->getPopOver().popdown();
-    }
+
+    RecolorArtManager::get().popover.popdown();
     
     if (_selection_changed_connection) {
         _selection_changed_connection.disconnect();
@@ -255,10 +242,6 @@ void PaintSelector::setDesktop(SPDesktop *desktop)
             _selection_changed_connection = 
                 selection->connectChanged(sigc::mem_fun(*this, &PaintSelector::onSelectionChanged));
         }
-    }
-    
-    if (_recolorManager) {
-        _recolorManager->setDesktop(_desktop);
     }
 }
 
@@ -299,9 +282,6 @@ void PaintSelector::fillrule_toggled(FillRuleRadioButton *tb)
 
 void PaintSelector::setMode(Mode mode)
 {
-    if (_recolorManager && _recolorManager->getPopOver().get_visible() && checkSelection(_desktop->getSelection())) {
-        return;
-    }
     set_mode_ex(mode, false);
 }
 
@@ -1217,50 +1197,27 @@ PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrS
 
 void PaintSelector::onSelectionChanged(Inkscape::Selection *selection)
 {
-    if (_blocker.pending()) {
-        return;
-    }
+    bool show_recolor = (_mode == MODE_GRADIENT_MESH && RecolorArtManager::checkMeshObject(selection)) ||
+                        RecolorArtManager::checkSelection(selection);
 
-    if (checkSelection(selection)) {
+    int btn_index = -1;
+
+    if (show_recolor) {
         if (_mode == MODE_MULTIPLE || _mode == MODE_UNSET || _mode == MODE_GRADIENT_MESH) {
-            hideAllExcept(_recolorButtonTrigger[0].get());
+            btn_index = 0;
         } else if (_mode == MODE_SOLID_COLOR) {
-            hideAllExcept(_recolorButtonTrigger[1].get());
+            btn_index = 1;
         } else if (_mode == MODE_GRADIENT_RADIAL || _mode == MODE_GRADIENT_LINEAR) {
-            hideAllExcept(_recolorButtonTrigger[2].get());
+            btn_index = 2;
         } else if (_mode == MODE_PATTERN) {
-            hideAllExcept(_recolorButtonTrigger[3].get());
+            btn_index = 3;
         } else if (_mode == MODE_SWATCH) {
-            hideAllExcept(_recolorButtonTrigger[4].get());
-        } else {
-            hideAllExcept();
+            btn_index = 4;
         }
-    } else {
-        hideAllExcept();
     }
 
-    if (_recolorManager && _recolorManager->getPopOver().get_visible() && checkSelection(selection)) {
-        auto guard = _blocker.block();
-        _recolorManager->performUpdate();
-    }
-}
-
-bool PaintSelector::checkSelection(Inkscape::Selection *selection)
-{
-    return (_mode == MODE_GRADIENT_MESH && (selection->size() > 1 || RecolorArtManager::checkMeshObject(selection))) ||
-           RecolorArtManager::checkSelection(selection);
-}
-
-void PaintSelector::hideAllExcept(Gtk::Button *recolorButtonTrigger)
-{
-    if (recolorButtonTrigger) {
-        recolorButtonTrigger->show();
-    }
-
-    for (auto const &b : _recolorButtonTrigger) {
-        if (b.get() != recolorButtonTrigger) {
-            b->hide();
-        }
+    for (int i = 0; i < _recolorButtonTrigger.size(); i++) {
+        _recolorButtonTrigger[i]->set_visible(i == btn_index);
     }
 }
 

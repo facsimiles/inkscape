@@ -8,8 +8,9 @@
 
 #include "recolor-art-manager.h"
 
+#include <gtkmm/menubutton.h>
+
 #include "object/sp-gradient.h"
-#include "object/sp-mask.h"
 #include "object/sp-pattern.h"
 #include "object/sp-use.h"
 #include "style.h"
@@ -19,51 +20,54 @@ namespace {
 
 bool has_colors_pattern(SPItem const *item)
 {
-    std::set<std::string> colors;
-    SPPattern *patternstroke = nullptr;
-    SPPattern *patternfill = nullptr;
-    SPPattern *pattern = nullptr;
-    if (item && item->style) {
-        patternstroke = cast<SPPattern>(item->style->getStrokePaintServer());
-        patternfill = cast<SPPattern>(item->style->getFillPaintServer());
+    if (!item || !item->style) {
+        return false;
     }
 
-    if (patternstroke)
-        pattern = patternstroke;
-    if (patternfill)
-        pattern = patternfill;
-    if (!pattern)
-        return false;
-    SPPattern *root = pattern->rootPattern();
-    for (auto &child : root->children) {
-        if (auto group = cast<SPGroup>(&child)) {
-            for (auto &child : group->children) {
-                if (auto c = dynamic_cast<SPItem *>(&child)) {
-                    if (c->style->fill.isColor()) {
-                        std::string rgba = c->style->fill.getColor().toString(true);
-                        colors.insert(rgba);
-                    }
-                    if (c->style->stroke.isColor()) {
-                        std::string rgba = c->style->stroke.getColor().toString(true);
-                        colors.insert(rgba);
+    std::optional<Colors::Color> first_col;
+
+    // Return true when a second colour is found.
+    auto check_color = [&] (SPIPaint const &paint) {
+        if (!paint.isColor()) {
+            return false;
+        }
+
+        if (!first_col) {
+            first_col = paint.getColor();
+            return false;
+        } else {
+            return paint.getColor() != first_col;
+        }
+    };
+
+    // Search a pattern for colours, returning true when a second colour is found.
+    auto search_pattern = [&] (SPPaintServer const *ps) {
+        auto pat = cast<SPPattern>(ps);
+        if (!pat) {
+            return false;
+        }
+
+        for (auto const &child : pat->rootPattern()->children) {
+            if (auto group = cast<SPGroup>(&child)) {
+                for (auto const &child : group->children) {
+                    if (auto c = cast<SPItem>(&child)) {
+                        if (check_color(c->style->fill) || check_color(c->style->stroke)) {
+                            return true;
+                        }
                     }
                 }
             }
-        }
-        auto item = cast<SPItem>(&child);
-        if (!item || !item->style)
-            continue;
 
-        if (item->style->fill.isColor()) {
-            std::string rgba = item->style->fill.getColor().toString(true);
-            colors.insert(rgba);
+            if (check_color(child.style->fill) || check_color(child.style->stroke)) {
+                return true;
+            }
         }
-        if (item->style->stroke.isColor()) {
-            std::string rgba = item->style->stroke.getColor().toString(true);
-            colors.insert(rgba);
-        }
-    }
-    return colors.size() > 1;
+
+        return false;
+    };
+
+    return search_pattern(item->style->getFillPaintServer()) ||
+           search_pattern(item->style->getStrokePaintServer());
 }
 
 } // namespace
@@ -74,56 +78,63 @@ RecolorArtManager &RecolorArtManager::get()
     return instance;
 }
 
+void RecolorArtManager::reparentPopoverTo(Gtk::MenuButton &button)
+{
+    if (popover.get_parent() == &button) {
+        return;
+    }
+
+    if (auto oldbutton = dynamic_cast<Gtk::MenuButton *>(popover.get_parent())) {
+        oldbutton->unset_popover();
+    }
+
+    button.set_popover(popover);
+
+    // The previous call causes GTK to reset the popover direction to down. Override it to left.
+    popover.set_position(Gtk::PositionType::LEFT);
+}
+
 RecolorArtManager::RecolorArtManager()
 {
-    _recolorPopOver.set_autohide(false);
-    _recolorPopOver.set_position(Gtk::PositionType::LEFT);
-    _recolorPopOver.set_child(_recolor_widget);
+    popover.set_autohide(false);
+    popover.set_child(widget);
 }
 
 bool RecolorArtManager::checkSelection(Inkscape::Selection *selection)
 {
-    auto group = cast<SPGroup>(selection->single());
-    auto use_group = cast<SPUse>(selection->single());
-    auto item = cast<SPItem>(selection->single());
-    bool pattern_colors = false;
-    SPMask *mask = nullptr;
-    if (item) {
-        mask = cast<SPMask>(item->getMaskObject());
-        pattern_colors = has_colors_pattern(item);
+    if (selection->size() > 1) {
+        return true;
     }
-    return selection->size() > 1 || group || use_group || mask || pattern_colors;
+
+    auto item = selection->singleItem();
+    if (!item) {
+        return false;
+    }
+
+    return is<SPGroup>(item) ||
+           is<SPUse>(item) ||
+           item->getMaskObject() ||
+           has_colors_pattern(item);
 }
 
 bool RecolorArtManager::checkMeshObject(Inkscape::Selection *selection)
 {
-    if (selection->items().empty()) {
+    if (selection->size() > 1) {
+        return true;
+    }
+
+    auto item = selection->singleItem();
+    if (!item) {
         return false;
     }
-    auto fill_gradient = cast<SPPaintServer>(selection->single()->style->getFillPaintServer());
-    auto stroke_gradient = cast<SPPaintServer>(selection->single()->style->getStrokePaintServer());
-    SPGradient *gradient = fill_gradient ? cast<SPGradient>(fill_gradient) : cast<SPGradient>(stroke_gradient);
-    return gradient && gradient->hasPatches();
-}
 
-void RecolorArtManager::setDesktop(SPDesktop *desktop)
-{
-    _recolor_widget.setDesktop(desktop);
-}
+    auto is_mesh = [] (SPPaintServer *ps) {
+        auto grad = cast<SPGradient>(ps);
+        return grad && grad->hasPatches();
+    };
 
-void RecolorArtManager::performUpdate()
-{
-    _recolor_widget.performUpdate();
-}
-
-void RecolorArtManager::performMarkerUpdate(SPMarker *marker)
-{
-    _recolor_widget.performMarkerUpdate(marker);
-}
-
-Gtk::Popover &RecolorArtManager::getPopOver()
-{
-    return _recolorPopOver;
+    return is_mesh(item->style->getFillPaintServer()) ||
+           is_mesh(item->style->getStrokePaintServer());
 }
 
 } // namespace Inkscape::UI::Widget

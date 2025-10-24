@@ -26,8 +26,6 @@
 #include "ui/operation-blocker.h"
 #include "ui/widget/ink-color-wheel.h"
 
-class SPMarker;
-
 namespace Inkscape::Colors {
 class Color;
 class ColorSet;
@@ -67,24 +65,26 @@ class RecolorArt : public Gtk::Box
 public:
     RecolorArt();
 
-    void performUpdate();
-    bool isInPreviewMode() const { return _is_preview; }
-    void setDesktop(SPDesktop *desktop);
+    void showForSelection(SPDesktop *desktop);
+    void showForObject(SPDesktop *desktop, SPObject *object);
+
     void onResetClicked();
-    void performMarkerUpdate(SPMarker *marker);
 
 private:
+    RecolorArt(Glib::RefPtr<Gtk::Builder> const &builder);
+
     SPDesktop *_desktop = nullptr;
-    Glib::RefPtr<Gtk::Builder> _builder;
+    sigc::scoped_connection _sel_changed_conn;
+    sigc::scoped_connection _desktop_destroyed_conn;
+    Gtk::Box &_color_picker_container;
     Gtk::Notebook &_notebook;
     Gtk::Box &_color_wheel_page;
     std::shared_ptr<Colors::ColorSet> _solid_colors = std::make_shared<Colors::ColorSet>();
-    sigc::connection _solid_color_changed;
     Gtk::Box &_color_list;
     Gtk::Button &_reset;
     Gtk::CheckButton &_live_preview;
+    Gtk::ListView &_list_view;
     Inkscape::UI::Widget::ColorNotebook *_color_picker_wdgt = nullptr;
-    Gtk::ListView *_list_view = nullptr;
     uint32_t _current_color_id;
     bool _is_preview = true;
 
@@ -98,6 +98,9 @@ private:
     
     OperationBlocker _blocker;
     OperationBlocker _selection_blocker;
+
+    void setDesktop(SPDesktop *desktop);
+    void updateFromSelection();
 
     void generateVisualList();
     void layoutColorPicker(std::shared_ptr<Colors::ColorSet> updated_color = nullptr);

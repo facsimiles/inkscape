@@ -22,8 +22,6 @@
 #include "seltrans.h"
 #include "selection.h" 
 #include "ui/tools/select-tool.h"
-#include "object/sp-marker.h"
-
 
 namespace Inkscape::UI::Widget {
 
@@ -38,39 +36,25 @@ namespace Inkscape::UI::Widget {
  */
 
 RecolorArt::RecolorArt()
-    : _builder{create_builder("widget-recolor.ui")}
-    , _notebook(*_builder->get_widget<Gtk::Notebook>("list-wheel-box"))
-    , _color_wheel_page(*_builder->get_widget<Gtk::Box>("color-wheel-page"))
+    : RecolorArt{create_builder("widget-recolor.ui")}
+{}
+
+RecolorArt::RecolorArt(Glib::RefPtr<Gtk::Builder> const &builder)
+    : _color_picker_container{get_widget<Gtk::Box>(builder, "color-picker")}
+    , _notebook(get_widget<Gtk::Notebook>(builder, "list-wheel-box"))
+    , _color_wheel_page(get_widget<Gtk::Box>(builder, "color-wheel-page"))
     , _color_wheel(Gtk::make_managed<MultiMarkerColorPlate>(Colors::ColorSet{}))
-    , _color_list(*_builder->get_widget<Gtk::Box>("colors-list"))
-    , _reset(*_builder->get_widget<Gtk::Button>("reset"))
-    , _live_preview(*_builder->get_widget<Gtk::CheckButton>("liveP"))
+    , _color_list(get_widget<Gtk::Box>(builder, "colors-list"))
+    , _reset(get_widget<Gtk::Button>(builder, "reset"))
+    , _live_preview(get_widget<Gtk::CheckButton>(builder, "liveP"))
+    , _list_view{get_widget<Gtk::ListView>(builder, "recolor-art-list")}
 {
     set_name("RecolorArt");
-    append(get_widget<Gtk::Box>(_builder, "recolor-art"));
+    append(get_widget<Gtk::Box>(builder, "recolor-art"));
     _solid_colors->set(Color(0x000000ff));
-    // when recolor widget is closed it resets opacity to mitigate the effect of getSelection function
-    // and reshow selection boxes again
-    signal_unmap().connect([&]() {
-        if (!_is_preview) {
-            _manager.convertToRecoloredColors();
-            DocumentUndo::done(_desktop->getDocument(), _("changed Item color"),
-                        INKSCAPE_ICON("object-recolor-art"));
-        }
-        if (_desktop) {
-            _desktop->setHideSelectionBoxes(false);
-        }
-    });
-    // hide selection boxes after widget gets mapped (this is why it connects to signal idle to activate after finishing
-    // mapping
-    signal_map().connect([&]() {
-        Glib::signal_idle().connect([this]() {
-            if (_desktop) {
-                _desktop->setHideSelectionBoxes(true);
-            }
-            return false;
-        });
-    });
+    // when recolor widget is closed it detaches from desktop, ending session
+    signal_unmap().connect([this] { setDesktop(nullptr); });
+
     _color_wheel->connect_color_changed(static_cast<sigc::slot<void()>>([this]() {
         if(_blocker.pending()) {
             return; // to stop recursive calling to signal if changed from the color list page
@@ -119,7 +103,6 @@ RecolorArt::RecolorArt()
     _reset.signal_clicked().connect(sigc::mem_fun(*this, &RecolorArt::onResetClicked));
 
     // setting up list view for the color list
-    _list_view = _builder->get_widget<Gtk::ListView>("recolor-art-list");
     _color_model = Gio::ListStore<ColorItem>::create();
     _selection_model = Gtk::SingleSelection::create(_color_model);
     _color_factory = Gtk::SignalListItemFactory::create();
@@ -219,15 +202,15 @@ RecolorArt::RecolorArt()
         }
     });
 
-    _list_view->set_model(_selection_model);
-    _list_view->set_factory(_color_factory);
+    _list_view.set_model(_selection_model);
+    _list_view.set_factory(_color_factory);
 
-    auto lm = _list_view->get_layout_manager();
+    auto lm = _list_view.get_layout_manager();
     if (auto grid_layout = std::dynamic_pointer_cast<Gtk::GridLayout>(lm)) {
         grid_layout->set_row_spacing(0);
     }
-    _list_view->set_hexpand(false);
-    _list_view->set_vexpand(false);
+    _list_view.set_hexpand(false);
+    _list_view.set_vexpand(false);
 
     _selection_model->signal_selection_changed().connect([this](guint pos, guint n_items) {
         int index = _selection_model->get_selected();
@@ -249,12 +232,33 @@ RecolorArt::RecolorArt()
 
 void RecolorArt::setDesktop(SPDesktop *desktop)
 {
-    if (_desktop != desktop) {
-        _desktop = desktop;
-        _color_wheel->toggleHueLock(false);
-        _color_wheel->setLightness(100.0);
-        _color_wheel->setSaturation(100.0);
+    if (_desktop == desktop) {
+        return;
     }
+
+    if (_desktop) {
+        _sel_changed_conn.disconnect();
+        _desktop_destroyed_conn.disconnect();
+
+        _desktop->setHideSelectionBoxes(false);
+
+        if (!_is_preview) {
+            _manager.convertToRecoloredColors();
+            DocumentUndo::done(_desktop->getDocument(), _("Change item color"), INKSCAPE_ICON("object-recolor-art"));
+        }
+    }
+
+    _desktop = desktop;
+
+    if (_desktop) {
+        _desktop->setHideSelectionBoxes(true);
+
+        _desktop_destroyed_conn = _desktop->connectDestroy([this] (auto) {
+            setDesktop(nullptr);
+        });
+    }
+
+    set_sensitive(_desktop);
 }
 
 /*
@@ -287,15 +291,10 @@ void RecolorArt::layoutColorPicker(std::shared_ptr<Colors::ColorSet> updated_col
 
     _solid_colors->signal_changed.connect([this]() { onColorPickerChanged(); });
 
-    auto container = _builder->get_widget<Gtk::Box>("color-picker");
-    if (container) {
-        for (auto child : container->get_children()) {
-            container->remove(*child);
-        }
-        container->append(*_color_picker_wdgt);
-    } else {
-        g_warning("color picker not found");
+    for (auto child : _color_picker_container.get_children()) {
+        _color_picker_container.remove(*child);
     }
+    _color_picker_container.append(*_color_picker_wdgt);
 }
 
 /*
@@ -561,6 +560,18 @@ void RecolorArt::onLivePreviewToggled()
     }
 }
 
+void RecolorArt::showForSelection(SPDesktop *desktop)
+{
+    assert(desktop);
+
+    setDesktop(desktop);
+    _sel_changed_conn = _desktop->getSelection()->connectChanged([this] (auto) {
+        updateFromSelection();
+    });
+
+    updateFromSelection();
+}
+
 /*
  * main function that :
  * 1- clears old data
@@ -569,13 +580,9 @@ void RecolorArt::onLivePreviewToggled()
  * 4- call collect colors func
  * 5- put the generated list in the UI
  */
-void RecolorArt::performUpdate()
+void RecolorArt::updateFromSelection()
 {
     if (_selection_blocker.pending()) {
-        return;
-    }
-    if (!_desktop) {
-        g_warning("Desktop is NULL in Performupdate in recolor widget");
         return;
     }
 
@@ -600,15 +607,12 @@ void RecolorArt::performUpdate()
     }
 }
 
-void RecolorArt::performMarkerUpdate(SPMarker *marker)
+void RecolorArt::showForObject(SPDesktop *desktop, SPObject *object)
 {
-    if (!marker) {
-        return;
-    }
-    if (!_desktop) {
-        g_warning("Desktop is NULL in Performupdate in recolor widget");
-        return;
-    }
+    assert(desktop);
+    assert(object);
+
+    setDesktop(desktop);
 
     _manager.clearData();
 
@@ -616,7 +620,7 @@ void RecolorArt::performMarkerUpdate(SPMarker *marker)
     _color_wheel->setLightness(100.0);
     _color_wheel->setSaturation(100.0);
 
-    _manager = collect_colours({marker});
+    _manager = collect_colours({object});
     if (!_manager.isColorsEmpty()) {
         generateVisualList();
         auto first_button_id = _manager.getFirstKey();

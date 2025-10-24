@@ -14,6 +14,8 @@
 #include "ui/widget/recolor-art.h"
 #include "selection.h"
 
+namespace Gtk { class MenuButton; }
+
 namespace Inkscape::UI::Widget {
 
 class RecolorArtManager
@@ -21,20 +23,16 @@ class RecolorArtManager
 public:
     static RecolorArtManager &get();
 
-    Gtk::Popover &getPopOver();
+    RecolorArt widget;
+    Gtk::Popover popover;
+
+    void reparentPopoverTo(Gtk::MenuButton &button);
 
     static bool checkSelection(Inkscape::Selection *selection);
     static bool checkMeshObject(Inkscape::Selection *selection);
 
-    void setDesktop(SPDesktop *desktop);
-    void performUpdate();
-    void performMarkerUpdate(SPMarker *marker);
-
 private:
     RecolorArtManager();
-
-    RecolorArt _recolor_widget;
-    Gtk::Popover _recolorPopOver;
 };
 
 } // namespace Inkscape::UI::Widget

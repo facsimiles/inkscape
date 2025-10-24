@@ -159,7 +159,7 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _orient_angle(get_widget<Gtk::ToggleButton>(_builder, "orient-angle")),
     _orient_flip_horz(get_widget<Gtk::Button>(_builder, "btn-horz-flip")),
     _edit_marker(get_widget<Gtk::Button>(_builder, "edit-marker")),
-    _recolorButtonTrigger(Gtk::make_managed<Gtk::Button>())
+    _recolorButtonTrigger(Gtk::make_managed<Gtk::MenuButton>())
 {
     set_name("MarkerComboBox");
 
@@ -353,28 +353,15 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _recolorButtonTrigger->set_halign(Gtk::Align::FILL);
     _recolorButtonTrigger->set_valign(Gtk::Align::START);
     _recolorButtonTrigger->set_margin_top(8);
-
+    _recolorButtonTrigger->set_direction(Gtk::ArrowType::NONE);
+    _recolorButtonTrigger->set_visible(false);
     _grid.add_full_row(_recolorButtonTrigger);
-    _recolorButtonTrigger->signal_clicked().connect([this] {
-        if (!_recolorManager) {
-            // Lazy-load the recolour widget and popover.
-            _recolorManager = &RecolorArtManager::get();
-            if (_recolorManager->getPopOver().get_parent()) {
-                _recolorManager->getPopOver().unparent();
-            }
-            _recolorManager->getPopOver().set_parent(*_recolorButtonTrigger);
-            _recolorManager->setDesktop(_desktop);
 
-        } else if (_recolorManager->getPopOver().get_parent() != _recolorButtonTrigger) {
-            // Reparent the popover to this button if necessary.
-            _recolorManager->getPopOver().unparent();
-            _recolorManager->getPopOver().set_parent(*_recolorButtonTrigger);
-        }
-        _recolorManager->getPopOver().popup();
-        _recolorManager->performMarkerUpdate(get_current());
+    _recolorButtonTrigger->set_create_popup_func([this] {
+        auto &mgr = RecolorArtManager::get();
+        mgr.reparentPopoverTo(*_recolorButtonTrigger);
+        mgr.widget.showForObject(_desktop, get_current());
     });
-
-    _recolorButtonTrigger->hide();
 }
 
 void MarkerComboBox::update_widgets_from_marker(SPMarker* marker) {
@@ -516,16 +503,11 @@ void MarkerComboBox::setDesktop(SPDesktop *desktop)
         return;
     }
 
-    if (_recolorManager) {
-        _recolorManager->getPopOver().popdown();
-    }
+    RecolorArtManager::get().popover.popdown();
 
     _desktop = desktop;
-
-    if (_recolorManager) {
-        _recolorManager->setDesktop(_desktop);
-    }
 }
+
 void MarkerComboBox::setDocument(SPDocument *document)
 {
     if (_document != document) {
