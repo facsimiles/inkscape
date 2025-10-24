@@ -51,6 +51,7 @@
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
+#include "ui/widget/events/canvas-event.h"
 #include "ui/widget/events/debug.h"
 
 // globals for temporary switching to selector by space
@@ -935,26 +936,26 @@ bool ToolBase::are_buttons_1_and_3_on(CanvasEvent const &event)
  */
 bool ToolBase::item_handler(SPItem *item, CanvasEvent const &event)
 {
-    if (event.type() != EventType::BUTTON_PRESS) {
-        return false;
-    }
+    bool ret = false;
 
-    auto &button = static_cast<ButtonPressEvent const &>(event);
-
-    if (!are_buttons_1_and_3_on(event) && button.button == 3 &&
-        !(button.modifiers & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
-        menu_popup(event);
-        return true;
-    } else if (button.button == 1 && shape_editor && shape_editor->has_knotholder()) {
-        // This allows users to select an arbitary position in a pattern to edit on canvas.
-        auto &knotholder = shape_editor->knotholder;
-        auto point = button.pos;
-        if (_desktop->getItemAtPoint(point, true) == knotholder->getItem()) {
-            return knotholder->set_item_clickpos(_desktop->w2d(point) * _desktop->dt2doc());
-        }
-    }
-
-    return false;
+    inspect_event(event,
+        [&] (ButtonPressEvent const &event) {
+            if (!are_buttons_1_and_3_on(event) && event.button == 3 &&
+                !(event.modifiers & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
+                menu_popup(event);
+                ret = true;
+            } else if (event.button == 1 && shape_editor && shape_editor->has_knotholder()) {
+                // This allows users to select an arbitary position in a pattern to edit on canvas.
+                auto &knotholder = shape_editor->knotholder;
+                auto point = event.pos;
+                if (_desktop->getItemAtPoint(point, true) == knotholder->getItem()) {
+                    ret = knotholder->set_item_clickpos(_desktop->w2d(point) * _desktop->dt2doc());
+                }
+            }
+        },
+        [&] (CanvasEvent const &event) {}
+    );
+    return ret;
 }
 
 /**
