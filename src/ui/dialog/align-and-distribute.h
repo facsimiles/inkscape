@@ -16,90 +16,128 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INKSCAPE_UI_WIDGET_ALIGN_AND_DISTRIBUTE_H
-#define INKSCAPE_UI_WIDGET_ALIGN_AND_DISTRIBUTE_H
+#ifndef INKSCAPE_UI_DIALOG_ALIGN_AND_DISTRIBUTE_H
+#define INKSCAPE_UI_DIALOG_ALIGN_AND_DISTRIBUTE_H
+
+#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
+#include <gtkmm/button.h>
+#include <gtkmm/combobox.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/spinbutton.h>
+#include <gtkmm/togglebutton.h>
+#include <gtkmm/eventcontroller.h>
+#include <gtkmm/eventcontrollermotion.h>
 
 #include <set>
+#include <vector>
+#include <map>
+#include <functional>
+#include <sigc++/connection.h>
 
+#include "2geom/affine.h"
 #include "preferences.h"
-
-namespace Gtk {
-class Builder;
-class Button;
-class ComboBox;
-class Frame;
-class SpinButton;
-class ToggleButton;
-} // namespace Gtk
+#include "ui/tools/tool-base.h"
 
 class SPDesktop;
+class SPObject;
 
-namespace Inkscape {
-namespace UI {
+namespace Inkscape::UI::Dialog {
 
-namespace Tools {
-class ToolBase;
-}
-
-namespace Dialog {
 class DialogBase;
 
 class AlignAndDistribute : public Gtk::Box
 {
 public:
-    AlignAndDistribute(Inkscape::UI::Dialog::DialogBase* dlg);
-    ~AlignAndDistribute() override = default;
+    AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg);
+    ~AlignAndDistribute();
 
     void desktop_changed(SPDesktop* desktop);
-    void tool_changed(SPDesktop* desktop); // Need to show different widgets for node vs. other tools.
-    void tool_changed_callback(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* tool);
 
 private:
-
-    // ********* Widgets ********** //
-    Glib::RefPtr<Gtk::Builder> builder;
-
-    Gtk::Box &align_and_distribute_box;
-    Gtk::Box &align_and_distribute_object;  // Hidden when node tool active.
-    Gtk::Frame &remove_overlap_frame;       // Hidden when node tool active.
-    Gtk::Box &align_and_distribute_node;    // Visible when node tool active.
-
-    // Align
-    Gtk::ToggleButton &align_move_as_group;
-    Gtk::ComboBox     &align_relative_object;
-    Gtk::ComboBox     &align_relative_node;
-
-    // Remove overlap
-    Gtk::Button       &remove_overlap_button;
-    Gtk::SpinButton   &remove_overlap_hgap;
-    Gtk::SpinButton   &remove_overlap_vgap;
-
-    // Valid relative alignment entries for single selection.
-    std::set<Glib::ustring> single_selection_relative_categories = {"drawing", "page"};
-    Glib::ustring single_selection_align_to = "page";
-    Glib::ustring multi_selection_align_to;
-    bool single_item = false;
-
-    // ********* Signal handlers ********** //
+    void tool_changed(SPDesktop* desktop);
+    void tool_changed_callback(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* tool);
 
     void on_align_as_group_clicked();
     void on_align_relative_object_changed();
     void on_align_relative_node_changed();
-
-    void on_align_clicked         (std::string const &align_to);
+    void on_align_clicked(std::string const &align_to);
     void on_remove_overlap_clicked();
-    void on_align_node_clicked    (std::string const &align_to);
+    void on_align_node_clicked(std::string const &direction);
 
+    // Button handling
+    void on_button_clicked(std::string const &action);
+    void execute_action(const std::string& action);
+    void execute_distribute_action(const std::string& action);
+    void execute_rearrange_action(const std::string& action);
+    
+    // Hover preview system
+    void setup_hover_preview_for_button(const char* button_id, const char* action_name,
+                                       std::function<void(const std::string&)> preview_func);
+    
+    // Preview methods
+    bool start_preview_timeout();
+    void start_preview();
+    void end_preview();
+    void confirm_preview();
+    void store_original_transforms();
+    void restore_original_transforms();
+    
+    // Preview implementations
+    void preview_align(const std::string& action);
+    void preview_distribute(const std::string& action);
+    void preview_remove_overlap();
+    void preview_rearrange(const std::string& action);
+
+    // UI
+    Glib::RefPtr<Gtk::Builder> builder;
+    Gtk::Box &align_and_distribute_box;
+    Gtk::Box &align_and_distribute_object;
+    Gtk::Frame &remove_overlap_frame;
+    Gtk::Box &align_and_distribute_node;
+
+    // Object align
+    Gtk::ComboBox &align_relative_object;
+    Gtk::ToggleButton &align_move_as_group;
+
+    // Remove overlap
+    Gtk::Button &remove_overlap_button;
+    Gtk::SpinButton &remove_overlap_hgap;
+    Gtk::SpinButton &remove_overlap_vgap;
+
+    // Node
+    Gtk::ComboBox &align_relative_node;
+
+    // State
     sigc::connection tool_connection;
-    sigc::scoped_connection sel_changed;
-    Inkscape::PrefObserver _icon_sizes_changed;
+    sigc::connection sel_changed;
+    std::unique_ptr<Inkscape::Preferences::PreferencesObserver> _icon_sizes_changed;
+    
+    bool single_item = false;
+    std::string single_selection_align_to = "first";
+    std::string multi_selection_align_to = "selection";
+    
+    std::set<Glib::ustring> single_selection_relative_categories = {
+        "first", "last", "biggest", "smallest"
+    };
+    
+    // Preview state
+    bool _preview_active = false;
+    std::string _preview_action;
+    std::function<void(const std::string&)> _preview_func;
+    sigc::connection _preview_timeout_connection;
+    
+    // Store original transforms for preview
+    std::vector<SPObject*> _preview_objects;
+    std::vector<Geom::Affine> _original_transforms;
+    
+    // Motion controllers for hover detection
+    std::map<std::string, Glib::RefPtr<Gtk::EventControllerMotion>> _motion_controllers;
 };
 
-} // namespace Dialog
-} // namespace UI
-} // namespace Inkscape
+} // namespace Inkscape::UI::Dialog
 
-#endif // INKSCAPE_UI_WIDGET_ALIGN_AND_DISTRIBUTE_H
+#endif // INKSCAPE_UI_DIALOG_ALIGN_AND_DISTRIBUTE_H
 
 /*
   Local Variables:
