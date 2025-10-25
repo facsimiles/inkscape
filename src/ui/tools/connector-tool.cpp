@@ -1062,6 +1062,11 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
     g_assert( is<SPPath>(item) );
 
     auto curve = cast<SPPath>(item)->curveForEdit();
+
+    if (!curve) {
+        return;
+    }
+
     Geom::Affine i2dt = item->i2dt_affine();
 
     if (this->active_conn.get() == item) {
@@ -1181,12 +1186,13 @@ static bool cc_item_is_shape(SPItem *item)
 
 bool cc_item_is_connector(SPItem *item)
 {
-    if (auto path = cast<SPPath>(item)) {
-        bool closed = is_closed(*path->curveForEdit());
-        if (path->connEndPair.isAutoRoutingConn() && !closed) {
-            // To be considered a connector, an object must be a non-closed
-            // path that is marked with a "inkscape:connector-type" attribute.
-            return true;
+    if (auto const path = cast<SPPath>(item)) {
+        if (auto const curve = path->curveForEdit()) {
+            if (path->connEndPair.isAutoRoutingConn() && !is_closed(*curve)) {
+                // To be considered a connector, an object must be a non-closed
+                // path that is marked with a "inkscape:connector-type" attribute.
+                return true;
+            }
         }
     }
     return false;
