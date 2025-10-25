@@ -24,7 +24,7 @@ namespace GC {
 
 namespace {
 
-#if GC_VERSION_MAJOR >= 8 and (GC_VERSION_MINOR >=3 or (GC_VERSION_MINOR == 2 and GC_VERSION_MICRO >= 10))
+#if GC_VERSION_MAJOR >= 8 and GC_VERSION_MINOR >=3
 void display_warning(const char *msg, GC_word arg) {
     g_warning(msg, arg);
 }
