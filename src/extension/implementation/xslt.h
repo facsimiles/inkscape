@@ -38,6 +38,7 @@ public:
 
     bool load(Inkscape::Extension::Extension *module) override;
     void unload(Inkscape::Extension::Extension *module) override;
+    void effect(Inkscape::Extension::Effect *module, ExecutionEnv *env, SPDocument *document) override;
 
     bool check(Inkscape::Extension::Extension *module) override;
 
