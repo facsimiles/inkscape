@@ -10,3 +10,7 @@
 [submodule "src/3rdparty/libcroco"]
 	path = src/3rdparty/libcroco
 	url = https://gitlab.com/inkscape/libcroco.git
+[submodule "po"]
+	path = po
+	url = https://gitlab.com/inkscape/translations.git
+	branch = 1.4.x
