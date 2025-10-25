@@ -352,17 +352,8 @@ translations:
   # update inkscape.pot and sync all .po files
   - rm -f inkscape.pot
   - cd ../build && make inkscape_pot && cd ../po || exit 1
-  - ../buildtools/post_translation_statistics.sh
   - ./update_po_files.sh
 
-  # check if POTFILES.*.in should be updated in the repo (shall we automate this?)
-  - 'if [ -n "$(git diff POTFILES.*.in)" ]; then
-      git diff POTFILES.*.in;
-      echo "New translatable strings in source files found.";
-      echo "Please add the paths to POTFILES.*.in so they can be translated";
-      echo "(or add them to POTFILES.skip to exclude them from translations).";
-      exit 1;
-    fi'
   artifacts:
     name: "translations"
     paths:
@@ -478,3 +469,35 @@ pages:
   artifacts:
     paths:
       - public
+
+      
+#############################
+#                           #
+#  Update translation repo  #
+#                           #
+#############################
+
+# pushes code changes to the translations repo by updating the potfile
+translations:daily:
+  rules:
+    - if: $SCHEDULED_JOB_NAME == "translations-daily"
+      allow_failure: true # allows empty changesets
+  script:
+    - cd po && git checkout ${CI_COMMIT_BRANCH} && git pull
+    - ./generate_POTFILES.sh && cd ..
+    - mkdir build && cd build && cmake .. && make inkscape_pot && cd ../po
+    - git add . && git commit --author "Inkscape <inkscape-devel@lists.inkscape.org>" -m "Daily code update"
+    - git push https://ci:${TRANSLATION_TOKEN}@gitlab.com/inkscape/translations.git ${CI_COMMIT_BRANCH}
+    - ../buildtools/post_translation_statistics.sh
+
+# Pulls new translations made in weblate
+translations:weekly:
+  rules:
+    - if: $SCHEDULED_JOB_NAME == "translations-weekly"
+      allow_failure: true # to deal with empty changesets
+  script:
+    - git submodule update --remote po && git add po && git commit --author "Inkscape <inkscape-translator@lists.inkscape.org>" -m "update translations" && git push https://ci:${TRANSLATION_TOKEN}@gitlab.com/inkscape/inkscape.git
+
+
+
+
