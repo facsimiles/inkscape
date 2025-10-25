@@ -64,7 +64,7 @@ $ARCH-gc \
 $ARCH-gsl \
 $ARCH-gtk4 \
 $ARCH-gtk-doc \
-$ARCH-gtkmm4 \
+$ARCH-gtkmm-4.0 \
 $ARCH-libxslt
 
 # install packaging tools (required for dist-win-* targets)
