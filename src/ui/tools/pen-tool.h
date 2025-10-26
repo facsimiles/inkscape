@@ -162,6 +162,8 @@ private:
     Util::ActionAccel _acc_to_line;
     Util::ActionAccel _acc_to_curve;
     Util::ActionAccel _acc_to_guides;
+
+    std::vector<CanvasItemPtr<CanvasItem>> indicator_tmp_items;
 };
 
 } // namespace Inkscape:UI::Tools
