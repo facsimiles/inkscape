@@ -40,6 +40,7 @@ public:
 
     static std::unique_ptr<SPDocument> createDoc(Inkscape::XML::Document *, char const *, char const *, char const *,
                                                  bool, SPDocument * = nullptr);
+    static void rebase(Inkscape::XML::Document *, bool keep_namedview = true);
 };
 SPDocument::~SPDocument() {}
 
@@ -47,6 +48,11 @@ std::unique_ptr<SPDocument> SPDocument::createDoc(Inkscape::XML::Document *, cha
                                                   bool, SPDocument *)
 {
     return {};
+}
+
+void SPDocument::rebase(Inkscape::XML::Document *, bool keep_namedview)
+{
+    return;
 }
 
 bool sp_repr_save_rebased_file(Inkscape::XML::Document *, gchar const *const, gchar const *, gchar const *,
@@ -62,6 +68,7 @@ struct MockStatics
     ~MockStatics() { instance = nullptr; }
 
     MOCK_CONST_METHOD0(sp_repr_do_read, Inkscape::XML::Document *());
+    MOCK_CONST_METHOD0(sp_repr_read_file, Inkscape::XML::Document *());
 
     inline static MockStatics *instance = nullptr;
 };
@@ -70,6 +77,11 @@ struct MockStatics
 Inkscape::XML::Document *sp_repr_do_read(xmlDocPtr, gchar const *)
 {
     return MockStatics::instance->sp_repr_do_read();
+}
+
+Inkscape::XML::Document *sp_repr_read_file(char const*, char const*, bool)
+{
+    return MockStatics::instance->sp_repr_read_file();
 }
 
 /* Mock implementation of the XML and XSLT library functions.
