@@ -30,7 +30,6 @@ Build-Depends:
  libcdr-dev,
  libdouble-conversion-dev,
  libgc-dev,
- libgdl-3-dev,
  libdbus-1-dev,
  libdbus-glib-1-dev,
  libglib2.0-dev,
