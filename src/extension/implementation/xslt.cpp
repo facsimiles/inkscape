@@ -133,6 +133,26 @@ SPDocument * XSLT::open(Inkscape::Extension::Input */*module*/,
     return doc;
 }
 
+void XSLT::effect(Inkscape::Extension::Effect *mod, SPDocument *document)
+{
+    std::string tempfilename_out;
+    int tempfd_out = 0;
+    try {
+        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
+    } catch (...) {
+        /// \todo Popup dialog here
+        return;
+    }
+    XSLT::save((Inkscape::Extension::Output *)mod, document, tempfilename_out.c_str());
+    close(tempfd_out);
+
+    Inkscape::XML::Document *new_xmldoc = nullptr;
+    new_xmldoc = sp_repr_read_file(tempfilename_out.c_str(), SP_SVG_NS_URI);
+    if (new_xmldoc) {
+        document->rebase(new_xmldoc);
+    }
+}
+
 void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, char const *filename)
 {
     /* TODO: Should we assume filename to be in utf8 or to be a raw filename?
