@@ -182,9 +182,7 @@ text_remove_from_path()
 
     bool did = false;
     auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        SPObject *obj = *i;
-
+    for(auto obj : items){
         if (SP_IS_TEXT_TEXTPATH(obj)) {
             SPObject *tp = obj->firstChild();
 
@@ -244,9 +242,7 @@ text_remove_all_kerns()
     bool did = false;
 
     auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        SPObject *obj = *i;
-
+    for(auto obj : items){
         if (!is<SPText>(obj) && !is<SPTSpan>(obj) && !is<SPFlowtext>(obj)) {
             continue;
         }
@@ -370,8 +366,7 @@ text_flow_into_shape()
 
         /* Add clones */
         auto items = selection->items();
-        for(auto i=items.begin();i!=items.end();++i){
-            SPItem *item = *i;
+        for(auto item : items){
             if (is<SPShape>(item)){
                 Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
                 clone->setAttribute("x", "0");

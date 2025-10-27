@@ -737,8 +737,7 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
     bool preserve = prefs->getBool("/options/preservetransform/value", false);
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
     	auto tmp= selection->items();
-    	for(auto i=tmp.begin();i!=tmp.end();++i){
-            SPItem *item = *i;
+    	for(auto item : tmp){
             Geom::OptRect bbox_pref = item->desktopPreferredBounds();
             Geom::OptRect bbox_geom = item->desktopGeometricBounds();
             if (bbox_pref && bbox_geom) {
@@ -800,8 +799,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
 
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
     	auto tmp= selection->items();
-    	for(auto i=tmp.begin();i!=tmp.end();++i){
-            SPItem *item = *i;
+    	for(auto item : tmp){
             item->rotate_rel(Geom::Rotate (angle*M_PI/180.0));
         }
     } else {
@@ -819,9 +817,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
     	auto items = selection->items();
-    	for(auto i = items.begin();i!=items.end();++i){
-            SPItem *item = *i;
-
+    	for(auto item : items){
             if (!_units_skew.isAbsolute()) { // percentage
                 double skewX = _scalar_skew_horizontal.getValue("%");
                 double skewY = _scalar_skew_vertical.getValue("%");
@@ -927,8 +923,7 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
 
     if (_check_replace_matrix.get_active()) {
     	auto tmp = selection->items();
-    	for(auto i=tmp.begin();i!=tmp.end();++i){
-            SPItem *item = *i;
+    	for(auto item : tmp){
             item->set_item_transform(displayed);
             item->updateRepr();
         }

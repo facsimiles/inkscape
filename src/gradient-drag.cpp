@@ -2394,8 +2394,7 @@ void GrDrag::updateDraggers()
 
     g_return_if_fail(this->selection != nullptr);
     auto list = this->selection->items();
-    for (auto i = list.begin(); i != list.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : list) {
         SPStyle *style = item->style;
 
         if (style && (style->fill.isPaintserver())) {
@@ -2441,8 +2440,7 @@ void GrDrag::refreshDraggers()
 
     g_return_if_fail(this->selection != nullptr);
     auto list = this->selection->items();
-    for (auto i = list.begin(); i != list.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : list) {
         SPStyle *style = item->style;
 
         if (style && (style->fill.isPaintserver())) {
@@ -2498,9 +2496,7 @@ void GrDrag::updateLines()
     g_return_if_fail(this->selection != nullptr);
 
     auto list = this->selection->items();
-    for (auto i = list.begin(); i != list.end(); ++i) {
-        SPItem *item = *i;
-
+    for (auto item : list) {
         SPStyle *style = item->style;
 
         if (style && (style->fill.isPaintserver())) {
@@ -2679,8 +2675,7 @@ void GrDrag::updateLevels()
     g_return_if_fail (this->selection != nullptr);
 
     auto list = this->selection->items();
-    for (auto i = list.begin(); i != list.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : list) {
         Geom::OptRect rect = item->desktopVisualBounds();
         if (rect) {
             // Remember the edges of the bbox and the center axis

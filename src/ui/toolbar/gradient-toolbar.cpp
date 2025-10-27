@@ -192,8 +192,8 @@ void gr_get_dt_selected_gradient(Inkscape::Selection *selection, std::vector<SPG
     SPGradient *gradient = nullptr;
 
     auto itemlist= selection->items();
-    for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        SPItem *item = *i;// get the items gradient, not the getVector() version
+    for(auto item : itemlist){
+        // get the items gradient, not the getVector() version
          SPStyle *style = item->style;
          SPPaintServer *server = nullptr;
 
@@ -258,8 +258,7 @@ void gr_read_selection( Inkscape::Selection *selection,
 
    // If no selected dragger, read desktop selection
     auto itemlist= selection->items();
-    for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        SPItem *item = *i;
+    for(auto item : itemlist){
         SPStyle *style = item->style;
 
         if (style && (style->fill.isPaintserver())) {

@@ -239,8 +239,7 @@ std::unordered_set<SPBox3D *> VanishingPoint::selectedBoxes(Inkscape::Selection 
 {
     std::unordered_set<SPBox3D *> sel_boxes;
     auto itemlist = sel->items();
-    for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : itemlist) {
         auto *box = cast<SPBox3D>(item);
         if (box && this->hasBox(box)) {
             sel_boxes.emplace(box);
@@ -375,8 +374,7 @@ std::set<VanishingPoint *> VPDragger::VPsOfSelectedBoxes()
     // FIXME: Should we take the selection from the parent VPDrag? I guess it shouldn't make a difference.
     Inkscape::Selection *sel = SP_ACTIVE_DESKTOP->getSelection();
     auto itemlist = sel->items();
-    for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : itemlist) {
         auto box = cast<SPBox3D>(item);
         if (box) {
             vp = this->findVPWithBox(box);
@@ -535,8 +533,7 @@ void VPDrag::updateDraggers()
     g_return_if_fail(this->selection != nullptr);
 
     auto itemlist = this->selection->items();
-    for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : itemlist) {
         auto box = cast<SPBox3D>(item);
         if (box) {
             VanishingPoint vp;
@@ -564,8 +561,7 @@ void VPDrag::updateLines()
     g_return_if_fail(this->selection != nullptr);
 
     auto itemlist = this->selection->items();
-    for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : itemlist) {
         auto box = cast<SPBox3D>(item);
         if (box) {
             this->drawLinesForFace(box, Proj::X);

@@ -227,22 +227,22 @@ constexpr std::string axis_string(Box3D::Axis dirs, bool rear)
 const Glib::ustring & Box3DSide::axes_string() const
 {
     static const Glib::ustring strings[16] = {
-        axis_string((Box3D::Axis)0, 0).c_str(),
-        axis_string((Box3D::Axis)1, 0).c_str(),
-        axis_string((Box3D::Axis)2, 0).c_str(),
-        axis_string((Box3D::Axis)3, 0).c_str(),
-        axis_string((Box3D::Axis)4, 0).c_str(),
-        axis_string((Box3D::Axis)5, 0).c_str(),
-        axis_string((Box3D::Axis)6, 0).c_str(),
-        axis_string((Box3D::Axis)7, 0).c_str(),
-        axis_string((Box3D::Axis)0, 1).c_str(),
-        axis_string((Box3D::Axis)1, 1).c_str(),
-        axis_string((Box3D::Axis)2, 1).c_str(),
-        axis_string((Box3D::Axis)3, 1).c_str(),
-        axis_string((Box3D::Axis)4, 1).c_str(),
-        axis_string((Box3D::Axis)5, 1).c_str(),
-        axis_string((Box3D::Axis)6, 1).c_str(),
-        axis_string((Box3D::Axis)7, 1).c_str(),
+        axis_string((Box3D::Axis)0, false).c_str(),
+        axis_string((Box3D::Axis)1, false).c_str(),
+        axis_string((Box3D::Axis)2, false).c_str(),
+        axis_string((Box3D::Axis)3, false).c_str(),
+        axis_string((Box3D::Axis)4, false).c_str(),
+        axis_string((Box3D::Axis)5, false).c_str(),
+        axis_string((Box3D::Axis)6, false).c_str(),
+        axis_string((Box3D::Axis)7, false).c_str(),
+        axis_string((Box3D::Axis)0, true).c_str(),
+        axis_string((Box3D::Axis)1, true).c_str(),
+        axis_string((Box3D::Axis)2, true).c_str(),
+        axis_string((Box3D::Axis)3, true).c_str(),
+        axis_string((Box3D::Axis)4, true).c_str(),
+        axis_string((Box3D::Axis)5, true).c_str(),
+        axis_string((Box3D::Axis)6, true).c_str(),
+        axis_string((Box3D::Axis)7, true).c_str(),
     };
 
     return strings[ ((this->dir1 ^ this->dir2) | this->front_or_rear) ];

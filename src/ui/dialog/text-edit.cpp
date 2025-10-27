@@ -352,10 +352,10 @@ SPItem *TextEdit::getSelectedTextItem ()
         return nullptr;
 
     auto tmp= getDesktop()->getSelection()->items();
-	for(auto i=tmp.begin();i!=tmp.end();++i)
+	for(auto i : tmp)
     {
-        if (is<SPText>(*i) || is<SPFlowtext>(*i))
-            return *i;
+        if (is<SPText>(i) || is<SPFlowtext>(i))
+            return i;
     }
 
     return nullptr;
@@ -370,9 +370,9 @@ unsigned TextEdit::getSelectedTextCount ()
     unsigned int items = 0;
 
     auto tmp= getDesktop()->getSelection()->items();
-	for(auto i=tmp.begin();i!=tmp.end();++i)
+	for(auto i : tmp)
     {
-        if (is<SPText>(*i) || is<SPFlowtext>(*i))
+        if (is<SPText>(i) || is<SPFlowtext>(i))
             ++items;
     }
 
@@ -470,9 +470,9 @@ void TextEdit::apply_changes(bool continuous) {
     auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    for(auto i=item_list.begin();i!=item_list.end();++i){
+    for(auto i : item_list){
         // apply style to the reprs of all text objects in the selection
-        if (is<SPText>(*i) || (is<SPFlowtext>(*i)) ) {
+        if (is<SPText>(i) || (is<SPFlowtext>(i)) ) {
             ++items;
         }
     }

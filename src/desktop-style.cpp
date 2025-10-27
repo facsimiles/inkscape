@@ -192,8 +192,7 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
         // Find the set of selected item types that need its per-object-type current style updated
         std::unordered_set<const char*> selected_item_types;
         auto itemlist = set->items();
-        for (auto i = itemlist.begin(); i!= itemlist.end(); ++i) {
-            SPItem *obj = *i;
+        for (auto obj : itemlist) {
             if (auto *side = cast<Box3DSide>(obj)) {
                 selected_item_types.emplace(side->axes_string().data());
             } else if (auto *box = cast<SPBox3D>(obj)) {
@@ -255,9 +254,7 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
         css_no_text = sp_css_attr_unset_text(css_no_text);
 
         auto itemlist = set->items();
-        for (auto i = itemlist.begin(); i!= itemlist.end(); ++i) {
-            SPItem *item = *i;
-
+        for (auto item : itemlist) {
             // If not text, don't apply text attributes (can a group have text attributes? Yes! FIXME)
             if (isTextualItem(item)) {
                 // If any font property has changed, then we have written out the font

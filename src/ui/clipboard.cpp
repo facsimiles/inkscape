@@ -865,8 +865,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
     if (separately) {
         // resize each object in the selection
         auto itemlist = set->items();
-        for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-            SPItem *item = *i;
+        for (auto item : itemlist) {
             if (item) {
                 Geom::OptRect obj_size = item->desktopPreferredBounds();
                 if ( obj_size ) {
@@ -917,8 +916,7 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 set->toLPEItems();
                 auto itemlist= set->items();
-                for(auto i=itemlist.begin();i!=itemlist.end();++i){
-                    SPItem *item = *i;
+                for(auto item : itemlist){
                     _applyPathEffect(item, effectstack);
                     item->doWriteTransform(item->transform);
                 }

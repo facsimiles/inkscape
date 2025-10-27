@@ -552,9 +552,9 @@ void GlyphsPanel::insertText()
 
     SPItem *textItem = nullptr;
     auto itemlist = selection->items();
-        for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
-            if (is<SPText>(*i) || is<SPFlowtext>(*i)) {
-            textItem = *i;
+        for(auto i : itemlist) {
+            if (is<SPText>(i) || is<SPFlowtext>(i)) {
+            textItem = i;
             break;
         }
     }
@@ -632,8 +632,8 @@ void GlyphsPanel::calcCanInsert()
 
     int items = 0;
     auto itemlist = selection->items();
-    for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
-        if (is<SPText>(*i) || is<SPFlowtext>(*i)) {
+    for(auto i : itemlist) {
+        if (is<SPText>(i) || is<SPFlowtext>(i)) {
             ++items;
         }
     }

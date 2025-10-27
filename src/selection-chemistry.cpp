@@ -1334,9 +1334,7 @@ void ObjectSet::removeLPE()
         return;
     }
     auto list= items();
-    for (auto itemlist=list.begin();itemlist!=list.end();++itemlist) {
-        SPItem *item = *itemlist;
-
+    for (auto item : list) {
         sp_selection_remove_livepatheffect_impl(item);
 
     }
@@ -1365,8 +1363,8 @@ void ObjectSet::removeFilter()
         set_active_tool (d, get_active_tool(d));
     } else {
         auto list = items();
-        for (auto itemlist=list.begin();itemlist!=list.end();++itemlist) {
-            sp_desktop_apply_css_recursive(*itemlist, css, true);
+        for (auto itemlist : list) {
+            sp_desktop_apply_css_recursive(itemlist, css, true);
         }
     }
     sp_repr_css_attr_unref(css);
@@ -1597,8 +1595,7 @@ object_set_contains_both_clone_and_original(ObjectSet *set)
 {
     bool clone_with_original = false;
     auto items = set->items();
-    for (auto l=items.begin();l!=items.end() ;++l) {
-        SPItem *item = *l;
+    for (auto item : items) {
         if (item) {
             clone_with_original |= object_set_contains_original(item, set);
             if (clone_with_original)
@@ -1665,8 +1662,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
     }
     auto items_copy = items();
     std::vector<SPItem *> ordered_items;
-    for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {
-        SPItem *item = *l;
+    for (auto item : items_copy) {
         auto clonelpe = cast<SPLPEItem>(item);
         if (clonelpe && clonelpe->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
             ordered_items.insert(ordered_items.begin(), item);
@@ -1825,8 +1821,8 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
 void ObjectSet::removeTransform()
 {
     auto items = xmlNodes();
-    for (auto l=items.begin();l!=items.end() ;++l) {
-        (*l)->removeAttribute("transform");
+    for (auto item : items) {
+        item->removeAttribute("transform");
     }
 
     if (document()) {
@@ -1959,8 +1955,7 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
     }
     all_list=tmp;
 
-    for (auto sel_iter=items.begin();sel_iter!=items.end();++sel_iter) {
-        SPItem *sel = *sel_iter;
+    for (auto sel : items) {
         std::vector<SPItem*> matches = all_list;
         if (fill && stroke && style) {
             matches = sp_get_same_style(sel, matches);
@@ -2005,8 +2000,7 @@ void sp_select_same_object_type(SPDesktop *desktop)
     Inkscape::Selection *selection = desktop->getSelection();
 
     auto items= selection->items();
-    for (auto sel_iter=items.begin();sel_iter!=items.end();++sel_iter) {
-        SPItem *sel = *sel_iter;
+    for (auto sel : items) {
         if (sel) {
             matches = sp_get_same_object_type(sel, matches);
         } else {
@@ -2606,9 +2600,7 @@ void ObjectSet::relink()
     // Get a copy of current selection.
     bool relinked = false;
     auto items_= items();
-    for (auto i=items_.begin();i!=items_.end();++i){
-        SPItem *item = *i;
-
+    for (auto item : items_){
         if (auto use = cast<SPUse>(item)) {
             // Get original referenced item, relink, then get new reference
             SPItem *ref = use->get_original();

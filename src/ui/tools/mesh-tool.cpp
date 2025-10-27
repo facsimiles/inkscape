@@ -363,9 +363,8 @@ void MeshTool::fit_mesh_in_bbox()
 
     bool changed = false;
     auto itemlist = selection->items();
-    for (auto i=itemlist.begin(); i!=itemlist.end(); ++i) {
+    for (auto item : itemlist) {
 
-        SPItem *item = *i;
         SPStyle *style = item->style;
 
         if (style) {
@@ -844,10 +843,10 @@ void MeshTool::new_default()
         SPDefs *defs = document->getDefs();
 
         auto items= selection->items();
-        for(auto i=items.begin();i!=items.end();++i){
+        for(auto item : items){
 
             //FIXME: see above
-            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
+            sp_repr_css_change_recursive(item->getRepr(), css, "style");
 
             // Create mesh element
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:meshgradient");
@@ -861,15 +860,15 @@ void MeshTool::new_default()
 
             // Get corresponding object
             SPMeshGradient *mg = static_cast<SPMeshGradient *>(document->getObjectByRepr(repr));
-            mg->array.create(mg, *i, (fill_or_stroke_pref == Inkscape::FOR_FILL) ?
-                             (*i)->geometricBounds() : (*i)->visualBounds());
+            mg->array.create(mg, item, (fill_or_stroke_pref == Inkscape::FOR_FILL) ?
+                             item->geometricBounds() : item->visualBounds());
 
-            bool isText = is<SPText>(*i);
-            sp_style_set_property_url(*i,
+            bool isText = is<SPText>(item);
+            sp_style_set_property_url(item,
                                       ((fill_or_stroke_pref == Inkscape::FOR_FILL) ? "fill":"stroke"),
                                       mg, isText);
 
-            (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_STYLE_MODIFIED_FLAG);
+            item->requestModified(SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
 
         if (css) {

@@ -174,8 +174,7 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
         SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
         snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
         auto items = const_cast<Selection *>(this)->items();
-        for (auto iter = items.begin(); iter != items.end(); ++iter) {
-            SPItem *this_item = *iter;
+        for (auto this_item : items) {
             this_item->getSnappoints(p, &snapprefs_dummy);
 
             //Include the transformation origin for snapping
@@ -283,8 +282,8 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
 size_t Selection::numberOfLayers() {
     auto items = this->items();
     std::set<SPObject*> layers;
-    for (auto iter = items.begin(); iter != items.end(); ++iter) {
-        SPObject *layer = _desktop->layerManager().layerForObject(*iter);
+    for (auto item : items) {
+        SPObject *layer = _desktop->layerManager().layerForObject(item);
         layers.insert(layer);
     }
 
@@ -294,8 +293,8 @@ size_t Selection::numberOfLayers() {
 size_t Selection::numberOfParents() {
     auto items = this->items();
     std::set<SPObject*> parents;
-    for (auto iter = items.begin(); iter != items.end(); ++iter) {
-        SPObject *parent = (*iter)->parent;
+    for (auto item : items) {
+        SPObject *parent = item->parent;
         parents.insert(parent);
     }
     return parents.size();

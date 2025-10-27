@@ -68,9 +68,7 @@ void MarkerTool::selection_changed(Inkscape::Selection *selection) {
     auto selected_items = selection->items();
     _shape_editors.clear();
 
-    for(auto i = selected_items.begin(); i != selected_items.end(); ++i){
-        SPItem *item = *i;
-
+    for(auto item : selected_items){
         if(item) {
             auto shape = cast<SPShape>(item);
 
