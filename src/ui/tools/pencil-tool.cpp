@@ -21,8 +21,9 @@
 
 #include <numeric> // std::accumulate
 #include <2geom/circle.h>
+#include <2geom/bezier-utils.h>
+#include <2geom/sbasis-to-bezier.h>
 
-#include "bezier-utils.h"
 #include "context-fns.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/snap-indicator.h"
@@ -35,7 +36,6 @@
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "path/path-boolop.h"
-#include "sbasis-to-bezier.h"
 #include "selection.h"
 #include "style.h"
 #include "svg/svg.h"
