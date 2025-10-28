@@ -298,7 +298,6 @@ DocumentResources::DocumentResources()
     : DialogBase("/dialogs/document-resources", "DocumentResources"),
     _builder(create_builder("dialog-document-resources.glade")),
     _gridview(get_widget<Gtk::GridView>(_builder, "iconview")),
-    // _treeview(get_widget<Gtk::TreeView>(_builder, "treeview")),
     _listview(get_widget<Gtk::ColumnView>(_builder, "listview")),
     _selector(get_widget<Gtk::ListView>(_builder, "tree")),
     _edit(get_widget<Gtk::Button>(_builder, "edit")),
@@ -307,26 +306,20 @@ DocumentResources::DocumentResources()
     _extract(get_widget<Gtk::Button>(_builder, "extract")),
     _search(get_widget<Gtk::SearchEntry2>(_builder, "search")) {
 
-    // _info_store = Gio::ListStore<InfoItem>::create();
     _info_store = Gio::ListStore<InfoItem>::create();
-    // _info_store = Gtk::ListStore::create(g_info_columns);
-    // _item_store = Gtk::ListStore::create(g_item_columns);
     _item_store = Gio::ListStore<details::ResourceItem>::create();
     _info_filter = Gtk::BoolFilter::create({});
     auto filtered_info = Gtk::FilterListModel::create(_info_store, _info_filter);
-    // auto filtered_info = Gtk::TreeModelFilter::create(_info_store);
     _item_filter = std::make_unique<TextMatchingFilter>([](const Glib::RefPtr<Glib::ObjectBase>& item){
         auto ptr = std::dynamic_pointer_cast<details::ResourceItem>(item);
         return ptr ? ptr->label : Glib::ustring();
     });
     auto filtered_items = Gtk::FilterListModel::create(_item_store, _item_filter->get_filter()); // Gtk::TreeModelFilter::create(_item_store);
-    // auto model = Gtk::TreeModelSort::create(filtered_items);
     auto sorter = Gtk::StringSorter::create(Gtk::ClosureExpression<Glib::ustring>::create([this](auto& item){
         auto ptr = std::dynamic_pointer_cast<details::ResourceItem>(item);
         return ptr ? ptr->label : "";
     }));
     auto model = Gtk::SortListModel::create(filtered_items, sorter);
-    // model->set_sort_column(g_item_columns.label.index(), Gtk::SortType::ASCENDING);
 
     _item_factory = IconViewItemFactory::create([this](auto& ptr) -> IconViewItemFactory::ItemData {
         auto rsrc = std::dynamic_pointer_cast<details::ResourceItem>(ptr);
@@ -335,27 +328,20 @@ DocumentResources::DocumentResources()
         auto name = Glib::Markup::escape_text(rsrc->label);
         return { .label_markup = name, .image = rsrc->image, .tooltip = rsrc->label };
     });
+    _item_factory->enable_label_editing(true);
+    _item_factory->signal_editing().connect([this](bool start, auto& edit, auto& obj) {
+        if (start) return;
+        // end of editing
+        if (auto item = std::dynamic_pointer_cast<details::ResourceItem>(obj)) {
+            end_editing(item->object, edit.get_text());
+        }
+    });
     _gridview.add_css_class("grid-view-small");
     _gridview.set_factory(_item_factory->get_factory());
     _item_selection_model = Gtk::SingleSelection::create(model);
     _gridview.set_model(_item_selection_model);
 
     append(get_widget<Gtk::Box>(_builder, "main"));
-
-    // _iconview.set_model(model);
-    // _iconview.set_text_column(g_item_columns.label);
-    // _label_renderer = dynamic_cast<Gtk::CellRendererText*>(_iconview.get_first_cell());
-    // assert(_label_renderer);
-    // _label_renderer->property_editable() = true;
-    // _label_renderer->signal_editing_started().connect([this](Gtk::CellEditable * const cell, Glib::ustring const &path){
-    //     start_editing(cell, path);
-    // });
-    // _label_renderer->signal_edited().connect([this](Glib::ustring const &path, Glib::ustring const &new_text){
-    //     end_editing(path, new_text);
-    // });
-
-    // _iconview.pack_start(_image_renderer);
-    // _iconview.add_attribute(_image_renderer, "surface", g_item_columns.image);
 
     auto set_up_label = [](auto& list_item){
         auto label = Gtk::make_managed<Gtk::Label>();
@@ -385,7 +371,7 @@ DocumentResources::DocumentResources()
     }
     _listview.set_model(Gtk::NoSelection::create(filtered_info));
 
-    auto refilter_info = [this]() {
+    auto refilter_info = [this] {
         auto expression = Gtk::ClosureExpression<bool>::create([this](auto& item){
             auto ptr = std::dynamic_pointer_cast<InfoItem>(item);
             if (!ptr) return false;
@@ -413,7 +399,7 @@ DocumentResources::DocumentResources()
     });
 
     auto factory_1 = Gtk::SignalListItemFactory::create();
-    factory_1->signal_setup().connect([this](auto& list_item) {
+    factory_1->signal_setup().connect([](auto& list_item) {
         auto box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
         box->add_css_class("item-box");
         auto image = Gtk::make_managed<Gtk::Image>();
@@ -423,7 +409,7 @@ DocumentResources::DocumentResources()
         list_item->set_child(*box);
     });
 
-    factory_1->signal_bind().connect([this](auto& list_item) {
+    factory_1->signal_bind().connect([](auto& list_item) {
         auto item = std::dynamic_pointer_cast<ResourceTextItem>(list_item->get_item());
         if (!item) return;
         auto box = dynamic_cast<Gtk::Box*>(list_item->get_child());
@@ -483,23 +469,24 @@ DocumentResources::DocumentResources()
     }
 
     auto paned = &get_widget<Gtk::Paned>(_builder, "paned");
-    auto const move = [=, this](){
+    auto const move = [=, this]{
         auto pos = paned->get_position();
         get_widget<Gtk::Label>(_builder, "spacer").set_size_request(pos);
     };
-    paned->property_position().signal_changed().connect([move](){ move(); });
+    paned->property_position().signal_changed().connect([move]{ move(); });
     move();
 
     _edit.signal_clicked().connect([this]{
-        auto sel = _item_selection_model->get_selected_item();
-        // auto sel = _iconview.get_selected_items();
-        if (sel) {
-            // todo: investigate why this doesn't work initially:
-            // _iconview.set_cursor(sel.front(), true);
-            // TODO: enter edit mode
-            // _item_selection_model->
+        if (auto sel = _item_selection_model->get_selected_item()) {
+            if (auto child = _item_factory->find_child_item(_gridview, sel)) {
+                if (auto box = dynamic_cast<Gtk::CenterBox*>(child)) {
+                    if (auto label = dynamic_cast<Gtk::EditableLabel*>(box->get_end_widget())) {
+                        label->start_editing();
+                    }
+                }
+            }
         }
-        // treeview todo if needed
+        // treeview todo if needed - right now there are no editable labels there
     });
 
     // selectable elements can be selected on the canvas;
@@ -510,7 +497,6 @@ DocumentResources::DocumentResources()
         if (!document || !desktop) return;
 
         if (auto rsrc = selected_item()) {
-            // Glib::ustring id = row[g_item_columns.id];
             if (auto object = document->getObjectById(rsrc->id)) {
                 // select object
                 desktop->getSelection()->set(object);
@@ -1186,27 +1172,16 @@ void DocumentResources::refresh_page(const Glib::ustring& id) {
     _showing_resource = rsrc;
 
     _listview.get_columns()->get_typed_object<Gtk::ColumnViewColumn>(1)->set_visible(has_count);
-    //TODO
-    // _label_renderer->property_editable() = label_editable;
     _edit   .set_visible(label_editable);
     _select .set_visible(items_selectable);
     _delete .set_visible(can_delete);
     _extract.set_visible(can_extract);
 
-    //TODO
-    // _iconview.set_item_width(item_width);
     get_widget<Gtk::Stack>(_builder, "stack").set_visible_child(tab);
     update_buttons();
 }
 
-//TODO
-void DocumentResources::end_editing(const Glib::ustring& path, const Glib::ustring& new_text) {
-    // auto model = _iconview.get_model();
-    // Gtk::TreeModel::Row row = *model->get_iter(path);
-    // if (!row) return;
-    return;
-
-    SPObject* object = 0; // row[g_item_columns.object];
+void DocumentResources::end_editing(SPObject* object, const Glib::ustring& new_text) {
     if (!object) {
         g_warning("Missing object ptr, cannot edit object's name.");
         return;
@@ -1224,9 +1199,6 @@ void DocumentResources::end_editing(const Glib::ustring& path, const Glib::ustri
     if (new_text == name) return;
 
     setter(*object, new_text);
-
-    // auto id = get_id(object);
-    // row[g_item_columns.label] = label_fmt(new_text.c_str(), id);
 
     if (auto document = object->document) {
         DocumentUndo::done(document, _("Edit object title"), INKSCAPE_ICON("document-resources"));

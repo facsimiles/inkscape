@@ -1721,3 +1721,9 @@ button.reduced-padding {
   #DialogMultipaned:drop(active),   #DialogMultipaned:drop(active):focus {
     box-shadow: none;
 }
+
+/* this is a frame for EditingLabel to signal we are in editing mode */
+editablelabel.editing {
+    outline-offset: 0;
+    outline: 1px solid @theme_fg_color;
+}

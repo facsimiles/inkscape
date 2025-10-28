@@ -21,6 +21,8 @@
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/registry.h"
 
+class SPObject;
+
 namespace Glib {
 class ustring;
 } // namespace Glib
@@ -79,7 +81,7 @@ private:
     void refresh_current_page();
     void rebuild_stats();
     details::Statistics collect_statistics();
-    void end_editing(const Glib::ustring& path, const Glib::ustring& new_text);
+    void end_editing(SPObject* object, const Glib::ustring& new_text);
     void selectionModified(Inkscape::Selection *selection, unsigned flags) override;
     void update_buttons();
     std::shared_ptr<details::ResourceItem> selected_item();
