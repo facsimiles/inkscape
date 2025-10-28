@@ -21,10 +21,12 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
+#include "inkscape-application.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "preferences.h"
 #include "selection.h"
+#include "svg/svg.h"
 #include "text-chemistry.h"
 #include "text-editing.h"
 
@@ -556,12 +558,11 @@ text_unflow ()
 void
 text_to_glyphs()
 {
-    auto desktop = SP_ACTIVE_DESKTOP;
-    auto selection = desktop->getSelection();
+    auto doc = SP_ACTIVE_DOCUMENT;
+    auto selection = InkscapeApplication::instance()->get_active_selection();
     std::vector<SPText*> results;
     std::vector<SPText*> to_delete;
 
-    auto doc = desktop->getDocument();
     auto xml_doc = doc->getReprDoc();
 
     for(auto item : selection->items()) {
@@ -575,7 +576,7 @@ text_to_glyphs()
         auto const &layout = text->layout;
         auto iter = layout.end();
         while (iter != layout.begin()) {
-
+            auto end = iter;
             // Glyph index may not be zero leading to an infinite loop
             // if we don't test this here... (see issue #4767).
             if (!iter.prevCharacter()) {
@@ -585,8 +586,42 @@ text_to_glyphs()
             if (layout.isWhitespace(iter))
                 continue;
 
-            auto str = Glib::ustring(1, layout.characterAt(iter));
-            auto point = layout.characterAnchorPoint(iter);
+            auto it_next = iter;
+            int last_glyph = iter.glyphIndex();
+            while (it_next.prevCharacter()) {
+                // multiple characters single glyph ligature
+                bool multi_char_glyph = it_next.glyphIndex() == last_glyph;
+                // In some cases diacritics are separate glyphs and separate characters, but they can not
+                // be used independently without base character.
+                // Depends on specific font.
+                bool helper_char = !layout.isCursorPosition(iter);
+                if (multi_char_glyph || helper_char) {
+                    iter = it_next;
+                } else {
+                    break;
+                }
+                last_glyph = it_next.glyphIndex();
+            }
+            // multiple glyphs from single character, get first glyph
+            while (iter.glyphIndex() > 0 && layout.glyphs()[iter.glyphIndex() - 1].in_character ==
+                                                layout.glyphs()[iter.glyphIndex()].in_character) {
+                iter.prevGlyph();
+            }
+
+            Glib::ustring str;
+            for (auto char_iter = iter; char_iter < end;) {
+                if (layout.isWhitespace(char_iter)) {
+                    break;
+                }
+                str.push_back(layout.characterAt(char_iter));
+                if (!char_iter.nextCharacter()) {
+                    break; // should not happen
+                }
+            }
+            if (!iter.hasGlyph()) {
+                continue;
+            }
+            auto glyph = layout.glyphs()[iter.glyphIndex()];
 
             SPObject *tspan = nullptr;
             layout.getSourceOfCharacter(iter, &tspan);
@@ -603,13 +638,21 @@ text_to_glyphs()
             }
             result_style->merge(text->style);
             result_style->text_anchor.read("start");
+            // reset layout properties which are already included in glyph transform
+            result_style->writing_mode = SP_CSS_WRITING_MODE_LR_TB;
+            result_style->direction = SP_CSS_DIRECTION_LTR;
             Glib::ustring glyph_style = result_style->writeIfDiff(text->parent->style);
             delete result_style;
 
             new_node->setAttributeOrRemoveIfEmpty("style", glyph_style);
-            new_node->setAttributeOrRemoveIfEmpty("transform", text->getAttribute("transform"));
-            new_node->setAttributeSvgDouble("x", point[Geom::X]);
-            new_node->setAttributeSvgDouble("y", point[Geom::Y]);
+            auto const &glyph_span = glyph.span(&layout);
+            auto inverse_scale = 1.0 / glyph_span.font_size;
+            // not ideal, assumes that in case of 1 character -> n glyphs, the first glyph is the base glyph
+            // and has normal position
+            Geom::Affine transform =
+                Geom::Scale(inverse_scale, -inverse_scale) // prevent font size from being applied twice
+                * glyph.transform(layout) * text->transform;
+            new_node->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
             new_node->appendChild(xml_doc->createTextNode(str.c_str()));
 
             // Store the new object for the selection and prepare for the next glyph
@@ -627,8 +670,10 @@ text_to_glyphs()
     }
 
     if (results.empty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE,
-                                          _("Select <b>text(s)</b> to convert to glyphs."));
+        auto desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>text(s)</b> to convert to glyphs."));
+        }
     } else {
         DocumentUndo::done(doc, _("Convert text to glyphs"), INKSCAPE_ICON("text-convert-to-regular"));
         selection->setList(results);

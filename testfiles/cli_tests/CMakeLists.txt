@@ -12,6 +12,9 @@
 #   FUZZ_PERCENTAGE    - maximum allowed normalized root-mean-squared distance between compared images
 #   RASTER_DPI         - DPI setting for rasterizing vector formats before root-mean-squared comparison
 #   PARAMETERS         - additional command line parameters to pass to Inkscape
+#   REFERENCE_INKSCAPE - rasterize REFERENCE_FILENAME using inkscape
+#                        Avoid this when possible! Preferably reference should be a raster image and when that's not
+#                        practical rasterized using third party rasterizer instead of inkscape.
 #
 # Pass/fail criteria:
 #   PASS_FOR_OUTPUT    - pass if output matches the given value, otherwise fail
@@ -50,7 +53,8 @@ endfunction(add_cli_test)
 #
 function(add_cli_test_run fixture testname)
     # parse arguments
-    set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT)
+    set(options REFERENCE_INKSCAPE)
+    set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT REFERENCE_FILENAME)
     set(multiValueArgs PARAMETERS ENVIRONMENT EXPECTED_FILES TEST_SCRIPT)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     set(CMAKE_CTEST_ENV "INKSCAPE_FONTCONFIG=${CMAKE_CURRENT_SOURCE_DIR}/../rendering_tests/fonts/isolated.conf;${CMAKE_CTEST_ENV}")
@@ -91,6 +95,15 @@ function(add_cli_test_run fixture testname)
         set_tests_properties(${testname} PROPERTIES FAIL_REGULAR_EXPRESSION ${ARG_FAIL_FOR_OUTPUT})
     endif()
 
+    if (${ARG_REFERENCE_INKSCAPE} AND DEFINED ARG_REFERENCE_FILENAME)
+        file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_REFERENCE_FILENAME}"  REFERENCE_FILENAME)
+        set(ARG_PARAMETERS ${REFERENCE_FILENAME}  "--export-png-use-dithering=false"
+                "--export-filename=${ARG_REFERENCE_FILENAME}.reference.png" "--export-make-paths")
+        add_test(NAME ${testname}_ref COMMAND inkscape ${ARG_PARAMETERS})
+        set_tests_properties(${testname}_ref PROPERTIES
+                FIXTURES_SETUP ${fixture}
+                ENVIRONMENT "${CMAKE_CTEST_ENV}")
+    endif()
 endfunction(add_cli_test_run)
 
 #
@@ -98,6 +111,7 @@ endfunction(add_cli_test_run)
 #
 function(add_cli_test_cmp fixture testname)
     # parse arguments
+    set(options REFERENCE_INKSCAPE)
     set(oneValueArgs OUTPUT_FILENAME OUTPUT_PAGE REFERENCE_FILENAME
         FUZZYREF_FILENAME FUZZ_PERCENTAGE RASTER_DPI PNG_FILENAME)
     set(multiValueArgs EXPECTED_FILES TEST_SCRIPT)
@@ -118,7 +132,11 @@ function(add_cli_test_cmp fixture testname)
     # add test to check output files
     if(DEFINED ARG_REFERENCE_FILENAME OR DEFINED ARG_EXPECTED_FILES OR DEFINED ARG_TEST_SCRIPT)
         if(DEFINED ARG_REFERENCE_FILENAME)
-            file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_REFERENCE_FILENAME}" ARG_REFERENCE_FILENAME)
+            if (${ARG_REFERENCE_INKSCAPE})
+                set(ARG_REFERENCE_FILENAME "${ARG_REFERENCE_FILENAME}.reference.png")
+            else()
+                file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_REFERENCE_FILENAME}" ARG_REFERENCE_FILENAME)
+            endif()
         endif()
         if(DEFINED ARG_EXPECTED_FILES)
             string(REPLACE ";" " " ARG_EXPECTED_FILES "${ARG_EXPECTED_FILES}")
@@ -159,7 +177,8 @@ endfunction(add_cli_test_cmp)
 # Delete all the generated files
 #
 function(add_cli_test_cln fixture testname)
-    set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT)
+    set(options REFERENCE_INKSCAPE)
+    set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT REFERENCE_FILENAME)
     set(multiValueArgs PARAMETERS ENVIRONMENT EXPECTED_FILES TEST_SCRIPT)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -169,6 +188,9 @@ function(add_cli_test_cln fixture testname)
     endif()
     if(DEFINED ARG_EXPECTED_FILES)
         list(APPEND CREATED_FILES ${ARG_EXPECTED_FILES})
+    endif()
+    if (${ARG_REFERENCE_INKSCAPE} AND DEFINED ARG_REFERENCE_FILENAME)
+        list(APPEND CREATED_FILES ${ARG_REFERENCE_FILENAME}.reference.png)
     endif()
     if(DEFINED CREATED_FILES)
         add_test("${testname}" rm -f ${CREATED_FILES})
@@ -1038,6 +1060,16 @@ add_cli_test(actions-svginot-text-topath2
         FUZZYREF_FILENAME ../../rendering_tests/expected_rendering/text-svg-glyph-custom.png
         FUZZ_PERCENTAGE 1
 )
+
+add_cli_test(actions-text-to-glyph
+        INPUT_FILENAME text_to_glyph.svg
+        PARAMETERS
+            --actions=select-all$<SEMICOLON>text-convert-to-glyphs$<SEMICOLON>select-clear$<SEMICOLON>select-by-id:text_o_1$<SEMICOLON>select-by-id:text_o_2$<SEMICOLON>select-by-id:text_o_3$<SEMICOLON>select-by-id:text_o_4$<SEMICOLON>delete$<SEMICOLON>
+        OUTPUT_FILENAME text_to_glyph.png
+        REFERENCE_FILENAME text_to_glyph_expected.svgz REFERENCE_INKSCAPE
+        FUZZ_PERCENTAGE 8
+)
+
 
 # The export area type should be the last set value
 add_cli_test(actions-export-area-drawing-then-page

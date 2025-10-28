@@ -805,7 +805,6 @@ private:
     Path const *_path_fitted = nullptr;
 
 public:
-    struct Glyph;
     struct Character;
     struct Span;
     struct Chunk;
@@ -1008,6 +1007,9 @@ public:
         {return _char_index > other._char_index;}
     bool operator>= (iterator const &other) const
         {return _char_index >= other._char_index;}
+
+    int glyphIndex() const { return _glyph_index; }
+    bool hasGlyph() const { return _glyph_index >= 0; }
 
     /* **** visual-oriented methods **** */
 
