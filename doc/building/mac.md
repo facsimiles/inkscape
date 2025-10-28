@@ -28,14 +28,12 @@ brew install \
     double-conversion \
     gettext \
     gsl \
-    gspell \
     gtkmm4 \
     gtksourceview5 \
+    icu4c \
     imagemagick \
     intltool \
     lcms2 \
-    libomp \
-    libsoup@2 \
     libxslt \
     ninja \
     pkg-config \
@@ -47,7 +45,7 @@ You may substitute `imagemagick` with `graphicsmagick`.
 
 If you want to include a spell checker, also install `libspelling` using `brew`.
 
-To build version 1.4.x you need `gtkmm3` instead of `gtkmm4`.
+To build version 1.4.x you need `gtkmm3` instead of `gtkmm4` and also install libraries `gspell`, `libomp` and `libsoup@2`.
 
 ### Get Inkscape Source
 Check out the source if you haven't already:
@@ -67,7 +65,8 @@ LIBPREFIX="/opt/homebrew"
 export PATH="$LIBPREFIX/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Some keg-only libraries need to be added to PKG_CONFIG_PATH
-export PKG_CONFIG_PATH="$LIBPREFIX/opt/icu4c/lib/pkgconfig"
+# Note: icu4c path is version specific (here: @77)
+export PKG_CONFIG_PATH="$LIBPREFIX/opt/icu4c@77/lib/pkgconfig"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBPREFIX/opt/libsoup@2/lib/pkgconfig"
 
 # prevent picking up libxslt and libxml2 from the (wrong) SDK
