@@ -46,6 +46,7 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
+#include "io/dir-util.h"
 #include "io/file.h"
 #include "io/fix-broken-links.h"
 #include "io/resource.h"
@@ -363,46 +364,23 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
 bool
 sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
 {
-    bool success = true;
-
-    if (doc->isModifiedSinceSave()) {
-        if ( doc->getDocumentFilename() == nullptr )
-        {
-            // In this case, an argument should be given that indicates that the document is the first
-            // time saved, so that .svg is selected as the default and not the last one "Save as ..." extension used
-            return sp_file_save_dialog(parentWindow, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
-        } else {
-            std::string path = doc->getDocumentFilename();
-
-            // Try to determine the extension from the filename; this may not lead to a valid extension,
-            // but this case is caught in the file_save method below (or rather in Extension::save()
-            // further down the line).
-            std::string ext;
-            std::string::size_type pos = path.rfind('.');
-            if (pos != std::string::npos) {
-                // FIXME: this could/should be more sophisticated (see FileSaveDialog::appendExtension()),
-                // but hopefully it's a reasonable workaround for now
-                ext = path.substr( pos );
-            }
-            auto file = Gio::File::create_for_path(path);
-            success = file_save(parentWindow, doc, file, Inkscape::Extension::db.get(ext.c_str()), false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
-            if (success == false) {
-                // give the user the chance to change filename or extension
-                return sp_file_save_dialog(parentWindow, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
-            }
+    if (auto path = doc->getDocumentFilename()) {
+        // Try to determine the extension from the filename;
+        // this may not lead to a valid extension,
+        // but this case is caught in the file_save method below
+        // (or rather in Extension::save() further down the line).
+        auto ext = sp_extension_from_path(path);
+        auto file = Gio::File::create_for_path(path);
+        if (file_save(parentWindow, doc, file, Inkscape::Extension::db.get(ext), false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS)) {
+            return true;
         }
-    } else {
-        Glib::ustring msg;
-        if (doc->getDocumentFilename() == nullptr) {
-            msg = Glib::ustring::format(_("No changes need to be saved."));
-        } else {
-            msg = Glib::ustring::format(_("No changes need to be saved."), " ", doc->getDocumentFilename());
-        }
-        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, msg.c_str());
-        success = true;
     }
 
-    return success;
+    // In this case `path == nullptr`, therefore, an argument should be given
+    // that indicates that the document is the firsttime saved,
+    // so that .svg is selected as the default
+    // and not the last one "Save as ..." extension used
+    return sp_file_save_dialog(parentWindow, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
 }
 
 /**
