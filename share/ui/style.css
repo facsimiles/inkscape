@@ -1759,7 +1759,7 @@ listview row.top-separator {
     margin-left: 26px;
 }
 #Settings #PageSelector {
-    margin: 16px;
+    margin: 8px;
 }
 #Settings #PageContent {
     margin-top: 16px;
@@ -1802,6 +1802,28 @@ listview row.top-separator {
 }
 #Settings .settings-separator {
     margin: 0.75em 0;
+}
+#Settings .item-separator {
+    margin: 0.6em 0 0 0;
+}
+#Settings .heading {
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-top: 0.2em;
+    margin-bottom: 0.5em;
+}
+#Settings .spin-entry-margin {
+    margin-bottom: 4px;
+}
+#Settings .page-indentation {
+    margin: 0 14px 0 0;
+}
+#Settings .page-indentation-right {
+    /* we need some space on the right, so scrollbar doesn't overlap buttons */
+    margin: 0 5px 0 0;
+}
+#Settings .label-indentation {
+    margin-left: 14px;
 }
 
 .key-pillbox {

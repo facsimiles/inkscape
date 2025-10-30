@@ -7,9 +7,18 @@
 
 #include <array>
 #include <cstddef>
+#include <iomanip>
+#include <numeric>
+#include <optional>
+#include <regex>
+#include <string>
+#include <string_view>
+#include <vector>
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
 #include <gdkmm/enums.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/ustring.h>
 #include <gtkmm/accelerator.h>
@@ -19,30 +28,27 @@
 #include <gtkmm/dropdown.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/enums.h>
+#include <gtkmm/eventcontrollerfocus.h>
+#include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/fontchooserdialog.h>
 #include <gtkmm/label.h>
 #include <gtkmm/object.h>
 #include <gtkmm/overlay.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/settings.h>
 #include <gtkmm/shortcuttrigger.h>
+#include <gtkmm/sizegroup.h>
+#include <gtkmm/switch.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/togglebutton.h>
 #include <gtkmm/widget.h>
-#include <iomanip>
-#include <numeric>
-#include <optional>
-#include <regex>
-#include <glibmm/fileutils.h>
-#include <glibmm/i18n.h>
 #include <sigc++/signal.h>
-#include <string>
-#include <string_view>
-#include <vector>
 
-// #include "inkscape.h"
 #include "inkscape-application.h"
-#include "io/resource.h"
 #include "preferences.h"
 #include "settings-helpers.h"
+#include "io/resource.h"
 #include "ui/builder-utils.h"
 #include "ui/containerize.h"
 #include "ui/modifiers.h"
@@ -50,8 +56,8 @@
 #include "ui/shortcuts.h"
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
-#include "ui/widget/ink-spin-button.h"
 #include "ui/widget/preferences-widget.h"
+#include "ui/widget/generic/spin-button.h"
 #include "util-string/ustring-format.h"
 #include "util/action-accel.h"
 #include "util/key-helpers.h"
@@ -292,7 +298,7 @@ std::string to_path(XML::Node* node) {
 bool read_bool(ReadWrite::IO* io, const std::string& path) {
     auto value = io->read(path);
     if (value->empty()) {
-        std::cerr << "Missing preference value for '" << path << "'. Fix preferences-skeleton.h file" << std::endl;
+        // std::cerr << "Missing preference value for '" << path << "'. Fix preferences-skeleton.h file" << std::endl;
         return false;
     }
 
@@ -428,7 +434,7 @@ void _subst_argument(XML::Node* node, const std::string& placeholder, const std:
         }
     }
 
-    // substiute in children
+    // substitute in children
     for (auto el = node->firstChild(); el; el = el->next()) {
         _subst_argument(el, placeholder, arg);
     }
@@ -958,6 +964,7 @@ struct Section : Gtk::ListBoxRow {
 
     Section(Context& ctx, XML::Node* node): _root(node) {
         _box.add_css_class("section");
+        _box.set_hexpand();
         if (!node) return;
 
         auto& content = get_content(false);
@@ -1503,6 +1510,7 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
     // _content.set_margin_start(8);
     // _content.set_margin_end(8);
     // _content.set_expand();
+_builder->get_widget<Gtk::Entry>("user-config-path")->set_text("/Users/mike/Library/Application Support/org.inkscape.Inkscape/config/inkscape");
 
     // access to preferences
     _io = std::make_unique<PreferencesIO>(get_root()->get_display());
@@ -1544,8 +1552,10 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
         auto widget = dynamic_cast<Gtk::Grid*>(obj.get());
         if (widget && widget->get_name() == "Page") {
             auto title = dynamic_cast<Gtk::Label*>(widget->get_child_at(1, 0));
+     // printf("page: '%s'\n", title->get_text().c_str());
             if (title) title->set_visible(false);
             auto page = create_section(ctx, nullptr, widget, title->get_text());
+            // page->set_hexpand();
             _pages.append(*page);
             pages++;
         }

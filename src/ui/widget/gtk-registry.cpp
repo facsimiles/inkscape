@@ -12,6 +12,7 @@
 #include "generic/tab-strip.h"
 #include "style/paint-order.h"
 #include "property-widget.h"
+#include "preference-widgets.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -22,6 +23,8 @@ void register_all()
     TabStrip::register_type();
     ReorderableStack::register_type();
     PropertyWidget::register_type();
+    PreferenceCheckButton::register_type();
+    PreferenceSpinButton::register_type();
 
     // Specific widgets
     PaintOrderWidget::register_type();

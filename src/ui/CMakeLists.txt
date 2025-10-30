@@ -278,6 +278,7 @@ target_sources(inkscape_base PRIVATE
 	widget/pattern-editor.cpp
 	widget/point.cpp
 	widget/preferences-widget.cpp
+	widget/preference-widgets.cpp
 	widget/property-widget.cpp
 	widget/random.cpp
 	widget/registered-widget.cpp
@@ -615,6 +616,7 @@ target_sources(inkscape_base PRIVATE
 	widget/pattern-editor.h
 	widget/point.h
 	widget/preferences-widget.h
+	widget/preference-widgets.h
 	widget/property-widget.h
 	widget/random.h
 	widget/registered-enums.h

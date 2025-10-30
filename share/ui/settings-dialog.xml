@@ -31,7 +31,7 @@
     <template name="shape-settings">
       <gap/>
       <row label="Display">
-        <checkbox label="Show selection cue" path="x"/>
+        <checkbox label="Show selection cue" path="/x"/>
       </row>
       <gap />
       <row label="Behavior">
@@ -114,7 +114,7 @@
         </row>
         <gap/>
         <row label="Alt+Scroll wheel">
-          <checkbox label="Cycle through stacked objects" path="x"/>
+          <checkbox label="Cycle through stacked objects" path="/x"/>
           <checkbox label="Wrap when cycle selecting" path="/options/selection/cycleWrap"/>
         </row>
         <gap/>
@@ -130,35 +130,35 @@
       <insert template="about" label="Edit paths by nodes"/>
       <insert template="tool-shortcut" tool="Node"/>
       <row label="On select">
-        <checkbox label="Change layer" path="x"/>
+        <checkbox label="Change layer" path="/x"/>
       </row>
       <gap/>
       <row label="Display">
-        <checkbox label="Show selection cue" path="x"/>
-        <checkbox label="Show transform handles for single nodes" path="x"/>
+        <checkbox label="Show selection cue" path="/x"/>
+        <checkbox label="Show transform handles for single nodes" path="/x"/>
       </row>
       <gap/>
       <row label="Simplification threshold">
-        <number min="0.01" max="1.0" step="0.01" precision="4" path="x"/>
+        <number min="0.01" max="1.0" step="0.01" precision="4" path="/x"/>
       </row>
       <expander label="PATH OUTLINE">
         <row label="Color">
-          <color-picker label="Path outline" tooltip="Explanation..." path="x"/>
+          <color-picker label="Path outline" tooltip="Explanation..." path="/x"/>
         </row>
         <row label="Flash time">
-          <number min="0.0" max="10.0" step="0.1" precision="2" unit="s" path="x"/>
+          <number min="0.0" max="10.0" step="0.1" precision="2" unit="s" path="/x"/>
         </row>
         <gap/>
         <row label="Display">
-          <checkbox label="Always show outline" path="x"/>
-          <checkbox label="Show path direction on outlines" path="x"/>
-          <checkbox label="Show temporary path outlines" path="x"/>
-          <checkbox label="Show temporary outline for selected paths" path="x"/>
+          <checkbox label="Always show outline" path="/x"/>
+          <checkbox label="Show path direction on outlines" path="/x"/>
+          <checkbox label="Show temporary path outlines" path="x/"/>
+          <checkbox label="Show temporary outline for selected paths" path="/x"/>
         </row>
         <gap/>
         <row label="Behavior">
-          <checkbox label="Update outline when dragging nodes" path="x"/>
-          <checkbox label="Update paths when dragging nodes" path="x"/>
+          <checkbox label="Update outline when dragging nodes" path="/x"/>
+          <checkbox label="Update paths when dragging nodes" path="/x"/>
         </row>
         <gap/>
       </expander>
@@ -243,7 +243,7 @@
       <row label="Display">
         <checkbox label="Show font samples in drop-down list" path="show_sample_in_list" tooltip="Show font samples alongside font names in the drop-down list in Text bar"/>
         <checkbox label="Show font substitution warning dialog" path="/options/font/substitutedlg" tooltip="Show font substitution warning dialog when requested fonts are not available on the system"/>
-        <checkbox label="Show selection cue" path="x"/>
+        <checkbox label="Show selection cue" path="/x"/>
       </row>
       <gap/>
       <row label="Behavior">
@@ -380,10 +380,10 @@
       </row>
       <gap/>
       <row label="Color selector">
-        <checkbox label="Use compact selector" path="x" />
+        <checkbox label="Use compact selector" path="/x" />
       </row>
       <row label="">
-        <group type="segmented" path="show">
+        <group type="segmented" path="/show">
           <toggle label="RGB" path="rgb" size="sixth"/>
           <toggle label="CMYK" path="cmyk" size="sixth"/>
           <toggle label="HSL" path="hsl" size="sixth"/>
@@ -394,46 +394,46 @@
       </row>
       <gap/>
       <row label="Welcome dialog">
-        <checkbox label="Show on start-up" path="x" />
+        <checkbox label="Show on start-up" path="/x" />
       </row>
       <expander label="ADVANCED">
         <row label="Command palette">
-          <checkbox label="Show command line argument names" path="x" />
-          <checkbox label="Show untranslated (English) names" path="x" />
+          <checkbox label="Show command line argument names" path="/x" />
+          <checkbox label="Show untranslated (English) names" path="/x" />
         </row>
         <row label="Recent docs">
-          <number min="0" max="30" step="1" path="x"/>
+          <number min="0" max="30" step="1" path="/x"/>
         </row>
         <row label="Mouse cursor">
-          <checkbox label="Enable high-DPI scaling" path="x" />
-          <checkbox label="Show drop shadow" path="x" />
+          <checkbox label="Enable high-DPI scaling" path="/x" />
+          <checkbox label="Show drop shadow" path="/x" />
         </row>
         <gap/>
         <row label="UI text scale">
-          <number unit="%" min="50" max="300" step="5" scaling-factor="100" path="x"/>
+          <number unit="%" min="50" max="300" step="5" scaling-factor="100" path="/x"/>
         </row>
         <row label="Icon scale">
-          <number unit="%" min="50" max="300" step="5" scaling-factor="100" path="x"/>
+          <number unit="%" min="50" max="300" step="5" scaling-factor="100" path="/x"/>
         </row>
         <row label="Snap control bar">
-          <group type="radio" path="x">
+          <group type="radio" path="/x">
             <toggle label="Simple" value="0" tooltip="Show simplified snap controls"/>
             <toggle label="Advanced" value="1" tooltip="Show advanced snap controls"/>
             <toggle label="Permanent" value="2" tooltip="`"/>
           </group>
         </row>
         <row label="Lock canvas" tooltip="Prevent accidental canvas rotation by disabling on-canvas keyboard and mouse actions for rotation">
-          <checkbox label="Lock canvas rotation" path="x" />
+          <checkbox label="Lock canvas rotation" path="/x" />
         </row>
         <row label="Dialog tab labels">
-          <group type="radio" path="x">
+          <group type="radio" path="/x">
             <toggle label="Show all" value="0" tooltip="Show labels in all docked dialog tabs"/>
             <toggle label="Active only" value="1" tooltip="Show label of visible docked dialog only"/>
             <toggle label="Hidden" value="2" tooltip="Hide labels in all docked dialog tabs"/>
           </group>
         </row>
         <row label="Save window size">
-          <group type="radio" path="x">
+          <group type="radio" path="/x">
             <toggle label="Don't save" value="0" tooltip=""/>
             <toggle label="Last window" value="1" tooltip=""/>
             <toggle label="Each document" value="2" tooltip=""/>
@@ -450,13 +450,13 @@
       <row label="">
         <!-- handle preview -->
       </row>
-      <row label="Handle color" path="x">
+      <row label="Handle color" path="/x">
         <selector source="handle-colors"/>
       </row>
       <row label="Selection" path="/options/ruler/show_bbox" tooltip="Shows a blue line in the ruler where the selection is.">
         <checkbox label="Show in ruler"/>
       </row>
-      <row label="Zoom drawing" path="x">
+      <row label="Zoom drawing" path="/x">
         <checkbox label="When window is resized"/>
       </row>
       <expander label="ADVANCED">
@@ -470,7 +470,7 @@
         <ruler/>
         <gap/>
         <row label="Document viewports">
-          <checkbox label="Save and restore" path="x" />
+          <checkbox label="Save and restore" path="/x" />
         </row>
       </expander>
     </panel>
