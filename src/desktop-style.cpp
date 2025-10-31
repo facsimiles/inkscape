@@ -505,6 +505,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
 
        paintImpossible = false;
        paint_res->paintOrigin = paint->paintOrigin;
+       paint_res->paintSource = paint->paintSource;
        if (paint_res->set && paint_effectively_set && paint->isPaintserver()) { // copy the server
            if (isfill) {
                sp_style_set_to_uri(style_res, true, style->getFillURI());

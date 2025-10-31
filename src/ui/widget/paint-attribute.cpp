@@ -275,8 +275,21 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
     _clear.signal_clicked().connect([this, fill, tag]() {
         if (!can_update()) return;
 
-        // _current_item->style->getFillOrStroke(_is_fill)->setNone();
-        set_item_style_str(_current_item, fill ? "fill" : "stroke", "none");
+        // deleting fill or stroke; remove all related attributes as well
+        auto css = new_css_attr();
+        if (fill) {
+            sp_repr_css_set_property(css.get(), "fill", "none");
+            sp_repr_css_unset_property(css.get(), "fill-opacity");
+        }
+        else {
+            for (auto attr : {
+                "stroke", "stroke-opacity", "stroke-width", "stroke-miterlimit", "stroke-linejoin",
+                "stroke-linecap", "stroke-dashoffset", "stroke-dasharray"}) {
+                sp_repr_css_unset_property(css.get(), attr);
+            }
+            sp_repr_css_set_property(css.get(), "stroke", "none");
+        }
+        set_item_style(cast<SPItem>(_current_item), css.get());
         request_update(true);
 
         DocumentUndo::done(_current_item->document, fill ? _("Remove fill") : _("Remove stroke"), "dialog-fill-and-stroke", tag);
@@ -393,47 +406,47 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         set_fill_rule(fill_rule);
     });
 
+    _switch->get_inherit_mode_changed().connect([=,this](auto mode) {
+        if (!can_update()) return;
+
+        auto css = new_css_attr();
+        auto attr = fill ? "fill" : "stroke";
+        switch (mode) {
+        case PaintInheritMode::Unset:
+            sp_repr_css_unset_property(css.get(), attr);
+            break;
+        case PaintInheritMode::Inherit:
+            sp_repr_css_set_property(css.get(), attr, "inherit");
+            break;
+        case PaintInheritMode::ContextFill:
+            sp_repr_css_set_property(css.get(), attr, "context-fill");
+            break;
+        case PaintInheritMode::ContextStroke:
+            sp_repr_css_set_property(css.get(), attr, "context-stroke");
+            break;
+        case PaintInheritMode::CurrentColor:
+            sp_repr_css_set_property(css.get(), attr, "currentColor");
+            break;
+        default:
+            g_warning("Unknown PaintUnsetMode");
+            break;
+        }
+        set_item_style(cast<SPItem>(_current_item), css.get());
+        DocumentUndo::done(_current_item->document,  fill ? _("Inherit fill") : _("Inherit stroke"), "dialog-fill-and-stroke", tag);
+        update_preview_indicators(_current_item);
+    });
+
     _switch->get_signal_mode_changed().connect([this, fill, tag](auto mode) {
         if (!can_update()) return;
 
-        if (mode == PaintMode::NotSet) {
-            //todo: this is an attempt to unset style; doesn't quite work
-            // unset
-            /*
-            auto style = _current_item->style;
-            if (fill) {
-                style->fill.clear();
-                style->fill_opacity.clear();
-            }
-            else {
-                style->stroke.clear();
-                style->stroke_opacity.clear();
-                style->stroke_width.clear();
-                style->stroke_miterlimit.clear();
-                style->stroke_linejoin.clear();
-                style->stroke_linecap.clear();
-                style->stroke_dasharray.clear();
-                style->stroke_dashoffset.clear();
-                style->stroke_extensions.clear();
-                style->vector_effect.clear(); //todo: verify
-            }
-            request_update(true);
-            */
-
-            _current_item->removeAttribute(fill ? "fill" : "stroke");
+        if (mode == PaintMode::Derived) {
             auto css = new_css_attr();
-            if (fill) {
-                sp_repr_css_unset_property(css.get(), "fill");
-            }
-            else {
-                for (auto attr : {
-                    "stroke", "stroke-opacity", "stroke-width", "stroke-miterlimit", "stroke-linejoin",
-                    "stroke-linecap", "stroke-dashoffset", "stroke-dasharray"}) {
-                    sp_repr_css_unset_property(css.get(), attr);
-                }
-            }
+            sp_repr_css_unset_property(css.get(), fill ? "fill" : "stroke");
             set_item_style(cast<SPItem>(_current_item), css.get());
             DocumentUndo::done(_current_item->document,  fill ? _("Unset fill") : _("Unset stroke"), "dialog-fill-and-stroke", tag);
+            if (auto paint = _current_item->style->getFillOrStroke(fill)) {
+                _switch->update_from_paint(*paint);
+            }
             update_preview_indicators(_current_item);
         }
     });
@@ -920,6 +933,7 @@ void PaintAttribute::update_reset_opacity_button() {
     if (!_current_item || !_current_item->style) return;
 
     auto& opacity = _current_item->style->opacity;
+    // no reset btn available
     // _reset_opacity.set_visible(opacity.inherit || (opacity.set && static_cast<double>(opacity) < 1.0));
 }
 

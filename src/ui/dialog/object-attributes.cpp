@@ -1586,14 +1586,14 @@ struct PaintKey {
 };
 
 PaintKey get_paint(SPIPaint* paint) {
-    auto mode = paint ? Widget::get_mode_from_paint(*paint) : Widget::PaintMode::NotSet;
+    auto mode = paint ? Widget::get_mode_from_paint(*paint) : Widget::PaintMode::Derived;
     PaintKey key;
     key.mode = mode;
     if (mode == Widget::PaintMode::Solid) {
         key.id = paint->getColor().toString(false);
         key.color = paint->getColor();
     }
-    else if (mode != Widget::PaintMode::NotSet && mode != Widget::PaintMode::None) {
+    else if (mode != Widget::PaintMode::Derived && mode != Widget::PaintMode::None) {
         if (auto server = paint->href ? paint->href->getObject() : nullptr) {
             if (auto gradient = cast<SPGradient>(server)) {
                 // gradients, meshes
@@ -1941,7 +1941,7 @@ public:
         add_object_label();
         add_size_properties();
         _grid.add_gap();
-        add_fill_and_stroke(static_cast<Parts>(Parts::Opacity | Parts::BlendMode));
+        add_fill_and_stroke();
 
         add_header(_("Group"));
         auto enter = Gtk::make_managed<Gtk::Button>(_("Enter group"));
@@ -2012,7 +2012,7 @@ public:
         add_object_label();
         add_size_properties();
         _grid.add_gap();
-        add_fill_and_stroke(static_cast<Parts>(Parts::Opacity | Parts::BlendMode));
+        add_fill_and_stroke();
 
         add_header(_("Clone"));
         auto go_to = create_button(_("Go to"), "object-pick");

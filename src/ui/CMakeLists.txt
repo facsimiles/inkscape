@@ -261,6 +261,8 @@ set(ui_SRC
 	widget/page-size-preview.cpp
 	widget/page-selector.cpp
 	widget/paint-attribute.cpp
+	widget/paint-enums.cpp
+	widget/paint-inherited.cpp
 	widget/paint-selector.cpp
 	widget/paint-switch.cpp
 	widget/pattern-editor.cpp
@@ -590,6 +592,8 @@ set(ui_SRC
 	widget/optglarea.h
 	widget/page-selector.h
 	widget/paint-attribute.h
+	widget/paint-inherited.h
+	widget/paint-enums.h
 	widget/paint-selector.h
 	widget/paint-switch.h
 	widget/palette_t.h

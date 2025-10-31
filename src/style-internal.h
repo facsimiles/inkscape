@@ -731,6 +731,7 @@ public:
         paintOrigin = rhs.paintOrigin;
         paintSource = rhs.paintSource;
         noneSet     = rhs.noneSet;
+        inheritSource = rhs.inheritSource;
         _color      = rhs._color;
         href        = rhs.href;
         return *this;
@@ -740,10 +741,11 @@ public:
 
     bool isSameType( SPIPaint const & other ) const {
         return
-            (isPaintserver() == other.isPaintserver()) &&
-            (isColor() == other.isColor()) &&
-            (paintOrigin == other.paintOrigin) &&
-            (paintSource == other.paintSource);
+            isPaintserver() == other.isPaintserver() &&
+            isColor() == other.isColor() &&
+            paintOrigin == other.paintOrigin &&
+            paintSource == other.paintSource &&
+            inheritSource == other.inheritSource;
     }
 
     bool isNoneSet() const {
@@ -751,10 +753,11 @@ public:
     }
 
     bool isNone() const {
-        return !_color && !isPaintserver() && (paintOrigin == SP_CSS_PAINT_ORIGIN_NORMAL);
+        return !_color && !isPaintserver() && paintOrigin == SP_CSS_PAINT_ORIGIN_NORMAL;
     }
 
     bool isColor() const {
+        //TODO: consider paintOrigin too?
         return _color && !isPaintserver();
     }
 
@@ -766,6 +769,10 @@ public:
         return
             paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ||
             paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
+    }
+
+    bool isDerived() const {
+        return !set || inheritSource || paintSource != SP_CSS_PAINT_ORIGIN_NORMAL;
     }
 
     void setNone() {
@@ -786,6 +793,7 @@ public:
     SPPaintOrigin paintOrigin : 2; // Inherited value (from cascade)
     SPPaintOrigin paintSource:  2; // Set value (from XML)
     bool noneSet : 1;
+    bool inheritSource : 1; // Value from XML: true if paint is set to 'inherit' (with a keyword)
     std::shared_ptr<SPPaintServerReference> href;
     SPObject *tag = nullptr;
 private:

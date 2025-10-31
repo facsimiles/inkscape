@@ -44,6 +44,7 @@
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/gradient-editor.h"
 #include "ui/widget/pattern-editor.h"
+#include "ui/widget/paint-inherited.h"
 #include "ui/widget/swatch-selector.h"
 #include "ui/widget/recolor-art-manager.h"
 #include "widgets/widget-sizes.h"
@@ -62,7 +63,7 @@ static gchar const *modeStrings[] = {
 #endif
     "MODE_PATTERN",
     "MODE_SWATCH",
-    "MODE_UNSET",
+    "MODE_OTHER",
     ".",
     ".",
 };
@@ -123,7 +124,7 @@ GradientSelectorInterface *PaintSelector::getGradientFromData() const
 
 PaintSelector::PaintSelector(FillOrStroke kind, std::shared_ptr<Colors::ColorSet> colors)
     : _selected_colors(std::move(colors))
-{       
+{
     set_orientation(Gtk::Orientation::VERTICAL);
 
     _mode = static_cast<PaintSelector::Mode>(-1); // huh?  do you mean 0xff?  --  I think this means "not in the enum"
@@ -151,8 +152,8 @@ PaintSelector::PaintSelector(FillOrStroke kind, std::shared_ptr<Colors::ColorSet
 #endif
     _pattern = style_button_add(INKSCAPE_ICON("paint-pattern"), PaintSelector::MODE_PATTERN, _("Pattern"));
     _swatch = style_button_add(INKSCAPE_ICON("paint-swatch"), PaintSelector::MODE_SWATCH, _("Swatch"));
-    _unset = style_button_add(INKSCAPE_ICON("paint-unknown"), PaintSelector::MODE_UNSET,
-                              _("Unset paint (make it undefined so it can be inherited)"));
+    _other = style_button_add(INKSCAPE_ICON("paint-unknown"), PaintSelector::MODE_OTHER,
+                              _("Some other paint, take the paint from some other shape."));
 
     /* Fillrule */
     {
@@ -230,16 +231,16 @@ void PaintSelector::setDesktop(SPDesktop *desktop)
     }
 
     RecolorArtManager::get().popover.popdown();
-    
+
     if (_selection_changed_connection) {
         _selection_changed_connection.disconnect();
     }
-    
-    _desktop = desktop;  
-    
+
+    _desktop = desktop;
+
     if (_desktop) {
         if (auto selection = _desktop->getSelection()) {
-            _selection_changed_connection = 
+            _selection_changed_connection =
                 selection->connectChanged(sigc::mem_fun(*this, &PaintSelector::onSelectionChanged));
         }
     }
@@ -323,8 +324,8 @@ void PaintSelector::set_mode_ex(Mode mode, bool switch_style) {
             case MODE_SWATCH:
                 set_mode_swatch(mode);
                 break;
-            case MODE_UNSET:
-                set_mode_unset();
+            case MODE_OTHER:
+                set_mode_other();
                 break;
             default:
                 g_warning("file %s: line %d: Unknown paint mode %d", __FILE__, __LINE__, mode);
@@ -466,6 +467,9 @@ void PaintSelector::clear_frame()
     if (_selector_swatch) {
         _selector_swatch->set_visible(false);
     }
+    if (_selector_other) {
+        _selector_other->set_visible(false);
+    }
 }
 
 void PaintSelector::set_mode_empty()
@@ -484,12 +488,29 @@ void PaintSelector::set_mode_multiple()
     _label->set_markup(_("<b>Multiple styles</b>"));
 }
 
-void PaintSelector::set_mode_unset()
+void PaintSelector::set_mode_other()
 {
-    set_style_buttons(_unset);
+    set_style_buttons(_other);
     _style->set_sensitive(true);
-    clear_frame();
-    _label->set_markup(_("<b>Paint is undefined</b>"));
+
+    if (_mode == PaintSelector::MODE_OTHER) {
+        /* Already have other selector */
+        // Do nothing
+    } else {
+        clear_frame();
+
+        if (!_selector_other) {
+            _selector_other = Gtk::make_managed<PaintInherited>();
+            _selector_other->signal_mode_changed().connect([this](auto) {
+                _signal_changed.emit();
+            });
+            _frame->append(*_selector_other);
+        }
+
+        _selector_other->set_visible(true);
+    }
+    _label->set_markup("");
+    _label->set_visible(false);
 }
 
 void PaintSelector::set_mode_none()
@@ -959,7 +980,7 @@ void PaintSelector::set_style_buttons(Gtk::ToggleButton *active)
 #endif
     _pattern->set_active(active == _pattern);
     _swatch->set_active(active == _swatch);
-    _unset->set_active(active == _unset);
+    _other->set_active(active == _other);
 }
 
 void PaintSelector::pattern_destroy(GtkWidget *widget, PaintSelector * /*psel*/)
@@ -1018,7 +1039,7 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
 void PaintSelector::set_mode_hatch(PaintSelector::Mode mode)
 {
     if (mode == PaintSelector::MODE_HATCH) {
-        set_style_buttons(_unset);
+        set_style_buttons(_other);
     }
 
     _style->set_sensitive(true);
@@ -1106,6 +1127,15 @@ SPPattern* PaintSelector::getPattern() {
     return cast<SPPattern>(pat_obj);
 }
 
+std::string PaintSelector::getOtherSetting() const {
+    g_return_val_if_fail(_mode == MODE_OTHER, nullptr);
+
+    if (!_selector_other) return {};
+
+    // Get value from _selector_other widget and return as string.
+    return get_inherited_paint_css_mode(_selector_other->get_mode());
+}
+
 void PaintSelector::set_mode_swatch(PaintSelector::Mode mode)
 {
     if (mode == PaintSelector::MODE_SWATCH) {
@@ -1148,11 +1178,11 @@ void PaintSelector::set_mode_swatch(PaintSelector::Mode mode)
 
 PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrStroke kind)
 {
-    Mode mode = MODE_UNSET;
+    Mode mode = MODE_OTHER;
     SPIPaint const &target = *style.getFillOrStroke(kind == FILL);
 
     if (!target.set) {
-        mode = MODE_UNSET;
+        mode = MODE_OTHER;
     } else if (target.isPaintserver()) {
         SPPaintServer const *server = kind == FILL ? style.getFillPaintServer() : style.getStrokePaintServer();
 
@@ -1182,6 +1212,8 @@ PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrS
             g_warning("file %s: line %d: Unknown paintserver", __FILE__, __LINE__);
             mode = MODE_NONE;
         }
+    } else if (target.isDerived()) {
+        mode = MODE_OTHER;
     } else if (target.isColor()) {
         // TODO this is no longer a valid assertion:
         mode = MODE_SOLID_COLOR; // so far only rgb can be read from svg
@@ -1195,6 +1227,12 @@ PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrS
     return mode;
 }
 
+void PaintSelector::setInheritedPaint(PaintInheritMode mode) {
+    if (_selector_other) {
+        _selector_other->set_mode(mode);
+    }
+}
+
 void PaintSelector::onSelectionChanged(Inkscape::Selection *selection)
 {
     bool show_recolor = (_mode == MODE_GRADIENT_MESH && RecolorArtManager::checkMeshObject(selection)) ||
@@ -1203,7 +1241,7 @@ void PaintSelector::onSelectionChanged(Inkscape::Selection *selection)
     int btn_index = -1;
 
     if (show_recolor) {
-        if (_mode == MODE_MULTIPLE || _mode == MODE_UNSET || _mode == MODE_GRADIENT_MESH) {
+        if (_mode == MODE_MULTIPLE || _mode == MODE_OTHER || _mode == MODE_GRADIENT_MESH) {
             btn_index = 0;
         } else if (_mode == MODE_SOLID_COLOR) {
             btn_index = 1;

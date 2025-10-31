@@ -19,10 +19,15 @@
 #include <gtkmm/menubutton.h>
 
 #include "fill-or-stroke.h"
+#include "paint-enums.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/swatch-selector.h"
 #include "selection.h"
 #include "ui/widget/recolor-art-manager.h"
+
+namespace Inkscape::UI::Widget {
+class PaintInherited;
+}
 
 class SPGradient;
 class SPLinearGradient;
@@ -69,7 +74,7 @@ class PaintSelector : public Gtk::Box {
         MODE_PATTERN,
         MODE_HATCH,
         MODE_SWATCH,
-        MODE_UNSET
+        MODE_OTHER
     };
 
     enum FillRule { FILLRULE_NONZERO, FILLRULE_EVENODD };
@@ -89,7 +94,7 @@ class PaintSelector : public Gtk::Box {
 #endif
     StyleToggleButton *_pattern;
     StyleToggleButton *_swatch;
-    StyleToggleButton *_unset;
+    StyleToggleButton *_other;
 
     Gtk::Box *_fillrulebox;
     FillRuleRadioButton *_evenodd;
@@ -102,7 +107,8 @@ class PaintSelector : public Gtk::Box {
     Gtk::Box         *_selector_mesh = nullptr;
     SwatchSelector   *_selector_swatch = nullptr;
     PatternEditor* _selector_pattern = nullptr;
-    
+    PaintInherited* _selector_other = nullptr;
+
     std::array<std::unique_ptr<Gtk::MenuButton>, 5> _recolorButtonTrigger;
     SPDesktop *_desktop = nullptr;
     void onSelectionChanged(Inkscape::Selection *selection);
@@ -142,7 +148,7 @@ class PaintSelector : public Gtk::Box {
     void set_mode_none();
     GradientSelectorInterface *getGradientFromData() const;
     void clear_frame();
-    void set_mode_unset();
+    void set_mode_other();
     void set_mode_color();
     void set_mode_gradient(PaintSelector::Mode mode);
 #ifdef WITH_MESH
@@ -193,6 +199,8 @@ class PaintSelector : public Gtk::Box {
     void updateMeshList(SPMeshGradient *pat);
 #endif
 
+    void setInheritedPaint(PaintInheritMode mode);
+    std::string getOtherSetting() const;
     void updatePatternList(SPPattern *pat);
     inline decltype(_mode) get_mode() const { return _mode; }
 

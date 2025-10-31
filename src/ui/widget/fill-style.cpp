@@ -223,7 +223,11 @@ void FillNStroke::performUpdate()
                                    : UI::Widget::PaintSelector::FILLRULE_EVENODD);
             }
 
-            if (targPaint.set && targPaint.isColor()) {
+            if (targPaint.isDerived()) {
+                auto inherited = get_inherited_paint_mode(targPaint);
+                _psel->setInheritedPaint(inherited.value_or(PaintInheritMode::Unset));
+            }
+            else if (targPaint.set && targPaint.isColor()) {
                 // This is terrible, future refactoring has been written
                 auto color = targPaint.getColor();
                 color.addOpacity(targOpacity);
@@ -708,32 +712,45 @@ void FillNStroke::updateFromPaint(bool switch_style)
 
             break;
 
-        case UI::Widget::PaintSelector::MODE_UNSET:
+        case UI::Widget::PaintSelector::MODE_OTHER:
             if (!items.empty()) {
-                for (auto item: items) {
-                    if (item) {
-                        unset_recursive((kind == FILL) ? "fill" : "stroke", item);
+                auto other = _psel->getOtherSetting();
+
+                if (other.empty()) {
+                    for (auto item: items) {
+                        if (item) {
+                            unset_recursive((kind == FILL) ? "fill" : "stroke", item);
+                        }
                     }
-                }
-                SPCSSAttr *css = sp_repr_css_attr_new();
-                if (kind == FILL) {
-                    sp_repr_css_unset_property(css, "fill");    
+                    SPCSSAttr *css = sp_repr_css_attr_new();
+                    if (kind == FILL) {
+                        sp_repr_css_unset_property(css, "fill");    
+                    } else {
+                        sp_repr_css_unset_property(css, "stroke");
+                        sp_repr_css_unset_property(css, "stroke-opacity");
+                        sp_repr_css_unset_property(css, "stroke-width");
+                        sp_repr_css_unset_property(css, "stroke-miterlimit");
+                        sp_repr_css_unset_property(css, "stroke-linejoin");
+                        sp_repr_css_unset_property(css, "stroke-linecap");
+                        sp_repr_css_unset_property(css, "stroke-dashoffset");
+                        sp_repr_css_unset_property(css, "stroke-dasharray");
+                    }
+
+                    sp_desktop_set_style(_desktop, css);
+                    sp_repr_css_attr_unref(css);
+                    css = nullptr;
+
+                    DocumentUndo::done(document,  (kind == FILL) ? _("Unset fill") : _("Unset stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
                 } else {
-                    sp_repr_css_unset_property(css, "stroke");
-                    sp_repr_css_unset_property(css, "stroke-opacity");
-                    sp_repr_css_unset_property(css, "stroke-width");
-                    sp_repr_css_unset_property(css, "stroke-miterlimit");
-                    sp_repr_css_unset_property(css, "stroke-linejoin");
-                    sp_repr_css_unset_property(css, "stroke-linecap");
-                    sp_repr_css_unset_property(css, "stroke-dashoffset");
-                    sp_repr_css_unset_property(css, "stroke-dasharray");
+                    SPCSSAttr *css = sp_repr_css_attr_new();
+                    sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", other.c_str());
+
+                    sp_desktop_set_style(_desktop, css, true, true, switch_style);
+                    sp_repr_css_attr_unref(css);
+                    css = nullptr;
+
+                    DocumentUndo::done(document, (kind == FILL) ? _("Set fill") : _("Set stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
                 }
-
-                sp_desktop_set_style(_desktop, css);
-                sp_repr_css_attr_unref(css);
-                css = nullptr;
-
-                DocumentUndo::done(document,  (kind == FILL) ? _("Unset fill") : _("Unset stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             }
             break;
 

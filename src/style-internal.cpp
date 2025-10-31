@@ -1648,6 +1648,7 @@ SPIPaint::read( gchar const *str ) {
     if (streq(str, "inherit")) {
         set = true;
         inherit = true;
+        inheritSource = true;
     } else {
         // Read any URL first. The other values can be stand-alone or backup to the URL.
 
@@ -1785,6 +1786,7 @@ SPIPaint::reset( bool init ) {
 
     // std::cout << "SPIPaint::reset(): " << name << " " << init << std::endl;
     SPIBase::clear();
+    inheritSource = inherit;
     paintOrigin = SP_CSS_PAINT_ORIGIN_NORMAL;
     paintSource = paintOrigin;
     noneSet = false;
@@ -1804,7 +1806,10 @@ SPIPaint::cascade( const SPIBase* const parent ) {
     if( const SPIPaint* p = dynamic_cast<const SPIPaint*>(parent) ) {
         if (!set || inherit) {  // Always inherits
 
+            bool inherit_keyword = inherit;
             reset( false ); // Do not init
+
+            inheritSource = inherit_keyword;
 
             if( p->isPaintserver() ) {
                 if( p->href) {

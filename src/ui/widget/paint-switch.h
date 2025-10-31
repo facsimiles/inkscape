@@ -17,18 +17,9 @@
 #include "style-internal.h"
 #include "colors/color.h"
 #include "object/sp-gradient.h"
+#include "paint-enums.h"
 
 namespace Inkscape::UI::Widget {
-
-enum class PaintMode {
-    Solid,
-    Swatch,
-    Gradient,
-    Mesh,
-    Pattern,
-    NotSet,
-    None,   // set to no paint
-};
 
 enum class FillRule {
     NonZero,
@@ -62,6 +53,7 @@ public:
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() = 0;
     virtual sigc::signal<void (SPGradient* mesh)> get_mesh_changed() = 0;
     virtual sigc::signal<void (FillRule)> get_fill_rule_changed() = 0;
+    virtual sigc::signal<void (PaintInheritMode)> get_inherit_mode_changed() = 0;
 };
 
 } // namespace

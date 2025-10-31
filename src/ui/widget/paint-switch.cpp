@@ -22,6 +22,7 @@
 #include "ui/widget/gradient-editor.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/pattern-editor.h"
+#include "ui/widget/swatch-editor.h"
 #include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
@@ -30,16 +31,16 @@
 #include "object/sp-stop.h"
 #include "document.h"
 #include "mesh-editor.h"
+#include "paint-inherited.h"
 #include "pattern-manager.h"
 #include "widget-group.h"
 #include "actions/actions-tools.h"
-#include "ui/widget/swatch-editor.h"
 
 namespace Inkscape::UI::Widget {
 
 PaintMode get_mode_from_paint(const SPIPaint& paint) {
     if (!paint.set) {
-        return PaintMode::NotSet;
+        return PaintMode::Derived;
     }
 
     if (auto server = paint.isPaintserver() ? paint.href->getObject() : nullptr) {
@@ -63,15 +64,18 @@ PaintMode get_mode_from_paint(const SPIPaint& paint) {
         }
         else {}
     }
-    else if (paint.isColor()) {
+    else if (paint.isColor() && paint.paintSource == SP_CSS_PAINT_ORIGIN_NORMAL) {
         return PaintMode::Solid;
     }
     else if (paint.isNone()) {
         return PaintMode::None;
     }
+    else if (paint.paintSource != SP_CSS_PAINT_ORIGIN_NORMAL) {
+        return PaintMode::Derived;
+    }
 
     g_warning("Unexpected paint mode combination\n");
-    return PaintMode::NotSet;
+    return PaintMode::Derived;
 }
 
 namespace {
@@ -84,7 +88,7 @@ const struct Paint { PaintMode mode; const char* icon; const char* name; const c
 #endif
     {PaintMode::Pattern,     "paint-pattern",         C_("Paint type", "Pattern"),  _("Pattern fill")},
     {PaintMode::Swatch,      "paint-swatch",          C_("Paint type", "Swatch"),   _("Swatch color")},
-    {PaintMode::NotSet,      "paint-unknown",         C_("Paint type", "Unset"),    _("Inherited")},
+    {PaintMode::Derived,     "paint-unknown",         C_("Paint type", "Inherited"),_("Inherited")},
     {PaintMode::None,        "paint-none",            C_("Paint type", "None"),     _("No paint")},
 };
 
@@ -187,6 +191,9 @@ public:
     sigc::signal<void (FillRule)> get_fill_rule_changed() override {
         return _signal_fill_rule_changed;
     }
+    sigc::signal<void (PaintInheritMode)> get_inherit_mode_changed() override {
+        return _signal_inherit_mode_changed;
+    }
     void fire_flat_color_changed() {
         if (_update.pending()) return;
 
@@ -247,6 +254,7 @@ public:
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
                        bool, const Geom::Scale&)> _signal_pattern_changed;
     sigc::signal<void (FillRule)> _signal_fill_rule_changed;
+    sigc::signal<void (PaintInheritMode)> _signal_inherit_mode_changed;
     std::map<PaintMode, Gtk::Widget*> _pages;
     std::map<PaintMode, Gtk::ToggleButton*> _mode_buttons;
     std::map<ColorPickerPanel::PlateType, Gtk::ToggleButton*> _plate_buttons;
@@ -258,7 +266,7 @@ public:
     PatternEditor _pattern{"/pattern-editor", PatternManager::get()};
     SwatchEditor _swatch{get_color_type(), "/swatch-editor"};
     MeshEditor _mesh;
-    Gtk::Box& _unset;
+    PaintInherited& _inherited;
     Gtk::Button& _fill_rule_btn;
     FillRule _fill_rule = FillRule::NonZero;
     OperationBlocker _update;
@@ -270,7 +278,7 @@ public:
 PaintSwitchImpl::PaintSwitchImpl(bool support_no_paint, bool support_fill_rule) :
     _builder(create_builder("paint-switch.ui")),
     _stack(get_widget<Gtk::Stack>(_builder, "stack")),
-    _unset(get_widget<Gtk::Box>(_builder, "unset")),
+    _inherited(get_derived_widget<PaintInherited>(_builder, "inherited")),
     _fill_rule_btn(get_widget<Gtk::Button>(_builder, "btn-fill-rule")) {
 
     if (!support_fill_rule) {
@@ -333,6 +341,10 @@ PaintSwitchImpl::PaintSwitchImpl(bool support_no_paint, bool support_fill_rule) 
         auto scoped(_update.block());
         _signal_fill_rule_changed.emit(_fill_rule == FillRule::NonZero ? FillRule::EvenOdd : FillRule::NonZero);
     });
+    // inherited paint variants
+    _inherited.signal_mode_changed().connect([this](auto mode) {
+        _signal_inherit_mode_changed.emit(mode);
+    });
 
     _gradient.signal_changed().connect([this](auto gradient) { fire_gradient_changed(gradient, _mode); });
     _gradient.set_margin_top(4);
@@ -362,7 +374,7 @@ PaintSwitchImpl::PaintSwitchImpl(bool support_no_paint, bool support_fill_rule) 
     _pages[PaintMode::Gradient] = &_gradient;
     _pages[PaintMode::Pattern]  = &_pattern;
     _pages[PaintMode::Mesh]     = &_mesh;
-    _pages[PaintMode::NotSet]   = &_unset;
+    _pages[PaintMode::Derived]  = &_inherited;
     for (auto [mode, child] : _pages) {
         if (child) _stack.add(*child);
     }
@@ -381,7 +393,6 @@ void PaintSwitchImpl::switch_paint_mode(PaintMode mode) {
         break;
     case PaintMode::Solid:
         fire_flat_color_changed();
-        // set_color();
         break;
     case PaintMode::Pattern:
         fire_pattern_changed();
@@ -396,7 +407,7 @@ void PaintSwitchImpl::switch_paint_mode(PaintMode mode) {
         //todo: verify: .getGradientSelector()->getVector();
         fire_swatch_changed(_swatch.get_selected_vector(), EditOperation::New, nullptr, {}, {});
         break;
-    case PaintMode::NotSet:
+    case PaintMode::Derived:
         break;
     default:
         assert(false);
@@ -480,8 +491,7 @@ std::optional<ColorPickerPanel::PlateType> PaintSwitchImpl::get_plate_type(Gtk::
 void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
     auto scoped(_update.block());
 
-    auto server = paint.isPaintserver() ? paint.href->getObject() : nullptr;
-    if (server) {
+    if (auto server = paint.isPaintserver() ? paint.href->getObject() : nullptr) {
         if (is<SPGradient>(server) && cast<SPGradient>(server)->getVector()->isSwatch()) {
             // swatch color
             auto vector = cast<SPGradient>(server)->getVector();
@@ -513,11 +523,8 @@ void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
             _pattern.set_selected(cast<SPPattern>(server));
         }
     }
-    else if (paint.isColor()) {
-        // no op
-    }
-    else {
-        //todo, if anything
+    else if (auto inherited = get_inherited_paint_mode(paint)) {
+        _inherited.set_mode(*inherited);
     }
 }
 
