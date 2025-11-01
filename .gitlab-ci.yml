@@ -135,7 +135,7 @@ appimage:linux:
     # build number
     INK_BUILD: $CI_PIPELINE_IID
     # build host
-    ORKA_RUNNER: sequoia-3
+    ORKA_RUNNER: sequoia-4
     # package registry to upload dependencies
     PACKAGE_REGISTRY_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic
     PACKAGE_URL_PREFIX: ${PACKAGE_REGISTRY_URL}/icm/${ICM_REPO_REF}
