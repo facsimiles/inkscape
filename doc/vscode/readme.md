@@ -10,33 +10,17 @@
 
 0. In your clone of the repository (called `master` in the compilation tutorial), make a new folder named: `.vscode`
 
-0. Copy [c_cpp_properties.json](./c_cpp_properties.json), [launch.json](./launch.json), and [tasks.json](./tasks.json) from `doc/vscode` to that folder.
+0. Copy all `.json` files from `doc/vscode` to that folder. This is the Inkscape-specific configuration of VSCode for the repository. Details about these files (c_cpp_properties.json, settings.json, tasks.json, launch.json) will be explained later.
 
 0. Install [Visual Studio Code](https://code.visualstudio.com/) if you haven't.
 
-0. Launch VS Code and install [the official C/C++ extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack) or at least [the main extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools). This is easily done via the extensions panel (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>).
-
-0. Open the command palette (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>) and enter `> Open User Settings (JSON)`.
-
-0. In the file that opens, add the following. This will allow you to launch the relevant MSYS2 terminals from within VS Code (<kbd>Ctrl</kbd> + <kbd>\`</kbd>) for convenience. If `terminal.integrated.profiles.windows` already exists, just add the items `UCRT` and `MSYS` to it. Note the presence of commas between adjacent list items.
-    ```json
-    "terminal.integrated.profiles.windows": {
-        "UCRT": {
-            "path": "cmd.exe",
-            "args": [ "/c", "C:/msys64/msys2_shell.cmd -defterm -here -no-start -ucrt64" ],
-            "overrideName": true
-        },
-        "MSYS": {
-            "path": "cmd.exe",
-            "args": [ "/c", "C:/msys64/msys2_shell.cmd -defterm -here -no-start -msys" ],
-            "overrideName": true
-        }
-    }
-    ```
-
-0. Save and close `settings.json`.
+0. Launch VSCode.
 
 0. Open the folder with your clone of the Inkscape repository. You can open a folder with `File > Open Folder...`.
+
+0. When asked "Do you want to install the recommended installations for this repository", accept by clicking "Install". You can also do this later by installing [the official C/C++ extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack) or at least [the main extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) via the extensions panel (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>).
+
+0. [settings.json](./settings.json) defines terminal profiles that you need for running Inkscape build commands inside the VS Code terminal: UCRT (normal) and MSYS2 (special cases only). To launch the relevant MSYS2 terminals press <kbd>Ctrl</kbd> + <kbd>\`</kbd>.
 
 0. To build Inkscape, I recommend trying via the terminal first to make it easier to troubleshoot. You can do that in VS Code: in the command palette, enter `> Create New Terminal (With Profile)` and choose `UCRT`.
 
