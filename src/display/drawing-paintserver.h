@@ -151,8 +151,7 @@ public:
         char pathtype[4];
         bool tensorIsSet[4];
         Geom::Point tensorpoints[4];
-        std::array<float, 3> color[4];
-        double opacity[4];
+        std::optional<Colors::Color> color[4];
     };
 
     DrawingMeshGradient(SPGradientSpread spread, SPGradientUnits units, Geom::Affine const &transform,

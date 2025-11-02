@@ -75,7 +75,6 @@ NRStyleData::NRStyleData()
     , stroke_width(0.0)
     , hairline(false)
     , miter_limit(0.0)
-    , n_dash(0)
     , dash_offset(0.0)
     , fill_rule(CAIRO_FILL_RULE_EVEN_ODD)
     , line_cap(CAIRO_LINE_CAP_BUTT)
@@ -185,16 +184,13 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
     }
     miter_limit = style->stroke_miterlimit.value;
 
-    n_dash = style->stroke_dasharray.values.size();
+    int const n_dash = style->stroke_dasharray.values.size();
     if (n_dash > 0 && style->stroke_dasharray.is_valid()) {
         dash_offset = style->stroke_dashoffset.computed;
         dash.resize(n_dash);
         for (int i = 0; i < n_dash; ++i) {
             dash[i] = style->stroke_dasharray.values[i].computed;
         }
-    } else {
-        dash_offset = 0.0;
-        dash.clear();
     }
 
     for (int i = 0; i < PAINT_ORDER_LAYERS; ++i) {
@@ -385,7 +381,7 @@ void NRStyle::applyStroke(Inkscape::DrawingContext &dc, CairoPatternUniqPtr cons
     dc.setLineCap(data.line_cap);
     dc.setLineJoin(data.line_join);
     dc.setMiterLimit(data.miter_limit);
-    cairo_set_dash(dc.raw(), data.dash.empty() ? nullptr : data.dash.data(), data.dash.empty() ? 0 : data.n_dash, data.dash_offset); // fixme
+    dc.setDash(data.dash, data.dash_offset);
 }
 
 void NRStyle::applyTextDecorationStroke(Inkscape::DrawingContext &dc, CairoPatternUniqPtr const &cp) const
@@ -399,7 +395,7 @@ void NRStyle::applyTextDecorationStroke(Inkscape::DrawingContext &dc, CairoPatte
     dc.setLineCap(CAIRO_LINE_CAP_BUTT);
     dc.setLineJoin(CAIRO_LINE_JOIN_MITER);
     dc.setMiterLimit(data.miter_limit);
-    cairo_set_dash(dc.raw(), nullptr, 0, 0.0); // fixme (no dash)
+    dc.setDash({}, 0.0);
 }
 
 void NRStyle::invalidate()

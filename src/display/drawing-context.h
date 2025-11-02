@@ -13,6 +13,7 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
 
+#include <span>
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
 #include <boost/noncopyable.hpp>
@@ -104,6 +105,9 @@ public:
     void setLineCap(cairo_line_cap_t cap) { cairo_set_line_cap(_ct, cap); }
     void setLineJoin(cairo_line_join_t join) { cairo_set_line_join(_ct, join); }
     void setMiterLimit(double miter) { cairo_set_miter_limit(_ct, miter); }
+    void setDash(std::span<double const> dashes, double offset) {
+        cairo_set_dash(_ct, dashes.data(), dashes.size(), offset);
+    }
     void setFillRule(cairo_fill_rule_t rule) { cairo_set_fill_rule(_ct, rule); }
     void setOperator(cairo_operator_t op) { cairo_set_operator(_ct, op); }
     cairo_operator_t getOperator() { return cairo_get_operator(_ct); }

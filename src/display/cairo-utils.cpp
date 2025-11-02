@@ -990,6 +990,12 @@ cairo_pattern_t *ink_cairo_pattern_create(Colors::Color const &color, bool to_sr
     return nullptr;
 }
 
+void ink_cairo_mesh_pattern_set_corner_color(cairo_pattern_t *pattern, unsigned corner_num, Colors::Color color)
+{
+    color.convert(Colors::Space::Type::RGB);
+    cairo_mesh_pattern_set_corner_color_rgba(pattern, corner_num, color[0], color[1], color[2], color.getOpacity());
+}
+
 
 void ink_matrix_to_2geom(Geom::Affine &m, cairo_matrix_t const &cm)
 {

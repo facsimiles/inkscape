@@ -104,6 +104,7 @@ void ink_cairo_transform(cairo_t *ct, Geom::Affine const &m);
 void ink_cairo_pattern_set_matrix(cairo_pattern_t *cp, Geom::Affine const &m);
 void ink_cairo_set_hairline(cairo_t *ct);
 void ink_cairo_pattern_set_dither(cairo_pattern_t *pattern, bool enabled);
+void ink_cairo_mesh_pattern_set_corner_color(cairo_pattern_t *pattern, unsigned corner_num, Colors::Color color);
 
 void ink_matrix_to_2geom(Geom::Affine &, cairo_matrix_t const &);
 Geom::Affine ink_matrix_to_2geom(cairo_matrix_t const &cairo_matrix);

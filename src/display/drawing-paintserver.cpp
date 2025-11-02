@@ -159,11 +159,13 @@ cairo_pattern_t *DrawingMeshGradient::create_pattern(cairo_t *, Geom::OptRect co
                     cairo_mesh_pattern_set_control_point(pat, k, t.x(), t.y());
                 }
 
-                cairo_mesh_pattern_set_corner_color_rgba(pat, k,
-                                                         data.color[k][0],
-                        data.color[k][1],
-                        data.color[k][2],
-                        data.opacity[k] * opacity);
+                if (data.color[k]) {
+                    ink_cairo_mesh_pattern_set_corner_color(pat, k, data.color[k]->withOpacity(opacity));
+                } else {
+                    std::cerr << "Bad mesh color at pos " << k << "\n";
+                    static auto const black = *Colors::Color::parse("black");
+                    ink_cairo_mesh_pattern_set_corner_color(pat, k, black.withOpacity(opacity));
+                }
             }
 
             cairo_mesh_pattern_end_patch(pat);

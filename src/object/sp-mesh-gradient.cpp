@@ -215,13 +215,7 @@ std::unique_ptr<Inkscape::DrawingPaintServer> SPMeshGradient::create_drawing_pai
                     //std::cout << "  sp_mesh_create_pattern: tensor " << k
                     //          << " calculated as " << t << "." << std::endl;
                 }
-
-                // Does this data really need RGB at this stage?
-                auto color = *patch.getColor(k)->converted(Colors::Space::Type::RGB);
-                for (int r = 0; r < 3; r++) {
-                    data.color[k][r] = color[r];
-                }
-                data.opacity[k] = color.getOpacity();
+                data.color[k] = patch.getColor(k);
             }
         }
     }
