@@ -199,6 +199,12 @@ bool SPLPEItem::isOnSymbol() const {
  */
 bool SPLPEItem::performPathEffect(Geom::PathVector &curve, SPShape *current, bool is_clip_or_mask)
 {
+    if (!Inkscape::LivePathEffect::can_have_lpe(current)) {
+        // Reject things that have curves put can't have path
+        // effects: polygons, paths with offsets, etc.
+        return false;
+    }
+
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
         PathEffectList path_effect_list(*this->path_effect_list);
         auto const path_effect_list_size = path_effect_list.size();

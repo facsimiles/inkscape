@@ -234,8 +234,11 @@ private:
     bool defaultsopen;
 };
 
+bool can_have_lpe(SPObject const* object);
+
 } //namespace LivePathEffect
 } //namespace Inkscape
+
 
 #endif // INKSCAPE_LIVEPATHEFFECT_H
 

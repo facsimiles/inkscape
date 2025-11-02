@@ -1045,6 +1045,13 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
 {
     std::vector<SPItem*> const item_list = group->item_list();
     for (auto sub_item : item_list) {
+
+        if (!Inkscape::LivePathEffect::can_have_lpe(sub_item)) {
+            // Reject things with curves that can't have path
+            // effects: polygons, paths with offsets, etc.
+            continue;
+        }
+
         auto sub_group = cast<SPGroup>(sub_item);
         if (sub_group) {
             sp_group_perform_patheffect(sub_group, top_group, lpe, write);
