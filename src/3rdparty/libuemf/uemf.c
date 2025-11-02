@@ -1541,6 +1541,37 @@ int drawing_size(
    return(0);
 }
 
+/**
+    \brief Set up fields for an EMR_HEADER for drawing by physical size in 100th of mm and dots per millimeter.
+    Technically rclBounds is supposed to be the extent of the drawing within the EMF, but libUEMF has no way
+    of knowing this since it never actually draws anything.  Instead this is set to the full drawing size.
+    Coordinates are inclusive inclusive, so 297 -> 0,29699.
+    \return 0 for success, >=1 for failure.
+    \param x100thmm   Drawing  width in 100ths of millimeter
+    \param y100thmm   Drawing height in 100ths of millimeter
+    \param dpmm       Dots per millimeter
+    \param rclBounds  Drawing size structure in pixels
+    \param rclFrame   Drawing size structure in mm
+*/
+int drawing_size_100th(
+      const int    x100thmm,
+      const int    y100thmm,
+      const float  dpmm,
+      U_RECTL     *rclBounds,
+      U_RECTL     *rclFrame
+   ){
+   if(x100thmm < 0 || y100thmm < 0 || dpmm < 0)return(1);
+   rclBounds->left     =  0;
+   rclBounds->top      =  0;
+   rclBounds->right    =  U_ROUND((float) x100thmm  * dpmm / 100.) - 1;  // because coordinate system is 0,0 in upper left, N,M in lower right
+   rclBounds->bottom   =  U_ROUND((float) y100thmm  * dpmm / 100.) - 1;
+   rclFrame->left      =  0;       
+   rclFrame->top       =  0; 
+   rclFrame->right     =  U_ROUND((float) x100thmm ) - 1; 
+   rclFrame->bottom    =  U_ROUND((float) y100thmm ) - 1;         
+   return(0);
+}
+
 /** 
     \brief Set a U_COLORREF value from separate R,G,B values.
     \param red    Red   component

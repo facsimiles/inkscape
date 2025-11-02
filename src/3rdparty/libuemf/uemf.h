@@ -3375,7 +3375,8 @@ int       DIB_to_RGBA(const char *px, const U_RGBQUAD *ct, int numCt,
 char     *RGBA_to_RGBA(char *rgba_px, int w, int h, int sl, int st, int *ew, int *eh);
 
 int   device_size(const int xmm, const int ymm, const float dpmm, U_SIZEL *szlDev, U_SIZEL *szlMm);
-int   drawing_size(const int xmm, const int yum, const float dpmm, U_RECTL *rclBounds, U_RECTL *rclFrame);
+int   drawing_size(const int xmm, const int ymm, const float dpmm, U_RECTL *rclBounds, U_RECTL *rclFrame);
+int   drawing_size_100th(const int x100thmm, const int y100thmm, const float dpmm, U_RECTL *rclBounds, U_RECTL *rclFrame);
 
 int   emf_start(const char *name, const uint32_t initsize, const uint32_t chunksize, EMFTRACK **et);
 int   emf_finish(EMFTRACK *et, EMFHANDLES *eht);
