@@ -231,6 +231,7 @@ set(ui_SRC
 	widget/font-variants.cpp
 	widget/font-variations.cpp
 	widget/frame.cpp
+	widget/generic/reorderable-stack.cpp
 	widget/gradient-image.cpp
 	widget/gradient-editor.cpp
 	widget/gradient-selector.cpp
@@ -560,6 +561,7 @@ set(ui_SRC
 	widget/font-variants.h
 	widget/font-variations.h
 	widget/frame.h
+	widget/generic/reorderable-stack.h
 	widget/gradient-image.h
 	widget/gradient-editor.h
 	widget/gradient-selector.h

@@ -144,15 +144,15 @@ static Gtk::Label *spw_label(Gtk::Grid *table, const gchar *label_text, int col,
  */
 static Gtk::Box *spw_hbox(Gtk::Grid *table, int width, int col, int row)
 {
-  /* Create a new hbox with a 4-pixel spacing between children */
-  auto const hb = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 4);
-  g_assert(hb != nullptr);
-  hb->set_visible(true);
-  hb->set_hexpand();
-  hb->set_halign(Gtk::Align::FILL);
-  hb->set_valign(Gtk::Align::CENTER);
-  table->attach(*hb, col, row, width, 1);
-  return hb;
+    auto const hb = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 0);
+    g_assert(hb != nullptr);
+    hb->set_visible(true);
+    hb->set_hexpand();
+    hb->set_halign(Gtk::Align::FILL);
+    hb->set_valign(Gtk::Align::CENTER);
+    hb->add_css_class("linked");
+    table->attach(*hb, col, row, width, 1);
+    return hb;
 }
 
 /**
@@ -220,11 +220,12 @@ StrokeStyle::StrokeStyle() :
     _old_unit(nullptr)
 {
     set_name("StrokeSelector");
+
     table = Gtk::make_managed<Gtk::Grid>();
     table->set_margin(4);
     table->set_row_spacing(4);
-    table->set_hexpand(false);
-    table->set_halign(Gtk::Align::CENTER);
+    table->set_hexpand(true);
+    table->set_halign(Gtk::Align::FILL);
     table->set_visible(true);
     append(*table);
 
@@ -247,7 +248,7 @@ StrokeStyle::StrokeStyle() :
 
     sp_dialog_defocus_on_enter(*widthSpin);
 
-    UI::pack_start(*hb, *widthSpin, false, false);
+    UI::pack_start(*hb, *widthSpin, true, true);
     unitSelector = Gtk::make_managed<UnitMenu>();
     unitSelector->setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -315,10 +316,11 @@ StrokeStyle::StrokeStyle() :
 
     spw_label(table, _("Markers"), 0, i, nullptr);
 
-    hb = spw_hbox(table, 1, 1, i);
+    hb = spw_hbox(table, 3, 1, i);
     i++;
 
     startMarkerCombo = Gtk::make_managed<MarkerComboBox>("marker-start", SP_MARKER_LOC_START);
+    startMarkerCombo->set_flat(true);
     startMarkerCombo->set_tooltip_text(_("Start Markers are drawn on the first node of a path or shape"));
     startMarkerConn = startMarkerCombo->connect_changed([this]{ markerSelectCB(startMarkerCombo, SP_MARKER_LOC_START); });
     startMarkerCombo->connect_edit([this]{ enterEditMarkerMode(SP_MARKER_LOC_START); });
@@ -327,6 +329,7 @@ StrokeStyle::StrokeStyle() :
     UI::pack_start(*hb, *startMarkerCombo, true, true);
 
     midMarkerCombo = Gtk::make_managed<MarkerComboBox>("marker-mid", SP_MARKER_LOC_MID);
+    midMarkerCombo->set_flat(true);
     midMarkerCombo->set_tooltip_text(_("Mid Markers are drawn on every node of a path or shape except the first and last nodes"));
     midMarkerConn = midMarkerCombo->connect_changed([this]{ markerSelectCB(midMarkerCombo, SP_MARKER_LOC_MID); });
     midMarkerCombo->connect_edit([this]{ enterEditMarkerMode(SP_MARKER_LOC_MID); });
@@ -335,12 +338,45 @@ StrokeStyle::StrokeStyle() :
     UI::pack_start(*hb, *midMarkerCombo, true, true);
 
     endMarkerCombo = Gtk::make_managed<MarkerComboBox>("marker-end", SP_MARKER_LOC_END);
+    endMarkerCombo->set_flat(true);
     endMarkerCombo->set_tooltip_text(_("End Markers are drawn on the last node of a path or shape"));
     endMarkerConn = endMarkerCombo->connect_changed([this]{ markerSelectCB(endMarkerCombo, SP_MARKER_LOC_END); });
     endMarkerCombo->connect_edit([this]{ enterEditMarkerMode(SP_MARKER_LOC_END); });
     endMarkerCombo->set_visible(true);
 
     UI::pack_start(*hb, *endMarkerCombo, true, true);
+    i++;
+
+    /* Cap type */
+    // TRANSLATORS: cap type specifies the shape for the ends of lines
+    //spw_label(t, _("_Cap:"), 0, i);
+    spw_label(table, _("Cap"), 0, i, nullptr);
+
+    hb = spw_hbox(table, 3, 1, i);
+
+    Gtk::ToggleButton *capGrp = nullptr;
+
+    capButt = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-butt"),
+                                hb, STROKE_STYLE_BUTTON_CAP, "butt");
+
+    // TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
+    //  of the line; the ends of the line are square
+    capButt->set_tooltip_text(_("Butt cap"));
+
+    capRound = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-round"),
+                                hb, STROKE_STYLE_BUTTON_CAP, "round");
+
+    // TRANSLATORS: Round cap: the line shape extends beyond the end point of the
+    //  line; the ends of the line are rounded
+    capRound->set_tooltip_text(_("Round cap"));
+
+    capSquare = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-square"),
+                                hb, STROKE_STYLE_BUTTON_CAP, "square");
+
+    // TRANSLATORS: Square cap: the line shape extends beyond the end point of the
+    //  line; the ends of the line are square
+    capSquare->set_tooltip_text(_("Square cap"));
+
     i++;
 
     /* Join type */
@@ -376,6 +412,10 @@ StrokeStyle::StrokeStyle() :
     //  "Join" option (in the Fill and Stroke dialog).
     joinMiter->set_tooltip_text(_("Miter join"));
 
+    i++;
+
+    _miter_hb = spw_hbox(table, 3, 1, i);
+
     /* Miterlimit  */
     // TRANSLATORS: Miter limit: only for "miter join", this limits the length
     //  of the sharp "spike" when the lines connect at too sharp an angle.
@@ -391,78 +431,22 @@ StrokeStyle::StrokeStyle() :
     miterLimitSpin->set_visible(true);
     sp_dialog_defocus_on_enter(*miterLimitSpin);
 
-    UI::pack_start(*hb, *miterLimitSpin, false, false);
+    UI::pack_start(*_miter_hb, *miterLimitSpin, true, true);
     miterLimitAdj->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::setStrokeMiter));
 
     i++;
-
-    /* Cap type */
-    // TRANSLATORS: cap type specifies the shape for the ends of lines
-    //spw_label(t, _("_Cap:"), 0, i);
-    spw_label(table, _("Cap"), 0, i, nullptr);
-
-    hb = spw_hbox(table, 3, 1, i);
-
-    Gtk::ToggleButton *capGrp = nullptr;
-
-    capButt = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-butt"),
-                                hb, STROKE_STYLE_BUTTON_CAP, "butt");
-
-    // TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
-    //  of the line; the ends of the line are square
-    capButt->set_tooltip_text(_("Butt cap"));
-
-    capRound = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-round"),
-                                hb, STROKE_STYLE_BUTTON_CAP, "round");
-
-    // TRANSLATORS: Round cap: the line shape extends beyond the end point of the
-    //  line; the ends of the line are rounded
-    capRound->set_tooltip_text(_("Round cap"));
-
-    capSquare = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-square"),
-                                hb, STROKE_STYLE_BUTTON_CAP, "square");
-
-    // TRANSLATORS: Square cap: the line shape extends beyond the end point of the
-    //  line; the ends of the line are square
-    capSquare->set_tooltip_text(_("Square cap"));
-
-    i++;
-
     /* Paint order */
     // TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and 'markers are painted.
     spw_label(table, _("Order"), 0, i, nullptr);
 
-    hb = spw_hbox(table, 4, 1, i);
-
-    Gtk::ToggleButton *paintOrderGrp = nullptr;
-
-    paintOrderFSM = makeRadioButton(paintOrderGrp, INKSCAPE_ICON("paint-order-fsm"),
-                                    hb, STROKE_STYLE_BUTTON_ORDER, "normal");
-    paintOrderFSM->set_tooltip_text(_("1.Fill, 2.Stroke, 3.Markers")); 
-
-    paintOrderSFM = makeRadioButton(paintOrderGrp, INKSCAPE_ICON("paint-order-sfm"),
-                                    hb, STROKE_STYLE_BUTTON_ORDER, "stroke fill markers");
-    paintOrderSFM->set_tooltip_text(_("1.Stroke, 2.Fill, 3.Markers")); 
-
-    paintOrderFMS = makeRadioButton(paintOrderGrp, INKSCAPE_ICON("paint-order-fms"),
-                                    hb, STROKE_STYLE_BUTTON_ORDER, "fill markers stroke");
-    paintOrderFMS->set_tooltip_text(_("1.Fill, 2.Markers, 3.Stroke")); 
-
-    i++;
-
-    hb = spw_hbox(table, 4, 1, i);
-
-    paintOrderMFS = makeRadioButton(paintOrderGrp, INKSCAPE_ICON("paint-order-mfs"),
-                                    hb, STROKE_STYLE_BUTTON_ORDER, "markers fill stroke");
-    paintOrderMFS->set_tooltip_text(_("1.Markers, 2.Fill, 3.Stroke")); 
-
-    paintOrderSMF = makeRadioButton(paintOrderGrp, INKSCAPE_ICON("paint-order-smf"),
-                                    hb, STROKE_STYLE_BUTTON_ORDER, "stroke markers fill");
-    paintOrderSMF->set_tooltip_text(_("1.Stroke, 2.Markers, 3.Fill")); 
-
-    paintOrderMSF = makeRadioButton(paintOrderGrp, INKSCAPE_ICON("paint-order-msf"),
-                                    hb, STROKE_STYLE_BUTTON_ORDER, "markers stroke fill");
-    paintOrderMSF->set_tooltip_text(_("1.Markers, 2.Stroke, 3.Fill")); 
+    _paint_order = Gtk::make_managed<PaintOrderWidget>();
+    paintOrderConn = _paint_order->signal_values_changed().connect([this, desktop]() {
+        auto po = _paint_order->getValue();
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_set_property(css, "paint-order", po.get_value().c_str());
+        sp_desktop_set_style(desktop, css);
+    });
+    table->attach(*_paint_order, 1, i, 3, 1);
 
     i++;
 }
@@ -528,6 +512,8 @@ StrokeStyle::makeRadioButton(Gtk::ToggleButton    *&grp,
     UI::pack_start(*hb, *tb, false, false);
     tb->signal_toggled().connect(sigc::bind(
                                      sigc::ptr_fun(&StrokeStyle::buttonToggledCB), tb, this));
+    tb->set_hexpand();
+    tb->set_halign(Gtk::Align::FILL);
     return tb;
 }
 
@@ -774,35 +760,10 @@ StrokeStyle::setCapType (unsigned const captype)
 void
 StrokeStyle::setPaintOrder (gchar const *paint_order)
 {
-    Gtk::ToggleButton *tb = paintOrderFSM;
-
+    std::vector<std::string> compiled;
     SPIPaintOrder temp;
     temp.read( paint_order );
-
-    if (temp.layer[0] != SP_CSS_PAINT_ORDER_NORMAL) {
-
-        if (temp.layer[0] == SP_CSS_PAINT_ORDER_FILL) {
-            if (temp.layer[1] == SP_CSS_PAINT_ORDER_STROKE) {
-                tb = paintOrderFSM;
-            } else {
-                tb = paintOrderFMS;
-            }
-        } else if (temp.layer[0] == SP_CSS_PAINT_ORDER_STROKE) {
-            if (temp.layer[1] == SP_CSS_PAINT_ORDER_FILL) {
-                tb = paintOrderSFM;
-            } else {
-                tb = paintOrderSMF;
-            }
-        } else {
-            if (temp.layer[1] == SP_CSS_PAINT_ORDER_STROKE) {
-                tb = paintOrderMSF;
-            } else {
-                tb = paintOrderMFS;
-            }
-        }
-
-    }
-    setPaintOrderButtons(tb);
+    _paint_order->setValue(temp);
 }
 
 /**
@@ -1104,7 +1065,7 @@ void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
 
     if (tb->get_active()) {
         if (tb->get_button_type() == STROKE_STYLE_BUTTON_JOIN) {
-            spw->miterLimitSpin->set_sensitive(!strcmp(tb->get_stroke_style(), "miter"));
+            spw->_miter_hb->set_visible(!strcmp(tb->get_stroke_style(), "miter"));
         }
 
         /* TODO: Create some standardized method */
@@ -1121,10 +1082,6 @@ void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
                 sp_desktop_set_style (spw->desktop, css);
                 spw->setCapButtons(tb);
                 break;
-            case STROKE_STYLE_BUTTON_ORDER:
-                sp_repr_css_set_property(css, "paint-order", tb->get_stroke_style());
-                sp_desktop_set_style (spw->desktop, css);
-                //spw->setPaintButtons(tb);
         }
 
         sp_repr_css_attr_unref(css);
@@ -1155,21 +1112,6 @@ StrokeStyle::setCapButtons(Gtk::ToggleButton *active)
     capButt->set_active(active == capButt);
     capRound->set_active(active == capRound);
     capSquare->set_active(active == capSquare);
-}
-
-
-/**
- * Updates the paint order style toggle buttons
- */
-void
-StrokeStyle::setPaintOrderButtons(Gtk::ToggleButton *active)
-{
-    paintOrderFSM->set_active(active == paintOrderFSM);
-    paintOrderSFM->set_active(active == paintOrderSFM);
-    paintOrderFMS->set_active(active == paintOrderFMS);
-    paintOrderMFS->set_active(active == paintOrderMFS);
-    paintOrderSMF->set_active(active == paintOrderSMF);
-    paintOrderMSF->set_active(active == paintOrderMSF);
 }
 
 

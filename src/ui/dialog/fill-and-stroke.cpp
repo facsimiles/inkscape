@@ -177,7 +177,7 @@ FillAndStroke::_layoutPageStrokeStyle()
 {
     strokeStyleWdgt = Gtk::make_managed<UI::Widget::StrokeStyle>();
     strokeStyleWdgt->set_hexpand();
-    strokeStyleWdgt->set_halign(Gtk::Align::START);
+    strokeStyleWdgt->set_halign(Gtk::Align::FILL);
     _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 0, 1, 1);
 }
 

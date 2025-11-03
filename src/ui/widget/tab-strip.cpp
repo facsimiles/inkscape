@@ -3,6 +3,7 @@
 #include "tab-strip.h"
 
 #include <numeric>
+#include <ranges>
 #include <gdkmm/surface.h>
 #include <glibmm/main.h>
 #include <gtkmm/button.h>
@@ -53,7 +54,7 @@ struct SimpleTab : Gtk::Widget
     Gtk::Button _close;
     Gtk::Image _icon;
     Gtk::DrawingArea _mask;
-    TabStrip::ShowLabels _show_labels = TabStrip::Never;
+    TabStrip::ShowLabels _show_labels = TabStrip::ShowLabels::Never;
     bool _show_close_btn = true;
 
     SimpleTab(const SimpleTab& src) : SimpleTab() {
@@ -106,7 +107,7 @@ struct SimpleTab : Gtk::Widget
         if (_show_close_btn) {
             _close.set_visible();
         }
-        if (_show_labels == TabStrip::ActiveOnly) {
+        if (_show_labels == TabStrip::ShowLabels::ActiveOnly) {
             _name.set_visible();
         }
     }
@@ -115,7 +116,7 @@ struct SimpleTab : Gtk::Widget
         if (_show_close_btn) {
             _close.set_visible(false);
         }
-        if (_show_labels == TabStrip::ActiveOnly) {
+        if (_show_labels == TabStrip::ShowLabels::ActiveOnly) {
             _name.set_visible(false);
         }
     }
@@ -125,7 +126,7 @@ struct SimpleTab : Gtk::Widget
         _close.set_visible(_show_close_btn && is_active);
 
         _name.set_visible(
-            _show_labels != TabStrip::Never && (_show_labels == TabStrip::Always || (_show_labels == TabStrip::ActiveOnly && is_active))
+            _show_labels != TabStrip::ShowLabels::Never && (_show_labels == TabStrip::ShowLabels::Always || (_show_labels == TabStrip::ShowLabels::ActiveOnly && is_active))
         );
     }
 
@@ -289,7 +290,7 @@ public:
             _dst->queue_allocate();
             // temporarily hide (+) button too
             _src->parent->_plus_btn.set_visible(false);
-        } else {
+        } else if (_dst->_rearrange == TabStrip::Rearrange::Externally) {
             // Pointer is too far away from dst - detach from it.
             cancelTick();
             _ensureDrag();
@@ -321,7 +322,8 @@ public:
     /// Set a new destination tab bar, or unset by passing null.
     void setDst(TabStrip *new_dst)
     {
-        if (new_dst == _dst) {
+        if (new_dst == _dst
+            || _src->parent->_rearrange != TabStrip::Rearrange::Externally) {
             return;
         }
 
@@ -358,9 +360,7 @@ public:
 
         // Undo widget modifications to source and destination.
         _src->set_visible(true);
-        if (_src->parent->_plus_btn.get_popover()) {
-            _src->parent->_plus_btn.set_visible();
-        }
+        _src->parent->_update_new_tab();
         _src->parent->queue_resize();
         if (_dst) {
             if (_widget && _widget->get_parent() == _dst) {
@@ -383,7 +383,7 @@ public:
         } else if (_dst == _src->parent) {
             // Reorder
             if (_drop_i) {
-                if (_src->parent->_can_rearrange) {
+                if (_src->parent->_rearrange != TabStrip::Rearrange::Never) {
                     int const from = _src->parent->get_tab_position(*_src);
                     if (_src->parent->_reorderTab(from, *_drop_i)) {
                         _src->parent->_signal_tab_rearranged(from, *_drop_i - ( *_drop_i > from ));
@@ -393,7 +393,7 @@ public:
                     }
                 }
             }
-        } else {
+        } else if (_src->parent->_rearrange == TabStrip::Rearrange::Externally) {
             // Migrate
             if (_drop_i) {
                 _dst->_signal_move_tab.emit(*_src, _src->parent->get_tab_position(*_src), *_src->parent, *_drop_i);
@@ -449,7 +449,7 @@ private:
 
         // Hide the real tab.
         _src->set_visible(false);
-        _src->parent->_plus_btn.set_visible();
+        _src->parent->_update_new_tab();
 
         // Create a visual replica of the tab.
         _widget = std::make_unique<SimpleTab>(*_src);
@@ -756,6 +756,21 @@ void TabStrip::select_tab_at(int pos) {
     }
 }
 
+void TabStrip::set_tabs_order(std::vector<Gtk::Widget *> sorted)
+{
+    std::sort(_tabs.begin(), _tabs.end(), [sorted](std::shared_ptr<TabWidget> a, std::shared_ptr<TabWidget> b) {
+        return std::find(sorted.begin(), sorted.end(), a.get())
+             < std::find(sorted.begin(), sorted.end(), b.get());
+    });
+    queue_resize();
+}
+
+std::vector<Gtk::Widget *> TabStrip::get_tabs() const
+{
+    auto range = _tabs | std::views::transform([](auto& tab){ return tab.get();});
+    return std::vector<Gtk::Widget*>(range.begin(), range.end());
+}
+
 int TabStrip::get_tab_position(const Gtk::Widget& tab) const
 {
     for (int i = 0; i < _tabs.size(); i++) {
@@ -775,12 +790,19 @@ Gtk::Widget* TabStrip::get_tab_at(int i) const
 void TabStrip::set_new_tab_popup(Gtk::Popover* popover) {
     if (popover) {
         _plus_btn.set_popover(*popover);
-        _plus_btn.set_visible();
     }
     else {
         _plus_btn.unset_popover();
-        _plus_btn.set_visible(false);
     }
+    _update_new_tab();
+}
+
+/**
+ * Keep the new_tab button in sync with the popover widget.
+ */
+void TabStrip::_update_new_tab()
+{
+    _plus_btn.set_visible((bool)_plus_btn.get_popover());
 }
 
 void TabStrip::set_tabs_context_popup(Gtk::Popover* popover) {
@@ -792,8 +814,8 @@ void TabStrip::set_tabs_context_popup(Gtk::Popover* popover) {
     }
 }
 
-void TabStrip::enable_rearranging_tabs(bool enable) {
-    _can_rearrange = enable;
+void TabStrip::set_rearranging_tabs(Rearrange rearrange) {
+    _rearrange = rearrange;
 }
 
 void TabStrip::set_show_labels(ShowLabels labels) {
@@ -868,7 +890,8 @@ namespace {
 
 struct Size {
     int minimum;
-    int delta;  // value to shrink
+    int delta;   // value to shrink
+    bool expand; // should it expand
     int index; // original location
     int size() const { return minimum + delta; }
 };
@@ -885,7 +908,7 @@ void shrink_sizes(std::vector<Size>& sizes, int decrease) {
     decrease = std::min(available, decrease);
 
     // sentry
-    sizes.emplace_back(Size{ .minimum = 0, .delta = 0, .index = 99999 });
+    sizes.emplace_back(Size{ .minimum = 0, .delta = 0, .expand = false, .index = 99999 });
 
     auto entry = &sizes.front();
     while (decrease > 0) {
@@ -899,6 +922,50 @@ void shrink_sizes(std::vector<Size>& sizes, int decrease) {
         }
         else {
             entry = &sizes.front();
+        }
+    }
+
+    // restore order
+    std::sort(begin(sizes), end(sizes), [](const Size& a, const Size& b){ return a.index < b.index; });
+}
+
+// Decrease sizes until they meet target value by subtracting given amount
+void expand_sizes(std::vector<Size>& sizes, int increase) {
+    if (sizes.empty() || increase <= 0) return;
+
+    // Sort, expanding elements first, then by current size
+    std::sort(begin(sizes), end(sizes), [](const Size& a, const Size& b){
+        if (a.expand != b.expand) {
+            return a.expand > b.expand;
+        }
+        return a.size() < b.size();
+    });
+
+    // sentry
+    sizes.emplace_back(Size{ .minimum = 0, .delta = 0, .expand = false, .index = 99999 });
+
+    while (increase > 0) {
+        // Find all sizes of the same size
+        auto i = 0;
+        while (sizes[i].size() == sizes[i+1].size() && sizes[i+1].expand) {
+            i++;
+        }
+        // Expand until all previous match the next size up
+        auto to_increase = increase / (i + 1);
+        if (sizes[i+1].expand) {
+            to_increase = std::min(to_increase, (sizes[i+1].size() - sizes[i].size()));
+        }
+        // Add to the delta for each element of the same size
+        for (auto j = 0; j <= i; j++) {
+            sizes[j].delta += to_increase;
+            increase -= to_increase;
+        }
+        // If this was the final expansion, distribute any remaining pixels which is guarenteed to be <= i
+        if (!sizes[i+1].expand) {
+            for (auto j = 0; j <= i && increase > 0; j++) {
+                sizes[j].delta += 1;
+                increase--;
+            }
         }
     }
 
@@ -930,6 +997,7 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
     std::vector<Size> alloc;
     int minimum = 0;
     int total = 0;
+    bool has_expanding = false;
     // gather all measurements
     alloc.reserve(_tabs.size() + 1);
     for (int i = 0; i < _tabs.size(); i++) {
@@ -937,7 +1005,8 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
         auto [min, natural] = tab->measure(Gtk::Orientation::HORIZONTAL, -1).sizes;
         total += natural;
         minimum += min;
-        alloc.emplace_back(Size{ .minimum = min, .delta = natural - min, .index = i });
+        alloc.emplace_back(Size{ .minimum = min, .delta = natural - min, .expand = tab->get_hexpand(), .index = i });
+        has_expanding = has_expanding || tab->get_hexpand();
     }
 
     // check available width; restrict tab sizes if space is limited
@@ -950,9 +1019,9 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
     else if (width < total) {
         // We shall have to economise, Gromit.
         shrink_sizes(alloc, total - width);
-    }
-    else {
-        // no restrictions on size; all tabs fit
+    } else if (has_expanding) {
+        // In fact, let them grow bigger and stronger than anyone else's
+        expand_sizes(alloc, width - total);
     }
 
     if (_drag_dst && _drag_dst->dropX()) {

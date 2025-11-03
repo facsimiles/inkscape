@@ -21,6 +21,7 @@
 
 #include "object/sp-marker-loc.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/style/paint-order.h"
 
 class SPItem;
 class SPStyle;
@@ -102,7 +103,6 @@ private:
     void setPaintOrder (gchar const *paint_order);
     void setJoinButtons(Gtk::ToggleButton *active);
     void setCapButtons(Gtk::ToggleButton *active);
-    void setPaintOrderButtons(Gtk::ToggleButton *active);
     void setStrokeWidth();
     void setStrokeDash();
     void setStrokeMiter();
@@ -125,6 +125,7 @@ private:
     MarkerComboBox *midMarkerCombo;
     MarkerComboBox *endMarkerCombo;
     Gtk::Grid *table;
+    Gtk::Box *_miter_hb;
     Glib::RefPtr<Gtk::Adjustment> widthAdj;
     Glib::RefPtr<Gtk::Adjustment> miterLimitAdj;
     SpinButton *miterLimitSpin;
@@ -137,12 +138,7 @@ private:
     StrokeStyleButton *capButt;
     StrokeStyleButton *capRound;
     StrokeStyleButton *capSquare;
-    StrokeStyleButton *paintOrderFSM;
-    StrokeStyleButton *paintOrderSFM;
-    StrokeStyleButton *paintOrderFMS;
-    StrokeStyleButton *paintOrderMFS;
-    StrokeStyleButton *paintOrderSMF;
-    StrokeStyleButton *paintOrderMSF;
+    PaintOrderWidget *_paint_order;
     DashSelector *dashSelector;
     Gtk::Entry* _pattern_entry = nullptr;
     Gtk::Label* _pattern_label = nullptr;
@@ -155,6 +151,7 @@ private:
     sigc::connection startMarkerConn;
     sigc::connection midMarkerConn;
     sigc::connection endMarkerConn;
+    sigc::connection paintOrderConn;
     
     Inkscape::Util::Unit const *_old_unit;
 

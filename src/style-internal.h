@@ -711,14 +711,6 @@ private:
 #define SP_STYLE_FILL_SERVER(s) ((const_cast<SPStyle *> (s))->getFillPaintServer())
 #define SP_STYLE_STROKE_SERVER(s) ((const_cast<SPStyle *> (s))->getStrokePaintServer())
 
-// SVG 2
-enum SPPaintOrigin {
-    SP_CSS_PAINT_ORIGIN_NORMAL,
-    SP_CSS_PAINT_ORIGIN_CURRENT_COLOR,
-    SP_CSS_PAINT_ORIGIN_CONTEXT_FILL,
-    SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE
-};
-
 
 /// Paint type internal to SPStyle.
 class SPIPaint : public SPIBase
@@ -800,14 +792,6 @@ private:
     std::optional<Colors::Color> _color;
 };
 
-
-// SVG 2
-enum SPPaintOrderLayer {
-    SP_CSS_PAINT_ORDER_NORMAL,
-    SP_CSS_PAINT_ORDER_FILL,
-    SP_CSS_PAINT_ORDER_STROKE,
-    SP_CSS_PAINT_ORDER_MARKER
-};
 
 // Normal maybe should be moved out as is done in other classes.
 // This could be replaced by a generic enum class where multiple keywords are allowed and

@@ -62,12 +62,12 @@ DialogNotebook::DialogNotebook(DialogContainer* container) : _container(containe
 
     _label_pref = prefs->createObserver("/options/notebooklabels/value", [=,this](const auto& entry) {
         auto status = entry.getInt();
-        auto labels = UI::Widget::TabStrip::Never;
+        auto labels = UI::Widget::TabStrip::ShowLabels::Never;
         if (status == PREFS_NOTEBOOK_LABELS_AUTO) {
-            labels = UI::Widget::TabStrip::Always;
+            labels = UI::Widget::TabStrip::ShowLabels::Always;
         }
         else if (status == PREFS_NOTEBOOK_LABELS_ACTIVE) {
-            labels = UI::Widget::TabStrip::ActiveOnly;
+            labels = UI::Widget::TabStrip::ShowLabels::ActiveOnly;
         }
         _tabs.set_show_labels(labels);
     });

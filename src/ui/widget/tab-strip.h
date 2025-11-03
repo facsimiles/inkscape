@@ -40,6 +40,10 @@ public:
     // mark tab as activated; other tabs will be deselected
     void select_tab(const Gtk::Widget& tab);
     void select_tab_at(int pos);
+    // manually move tabs to a position
+    void set_tabs_order(std::vector<Gtk::Widget *> sorted);
+    // Get a vector of the tab widgets
+    std::vector<Gtk::Widget *> get_tabs() const;
     // find position of the tab in a strip
     int get_tab_position(const Gtk::Widget& tab) const;
     // get tab at specified position or null if there's none there
@@ -49,9 +53,10 @@ public:
     // add a context popup to all tabs
     void set_tabs_context_popup(Gtk::Popover* popover);
     // enable/disable rearranging tabs by draggin them to new position
-    void enable_rearranging_tabs(bool enable);
+    enum class Rearrange { Never, Internally, Externally };
+    void set_rearranging_tabs(Rearrange enable);
     // set label behavior
-    enum ShowLabels { Never, Always, ActiveOnly };
+    enum class ShowLabels { Never, Always, ActiveOnly };
     void set_show_labels(ShowLabels labels);
     // return true if tab is active
     bool is_tab_active(const Gtk::Widget& tab) const;
@@ -93,14 +98,15 @@ private:
     sigc::signal<void (int, int)> _signal_tab_rearranged;
     sigc::signal<void ()> _signal_dnd_begin;
     sigc::signal<void (bool)> _signal_dnd_end;
-    bool _can_rearrange = true;
-    ShowLabels _show_labels = Never;
+    Rearrange _rearrange = Rearrange::Externally;
+    ShowLabels _show_labels = ShowLabels::Never;
     bool _show_close_btn = true;
 
     friend TabWidgetDrag;
     std::shared_ptr<TabWidgetDrag> _drag_src;
     std::shared_ptr<TabWidgetDrag> _drag_dst;
 
+    void _update_new_tab();
     void _updateVisibility();
     TabWidget* find_tab(Gtk::Widget& tab);
     Gtk::SizeRequestMode get_request_mode_vfunc() const override;

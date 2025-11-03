@@ -349,6 +349,22 @@ enum SPStrokeExtensions : std::uint_least8_t {
     SP_STROKE_EXTENSIONS_HAIRLINE
 };
 
+// SVG 2
+enum SPPaintOrigin : std::uint_least8_t {
+    SP_CSS_PAINT_ORIGIN_NORMAL,
+    SP_CSS_PAINT_ORIGIN_CURRENT_COLOR,
+    SP_CSS_PAINT_ORIGIN_CONTEXT_FILL,
+    SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE
+};
+
+enum SPPaintOrderLayer : std::uint_least8_t {
+    SP_CSS_PAINT_ORDER_NORMAL,
+    SP_CSS_PAINT_ORDER_FILL,
+    SP_CSS_PAINT_ORDER_STROKE,
+    SP_CSS_PAINT_ORDER_MARKER
+};
+
+
 struct SPStyleEnum {
     char const *key;
     int value;
