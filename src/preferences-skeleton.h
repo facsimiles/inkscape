@@ -78,7 +78,7 @@ static char const preferences_skeleton[] =
 
     <group id="shapes" style="fill-rule:evenodd;" selcue="1" gradientdrag="1">
       <eventcontext id="rect" style="fill:blue;" usecurrent="rect"/>
-      <eventcontext id="3dbox" style="stroke:none;stroke-linejoin:round;" usecurrent="3dbox">
+      <eventcontext id="3dbox" style="stroke:none;stroke-linejoin:round;stroke-width:0" usecurrent="3dbox">
         <side id="XYfront"  style="fill:#8686bf;stroke:none;stroke-linejoin:round;"/>
         <side id="XYrear"   style="fill:#e9e9ff;stroke:none;stroke-linejoin:round;"/>
         <side id="XZtop"    style="fill:#4d4d9f;stroke:none;stroke-linejoin:round;"/>

@@ -1804,7 +1804,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             if (set_i2d) {
                 item->set_i2d_affine(item->i2dt_affine() * (Geom::Affine)affine);
             }
-            item->doWriteTransform(item->transform, nullptr, compensate);
+            item->doWriteTransform(item->transform, &item->transform, compensate);
         }
 
         if (adjust_transf_center) { // The transformation center should not be touched in case of pasting or importing, which is allowed by this if clause

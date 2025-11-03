@@ -1482,10 +1482,14 @@ void SPItem::adjust_stroke( gdouble ex )
     if (freeze_stroke_width) {
         return;
     }
-
     SPStyle *style = this->style;
 
     if (style && !Geom::are_near(ex, 1.0, Geom::EPSILON) && !style->stroke_extensions.hairline) {
+
+        // If there are any pending attribute updates, SPStyle::read overwrites the new stroke_width when
+        // updateRepr applies those other attributes. Write out any pending updates before adjusting stroke.
+        updateRepr();
+
         style->stroke_width.computed *= ex;
         style->stroke_width.set = TRUE;
 

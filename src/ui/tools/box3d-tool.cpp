@@ -429,7 +429,7 @@ void Box3dTool::drag()
         // Create object
         auto newbox3d = SPBox3D::createBox3D(currentLayer());
 
-        // Set style
+        // Set group style. This style isn't visible, since only the faces are visible.
         _desktop->applyCurrentOrToolStyle(newbox3d, "/tools/shapes/3dbox", false);
 
         box3d = newbox3d;
@@ -455,6 +455,7 @@ void Box3dTool::drag()
             side->updateRepr(); // calls Box3DSide::write() and updates, e.g., the axes string description
         }
 
+        box3d->transform = currentLayer()->i2doc_affine().inverse();
         box3d->set_z_orders();
         box3d->updateRepr();
 
@@ -502,6 +503,7 @@ void Box3dTool::finishItem()
         box3d->orig_corner7 = drag_ptC_proj;
 
         box3d->updateRepr();
+        box3d->doWriteTransform(box3d->transform, nullptr, true);
 
         box3d->relabel_corners();
 

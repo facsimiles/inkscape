@@ -250,6 +250,18 @@ void SPBox3D::position_set()
     }
 }
 
+static void set_transform_box3d_child_item(SPItem *childitem, Geom::Affine const &xform, gdouble scale)
+{
+    // Adjust stroke width. If stroke-width is unset, SPItem::adjust_stroke will create one (typically with value 1*scale)
+    childitem->adjust_stroke(scale);
+
+    // Adjust pattern fill
+    childitem->adjust_pattern(xform);
+
+    // Adjust gradient fill
+    childitem->adjust_gradient(xform);
+}
+
 Geom::Affine SPBox3D::set_transform(Geom::Affine const &xform) {
     // We don't apply the transform to the box directly but instead to its perspective (which is
     // done in sp_selection_apply_affine). Here we only adjust strokes, patterns, etc.
@@ -257,20 +269,15 @@ Geom::Affine SPBox3D::set_transform(Geom::Affine const &xform) {
     Geom::Affine ret(Geom::Affine(xform).withoutTranslation());
     gdouble const sw = hypot(ret[0], ret[1]);
     gdouble const sh = hypot(ret[2], ret[3]);
+    gdouble const scale = sqrt(fabs(sw * sh));
 
     for (auto& child: children) {
         auto childitem = cast<SPItem>(&child);
         if (childitem) {
-            // Adjust stroke width
-            childitem->adjust_stroke(sqrt(fabs(sw * sh)));
-
-            // Adjust pattern fill
-            childitem->adjust_pattern(xform);
-
-            // Adjust gradient fill
-            childitem->adjust_gradient(xform);
+            set_transform_box3d_child_item(childitem, xform, scale);
         }
     }
+    set_transform_box3d_child_item(this, xform, scale);
 
     return Geom::identity();
 }
