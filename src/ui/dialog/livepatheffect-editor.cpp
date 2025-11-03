@@ -143,10 +143,44 @@ LivePathEffectEditor::LivePathEffectEditor()
     selection_info();
 
     _lpes_popup.get_entry().set_placeholder_text(_("Add Live Path Effect"));
-    _lpes_popup.on_match_selected().connect([this](int const id)
-        { onAdd(static_cast<LivePathEffect::EffectType>(id)); });
-    _lpes_popup.on_button_press().connect([this]{ setMenu(); });
-    _lpes_popup.on_focus().connect([this]{ setMenu(); return true; });
+    _lpes_popup.get_menu().set_autohide(false);
+    
+
+    _lpes_popup.on_match_selected().connect([this](int const id) {
+        onAdd(static_cast<LivePathEffect::EffectType>(id));
+        _lpes_popup.get_menu().popdown();
+
+    });
+    _lpes_popup.on_button_press().connect([this] {setMenu();});
+
+    auto click_controller = Gtk::GestureClick::create();
+    click_controller->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    click_controller->set_button(GDK_BUTTON_PRIMARY);
+
+    click_controller->signal_pressed().connect([this](int n_press, double x, double y) {
+        setMenu();
+        auto text = _lpes_popup.get_entry().get_text();
+        if (text.empty()) {
+            _lpes_popup.get_menu().popup();
+        }
+    });
+    _lpes_popup.get_entry().add_controller(click_controller);
+
+    _lpes_popup.on_focus().connect([this] {
+        setMenu();
+        return true;
+    });
+
+    _lpes_popup.get_entry().signal_changed().connect([&]() {
+
+        auto text = _lpes_popup.get_entry().get_text();
+        if (text.empty() && _lpes_popup.get_entry().has_focus()) {
+            _lpes_popup.get_menu().popup();
+        } else {
+            _lpes_popup.get_menu().popdown();
+        }
+    });
+
     UI::pack_start(_LPEAddContainer, _lpes_popup);
 
     sp_set_experimental(_experimental);

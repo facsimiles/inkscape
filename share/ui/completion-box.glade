@@ -16,7 +16,7 @@
     <property name="popup-set-width">True</property>
     <child>
       <object class="GtkCellRendererPixbuf" id="icon-cell">
-        <property name="icon-size">large</property>
+        <property name="icon-size">normal</property>
       </object>
       <attributes>
         <attribute name="icon-name">2</attribute>
