@@ -57,7 +57,14 @@ void ColorEntry::on_changed()
         return;
     }
 
-    auto new_color = Colors::Color::parse(get_text());
+    auto text = get_text();
+    // If it looks like a plain hex string (e.g., "ff00ff") add a '#' 
+    // so both "ff00ff" and "#ff00ff" are accepted.
+    if (looksLikeHex(text)) {
+        text = "#" + text;
+    }
+
+    auto new_color = Colors::Color::parse(text);
 
     _updatingrgba = true;
     if (new_color) {
@@ -107,6 +114,26 @@ void ColorEntry::_onColorChanged()
         set_text(text);
         _updating = false;
     }
+}
+
+// Checks if a text looks like a hex color code
+// for example, returns true for "fff" or "ff00ff",
+// but false for actual hex codes (like "#fff" or "#ff00ff")
+// or any invalid hex strings.
+bool ColorEntry::looksLikeHex(const Glib::ustring &text) const
+{
+    if (text.empty() || text[0] == '#') {
+        return false;
+    }
+
+    auto len = text.size();
+    if (len != 3 && len != 4 && len != 6 && len != 8) {
+        return false;
+    }
+
+    return std::all_of(text.begin(), text.end(), [](unsigned char c) {
+        return std::isxdigit(c);
+    });
 }
 
 } // namespace

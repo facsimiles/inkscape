@@ -32,6 +32,7 @@ protected:
 private:
     void _onColorChanged();
     void _inputCheck(guint pos, const gchar * /*chars*/, guint /*n_chars*/);
+    bool looksLikeHex(const Glib::ustring &text) const;
 
     std::shared_ptr<Colors::ColorSet> _colors;
     bool _updating;
