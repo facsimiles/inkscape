@@ -182,6 +182,7 @@ inkscape:macos:
     when: always
   variables:
     MSYSTEM: UCRT64
+    CCACHE_COMPILERCHECK: content
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     CCACHE_MAXSIZE: 512M"
     IDW_VERSION: 88
