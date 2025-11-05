@@ -289,9 +289,6 @@ inkscape:windows:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     CCACHE_MAXSIZE: "200M"
   script:
-    # install Windows SDK for exe and msi jobs to provide
-    # 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe'
-    - if (${Env:DIST} -ne "7z" ) { choco install windows-sdk-10.1 -y }
     # If we are building the MSI package, install extra build dependencies
     - if (${Env:DIST} -eq "msi") { . "${Env:CI_PROJECT_DIR}\buildtools\windows-deps-install-wix4.ps1" }
     # Kill the job before hitting runner's timeout. This way we can preserve the cache so the next retry
