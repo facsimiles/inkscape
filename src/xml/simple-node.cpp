@@ -477,12 +477,12 @@ void SimpleNode::removeChild(Node *generic_child) {
     } else {
         _first_child = next;
     }
-    if (next) { // removing the last child?
+    if (next) {
         next->_prev = ref;
-    } else {
         // removing any other child invalidates the cached positions
-        _last_child = ref;
         _cached_positions_valid = false;
+    } else { // removing the last child?
+        _last_child = ref;
     }
 
     child->_next = nullptr;
