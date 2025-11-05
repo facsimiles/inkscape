@@ -214,7 +214,7 @@ inkscape:macos:
     MSYSTEM: UCRT64
     CCACHE_BASEDIR: $CI_PROJECT_DIR/src
     # ICW = inkscape-ci-windows, https://gitlab.com/inkscape/infra/inkscape-ci-windows
-    ICW_VERSION: 152
+    ICW_VERSION: 157
     ICW_NAME: ink$ICW_VERSION
     ICW_RELEASE_URL: $CI_API_V4_URL/projects/46863172/packages/generic/windows/r$ICW_VERSION/${ICW_NAME}_$MSYSTEM.wim
   before_script:
