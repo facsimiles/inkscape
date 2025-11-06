@@ -2691,9 +2691,9 @@ void InkscapePreferences::initPageBehavior()
     _scroll_auto_speed.init ( "/options/autoscrollspeed/value", 0.0, 5.0, 0.01, 1.0, 0.7, false, false);
     _page_scrolling.add_line( true, _("_Speed:"), _scroll_auto_speed, "",
                            _("How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn autoscroll off)"), false);
-    _scroll_auto_thres.init ( "/options/autoscrolldistance/value", -600.0, 600.0, 1.0, 1.0, -10.0, true, false);
+    _scroll_auto_thres.init ( "/options/autoscrolldistance/value", -600.0, 600.0, 1.0, 1.0, 10.0, true, false);
     _page_scrolling.add_line( true, _("_Threshold:"), _scroll_auto_thres, _("pixels"),
-                           _("How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), false);
+                           _("How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is within the canvas, negative is outside the canvas"), false);
     _scroll_space.init ( _("Mouse move pans when Space is pressed"), "/options/spacebarpans/value", true);
     _page_scrolling.add_line( true, "", _scroll_space, "",
                             _("When on, pressing and holding Space and dragging pans canvas"));

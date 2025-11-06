@@ -303,7 +303,7 @@ static char const preferences_skeleton[] =
     <group id="snapclosestonly" value="0"/>
     <group id="snapindicator" value="1"/>
     <group id="autoscrollspeed" value="0.7"/>
-    <group id="autoscrolldistance" value="-10"/>
+    <group id="autoscrolldistance" value="10"/>
     <group id="simplifythreshold" value="0.002"/>
     <group id="bitmapeditor" value="gimp"/>
     <group id="svgeditor" value="inkscape"/>
