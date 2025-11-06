@@ -104,7 +104,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
     parametersTable.attach(radiusX, 1, 1, 1, 1);
     parametersTable.attach(radiusY, 2, 1, 1, 1);
 
-    angleLabel.set_text(_("Angle X/Y:"));
+    angleLabel.set_text(_("Angle start/end:"));
     parametersTable.attach(angleLabel, 0, 2, 1, 1);
     angleX.setDigits(2);
     angleX.setIncrements(0.2, 0);
@@ -272,20 +272,7 @@ void PolarArrangeTab::arrange()
     bool arrangeOnFirstEllipse = arrangeOnEllipse && arrangeOnFirstCircleRadio.get_active();
     float yaxisdir = parent->getDesktop()->yaxisdir();
 
-    int count = 0;
-    if (arrangeOnEllipse) {
-        for (auto item : tmp) {
-            if (auto ellipse = cast<SPGenericEllipse>(item)) {
-                if (!referenceEllipse || !arrangeOnFirstEllipse) {
-                    referenceEllipse = ellipse;
-                }
-            }
-            ++count;
-        }
-    } else {
-        count = tmp.size();
-    }
-
+    int count = tmp.size();
     float cx, cy; // Center of the ellipse
     float rx, ry; // Radiuses of the ellipse in x and y direction
     float arcBeg;
@@ -293,6 +280,14 @@ void PolarArrangeTab::arrange()
     bool whole = false;
     Geom::Affine transformation; // Any additional transformation to apply to the objects
     if (arrangeOnEllipse) {
+        for (auto item : tmp) {
+            if (auto ellipse = cast<SPGenericEllipse>(item)) {
+                if (!referenceEllipse || !arrangeOnFirstEllipse) {
+                    referenceEllipse = ellipse;
+                }
+            }
+        }
+
         if (!referenceEllipse) {
             if (auto desktop = parent->getDesktop()) {
                 desktop->showNotice(_("Couldn't find an ellipse in selection"), 5000);
@@ -329,7 +324,7 @@ void PolarArrangeTab::arrange()
         arcBeg = angleX.getValue("rad");
         float arcEnd = angleY.getValue("rad");
         arcLength = arcEnd - arcBeg;
-        if (std::abs(arcLength - M_PI * 2) < 0.00001) {
+        if (std::abs(std::abs(arcLength) - M_PI * 2) < 0.00001) {
             whole = true;
         }
         transformation.setIdentity();
