@@ -304,8 +304,11 @@ inkscape:windows:
 inkscape:android:
   stage: build
   timeout: 3h
-  image: registry.gitlab.com/inkscape/infra/inkscape-ci-android/master@sha256:bf573c2dc030aadfe0c14f3fac8e5fdaba1ef4826c6108d21e012ef001508b6a # Commit 062ddef091ff299d120d4be75c3a76d6ecdc5102
-  when: manual
+  rules:
+    - *do_not_run_for_schedules
+    - when: manual
+      allow_failure: true
+  image: registry.gitlab.com/inkscape/infra/inkscape-ci-android/master@sha256:12e0806cf33a495f4d6c088f2e53630ca5b835d1aaabb836641b94533d00c914 # Commit e43a90c99df3785fef8931bd93b82c9d29e401ed
   cache:
     key: "cache-android"
     paths:
