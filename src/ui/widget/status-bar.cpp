@@ -19,7 +19,7 @@
 #include "ui/builder-utils.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
-#include "ui/widget/ink-spin-button.h"
+#include "ui/widget/generic/spin-button.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/page-selector.h"
 

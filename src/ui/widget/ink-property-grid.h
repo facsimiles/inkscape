@@ -21,7 +21,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/sizegroup.h>
 
-#include "bin.h"
+#include "generic/bin.h"
 #include "widget-group.h"
 
 namespace Inkscape::UI::Widget {

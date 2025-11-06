@@ -142,7 +142,7 @@ set(ui_SRC
 	dialog/font-collections-manager.cpp
 	dialog/font-substitution.cpp
 	dialog/global-palettes.cpp
-    dialog/glyphs.cpp
+	dialog/glyphs.cpp
 	dialog/grid-arrange-tab.cpp
 	dialog/guides.cpp
 	dialog/icon-preview.cpp
@@ -176,14 +176,13 @@ set(ui_SRC
 	dialog/xml-tree.cpp
 	dialog/save-template-dialog.cpp
 
-	widget/block-scale.cpp
+	widget-vfuncs-class-init.cpp
+
 	widget/character-viewer.cpp
 	widget/iconrenderer.cpp
-	widget/ink-spin-button.cpp
 	widget/ink-property-grid.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
-	widget/bin.cpp
 	widget/completion-popup.cpp
 	widget/canvas.cpp
 	widget/canvas/stores.cpp
@@ -212,7 +211,6 @@ set(ui_SRC
 	widget/color-wheel-factory.cpp
 	widget/combo-box-entry-tool-item.cpp
 	widget/combo-tool-item.cpp
-	widget/css-name-class-init.cpp
 	widget/custom-tooltip.cpp
 	widget/dash-selector.cpp
 	widget/desktop-widget.cpp
@@ -231,7 +229,17 @@ set(ui_SRC
 	widget/font-variants.cpp
 	widget/font-variations.cpp
 	widget/frame.cpp
+	widget/generic/bin.cpp
+	widget/generic/css-name-class-init.cpp
+	widget/generic/dual-spin-scale.cpp
+	widget/generic/popover-bin.cpp
+	widget/generic/popover-menu.cpp
 	widget/generic/reorderable-stack.cpp
+	widget/generic/scale-bar.cpp
+	widget/generic/simple-grid.cpp
+	widget/generic/snapshot-widget.cpp
+	widget/generic/spin-button.cpp
+	widget/generic/tab-strip.cpp
 	widget/gradient-image.cpp
 	widget/gradient-editor.cpp
 	widget/gradient-selector.cpp
@@ -243,12 +251,9 @@ set(ui_SRC
 	widget/imagetoggler.cpp
 	widget/ink-color-wheel.cpp
 	widget/ink-ruler.cpp
-	widget/ink-spinscale.cpp
-	widget/ink-spin-button.cpp
 	widget/labelled.cpp
 	widget/layer-selector.cpp
 	widget/licensor.cpp
-	widget/marker-combo-box.cpp
 	widget/memory.cpp
 	widget/messages.cpp
 	widget/mesh-editor.cpp
@@ -267,9 +272,6 @@ set(ui_SRC
 	widget/paint-switch.cpp
 	widget/pattern-editor.cpp
 	widget/point.cpp
-	widget/popover-bin.cpp
-	widget/popover-menu.cpp
-	widget/popover-menu-item.cpp
 	widget/preferences-widget.cpp
 	widget/random.cpp
 	widget/registered-widget.cpp
@@ -282,26 +284,22 @@ set(ui_SRC
 	widget/scroll-utils.cpp
 	widget/selected-style.cpp
 	widget/shapeicon.cpp
-	widget/snapshot-widget.cpp
-	widget/simple-grid.cpp
-	widget/spin-scale.cpp
 	widget/spinbutton.cpp
 	widget/stack.cpp
 	widget/status-bar.cpp
 	widget/stroke-style.cpp
 	widget/stroke-options.cpp
+	widget/style/marker-combo-box.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
 	widget/swatch-editor.cpp
 	widget/swatch-selector.cpp
-	widget/tab-strip.cpp
 	widget/tabs-widget.cpp
 	widget/template-list.cpp
 	widget/text.cpp
 	widget/textpath-popover.cpp
 	widget/unit-menu.cpp
 	widget/unit-tracker.cpp
-	widget/widget-vfuncs-class-init.cpp
 	widget/xml-treeview.cpp
 	widget/property-utils.cpp
 	widget/recolor-art.cpp
@@ -500,14 +498,13 @@ set(ui_SRC
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
-	widget/block-scale.h
+	widget-vfuncs-class-init.h
+
 	widget/iconrenderer.h
-	widget/ink-spin-button.h
 	widget/ink-property-grid.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
-	widget/bin.h
 	widget/canvas.h
 	widget/canvas/fragment.h
 	widget/canvas/prefs.h
@@ -541,7 +538,6 @@ set(ui_SRC
 	widget/combo-enums.h
 	widget/combo-box-entry-tool-item.h
 	widget/combo-tool-item.h
-	widget/css-name-class-init.h
 	widget/custom-tooltip.h
 	widget/dash-selector.h
 	widget/desktop-widget.h
@@ -564,7 +560,17 @@ set(ui_SRC
 	widget/font-variants.h
 	widget/font-variations.h
 	widget/frame.h
+	widget/generic/bin.h
+	widget/generic/css-name-class-init.h
+	widget/generic/dual-spin-scale.h
+	widget/generic/popover-bin.h
+	widget/generic/popover-menu.h
 	widget/generic/reorderable-stack.h
+	widget/generic/scale-bar.h
+	widget/generic/simple-grid.h
+	widget/generic/snapshot-widget.h
+	widget/generic/spin-button.h
+	widget/generic/tab-strip.h
 	widget/gradient-image.h
 	widget/gradient-editor.h
 	widget/gradient-selector.h
@@ -576,12 +582,9 @@ set(ui_SRC
 	widget/imagetoggler.h
 	widget/ink-color-wheel.h
 	widget/ink-ruler.h
-	widget/ink-spinscale.h
-	widget/ink-spin-button.h
 	widget/labelled.h
 	widget/layer-selector.h
 	widget/licensor.h
-	widget/marker-combo-box.h
 	widget/memory.h
 	widget/messages.h
 	widget/mesh-editor.h
@@ -599,9 +602,6 @@ set(ui_SRC
 	widget/palette_t.h
 	widget/pattern-editor.h
 	widget/point.h
-	widget/popover-bin.h
-	widget/popover-menu.h
-	widget/popover-menu-item.h
 	widget/preferences-widget.h
 	widget/random.h
 	widget/registered-enums.h
@@ -615,27 +615,23 @@ set(ui_SRC
 	widget/scroll-utils.h
 	widget/selected-style.h
 	widget/shapeicon.h
-	widget/snapshot-widget.h
-	widget/simple-grid.h
 	widget/size-reporter.h
-	widget/spin-scale.h
 	widget/spinbutton.h
 	widget/stack.h
 	widget/status-bar.h
 	widget/stroke-style.h
 	widget/stroke-options.h
+	widget/style/marker-combo-box.h
 	widget/style-subject.h
 	widget/style-swatch.h
 	widget/swatch-editor.h
 	widget/swatch-selector.h
-	widget/tab-strip.h
 	widget/tabs-widget.h
 	widget/template-list.h
 	widget/text.h
 	widget/textpath-popover.h
 	widget/unit-menu.h
 	widget/unit-tracker.h
-	widget/widget-vfuncs-class-init.h
 	widget/xml-treeview.h
 	widget/property-utils.h
 	widget/recolor-art.h

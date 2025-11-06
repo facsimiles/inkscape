@@ -19,7 +19,7 @@
 #include "preferences.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"
-#include "ui/widget/spin-scale.h"
+#include "ui/widget/generic/spin-scale.h"
 #include "util-string/ustring-format.h"
 #include "xml/node.h"
 
@@ -170,7 +170,9 @@ Gtk::Widget *ParamFloat::get_widget(sigc::signal<void ()> *changeSignal)
         Glib::ustring text;
         if (_text != nullptr)
             text = _text;
-        auto const scale = Gtk::make_managed<UI::Widget::SpinScale>(text, fadjust, _precision);
+        auto const scale = Gtk::make_managed<UI::Widget::SpinScale>();
+        scale->set_adjustment(fadjust);
+        scale->set_digits(_precision);
         scale->set_size_request(400, -1);
         scale->set_visible(true);
         UI::pack_start(*hbox, *scale, true, true);

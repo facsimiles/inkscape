@@ -24,6 +24,7 @@ public:
 
     Inkscape::Filters::FilterColorMatrixType get_type() const { return type; }
     std::vector<double> const &get_values() const { return values; }
+    double get_value() const { return value; }
 
 private:
     Inkscape::Filters::FilterColorMatrixType type = Inkscape::Filters::COLORMATRIX_MATRIX;

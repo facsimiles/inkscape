@@ -7,10 +7,12 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/gesture.h>
 #include <gtkmm/label.h>
 #include <gtkmm/widget.h>
 #include <sigc++/scoped_connection.h>
-#include "ui/class-init.h"
+
+#include "css-name-class-init.h"
 
 namespace Gtk {
 class EventControllerKey;
@@ -25,7 +27,7 @@ namespace Inkscape::UI { class DefocusTarget; }
 
 namespace Inkscape::UI::Widget {
 
-class InkSpinButton : public Util::ClassExtraInit, public Gtk::Widget {
+class InkSpinButton : public CssNameClassInit, public Gtk::Widget {
 public:
     InkSpinButton();
     InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);

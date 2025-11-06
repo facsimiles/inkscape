@@ -66,6 +66,7 @@
 #include "ui/widget/color-picker.h"
 #include "ui/widget/custom-tooltip.h"
 #include "ui/widget/filter-effect-chooser.h"
+#include "ui/widget/generic/dual-spin-scale.h"
 #include "ui/widget/spinbutton.h"
 
 using namespace Inkscape::Filters;
@@ -74,8 +75,8 @@ namespace Inkscape::UI::Dialog {
 
 using Inkscape::UI::Widget::AttrWidget;
 using Inkscape::UI::Widget::ComboBoxEnum;
-using Inkscape::UI::Widget::DualSpinScale;
 using Inkscape::UI::Widget::SpinScale;
+using Inkscape::UI::Widget::DualSpinScale;
 
 constexpr int max_convolution_kernel_size = 10;
 
@@ -167,6 +168,68 @@ public:
             set_value(Glib::Ascii::strtod(val));
         } else {
             set_value(get_default()->as_double());
+        }
+    }
+};
+
+class SpinScaleAttr : public Inkscape::UI::Widget::SpinScale, public AttrWidget
+{
+public:
+    SpinScaleAttr(const SPAttr a)
+        : SpinScale()
+        , AttrWidget(a)
+    {
+        signal_value_changed().connect([this](double) { signal_attr_changed().emit(); });
+    }
+
+    Glib::ustring get_as_attribute() const { return as_string(); }
+    void set_from_attribute(SPObject* o) { set_value(o->getAttributeDouble(get_attribute_name(), 0.0)); }
+};
+
+class DualSpinScaleAttr : public Inkscape::UI::Widget::DualSpinScale, public AttrWidget
+{
+public:
+    DualSpinScaleAttr(Glib::ustring label1, Glib::ustring label2,
+                      double value, double lower, double upper,
+                      double step_increment, int digits,
+                      Glib::ustring const &tip_text1, Glib::ustring const &tip_text2, const SPAttr a)
+        : DualSpinScale(label1, label2, value, lower, upper, step_increment, digits, tip_text1, tip_text2)
+        , AttrWidget(a)
+    {
+        signal_value_changed().connect(signal_attr_changed().make_slot());
+    }
+
+
+    Glib::ustring get_as_attribute() const
+    {
+        auto value = get_value();
+        Inkscape::CSSOStringStream os;
+        os << value.first;
+        if (!is_linked()) {
+            os << " " << value.second;
+        }
+        return os.str();
+    }
+
+    void set_from_attribute(SPObject* o)
+    {
+        const gchar* val = attribute_value(o);
+        if(val) {
+            // Split val into parts
+            gchar** toks = g_strsplit(val, " ", 2);
+
+            if(toks) {
+                double v1 = 0.0, v2 = 0.0;
+                if(toks[0])
+                    v1 = v2 = Glib::Ascii::strtod(toks[0]);
+                if(toks[1])
+                    v2 = Glib::Ascii::strtod(toks[1]);
+
+                set_linked(toks[1] == nullptr);
+                set_value(v1, v2);
+
+                g_strfreev(toks);
+            }
         }
     }
 };
@@ -481,16 +544,24 @@ class FilterEffectsDialog::ColorMatrixValues : public Gtk::Frame, public AttrWid
 {
 public:
     ColorMatrixValues()
-        : AttrWidget(SPAttr::VALUES),
+        : AttrWidget(SPAttr::VALUES)
           // TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
-          _matrix(SPAttr::VALUES, _("This matrix determines a linear transform on color space. Each line affects one of the color components. Each column determines how much of each color component from the input is passed to the output. The last column does not depend on input colors, so can be used to adjust a constant component value.")),
-          _saturation("", 1, 0, 1, 0.1, 0.01, 2, SPAttr::VALUES),
-          _angle("", 0, 0, 360, 0.1, 0.01, 1, SPAttr::VALUES),
-          _label(C_("Label", "None"), Gtk::Align::START)
+        , _matrix(SPAttr::VALUES, _("This matrix determines a linear transform on color space. Each line affects one of the color components. Each column determines how much of each color component from the input is passed to the output. The last column does not depend on input colors, so can be used to adjust a constant component value."))
+        , _label(C_("Label", "None"), Gtk::Align::START)
     {
+        _saturation.set_adjustment_values(0, 1, 0.1, 0.01);
+        _saturation.set_value(1.0);
+
+        _angle.set_adjustment_values(0, 360, 0.1, 0.01);
+        _angle.set_value(0.0);
+
         _matrix.signal_attr_changed().connect(signal_attr_changed().make_slot());
-        _saturation.signal_attr_changed().connect(signal_attr_changed().make_slot());
-        _angle.signal_attr_changed().connect(signal_attr_changed().make_slot());
+        _saturation.signal_value_changed().connect([this](double) {
+            signal_attr_changed().emit();
+        });
+        _angle.signal_value_changed().connect([this](double) {
+            signal_attr_changed().emit();
+        });
 
         _label.set_sensitive(false);
 
@@ -499,19 +570,19 @@ public:
 
     void set_from_attribute(SPObject* o) override
     {
-        if(is<SPFeColorMatrix>(o)) {
-            auto col = cast<SPFeColorMatrix>(o);
-            unset_child();
+        if(auto col = cast<SPFeColorMatrix>(o)) {
 
-            switch(col->get_type()) {
+            unset_child();
+            _type = col->get_type();
+            switch(_type) {
                 case COLORMATRIX_SATURATE:
                     set_child(_saturation);
-                    _saturation.set_from_attribute(o);
+                    _saturation.set_value(col->get_value());
                     break;
 
                 case COLORMATRIX_HUEROTATE:
                     set_child(_angle);
-                    _angle.set_from_attribute(o);
+                    _angle.set_value(col->get_value());
                     break;
 
                 case COLORMATRIX_LUMINANCETOALPHA:
@@ -529,16 +600,22 @@ public:
 
     Glib::ustring get_as_attribute() const override
     {
-        const Widget* w = get_child();
-        if(w == &_label)
-            return "";
-        if (auto attrw = dynamic_cast<const AttrWidget *>(w))
-            return attrw->get_as_attribute();
-        g_assert_not_reached();
+        switch(_type) {
+            case COLORMATRIX_SATURATE:
+                return _saturation.as_string();
+            case COLORMATRIX_HUEROTATE:
+                return _angle.as_string();
+            case COLORMATRIX_LUMINANCETOALPHA:
+                return "";
+            case COLORMATRIX_MATRIX:
+            default:
+                return _matrix.get_as_attribute();
+        }
         return "";
     }
 
 private:
+    FilterColorMatrixType _type = COLORMATRIX_SATURATE;
     MatrixAttr _matrix;
     SpinScale _saturation;
     SpinScale _angle;
@@ -744,26 +821,30 @@ public:
     }
 
     // SpinScale
-    SpinScale* add_spinscale(double def, const SPAttr attr, const Glib::ustring& label,
-                         const double lo, const double hi, const double step_inc, const double page_inc, const int digits, char* tip_text = nullptr)
+    SpinScaleAttr* add_spinscale(double def, const SPAttr attr, const Glib::ustring& label,
+                                 const double lo, const double hi, const double step_inc, const double page_inc, const int digits, char* tip_text = nullptr)
     {
         Glib::ustring tip_text2;
         if (tip_text)
             tip_text2 = tip_text;
-        auto const spinslider = Gtk::make_managed<SpinScale>("", def, lo, hi, step_inc, page_inc, digits, attr, tip_text2);
+        auto spinslider = Gtk::make_managed<SpinScaleAttr>(attr);
+        spinslider->set_value(def);
+        spinslider->set_adjustment_values(lo, hi, step_inc);
+        spinslider->set_digits(digits);
+        spinslider->set_tooltip_text(tip_text2);
         add_widget(spinslider, label);
         add_attr_widget(spinslider);
         return spinslider;
     }
 
     // DualSpinScale
-    DualSpinScale* add_dualspinscale(const SPAttr attr, const Glib::ustring& label,
-                                     const double lo, const double hi, const double step_inc,
-                                     const double climb, const int digits,
-                                     const Glib::ustring tip_text1 = "",
-                                     const Glib::ustring tip_text2 = "")
+    DualSpinScaleAttr* add_dualspinscale(const SPAttr attr, const Glib::ustring& label,
+                                         const double lo, const double hi, const double step_inc,
+                                         const double climb, const int digits,
+                                         const Glib::ustring tip_text1 = "",
+                                         const Glib::ustring tip_text2 = "")
     {
-        auto const dss = Gtk::make_managed<DualSpinScale>("", "", lo, lo, hi, step_inc, climb, digits, attr, tip_text1, tip_text2);
+        auto const dss = Gtk::make_managed<DualSpinScaleAttr>("", "", lo, lo, hi, step_inc, digits, tip_text1, tip_text2, attr);
         add_widget(dss, label);
         add_attr_widget(dss);
         return dss;

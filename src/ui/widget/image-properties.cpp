@@ -14,10 +14,11 @@
 #include <glibmm/markup.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/drawingarea.h>
+#include <gtkmm/dropdown.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "display/cairo-utils.h"
 #include "document-undo.h"
 #include "enums.h"

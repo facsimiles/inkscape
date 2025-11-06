@@ -17,7 +17,7 @@
 #include <ui/operation-blocker.h>
 
 #include "ui/widget/document-templates.h"
-#include "ui/widget/ink-spin-button.h"
+#include "ui/widget/generic/spin-button.h"
 
 namespace Gtk {
 class SizeGroup;

@@ -12,7 +12,7 @@
 
 #include "pattern-manager.h"
 #include "ink-property-grid.h"
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/color-picker.h"
 

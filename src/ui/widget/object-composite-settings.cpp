@@ -89,7 +89,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     double radius;
     if (bbox) {
         double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-        double blur_value = _filter_modifier.get_blur_value() / 100.0;
+        double blur_value = _filter_modifier.get_blur_value();
         radius = blur_value * blur_value * perimeter / BLUR_MULTIPLIER;
     } else {
         radius = 0;
@@ -145,7 +145,7 @@ ObjectCompositeSettings::_opacityValueChanged()
     SPCSSAttr *css = sp_repr_css_attr_new ();
 
     Inkscape::CSSOStringStream os;
-    os << CLAMP (_filter_modifier.get_opacity_value() / 100, 0.0, 1.0);
+    os << CLAMP (_filter_modifier.get_opacity_value(), 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
 
     _subject->setCSS(css);
@@ -210,7 +210,7 @@ ObjectCompositeSettings::_subjectChanged() {
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently
         case QUERY_STYLE_MULTIPLE_SAME:
-            _filter_modifier.set_opacity_value(100 * SP_SCALE24_TO_FLOAT(query.opacity.value));
+            _filter_modifier.set_opacity_value(query.opacity);
             break;
     }
 
@@ -260,7 +260,7 @@ ObjectCompositeSettings::_subjectChanged() {
                     bbox->dimensions()[Geom::Y]; // fixme: this is only half the perimeter, is that correct?
                 // update blur widget value
                 float radius = query.filter_gaussianBlur_deviation.value;
-                float percent = std::sqrt(radius * BLUR_MULTIPLIER / perimeter) * 100;
+                float percent = std::sqrt(radius * BLUR_MULTIPLIER / perimeter);
                 _filter_modifier.set_blur_value(percent);
             }
             break;

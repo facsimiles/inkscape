@@ -24,7 +24,7 @@
 #include "enums.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "widget/ink-spin-button.h"
+#include "widget/generic/spin-button.h"
 
 /**
  * Remove focus from window to whoever it is transient for.

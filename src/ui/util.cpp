@@ -36,7 +36,7 @@
 #include "colors/utils.h" // color to hex string
 #include "ui/dialog-run.h"
 #include "util/numeric/converters.h"
-#include "widget/ink-spin-button.h"
+#include "widget/generic/spin-button.h"
 
 // NOTE: Include windows stuff last, as it #defines ERROR leading to compilation errors
 #if (defined (_WIN32) || defined (_WIN64))

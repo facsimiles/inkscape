@@ -26,8 +26,7 @@
 #include "ui/dialog/color-item.h"
 #include "ui/util.h"
 #include "ui/widget/color-palette-preview.h"
-#include "ui/widget/popover-menu.h"
-#include "ui/widget/popover-menu-item.h"
+#include "ui/widget/generic/popover-menu.h"
 
 namespace Inkscape::UI::Widget {
 

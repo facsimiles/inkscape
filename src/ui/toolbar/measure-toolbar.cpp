@@ -35,7 +35,7 @@
 #include "ui/builder-utils.h"
 #include "ui/tools/measure-tool.h"
 #include "ui/widget/combo-tool-item.h"
-#include "ui/widget/ink-spin-button.h"
+#include "ui/widget/generic/spin-button.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 

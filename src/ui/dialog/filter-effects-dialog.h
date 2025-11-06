@@ -25,11 +25,11 @@
 
 #include "display/nr-filter-types.h"
 #include "ui/dialog/dialog-base.h"
-#include "ui/widget/bin.h"
+#include "ui/widget-vfuncs-class-init.h"
 #include "ui/widget/combo-enums.h"
 #include "ui/widget/completion-popup.h"
-#include "ui/widget/popover-bin.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
+#include "ui/widget/generic/bin.h"
+#include "ui/widget/generic/popover-bin.h"
 #include "xml/helper-observer.h"
 
 namespace Gdk {

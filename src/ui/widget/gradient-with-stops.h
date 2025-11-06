@@ -18,7 +18,7 @@
 
 #include "colors/color.h"
 #include "ui/svg-renderer.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
+#include "ui/widget-vfuncs-class-init.h"
 
 namespace Gdk {
 class Cursor;

@@ -781,6 +781,7 @@ public:
                       Inkscape::Util::const_char_ptr value);
 
     void setAttributeDouble(Inkscape::Util::const_char_ptr key, double value);
+    double getAttributeDouble(Inkscape::Util::const_char_ptr key, double def);
 
     void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key,
                                      Inkscape::Util::const_char_ptr value) {

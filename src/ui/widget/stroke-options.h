@@ -8,7 +8,7 @@
 #include <gtkmm/togglebutton.h>
 #include <ui/operation-blocker.h>
 
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 
 class SPStyle;
 

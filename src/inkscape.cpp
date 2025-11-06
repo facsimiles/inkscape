@@ -53,7 +53,7 @@
 #include "ui/themes.h"
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
-#include "ui/widget/ink-spin-button.h"
+#include "ui/widget/generic/spin-button.h"
 #include "util/font-discovery.h"
 
 static bool desktop_is_active(SPDesktop const *d)

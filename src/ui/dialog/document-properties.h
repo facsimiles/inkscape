@@ -34,7 +34,7 @@
 #include <gtkmm/textview.h>
 #include "object/sp-grid.h"
 #include "ui/dialog/dialog-base.h"
-#include "ui/widget/popover-bin.h"
+#include "ui/widget/generic/popover-bin.h"
 #include "ui/widget/icon-combobox.h"
 #include "ui/widget/licensor.h"
 #include "ui/widget/registered-widget.h"

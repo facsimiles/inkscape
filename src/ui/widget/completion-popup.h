@@ -6,7 +6,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/builder.h>
 
-#include "ui/widget/popover-menu.h"
+#include "ui/widget/generic/popover-menu.h"
 
 namespace Gtk {
 class EntryCompletion;

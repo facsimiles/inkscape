@@ -15,7 +15,7 @@
 #include <2geom/int-point.h>
 
 #include "ui/widget/palette_t.h"
-#include "ui/widget/bin.h"
+#include "ui/widget/generic/bin.h"
 
 namespace Gtk {
 class Builder;

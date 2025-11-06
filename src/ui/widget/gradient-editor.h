@@ -13,14 +13,16 @@
 #ifndef SEEN_GRADIENT_EDITOR_H
 #define SEEN_GRADIENT_EDITOR_H
 
+#include <gtkmm/menubutton.h>
+
 #include "color-page.h"
 #include "color-picker-panel.h"
 #include "colors/color-set.h"
-#include "spin-scale.h"
+#include "generic/spin-scale.h"
 #include "gradient-with-stops.h"
 #include "gradient-selector-interface.h"
-#include "ink-spin-button.h"
-#include "popover-menu.h"
+#include "generic/spin-button.h"
+#include "generic/popover-menu.h"
 #include "ui/operation-blocker.h"
 
 namespace Gtk {

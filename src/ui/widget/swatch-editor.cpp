@@ -5,8 +5,10 @@
 
 #include "swatch-editor.h"
 
+#include <giomm/file.h>
 #include <glib/gi18n.h>
 #include <glibmm/main.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/filterlistmodel.h>
 #include <gtkmm/label.h>
 #include <gtkmm/object.h>
@@ -17,7 +19,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "preferences.h"
 #include "object/sp-defs.h"
 #include "object/sp-stop.h"

@@ -4,13 +4,13 @@
 //
 // Simple scale widget that shows the range in discrete blocks.
 
-#ifndef BLOCK_SCALE_H
-#define BLOCK_SCALE_H
+#ifndef GENERIC_WIDGET_SCALE_BAR_H
+#define GENERIC_WIDGET_SCALE_BAR_H
 
 #include <gtkmm/widget.h>
 #include <gtkmm/gestureclick.h>
 
-#include "widget-vfuncs-class-init.h"
+#include "ui/widget-vfuncs-class-init.h"
 
 namespace Gtk {
 class EventControllerScroll;
@@ -19,9 +19,9 @@ class EventControllerMotion;
 
 namespace Inkscape::UI::Widget {
 
-class BlockScale : public WidgetVfuncsClassInit, public Gtk::Widget {
+class ScaleBar : public WidgetVfuncsClassInit, public Gtk::Widget {
 public:
-    BlockScale();
+    ScaleBar();
 
     void set_adjustment(Glib::RefPtr<Gtk::Adjustment> adj);
 
@@ -41,7 +41,8 @@ private:
     bool on_scroll(Gtk::EventControllerScroll& scroll, double dx, double dy);
     void on_scroll_end();
 
-    int _block_count = 10;
+    int _block_count = 0; // No blocks
+
     // height in pixels
     int _block_height = 10;
     Glib::RefPtr<Gtk::Adjustment> _adjustment;
@@ -52,4 +53,4 @@ private:
 
 } // namespace
 
-#endif //BLOCK_SCALE_H
+#endif //GENERIC_WIDGET_SCALE_BAR_H

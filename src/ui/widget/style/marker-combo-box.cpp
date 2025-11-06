@@ -24,10 +24,10 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/menubutton.h>
+#include <gtkmm/popover.h>
+#include <gtkmm/snapshot.h>
 #include <gtkmm/togglebutton.h>
 
-#include "snapshot-widget.h"
 #include "helper/stock-items.h"
 #include "io/resource.h"
 #include "object/sp-defs.h"
@@ -38,6 +38,7 @@
 #include "ui/builder-utils.h"
 #include "ui/svg-renderer.h"
 #include "ui/util.h"
+#include "ui/widget/generic/snapshot-widget.h"
 #include "util/object-renderer.h"
 #include "util/static-doc.h"
 

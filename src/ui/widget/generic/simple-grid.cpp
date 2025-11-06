@@ -7,11 +7,11 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/gestureclick.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/tooltip.h>
 
-#include "block-scale.h"
 #include "util/drawing-utils.h"
 
 namespace Inkscape::UI::Widget {

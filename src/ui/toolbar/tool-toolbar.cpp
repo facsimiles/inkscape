@@ -26,8 +26,7 @@
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/util.h"
-#include "ui/widget/popover-menu.h"
-#include "ui/widget/popover-menu-item.h"
+#include "ui/widget/generic/popover-menu.h"
 #include "widgets/spw-utilities.h" // Find action target
 
 namespace Inkscape::UI::Toolbar {

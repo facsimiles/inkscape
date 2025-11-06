@@ -30,7 +30,6 @@
 #include "document.h"
 #include "fill-or-stroke.h"
 #include "inkscape.h"
-#include "marker-combo-box.h"
 #include "object/sp-namedview.h"
 #include "object/sp-text.h"
 #include "selection.h"
@@ -43,6 +42,7 @@
 #include "ui/pack.h"
 #include "ui/tools/marker-tool.h"
 #include "ui/util.h"
+#include "ui/widget/style/marker-combo-box.h"
 #include "ui/widget/unit-menu.h"
 #include "widgets/style-utils.h"
 

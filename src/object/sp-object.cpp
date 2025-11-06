@@ -1597,6 +1597,10 @@ void SPObject::setAttributeDouble(Inkscape::Util::const_char_ptr key, double val
     os << value;
     setAttribute(key, os.str());
 }
+double SPObject::getAttributeDouble(Inkscape::Util::const_char_ptr key, double def)
+{
+    return getRepr()->getAttributeDouble(key, def);
+}
 
 void SPObject::removeAttribute(gchar const *key)
 {

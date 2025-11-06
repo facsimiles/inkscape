@@ -12,7 +12,7 @@
 #define INKSCAPE_UI_WIDGET_RULER_H
 
 #include "preferences.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
+#include "ui/widget-vfuncs-class-init.h"
 #include "util/delete-with.h"
 
 namespace Cairo { class Context; }

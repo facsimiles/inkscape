@@ -24,7 +24,7 @@
 #include "colors/spaces/hsluv.h"
 #include "ui/controller.h"
 #include "ui/util.h"
-#include "ui/widget/bin.h"
+#include "ui/widget/generic/bin.h"
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"
 #include "ink-color-wheel.h"

@@ -20,8 +20,8 @@
 
 #include "dialog-container.h"
 #include "preferences.h"
-#include "ui/widget/popover-menu.h"
-#include "ui/widget/tab-strip.h"
+#include "ui/widget/generic/tab-strip.h"
+#include "ui/widget/generic/popover-menu.h"
 
 namespace Glib {
 class ValueBase;

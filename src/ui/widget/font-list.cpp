@@ -20,8 +20,7 @@
 #include "svg/css-ostringstream.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-loader.h"
-#include "ui/widget/popover-menu-item.h"
-#include "ui/widget/popover-menu.h"
+#include "ui/widget/generic/popover-menu.h"
 #include "util/font-collections.h"
 
 using Inkscape::UI::create_builder;

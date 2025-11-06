@@ -16,7 +16,7 @@
 #include "color-wheel-factory.h"
 #include "colors/color-set.h"
 #include "ink-color-wheel.h"
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "ui/builder-utils.h"
 #include "ui/util.h"
 #include "util/signal-blocker.h"

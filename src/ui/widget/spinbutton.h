@@ -14,7 +14,7 @@
 #include <gtkmm/spinbutton.h>
 
 #include "ui/popup-menu.h"
-#include "ui/widget/popover-menu.h"
+#include "ui/widget/generic/popover-menu.h"
 
 namespace Gtk {
 class Builder;

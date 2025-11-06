@@ -19,7 +19,7 @@
 #include "widget/canvas.h"
 #include "widget/color-page.h"
 #include "widget/color-preview.h"
-#include "widget/ink-spin-button.h"
+#include "widget/generic/spin-button.h"
 #include "widget/paint-switch.h"
 
 namespace Inkscape::UI::Utils {

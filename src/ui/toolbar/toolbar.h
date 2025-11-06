@@ -14,7 +14,7 @@
 #include <stack>
 
 #include "ui/defocus-target.h"
-#include "ui/widget/bin.h"
+#include "ui/widget/generic/bin.h"
 
 class SPDesktop;
 

@@ -20,7 +20,6 @@
 #include "ui/defocus-target.h"
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
-#include "ui/widget/popover-menu-item.h"
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"

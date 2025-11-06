@@ -24,7 +24,7 @@
 #include "style-enums.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/color-notebook.h"
-#include "ui/widget/popover-bin.h"
+#include "ui/widget/generic/popover-bin.h"
 #include "ui/widget/preferences-widget.h"
 #include "ui/widget/style-subject.h"
 

@@ -61,12 +61,22 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     , _lb_blend(_("Blend mode"))
     , _lb_isolation("Isolate") // Translate for 1.1
     , _blend(SPBlendModeConverter, SPAttr::INVALID, false, "BlendMode")
-    , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
-    , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
     , _notify(true)
     , _hb_blend(Gtk::Orientation::HORIZONTAL, 4)
 {
     set_name("SimpleFilterModifier");
+
+    _blur.set_adjustment_values(0, 100, 1, 0.1);
+    _blur.set_digits(3);
+    // This blur is adjusted to be a percent of the bounding box size (below)
+    _blur.set_suffix("%", false);
+    _blur.set_scaling_factor(100.0);
+
+    _opacity.set_adjustment_values(0, 100, 1, 0.1);
+    _opacity.set_max_block_count(20); // 100/20 -> 5% increments
+    _opacity.set_digits(3);
+    _opacity.set_suffix("%", false);
+    _opacity.set_scaling_factor(100.0);
 
     /* "More options" expander --------
     _extras.set_visible();
@@ -117,8 +127,8 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     }
 
     _blend.signal_changed().connect(signal_blend_changed());
-    _blur.signal_value_changed().connect(signal_blur_changed());
-    _opacity.signal_value_changed().connect(signal_opacity_changed());
+    _blur.signal_value_changed().connect([this](double) { signal_blur_changed().emit(); });
+    _opacity.signal_value_changed().connect([this](double) { signal_opacity_changed().emit(); });
     _isolation.signal_toggled().connect(signal_isolation_changed());
 }
 

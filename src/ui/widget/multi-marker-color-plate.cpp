@@ -14,7 +14,7 @@
 #include "ui/widget/color-preview.h"
 #include "ui/widget/color-slider.h"
 #include "ui/widget/icon-combobox.h"
-#include "ui/widget/ink-spin-button.h"
+#include "ui/widget/generic/spin-button.h"
 
 namespace Inkscape::UI::Widget {
 

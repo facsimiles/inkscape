@@ -33,7 +33,7 @@
 #include "trace/potrace/inkscape-potrace.h"
 #include "ui/builder-utils.h"
 #include "ui/util.h"
-#include "ui/widget/bin.h"
+#include "ui/widget/generic/bin.h"
 
 namespace Inkscape::UI::Dialog {
 namespace {

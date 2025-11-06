@@ -5,7 +5,7 @@
 #include <glib/gi18n.h>
 #include <gtkmm/adjustment.h>
 
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "ui/util.h"
 
 namespace Inkscape::UI::Utils {

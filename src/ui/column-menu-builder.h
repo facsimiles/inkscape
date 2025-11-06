@@ -5,8 +5,7 @@
 
 #include <gtkmm/separator.h>
 
-#include "ui/widget/popover-menu.h"
-#include "ui/widget/popover-menu-item.h"
+#include "ui/widget/generic/popover-menu.h"
 
 namespace Inkscape::UI {
 

@@ -11,7 +11,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/widget-vfuncs-class-init.h"
+#include "widget-vfuncs-class-init.h"
 
 #include <unordered_map>
 

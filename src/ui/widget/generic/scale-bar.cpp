@@ -3,24 +3,26 @@
 // Created by Michael Kowalski on 5/20/25.
 //
 
-#include "block-scale.h"
+#include "scale-bar.h"
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/gestureclick.h>
+#include <gtkmm/eventcontrollermotion.h>
+#include <gtkmm/eventcontrollerscroll.h>
+#include <gtkmm/snapshot.h>
 #include <gdk/gdkevents.h>
 
-#include "stroke-options.h"
 #include "ui/controller.h"
 #include "ui/util.h"
 
 namespace Inkscape::UI::Widget {
 
-BlockScale::BlockScale() : Glib::ObjectBase{"BlockScale"} {
+ScaleBar::ScaleBar() : Glib::ObjectBase{"ScaleBar"} {
 
     auto click = Gtk::GestureClick::create();
     click->set_button(GDK_BUTTON_PRIMARY);
     click->set_propagation_phase(Gtk::PropagationPhase::TARGET);
-    click->signal_pressed().connect(Controller::use_state(sigc::mem_fun(*this, &BlockScale::on_click_pressed), *click));
+    click->signal_pressed().connect(Controller::use_state(sigc::mem_fun(*this, &ScaleBar::on_click_pressed), *click));
     add_controller(click);
 
     auto motion = Gtk::EventControllerMotion::create();
@@ -30,21 +32,21 @@ BlockScale::BlockScale() : Glib::ObjectBase{"BlockScale"} {
 
     auto scroll = Gtk::EventControllerScroll::create();
     scroll->set_propagation_phase(Gtk::PropagationPhase::TARGET);
-    scroll->signal_scroll_begin().connect(sigc::mem_fun(*this, &BlockScale::on_scroll_begin));
+    scroll->signal_scroll_begin().connect(sigc::mem_fun(*this, &ScaleBar::on_scroll_begin));
     scroll->signal_scroll().connect([this, &scroll = *scroll](auto&& ...args){ return on_scroll(scroll, args...); }, false);
-    scroll->signal_scroll_end().connect(sigc::mem_fun(*this, &BlockScale::on_scroll_end));
+    scroll->signal_scroll_end().connect(sigc::mem_fun(*this, &ScaleBar::on_scroll_end));
     scroll->set_flags(Gtk::EventControllerScroll::Flags::BOTH_AXES); // Mouse wheel is on y.
     add_controller(scroll);
 }
 
-Gtk::EventSequenceState BlockScale::on_click_pressed(const Gtk::GestureClick& click, int n_press, double x, double y) {
+Gtk::EventSequenceState ScaleBar::on_click_pressed(const Gtk::GestureClick& click, int n_press, double x, double y) {
     if (_adjustment && n_press == 1) {
         set_adjustment_value(x);
     }
     return Gtk::EventSequenceState::CLAIMED;
 }
 
-void BlockScale::on_motion(const Gtk::EventControllerMotion& motion, double x, double y) {
+void ScaleBar::on_motion(const Gtk::EventControllerMotion& motion, double x, double y) {
     auto state = motion.get_current_event_state();
     if (static_cast<bool>(state & Gdk::ModifierType::BUTTON1_MASK)) {
         if (_adjustment) {
@@ -53,7 +55,7 @@ void BlockScale::on_motion(const Gtk::EventControllerMotion& motion, double x, d
     }
 }
 
-void BlockScale::set_adjustment(Glib::RefPtr<Gtk::Adjustment> adj) {
+void ScaleBar::set_adjustment(Glib::RefPtr<Gtk::Adjustment> adj) {
     _adjustment = adj;
 
     if (_adjustment) {
@@ -66,31 +68,31 @@ void BlockScale::set_adjustment(Glib::RefPtr<Gtk::Adjustment> adj) {
     queue_draw();
 }
 
-void BlockScale::set_max_block_count(int n) {
+void ScaleBar::set_max_block_count(int n) {
     _block_count = std::clamp(n, 0, 1000);
     queue_draw();
 }
 
-void BlockScale::set_block_height(int height) {
+void ScaleBar::set_block_height(int height) {
     _block_height = height;
     queue_draw();
 }
 
-void BlockScale::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {
+void ScaleBar::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {
     draw_scale(snapshot);
 }
 
-void BlockScale::css_changed(GtkCssStyleChange*) {
+void ScaleBar::css_changed(GtkCssStyleChange*) {
     _selected = get_color_with_class(*this, "theme_selected_bg_color");
     _unselected = get_color_with_class(*this, "theme_fg_color");
     _unselected.set_alpha(0.16f);
     queue_draw();
 }
 
-void BlockScale::on_scroll_begin() {
+void ScaleBar::on_scroll_begin() {
 }
 
-bool BlockScale::on_scroll(Gtk::EventControllerScroll& scroll, double dx, double dy) {
+bool ScaleBar::on_scroll(Gtk::EventControllerScroll& scroll, double dx, double dy) {
     if (!_adjustment) return false;
 
     // growth direction: up or right
@@ -104,13 +106,13 @@ bool BlockScale::on_scroll(Gtk::EventControllerScroll& scroll, double dx, double
     return true;
 }
 
-void BlockScale::on_scroll_end() {
+void ScaleBar::on_scroll_end() {
 }
 
 constexpr int MIN_BLOCK_SIZE = 3;
 constexpr int BLOCK_GAP = 1;
 
-void BlockScale::draw_scale(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {
+void ScaleBar::draw_scale(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {
     const auto dim = Geom::IntPoint{get_width(), get_height()};
     if (!_adjustment || dim.x() < MIN_BLOCK_SIZE || dim.y() < MIN_BLOCK_SIZE) return;
 
@@ -163,7 +165,7 @@ void BlockScale::draw_scale(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {
     }
 }
 
-void BlockScale::set_adjustment_value(double x) {
+void ScaleBar::set_adjustment_value(double x) {
     x = std::clamp(x, 0.0, static_cast<double>(get_width()));
     auto range = _adjustment->get_upper() - _adjustment->get_lower();
     auto w = get_width();

@@ -18,7 +18,7 @@
 #include "preferences.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"
-#include "ui/widget/spin-scale.h"
+#include "ui/widget/generic/spin-scale.h"
 #include "xml/node.h"
 
 namespace Inkscape::Extension {
@@ -144,7 +144,8 @@ ParamInt::get_widget(sigc::signal<void ()> *changeSignal)
         if (_text != nullptr)
             text = _text;
 
-        auto const scale = Gtk::make_managed<UI::Widget::SpinScale>(text, fadjust, 0);
+        auto const scale = Gtk::make_managed<UI::Widget::SpinScale>();
+        scale->set_adjustment(fadjust);
         scale->set_size_request(400, -1);
         UI::pack_start(*hbox, *scale, true, true);
     } else if (_mode == DEFAULT) {

@@ -4,7 +4,7 @@
 // Mike Kowalski
 //
 
-#include "ink-spin-button.h"
+#include "spin-button.h"
 
 #include <array>
 #include <cassert>
@@ -19,6 +19,7 @@
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/gesturedrag.h>
 #include <gtkmm/root.h>
+#include <gtkmm/snapshot.h>
 
 #include "ui/containerize.h"
 #include "ui/controller.h"
@@ -273,7 +274,7 @@ void InkSpinButton::construct() {
 
 #define CALL_CONSTRUCTORS \
     Glib::ObjectBase("InkSpinButton"), \
-    ClassExtraInit("ink-spinbutton")
+    CssNameClassInit{"ink-spinbutton"}
 
 InkSpinButton::InkSpinButton():
     CALL_CONSTRUCTORS,

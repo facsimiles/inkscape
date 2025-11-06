@@ -16,6 +16,7 @@
 
 #include <glibmm/extraclassinit.h>
 #include <gtkmm/enums.h>
+#include <gtk/gtktypes.h>
 #include <optional>
 
 namespace Inkscape::UI::Widget {

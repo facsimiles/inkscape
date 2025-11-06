@@ -11,9 +11,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/popover-menu.h"
+#include "popover-menu.h"
 
+#include <giomm/themedicon.h>
 #include <glibmm/main.h>
+#include <gtkmm/box.h>
+#include <gtkmm/image.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
@@ -21,7 +24,6 @@
 
 #include "ui/popup-menu.h"
 #include "ui/util.h"
-#include "ui/widget/popover-menu-item.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -223,6 +225,82 @@ void PopoverMenu::remove_all()
         _grid.remove(*item);
     }
     _items.clear();
+}
+
+// PopoverMenuItem
+
+PopoverMenuItem::PopoverMenuItem(Glib::ustring const &text,
+                                 bool const mnemonic,
+                                 Glib::ustring const &icon_name,
+                                 Gtk::IconSize const icon_size,
+                                 bool const popdown_on_activate)
+    : Glib::ObjectBase{"PopoverMenuItem"}
+    , CssNameClassInit{"menuitem"}
+    , Gtk::Button{}
+{
+    get_style_context()->add_class("menuitem");
+    add_css_class("regular-item");
+    set_has_frame(false);
+
+    Gtk::Image *image = nullptr;
+
+    if (!text.empty()) {
+        _label = Gtk::make_managed<Gtk::Label>(text, Gtk::Align::START, Gtk::Align::CENTER, mnemonic);
+    }
+
+    if (!icon_name.empty()) {
+        image = Gtk::make_managed<Gtk::Image>(Gio::ThemedIcon::create(icon_name));
+        image->set_icon_size(icon_size);
+    }
+
+    if (_label && image) {
+        auto &hbox = *Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 8);
+        hbox.append(*image);
+        hbox.append(*_label);
+        set_child(hbox);
+    } else if (_label) {
+        set_child(*_label);
+    } else if (image) {
+        set_child(*image);
+    }
+
+    if (popdown_on_activate) {
+        signal_activate().connect([this]
+        {
+            if (auto const menu = get_menu()) {
+                menu->popdown();
+            }
+        });
+    }
+}
+
+Glib::SignalProxy<void ()> PopoverMenuItem::signal_activate()
+{
+    return signal_clicked();
+}
+
+PopoverMenu *PopoverMenuItem::get_menu()
+{
+    PopoverMenu *result = nullptr;
+    for_each_parent(*this, [&](Gtk::Widget &parent)
+    {
+        if (auto const menu = dynamic_cast<PopoverMenu *>(&parent)) {
+            result = menu;
+            return ForEachResult::_break;
+        }
+        return ForEachResult::_continue;
+    });
+    return result;
+}
+
+void PopoverMenuItem::set_label(Glib::ustring const &name)
+{
+    if (_label) {
+        _label->set_text(name);
+    } else {
+        _label = Gtk::make_managed<Gtk::Label>(name, Gtk::Align::START, Gtk::Align::CENTER);
+        set_child(*_label);
+    }
 }
 
 } // namespace Inkscape::UI::Widget

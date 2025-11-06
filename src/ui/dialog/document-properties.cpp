@@ -48,8 +48,7 @@
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/page-properties.h"
-#include "ui/widget/popover-menu-item.h"
-#include "ui/widget/popover-menu.h"
+#include "ui/widget/generic/popover-menu.h"
 #include "util/expression-evaluator.h"
 
 namespace Inkscape::UI {

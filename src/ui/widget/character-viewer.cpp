@@ -17,11 +17,11 @@
 
 #include "drop-down-list.h"
 #include "preferences.h"
-#include "simple-grid.h"
 #include "io/resource.h"
 #include "libnrtype/font-instance.h"
 #include "ui/builder-utils.h"
 #include "ui/util.h"
+#include "ui/widget/generic/simple-grid.h"
 #include "util/drawing-utils.h"
 #include "util/glyph-draw.h"
 #include "util/unicode.h"

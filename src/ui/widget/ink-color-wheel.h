@@ -23,7 +23,7 @@
 
 #include "color-wheel.h"
 #include "colors/color.h"
-#include "ui/widget/widget-vfuncs-class-init.h" // for focus
+#include "ui/widget-vfuncs-class-init.h" // for focus
 
 namespace Gtk {
 class Builder;

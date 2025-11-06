@@ -19,7 +19,7 @@
 #include <gtkmm/expander.h>
 
 #include "combo-enums.h"
-#include "spin-scale.h"
+#include "generic/spin-scale.h"
 #include "style-enums.h"
 
 using Inkscape::Util::EnumData;

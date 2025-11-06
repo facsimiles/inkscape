@@ -19,16 +19,17 @@
 
 #include <giomm/liststore.h>
 #include <gtkmm/box.h>
+#include <gtkmm/menubutton.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/cellrendererpixbuf.h>
 
 #include "display/drawing.h"
 #include "document.h"
-#include "ink-property-grid.h"
-#include "ink-spin-button.h"
-#include "snapshot-widget.h"
 #include "ui/operation-blocker.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
+#include "ui/widget-vfuncs-class-init.h"
+#include "ui/widget/ink-property-grid.h"
+#include "ui/widget/generic/snapshot-widget.h"
+#include "ui/widget/generic/spin-button.h"
 #include "ui/widget/recolor-art.h"
 #include "ui/widget/recolor-art-manager.h"
 

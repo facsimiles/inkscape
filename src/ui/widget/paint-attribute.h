@@ -16,13 +16,13 @@
 #include <gtkmm/menubutton.h>
 #include <sigc++/signal.h>
 
-#include "block-scale.h"
 #include "color-preview.h"
 #include "combo-enums.h"
 #include "dash-selector.h"
 #include "ink-property-grid.h"
-#include "ink-spin-button.h"
-#include "marker-combo-box.h"
+#include "generic/spin-button.h"
+#include "generic/spin-scale.h"
+#include "style/marker-combo-box.h"
 #include "paint-switch.h"
 #include "stroke-options.h"
 #include "style-internal.h"
@@ -115,8 +115,7 @@ private:
     unsigned int _hairline_item = 0;
     Gtk::Popover& _stroke_popup;
     StrokeOptions _stroke_options;
-    BlockScale _opacity_scale;
-    InkSpinButton& _opacity;
+    SpinScale& _opacity;
     ComboBoxEnum<SPBlendMode> _blend;
     Gtk::Button& _reset_blend;
     SPItem* _current_item = nullptr;

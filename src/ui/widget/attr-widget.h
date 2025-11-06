@@ -15,6 +15,8 @@
 #include "attributes.h"
 #include "object/sp-object.h"
 #include "xml/node.h"
+#include "gtkmm/adjustment.h"
+#include "svg/css-ostringstream.h"
 
 namespace Inkscape {
 namespace UI {
@@ -153,7 +155,7 @@ protected:
     DefaultValueHolder* get_default() { return &_default; }
     const gchar* attribute_value(SPObject* o) const
     {
-        const gchar* name = (const gchar*)sp_attribute_name(_attr);
+        auto name = get_attribute_name();
         if(name && o) {
             const gchar* val = o->getRepr()->attribute(name);
             return val;
@@ -161,6 +163,10 @@ protected:
         return nullptr;
     }
 
+    const gchar* get_attribute_name() const
+    {
+        return (const gchar*)sp_attribute_name(_attr);
+    }
 private:
     const SPAttr _attr;
     DefaultValueHolder _default;

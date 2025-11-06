@@ -15,6 +15,9 @@
 #define SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 
 #include <glibmm/ustring.h>
+#include <gtkmm/boolfilter.h>
+#include <gtkmm/listbox.h>
+#include <gtkmm/searchentry2.h>
 #include <gtkmm/widget.h>
 #include <memory>
 #include <map>

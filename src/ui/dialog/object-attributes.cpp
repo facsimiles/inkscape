@@ -29,10 +29,12 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/enums.h>
 #include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/filterlistmodel.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/separator.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/togglebutton.h>
@@ -1763,7 +1765,7 @@ private:
         return {};
     }
 
-    Widget::BlockScale _font_size_scale;
+    Widget::ScaleBar _font_size_scale;
     Widget::InkSpinButton& _font_size;
     SPText* _current_item = nullptr;
     Gtk::Button* _section_toggle;

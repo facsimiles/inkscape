@@ -19,7 +19,7 @@
 #include "color-wheel.h"
 #include "desktop.h"
 #include "icon-combobox.h"
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "inkscape.h"
 #include "colors/color.h"
 #include "colors/manager.h"

@@ -20,6 +20,7 @@
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
+#include <gtkmm/scale.h>
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/treestore.h>
@@ -40,12 +41,12 @@
 #include "ui/icon-names.h"
 #include "ui/shortcuts.h"
 #include "ui/util.h"
+#include "ui/widget-vfuncs-class-init.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/objects-dialog-cells.h"
 #include "ui/widget/shapeicon.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
 #include "util/numeric/converters.h"
 
 // alpha (transparency) multipliers corresponding to item selection state combinations (SelectionState)

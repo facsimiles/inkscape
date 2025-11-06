@@ -13,16 +13,8 @@
 #include <ranges>
 
 #include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/eventcontrollermotion.h>
-#include <gtkmm/gestureclick.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
-//#include <gtkmm/listbox.h>
 
-#include "../tab-strip.h"
-
-#include "ui/pack.h"
+#include "tab-strip.h"
 
 namespace Inkscape::UI::Widget {
 

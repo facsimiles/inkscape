@@ -8,7 +8,7 @@
 
 #include "object/sp-image.h"
 #include "ui/operation-blocker.h"
-#include "ui/widget/widget-vfuncs-class-init.h"
+#include "ui/widget-vfuncs-class-init.h"
 
 namespace Cairo {
 class Surface;

@@ -12,7 +12,7 @@
  */
 
 #include <gtk/gtk.h>
-#include "ui/widget/css-name-class-init.h"
+#include "css-name-class-init.h"
 
 namespace Inkscape::UI::Widget {
 

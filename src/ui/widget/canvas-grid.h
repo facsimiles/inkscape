@@ -23,7 +23,7 @@
 
 #include "display/control/canvas-item-ptr.h"
 #include "preferences.h"
-#include "ui/widget/popover-bin.h"
+#include "ui/widget/generic/popover-bin.h"
 #include "util/action-accel.h"
 
 namespace Gtk {

@@ -19,7 +19,7 @@
 #include "rotateable.h"
 #include "ui/defocus-target.h"
 #include "ui/popup-menu.h"
-#include "ui/widget/popover-bin.h"
+#include "ui/widget/generic/popover-bin.h"
 
 namespace Gtk {
 class Adjustment;

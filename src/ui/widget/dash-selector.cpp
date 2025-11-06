@@ -30,7 +30,7 @@
 #include <gtkmm/singleselection.h>
 #include <2geom/coord.h> // Geom::are_near
 
-#include "ink-spin-button.h"
+#include "generic/spin-button.h"
 #include "preferences.h"
 #include "stroke-style.h"
 #include "style.h"  // Read dash patterns from preferences.

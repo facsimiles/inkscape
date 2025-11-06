@@ -6,6 +6,7 @@
 #include <boost/smart_ptr/intrusive_ptr.hpp>
 #include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
+#include <gtkmm/binlayout.h>
 
 #include "desktop-style.h"
 #include "document-undo.h"
@@ -54,12 +55,16 @@ PaintAttribute::PaintAttribute(Parts add_parts, unsigned int tag) :
     _stroke_icons(get_widget<Gtk::Box>(_builder, "stroke-icons")),
     _stroke_presets(get_widget<Gtk::MenuButton>(_builder, "stroke-presets")),
     _stroke_popup(get_widget<Gtk::Popover>(_builder, "stroke-popup")),
-    _opacity(get_widget<InkSpinButton>(_builder, "obj-opacity")),
+    _opacity(get_derived_widget<SpinScale>(_builder, "obj-opacity")),
     _reset_blend(get_widget<Gtk::Button>(_builder, "reset-blend-mode")),
     _visible(get_widget<Gtk::Button>(_builder, "visible-btn")),
     _added_parts(add_parts),
     _modified_tag(tag)
 {
+    _opacity.set_max_block_count(20); // 100/20 -> 5% increments
+    _opacity.set_suffix("%", false);
+    _opacity.set_scaling_factor(100.0);
+
     _marker_start.set_flat(true);
     _marker_mid.set_flat(true);
     _marker_end.set_flat(true);
@@ -736,10 +741,6 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
     });
 
     if (_added_parts & Opacity) {
-        get_widget<Gtk::Box>(_builder, "opacity-scale").append(_opacity_scale);
-        _opacity_scale.set_hexpand();
-        _opacity_scale.set_adjustment(_opacity.get_adjustment());
-        _opacity_scale.set_max_block_count(20); // 100/20 -> 5% increments
         reparent_properties(get_widget<Gtk::Grid>(_builder, "opacity-box"), grid);
     }
     if (_added_parts & BlendMode) {
