@@ -113,6 +113,30 @@ public:
         return _signal.connect(std::move(slot));
     }
 
+    bool iter_next(Gtk::TreePath &path)
+    {
+        auto model = get_model();
+        auto c_model = model->gobj();
+        auto iter = model->get_iter(path);
+        auto c_iter = iter.gobj();
+        if (gtk_tree_model_iter_next(c_model, c_iter)) {
+            path.next();
+            return true;
+        }
+        return false;
+    }
+
+    Gtk::TreePath iter_last_child(Gtk::TreePath &path)
+    {
+        auto model = get_model();
+        auto c_model = model->gobj();
+        auto iter = model->get_iter(path);
+        auto c_iter = iter.gobj();
+        auto count = std::to_string(gtk_tree_model_iter_n_children(c_model, c_iter) - 1);
+        auto new_path = path.to_string() + ":" + count;
+        return Gtk::TreePath(new_path);
+    }
+
 private:
     sigc::signal<void (GtkCssStyleChange *)> _signal;
 
@@ -1377,6 +1401,7 @@ bool ObjectsPanel::on_tree_key_pressed(Gtk::EventControllerKey const &controller
     _tree.get_cursor(path, column);
 
     auto const shift = Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK);
+    auto const ctrl = Controller::has_flag(state, Gdk::ModifierType::CONTROL_MASK);
     auto const shortcut = Inkscape::Shortcuts::get_from(controller, keyval, keycode, state);
     switch (shortcut.get_key()) {
         case GDK_KEY_Escape:
@@ -1386,19 +1411,34 @@ bool ObjectsPanel::on_tree_key_pressed(Gtk::EventControllerKey const &controller
             }
             break;
         case GDK_KEY_Left:
-        case GDK_KEY_KP_Left:
-            if (path && shift) {
-                _tree.collapse_row(path);
+        case GDK_KEY_KP_Left: {
+            // suppress handling if in multiselect mode
+            if (shift) {
                 return true;
             }
-            break;
+            if (_tree.row_expanded(path)) {
+                _tree.collapse_row(path);
+            } else if (path.up()) {
+                _tree.collapse_row(path);
+            }
+            _tree.get_selection()->set_mode(Gtk::SelectionMode::NONE);
+            _tree.set_cursor(path, *_name_column);
+            selectCursorItem(Gdk::ModifierType(state));
+            return true;
+        };
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
-            if (path && shift) {
-                _tree.expand_row(path, false);
+            // suppress handling if in multiselect mode
+            if (shift) {
                 return true;
             }
-            break;
+            if (_tree.expand_row(path, false)) {
+                path.down();
+            }
+            _tree.get_selection()->set_mode(Gtk::SelectionMode::NONE);
+            _tree.set_cursor(path, *_name_column);
+            selectCursorItem(Gdk::ModifierType(state));
+            return true;
         case GDK_KEY_space:
             selectCursorItem(Gdk::ModifierType(state));
             return true;
@@ -1426,17 +1466,89 @@ bool ObjectsPanel::on_tree_key_pressed(Gtk::EventControllerKey const &controller
             break;
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
-            if (shift) {
+            if (ctrl) {
                 _activateAction("win.layer-raise", "selection-stack-up");
+                return true;
+            } else {
+                auto original_path = path;
+                if (!path.prev()) {
+                    if (path.size() > 1) {
+                        path.up();
+                    }
+                } else {
+                    // if the node is expanded navigate to the last child item
+                    while (_tree.row_expanded(path)) {
+                        path = _tree.iter_last_child(path);
+                    }
+                }
+                if (shift) {
+                    auto selection = getSelection();
+                    auto row = *_store->get_iter(path);
+                    if (!row)
+                        return false;
+                    auto item = getItem(row);
+                    if (selection->includes(item)) {
+                        auto row = *_store->get_iter(original_path);
+                        if (!row)
+                            return false;
+                        auto item = getItem(row);
+                        selection->remove(item);
+                    } else {
+                        selection->add(item, false);
+                    }
+                }
+                _tree.set_cursor(path);
+                if (!shift)
+                    selectCursorItem(Gdk::ModifierType(state));
                 return true;
             }
             break;
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
-            if (shift) {
+            if (ctrl) {
                 _activateAction("win.layer-lower", "selection-stack-down");
                 return true;
+            } else {
+                auto original_path = path;
+                if (_tree.row_expanded(path)) {
+                    path.down();
+                } else {
+                    while (!_tree.iter_next(path) && path.size() > 1) {
+                        // if you can't go to the next node go up to the parent then move to the next node at that level
+                        path.up();
+                    }
+                }
+
+                // don't loop back up to top from the bottom of the tree
+                if (path.to_string() == "0")
+                    return true;
+
+                if (shift) {
+                    auto selection = getSelection();
+                    auto row = *_store->get_iter(path);
+                    if (!row)
+                        return false;
+                    auto item = getItem(row);
+                    auto original_row = *_store->get_iter(original_path);
+                    if (!original_row)
+                        return false;
+                    auto original_item = getItem(original_row);
+                    if (selection->includes(item)) {
+                        selection->remove(original_item);
+                    } else {
+                        // if descending into a group deselect the top level
+                        if (path.is_descendant(original_path))
+                            selection->remove(original_item);
+                        selection->add(item, false);
+                    }
+                }
+
+                _tree.set_cursor(path);
+                if (!shift)
+                    selectCursorItem(Gdk::ModifierType(state));
+                return true;
             }
+            break;
         case GDK_KEY_Return:
             if (auto item = getSelection()->singleItem()) {
                 if (auto watcher = getWatcher(item->getRepr())) {
