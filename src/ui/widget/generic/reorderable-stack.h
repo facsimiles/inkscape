@@ -26,21 +26,22 @@
 
 namespace Inkscape::UI::Widget {
 
-class ReorderableStack : public TabStrip //Gtk::ListBox
+class ReorderableStack : public Gtk::Box
 {
 public:
-    ReorderableStack();
+    ReorderableStack(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);
 
     void add_option(std::string const &label, std::string const &icon, std::string const &tooltip, int value);
 
     void setValues(std::vector<int> const &values);
     std::vector<int> getValues() const;
 
-    sigc::signal<void ()> signal_values_changed() { return _signal_values_changed; }
+    sigc::signal<void ()>& signal_values_changed() { return _signal_values_changed; }
 
 private:
     sigc::signal<void ()> _signal_values_changed;
 
+    TabStrip _tabs;
     std::vector<std::pair<Gtk::Widget *, int>> _rows;
 };
 

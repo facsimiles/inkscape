@@ -1691,23 +1691,37 @@ button.reduced-padding {
 /* TabStrip widget is used for switching docked dialogs */
 #TabStrip {
     min-height: calc(2em + 4px);
+}
+#TabStrip.horizontal {
     padding: 0 4px;
+}
+#TabStrip.vertical {
+    padding: 0 1px;
 }
 #SimpleTab {
     min-width: 1em;
     min-height: calc(2em + 4px);
 }
-#SimpleTab:hover {
+#TabStrip.horizontal #SimpleTab:hover {
     box-shadow: inset 0 -3px alpha(@theme_fg_color, 0.15);
 }
-#SimpleTab.tab-active {
+#TabStrip.horizontal #SimpleTab.tab-active {
     background-color: @theme_base_color;
     box-shadow: inset 0 -3px @theme_selected_bg_color,
         inset -1px 0 alpha(@theme_fg_color, 0.10),
         inset  1px 0 alpha(@theme_fg_color, 0.10);
 }
-#SimpleTab.tab-active:hover {
+#TabStrip.horizontal #SimpleTab.tab-active:hover {
     /*border-bottom-color: @theme_selected_bg_color;*/
+}
+#TabStrip.vertical #SimpleTab:hover {
+    box-shadow: inset 4px 0 alpha(@theme_fg_color, 0.15);
+}
+#TabStrip.vertical #SimpleTab.tab-active {
+    background-color: @theme_base_color;
+    box-shadow: inset 4px 0 @theme_selected_bg_color,
+        inset 0 -1px alpha(@theme_fg_color, 0.10),
+        inset 0  1px alpha(@theme_fg_color, 0.10);
 }
 #NewTabButton {
     margin-left: 3px;

@@ -10,27 +10,30 @@
 
 namespace Inkscape::UI::Widget {
 
-ReorderableStack::ReorderableStack()
-    : TabStrip()
+ReorderableStack::ReorderableStack(Gtk::Orientation orientation)
 {
     set_name("ReorderableStack");
+    append(_tabs);
+    _tabs.set_hexpand();
+    _tabs.set_orientation(orientation);
+    _tabs.set_draw_handle();
 
-    add_css_class("border-box");
-    add_css_class("entry-box");
+    _tabs.add_css_class("border-box");
+    _tabs.add_css_class("entry-box");
 
-    set_show_labels(TabStrip::ShowLabels::Always);
-    set_rearranging_tabs(TabStrip::Rearrange::Internally);
+    _tabs.set_show_labels(TabStrip::ShowLabels::Always);
+    _tabs.set_rearranging_tabs(TabStrip::Rearrange::Internally);
 
-    signal_tab_rearranged().connect([this](int, int) {
+    _tabs.signal_tab_rearranged().connect([this](int, int) {
         _signal_values_changed.emit();
     });
-    set_new_tab_popup(nullptr);
+    _tabs.set_new_tab_popup(nullptr);
 }
 
 void ReorderableStack::add_option(std::string const &label, std::string const &icon, std::string const &tooltip, int value)
 {
     // Build a row
-    auto row = add_tab(label, icon);
+    auto row = _tabs.add_tab(label, icon);
     row->set_tooltip_text(tooltip);
     row->set_hexpand(true);
     _rows.emplace_back(row, value);
@@ -45,13 +48,13 @@ void ReorderableStack::setValues(std::vector<int> const &values)
             [value](const std::pair<Gtk::Widget *, int>& row){ return row.second == value;} );
         widgets.emplace_back(it->first);
     }
-    set_tabs_order(widgets);
+    _tabs.set_tabs_order(widgets);
 }
 
 std::vector<int> ReorderableStack::getValues() const
 {
     std::vector<int> values;
-    for (auto tab : get_tabs()) {
+    for (auto tab : _tabs.get_tabs()) {
         auto it = std::find_if(_rows.begin(), _rows.end(),
             [tab](const std::pair<Gtk::Widget *, int>& row){ return row.first == tab;} );
         values.emplace_back(it->second);

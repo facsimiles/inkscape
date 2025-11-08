@@ -21,19 +21,19 @@ class PaintOrderWidget : public ReorderableStack
 {
 public:
     PaintOrderWidget()
-        : ReorderableStack()
+        : ReorderableStack(Gtk::Orientation::VERTICAL)
     {
         add_option(_("Marker"), "paint-order-markers", _("Arrows, markers and points"),       SP_CSS_PAINT_ORDER_MARKER);
         add_option(_("Stroke"), "paint-order-stroke",  _("The border line around the shape"), SP_CSS_PAINT_ORDER_STROKE);
         add_option(_("Fill"),   "paint-order-fill",    _("The content of the shape"),         SP_CSS_PAINT_ORDER_FILL);
-        set_visible(true);
     }
 
     void setValue(SPIPaintOrder &po)
     {
         // array to vector
         auto values = po.get_layers();
-        std::vector<int> vec = {values[0], values[1], values[2]};
+        // Note: what's painted first is presented at the bottom of the stack.
+        std::vector<int> vec = {values[2], values[1], values[0]};
         setValues(vec);
     }
 
@@ -42,7 +42,8 @@ public:
         SPIPaintOrder po;
         auto values = getValues();
         for (auto i = 0; i < 3; i++) {
-            po.layer[i] = (SPPaintOrderLayer)values[i];
+            // Note the reversed order to match setValue()
+            po.layer[i] = (SPPaintOrderLayer)values[2 - i];
             po.layer_set[i] = true;
         }
         po.set = true;

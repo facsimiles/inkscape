@@ -17,6 +17,7 @@
 
 #include <2geom/point.h>
 #include <gtkmm/menubutton.h>
+#include <gtkmm/orientable.h>
 
 namespace Gtk { class Popover; }
 
@@ -26,10 +27,10 @@ struct TabWidget;
 class TabWidgetDrag;
 
 /// Widget that implements strip of tabs
-class TabStrip : public Gtk::Widget
+class TabStrip final : public Gtk::Orientable, public Gtk::Widget
 {
 public:
-    TabStrip();
+    TabStrip(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);
     ~TabStrip() override;
 
     // create a new tab
@@ -66,6 +67,8 @@ public:
     static GType get_dnd_source_type();
     // given drop source value unpack it to the source TabStrip and tab index
     static std::optional<std::pair<TabStrip*, int>> unpack_drop_source(const Glib::ValueBase& value);
+    // if true, show drag handles in the tabs
+    void set_draw_handle(bool show = true);
 
     // user attempts to select given tab
     sigc::signal<void (Gtk::Widget&)> signal_select_tab() { return _signal_select_tab; }
@@ -101,6 +104,7 @@ private:
     Rearrange _rearrange = Rearrange::Externally;
     ShowLabels _show_labels = ShowLabels::Never;
     bool _show_close_btn = true;
+    bool _show_drag_handles = false;
 
     friend TabWidgetDrag;
     std::shared_ptr<TabWidgetDrag> _drag_src;

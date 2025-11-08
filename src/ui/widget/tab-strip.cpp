@@ -52,6 +52,7 @@ struct SimpleTab : Gtk::Widget
 {
     Gtk::Label _name;
     Gtk::Button _close;
+    Gtk::Image _handle;
     Gtk::Image _icon;
     Gtk::DrawingArea _mask;
     TabStrip::ShowLabels _show_labels = TabStrip::ShowLabels::Never;
@@ -61,6 +62,7 @@ struct SimpleTab : Gtk::Widget
         _name.set_text(src._name.get_text());
         _name.set_visible(src._name.get_visible());
         _icon.set_from_icon_name(src._icon.property_icon_name());
+        _handle.set_visible(src._handle.get_visible());
         _close.set_visible(src._close.get_visible());
         _show_labels = src._show_labels;
         _show_close_btn = src._show_close_btn;
@@ -69,6 +71,8 @@ struct SimpleTab : Gtk::Widget
     SimpleTab() {
         _name.set_halign(Gtk::Align::START);
         _name.set_xalign(0);
+        _handle.set_from_icon_name("drag-handle-vert");
+        _handle.set_visible(false);
 
         // a fade-out mask for overflowing text
         _mask.set_draw_func([this](auto& ctx, auto w, auto h) {
@@ -84,6 +88,9 @@ struct SimpleTab : Gtk::Widget
             ctx->fill();
         });
         _mask.set_can_target(false);
+        _handle.set_can_target(false);
+        _icon.set_can_target(false);
+        _name.set_can_target(false);
 
         _close.set_visible(false);
         _close.set_has_frame(false);
@@ -93,6 +100,7 @@ struct SimpleTab : Gtk::Widget
         _close.set_halign(Gtk::Align::CENTER);
         _close.set_valign(Gtk::Align::CENTER);
 
+        _handle.insert_at_end(*this);
         _icon.insert_at_end(*this);
         _name.insert_at_end(*this);
         _mask.insert_at_end(*this);
@@ -122,6 +130,10 @@ struct SimpleTab : Gtk::Widget
     }
     Glib::ustring get_label() const { return _name.get_text(); }
 
+    void show_handle(bool show) {
+        _handle.set_visible(show);
+    }
+
     void update(bool is_active) {
         _close.set_visible(_show_close_btn && is_active);
 
@@ -132,6 +144,7 @@ struct SimpleTab : Gtk::Widget
 
     void measure_vfunc(Gtk::Orientation orientation, int, int &min, int &nat, int &, int &) const override {
         {
+            auto _ = _handle.measure(orientation);
             auto [sizes, baselines] = _icon.measure(orientation);
             // normal icon size with margins
             auto icon_size = sizes.minimum + 2 * MARGIN;
@@ -140,7 +153,14 @@ struct SimpleTab : Gtk::Widget
             // more generous natural size: twice the icon size; that's what we use when there is space
             nat =  orientation == Gtk::Orientation::VERTICAL || _name.get_visible() ? icon_size : icon_size * 2;
 
+            // for vert measurements: all elements are in one row, so just use icon size
             if (orientation == Gtk::Orientation::VERTICAL) return;
+        }
+        // space for handle, if visible
+        if (_handle.get_visible()) {
+            auto [sizes, baselines] = _handle.measure(orientation);
+            min += sizes.minimum + MARGIN;
+            nat += sizes.natural + MARGIN;
         }
         // reserve space for the close button if there is one shown
         if (_close.get_visible()) {
@@ -172,7 +192,16 @@ struct SimpleTab : Gtk::Widget
         // for tracking widgets' position
         int x = MARGIN, y = 0;
         width -= 2 * MARGIN;
-        // start with the icon on the left, we can center it later if needed
+
+        // first comes dragging handle
+        if (_handle.get_visible()) {
+            auto handle_w = _handle.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
+            _handle.size_allocate(Gtk::Allocation(x, y, handle_w, height), -1);
+            width -= handle_w + MARGIN;
+            x += handle_w + MARGIN;
+        }
+
+        // icon on the left, we can center it later if needed
         _icon.size_allocate(Gtk::Allocation(x, y, icon_w, height), -1);
         width -= icon_w;
         x += icon_w;
@@ -270,13 +299,17 @@ public:
     /// Create and start a tab drag.
     /// All drags are assumed to start off local, i.e. the source and destination tab bars are the same.
     /// The result must therefore be assigned to the source tab bar's _drag_src and _drag_dst.
-    TabWidgetDrag(TabWidget *src, Geom::Point const &offset, Glib::RefPtr<Gdk::Device> device)
+    TabWidgetDrag(TabWidget *src, Geom::Point const &offset, Gtk::Orientation orientation, Glib::RefPtr<Gdk::Device> device)
         : _src{src}
         , _offset{offset}
+        , _orientation{orientation}
         , _device{std::move(device)}
-        , _dst{src->parent}
-    {}
+        , _dst{src->parent} {
+        _src->set_cursor("grabbing");
+    }
     ~TabWidgetDrag() {
+        Glib::RefPtr<Gdk::Cursor> null;
+        _src->set_cursor(null);
     }
 
     /// Called by dst whenever the pointer moves, whether over it or not. This sometimes requires polling.
@@ -286,7 +319,9 @@ public:
         constexpr int detach_dist = 25;
         if (pos && Geom::Rect(0, 0, _dst->get_width(), _dst->get_height()).distanceSq(*pos) < Geom::sqr(detach_dist)) {
             // Pointer is still sufficiently near dst - update drop position.
-            _drop_x = pos->x() - static_cast<int>(std::round(_offset.x()));
+            _drop_pos = _orientation == Gtk::Orientation::HORIZONTAL ?
+                pos->x() - static_cast<int>(std::round(_offset.x())) :
+                pos->y() - static_cast<int>(std::round(_offset.y()));
             _dst->queue_allocate();
             // temporarily hide (+) button too
             _src->parent->_plus_btn.set_visible(false);
@@ -336,7 +371,7 @@ public:
 
         if (_dst) {
             _dst->_drag_dst = _src->parent->_drag_src;
-            _drop_x = {};
+            _drop_pos = {};
             _drop_i = {};
         }
 
@@ -403,16 +438,17 @@ public:
 
     TabWidget *src() const { return _src; }
     SimpleTab *widget() const { return _widget.get(); }
-    std::optional<int> const &dropX() const { return _drop_x; }
+    std::optional<int> const &dropPos() const { return _drop_pos; }
     void setDropI(int i) { _drop_i = i; }
 
 private:
     TabWidget *const _src; // The source tab.
     Geom::Point const _offset; // The point within the tab that the drag started from.
+    Gtk::Orientation const _orientation; // orientation of the TabStrip
     Glib::RefPtr<Gdk::Device> const _device; // The pointing device that started the drag.
 
     TabStrip *_dst; // The destination tabs widget, possibly null.
-    std::optional<int> _drop_x; // Position within dst where tab is dropped.
+    std::optional<int> _drop_pos; // Position (either x or y) within dst where tab is dropped.
     std::optional<int> _drop_i; // The index within dst where the tab is dropped.
 
     sigc::scoped_connection _reparent_conn; // Used to defer reparenting of widget.
@@ -506,10 +542,14 @@ static std::shared_ptr<TabWidgetDrag> get_tab_drag(Gtk::DropTarget &droptarget)
     return content->lock();
 }
 
-TabStrip::TabStrip() :
-    _overlay{Gtk::make_managed<PointerTransparentWidget>()}
+TabStrip::TabStrip(Gtk::Orientation orientation)
+    : Glib::ObjectBase("TabStrip")
+    , Gtk::Orientable()
+    , Gtk::Widget()
+    , _overlay{Gtk::make_managed<PointerTransparentWidget>()}
 {
     set_name("TabStrip");
+    set_orientation(orientation);
     set_overflow(Gtk::Overflow::HIDDEN);
     containerize(*this);
 
@@ -598,6 +638,7 @@ TabStrip::TabStrip() :
             _drag_src = _drag_dst = std::make_shared<TabWidgetDrag>(
                 tab.get(),
                 offset,
+                get_orientation(),
                 motion.get_current_event_device()
             );
 
@@ -647,6 +688,7 @@ TabStrip::~TabStrip()
 Gtk::Widget* TabStrip::add_tab(const Glib::ustring& label, const Glib::ustring& icon, int pos)
 {
     auto tab = std::make_shared<TabWidget>(this);
+    tab->_handle.set_visible(_show_drag_handles);
     tab->_name.set_text(label);
     tab->_icon.set_from_icon_name(icon);
     tab->_show_close_btn = _show_close_btn;
@@ -730,6 +772,16 @@ std::optional<std::pair<TabStrip*, int>> TabStrip::unpack_drop_source(const Glib
     return {};
 }
 
+void TabStrip::set_draw_handle(bool show) {
+    if (_show_drag_handles == show) return;
+
+    _show_drag_handles = show;
+    // propagate changes to tabs
+    for (auto& tab : _tabs) {
+        tab->show_handle(show);
+    }
+}
+
 void TabStrip::select_tab(const Gtk::Widget& tab)
 {
     auto const active = _active.lock();
@@ -758,7 +810,7 @@ void TabStrip::select_tab_at(int pos) {
 
 void TabStrip::set_tabs_order(std::vector<Gtk::Widget *> sorted)
 {
-    std::sort(_tabs.begin(), _tabs.end(), [sorted](std::shared_ptr<TabWidget> a, std::shared_ptr<TabWidget> b) {
+    std::sort(_tabs.begin(), _tabs.end(), [sorted](const auto& a, const auto& b) {
         return std::find(sorted.begin(), sorted.end(), a.get())
              < std::find(sorted.begin(), sorted.end(), b.get());
     });
@@ -802,7 +854,8 @@ void TabStrip::set_new_tab_popup(Gtk::Popover* popover) {
  */
 void TabStrip::_update_new_tab()
 {
-    _plus_btn.set_visible((bool)_plus_btn.get_popover());
+    // show (+) button when there's a popover, but only in horizontal layout
+    _plus_btn.set_visible(_plus_btn.get_popover() && get_orientation() == Gtk::Orientation::HORIZONTAL);
 }
 
 void TabStrip::set_tabs_context_popup(Gtk::Popover* popover) {
@@ -850,10 +903,13 @@ Gtk::SizeRequestMode TabStrip::get_request_mode_vfunc() const
 
 void TabStrip::measure_vfunc(Gtk::Orientation orientation, int, int &min, int &nat, int &, int &) const
 {
-    if (orientation == Gtk::Orientation::VERTICAL) {
+    // orientation of the tab strip
+    auto layout = get_orientation();
+
+    if (orientation != layout) {
         min = 0;
         auto consider = [&] (Gtk::Widget const &w) {
-            auto const m = w.measure(Gtk::Orientation::VERTICAL, -1);
+            auto const m = w.measure(orientation, -1);
             min = std::max(min, m.sizes.minimum);
         };
         for (auto const &tab : _tabs) {
@@ -874,12 +930,12 @@ void TabStrip::measure_vfunc(Gtk::Orientation orientation, int, int &min, int &n
         min = 0;
         nat = 0;
         for (auto const &tab : _tabs) {
-            const auto [sizes, baselines] = tab->measure(Gtk::Orientation::HORIZONTAL, -1);
+            const auto [sizes, baselines] = tab->measure(layout, -1);
             min += sizes.minimum;
             nat += sizes.natural;
         }
         if (_plus_btn.is_visible()) {
-            const auto [sizes, baselines] = _plus_btn.measure(Gtk::Orientation::HORIZONTAL, -1);
+            const auto [sizes, baselines] = _plus_btn.measure(layout, -1);
             min += sizes.minimum;
             nat += sizes.natural;
         }
@@ -929,7 +985,7 @@ void shrink_sizes(std::vector<Size>& sizes, int decrease) {
     std::sort(begin(sizes), end(sizes), [](const Size& a, const Size& b){ return a.index < b.index; });
 }
 
-// Decrease sizes until they meet target value by subtracting given amount
+// Expand sizes until they meet target value by adding given amount
 void expand_sizes(std::vector<Size>& sizes, int increase) {
     if (sizes.empty() || increase <= 0) return;
 
@@ -960,7 +1016,7 @@ void expand_sizes(std::vector<Size>& sizes, int increase) {
             sizes[j].delta += to_increase;
             increase -= to_increase;
         }
-        // If this was the final expansion, distribute any remaining pixels which is guarenteed to be <= i
+        // If this was the final expansion, distribute any remaining pixels which is guaranteed to be <= i
         if (!sizes[i+1].expand) {
             for (auto j = 0; j <= i && increase > 0; j++) {
                 sizes[j].delta += 1;
@@ -977,6 +1033,7 @@ void expand_sizes(std::vector<Size>& sizes, int increase) {
 
 void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, int)
 {
+    auto layout = get_orientation();
     auto plus_w = _plus_btn.get_visible() ? _plus_btn.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural : 0;
 
     _overlay->size_allocate(Gtk::Allocation(0, 0, width, height), -1);
@@ -986,8 +1043,8 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
 
     struct Drop
     {
-        int x;
-        int w;
+        int loc;
+        int size;
         SimpleTab *widget;
         bool done = false;
     };
@@ -1002,15 +1059,19 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
     alloc.reserve(_tabs.size() + 1);
     for (int i = 0; i < _tabs.size(); i++) {
         auto const tab = _tabs[i].get();
-        auto [min, natural] = tab->measure(Gtk::Orientation::HORIZONTAL, -1).sizes;
+        auto [min, natural] = tab->measure(layout, -1).sizes;
         total += natural;
         minimum += min;
         alloc.emplace_back(Size{ .minimum = min, .delta = natural - min, .expand = tab->get_hexpand(), .index = i });
         has_expanding = has_expanding || tab->get_hexpand();
     }
 
+    if (layout == Gtk::Orientation::VERTICAL) {
+        // position tabs from top to bottom using their min size;
+        // at the moment no-op
+    }
     // check available width; restrict tab sizes if space is limited
-    if (width <= minimum) {
+    else if (width <= minimum) {
         // shrink to the minimum size, there's no wiggle room
         for (int i = 0; i < _tabs.size(); i++) {
             alloc[i].delta = 0;
@@ -1024,24 +1085,24 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
         expand_sizes(alloc, width - total);
     }
 
-    if (_drag_dst && _drag_dst->dropX()) {
+    if (_drag_dst && _drag_dst->dropPos()) {
         auto widget = !_drag_dst->widget()
             ? _drag_dst->src()
             : _drag_dst->widget();
         if (widget->get_parent() == this) {
             int pos = get_tab_position(*widget);
-            int w = widget->measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
+            int size = widget->measure(layout, -1).sizes.natural;
             if (pos >= 0) {
-                w = alloc[pos].size();
+                size = alloc[pos].size();
             }
-            auto right = width - w;
-            auto x = right > 0 ? std::clamp(*_drag_dst->dropX(), 0, right) : 0;
-            drop = Drop{ .x = x, .w = w, .widget = widget };
+            auto limit = (layout == Gtk::Orientation::HORIZONTAL ? width : height) - size;
+            auto loc = limit > 0 ? std::clamp(*_drag_dst->dropPos(), 0, limit) : 0;
+            drop = Drop{ .loc = loc, .size = size, .widget = widget };
         }
     }
 
     // position and size tabs
-    int x = 0;
+    int pos = 0;
     for (int i = 0; i < _tabs.size(); i++) {
         const auto& a = alloc[i];
         auto const tab = _tabs[i].get();
@@ -1049,18 +1110,23 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
         if (_drag_src && tab == _drag_src->src()) {
             continue;
         }
-        int w = a.size();
-        if (drop && !drop->done && x + w / 2 > drop->x) {
-            x += drop->w;
+        int size = a.size();
+        if (drop && !drop->done && pos + size / 2 > drop->loc) {
+            pos += drop->size;
             _drag_dst->setDropI(i);
             drop->done = true;
         }
-        tab->size_allocate(Gtk::Allocation(x, 0, w, height), -1);
-        x += w;
+        if (layout == Gtk::Orientation::HORIZONTAL) {
+            tab->size_allocate(Gtk::Allocation(pos, 0, size, height), -1);
+        }
+        else {
+            tab->size_allocate(Gtk::Allocation(0, pos, width, size), -1);
+        }
+        pos += size;
     }
 
     if (_plus_btn.get_visible()) {
-        _plus_btn.size_allocate(Gtk::Allocation(x, 0, plus_w, height), -1);
+        _plus_btn.size_allocate(Gtk::Allocation(pos, 0, plus_w, height), -1);
     }
 
     // GTK burdens custom widgets with having to implement this manually.
@@ -1072,7 +1138,12 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
         if (!drop->done) {
             _drag_dst->setDropI(_tabs.size());
         }
-        drop->widget->size_allocate(Gtk::Allocation(drop->x, 0, drop->w, height), -1);
+        if (layout == Gtk::Orientation::HORIZONTAL) {
+            drop->widget->size_allocate(Gtk::Allocation(drop->loc, 0, drop->size, height), -1);
+        }
+        else {
+            drop->widget->size_allocate(Gtk::Allocation(0, drop->loc, width, drop->size), -1);
+        }
     }
 }
 
