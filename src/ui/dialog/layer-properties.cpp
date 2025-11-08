@@ -124,6 +124,7 @@ void LayerPropertiesDialog::_apply()
         default:
             break;
     }
+    destroy();
 }
 
 /** Creates a new layer based on the input entered in the dialog window */
