@@ -1,5 +1,4 @@
 APPLICATION_ICON    ICON        "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico"
-1000                BITMAP      "${CMAKE_SOURCE_DIR}/src/show-preview.bmp"
 1                   24          "${CMAKE_BINARY_DIR}/src/${FILE_NAME}-manifest.xml"
 
 1 VERSIONINFO

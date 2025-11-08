@@ -387,10 +387,6 @@ endif()
 
 
 set(INKSCAPE_TARGET_LIBS
-        # order from automake
-        #sp_LIB
-        #inkscape_LIB
-        #sp_LIB # annoying, we need both!
         croco_LIB
         avoid_LIB
         cola_LIB
@@ -432,11 +428,10 @@ endif()
 target_link_libraries(inkscape_base
     PRIVATE
         ${INKSCAPE_TARGET_LIBS}
-        2Geom::2geom
     PUBLIC
         ${INKSCAPE_LIBS}
+        2Geom::2geom
   )
-target_include_directories(inkscape_base INTERFACE ${2Geom_INCLUDE_DIRS})
 
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)
