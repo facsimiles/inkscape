@@ -78,6 +78,9 @@ private:
     UI::Widget::ComboToolItem *_shape_item;
     Gtk::Box &_shapescale_box;
     UI::Widget::SpinButton &_shapescale_item;
+
+    Gtk::ToggleButton &_distance_info_btn;
+
     bool _set_shape = false;
 
     OperationBlocker _blocker;

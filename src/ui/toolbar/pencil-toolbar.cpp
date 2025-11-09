@@ -67,6 +67,7 @@ PencilToolbar::PencilToolbar(Glib::RefPtr<Gtk::Builder> const &builder, bool pen
     , _flatten_simplify_btn(get_widget<Gtk::Button>(builder, "_flatten_simplify_btn"))
     , _shapescale_box(get_widget<Gtk::Box>(builder, "_shapescale_box"))
     , _shapescale_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_shapescale_item"))
+    , _distance_info_btn(get_widget<Gtk::ToggleButton>(builder, "_distance_info_btn"))
 {
     auto prefs = Preferences::get();
 

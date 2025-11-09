@@ -1647,7 +1647,7 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, unsigned 
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Geom::Point tooltip_pos = p;
-    double fontsize = 10.0;
+    double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
     tooltip_pos += _desktop->w2d(Geom::Point(0, -2*fontsize));
 
     Geom::Point rel = p - p_array[0];
