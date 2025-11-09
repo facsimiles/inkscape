@@ -94,6 +94,7 @@ public:
 
 protected:
     friend class LPETaperStroke;
+    friend class LPETrimShape;
 
 private:
     size_t _active_index = 0;

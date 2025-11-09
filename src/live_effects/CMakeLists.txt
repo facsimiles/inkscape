@@ -60,6 +60,7 @@ set(live_effects_SRC
 	lpe-text_label.cpp
 	lpe-tiling.cpp
 	lpe-transform_2pts.cpp
+	lpe-trim-shape.cpp
 	lpegroupbbox.cpp
 	lpeobject-reference.cpp
 	lpe-vonkoch.cpp
@@ -158,6 +159,7 @@ set(live_effects_SRC
 	lpe-text_label.h
 	lpe-tiling.h
 	lpe-transform_2pts.h
+	lpe-trim-shape.h
 	lpe-vonkoch.h
 	lpegroupbbox.h
 	lpeobject-reference.h
