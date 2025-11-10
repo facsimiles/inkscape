@@ -9,6 +9,7 @@
 #include <ui/operation-blocker.h>
 
 #include "generic/spin-button.h"
+#include "style/paint-order.h"
 
 class SPStyle;
 
@@ -33,12 +34,7 @@ private:
     Gtk::ToggleButton _cap_butt;
     Gtk::ToggleButton _cap_round;
     Gtk::ToggleButton _cap_square;
-    Gtk::ToggleButton _paint_order_fsm;
-    Gtk::ToggleButton _paint_order_sfm;
-    Gtk::ToggleButton _paint_order_fms;
-    Gtk::ToggleButton _paint_order_mfs;
-    Gtk::ToggleButton _paint_order_smf;
-    Gtk::ToggleButton _paint_order_msf;
+    PaintOrderWidget _paint_order;
     OperationBlocker _update;
 };
 

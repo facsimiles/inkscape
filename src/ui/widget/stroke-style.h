@@ -138,6 +138,7 @@ private:
     StrokeStyleButton *capRound;
     StrokeStyleButton *capSquare;
     PaintOrderWidget *_paint_order;
+    Gtk::Box* _align_label;
     DashSelector *dashSelector;
     Gtk::Entry* _pattern_entry = nullptr;
     Gtk::Label* _pattern_label = nullptr;

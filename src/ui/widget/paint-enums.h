@@ -24,7 +24,7 @@ enum class PaintMode {
 };
 
 // Different ways paint can be inherited:
-enum class PaintInheritMode {
+enum class PaintDerivedMode {
     Unset,          // paint is not set (inherited implicitly)
     Inherit,        // paint is set to 'inherit' keyword (inherited explicitly)
     ContextFill,    // context-fill (markers and clones; inherited from context element)
@@ -33,11 +33,11 @@ enum class PaintInheritMode {
 };
 
 // Take inherited paint mode and return corresponding CSS string
-std::string get_inherited_paint_css_mode(PaintInheritMode mode);
+std::string get_inherited_paint_css_mode(PaintDerivedMode mode);
 
 // Examine 'paint' and return mode that describes how it is to be derived/inherited.
 // For paint servers and solid color the return is empty.
-std::optional<PaintInheritMode> get_inherited_paint_mode(const SPIPaint& paint);
+std::optional<PaintDerivedMode> get_inherited_paint_mode(const SPIPaint& paint);
 
 } // namespace
 

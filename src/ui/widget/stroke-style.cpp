@@ -435,9 +435,16 @@ StrokeStyle::StrokeStyle() :
     miterLimitAdj->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::setStrokeMiter));
 
     i++;
+    // this is a hack to align label text with the first row in paint order selector
+    auto& vbox = *Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
+    vbox.set_homogeneous();
     /* Paint order */
     // TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and 'markers are painted.
-    spw_label(table, _("Order"), 0, i, nullptr);
+    vbox.append(*Gtk::make_managed<Gtk::Label>(_("Order")));
+    vbox.append(*Gtk::make_managed<Gtk::Box>());
+    _align_label = Gtk::make_managed<Gtk::Box>();
+    vbox.append(*_align_label);
+    table->attach(vbox, 0, i);
 
     _paint_order = Gtk::make_managed<PaintOrderWidget>();
     paintOrderConn = _paint_order->signal_values_changed().connect([this, desktop]() {
@@ -890,6 +897,7 @@ StrokeStyle::updateLine()
 
     if (! is_query_style_updateable(result_order)) {
         setPaintOrder (query.paint_order.value, has_markers);
+        _align_label->set_visible(has_markers);
     } else {
         setPaintOrder (nullptr, true);
     }

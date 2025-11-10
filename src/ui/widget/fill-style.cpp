@@ -225,7 +225,7 @@ void FillNStroke::performUpdate()
 
             if (targPaint.isDerived()) {
                 auto inherited = get_inherited_paint_mode(targPaint);
-                _psel->setInheritedPaint(inherited.value_or(PaintInheritMode::Unset));
+                _psel->setInheritedPaint(inherited.value_or(PaintDerivedMode::Unset));
             }
             else if (targPaint.set && targPaint.isColor()) {
                 // This is terrible, future refactoring has been written

@@ -417,19 +417,19 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         auto css = new_css_attr();
         auto attr = fill ? "fill" : "stroke";
         switch (mode) {
-        case PaintInheritMode::Unset:
+        case PaintDerivedMode::Unset:
             sp_repr_css_unset_property(css.get(), attr);
             break;
-        case PaintInheritMode::Inherit:
+        case PaintDerivedMode::Inherit:
             sp_repr_css_set_property(css.get(), attr, "inherit");
             break;
-        case PaintInheritMode::ContextFill:
+        case PaintDerivedMode::ContextFill:
             sp_repr_css_set_property(css.get(), attr, "context-fill");
             break;
-        case PaintInheritMode::ContextStroke:
+        case PaintDerivedMode::ContextStroke:
             sp_repr_css_set_property(css.get(), attr, "context-stroke");
             break;
-        case PaintInheritMode::CurrentColor:
+        case PaintDerivedMode::CurrentColor:
             sp_repr_css_set_property(css.get(), attr, "currentColor");
             break;
         default:

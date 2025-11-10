@@ -199,7 +199,7 @@ class PaintSelector : public Gtk::Box {
     void updateMeshList(SPMeshGradient *pat);
 #endif
 
-    void setInheritedPaint(PaintInheritMode mode);
+    void setInheritedPaint(PaintDerivedMode mode);
     std::string getOtherSetting() const;
     void updatePatternList(SPPattern *pat);
     inline decltype(_mode) get_mode() const { return _mode; }

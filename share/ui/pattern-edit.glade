@@ -197,7 +197,7 @@
                       <object class="GtkBox">
                         <child>
                           <object class="GtkButton" id="previous">
-                            <property name="icon-name">pan-left</property>
+                            <property name="icon-name">pan-start</property>
                             <property name="focusable">True</property>
                             <property name="receives-default">True</property>
                             <property name="has-frame">False</property>
@@ -219,7 +219,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="next">
-                            <property name="icon-name">pan-right</property>
+                            <property name="icon-name">pan-end</property>
                             <property name="focusable">True</property>
                             <property name="receives-default">True</property>
                             <property name="has-frame">False</property>

@@ -22,7 +22,7 @@ struct Props {
         const char* icon;
         const char* style;
         const char* tooltip;
-    } buttons[7];
+    } buttons[4];
 };
 
 StrokeOptions::StrokeOptions() {
@@ -45,16 +45,6 @@ StrokeOptions::StrokeOptions() {
             {&_cap_square, "stroke-cap-square", "square", _("Square cap")},
             {}
         }},
-        // TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and 'markers are painted.
-        {_("Order"), &_order_changed, {
-            {&_paint_order_fsm, "paint-order-fsm", "normal", _("Fill, Stroke, Markers")},
-            {&_paint_order_sfm, "paint-order-sfm", "stroke fill markers", _("Stroke, Fill, Markers")},
-            {&_paint_order_fms, "paint-order-fms", "fill markers stroke", _("Fill, Markers, Stroke")},
-            {&_paint_order_mfs, "paint-order-mfs", "markers fill stroke", _("Markers, Fill, Stroke")},
-            {&_paint_order_smf, "paint-order-smf", "stroke markers fill", _("Stroke, Markers, Fill")},
-            {&_paint_order_msf, "paint-order-msf", "markers stroke fill", _("Markers, Stroke, Fill")},
-            {}
-        }}
     };
 
     Utils::SpinPropertyDef limit_prop = {&_miter_limit, { 0, 1e5, 0.1, 10, 3 }, nullptr, _("Maximum length of the miter (in units of stroke width)") };
@@ -103,6 +93,17 @@ StrokeOptions::StrokeOptions() {
         ++row;
     }
 
+    attach(_paint_order, 1, row, 2);
+    auto vbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
+    vbox->set_homogeneous();
+    vbox->append(*Gtk::make_managed<Gtk::Label>(_("Order")));
+    vbox->append(*Gtk::make_managed<Gtk::Box>());
+    vbox->append(*Gtk::make_managed<Gtk::Box>());
+    for (auto w : vbox->get_children()) {
+        w->set_vexpand();
+    }
+    attach(*vbox, 0, row);
+
     _miter_limit.signal_value_changed().connect([this](double value) {
         _miter_changed.emit(value);
     });
@@ -141,36 +142,13 @@ void StrokeOptions::update_widgets(SPStyle& style) {
 
     SPIPaintOrder order;
     order.read(style.paint_order.set ? style.paint_order.value : "normal");
-    if (order.layer[0] != SP_CSS_PAINT_ORDER_NORMAL) {
-        if (order.layer[0] == SP_CSS_PAINT_ORDER_FILL) {
-            if (order.layer[1] == SP_CSS_PAINT_ORDER_STROKE) {
-                _paint_order_fsm.set_active();
-            }
-            else {
-                _paint_order_fms.set_active();
-            }
-        }
-        else if (order.layer[0] == SP_CSS_PAINT_ORDER_STROKE) {
-            if (order.layer[1] == SP_CSS_PAINT_ORDER_FILL) {
-                _paint_order_sfm.set_active();
-            }
-            else {
-                _paint_order_smf.set_active();
-            }
-        }
-        else {
-            if (order.layer[1] == SP_CSS_PAINT_ORDER_STROKE) {
-                _paint_order_msf.set_active();
-            }
-            else {
-                _paint_order_mfs.set_active();
-            }
-        }
-    }
-    else {
-        // "normal" order
-        _paint_order_fsm.set_active();
-    }
+    bool has_markers = true; // <- TODO
+    _paint_order.setValue(order, has_markers);
+
+    _paint_order.signal_values_changed().connect([this] {
+        auto order = _paint_order.getValue().get_value();
+        _order_changed.emit(order.c_str());
+    });
 }
 
 } // namespace

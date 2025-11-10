@@ -1227,7 +1227,7 @@ PaintSelector::Mode PaintSelector::getModeForStyle(SPStyle const &style, FillOrS
     return mode;
 }
 
-void PaintSelector::setInheritedPaint(PaintInheritMode mode) {
+void PaintSelector::setInheritedPaint(PaintDerivedMode mode) {
     if (_selector_other) {
         _selector_other->set_mode(mode);
     }

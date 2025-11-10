@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "drop-down-list.h"
+
+#include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/label.h>
 #include <gtkmm/listheader.h>
 #include <gtkmm/stringobject.h>
@@ -27,6 +29,36 @@ void DropDownList::_init() {
         return std::dynamic_pointer_cast<Gtk::StringObject>(item)->get_string();
     });
     set_expression(expression);
+
+    // enable cycling through the items with key up/down
+    auto key_entry = Gtk::EventControllerKey::create();
+    key_entry->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    key_entry->signal_key_pressed().connect([this](auto keyval, auto keycode, auto state) {
+        if (state != Gdk::ModifierType::NO_MODIFIER_MASK) return false;
+
+        switch (keyval) {
+        case GDK_KEY_Down:
+            {
+                int n = get_item_count();
+                int sel = get_selected();
+                if (sel + 1 < n) {
+                    set_selected(sel + 1);
+                }
+            }
+            return true;
+        case GDK_KEY_Up:
+            {
+                int sel = get_selected();
+                if (sel - 1 >= 0) {
+                    set_selected(sel - 1);
+                }
+            }
+            return true;
+        default:
+            return false;
+        }
+    }, false); // Before default handler.
+    add_controller(key_entry);
 
     /* Example of setting up and binding labels in header factory:
      *

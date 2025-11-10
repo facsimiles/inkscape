@@ -8,25 +8,25 @@
 
 namespace Inkscape::UI::Widget {
 
-std::optional<PaintInheritMode> get_inherited_paint_mode(const SPIPaint& paint) {
+std::optional<PaintDerivedMode> get_inherited_paint_mode(const SPIPaint& paint) {
     if (!paint.isDerived()) {
         return {}; // not derived a derived paint
     }
 
     switch (paint.paintSource) {
     case SP_CSS_PAINT_ORIGIN_CONTEXT_FILL:
-        return PaintInheritMode::ContextFill;
+        return PaintDerivedMode::ContextFill;
     case SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE:
-        return PaintInheritMode::ContextStroke;
+        return PaintDerivedMode::ContextStroke;
     case SP_CSS_PAINT_ORIGIN_CURRENT_COLOR:
-        return PaintInheritMode::CurrentColor;
+        return PaintDerivedMode::CurrentColor;
     default:
         // check of 'inherit' keyword and "unset" paint
         if (paint.inheritSource) {
-            return PaintInheritMode::Inherit;
+            return PaintDerivedMode::Inherit;
         }
         if (!paint.set) {
-            return PaintInheritMode::Unset;
+            return PaintDerivedMode::Unset;
         }
     }
 
@@ -35,17 +35,17 @@ std::optional<PaintInheritMode> get_inherited_paint_mode(const SPIPaint& paint) 
     return {};
 }
 
-std::string get_inherited_paint_css_mode(PaintInheritMode mode) {
+std::string get_inherited_paint_css_mode(PaintDerivedMode mode) {
     switch (mode) {
-    case PaintInheritMode::Unset:
+    case PaintDerivedMode::Unset:
         return {};
-    case PaintInheritMode::Inherit:
+    case PaintDerivedMode::Inherit:
         return "inherit";
-    case PaintInheritMode::ContextFill:
+    case PaintDerivedMode::ContextFill:
         return "context-fill";
-    case PaintInheritMode::ContextStroke:
+    case PaintDerivedMode::ContextStroke:
         return "context-stroke";
-    case PaintInheritMode::CurrentColor:
+    case PaintDerivedMode::CurrentColor:
         return "currentColor";
     default:
         g_warning("get_inherited_paint_css_mode(): unknown mode");

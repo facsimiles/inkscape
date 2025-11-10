@@ -71,7 +71,7 @@ struct SimpleTab : Gtk::Widget
     SimpleTab() {
         _name.set_halign(Gtk::Align::START);
         _name.set_xalign(0);
-        _handle.set_from_icon_name("drag-handle-vert");
+        _handle.set_from_icon_name("dnd");
         _handle.set_visible(false);
 
         // a fade-out mask for overflowing text
@@ -144,7 +144,6 @@ struct SimpleTab : Gtk::Widget
 
     void measure_vfunc(Gtk::Orientation orientation, int, int &min, int &nat, int &, int &) const override {
         {
-            auto _ = _handle.measure(orientation);
             auto [sizes, baselines] = _icon.measure(orientation);
             // normal icon size with margins
             auto icon_size = sizes.minimum + 2 * MARGIN;
@@ -155,12 +154,6 @@ struct SimpleTab : Gtk::Widget
 
             // for vert measurements: all elements are in one row, so just use icon size
             if (orientation == Gtk::Orientation::VERTICAL) return;
-        }
-        // space for handle, if visible
-        if (_handle.get_visible()) {
-            auto [sizes, baselines] = _handle.measure(orientation);
-            min += sizes.minimum + MARGIN;
-            nat += sizes.natural + MARGIN;
         }
         // reserve space for the close button if there is one shown
         if (_close.get_visible()) {
@@ -173,6 +166,12 @@ struct SimpleTab : Gtk::Widget
             auto [sizes, baselines] = _name.measure(orientation);
             // do not inflate min size, so that labels can collapse to nothing and become hidden
             nat += sizes.natural + MARGIN;
+        }
+        // space for handle, if visible
+        if (_handle.get_visible()) {
+            auto [sizes, baselines] = _handle.measure(orientation);
+            min += sizes.minimum + 2 * MARGIN;
+            nat += sizes.natural + 2 * MARGIN;
         }
 
         (void)_mask.measure(orientation);
@@ -193,13 +192,8 @@ struct SimpleTab : Gtk::Widget
         int x = MARGIN, y = 0;
         width -= 2 * MARGIN;
 
-        // first comes dragging handle
-        if (_handle.get_visible()) {
-            auto handle_w = _handle.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural;
-            _handle.size_allocate(Gtk::Allocation(x, y, handle_w, height), -1);
-            width -= handle_w + MARGIN;
-            x += handle_w + MARGIN;
-        }
+        auto handle_w = _handle.get_visible() ? _handle.measure(Gtk::Orientation::HORIZONTAL, -1).sizes.natural : 0;
+        width -= handle_w;
 
         // icon on the left, we can center it later if needed
         _icon.size_allocate(Gtk::Allocation(x, y, icon_w, height), -1);
@@ -250,7 +244,7 @@ struct SimpleTab : Gtk::Widget
                     // text doesn't fit; add a fade-out mask
                     int mask_size = 20;
                     _mask.set_opacity(1);
-                    _mask.size_allocate(Gtk::Allocation(full_width - mask_size, y, mask_size, height - 8), -1);
+                    _mask.size_allocate(Gtk::Allocation(full_width - handle_w - mask_size, y, mask_size, height - 8), -1);
                 }
             }
             else {
@@ -269,6 +263,12 @@ struct SimpleTab : Gtk::Widget
         if (close_w > 0) {
             x += MARGIN;
             _close.size_allocate(Gtk::Allocation(full_width - close_w - MARGIN, y, close_w, height), -1);
+        }
+
+        // last comes dragging handle
+        if (_handle.get_visible()) {
+            _handle.size_allocate(Gtk::Allocation(std::max(x, full_width - handle_w - MARGIN), y, handle_w, height), -1);
+            center_icon = false;
         }
 
         if (center_icon) {

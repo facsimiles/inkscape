@@ -191,7 +191,7 @@ public:
     sigc::signal<void (FillRule)> get_fill_rule_changed() override {
         return _signal_fill_rule_changed;
     }
-    sigc::signal<void (PaintInheritMode)> get_inherit_mode_changed() override {
+    sigc::signal<void (PaintDerivedMode)> get_inherit_mode_changed() override {
         return _signal_inherit_mode_changed;
     }
     void fire_flat_color_changed() {
@@ -254,7 +254,7 @@ public:
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
                        bool, const Geom::Scale&)> _signal_pattern_changed;
     sigc::signal<void (FillRule)> _signal_fill_rule_changed;
-    sigc::signal<void (PaintInheritMode)> _signal_inherit_mode_changed;
+    sigc::signal<void (PaintDerivedMode)> _signal_inherit_mode_changed;
     std::map<PaintMode, Gtk::Widget*> _pages;
     std::map<PaintMode, Gtk::ToggleButton*> _mode_buttons;
     std::map<ColorPickerPanel::PlateType, Gtk::ToggleButton*> _plate_buttons;

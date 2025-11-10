@@ -53,7 +53,7 @@ public:
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() = 0;
     virtual sigc::signal<void (SPGradient* mesh)> get_mesh_changed() = 0;
     virtual sigc::signal<void (FillRule)> get_fill_rule_changed() = 0;
-    virtual sigc::signal<void (PaintInheritMode)> get_inherit_mode_changed() = 0;
+    virtual sigc::signal<void (PaintDerivedMode)> get_inherit_mode_changed() = 0;
 };
 
 } // namespace

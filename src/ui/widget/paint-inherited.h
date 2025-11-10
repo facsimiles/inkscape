@@ -21,19 +21,19 @@ public:
     PaintInherited(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>&);
 
     // update UI to reflect 'mode'
-    void set_mode(std::optional<PaintInheritMode> maybe_mode);
+    void set_mode(std::optional<PaintDerivedMode> maybe_mode);
 
     // get current UI state
-    PaintInheritMode get_mode() const;
+    PaintDerivedMode get_mode() const;
 
     // signal fired when the user changes inherited paint mode
-    sigc::signal<void (PaintInheritMode)>& signal_mode_changed() {
+    sigc::signal<void (PaintDerivedMode)>& signal_mode_changed() {
         return _signal_mode_changed;
     }
 private:
     void construct();
     OperationBlocker _update;
-    sigc::signal<void (PaintInheritMode)> _signal_mode_changed;
+    sigc::signal<void (PaintDerivedMode)> _signal_mode_changed;
     Glib::RefPtr<Gtk::Builder> _builder;
 };
 

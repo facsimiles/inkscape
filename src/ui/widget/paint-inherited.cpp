@@ -15,12 +15,12 @@ namespace Inkscape::UI::Widget {
 namespace {
 
 // inherited paint variants
-const std::array<std::pair<const char*, PaintInheritMode>, 5> derived_paints = {
-    std::pair{"paint-unset",    PaintInheritMode::Unset},
-    {"paint-inherit",        PaintInheritMode::Inherit},
-    {"paint-context-stroke", PaintInheritMode::ContextStroke},
-    {"paint-context-fill",   PaintInheritMode::ContextFill},
-    {"paint-current-color",  PaintInheritMode::CurrentColor}
+const std::array<std::pair<const char*, PaintDerivedMode>, 5> derived_paints = {
+    std::pair{"paint-unset", PaintDerivedMode::Unset},
+    {"paint-inherit",        PaintDerivedMode::Inherit},
+    {"paint-context-stroke", PaintDerivedMode::ContextStroke},
+    {"paint-context-fill",   PaintDerivedMode::ContextFill},
+    {"paint-current-color",  PaintDerivedMode::CurrentColor}
 };
 
 } // namespace
@@ -50,7 +50,7 @@ PaintInherited::PaintInherited(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
     construct();
 }
 
-void PaintInherited::set_mode(std::optional<PaintInheritMode> maybe_mode) {
+void PaintInherited::set_mode(std::optional<PaintDerivedMode> maybe_mode) {
     auto scoped(_update.block());
 
     if (!maybe_mode) {
@@ -63,9 +63,9 @@ void PaintInherited::set_mode(std::optional<PaintInheritMode> maybe_mode) {
     }
 
     auto mode = maybe_mode.value();
-    if (mode == PaintInheritMode::Inherit) {
+    if (mode == PaintDerivedMode::Inherit) {
         // "inherit" keyword and unset paint are currently both represented by "from ancestor" button
-        mode = PaintInheritMode::Unset;
+        mode = PaintDerivedMode::Unset;
     }
     for (auto [id, val] : derived_paints) {
         if (mode == val) {
@@ -76,7 +76,7 @@ void PaintInherited::set_mode(std::optional<PaintInheritMode> maybe_mode) {
     }
 }
 
-PaintInheritMode PaintInherited::get_mode() const {
+PaintDerivedMode PaintInherited::get_mode() const {
     for (auto& [id, mode] : derived_paints) {
         auto& btn = get_widget<Gtk::CheckButton>(_builder, id);
         if (btn.get_active()) {
@@ -85,7 +85,7 @@ PaintInheritMode PaintInherited::get_mode() const {
     }
 
     g_warning("PaintInherited::get_mode - mode has not been set.");
-    return PaintInheritMode::Unset;
+    return PaintDerivedMode::Unset;
 }
 
 } // namespace
