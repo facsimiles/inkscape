@@ -70,8 +70,7 @@ private:
     /** List of valid types for the stroke-style radio check-button widget */
     enum StrokeStyleButtonType {
         STROKE_STYLE_BUTTON_JOIN, ///< A button to set the line-join style
-        STROKE_STYLE_BUTTON_CAP,  ///< A button to set the line-cap style
-        STROKE_STYLE_BUTTON_ORDER ///< A button to set the paint-order style
+        STROKE_STYLE_BUTTON_CAP   ///< A button to set the line-cap style
     };
 
     /**
@@ -118,7 +117,7 @@ private:
     void unitChangedCB();
     bool areMarkersBeingUpdated();
     void markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const which);
-    static void buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw);
+    void buttonToggledCB(StrokeStyleButton *tb);
 
 
     MarkerComboBox *startMarkerCombo;

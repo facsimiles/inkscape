@@ -513,8 +513,7 @@ StrokeStyle::makeRadioButton(Gtk::ToggleButton    *&grp,
 
     auto const tb = Gtk::make_managed<StrokeStyleButton>(grp, icon, button_type, stroke_style);
     UI::pack_start(*hb, *tb, false, false);
-    tb->signal_toggled().connect(sigc::bind(
-                                     sigc::ptr_fun(&StrokeStyle::buttonToggledCB), tb, this));
+    tb->signal_toggled().connect([this, tb]() { buttonToggledCB(tb); });
     tb->set_hexpand();
     tb->set_halign(Gtk::Align::FILL);
     return tb;
@@ -858,6 +857,7 @@ StrokeStyle::updateLine()
 
         dashSelector->set_sensitive(is_enabled);
         _pattern_entry->set_sensitive(is_enabled);
+        _paint_order->set_sensitive(is_enabled);
     }
 
     if (result_ml != QUERY_STYLE_NOTHING)
@@ -1060,37 +1060,33 @@ StrokeStyle::isHairlineSelected() const
  * calls the respective routines to update css properties, etc.
  *
  */
-void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
+void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb)
 {
-    if (spw->update) {
+    if (update) {
         return;
     }
 
     if (tb->get_active()) {
-        if (tb->get_button_type() == STROKE_STYLE_BUTTON_JOIN) {
-            spw->_miter_hb->set_visible(!strcmp(tb->get_stroke_style(), "miter"));
-        }
-
         /* TODO: Create some standardized method */
         SPCSSAttr *css = sp_repr_css_attr_new();
 
         switch (tb->get_button_type()) {
             case STROKE_STYLE_BUTTON_JOIN: 
                 sp_repr_css_set_property(css, "stroke-linejoin", tb->get_stroke_style());
-                sp_desktop_set_style (spw->desktop, css);
-                spw->setJoinButtons(tb);
+                sp_desktop_set_style (desktop, css);
+                setJoinButtons(tb);
                 break;
             case STROKE_STYLE_BUTTON_CAP:
                 sp_repr_css_set_property(css, "stroke-linecap", tb->get_stroke_style());
-                sp_desktop_set_style (spw->desktop, css);
-                spw->setCapButtons(tb);
+                sp_desktop_set_style (desktop, css);
+                setCapButtons(tb);
                 break;
         }
 
         sp_repr_css_attr_unref(css);
         css = nullptr;
 
-        DocumentUndo::done(spw->desktop->getDocument(), _("Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::done(desktop->getDocument(), _("Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -1104,6 +1100,8 @@ StrokeStyle::setJoinButtons(Gtk::ToggleButton *active)
     miterLimitSpin->set_sensitive(active == joinMiter && !isHairlineSelected());
     joinRound->set_active(active == joinRound);
     joinBevel->set_active(active == joinBevel);
+    // Hide entire miter row when not Miter join
+    _miter_hb->set_visible(active == joinMiter);
 }
 
 /**
