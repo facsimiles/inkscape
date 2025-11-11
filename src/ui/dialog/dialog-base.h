@@ -16,6 +16,7 @@
 #include <gtkmm/box.h>
 
 #include "inkscape-application.h"
+#include "ui/defocus-target.h"
 
 namespace Gtk {
 class EventControllerKey;
@@ -36,7 +37,7 @@ namespace Inkscape::UI::Dialog {
  * DialogContainer classes. DialogContainer instances can have at most one type of dialog,
  * differentiated by the associated type.
  */
-class DialogBase : public Gtk::Box
+class DialogBase : public Gtk::Box, protected DefocusTarget
 {
     using parent_type = Gtk::Box;
 
@@ -87,6 +88,7 @@ protected:
     Glib::ustring const _dialog_type; // Type of dialog (we could just use _pref_path?).
 
 private:
+    void onDefocus() override;
     bool blink_off(); // timer callback
     bool on_key_pressed(Gtk::EventControllerKey const &controller,
                         unsigned keyval, unsigned keycode, Gdk::ModifierType state);

@@ -41,6 +41,7 @@
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/export-lists.h"
+#include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-menu.h"
 
 using Inkscape::Util::UnitTable;
@@ -82,15 +83,15 @@ SingleExport::SingleExport(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Buil
     selection_buttons[SELECTION_SELECTION] = &get_widget<Gtk::ToggleButton>(builder, "si_s_selection");
     selection_buttons[SELECTION_CUSTOM]    = &get_widget<Gtk::ToggleButton>(builder, "si_s_custom");
 
-    spin_buttons[SPIN_X0]       = &get_widget<Gtk::SpinButton>(builder, "si_left_sb");
-    spin_buttons[SPIN_X1]       = &get_widget<Gtk::SpinButton>(builder, "si_right_sb");
-    spin_buttons[SPIN_Y0]       = &get_widget<Gtk::SpinButton>(builder, "si_top_sb");
-    spin_buttons[SPIN_Y1]       = &get_widget<Gtk::SpinButton>(builder, "si_bottom_sb");
-    spin_buttons[SPIN_HEIGHT]   = &get_widget<Gtk::SpinButton>(builder, "si_height_sb");
-    spin_buttons[SPIN_WIDTH]    = &get_widget<Gtk::SpinButton>(builder, "si_width_sb");
-    spin_buttons[SPIN_BMHEIGHT] = &get_widget<Gtk::SpinButton>(builder, "si_img_height_sb");
-    spin_buttons[SPIN_BMWIDTH]  = &get_widget<Gtk::SpinButton>(builder, "si_img_width_sb");
-    spin_buttons[SPIN_DPI]      = &get_widget<Gtk::SpinButton>(builder, "si_dpi_sb");
+    spin_buttons[SPIN_X0]       = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_left_sb");
+    spin_buttons[SPIN_X1]       = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_right_sb");
+    spin_buttons[SPIN_Y0]       = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_top_sb");
+    spin_buttons[SPIN_Y1]       = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_bottom_sb");
+    spin_buttons[SPIN_HEIGHT]   = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_height_sb");
+    spin_buttons[SPIN_WIDTH]    = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_width_sb");
+    spin_buttons[SPIN_BMHEIGHT] = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_img_height_sb");
+    spin_buttons[SPIN_BMWIDTH]  = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_img_width_sb");
+    spin_buttons[SPIN_DPI]      = &get_derived_widget<UI::Widget::SpinButton>(builder, "si_dpi_sb");
 
     spin_labels[SPIN_X0]        = &get_widget<Gtk::Label>(builder, "si_label_left");
     spin_labels[SPIN_X1]        = &get_widget<Gtk::Label>(builder, "si_label_right");
@@ -248,7 +249,7 @@ void SingleExport::setupSpinButtons()
 }
 
 template <typename T>
-void SingleExport::setupSpinButton(Gtk::SpinButton *sb, double val, double min, double max, double step, double page,
+void SingleExport::setupSpinButton(UI::Widget::SpinButton *sb, double val, double min, double max, double step, double page,
                                    int digits, bool sensitive, void (SingleExport::*cb)(T), T param)
 {
     if (sb) {
@@ -257,8 +258,6 @@ void SingleExport::setupSpinButton(Gtk::SpinButton *sb, double val, double min, 
         sb->set_range(min, max);
         sb->set_value(val);
         sb->set_sensitive(sensitive);
-        sb->set_width_chars(0);
-        sb->set_max_width_chars(0);
         if (cb) {
             auto signal = sb->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, cb), param));
             // add signals to list to block all easily

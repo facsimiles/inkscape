@@ -293,10 +293,6 @@ std::tuple<bool, double, double> round_values(double x, double y) {
     return std::make_tuple(a != x || b != y, a, b);
 }
 
-std::tuple<bool, double, double> round_values(Gtk::SpinButton& x, Gtk::SpinButton& y) {
-    return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
-}
-
 std::tuple<bool, double, double> round_values(Widget::InkSpinButton& x, Widget::InkSpinButton& y) {
     return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
 }
@@ -2394,7 +2390,15 @@ details::AttributesPanel* ObjectAttributes::get_panel(Selection* selection) {
             auto obj_panel = create_panel(tag);
             panel = obj_panel.get();
             _panels[tag] = std::move(obj_panel);
-            if (panel) panel->set_document(getDocument());
+            if (panel) {
+                panel->set_document(getDocument());
+                for_each_descendant(panel->widget(), [this](auto& widget) {
+                    if (auto sb = dynamic_cast<UI::Widget::InkSpinButton*>(&widget)) {
+                        sb->setDefocusTarget(this);
+                    }
+                    return ForEachResult::_continue;
+                });
+            }
         }
         return panel;
     }

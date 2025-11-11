@@ -139,7 +139,7 @@ class SpinButtonAttr : public Inkscape::UI::Widget::SpinButton, public AttrWidge
 public:
     SpinButtonAttr(double lower, double upper, double step_inc,
                    double climb_rate, int digits, const SPAttr a, double def, char* tip_text)
-        : Inkscape::UI::Widget::SpinButton(climb_rate, digits),
+        : Glib::ObjectBase("SpinButtonAttr"), Inkscape::UI::Widget::SpinButton(climb_rate, digits),
           AttrWidget(a, def)
     {
         if (tip_text) {

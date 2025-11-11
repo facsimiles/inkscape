@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <placeholder width="274" height="812"></placeholder>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkBox" id="export-box">
     <property name="name">ExportDialog</property>
     <property name="orientation">vertical</property>
@@ -19,7 +20,7 @@
                   <object class="GtkBox" id="single-image">
                     <property name="sensitive">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">5</property>
+                    <property name="spacing">4</property>
                     <child>
                       <object class="GtkScrolledWindow" id="si_scroll">
                         <property name="focusable">True</property>
@@ -34,8 +35,9 @@
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkGrid">
+                                    <property name="margin-bottom">0</property>
                                     <property name="valign">start</property>
-                                    <property name="margin-top">5</property>
+                                    <property name="margin-top">4</property>
                                     <property name="column-spacing">4</property>
                                     <property name="column-homogeneous">True</property>
                                     <child>
@@ -132,69 +134,66 @@
                                 </child>
                                 <child>
                                   <object class="GtkGrid" id="si_sizes">
+                                    <property name="margin-bottom">0</property>
                                     <property name="vexpand">True</property>
-                                    <property name="margin-start">6</property>
-                                    <property name="margin-end">6</property>
-                                    <property name="margin-top">5</property>
-                                    <property name="row-spacing">5</property>
-                                    <property name="column-spacing">10</property>
+                                    <property name="margin-start">0</property>
+                                    <property name="margin-end">0</property>
+                                    <property name="margin-top">4</property>
+                                    <property name="row-spacing">4</property>
+                                    <property name="column-spacing">4</property>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_left_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_left_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
                                         <layout>
                                           <property name="column">1</property>
-                                          <property name="row">0</property>
-                                        </layout>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSpinButton" id="si_bottom_sb">
-                                        <property name="focusable">True</property>
-                                        <property name="valign">center</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
-                                        <layout>
-                                          <property name="column">3</property>
                                           <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_width_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_bottom_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
                                         <layout>
-                                          <property name="column">1</property>
+                                          <property name="column">4</property>
                                           <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_height_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_width_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
                                         <layout>
-                                          <property name="column">3</property>
-                                          <property name="row">2</property>
+                                          <property name="column">1</property>
+                                          <property name="row">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_height_sb">
+                                        <property name="focusable">True</property>
+                                        <property name="valign">center</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="width-chars">8</property>
+                                        <layout>
+                                          <property name="column">4</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="valign">center</property>
-                                        <property name="margin-top">5</property>
-                                        <property name="margin-bottom">5</property>
+                                        <property name="margin-top">0</property>
+                                        <property name="margin-bottom">0</property>
                                         <property name="label" translatable="yes">Image Size</property>
                                         <property name="xalign">0</property>
                                         <attributes>
@@ -202,34 +201,32 @@
                                         </attributes>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">4</property>
+                                          <property name="row">5</property>
                                           <property name="column-span">4</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_top_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_top_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
                                         <layout>
-                                          <property name="column">3</property>
-                                          <property name="row">0</property>
+                                          <property name="column">4</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_right_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_right_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
                                         <layout>
                                           <property name="column">1</property>
-                                          <property name="row">1</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -240,8 +237,8 @@
                                         <property name="wrap">True</property>
                                         <property name="xalign">0</property>
                                         <layout>
-                                          <property name="column">2</property>
-                                          <property name="row">2</property>
+                                          <property name="column">3</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -253,7 +250,7 @@
                                         <property name="xalign">0</property>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">2</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -265,7 +262,7 @@
                                         <property name="xalign">0</property>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">0</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -277,7 +274,7 @@
                                         <property name="xalign">0</property>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">1</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -288,8 +285,8 @@
                                         <property name="wrap">True</property>
                                         <property name="xalign">0</property>
                                         <layout>
-                                          <property name="column">2</property>
-                                          <property name="row">1</property>
+                                          <property name="column">3</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -300,58 +297,56 @@
                                         <property name="wrap">True</property>
                                         <property name="xalign">0</property>
                                         <layout>
-                                          <property name="column">2</property>
-                                          <property name="row">0</property>
+                                          <property name="column">3</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="label" translatable="yes">Width
-(px)</property>
+                                        <property name="label" translatable="yes">Width</property>
                                         <property name="wrap">True</property>
                                         <property name="xalign">0</property>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">5</property>
+                                          <property name="row">6</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="label" translatable="yes">Height
-(px)</property>
+                                        <property name="label" translatable="yes">Height</property>
                                         <property name="wrap">True</property>
                                         <property name="xalign">0</property>
                                         <layout>
-                                          <property name="column">2</property>
-                                          <property name="row">5</property>
+                                          <property name="column">3</property>
+                                          <property name="row">6</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_img_width_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_img_width_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
+                                        <property name="suffix" translatable="yes"> px</property>
                                         <layout>
                                           <property name="column">1</property>
-                                          <property name="row">5</property>
+                                          <property name="row">6</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_img_height_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_img_height_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
+                                        <property name="suffix" translatable="yes"> px</property>
                                         <layout>
-                                          <property name="column">3</property>
-                                          <property name="row">5</property>
+                                          <property name="column">4</property>
+                                          <property name="row">6</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -363,20 +358,19 @@
                                         <property name="xalign">0</property>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">6</property>
+                                          <property name="row">7</property>
                                         </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="si_dpi_sb">
+                                      <object class="gtkmm__CustomObject_InkSpinButton" id="si_dpi_sb">
                                         <property name="focusable">True</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="width-chars">0</property>
-                                        <property name="max-width-chars">0</property>
+                                        <property name="width-chars">8</property>
                                         <layout>
                                           <property name="column">1</property>
-                                          <property name="row">6</property>
+                                          <property name="row">7</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -401,8 +395,19 @@
                                         </child>
                                         <layout>
                                           <property name="column">0</property>
-                                          <property name="row">3</property>
-                                          <property name="column-span">4</property>
+                                          <property name="row">4</property>
+                                          <property name="column-span">5</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <!--dim: 5, 2-->
+                                    <child>
+                                      <object class="GtkBox" id="si-space">
+                                        <property name="height-request">-1</property>
+                                        <property name="width-request">4</property>
+                                        <layout>
+                                          <property name="column">2</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -477,7 +482,7 @@
                     </child>
                     <child>
                       <object class="GtkGrid" id="si_buttons">
-                        <property name="row-spacing">5</property>
+                        <property name="row-spacing">4</property>
                         <property name="column-spacing">4</property>
                         <child>
                           <object class="GtkLabel">
@@ -770,10 +775,10 @@
                                 </child>
                                 <child>
                                   <object class="GtkGrid" id="b_export_list">
-                                    <property name="margin-top">5</property>
-                                    <property name="margin-bottom">5</property>
-                                    <property name="row-spacing">10</property>
-                                    <property name="column-spacing">10</property>
+                                    <property name="margin-top">4</property>
+                                    <property name="margin-bottom">4</property>
+                                    <property name="row-spacing">4</property>
+                                    <property name="column-spacing">4</property>
                                     <layout>
                                       <property name="column">0</property>
                                       <property name="row">5</property>
@@ -806,7 +811,7 @@
                     <child>
                       <object class="GtkGrid" id="b_buttons">
                         <property name="margin-top">5</property>
-                        <property name="row-spacing">5</property>
+                        <property name="row-spacing">4</property>
                         <property name="column-spacing">4</property>
                         <child>
                           <object class="GtkEntry" id="b_name">

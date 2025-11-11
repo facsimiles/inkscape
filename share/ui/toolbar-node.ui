@@ -358,16 +358,10 @@
     <child>
       <object class="GtkBox" id="_nodes_x_box">
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_nodes_x_item">
             <property name="label" translatable="yes">X</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_nodes_x_item">
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">X - Horizontal position of selected node(s)</property>
-            <property name="width-chars">7</property>
             <property name="adjustment">_nodes_x_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -381,17 +375,10 @@
     <child>
       <object class="GtkBox" id="_nodes_y_box">
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_nodes_y_item">
             <property name="label" translatable="yes">Y</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_nodes_y_item">
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">Y - Vertical position of selected node(s)</property>
-            <property name="width-chars">7</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_nodes_y_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -405,17 +392,10 @@
     <child>
       <object class="GtkBox" id="_nodes_d_box">
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
-            <property name="label" translatable="yes">D</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_nodes_d_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_nodes_d_item">
+            <property name="label" translatable="yes" context="Abbreviation of Distance">D</property>
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">Distance between two selected nodes.</property>
-            <property name="width-chars">7</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_nodes_d_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>

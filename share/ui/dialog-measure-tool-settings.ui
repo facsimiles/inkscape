@@ -96,7 +96,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="seg_min_length">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="seg_min_length">
             <property name="halign">start</property>
             <property name="focusable">True</property>
             <property name="width-chars">2</property>

@@ -307,7 +307,7 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
         _("Font Size"),
         tooltip,
         create_sizes_store(unit),
-        8, // Width in characters
+        5, // Width in characters
         0, // Extra list width
         {}, // Cell layout
         {} // Separator

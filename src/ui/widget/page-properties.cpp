@@ -210,11 +210,11 @@ public:
         _linked_viewbox_scale.set_from_icon_name(s_linked);
 
         // report page size changes
-        _page_width .signal_value_changed().connect([this](){ set_page_size_linked(true); });
-        _page_height.signal_value_changed().connect([this](){ set_page_size_linked(false); });
+        _page_width .signal_value_changed().connect([this](auto){ set_page_size_linked(true); });
+        _page_height.signal_value_changed().connect([this](auto){ set_page_size_linked(false); });
         // enforce uniform scale thru viewbox
-        _viewbox_width. signal_value_changed().connect([this](){ set_viewbox_size_linked(true); });
-        _viewbox_height.signal_value_changed().connect([this](){ set_viewbox_size_linked(false); });
+        _viewbox_width. signal_value_changed().connect([this](auto){ set_viewbox_size_linked(true); });
+        _viewbox_height.signal_value_changed().connect([this](auto){ set_viewbox_size_linked(false); });
 
         _landscape.signal_toggled().connect([this](){ if (_landscape.get_active()) swap_width_height(); });
         _portrait .signal_toggled().connect([this](){ if (_portrait .get_active()) swap_width_height(); });
@@ -225,14 +225,14 @@ public:
             auto b2 = &pair.second;
             if (dim == Dimension::Scale) {
                 // uniform scale: report the same x and y
-                b1->signal_value_changed().connect([=, this](){
-                    // Report the dimention differently if locked
+                b1->signal_value_changed().connect([=, this](auto){
+                    // Report the dimension differently if locked
                     fire_value_changed(*b1, *b1, nullptr, _locked_content_scale ? Dimension::ScaleContent : Dimension::Scale);
                 });
             }
             else {
-                b1->signal_value_changed().connect([=, this](){ fire_value_changed(*b1, *b2, nullptr, dim); });
-                b2->signal_value_changed().connect([=, this](){ fire_value_changed(*b1, *b2, nullptr, dim); });
+                b1->signal_value_changed().connect([=, this](auto){ fire_value_changed(*b1, *b2, nullptr, dim); });
+                b2->signal_value_changed().connect([=, this](auto){ fire_value_changed(*b1, *b2, nullptr, dim); });
             }
         }
 
@@ -288,7 +288,7 @@ private:
         set_page_size(true);
     }
 
-    void changed_linked_value(bool width_changing, Gtk::SpinButton& wedit, Gtk::SpinButton& hedit) {
+    void changed_linked_value(bool width_changing, MathSpinButton& wedit, MathSpinButton& hedit) {
         if (_size_ratio > 0) {
             auto scoped(_update.block());
             if (width_changing) {
@@ -470,7 +470,7 @@ private:
         }
     }
 
-    void fire_value_changed(Gtk::SpinButton& b1, Gtk::SpinButton& b2, const Util::Unit* unit, Dimension dim) {
+    void fire_value_changed(MathSpinButton& b1, MathSpinButton& b2, const Util::Unit* unit, Dimension dim) {
         if (!_update.pending()) {
             _signal_dimension_changed.emit(b1.get_value(), b2.get_value(), unit, dim);
         }
@@ -517,7 +517,7 @@ private:
         }
     }
 
-    typedef std::pair<Gtk::SpinButton&, Gtk::SpinButton&> spin_pair;
+    typedef std::pair<MathSpinButton&, MathSpinButton&> spin_pair;
     spin_pair get_dimension(Dimension dimension) {
         switch (dimension) {
             case Dimension::PageSize: return spin_pair(_page_width, _page_height);

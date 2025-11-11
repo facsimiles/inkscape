@@ -58,6 +58,7 @@
 #include <gtkmm/spinbutton.h>
 #include "ui/widget/events/canvas-event.h"
 #include "ui/widget/events/debug.h"
+#include "ui/widget/generic/spin-button.h"
 
 // globals for temporary switching to selector by space
 static bool selector_toggled = false;
@@ -144,7 +145,7 @@ static Gtk::Widget* find_first_focusable_input(Gtk::Widget* container) {
         return (entry && entry->get_sensitive()) ? entry : nullptr;
     }
 
-    if (dynamic_cast<Gtk::SpinButton*>(container) || dynamic_cast<Gtk::Entry*>(container)) {
+    if (dynamic_cast<Widget::InkSpinButton*>(container) || dynamic_cast<Gtk::Entry*>(container)) {
         return (container->get_focusable() && container->get_sensitive()) ? container : nullptr;
     }
 

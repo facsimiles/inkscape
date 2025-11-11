@@ -28,6 +28,7 @@ class ToggleButton;
 } // namespace Gtk
 
 namespace Inkscape::UI::Widget {
+class SpinButton;
 
 class TextpathPopover final : public Gtk::Popover
 {
@@ -45,7 +46,7 @@ private:
     // ************* Widgets ************* //
     Glib::RefPtr<Gtk::Builder> _builder;
 
-    Gtk::SpinButton &_start_offset_sb;
+    SpinButton &_start_offset_sb;
 
     Gtk::ToggleButton &_side_left_btn;
     Gtk::ToggleButton &_side_right_btn;

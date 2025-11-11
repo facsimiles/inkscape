@@ -86,6 +86,7 @@ public:
 class PrefSpinButton : public SpinButton
 {
 public:
+    PrefSpinButton() : Glib::ObjectBase("PrefSpinButton") {}
     void init(Glib::ustring const &prefs_path,
               double lower, double upper, double step_increment, double page_increment,
               double default_value, bool is_int, bool is_percent);

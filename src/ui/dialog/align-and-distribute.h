@@ -37,6 +37,9 @@ class SPDesktop;
 
 namespace Inkscape {
 namespace UI {
+namespace Widget {
+class SpinButton;
+}
 
 namespace Tools {
 class ToolBase;
@@ -71,8 +74,8 @@ private:
 
     // Remove overlap
     Gtk::Button       &remove_overlap_button;
-    Gtk::SpinButton   &remove_overlap_hgap;
-    Gtk::SpinButton   &remove_overlap_vgap;
+    UI::Widget::SpinButton   &remove_overlap_hgap;
+    UI::Widget::SpinButton   &remove_overlap_vgap;
 
     // Valid relative alignment entries for single selection.
     std::set<Glib::ustring> single_selection_relative_categories = {"drawing", "page"};

@@ -57,6 +57,9 @@ public:
     // if set, this function will be used to extract string from items stored in the model
     void set_to_string_func(std::function<Glib::ustring (const Glib::RefPtr<Glib::ObjectBase>&)> callback);
 
+    // enable ellipsizing strings in the dropdown button itself
+    void set_ellipsize_button(bool ellipsize = true) { _ellipsize_button = ellipsize; }
+
 private:
     void _init();
     Glib::ustring get_item_string(const Glib::RefPtr<Glib::ObjectBase>& item);
@@ -66,6 +69,7 @@ private:
     std::function<bool (unsigned int)> _separator_callback;
     std::function<Glib::ustring (const Glib::RefPtr<Glib::ObjectBase>&)> _to_string;
     int _button_max_chars = -1;
+    bool _ellipsize_button = false;
 };
 
 } // namespace

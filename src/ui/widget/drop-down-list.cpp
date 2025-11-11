@@ -78,7 +78,7 @@ void DropDownList::_init() {
 
     auto dropdown_button = Gtk::SignalListItemFactory::create();
     dropdown_button->signal_setup().connect([this](auto& list_item) {
-        list_item->set_child(*set_up_item(true));
+        list_item->set_child(*set_up_item(_ellipsize_button));
     });
     dropdown_button->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
         auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());

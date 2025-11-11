@@ -13,6 +13,8 @@
 
 #include <gtkmm/spinbutton.h>
 
+#include "generic/bin.h"
+#include "generic/spin-button.h"
 #include "ui/popup-menu.h"
 #include "ui/widget/generic/popover-menu.h"
 
@@ -20,8 +22,6 @@ namespace Gtk {
 class Builder;
 class EventControllerKey;
 } // namespace Gtk
-
-namespace Inkscape::UI { class DefocusTarget; }
 
 namespace Inkscape::UI::Widget {
 
@@ -31,13 +31,13 @@ class UnitTracker;
 /**
  * A spin button for use with builders.
  */
-class MathSpinButton : public Gtk::SpinButton
+class MathSpinButton : public InkSpinButton
 {
 public:
     MathSpinButton(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade);
 
 private:
-    int on_input(double &newvalue);
+    double on_input(const Glib::ustring& text);
 };
 
 /**
@@ -46,19 +46,33 @@ private:
  *
  * Calling "set_numeric()" effectively disables the expression parsing. If no unit menu is linked, all unitlike characters are ignored.
  */
-class SpinButton : public Gtk::SpinButton
+class SpinButton : public InkSpinButton
 {
 public:
     using NumericMenuData = std::map<double, Glib::ustring>;
-    // We canʼt inherit ctors as if we declare SpinButton(), inherited ctors donʼt call it. Really!
-    template <typename ...Args>
-    SpinButton(Args &&...args)
-        : Gtk::SpinButton(std::forward<Args>(args)...)
-    { _construct(); } // Do the non-templated stuff
 
-    SpinButton(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &)
-        : Gtk::SpinButton(cobject)
-    { _construct(); }
+    SpinButton(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const & b):
+        Glib::ObjectBase("SpinButtonWrapper"), InkSpinButton(cobject, b)
+    { _construct(cobject); }
+
+    SpinButton(BaseObjectType *cobject):
+        Glib::ObjectBase("SpinButtonWrapper"), InkSpinButton(cobject)
+    { _construct(cobject); }
+
+    explicit SpinButton(double climb_rate = 0.0, guint digits = 0):
+        Glib::ObjectBase("SpinButtonWrapper")
+    {
+        _construct();
+        set_digits(digits);
+    }
+
+    explicit SpinButton(const Glib::RefPtr<Gtk::Adjustment>& adjustment, double climb_rate = 0.0, guint digits = 0):
+        Glib::ObjectBase("SpinButtonWrapper")
+    {
+        _construct();
+        set_adjustment(adjustment);
+        set_digits(digits);
+    }
 
     ~SpinButton() override;
 
@@ -72,16 +86,22 @@ public:
     inline bool get_zeroable() const { return _zeroable; }
     inline bool get_oneable() const { return _oneable; }
 
-    void defocus();
-
     // set key up/down increment to override spin button adjustment step setting
     void set_increment(double delta);
+    void set_increments(double step, double page);
+    void get_increments(double& step, double& page) const;
+    void get_range(double& min, double& max) const;
+    void set_range(double min, double max);
+    void set_width_chars(int chars);
+    void set_max_width_chars(int chars);
+    Glib::ustring get_text() const;
+    int get_value_as_int() const;
+    sigc::signal<void ()>& signal_value_changed() { return _signal_value_changed; }
 
 private:
     UnitMenu    *_unit_menu    = nullptr; ///< Linked unit menu for unit conversion in entered expressions.
     UnitTracker *_unit_tracker = nullptr; ///< Linked unit tracker for unit conversion in entered expressions.
     double _on_focus_in_value  = 0.;
-    Inkscape::UI::DefocusTarget *_defocus_target = nullptr; ///< Widget that should be informed when the spinbutton defocuses
     bool _zeroable = false; ///< Reset-value should be zero
     bool _oneable  = false; ///< Reset-value should be one
     bool _dont_evaluate = false; ///< Don't attempt to evaluate expressions
@@ -89,8 +109,9 @@ private:
     bool _custom_popup = false;
     double _increment = 0.0;    // if > 0, key up/down will increment/decrement current value by this amount
     std::unique_ptr<UI::Widget::PopoverMenu> _popover_menu;
+    sigc::signal<void ()> _signal_value_changed;
 
-    void _construct();
+    void _construct(BaseObjectType* cobject = nullptr);
 
     /**
      * This callback function should try to convert the entered text to a number and write it to newvalue.
@@ -99,7 +120,7 @@ private:
      * @retval false No conversion done, continue with default handler.
      * @retval true  Conversion successful, don't call default handler.
      */
-    int on_input(double &newvalue);
+    double on_input(const Glib::ustring& text);
 
     /**
      * Handle specific keypress events, like Ctrl+Z.
@@ -122,9 +143,6 @@ private:
     void _unparentChildren();
 
 public:
-    inline void setDefocusTarget(decltype(_defocus_target) target) { _defocus_target = target; }
-    inline void set_dont_evaluate(bool flag) { _dont_evaluate = flag; }
-
     void set_custom_numeric_menu_data(NumericMenuData &&custom_menu_data);
 };
 

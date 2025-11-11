@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <glibmm/main.h>
 #include <glibmm/markup.h>
+#include <gtkmm/accelerator.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/eventcontrollerkey.h>
@@ -123,6 +124,13 @@ void InkSpinButton::construct() {
 
     // ------------- CONTROLLERS -------------
 
+    // mouse clicks to open context menu
+    _click_value = Gtk::GestureClick::create();
+    _click_value->set_button(); // all buttons
+    _click_value->set_propagation_phase(Gtk::PropagationPhase::CAPTURE); // before GTK's popup handler
+    _click_value->signal_pressed().connect([this](auto n, auto x, auto y) { on_value_clicked(); });
+    add_controller(_click_value);
+
     // This is a mouse movement. Shows/hides +/- buttons.
     // Shows/hides +/- buttons.
     _motion = Gtk::EventControllerMotion::create();
@@ -193,7 +201,7 @@ void InkSpinButton::construct() {
 
     _key_entry = Gtk::EventControllerKey::create();
     _key_entry->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
-    _key_entry->signal_key_pressed().connect(sigc::mem_fun(*this, &InkSpinButton::on_key_pressed), false); // Before default handler.
+    _key_entry->signal_key_pressed().connect([this](auto keyval, auto keycode, auto modifiers){ return on_key_pressed(keyval, modifiers); }, false); // Before default handler.
     _entry.add_controller(_key_entry);
 
     //                  GTK4
@@ -201,15 +209,25 @@ void InkSpinButton::construct() {
 
     _entry.signal_activate().connect([this] { on_activate(); });
 
-    // Value (button) NOT USED, Click handled by zero length drag.
-    // m_value->signal_clicked().connect(sigc::mem_fun(*this, &SpinButton::on_value_clicked));
-
     _minus.set_visible();
     auto m = _minus.measure(Gtk::Orientation::HORIZONTAL);
     _button_width = m.sizes.natural;
     m = _entry.measure(Gtk::Orientation::VERTICAL);
     _entry_height = m.sizes.natural;
     _baseline = m.baselines.natural;
+    {
+        auto layout = create_pango_layout("9");
+        int text_width = 0;
+        int text_height = 0;
+        layout->get_pixel_size(text_width, text_height);
+        _text_width_min = text_width;
+        layout = create_pango_layout("12345.678");
+        layout->get_pixel_size(text_width, text_height);
+        _text_width_wide = text_width;
+        if (_text_width_wide <= _text_width_min) {
+            _text_width_wide = _text_width_min + 1;
+        }
+    }
 
     set_value(_num_value);
     set_step(_step_value);
@@ -246,12 +264,17 @@ void InkSpinButton::construct() {
     property_value().signal_changed().connect([this]{ set_value(_num_value); });
     property_prefix().signal_changed().connect([this]{ update(false); });
     property_suffix().signal_changed().connect([this]{ update(false); });
+    property_width_chars().signal_changed().connect([this] { set_width_chars(_width_chars.get_value()); });
 
     // if the adjustment property has been set, it takes precedence over min/max values and step
     if (auto adj = _adjust.get_value()) {
         _adjustment = adj;
     }
     _connection = _adjustment->signal_value_changed().connect([this]{ update(); });
+
+    if (auto width = _width_chars.get_value()) {
+        set_width_chars(width);
+    }
     update();
 }
 
@@ -270,7 +293,9 @@ void InkSpinButton::construct() {
     _icon_name(*this, "icon", {}), \
     _label_text(*this, "label", {}), \
     _prefix(*this, "prefix", {}), \
-    _suffix(*this, "suffix", {})
+    _suffix(*this, "suffix", {}), \
+    _width_chars(*this, "width-chars", 0), \
+    _climb_rate(*this, "climb-rate", 0.0)
 
 #define CALL_CONSTRUCTORS \
     Glib::ObjectBase("InkSpinButton"), \
@@ -341,8 +366,19 @@ void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, in
         auto btn = _enable_arrows ? _button_width : 0;
         // always reserve space for inc/dec buttons and label, whichever is greater
         natural = std::max(get_left_padding() + text_width, btn + text_width + btn);
-        // allow spin button to shrink if pushed
-        minimum = natural / 2;
+        // allow spin button to shrink if pushed;
+        // if it is wide, then we let it go down to 0.5 its normal size
+        // if it is narrow, then we let it shrink less
+        // if it is very narrow (one digit), we keep natural size
+        auto shrink_factor = 1.0; // 100% size - no shrinking
+        if (text_width > _text_width_min) {
+            double range = _text_width_wide - _text_width_min;
+            auto excess = text_width - _text_width_min;
+            // calc shrink amount in proportion to the size of the button;
+            // let it shrink, but to no less than to 50% of natural size
+            shrink_factor = std::max(0.5, 1.0 - (excess / range) * 0.5);
+        }
+        minimum = static_cast<int>(std::ceil(natural * shrink_factor));
     }
     else {
         minimum_baseline = natural_baseline = _baseline;
@@ -460,6 +496,10 @@ void InkSpinButton::set_range(double min, double max) {
 
 void InkSpinButton::set_step(double step_increment) {
     _adjustment->set_step_increment(step_increment);
+}
+
+void InkSpinButton::set_page_step(double page_increment) {
+    _adjustment->set_page_increment(page_increment);
 }
 
 void InkSpinButton::set_prefix(const std::string& prefix, bool add_space) {
@@ -671,17 +711,21 @@ Gtk::EventSequenceState InkSpinButton::on_drag_update_value(Gdk::EventSequence* 
     _drag_value->get_offset(dx, dy);
 
     // If we don't move, then it probably was a button click.
-    auto delta = 3; // tweak this value to reject real clicks, or else we'll change the value inadvertently
-    if (std::abs(dx) > delta || std::abs(dy) > delta) {
+    auto delta = 3.0; // tweak this value to reject real clicks, or else we'll change the value inadvertently
+    if (!_drag.started && (std::fabs(dx) > delta || std::fabs(dy) > delta)) {
+        _drag.started = true;
+        // remember where we crossed the move threshold; this is our new zero point
+        _drag.x = std::clamp(-delta, delta, dx);
+        _drag.y = std::clamp(-delta, delta, dy);
+        auto angle = std::fabs(std::atan2(dx, dy));
+        // lock into horizontal or vertical adjustment based on where the mouse travelled
+        _drag.horizontal = angle >= M_PI_4 && angle <= M_PI+M_PI_4;
+    }
+    if (_drag.started) {
         auto state = _drag_value->get_current_event_state();
-        auto distance = std::round(std::hypot(dx, dy));
-        auto angle = std::atan2(dx, dy);
-        auto grow = angle > M_PI_4 || angle < -M_PI+M_PI_4;
-        if (!grow) distance = -distance;
-
+        auto distance = _drag.horizontal ? dx - _drag.x : dy - _drag.y;
         auto value = _initial_value + get_accel_factor(state) * distance * _adjustment->get_step_increment();
         set_new_value(value);
-        _dragged = true;
     }
     return Gtk::EventSequenceState::CLAIMED;
 }
@@ -691,11 +735,11 @@ Gtk::EventSequenceState InkSpinButton::on_drag_end_value(Gdk::EventSequence* seq
     double dy = 0.0;
     _drag_value->get_offset(dx, dy);
 
-    if (dx == 0 && !_dragged) {
+    if (dx == 0 && !_drag.started) {
         // Must have been a click!
         enter_edit();
     }
-    _dragged = false;
+    _drag.started = false;
     return Gtk::EventSequenceState::CLAIMED;
 }
 
@@ -745,6 +789,10 @@ void InkSpinButton::exit_edit() {
     show_label_icon();
     _value.show();
     _mask.show();
+}
+
+bool InkSpinButton::edit_pending() const {
+    return _entry.get_visible();
 }
 
 void InkSpinButton::cancel_editing() {
@@ -833,9 +881,10 @@ double InkSpinButton::get_value() const {
     return _adjustment->get_value() / _fmt_scaling_factor;
 }
 
-void InkSpinButton::change_value(double inc, Gdk::ModifierType state) {
+void InkSpinButton::change_value(double inc, Gdk::ModifierType state, bool page) {
     double scale = get_accel_factor(state);
-    auto value = _adjustment->get_value() + _adjustment->get_step_increment() * scale * inc;
+    double step = page ? _adjustment->get_page_increment() : _adjustment->get_step_increment();
+    auto value = _adjustment->get_value() + step * scale * inc;
     set_new_value(value);
 }
 
@@ -854,31 +903,73 @@ double InkSpinButton::wrap_around(double value) {
 
 // ------------------   KEY    ------------------
 
-bool InkSpinButton::on_key_pressed(guint keyval, guint keycode, Gdk::ModifierType state) {
-   switch (keyval) {
-   case GDK_KEY_Escape: // Cancel
-       // Esc pressed - cancel editing
-       cancel_editing();
-       defocus();
-       return false; // allow Esc to be handled by dialog too
+bool InkSpinButton::on_key_pressed(guint keyval, Gdk::ModifierType state) {
+    state &= Gtk::Accelerator::get_default_mod_mask();
 
-   // signal "activate" uses this key, so we won't see it:
-   // case GDK_KEY_Return:
-       // break;
+    // Note:
+    // event->triggers_context_menu() doesn't work with key messages
 
-   case GDK_KEY_Up:
-       change_value(1, state);
-       return true;
+    switch (keyval) {
+    case GDK_KEY_Escape: // Cancel
+        // Esc pressed - cancel editing
+        if (edit_pending() && state == Gdk::ModifierType::NO_MODIFIER_MASK) {
+            cancel_editing();
+            defocus();
+            return true;
+        }
+        // allow Esc to be handled by dialog too
+        break;
 
-   case GDK_KEY_Down:
-       change_value(-1, state);
-       return true;
+    // signal "activate" uses this key, so we may not see it
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
+#ifdef __APPLE__
+        // ctrl+return is a macOS context menu shortcut
+        if (Controller::has_flag(state, Gdk::ModifierType::CONTROL_MASK)) {
+            return _context_menu_call ? _context_menu_call() : false;
+        }
+#endif
+        if (edit_pending() && state == Gdk::ModifierType::NO_MODIFIER_MASK) {
+            commit_entry();
+            defocus();
+            return true;
+        }
+        break;
 
-   default:
-       break;
-   }
+    case GDK_KEY_Up:
+    case GDK_KEY_KP_Up:
+        change_value(1, state);
+        return true;
 
-   return false;
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Down:
+        change_value(-1, state);
+        return true;
+
+    case GDK_KEY_Page_Up:
+        change_value(1, state, true);
+        return true;
+
+    case GDK_KEY_Page_Down:
+        change_value(-1, state, true);
+        return true;
+
+#ifndef __APPLE__
+    case GDK_KEY_F10:
+        if (Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK)) {
+            return _context_menu_call ? _context_menu_call() : false;
+        }
+        break;
+#endif
+
+    case GDK_KEY_Menu:
+        return _context_menu_call ? _context_menu_call() : false;
+
+    default:
+        break;
+    }
+
+    return false;
 }
 
 // ------------------  CLICK   ------------------
@@ -897,12 +988,24 @@ void InkSpinButton::on_pressed_minus(int n_press, double x, double y) {
     start_spinning(-inc, state, _click_minus);
 }
 
+void InkSpinButton::on_value_clicked() {
+    if (!_context_menu_call) return;
+
+    auto event = _click_value->get_current_event();
+    if (event->triggers_context_menu()) {
+        if (_context_menu_call()) {
+            _click_value->set_state(Gtk::EventSequenceState::CLAIMED);
+        }
+    }
+}
+
 void InkSpinButton::on_activate() {
     bool ok = commit_entry();
     if (ok && _enter_exit_edit) {
         set_focusable(true);
         defocus();
         exit_edit();
+        _signal_activate.emit();
     }
 }
 
@@ -939,6 +1042,11 @@ int InkSpinButton::get_left_padding() const {
     return _icon_width > 0 ? 2 * icon_margin + _icon_width : _label_width;
 }
 
+void InkSpinButton::set_width_chars(int width) {
+    std::string pattern(std::clamp(width, 0, 50), '9');
+    set_min_size(pattern);
+}
+
 void InkSpinButton::set_drag_sensitivity(double distance) {
     _drag_full_travel = distance;
 }
@@ -956,7 +1064,7 @@ void InkSpinButton::set_label(const std::string& label) {
     }
 }
 
-sigc::signal<void(double)> InkSpinButton::signal_value_changed() const {
+sigc::signal<void(double)>& InkSpinButton::signal_value_changed() {
     return _signal_value_changed;
 }
 
@@ -1005,6 +1113,14 @@ void InkSpinButton::set_transformers(std::function<double(double)> input, std::f
     _input_transformer = std::move(input);
     _output_transformer = std::move(output);
     update(false); // apply transformer
+}
+
+sigc::signal<void()> & InkSpinButton::signal_activate() {
+    return _signal_activate;
+}
+
+void InkSpinButton::set_activates_default(bool setting) {
+    _entry.set_activates_default(setting);
 }
 
 // a fade-out mask for overflowing numbers

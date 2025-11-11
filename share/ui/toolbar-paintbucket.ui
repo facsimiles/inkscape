@@ -34,10 +34,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_threshold_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_threshold_item">
             <property name="focusable">True</property>
-            <property name="width-chars">1</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_threshold_adj</property>
             <property name="climb-rate">0.10</property>
           </object>
@@ -54,10 +52,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_offset_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_offset_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_offset_adj</property>
             <property name="climb-rate">1</property>
             <property name="digits">2</property>

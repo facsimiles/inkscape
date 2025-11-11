@@ -80,10 +80,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_curvature_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_curvature_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_curvature_adj</property>
             <property name="climb-rate">0.10</property>
           </object>
@@ -100,10 +98,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_spacing_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_spacing_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_spacing_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="value">0.01</property>
@@ -142,10 +138,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_length_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_length_item">
             <property name="focusable">True</property>
-            <property name="width-chars">7</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_length_adj</property>
             <property name="climb-rate">0.10</property>
           </object>

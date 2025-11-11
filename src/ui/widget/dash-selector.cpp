@@ -29,6 +29,7 @@
 #include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/singleselection.h>
 #include <2geom/coord.h> // Geom::are_near
+#include <gtkmm/window.h>
 
 #include "generic/spin-button.h"
 #include "preferences.h"
@@ -138,7 +139,7 @@ void DashSelector::construct(bool compact) {
     if (compact) {
         auto& spinbutton = get_widget<InkSpinButton>(_builder, "offset");
         adjustment = spinbutton.get_adjustment();
-        sp_dialog_defocus_on_enter(spinbutton);
+        spinbutton.setDefocusTarget(this);
     }
     else {
         adjustment = Gtk::Adjustment::create(0.0, 0.0, 1000.0, 0.1, 1.0, 0.0);
@@ -305,6 +306,10 @@ void DashSelector::draw_text(Cairo::RefPtr<Cairo::Context> const &cr, int width,
     Gdk::Cairo::set_source_rgba(cr, get_color());
     cr->move_to(16.0, (height + 10) / 2.0);
     cr->show_text(_("Custom"));
+}
+
+void DashSelector::onDefocus() {
+    sp_dialog_defocus(dynamic_cast<Gtk::Window*>(get_root()));
 }
 
 } // namespace Inkscape::UI::Widget

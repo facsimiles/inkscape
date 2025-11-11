@@ -144,7 +144,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="page-width">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="page-width">
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">Width of front page</property>
             <property name="width-chars">9</property>
@@ -190,7 +190,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="page-height">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="page-height">
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">Height of front page</property>
             <property name="width-chars">9</property>
@@ -409,7 +409,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="scale-x">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="scale-x">
             <property name="valign">center</property>
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">Document scale establishes size of user units.
@@ -481,7 +481,7 @@ SVG element positions are expressed in user units.</property>
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="viewbox-x">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="viewbox-x">
             <property name="focusable">True</property>
             <property name="width-chars">9</property>
             <property name="adjustment">adj-viewbox-x</property>
@@ -497,7 +497,7 @@ SVG element positions are expressed in user units.</property>
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="viewbox-y">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="viewbox-y">
             <property name="focusable">True</property>
             <property name="width-chars">9</property>
             <property name="adjustment">adj-viewbox-y</property>
@@ -513,7 +513,7 @@ SVG element positions are expressed in user units.</property>
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="viewbox-width">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="viewbox-width">
             <property name="focusable">True</property>
             <property name="width-chars">9</property>
             <property name="adjustment">adj-viewbox-width</property>
@@ -529,7 +529,7 @@ SVG element positions are expressed in user units.</property>
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="viewbox-height">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="viewbox-height">
             <property name="focusable">True</property>
             <property name="width-chars">9</property>
             <property name="adjustment">adj-viewbox-height</property>

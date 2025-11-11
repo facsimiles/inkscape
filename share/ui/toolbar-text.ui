@@ -20,7 +20,7 @@
     <property name="page-increment">0.10</property>
   </object>
   <object class="GtkAdjustment" id="_line_height_adj">
-    <property name="upper">1000</property>
+    <property name="upper">10000</property>
     <property name="step-increment">0.10</property>
     <property name="page-increment">1</property>
   </object>
@@ -132,18 +132,13 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image3">
-            <property name="icon-name">text_line_spacing</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_line_height_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_line_height_item">
             <property name="focusable">True</property>
-            <property name="width-chars">1</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_line_height_adj</property>
             <property name="climb-rate">0.10</property>
-            <property name="digits">2</property>
+            <property name="digits">3</property>
+            <property name="width-chars">10</property>
+            <property name="icon">text_line_spacing</property>
           </object>
         </child>
       </object>
@@ -395,18 +390,12 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image10">
-            <property name="icon-name">text_letter_spacing</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_letter_spacing_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_letter_spacing_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_letter_spacing_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
+            <property name="icon">text_letter_spacing</property>
           </object>
         </child>
       </object>
@@ -418,18 +407,12 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image11">
-            <property name="icon-name">text_word_spacing</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_word_spacing_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_word_spacing_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text">0.00</property>
             <property name="adjustment">_word_spacing_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
+            <property name="icon">text_word_spacing</property>
           </object>
         </child>
       </object>
@@ -441,18 +424,12 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image12">
-            <property name="icon-name">text_horz_kern</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_dx_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_dx_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text">0.00</property>
             <property name="adjustment">_dx_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
+            <property name="icon">text_horz_kern</property>
           </object>
         </child>
       </object>
@@ -464,18 +441,12 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image13">
-            <property name="icon-name">text_vert_kern</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_dy_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_dy_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text">0.00</property>
             <property name="adjustment">_dy_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
+            <property name="icon">text_vert_kern</property>
           </object>
         </child>
       </object>
@@ -487,18 +458,12 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image14">
-            <property name="icon-name">text_rotation</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_rotation_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_rotation_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text">0.00</property>
             <property name="adjustment">_rotation_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
+            <property name="icon">text_rotation</property>
           </object>
         </child>
       </object>

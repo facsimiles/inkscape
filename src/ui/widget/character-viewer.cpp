@@ -66,6 +66,7 @@ CharacterViewer::CharacterViewer():
     });
 
     _range_selector.set_button_max_chars(20); // limit how wide dropdown can get
+    _range_selector.set_ellipsize_button(true);
     _range_selector.enable_search();
     for (auto& range : Util::get_unicode_ranges()) {
         _range_selector.append(range.name);

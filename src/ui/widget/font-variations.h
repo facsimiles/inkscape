@@ -18,15 +18,12 @@
 #include <gtkmm/scale.h>
 #include <gtkmm/spinbutton.h>
 
+#include "spinbutton.h"
 #include "libnrtype/OpenTypeUtil.h"
-
 #include "style.h"
 #include "ui/operation-blocker.h"
 
-namespace Inkscape {
-namespace UI {
-namespace Widget {
-
+namespace Inkscape::UI::Widget {
 
 /**
  * A widget for a single axis: Label and Slider
@@ -41,7 +38,7 @@ public:
     int get_precision()      { return precision; }
     Gtk::Scale* get_scale()  { return scale; }
     double get_def()         { return def; }
-    Gtk::SpinButton* get_editbox() { return edit; }
+    SpinButton* get_editbox() { return edit; }
     void set_value(double value);
 
 private:
@@ -49,7 +46,7 @@ private:
     Glib::ustring name;
     Gtk::Label* label;
     Gtk::Scale* scale;
-    Gtk::SpinButton* edit = nullptr;
+    SpinButton* edit = nullptr;
 
     int precision;
     double def = 0.0; // Default value
@@ -116,10 +113,8 @@ private:
     OperationBlocker _update;
 };
 
- 
-} // namespace Widget
-} // namespace UI
-} // namespace Inkscape
+
+}
 
 #endif // INKSCAPE_UI_WIDGET_FONT_VARIATIONS_H
 

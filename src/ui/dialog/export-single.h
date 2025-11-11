@@ -26,7 +26,6 @@ class Label;
 class ProgressBar;
 class ToggleButton;
 class ScrolledWindow;
-class SpinButton;
 } // namespace Gtk
 
 class InkscapeApplication;
@@ -43,6 +42,7 @@ class Preferences;
 namespace UI {
 
 namespace Widget {
+class SpinButton;
 class UnitMenu;
 class ColorPicker;
 } // namespace Widget
@@ -100,7 +100,7 @@ private:
 
     bool setupDone = false; // To prevent setup() call add connections again.
 
-    std::map<sb_type, Gtk::SpinButton *> spin_buttons;
+    std::map<sb_type, UI::Widget::SpinButton *> spin_buttons;
     std::map<sb_type, Gtk::Label *> spin_labels;
     std::map<selection_mode, Gtk::ToggleButton *> selection_buttons;
 
@@ -153,7 +153,7 @@ private:
 
     // change range and callbacks to spinbuttons
     template <typename T>
-    void setupSpinButton(Gtk::SpinButton *sb, double val, double min, double max, double step, double page, int digits,
+    void setupSpinButton(UI::Widget::SpinButton *sb, double val, double min, double max, double step, double page, int digits,
                          bool sensitive, void (SingleExport::*cb)(T), T param);
 
     void setDefaultSelectionMode();

@@ -14,6 +14,7 @@
 #define SEEN_DIALOG_EVENTS_H
 
 namespace Inkscape::UI::Widget {
+class SpinButton;
 class InkSpinButton;
 }
 
@@ -26,7 +27,7 @@ class Window;
 void sp_dialog_defocus(Gtk::Window *win);
 void sp_dialog_defocus_on_enter(Gtk::Entry *e);
 void sp_dialog_defocus_on_enter(Gtk::SpinButton &s);
-void sp_dialog_defocus_on_enter(Inkscape::UI::Widget::InkSpinButton &s);
+void sp_dialog_defocus_on_enter(Inkscape::UI::Widget::SpinButton& s);
 void sp_transientize(Gtk::Window &win);
 
 #endif // SEEN_DIALOG_EVENTS_H

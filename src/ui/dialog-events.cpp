@@ -17,6 +17,8 @@
 #include <gtkmm/version.h>
 #include <gtkmm/window.h>
 
+#include "widget/spinbutton.h"
+
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
@@ -55,8 +57,10 @@ void sp_dialog_defocus_on_enter(Gtk::SpinButton &s)
 #endif
 }
 
-void sp_dialog_defocus_on_enter(Inkscape::UI::Widget::InkSpinButton &s) {
-    //todo
+void sp_dialog_defocus_on_enter(Inkscape::UI::Widget::SpinButton& s) {
+    s.signal_activate().connect([&] {
+        sp_dialog_defocus(dynamic_cast<Gtk::Window*>(s.get_root()));
+    });
 }
 
 /**

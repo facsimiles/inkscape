@@ -32,13 +32,12 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_angle_x_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_angle_x_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_angle_x_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
+            <property name="suffix" translatable="no">°</property>
           </object>
         </child>
       </object>
@@ -67,13 +66,12 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_angle_y_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_angle_y_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_angle_y_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
+            <property name="suffix" translatable="no">°</property>
           </object>
         </child>
       </object>
@@ -102,13 +100,12 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_angle_z_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_angle_z_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_angle_z_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
+            <property name="suffix" translatable="no">°</property>
           </object>
         </child>
       </object>

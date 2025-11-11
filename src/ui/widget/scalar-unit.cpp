@@ -138,13 +138,15 @@ void ScalarUnit::grabFocusAndSelectEntry()
 {
     auto &spinButton = getSpinButton();
     spinButton.grab_focus();
-    spinButton.select_region(0, 20);
+    //TODO:
+    // spinButton.select_region(0, 20);
 }
 
 void ScalarUnit::setAlignment(double xalign)
 {
     xalign = std::clamp(xalign,0.0,1.0);
-    getSpinButton().set_alignment(xalign);
+    g_message("spinbtn alignment: not supported");
+    // getSpinButton().set_alignment(xalign);
 }
 
 void ScalarUnit::setHundredPercent(double number)

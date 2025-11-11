@@ -802,10 +802,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkSpinButton" id="remove-overlap-hgap">
+              <object class="gtkmm__CustomObject_InkSpinButton" id="remove-overlap-hgap">
                 <property name="focusable">True</property>
                 <property name="adjustment">RemoveOverlap_HGap</property>
-                <property name="numeric">True</property>
                 <property name="tooltip-text" translatable="yes">Minimum horizontal gap (in pixel units) between bounding boxes</property>
               </object>
             </child>
@@ -816,10 +815,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkSpinButton" id="remove-overlap-vgap">
+              <object class="gtkmm__CustomObject_InkSpinButton" id="remove-overlap-vgap">
                 <property name="focusable">True</property>
                 <property name="adjustment">RemoveOverlap_VGap</property>
-                <property name="numeric">True</property>
                 <property name="tooltip-text" translatable="yes">Minimum vertical gap (in pixel units) between bounding boxes</property>
               </object>
             </child>

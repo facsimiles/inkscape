@@ -57,7 +57,7 @@ CalligraphyToolbar::CalligraphyToolbar()
 CalligraphyToolbar::CalligraphyToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     : Toolbar{get_widget<Gtk::Box>(builder, "calligraphy-toolbar")}
     , _tracker{std::make_unique<UnitTracker>(Util::UNIT_TYPE_LINEAR)}
-    , _profile_selector_combo{get_widget<Gtk::ComboBoxText>(builder, "_profile_selector_combo")}
+    , _profile_selector_combo{get_derived_widget<UI::Widget::DropDownList>(builder, "_profile_selector_combo")}
     , _width_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_width_item")}
     , _thinning_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_thinning_item")}
     , _mass_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_mass_item")}
@@ -328,14 +328,14 @@ void CalligraphyToolbar::update_presets_list()
         if (match) {
             // newly added item is at the same index as the
             // save command, so we need to change twice for it to take effect
-            _profile_selector_combo.set_active(0);
-            _profile_selector_combo.set_active(index);
+            _profile_selector_combo.set_selected(0);
+            _profile_selector_combo.set_selected(index);
             return;
         }
     }
 
     // no match found
-    _profile_selector_combo.set_active(0);
+    _profile_selector_combo.set_selected(0);
 }
 
 void CalligraphyToolbar::tilt_state_changed()
@@ -366,7 +366,7 @@ void CalligraphyToolbar::build_presets_list()
 
 void CalligraphyToolbar::change_profile()
 {
-    auto mode = _profile_selector_combo.get_active_row_number();
+    auto mode = _profile_selector_combo.get_selected();
 
     if (_presets_blocked) {
         return;
@@ -436,7 +436,7 @@ void CalligraphyToolbar::save_profile(GtkWidget *)
         return;
     }
 
-    Glib::ustring current_profile_name = _profile_selector_combo.get_active_text();
+    auto current_profile_name = _profile_selector_combo.get_string(_profile_selector_combo.get_selected());
 
     if (current_profile_name == _("No preset")) {
         current_profile_name = "";

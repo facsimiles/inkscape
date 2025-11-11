@@ -97,26 +97,27 @@ void Scalar::setDigits(unsigned digits)
 
 void Scalar::setNoLeadingZeros()
 {
-    if (getDigits()) {
-        auto &spin_button = getSpinButton();
-        spin_button.set_numeric(false);
-        spin_button.signal_output().connect(sigc::mem_fun(*this, &Scalar::setNoLeadingZerosOutput), false);
-    }
+    // if (getDigits()) {
+    //     auto &spin_button = getSpinButton();
+    //     spin_button.set_numeric(false);
+    //     spin_button.signal_output().connect(sigc::mem_fun(*this, &Scalar::setNoLeadingZerosOutput), false);
+    // }
 }
 
 bool
 Scalar::setNoLeadingZerosOutput()
 {
-    auto &spin_button = getSpinButton();
-    double digits = std::pow(10.0, spin_button.get_digits());
-    double val = std::round(spin_button.get_value() * digits) / digits;
-    spin_button.set_text(Glib::ustring::format(val));
+    // auto &spin_button = getSpinButton();
+    // double digits = std::pow(10.0, spin_button.get_digits());
+    // double val = std::round(spin_button.get_value() * digits) / digits;
+    // spin_button.set_text(Glib::ustring::format(val));
     return true;
 }
 
 void 
 Scalar::setWidthChars(gint width_chars) {
-    getSpinButton().property_width_chars() = width_chars;
+    //TODO: set size, if need be
+    // getSpinButton().property_width_chars() = width_chars;
 }
 
 void Scalar::setIncrements(double step, double /*page*/)
@@ -145,7 +146,7 @@ void Scalar::setWidthChars(unsigned chars)
 
 void Scalar::update()
 {
-    getSpinButton().update();
+    // getSpinButton().update();
 }
 
 void Scalar::addSlider()
@@ -155,7 +156,7 @@ void Scalar::addSlider()
     UI::pack_start(*this, *scale);
 }
 
-Glib::SignalProxy<void()> Scalar::signal_value_changed()
+sigc::signal<void ()>& Scalar::signal_value_changed()
 {
     return getSpinButton().signal_value_changed();
 }

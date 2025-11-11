@@ -98,10 +98,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_magnitude_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_magnitude_item">
             <property name="focusable">True</property>
-            <property name="width-chars">1</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_magnitude_adj</property>
             <property name="climb-rate">0.10</property>
           </object>
@@ -121,10 +119,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_spoke_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_spoke_item">
             <property name="focusable">True</property>
-            <property name="width-chars">7</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_spoke_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -145,9 +141,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_roundedness_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_roundedness_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
             <property name="adjustment">_roundedness_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -168,10 +163,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_randomization_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_randomization_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_randomization_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -214,10 +207,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_length_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_length_item">
             <property name="focusable">True</property>
-            <property name="width-chars">7</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_length_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>

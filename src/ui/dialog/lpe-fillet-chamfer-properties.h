@@ -10,11 +10,11 @@
 
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/window.h>
 
 #include "live_effects/parameter/nodesatellitesarray.h"
+#include "ui/widget/spinbutton.h"
 
 class SPDesktop;
 
@@ -36,13 +36,13 @@ protected:
     Gtk::Box _buttonbox;
 
     Gtk::Label _fillet_chamfer_position_label;
-    Gtk::SpinButton _fillet_chamfer_position_numeric;
+    UI::Widget::SpinButton _fillet_chamfer_position_numeric;
     Gtk::CheckButton _fillet_chamfer_type_fillet;
     Gtk::CheckButton _fillet_chamfer_type_inverse_fillet;
     Gtk::CheckButton _fillet_chamfer_type_chamfer;
     Gtk::CheckButton _fillet_chamfer_type_inverse_chamfer;
     Gtk::Label _fillet_chamfer_chamfer_subdivisions_label;
-    Gtk::SpinButton _fillet_chamfer_chamfer_subdivisions;
+    UI::Widget::SpinButton _fillet_chamfer_chamfer_subdivisions;
 
     Gtk::Grid _layout_table;
     bool _position_visible = false;

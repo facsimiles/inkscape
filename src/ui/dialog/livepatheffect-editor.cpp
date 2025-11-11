@@ -43,6 +43,7 @@
 #include "ui/tools/node-tool.h"
 #include "ui/util.h"
 #include "ui/widget/custom-tooltip.h"
+#include "ui/widget/generic/spin-button.h"
 #include "util/optstr.h"
 
 namespace Inkscape::UI::Dialog {
@@ -272,9 +273,9 @@ void align(Gtk::Widget *top, int const spinbutton_width_chars)
     // column 1 - align spin buttons, if any
     int button_width = 0;
     for_child_n(1, [&](Gtk::Widget* child) {
-        if (auto spin = dynamic_cast<Gtk::SpinButton*>(child)) {
+        if (auto spin = dynamic_cast<Widget::InkSpinButton*>(child)) {
             // selected spinbutton size by each LPE default 7
-            spin->set_width_chars(spinbutton_width_chars);
+            spin->property_width_chars().set_value(spinbutton_width_chars);
             int dummy = 0;
             spin->measure(Gtk::Orientation::HORIZONTAL, -1, dummy, button_width, dummy, dummy);
         } 

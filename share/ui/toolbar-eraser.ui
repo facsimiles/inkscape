@@ -90,11 +90,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_width_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_width_item">
             <property name="name">eraser-width</property>
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_width_adj</property>
             <property name="climb-rate">1</property>
           </object>
@@ -128,10 +126,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_thinning_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_thinning_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_thinning_adj</property>
             <property name="climb-rate">0.10</property>
           </object>
@@ -151,9 +147,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_cap_rounding_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_cap_rounding_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
             <property name="adjustment">_cap_rounding_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
@@ -174,10 +169,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_tremor_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_tremor_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_tremor_adj</property>
             <property name="climb-rate">1</property>
           </object>
@@ -197,10 +190,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_mass_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_mass_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_mass_adj</property>
             <property name="climb-rate">1</property>
           </object>

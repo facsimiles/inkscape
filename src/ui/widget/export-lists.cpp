@@ -16,6 +16,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/viewport.h>
 
+#include "spinbutton.h"
 #include "extension/db.h"
 #include "extension/output.h"
 #include "io/sys.h"
@@ -175,9 +176,6 @@ void ExportList::setup()
     add_button->signal_clicked().connect(sigc::mem_fun(*this, &ExportList::append_row));
     add_button->set_hexpand(true);
     add_button->set_visible(true);
-
-    this->set_row_spacing(5);
-    this->set_column_spacing(2);
 }
 
 void ExportList::removeExtension(std::string &filename)
@@ -202,7 +200,7 @@ void ExportList::append_row()
     suffix->set_visible(true);
 
     auto const extension = Gtk::make_managed<ExtensionList>();
-    auto const dpi_sb = Gtk::make_managed<Gtk::SpinButton>();
+    auto const dpi_sb = Gtk::make_managed<UI::Widget::SpinButton>();
 
     extension->setup();
     extension->set_visible(true);
@@ -222,8 +220,6 @@ void ExportList::append_row()
     dpi_sb->set_value(default_dpi);
     dpi_sb->set_sensitive(true);
     dpi_sb->set_width_chars(6);
-    dpi_sb->set_max_width_chars(6);
-    dpi_sb->set_visible(true);
     this->attach(*dpi_sb, _dpi_col, current_row, 1, 1);
 
     auto const pIcon = Gtk::manage(sp_get_icon_image("window-close", Gtk::IconSize::NORMAL));
@@ -275,7 +271,7 @@ Inkscape::Extension::Output *ExportList::getExtension(int row)
 double ExportList::get_dpi(int row)
 {
     double dpi = default_dpi;
-    auto spin_sb = dynamic_cast<Gtk::SpinButton *>(this->get_child_at(_dpi_col, row + 1));
+    auto spin_sb = dynamic_cast<UI::Widget::InkSpinButton *>(this->get_child_at(_dpi_col, row + 1));
     if (spin_sb == nullptr) {
         return dpi;
     }

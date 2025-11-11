@@ -39,6 +39,7 @@ class ToggleButton;
 namespace Inkscape::UI {
 class SimplePrefPusher;
 namespace Widget {
+class DropDownList;
 class SpinButton;
 class UnitTracker;
 } // namespace Widget
@@ -60,7 +61,7 @@ private:
     std::unique_ptr<UI::Widget::UnitTracker> _tracker;
     bool _presets_blocked = false;
 
-    Gtk::ComboBoxText &_profile_selector_combo;
+    UI::Widget::DropDownList &_profile_selector_combo;
     UI::Widget::SpinButton &_width_item;
 
     UI::Widget::SpinButton &_thinning_item;

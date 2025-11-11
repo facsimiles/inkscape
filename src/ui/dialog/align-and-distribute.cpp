@@ -32,6 +32,7 @@
 #include "ui/builder-utils.h"
 #include "ui/dialog/dialog-base.h" // Tool switching.
 #include "ui/util.h"
+#include "ui/widget/spinbutton.h"
 
 namespace Inkscape::UI::Dialog {
 
@@ -52,8 +53,8 @@ AlignAndDistribute::AlignAndDistribute(Inkscape::UI::Dialog::DialogBase *dlg)
 
     // Remove overlap
     , remove_overlap_button(get_widget<Gtk::Button>(builder, "remove-overlap-button"))
-    , remove_overlap_hgap(get_widget<Gtk::SpinButton>(builder, "remove-overlap-hgap"))
-    , remove_overlap_vgap(get_widget<Gtk::SpinButton>(builder, "remove-overlap-vgap"))
+    , remove_overlap_hgap(get_derived_widget<UI::Widget::SpinButton>(builder, "remove-overlap-hgap"))
+    , remove_overlap_vgap(get_derived_widget<UI::Widget::SpinButton>(builder, "remove-overlap-vgap"))
 
     // Node
     , align_relative_node(get_widget<Gtk::ComboBox>(builder, "align-relative-node"))

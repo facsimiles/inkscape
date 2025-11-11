@@ -23,6 +23,8 @@
 #include <gtkmm/box.h>
 #include <gtkmm/entry.h>
 
+#include "ui/defocus-target.h"
+
 namespace Gtk {
 class Builder;
 class DrawingArea;
@@ -34,7 +36,7 @@ class SingleSelection;
 
 namespace Inkscape::UI::Widget {
 
-class DashSelector final : public Gtk::Box {
+class DashSelector final : public Gtk::Box, DefocusTarget {
 
 public:
     DashSelector(bool compact = false);
@@ -63,6 +65,8 @@ private:
     void draw_pattern(const Cairo::RefPtr<Cairo::Context>& cr, int width, int height,
                       const std::vector<double>& pattern);
     void draw_text(const Cairo::RefPtr<Cairo::Context>& cr, int width, int height);
+
+    void onDefocus() override;
 
     // Variables
     std::vector<double> dash_pattern; // The current pattern.

@@ -17,7 +17,6 @@
 
 #include "scroll-utils.h"
 #include "ui/controller.h"
-#include "ui/defocus-target.h"
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
 #include "unit-menu.h"
@@ -27,24 +26,17 @@
 
 namespace Inkscape::UI::Widget {
 
-MathSpinButton::MathSpinButton(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
-    : Gtk::SpinButton(cobject)
+MathSpinButton::MathSpinButton(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade) :
+    Glib::ObjectBase("MathSpinButtonWrapper"), InkSpinButton(cobject)
 {
-    signal_input().connect(sigc::mem_fun(*this, &MathSpinButton::on_input), true);
+    set_evaluator_function([this](auto& text) { return on_input(text); });
 }
 
-int MathSpinButton::on_input(double &newvalue)
-{
-    try {
-        newvalue = Util::ExpressionEvaluator{::get_text(*this)}.evaluate().value;
-    } catch (Inkscape::Util::EvaluatorException const &e) {
-        g_message ("%s", e.what());
-        return false;
-    }
-    return true;
+double MathSpinButton::on_input(const Glib::ustring& text) {
+    return Util::ExpressionEvaluator{text.c_str()}.evaluate().value;
 }
 
-void SpinButton::_construct()
+void SpinButton::_construct(BaseObjectType* cobject)
 {
     auto const key = Gtk::EventControllerKey::create();
     key->signal_key_pressed().connect([this, &key = *key](auto &&...args) { return on_key_pressed(key, args...); }, true);
@@ -58,41 +50,39 @@ void SpinButton::_construct()
     });
     add_controller(focus);
 
-    UI::on_popup_menu(*this, sigc::mem_fun(*this, &SpinButton::on_popup_menu));
+    set_context_menu_callback([this]{ return on_popup_menu({}); });
 
-    signal_input().connect(sigc::mem_fun(*this, &SpinButton::on_input), true);
+    set_evaluator_function([this](auto& text) { return on_input(text); });
+
+    InkSpinButton::signal_value_changed().connect([this](auto) {
+        _signal_value_changed.emit();
+    });
 
     signal_destroy().connect([this] { _unparentChildren(); });
 }
 
-int SpinButton::on_input(double &newvalue)
-{
-    if (_dont_evaluate) return false;
+double SpinButton::on_input(const Glib::ustring& text) {
+    auto value = std::stod(text);
+    if (_dont_evaluate) return value;
 
-    try {
-        Inkscape::Util::EvaluatorQuantity result;
-        if (_unit_menu || _unit_tracker) {
-            Unit const *unit = nullptr;
-            if (_unit_menu) {
-                unit = _unit_menu->getUnit();
-            } else {
-                unit = _unit_tracker->getActiveUnit();
-            }
-            result = Util::ExpressionEvaluator{::get_text(*this), unit}.evaluate();
-            // check if output dimension corresponds to input unit
-            if (result.dimension != (unit->isAbsolute() ? 1 : 0) ) {
-                throw Inkscape::Util::EvaluatorException("Input dimensions do not match with parameter dimensions.","");
-            }
+    Inkscape::Util::EvaluatorQuantity result;
+    if (_unit_menu || _unit_tracker) {
+        Unit const *unit = nullptr;
+        if (_unit_menu) {
+            unit = _unit_menu->getUnit();
         } else {
-            result = Util::ExpressionEvaluator{::get_text(*this)}.evaluate();
+            unit = _unit_tracker->getActiveUnit();
         }
-        newvalue = result.value;
-    } catch (Inkscape::Util::EvaluatorException const &e) {
-        g_message ("%s", e.what());
-        return false;
+        result = Util::ExpressionEvaluator{text.c_str(), unit}.evaluate();
+        // check if output dimension corresponds to input unit
+        if (result.dimension != (unit->isAbsolute() ? 1 : 0) ) {
+            throw Inkscape::Util::EvaluatorException("Input dimensions do not match with parameter dimensions.","");
+        }
+    } else {
+        result = Util::ExpressionEvaluator{text.c_str()}.evaluate();
     }
 
-    return true;
+    return result.value;
 }
 
 bool SpinButton::on_key_pressed(Gtk::EventControllerKey const &controller,
@@ -116,16 +106,6 @@ bool SpinButton::on_key_pressed(Gtk::EventControllerKey const &controller,
     }
 
     switch (Inkscape::UI::Tools::get_latin_keyval(controller, keyval, keycode, state)) {
-        case GDK_KEY_Escape: // defocus
-            undo();
-            defocus();
-            return true;
-
-        case GDK_KEY_Return: // defocus
-        case GDK_KEY_KP_Enter:
-            defocus();
-            break;
-
         case GDK_KEY_z:
         case GDK_KEY_Z:
             if (Controller::has_flag(state, Gdk::ModifierType::CONTROL_MASK)) {
@@ -236,19 +216,6 @@ SpinButton::~SpinButton()
     _unparentChildren();
 }
 
-void SpinButton::defocus()
-{
-    // clear selection, which would otherwise persist
-    select_region(0, 0);
-
-    // defocus spinbutton by moving focus to the canvas
-    if (_defocus_target) {
-        _defocus_target->onDefocus();
-    } else if (auto widget = get_scrollable_ancestor(*this)) {
-        widget->grab_focus();
-    }
-}
-
 void SpinButton::set_custom_numeric_menu_data(NumericMenuData &&custom_menu_data)
 {
     _custom_popup = true;
@@ -257,6 +224,48 @@ void SpinButton::set_custom_numeric_menu_data(NumericMenuData &&custom_menu_data
 
 void SpinButton::set_increment(double delta) {
     _increment = delta;
+}
+
+void SpinButton::set_increments(double step, double page) {
+    set_step(step);
+    set_page_step(page);
+}
+
+void SpinButton::get_increments(double &step, double &page) const {
+    auto& spin = const_cast<SpinButton&>(*this);
+    step = spin.get_adjustment()->get_step_increment();
+    page = spin.get_adjustment()->get_page_increment();
+}
+
+void SpinButton::get_range(double &min, double &max) const {
+    auto& spin = const_cast<SpinButton&>(*this);
+    auto adj = spin.get_adjustment();
+    min = adj->get_lower();
+    max = adj->get_upper();
+}
+
+void SpinButton::set_range(double min, double max) {
+    auto adj = get_adjustment();
+    adj->set_lower(min);
+    adj->set_upper(max);
+}
+
+void SpinButton::set_width_chars(int chars) {
+    property_width_chars().set_value(chars);
+}
+
+void SpinButton::set_max_width_chars(int chars) {
+    //TODO if needed
+}
+
+Glib::ustring SpinButton::get_text() const {
+    //TODO: remove
+    return {};
+}
+
+int SpinButton::get_value_as_int() const {
+    //TODO: round the value?
+    return static_cast<int>(get_value());
 }
 
 } // namespace Inkscape::UI::Widget

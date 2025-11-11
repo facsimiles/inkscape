@@ -143,6 +143,10 @@ void DialogBase::defocus_dialog() {
     }
 }
 
+void DialogBase::onDefocus() {
+    sp_dialog_defocus(dynamic_cast<Gtk::Window*>(get_root()));
+}
+
 /**
  * Callback to reset the dialog highlight.
  */

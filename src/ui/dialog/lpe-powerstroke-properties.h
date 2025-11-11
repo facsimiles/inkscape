@@ -19,11 +19,11 @@
 
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/window.h>
 
 #include "live_effects/parameter/powerstrokepointarray.h"
+#include "ui/widget/spinbutton.h"
 
 class SPDesktop;
 
@@ -43,9 +43,9 @@ protected:
     Gtk::Box _buttonbox;
 
     Gtk::Label        _powerstroke_position_label;
-    Gtk::SpinButton   _powerstroke_position_entry;
+    UI::Widget::SpinButton   _powerstroke_position_entry;
     Gtk::Label        _powerstroke_width_label;
-    Gtk::SpinButton   _powerstroke_width_entry;
+    UI::Widget::SpinButton   _powerstroke_width_entry;
     Gtk::Grid         _layout_table;
     bool              _position_visible = false;
 

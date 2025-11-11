@@ -50,6 +50,7 @@
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/page-properties.h"
 #include "ui/widget/generic/popover-menu.h"
+#include "ui/widget/generic/spin-button.h"
 #include "util/expression-evaluator.h"
 
 namespace Inkscape::UI {
@@ -1971,7 +1972,7 @@ GridWidget::GridWidget(SPGrid *grid)
 
     std::vector<Gtk::Widget*> widgets;
     for_each_descendant(*main_grid, [&](Gtk::Widget& w){
-        if (dynamic_cast<Gtk::SpinButton*>(&w) ||
+        if (dynamic_cast<InkSpinButton*>(&w) ||
             dynamic_cast<Gtk::ToggleButton*>(&w) ||
             dynamic_cast<Gtk::MenuButton*>(&w) ||
             dynamic_cast<Gtk::Label*>(&w) ||

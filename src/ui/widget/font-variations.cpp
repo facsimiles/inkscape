@@ -39,9 +39,7 @@
 
 #include "ui/util.h"
 
-namespace Inkscape {
-namespace UI {
-namespace Widget {
+namespace Inkscape::UI::Widget {
 
 std::pair<Glib::ustring, Glib::ustring> get_axis_name(const std::string& tag, const Glib::ustring& abbr) {
     // Transformed axis names;
@@ -60,7 +58,7 @@ std::pair<Glib::ustring, Glib::ustring> get_axis_name(const std::string& tag, co
         // which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
         {"XOPQ", std::make_pair(C_("Variable font axis", "X opaque"),      _("Alter the opaque stroke forms of glyphs in the X dimension"))},
         // TRANSLATORS: “Parametric Thin Stroke”, YOPQ, is a reference to its logical name, “Y Opaque”,
-        // which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension 
+        // which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension
         {"YOPQ", std::make_pair(C_("Variable font axis", "Y opaque"),      _("Alter the opaque stroke forms of glyphs in the Y dimension"))},
         // TRANSLATORS: “Parametric Counter Width”, XTRA, is a reference to its logical name, “X-Transparent,”
         // which describes how it alters a font’s transparent spaces (also known as negative shapes)
@@ -150,7 +148,7 @@ std::pair<Glib::ustring, Glib::ustring> get_axis_name(const std::string& tag, co
         {"slnt", std::make_pair(C_("Variable font axis", "Slant"),         _("Controls the font file’s slant parameter for oblique styles"))},
         // Italic
         {"ital", std::make_pair(C_("Variable font axis", "Italic"),        _("Turns on the font’s italic forms"))},
-        // TRANSLATORS: Weight controls the font file’s weight parameter. 
+        // TRANSLATORS: Weight controls the font file’s weight parameter.
         {"wght", std::make_pair(C_("Variable font axis", "Weight"),        _("Controls the font file’s weight parameter"))},
         // TRANSLATORS: Width controls the font file’s width parameter.
         {"wdth", std::make_pair(C_("Variable font axis", "Width"),         _("Controls the font file’s width parameter"))},
@@ -189,7 +187,7 @@ std::pair<Glib::ustring, Glib::ustring> get_axis_name(const std::string& tag, co
 
 FontVariationAxis::FontVariationAxis(Glib::ustring name_, OTVarAxis const &axis, Glib::ustring label_, Glib::ustring tooltip)
     : Gtk::Box(Gtk::Orientation::HORIZONTAL)
-    , name(std::move(name_))
+      , name(std::move(name_))
 {
     // std::cout << "FontVariationAxis::FontVariationAxis:: "
     //           << " name: " << name
@@ -205,7 +203,7 @@ FontVariationAxis::FontVariationAxis(Glib::ustring name_, OTVarAxis const &axis,
     label->set_xalign(0.0f); // left-align
     append(*label);
 
-    edit = Gtk::make_managed<Gtk::SpinButton>();
+    edit = Gtk::make_managed<SpinButton>();
     edit->set_max_width_chars(5);
     edit->set_valign(Gtk::Align::CENTER);
     edit->set_margin_top(2);
@@ -407,9 +405,9 @@ bool FontVariations::variations_present() const {
 
 Glib::RefPtr<Gtk::SizeGroup> FontVariations::get_size_group(int index) {
     switch (index) {
-        case 0: return _size_group;
-        case 1: return _size_group_edit;
-        default: return Glib::RefPtr<Gtk::SizeGroup>();
+    case 0: return _size_group;
+    case 1: return _size_group_edit;
+    default: return Glib::RefPtr<Gtk::SizeGroup>();
     }
 }
 
@@ -428,9 +426,7 @@ int FontVariations::measure_height(int axis_count) {
     return nat;
 }
 
-} // namespace Widget
-} // namespace UI
-} // namespace Inkscape
+}
 
 /*
   Local Variables:

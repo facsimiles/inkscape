@@ -365,6 +365,7 @@ TraceDialogImpl::TraceDialogImpl()
   , boxchild1      (get_widget<Gtk::Box>         (builder,           "boxchild1"))
   , boxchild2      (get_widget<Gtk::Box>         (builder,           "boxchild2"))
 {
+    builder->get_objects(); // instantiate all InkSpinButton instances
     append(bin);
     bin.set_child(mainBox);
     bin.set_expand(true);

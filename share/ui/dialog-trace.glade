@@ -403,7 +403,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="adjustment">SS_BC_T</property>
@@ -415,7 +415,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="adjustment">SS_ED_T</property>
@@ -427,7 +427,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="adjustment">SS_CQ_T</property>
@@ -438,7 +438,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="adjustment">SS_AT_FI_T</property>
@@ -449,7 +449,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="adjustment">SS_AT_ET_T</property>
@@ -461,7 +461,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">Speckles of up to this many pixels will be suppressed</property>
@@ -473,7 +473,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">Increase this to smooth corners more</property>
@@ -486,7 +486,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">Increase this to reduce the number of nodes in the trace by more aggressive optimization</property>
@@ -607,7 +607,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">The desired number of scans</property>
@@ -648,7 +648,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">Speckles of up to this many pixels will be suppressed</property>
@@ -700,7 +700,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">Increase this to smooth corners more</property>
@@ -740,7 +740,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">Increase this to reduce the number of nodes in the trace by more aggressive optimization</property>
@@ -856,13 +856,12 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">The heuristic computed vote will be multiplied by this value</property>
                             <property name="adjustment">PA_curves</property>
                             <property name="digits">3</property>
-                            <property name="numeric">True</property>
                             <property name="value">1</property>
                             <layout>
                               <property name="column">2</property>
@@ -871,12 +870,11 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">A constant vote value</property>
                             <property name="adjustment">PA_islands</property>
-                            <property name="numeric">True</property>
                             <property name="value">5</property>
                             <layout>
                               <property name="column">2</property>
@@ -885,12 +883,11 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">The radius of the window analyzed</property>
                             <property name="adjustment">PA_sparse1</property>
-                            <property name="numeric">True</property>
                             <property name="value">2</property>
                             <layout>
                               <property name="column">2</property>
@@ -899,13 +896,12 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="gtkmm__CustomObject_InkSpinButton">
                             <property name="valign">center</property>
                             <property name="focusable">True</property>
                             <property name="tooltip-text" translatable="yes">The heuristic computed vote will be multiplied by this value</property>
                             <property name="adjustment">PA_sparse2</property>
                             <property name="digits">3</property>
-                            <property name="numeric">True</property>
                             <property name="value">1</property>
                             <layout>
                               <property name="column">2</property>

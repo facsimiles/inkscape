@@ -193,11 +193,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_width_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_width_item">
             <property name="name">tweak-width</property>
             <property name="focusable">True</property>
-            <property name="width-chars">1</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_width_adj</property>
             <property name="climb-rate">1</property>
           </object>
@@ -217,11 +215,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_force_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_force_item">
             <property name="name">tweak-force</property>
             <property name="focusable">True</property>
-            <property name="width-chars">1</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_force_adj</property>
             <property name="climb-rate">1</property>
           </object>
@@ -255,10 +251,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_fidelity_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_fidelity_item">
             <property name="focusable">True</property>
-            <property name="width-chars">5</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_fidelity_adj</property>
             <property name="climb-rate">1</property>
           </object>

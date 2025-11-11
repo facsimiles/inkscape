@@ -22,6 +22,7 @@
 #include "document-undo.h"
 #include "object/sp-shape.h"
 #include "preferences.h"
+#include "spinbutton.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
 
@@ -32,7 +33,7 @@ TextpathPopover::TextpathPopover(SPText *text, SPTextPath *textpath, SPDesktop *
     , _text(text)
     , _textpath(textpath)
     , _builder(create_builder("textpath-popover-box.ui"))
-    , _start_offset_sb(get_widget<Gtk::SpinButton>(_builder, "start-offset-sb"))
+    , _start_offset_sb(get_derived_widget<SpinButton>(_builder, "start-offset-sb"))
     , _side_left_btn(get_widget<Gtk::ToggleButton>(_builder, "side-left-btn"))
     , _side_right_btn(get_widget<Gtk::ToggleButton>(_builder, "side-right-btn"))
 {

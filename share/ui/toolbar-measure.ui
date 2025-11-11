@@ -43,10 +43,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_font_size_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_font_size_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_font_size_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>
@@ -64,10 +62,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_precision_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_precision_item">
             <property name="focusable">True</property>
-            <property name="width-chars">1</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_precision_adj</property>
             <property name="climb-rate">0.10</property>
           </object>
@@ -83,16 +79,16 @@
         <child>
           <object class="GtkLabel">
             <property name="margin-start">5</property>
-            <property name="label" translatable="yes">Scale %</property>
+            <property name="label" translatable="yes">Scale</property>
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_scale_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_scale_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
             <property name="adjustment">_scale_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
+            <property name="suffix" translatable="no">%</property>
           </object>
         </child>
       </object>
@@ -298,10 +294,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_offset_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_offset_item">
             <property name="focusable">True</property>
-            <property name="width-chars">2</property>
-            <property name="text" translatable="yes">0</property>
             <property name="adjustment">_offset_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">2</property>

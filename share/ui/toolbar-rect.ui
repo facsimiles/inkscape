@@ -35,16 +35,9 @@
       <object class="GtkBox" id="width_box">
         <property name="tooltip-text" translatable="yes">Width of rectangle</property>
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_width_item">
             <property name="label" translatable="yes">W</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_width_item">
             <property name="focusable">True</property>
-            <property name="width-chars">7</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_width_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -56,16 +49,9 @@
       <object class="GtkBox" id="height_box">
         <property name="tooltip-text" translatable="yes">Height of rectangle</property>
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_height_item">
             <property name="label" translatable="yes" context="Abbreviation of Height">H</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_height_item">
             <property name="focusable">True</property>
-            <property name="width-chars">7</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_height_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -80,15 +66,9 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_rx_item">
             <property name="label" translatable="yes">Rx</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_rx_item">
             <property name="focusable">True</property>
-            <property name="width-chars">7</property>
             <property name="adjustment">_rx_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -103,16 +83,9 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_ry_item">
             <property name="label" translatable="yes">Ry</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_ry_item">
             <property name="focusable">True</property>
-            <property name="width-chars">10</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_ry_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>

@@ -36,16 +36,16 @@
     <child>
       <object class="GtkBox" id="rx_box">
         <property name="tooltip-text" translatable="yes">Horizontal radius of the circle, ellipse, or arc</property>
+<!--        <child>-->
+<!--          <object class="GtkLabel">-->
+<!--            <property name="margin-start">5</property>-->
+<!--            <property name="label" translatable="yes">Rx</property>-->
+<!--          </object>-->
+<!--        </child>-->
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_rx_item">
             <property name="label" translatable="yes">Rx</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_rx_item">
             <property name="focusable">True</property>
-            <property name="width-chars">6</property>
             <property name="adjustment">_rx_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -56,17 +56,16 @@
     <child>
       <object class="GtkBox" id="ry_box">
         <property name="tooltip-text" translatable="yes">Vertical radius of the circle, ellipse, or arc</property>
+<!--        <child>-->
+<!--          <object class="GtkLabel">-->
+<!--            <property name="margin-start">5</property>-->
+<!--            <property name="label" translatable="yes">Ry</property>-->
+<!--          </object>-->
+<!--        </child>-->
         <child>
-          <object class="GtkLabel">
-            <property name="margin-start">5</property>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_ry_item">
             <property name="label" translatable="yes">Ry</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="_ry_item">
             <property name="focusable">True</property>
-            <property name="width-chars">6</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_ry_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -92,10 +91,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_start_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_start_item">
+            <property name="icon" translatable="no">ellipse-start-angle</property>
+            <property name="suffix" translatable="no">°</property>
             <property name="focusable">True</property>
-            <property name="width-chars">6</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_start_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
@@ -113,10 +112,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="_end_item">
+          <object class="gtkmm__CustomObject_InkSpinButton" id="_end_item">
+            <property name="icon" translatable="no">ellipse-end-angle</property>
+            <property name="suffix" translatable="no">°</property>
             <property name="focusable">True</property>
-            <property name="width-chars">6</property>
-            <property name="text">0.000</property>
             <property name="adjustment">_end_adj</property>
             <property name="climb-rate">0.10</property>
             <property name="digits">3</property>
