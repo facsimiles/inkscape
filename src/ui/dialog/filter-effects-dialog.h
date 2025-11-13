@@ -81,15 +81,6 @@ class ToggleButton;
 class SPFilter;
 class SPFilterPrimitive;
 
-#define NODE_TYPE FilterEditorNode
-#define SCROLL_SENS (10.0)
-#define SHIFT_DOWN ((modifier_state & Gdk::ModifierType::SHIFT_MASK) != Gdk::ModifierType::SHIFT_MASK)
-
-namespace Inkscape::Testing {
-extern SPFilter *current_filter;
-extern Filters::Filter *filterrr;
-}
-
 namespace Inkscape::UI {
 
 namespace Widget {
@@ -126,7 +117,6 @@ public:
     void update_width()
     {
         width = std::max(static_cast<std::size_t>(15), 11 * connections.size() + 4);
-        // width = 15*std::max(static_cast<std::size_t>(1), connections.size());
         set_size_request(width, 15);
     }
 
@@ -257,21 +247,16 @@ protected:
 class FilterEditorFixed : public Gtk::Fixed
 {
 public:
-    FilterEditorFixed(std::map<int, std::vector<FilterEditorConnection *>> &_connections, FilterEditorCanvas *_canvas, double _x_offset = 0, double _y_offset = 0);
+    FilterEditorFixed(std::map<int, std::vector<FilterEditorConnection *>> &_connections, FilterEditorCanvas *_canvas, Geom::Point const &offset = {});
 
     ConnectionsRenderer connection_renderer;
-    void update_positions(double x_offset_new, double y_offset_new);
 
-    double get_x_offset();
-    double get_y_offset();
-
-    void update_offset(double x, double y);
+    Geom::Point offset;
 
 protected:
     friend class ConnectionsRenderer;
     friend class FilterEditorCanvas;
 
-    double x_offset, y_offset;
     FilterEditorCanvas *canvas;
     std::map<int, std::vector<FilterEditorConnection *>> connections;
 
@@ -312,22 +297,17 @@ public:
 
     bool get_selected() const { return is_selected; }
     bool toggle_selection(bool selected = true);
-    void get_position(double &x, double &y);
-    void update_position(double x, double y);
 
     FilterEditorSink *get_next_available_sink();
 
     void add_connected_node(FilterEditorSource *source, FilterEditorNode *node, FilterEditorConnection *conn);
     void add_connected_node(FilterEditorSink *sink, FilterEditorNode *node, FilterEditorConnection *conn);
 
-    std::vector<std::pair<FilterEditorSink *, FilterEditorNode *>> get_connected_up_nodes()
-    {
-        return connected_up_nodes;
-    }
-    std::vector<std::pair<FilterEditorSource *, FilterEditorNode *>> get_connected_down_nodes();
+    std::vector<std::pair<FilterEditorSink *, FilterEditorNode *>> get_connected_up_nodes() { return connected_up_nodes; }
+    std::vector<std::pair<FilterEditorSource *, FilterEditorNode *>> get_connected_down_nodes() { return connected_down_nodes; }
 
     void prepare_for_delete();
-    virtual void update_position_from_document() {};
+    virtual void update_position_from_document() {}
     virtual void set_result_string(std::string _result_string);
     virtual void set_sink_result(FilterEditorSink *sink, std::string result_string);
     virtual void set_sink_result(FilterEditorSink *sink, int inp_index);
@@ -342,11 +322,12 @@ public:
 
     bool is_selected = false;
 
+    Geom::Point position;
+
 protected:
     friend class FilterEditorCanvas;
 
     int node_id;
-    double x, y;
     bool part_of_chain = false;
 
     std::string result_string;
@@ -434,9 +415,9 @@ public:
         , filter(_filter)
     {}
 
-    FilterEditorSink *get_sink();
-    void set_sink_result(FilterEditorSink *sink, std::string result_string) override;
-    void set_sink_result(FilterEditorSink *sink, int inp_index) override;
+    FilterEditorSink *get_sink() { return sinks[0]; }
+    void set_sink_result(FilterEditorSink *sink, std::string result_string) override {}
+    void set_sink_result(FilterEditorSink *sink, int inp_index) override {}
     void update_position_from_document() override;
     void update_filter(SPFilter *_filter) { filter = _filter; }
     void label_updated() override;
@@ -454,7 +435,7 @@ public:
     FilterEditorCanvas(FilterEffectsDialog &dialog);
 
     FilterEditorPrimitiveNode *add_primitive_node(SPFilterPrimitive *primitive, double x_click, double y_click, Filters::FilterPrimitiveType type, Glib::ustring label_text, int num_sinks, bool local = true);
-    NODE_TYPE *add_node(SPFilterPrimitive *primitive, double x_click, double y_click, Glib::ustring label_text, int num_sources = 1, int num_sinks = 1);
+    FilterEditorNode *add_node(SPFilterPrimitive *primitive, double x_click, double y_click, Glib::ustring label_text, int num_sources = 1, int num_sinks = 1);
     FilterEditorConnection *create_connection(FilterEditorSource *source, FilterEditorSink *sink, bool break_connection = true);
     FilterEditorConnection *create_connection(FilterEditorPrimitiveNode *source_node, FilterEditorNode *sink_node);
 
@@ -463,7 +444,7 @@ public:
     FilterEditorFixed *get_canvas();
 
     double get_zoom_factor();
-    void update_offsets(double x, double y, bool update_to_document = true);
+    void update_offset(Geom::Point const &offset, bool update_to_document = true);
     void update_offset_from_document();
     void update_positions();
     void add_output_node();
@@ -474,7 +455,7 @@ public:
     void delete_nodes_without_prims();
     void duplicate_nodes();
     void select_nodes(std::vector<FilterEditorNode *> nodes);
-    void select_node(NODE_TYPE node);
+    void select_node(FilterEditorNode node);
     void update_canvas_new();
     void update_canvas();
     bool primitive_node_exists(SPFilterPrimitive *primitive);
@@ -519,16 +500,6 @@ public:
 
     std::unique_ptr<SPDocument> preview_doc;
     Inkscape::Drawing drawing;
-
-    // Utility functions for testing and assertions, to be removed later
-
-    /*
-     * Check if there are any two primitives in the currently selected filter
-     * with the same result, if yes, returns false.
-     * Use with an error in cases to ensure that no two primitives have the same
-     * results, at plaaces where the check is required
-     */
-    bool check_all_different_result_names();
 
     // Preview-related functions
     void refreshPreview(bool single_primitive = false);
@@ -607,7 +578,7 @@ private:
     double zoom_fac;
     FilterEditorSource *starting_source;
     FilterEditorSink *starting_sink;
-    std::pair<std::pair<double, double>, std::pair<double, double>> drag_global_coordinates;
+    std::pair<Geom::Point, Geom::Point> drag_global_coordinates;
 
     // Rubberband Selection
     Glib::RefPtr<Gtk::Box> rubberband_rectangle;
@@ -621,9 +592,9 @@ private:
     T *resolve_to_type(Gtk::Widget *widget);
 
     // Selection-based
-    bool toggle_node_selection(NODE_TYPE *widget);
+    bool toggle_node_selection(FilterEditorNode *widget);
 
-    void set_node_selection(NODE_TYPE *widget, bool selected = true);
+    void set_node_selection(FilterEditorNode *widget, bool selected = true);
 
     void clear_selection();
     void rubberband_select();
@@ -652,16 +623,16 @@ private:
     std::map<int, std::vector<std::unique_ptr<FilterEditorNode>>> nodes;
     std::map<int, std::vector<FilterEditorNode *>> selected_nodes;
 
-    NODE_TYPE *create_node(SPFilterPrimitive *primitive);
+    FilterEditorNode *create_node(SPFilterPrimitive *primitive);
     void remove_node(int node_id);
     void connect_nodes(int node1, int node2);
     void disconnect_nodes(int node1, int node2);
     void set_node_position(int node_id, int x, int y);
 
     // Geometry-related
-    void global_to_local(double xg, double yg, double &xl, double &yl);
-    void local_to_global(double xl, double yl, double &xg, double &yg);
-    void place_node(NODE_TYPE *node, double x, double y, bool local = false, bool update = true);
+    Geom::Point global_to_local(Geom::Point const &g) const { return g - canvas.offset; }
+    Geom::Point local_to_global(Geom::Point const &l) const { return l + canvas.offset; }
+    void place_node(FilterEditorNode *node, double x, double y, bool local = false, bool update = true);
 };
 
 // Overall class for the node editor canvas
