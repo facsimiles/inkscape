@@ -17,27 +17,22 @@
 
 #include "filter-effects-dialog.h"
 
-#include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
-#include <glib.h>
-#include <gtk/gtk.h>
 #include <map>
 #include <memory>
 #include <set>
-#include <string>
 #include <sstream>
+#include <string>
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <glibmm/convert.h>
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/refptr.h>
-#include <glibmm/stringutils.h>
-#include <glibmm/ustring.h>
 #include <gdkmm/display.h>
 #include <gdkmm/general.h>
 #include <gdkmm/seat.h>
+#include <glibmm/convert.h>
+#include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/stringutils.h>
+#include <glibmm/ustring.h>
 #include <gtkmm/dragsource.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/eventcontrollermotion.h>
@@ -46,7 +41,6 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/snapshot.h>
 #include <gtkmm/textview.h>
@@ -55,6 +49,7 @@
 #include "colors/color.h"
 #include "desktop.h"
 #include "display/nr-filter-morphology.h"
+#include "display/nr-filter-types.h"
 #include "display/nr-filter.h"
 #include "document-undo.h"
 #include "filter-chemistry.h"
@@ -63,7 +58,6 @@
 #include "inkscape-window.h"
 #include "io/resource.h"
 #include "layer-manager.h"
-#include "display/nr-filter-types.h"
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
 #include "object/filters/componenttransfer-funcnode.h"
@@ -73,12 +67,12 @@
 #include "object/filters/merge.h"
 #include "object/filters/mergenode.h"
 #include "object/filters/pointlight.h"
-#include "object/filters/spotlight.h"
 #include "object/filters/sp-filter-primitive.h"
-#include "object/sp-filter.h"
-#include "object/sp-root.h"
-#include "object/sp-item.h"
+#include "object/filters/spotlight.h"
 #include "object/sp-defs.h"
+#include "object/sp-filter.h"
+#include "object/sp-item.h"
+#include "object/sp-root.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "selection.h"
@@ -106,15 +100,13 @@
 #define filtered(x) x[current_filter_id]
 #define dbg g_message("%d", __LINE__)
 
-
 #define ORIENTATION_EDITOR_INVERSE HORIZONTAL
 #define ORIENTATION_EDITOR VERTICAL
 
-
 /*
 Node Editor TODO List:
-- Implemeting Auto Arrange: 
-    Arrange all the selected nodes based on the height from the bottom most node 
+- Implemeting Auto Arrange:
+    Arrange all the selected nodes based on the height from the bottom most node
     Each node at a given height -> Distributed according to number of nodes at that height.
 - Better way to render connections
 - Shouldn't be able to create a connection with the node connected to the output node
@@ -124,18 +116,18 @@ Crashes:
 - Behaviour Crashes - Right Clicking while in the middle of another event types
 */
 
-namespace Inkscape::Testing{
-    SPFilter* current_filter = nullptr;
-    Filters::Filter* filterrr = nullptr;
+namespace Inkscape::Testing {
+SPFilter *current_filter = nullptr;
+Filters::Filter *filterrr = nullptr;
 }
+
 using namespace Inkscape::Filters;
 
 namespace Inkscape::UI::Dialog {
 
-static int input_count(const SPFilterPrimitive* prim);
+static int input_count(SPFilterPrimitive const *prim);
 
-FilterEditorNode::FilterEditorNode(int node_id, int x, int y, 
-                                   Glib::ustring label_text, int num_sources, int num_sinks)
+FilterEditorNode::FilterEditorNode(int node_id, int x, int y, Glib::ustring label_text, int num_sources, int num_sinks)
     : Gtk::Box(Gtk::Orientation::ORIENTATION_EDITOR, 0)
     , node_id(node_id)
     , x(x)
@@ -160,7 +152,7 @@ FilterEditorNode::FilterEditorNode(int node_id, int x, int y,
     context->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     node.add_css_class("nodebox-alt");
 
-    // Setup Label    
+    // Setup Label
     label.set_halign(Gtk::Align::CENTER);
     label.set_sensitive(false);
     label.set_editable(false);
@@ -169,7 +161,7 @@ FilterEditorNode::FilterEditorNode(int node_id, int x, int y,
     label.get_style_context()->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     label.add_css_class("mainlabel");
     append(sink_dock);
-    for(int i = 0; i != num_sinks; i++){
+    for (int i = 0; i != num_sinks; i++) {
         auto sink = Gtk::make_managed<FilterEditorSink>(this, 1);
         sinks.push_back(sink);
         sink_dock.append(*sink);
@@ -180,7 +172,7 @@ FilterEditorNode::FilterEditorNode(int node_id, int x, int y,
 
     append(node);
     append(source_dock);
-    for(int i = 0; i != num_sources; i++){
+    for (int i = 0; i != num_sources; i++) {
         auto source = Gtk::make_managed<FilterEditorSource>(this);
         sources.push_back(source);
         source_dock.append(*source);
@@ -191,10 +183,6 @@ FilterEditorNode::FilterEditorNode(int node_id, int x, int y,
     add_css_class("node");
 }
 
-bool FilterEditorNode::get_selected()
-{
-    return is_selected;
-}
 bool FilterEditorNode::toggle_selection(bool selected)
 {
     is_selected = selected;
@@ -220,159 +208,160 @@ void FilterEditorNode::update_position(double x, double y)
     this->y = y;
 }
 
-FilterEditorSink* FilterEditorNode::get_next_available_sink(){
-    for(auto sink : sinks){
-        if(sink->can_add_connection()){
+FilterEditorSink *FilterEditorNode::get_next_available_sink()
+{
+    for (auto sink : sinks) {
+        if (sink->can_add_connection()) {
             return sink;
         }
-    }   
+    }
     return nullptr;
 }
 
-void FilterEditorNode::add_connected_node(FilterEditorSource* source, FilterEditorNode* node, FilterEditorConnection* conn){
+void FilterEditorNode::add_connected_node(FilterEditorSource *source, FilterEditorNode *node, FilterEditorConnection *conn)
+{
     connected_down_nodes.push_back({source, node});
     connections.push_back(conn);
 }
-void FilterEditorNode::add_connected_node(FilterEditorSink* sink, FilterEditorNode* node, FilterEditorConnection* conn){
+
+void FilterEditorNode::add_connected_node(FilterEditorSink *sink, FilterEditorNode *node, FilterEditorConnection *conn)
+{
     connected_up_nodes.push_back({sink, node});
     connections.push_back(conn);
 }
 
-std::vector<std::pair<FilterEditorSink*, FilterEditorNode*>> FilterEditorNode::get_connected_up_nodes(){ 
-    return connected_up_nodes;
-}
-std::vector<std::pair<FilterEditorSource*, FilterEditorNode*>> FilterEditorNode::get_connected_down_nodes(){
-    if(dynamic_cast<FilterEditorPrimitiveNode*>(this) != nullptr){
-        for(auto it: connected_down_nodes){
-            if(dynamic_cast<FilterEditorPrimitiveNode*>(it.second) != nullptr){
-            }
-        }
-    }
-    
+std::vector<std::pair<FilterEditorSource *, FilterEditorNode *>> FilterEditorNode::get_connected_down_nodes()
+{
     return connected_down_nodes;
 }
 
-void FilterEditorNode::set_result_string(std::string _result_string) {
+void FilterEditorNode::set_result_string(std::string _result_string)
+{
     result_string = _result_string;
 }
-void FilterEditorNode::set_sink_result(FilterEditorSink* sink, std::string result){
-    sink->set_result_inp(-1, result);    
+
+void FilterEditorNode::set_sink_result(FilterEditorSink *sink, std::string result)
+{
+    sink->set_result_inp(-1, result);
 }
 
-void FilterEditorNode::set_sink_result(FilterEditorSink* sink, int inp_index){
+void FilterEditorNode::set_sink_result(FilterEditorSink *sink, int inp_index)
+{
     sink->set_result_inp(inp_index);
-
 }
-std::string FilterEditorNode::get_result_string(){ 
+
+std::string FilterEditorNode::get_result_string()
+{
     return result_string;
 }
-void FilterEditorNode::label_updated(){ 
-    if(label.get_editing()){
+
+void FilterEditorNode::label_updated()
+{
+    if (label.get_editing()) {
         return;
-    } else {
-    } 
+    }
     label.set_sensitive(false);
     label.set_editable(false);
 }
 
-
-void FilterEditorOutputNode::label_updated(){
-    
-    if(label.get_editing()){
+void FilterEditorOutputNode::label_updated()
+{
+    if (label.get_editing()) {
         return;
     }
     auto new_text = label.get_text();
-    if(new_text == "" || new_text == "Output"){
-        if(filter)
+    if (new_text == "" || new_text == "Output") {
+        if (filter) {
             filter->setAttributeOrRemoveIfEmpty("aria-label", "");
-        label.set_text("Output");    
-    }
-    else{
-        if(filter)
-            filter->setAttribute("aria-label", new_text.c_str()); 
+        }
+        label.set_text("Output");
+    } else {
+        if (filter) {
+            filter->setAttribute("aria-label", new_text.c_str());
+        }
     }
     label.set_sensitive(false);
     label.set_editable(false);
-
 }
 
-SPFilterPrimitive* FilterEditorPrimitiveNode::get_primitive(){
+SPFilterPrimitive *FilterEditorPrimitiveNode::get_primitive()
+{
     return primitive;
 }
 
-FilterEditorSource* FilterEditorPrimitiveNode::get_source(){
-
+FilterEditorSource *FilterEditorPrimitiveNode::get_source()
+{
     return sources[0];
 }
 
-void FilterEditorPrimitiveNode::update_position_from_document(){
+void FilterEditorPrimitiveNode::update_position_from_document()
+{
     x = primitive->getRepr()->getAttributeDouble("inkscape:filter-x", x);
     y = primitive->getRepr()->getAttributeDouble("inkscape:filter-y", y);
 }
 
-void FilterEditorPrimitiveNode::set_result_string(std::string _result_string){
+void FilterEditorPrimitiveNode::set_result_string(std::string _result_string)
+{
     result_string = _result_string;
     get_primitive()->getRepr()->setAttribute("result", result_string.c_str());
 }
-void FilterEditorPrimitiveNode::update_sink_results(){
+
+void FilterEditorPrimitiveNode::update_sink_results()
+{
     std::vector<Glib::ustring> attr_strings = {"in", "in2"};
-    
-    const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha", "BackgroundImage", "BackgroundAlpha", "FillPaint", "StrokePaint"};
-    for(int i = 0; i != sinks.size(); i++){
-        if(get_primitive()->getRepr() != nullptr){
-            if(get_primitive()->getRepr()->attribute(attr_strings[i].c_str()) != nullptr){
-                if(std::find(result_inputs.begin(), result_inputs.end(), get_primitive()->getRepr()->attribute(attr_strings[i].c_str())) != result_inputs.end()){
+
+    std::vector<Glib::ustring> const result_inputs = {"SourceGraphic", "SourceAlpha", "BackgroundImage", "BackgroundAlpha", "FillPaint", "StrokePaint"};
+    for (int i = 0; i != sinks.size(); i++) {
+        if (get_primitive()->getRepr()) {
+            if (get_primitive()->getRepr()->attribute(attr_strings[i].c_str())) {
+                if (std::find(result_inputs.begin(), result_inputs.end(), get_primitive()->getRepr()->attribute(attr_strings[i].c_str())) != result_inputs.end()) {
                     set_sink_result(sinks[i], std::find(result_inputs.begin(), result_inputs.end(), get_primitive()->getRepr()->attribute(attr_strings[i].c_str())) - result_inputs.begin());
-                }
-                else{
+                } else {
                     set_sink_result(sinks[i], get_primitive()->getRepr()->attribute(attr_strings[i].c_str()));
                 }
-            }
-            else{
+            } else {
                 set_sink_result(sinks[i], 0);
-            } 
-        }else {
-            g_error("The problem is here"); 
+            }
+        } else {
+            g_error("The problem is here");
         }
     }
 }
 
-void FilterEditorPrimitiveNode::label_updated(){
-    
-    g_assert(primitive != nullptr);
-    if(label.get_editing()){
+void FilterEditorPrimitiveNode::label_updated()
+{
+    g_assert(primitive);
+    if (label.get_editing()) {
         return;
     }
     auto new_text = label.get_text();
-    if(new_text == "" || new_text == secondary_text.get_text()){
+    if (new_text == "" || new_text == secondary_text.get_text()) {
         primitive->setAttributeOrRemoveIfEmpty("aria-label", "");
         label.set_text(secondary_text.get_text());
-        if(secondary_text.get_parent() != nullptr){
+        if (secondary_text.get_parent()) {
             secondary_text.unparent();
         }
-    }
-    else{
+    } else {
         primitive->setAttribute("aria-label", new_text.c_str());
-        if(secondary_text.get_parent() == nullptr){
+        if (!secondary_text.get_parent()) {
             node.insert_child_after(secondary_text, label);
         }
     }
     label.set_sensitive(false);
     label.set_editable(false);
-    
 }
 
-
-FilterEditorSink* FilterEditorPrimitiveNode::get_sink(int index){
+FilterEditorSink *FilterEditorPrimitiveNode::get_sink(int index)
+{
     return sinks[index];
 }
 
-void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink* sink, std::string result_string){
-    if(std::find(sinks.begin(), sinks.end(), sink) != sinks.end()){
-        if(std::find(sinks.begin(), sinks.end(), sink) - sinks.begin() == 0){
+void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink *sink, std::string result_string)
+{
+    if (std::find(sinks.begin(), sinks.end(), sink) != sinks.end()) {
+        if (std::find(sinks.begin(), sinks.end(), sink) - sinks.begin() == 0) {
             primitive->getRepr()->setAttribute("in", result_string.c_str());
-        }
-        else if(std::find(sinks.begin(), sinks.end(), sink) - sinks.begin() == 1){
+        } else if (std::find(sinks.begin(), sinks.end(), sink) - sinks.begin() == 1) {
             primitive->getRepr()->setAttribute("in2", result_string.c_str());
         }
 
@@ -380,8 +369,9 @@ void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink* sink, std::str
     }
 }
 
-void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink* sink, int inp_index){
-    if(inp_index != -2){
+void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink *sink, int inp_index)
+{
+    if (inp_index != -2) {
         auto res_string = sink->get_result_inputs(inp_index);
         if (std::find(sinks.begin(), sinks.end(), sink) != sinks.end()) {
             if (std::find(sinks.begin(), sinks.end(), sink) - sinks.begin() == 0) {
@@ -392,8 +382,7 @@ void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink* sink, int inp_
 
             sink->set_result_inp(inp_index);
         }
-    }
-    else{
+    } else {
         sink->set_result_inp(inp_index);
         auto res_string = sink->get_result_inputs();
         if (std::find(sinks.begin(), sinks.end(), sink) != sinks.end()) {
@@ -403,25 +392,25 @@ void FilterEditorPrimitiveNode::set_sink_result(FilterEditorSink* sink, int inp_
                 primitive->getRepr()->setAttribute("in2", res_string.first.c_str());
             }
         }
-        
     }
 }
 
-std::string FilterEditorPrimitiveNode::get_result_string(){
-    if(primitive->getRepr()->attribute("result") == nullptr){
+std::string FilterEditorPrimitiveNode::get_result_string()
+{
+    if (!primitive->getRepr()->attribute("result")) {
         auto result = cast<SPFilter>(primitive->parent)->get_new_result_name();
         primitive->getRepr()->setAttribute("result", result.c_str());
         result_string = result;
-    }
-    else{
+    } else {
         result_string = primitive->getRepr()->attribute("result");
     }
 
     return result_string;
 }
 
-SPFeMergeNode* FilterEditorPrimitiveMergeNode::create_sink_merge_node(FilterEditorSink* sink){
-    if(sink_nodes.find(sink) == sink_nodes.end()){
+SPFeMergeNode *FilterEditorPrimitiveMergeNode::create_sink_merge_node(FilterEditorSink *sink)
+{
+    if (sink_nodes.find(sink) == sink_nodes.end()) {
         Inkscape::XML::Document *xml_doc = primitive->document->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:feMergeNode");
         repr->setAttribute("inkscape:collect", "always");
@@ -440,69 +429,70 @@ SPFeMergeNode* FilterEditorPrimitiveMergeNode::create_sink_merge_node(FilterEdit
     return nullptr;
 }
 
-void FilterEditorPrimitiveMergeNode::add_sink(){
-    // Create a new sink 
+void FilterEditorPrimitiveMergeNode::add_sink()
+{
     auto sink = Gtk::make_managed<FilterEditorSink>(this, 1);
     sinks.push_back(sink);
-    sink_dock.append(*sink); 
+    sink_dock.append(*sink);
 }
 
-void FilterEditorPrimitiveMergeNode::add_sink(SPFeMergeNode* node){
+void FilterEditorPrimitiveMergeNode::add_sink(SPFeMergeNode *node)
+{
     add_sink();
     auto sink = sinks.back();
     sink_nodes.insert({sink, node});
 }
 
-bool FilterEditorPrimitiveMergeNode::is_last_sink(FilterEditorSink* sink){
+bool FilterEditorPrimitiveMergeNode::is_last_sink(FilterEditorSink *sink)
+{
     return sinks.back() == sink && sink_nodes.find(sink) == sink_nodes.end();
 }
 
-void FilterEditorPrimitiveMergeNode::remove_extra_sinks(){
-    for(auto it = sinks.begin(); it != sinks.end();){
-        sink_dock.remove(*(*it)); 
-        it = sinks.erase(it); 
-    } 
+void FilterEditorPrimitiveMergeNode::remove_extra_sinks()
+{
+    for (auto it = sinks.begin(); it != sinks.end();) {
+        sink_dock.remove(*(*it));
+        it = sinks.erase(it);
+    }
     sink_nodes.clear();
 }
+
 // Update the sink result in the document to result, for the node corresponding to the index. Should be called only if the sink has a node mapped to it.
-void FilterEditorPrimitiveMergeNode::set_sink_result(FilterEditorSink* sink, std::string result){
-    if(sink_nodes.find(sink) != sink_nodes.end()){
+void FilterEditorPrimitiveMergeNode::set_sink_result(FilterEditorSink *sink, std::string result)
+{
+    if (sink_nodes.find(sink) != sink_nodes.end()) {
         auto node = sink_nodes[sink];
         node->setAttribute("in", result.c_str());
     }
-    else{
-    }
-
 }
-void FilterEditorPrimitiveMergeNode::set_sink_result(FilterEditorSink* sink, int inp_index){
+
+void FilterEditorPrimitiveMergeNode::set_sink_result(FilterEditorSink *sink, int inp_index)
+{
     g_assert(sink_nodes.find(sink) != sink_nodes.end());
-    if(sink_nodes.find(sink) != sink_nodes.end()){
+    if (sink_nodes.find(sink) != sink_nodes.end()) {
         auto node = sink_nodes[sink];
         if (inp_index != -2) {
             auto res_string = sink->get_result_inputs(inp_index);
             node->getRepr()->setAttribute("in", res_string.first.c_str());
             sink->set_result_inp(inp_index);
-            
         } else {
             sink->set_result_inp(inp_index);
             auto res_string = sink->get_result_inputs();
             node->getRepr()->setAttribute("in", res_string.first.c_str());
         }
     }
-    else{
-    }
-
 }
 
-void FilterEditorPrimitiveMergeNode::update_sink_results(){
-    const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha", "BackgroundImage", "BackgroundAlpha", "FillPaint", "StrokePaint"};
-    for(int i = 0; i != sinks.size(); i++){
-        if(sink_nodes.find(sinks[i]) != sink_nodes.end()){
+void FilterEditorPrimitiveMergeNode::update_sink_results()
+{
+    std::vector<Glib::ustring> const result_inputs = {"SourceGraphic", "SourceAlpha", "BackgroundImage", "BackgroundAlpha", "FillPaint", "StrokePaint"};
+    for (int i = 0; i != sinks.size(); i++) {
+        if (sink_nodes.find(sinks[i]) != sink_nodes.end()) {
             auto fe_merge_node = sink_nodes[sinks[i]];
-            if(fe_merge_node->getAttribute("in") != nullptr){
-                if(std::find(result_inputs.begin(), result_inputs.end(), fe_merge_node->getAttribute("in")) != result_inputs.end()){
-                }
-                else{
+            if (fe_merge_node->getAttribute("in")) {
+                if (std::find(result_inputs.begin(), result_inputs.end(), fe_merge_node->getAttribute("in")) !=
+                    result_inputs.end()) {
+                } else {
                     set_sink_result(sinks[i], fe_merge_node->getAttribute("in"));
                 }
             }
@@ -510,23 +500,22 @@ void FilterEditorPrimitiveMergeNode::update_sink_results(){
     }
 }
 
-
-FilterEditorSink* FilterEditorOutputNode::get_sink(){
+FilterEditorSink *FilterEditorOutputNode::get_sink()
+{
     return this->sinks[0];
 }
 
+void FilterEditorOutputNode::set_sink_result(FilterEditorSink *sink, std::string result_string) {}
 
-void FilterEditorOutputNode::set_sink_result(FilterEditorSink* sink, std::string result_string){
-    return;
-}
-void FilterEditorOutputNode::set_sink_result(FilterEditorSink* sink, int inp_index){
-    return;
-}
-void FilterEditorOutputNode::update_position_from_document(){
+void FilterEditorOutputNode::set_sink_result(FilterEditorSink *sink, int inp_index) {}
+
+void FilterEditorOutputNode::update_position_from_document()
+{
     x = filter->getRepr()->getAttributeDouble("inkscape:output-x", x);
     y = filter->getRepr()->getAttributeDouble("inkscape:output-y", y);
 }
-FilterEditorSource::FilterEditorSource(FilterEditorNode* _node, Glib::ustring _label_string)
+
+FilterEditorSource::FilterEditorSource(FilterEditorNode *_node, Glib::ustring _label_string)
     : Gtk::Box(Gtk::Orientation::VERTICAL, 0)
     , label_string(_label_string)
     , node(_node)
@@ -539,60 +528,68 @@ FilterEditorSource::FilterEditorSource(FilterEditorNode* _node, Glib::ustring _l
     provider->load_from_path(style);
     context->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     add_css_class("nodesource");
-};
+}
+
 FilterEditorNode *FilterEditorSource::get_parent_node()
 {
     return node;
-};
+}
 
-std::vector<FilterEditorConnection*>& FilterEditorSource::get_connections()
+std::vector<FilterEditorConnection *> &FilterEditorSource::get_connections()
 {
     return connections;
-};
+}
 
 bool FilterEditorSource::add_connection(FilterEditorConnection *connection)
 {
     connections.push_back(connection);
     update_width();
     return true;
-};
-bool connectionCompare(FilterEditorConnection*& a, FilterEditorConnection*& b){
-    FilterEditorConnection* t1 = static_cast<FilterEditorConnection*>(a);
-    FilterEditorConnection* t2 = static_cast<FilterEditorConnection*>(b);
+}
+
+bool connectionCompare(FilterEditorConnection *&a, FilterEditorConnection *&b)
+{
+    FilterEditorConnection *t1 = static_cast<FilterEditorConnection *>(a);
+    FilterEditorConnection *t2 = static_cast<FilterEditorConnection *>(b);
     double xa1, xa2, ya1, ya2, xb1, xb2, yb1, yb2;
     t1->get_position(xa1, ya1, xa2, ya2);
     t2->get_position(xb1, yb1, xb2, yb2);
-    if(xa2 < xb2){
+    if (xa2 < xb2) {
         return 1;
     }
     return 0;
 }
-void FilterEditorSource::sort_connections(){
+
+void FilterEditorSource::sort_connections()
+{
     std::sort(connections.begin(), connections.end(), connectionCompare);
 }
-bool FilterEditorSource::get_selected(){
+
+bool FilterEditorSource::get_selected()
+{
     return node->get_selected();
 }
 
-bool FilterEditorSink::get_selected(){
+bool FilterEditorSink::get_selected()
+{
     return node->get_selected();
 }
 
-
-FilterEditorFixed::FilterEditorFixed(std::map<int, std::vector<FilterEditorConnection *>> &_connections, FilterEditorCanvas* _canvas, double _x_offset, double _y_offset)
+FilterEditorFixed::FilterEditorFixed(std::map<int, std::vector<FilterEditorConnection *>> &_connections, FilterEditorCanvas *_canvas, double _x_offset, double _y_offset)
     : canvas(_canvas)
     , x_offset(_x_offset)
     , y_offset(_y_offset)
     , connections(_connections)
     , connection_renderer(this, _canvas)
-    {
-        put(connection_renderer, 0, 0);
-    };
+{
+    put(connection_renderer, 0, 0);
+}
 
 double FilterEditorFixed::get_x_offset()
 {
     return x_offset;
 }
+
 double FilterEditorFixed::get_y_offset()
 {
     return y_offset;
@@ -604,12 +601,10 @@ void FilterEditorFixed::update_offset(double x, double y)
     y_offset = y;
 }
 
-
-
-
-void ConnectionsRenderer::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &snapshot){
+void ConnectionsRenderer::snapshot_vfunc(std::shared_ptr<Gtk::Snapshot> const &snapshot)
+{
     auto const cr = snapshot->append_cairo(get_allocation());
-    if(canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::CONNECTION_UPDATE){
+    if (canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::CONNECTION_UPDATE) {
         cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
         cr->set_line_width(5.0);
         double x1, y1, x2, y2;
@@ -618,15 +613,14 @@ void ConnectionsRenderer::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &s
         x2 = canvas->drag_global_coordinates.second.first;
         y2 = canvas->drag_global_coordinates.second.second;
         auto alloc = canvas->starting_source->get_allocation();
-        canvas->starting_source->translate_coordinates(*this, alloc.get_width()/2, alloc.get_height()/2, x1, y1);
+        canvas->starting_source->translate_coordinates(*this, alloc.get_width() / 2, alloc.get_height() / 2, x1, y1);
         double x2_l, y2_l;
         canvas->global_to_local(x2, y2, x2_l, y2_l);
         cr->move_to(x1, y1);
         cr->line_to(x2_l, y2_l);
         cr->stroke();
         cr->close_path();
-    }
-    else if(canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::INVERTED_CONNECTION_UPDATE){
+    } else if (canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::INVERTED_CONNECTION_UPDATE) {
         cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
         cr->set_line_width(5.0);
         double x1, y1, x2, y2;
@@ -635,7 +629,7 @@ void ConnectionsRenderer::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &s
         x2 = canvas->drag_global_coordinates.second.first;
         y2 = canvas->drag_global_coordinates.second.second;
         auto alloc = canvas->starting_sink->get_allocation();
-        canvas->starting_sink->translate_coordinates(*this, alloc.get_width()/2, alloc.get_height()/2, x1, y1);
+        canvas->starting_sink->translate_coordinates(*this, alloc.get_width() / 2, alloc.get_height() / 2, x1, y1);
         double x2_l, y2_l;
         canvas->global_to_local(x2, y2, x2_l, y2_l);
         cr->move_to(x1, y1);
@@ -644,13 +638,11 @@ void ConnectionsRenderer::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &s
         cr->close_path();
     }
     for (auto conn : canvas->connections[canvas->current_filter_id]) {
-
         double x1, y1, x2, y2;
         conn->get_source()->sort_connections();
         conn->get_position(x1, y1, x2, y2);
         auto gradient = Cairo::LinearGradient::create(x1, y1, x2, y2);
         gradient->add_color_stop_rgba(1.0, 0.1, 0.1, 0.1, 1.0);
-        
 
         cr->set_line_cap(Cairo::Context::LineCap::ROUND);
         cr->set_line_join(Cairo::Context::LineJoin::ROUND);
@@ -694,44 +686,41 @@ void ConnectionsRenderer::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &s
         }
         cr->set_source(gradient);
         cr->set_line_width(5.0);
-        #ifdef CURVE_1
+#ifdef CURVE_1
         cr->move_to(x1, y1);
-        cr->line_to(x2, y2); 
-        #endif
-        #ifdef CURVE_2
+        cr->line_to(x2, y2);
+#endif
+#ifdef CURVE_2
         int threshold = 20;
-        if(y2 - y1 < threshold){
+        if (y2 - y1 < threshold) {
             int extension_length = 20;
             cr->move_to(x1, y1);
-            cr->line_to(x1, y1+extension_length);
-            cr->line_to((x1+x2)/2, y1+extension_length);
-            cr->line_to((x1+x2)/2, y2-extension_length);
-            cr->line_to(x2, y2-extension_length);
+            cr->line_to(x1, y1 + extension_length);
+            cr->line_to((x1 + x2) / 2, y1 + extension_length);
+            cr->line_to((x1 + x2) / 2, y2 - extension_length);
+            cr->line_to(x2, y2 - extension_length);
             cr->line_to(x2, y2);
-        }
-        else{
+        } else {
             cr->move_to(x1, y1);
             cr->line_to(x1, (y1 + y2) / 2);
             cr->line_to(x2, (y1 + y2) / 2);
             cr->line_to(x2, y2);
         }
 
-
-        #endif
+#endif
         cr->stroke();
         cr->close_path();
     }
-
 }
 
-void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &snapshot)
+void FilterEditorFixed::snapshot_vfunc(std::shared_ptr<Gtk::Snapshot> const &snapshot)
 {
-    if(canvas->_preview->get_parent() == static_cast<Gtk::Widget*>(this))
+    if (this == canvas->_preview->get_parent()) {
         snapshot_child(*canvas->_preview, snapshot);
+    }
     auto const cr = snapshot->append_cairo(get_allocation());
-    // const double t = 100;
-    if(canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::CONNECTION_UPDATE){
-        cr->set_source_rgba(1.0, 72/255, 0.0, 1.0);
+    if (canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::CONNECTION_UPDATE) {
+        cr->set_source_rgba(1.0, 72 / 255, 0.0, 1.0);
         cr->set_line_width(5.0);
         double x1, y1, x2, y2;
         x1 = canvas->drag_global_coordinates.first.first;
@@ -739,15 +728,14 @@ void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &sna
         x2 = canvas->drag_global_coordinates.second.first;
         y2 = canvas->drag_global_coordinates.second.second;
         auto alloc = canvas->starting_source->get_allocation();
-        canvas->starting_source->translate_coordinates(*this, alloc.get_width()/2, alloc.get_height()/2, x1, y1);
+        canvas->starting_source->translate_coordinates(*this, alloc.get_width() / 2, alloc.get_height() / 2, x1, y1);
         double x2_l, y2_l;
         canvas->global_to_local(x2, y2, x2_l, y2_l);
         cr->move_to(x1, y1);
         cr->line_to(x2_l, y2_l);
         cr->stroke();
         cr->close_path();
-    }
-    else if(canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::INVERTED_CONNECTION_UPDATE){
+    } else if (canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::INVERTED_CONNECTION_UPDATE) {
         cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
         cr->set_line_width(5.0);
         double x1, y1, x2, y2;
@@ -756,7 +744,7 @@ void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &sna
         x2 = canvas->drag_global_coordinates.second.first;
         y2 = canvas->drag_global_coordinates.second.second;
         auto alloc = canvas->starting_sink->get_allocation();
-        canvas->starting_sink->translate_coordinates(*this, alloc.get_width()/2, alloc.get_height()/2, x1, y1);
+        canvas->starting_sink->translate_coordinates(*this, alloc.get_width() / 2, alloc.get_height() / 2, x1, y1);
         double x2_l, y2_l;
         canvas->global_to_local(x2, y2, x2_l, y2_l);
         cr->move_to(x1, y1);
@@ -765,14 +753,12 @@ void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &sna
         cr->close_path();
     }
     for (auto conn : canvas->connections[canvas->current_filter_id]) {
-
         double x1, y1, x2, y2;
         conn->get_source()->sort_connections();
         conn->get_position(x1, y1, x2, y2);
-        
+
         auto gradient = Cairo::LinearGradient::create(x1, y1, x2, y2);
         gradient->add_color_stop_rgba(1.0, 0.1, 0.1, 0.1, 1.0);
-        
 
         cr->set_line_cap(Cairo::Context::LineCap::ROUND);
         cr->set_line_join(Cairo::Context::LineJoin::ROUND);
@@ -815,40 +801,39 @@ void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &sna
         }
         cr->set_source(gradient);
         cr->set_line_width(5.0);
-        #ifdef CURVE_1
+#ifdef CURVE_1
         cr->move_to(x1, y1);
-        cr->line_to(x2, y2); 
-        #endif
-        #ifdef CURVE_2
+        cr->line_to(x2, y2);
+#endif
+#ifdef CURVE_2
         int threshold = 20;
-        if(y2 - y1 < threshold){
+        if (y2 - y1 < threshold) {
             int extension_length = 20;
             cr->move_to(x1, y1);
-            cr->line_to(x1, y1+extension_length);
-            cr->line_to((x1+x2)/2, y1+extension_length);
-            cr->line_to((x1+x2)/2, y2-extension_length);
-            cr->line_to(x2, y2-extension_length);
+            cr->line_to(x1, y1 + extension_length);
+            cr->line_to((x1 + x2) / 2, y1 + extension_length);
+            cr->line_to((x1 + x2) / 2, y2 - extension_length);
+            cr->line_to(x2, y2 - extension_length);
             cr->line_to(x2, y2);
-        }
-        else{
+        } else {
             cr->move_to(x1, y1);
             cr->line_to(x1, (y1 + y2) / 2);
             cr->line_to(x2, (y1 + y2) / 2);
             cr->line_to(x2, y2);
         }
 
-
-        #endif
+#endif
         cr->stroke();
         cr->close_path();
     }
-    for(auto it: this->get_children()){
-        if(it != dynamic_cast<Gtk::Widget*>(canvas->_preview.get())){
+
+    for (auto it : this->get_children()) {
+        if (it != dynamic_cast<Gtk::Widget *>(canvas->_preview.get())) {
             snapshot_child(*it, snapshot);
         }
     }
-    // Gtk::Fixed::snapshot_vfunc(snapshot);
-};
+}
+
 void FilterEditorConnection::get_position(double &x1, double &y1, double &x2, double &y2)
 {
     double x_o, y_o, x, y;
@@ -858,30 +843,34 @@ void FilterEditorConnection::get_position(double &x1, double &y1, double &x2, do
     x1 = x;
     y1 = y;
     alloc = sink->get_allocation();
-    
+
     sink->translate_coordinates(*(canvas->get_canvas()), alloc.get_width() / 2 - 4, alloc.get_height() / 2, x, y);
     x2 = x;
     y2 = y;
 }
-FilterEditorNode* FilterEditorConnection::get_source_node(){
+
+FilterEditorNode *FilterEditorConnection::get_source_node()
+{
     return source_node;
 }
-FilterEditorNode* FilterEditorConnection::get_sink_node(){
+
+FilterEditorNode *FilterEditorConnection::get_sink_node()
+{
     return sink_node;
 }
-FilterEditorSource* FilterEditorConnection::get_source()
+
+FilterEditorSource *FilterEditorConnection::get_source()
 {
     return source;
 }
-FilterEditorSink* FilterEditorConnection::get_sink()
+
+FilterEditorSink *FilterEditorConnection::get_sink()
 {
     return sink;
 }
 
-
-FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
-    : Gtk::ScrolledWindow()
-    , canvas(this->connections, this)
+FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog &dialog)
+    : canvas(this->connections, this)
     , _dialog(dialog)
     , _popover_menu(create_menu())
 {
@@ -899,27 +888,24 @@ FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
     _preview = std::make_unique<UI::Dialog::ExportPreview>();
     _preview->usePreviewLoading(false);
     auto document = preview_doc.get();
-    if(document){
+    if (document) {
         auto col = Colors::Color::parse("#ffffff");
         _preview->setBackgroundColor(col->toRGBA());
         _preview->queueRefresh();
     }
     canvas.put(*_preview, 0, 0);
-     
-    while(controllers->get_object(i) != nullptr){
+
+    while (controllers->get_object(i)) {
         auto obj = controllers->get_typed_object<Gtk::EventControllerScroll>(i);
-        if( obj == nullptr){
-            
-        }
-        else{
-            this->remove_controller(obj);
+        if (obj) {
+            remove_controller(obj);
         }
         i++;
     }
     zoom_fac = 1.0;
     set_kinetic_scrolling(false);
     set_policy(Gtk::PolicyType::EXTERNAL, Gtk::PolicyType::EXTERNAL);
-    
+
     set_child(canvas);
     canvas.set_overflow(Gtk::Overflow::HIDDEN);
     Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
@@ -940,139 +926,129 @@ FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
     rubberband_rectangle->add_css_class("rubberband");
 
     initialize_gestures();
-    
-    // Setup Canvas
-};
+}
+
 std::unique_ptr<UI::Widget::PopoverMenu> FilterEditorCanvas::create_menu()
 {
     auto menu = std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM);
-    auto append = [&](Glib::ustring const &text, auto const mem_fun)
-    {
+    auto append = [&](Glib::ustring const &text, auto const mem_fun) {
         auto &item = *Gtk::make_managed<UI::Widget::PopoverMenuItem>(text, true);
         item.signal_activate().connect(sigc::mem_fun(*this, mem_fun));
         menu->append(item);
     };
-    append(_("_Duplicate selected nodes"            ), &FilterEditorCanvas::duplicate_nodes      );
-    append(_("_Remove selected nodes"               ), &FilterEditorCanvas::delete_nodes         );
+    append(_("_Duplicate selected nodes"), &FilterEditorCanvas::duplicate_nodes);
+    append(_("_Remove selected nodes"), &FilterEditorCanvas::delete_nodes);
     append(_("_Focus to output"), &FilterEditorCanvas::align_to_output);
     append(_("_Toggle Attribute Editor"), &FilterEditorCanvas::toggle_params);
 
     return menu;
 }
 
-FilterEditorOutputNode* FilterEditorCanvas::create_output_node(SPFilter* filter, double x, double y, Glib::ustring label_text){
+FilterEditorOutputNode *FilterEditorCanvas::create_output_node(SPFilter *filter, double x, double y, Glib::ustring label_text)
+{
     std::unique_ptr<FilterEditorOutputNode> output_node_derived = std::make_unique<FilterEditorOutputNode>(100, filter, x, y, label_text, 1, this);
-    std::unique_ptr<FilterEditorNode> output_node_new = std::move(output_node_derived); 
-    place_node(dynamic_cast<FilterEditorNode*>(output_node_new.get()), x, y, true, false); 
-    if(output_node_new.get() == nullptr)
+    std::unique_ptr<FilterEditorNode> output_node_new = std::move(output_node_derived);
+    place_node(dynamic_cast<FilterEditorNode *>(output_node_new.get()), x, y, true, false);
+    if (!output_node_new.get()) {
         g_error("There's some problem here");
-    nodes[current_filter_id].push_back(std::move(output_node_new)); 
-    auto ret_ptr = nodes[current_filter_id].back().get(); 
-    return (dynamic_cast<FilterEditorOutputNode*>(ret_ptr));
+    }
+    nodes[current_filter_id].push_back(std::move(output_node_new));
+    auto ret_ptr = nodes[current_filter_id].back().get();
+    return dynamic_cast<FilterEditorOutputNode *>(ret_ptr);
 }
 
 // TODO: Improve visited performance
-void FilterEditorCanvas::create_nodes_order(FilterEditorPrimitiveNode* prev_node, FilterEditorPrimitiveNode* node, std::vector<FilterEditorPrimitiveNode*>& nodes_order, std::map<FilterEditorPrimitiveNode*, std::pair<int, int>>& visited, bool dir, bool reset){
+void FilterEditorCanvas::create_nodes_order(FilterEditorPrimitiveNode *prev_node, FilterEditorPrimitiveNode *node, std::vector<FilterEditorPrimitiveNode *> &nodes_order, std::map<FilterEditorPrimitiveNode *, std::pair<int, int>> &visited, bool dir, bool reset)
+{
     // Dir true is up and false is down
     modify_observer(true);
     static int current_iter = 0;
     static bool new_iter = false;
-    if(reset){
+    if (reset) {
         current_iter = 0;
     }
-    if(new_iter || prev_node == nullptr){
+    if (new_iter || !prev_node) {
         current_iter++;
         visited.find(node)->second.first = current_iter;
         visited.find(node)->second.second = 0;
         node->get_primitive()->setAttribute("inkscape:vis1", std::to_string(current_iter).c_str());
         node->get_primitive()->setAttribute("inkscape:vis2", std::to_string(0).c_str());
         new_iter = false;
-    }
-    else{
+    } else {
         auto it = visited.find(node);
         auto it_prev = visited.find(prev_node);
-        if(dir == true){
-            if(it->second.first == -1 || it_prev->second.second+1 > it->second.second){
+        if (dir) {
+            if (it->second.first == -1 || it_prev->second.second + 1 > it->second.second) {
                 it->second.first = it_prev->second.first;
-                
+
                 it->second.second = std::max(it->second.second, it_prev->second.second + 1);
                 node->get_primitive()->setAttribute("inkscape:vis1", std::to_string(it->second.first).c_str());
                 node->get_primitive()->setAttribute("inkscape:vis2", std::to_string(it->second.second).c_str());
-            }
-            else{
+            } else {
                 return;
-            }    
-        }
-        else{
-            if(it->second.first == -1 || it_prev->second.second-1 < it->second.second){
-                if(it->second.first != -1){
+            }
+        } else {
+            if (it->second.first == -1 || it_prev->second.second - 1 < it->second.second) {
+                if (it->second.first != -1) {
                     it->second.second = std::min(it->second.second, it_prev->second.second - 1);
-                }
-                else{
+                } else {
                     it->second.second = it_prev->second.second - 1;
                 }
                 it->second.first = it_prev->second.first;
                 node->get_primitive()->setAttribute("inkscape:vis1", std::to_string(it->second.first).c_str());
                 node->get_primitive()->setAttribute("inkscape:vis2", std::to_string(it->second.second).c_str());
-            }
-            else{
+            } else {
                 return;
             }
-
         }
     }
-    if(!is<SPFeMerge>(node->get_primitive()) || is<SPFeMerge>(node->get_primitive())){
+    if (!is<SPFeMerge>(node->get_primitive()) || is<SPFeMerge>(node->get_primitive())) {
         auto connected_up_nodes = node->get_connected_up_nodes();
-        auto connected_down_nodes = node->get_connected_down_nodes(); 
-        for(int i = 0; i != connected_up_nodes.size(); i++){
-            if(dynamic_cast<FilterEditorPrimitiveNode*>(connected_up_nodes[i].second) != nullptr){
-                if(dynamic_cast<FilterEditorPrimitiveNode*>(connected_up_nodes[i].second) == prev_node){
+        auto connected_down_nodes = node->get_connected_down_nodes();
+        for (int i = 0; i != connected_up_nodes.size(); i++) {
+            if (dynamic_cast<FilterEditorPrimitiveNode *>(connected_up_nodes[i].second)) {
+                if (dynamic_cast<FilterEditorPrimitiveNode *>(connected_up_nodes[i].second) == prev_node) {
                     continue;
-                }
-                else{
+                } else {
                     create_nodes_order(node, dynamic_cast<FilterEditorPrimitiveNode *>(connected_up_nodes[i].second),
                                        nodes_order, visited, true, false);
                 }
-
             }
         }
-        for(int i = 0; i != connected_down_nodes.size(); i++){
+        for (int i = 0; i != connected_down_nodes.size(); i++) {
             if (dynamic_cast<FilterEditorPrimitiveNode *>(connected_down_nodes[i].second) == prev_node) {
                 continue;
             }
-            if(dynamic_cast<FilterEditorPrimitiveNode*>(connected_down_nodes[i].second) != nullptr){
-                create_nodes_order(node,
-                                   dynamic_cast<FilterEditorPrimitiveNode *>(connected_down_nodes[i].second),
+            if (dynamic_cast<FilterEditorPrimitiveNode *>(connected_down_nodes[i].second)) {
+                create_nodes_order(node, dynamic_cast<FilterEditorPrimitiveNode *>(connected_down_nodes[i].second),
                                    nodes_order, visited, false, false);
-
             }
-        }  
+        }
     }
-    
+
     nodes_order.push_back(node);
     node->part_of_chain = true;
     modify_observer(false);
-    return;
-
 }
 
-void FilterEditorCanvas::delete_nodes_without_prims(){
+void FilterEditorCanvas::delete_nodes_without_prims()
+{
     modify_observer(true);
-    
+
     auto filter = _dialog._filter_modifier.get_selected_filter();
     int delete_counter = 0;
-    if(filter){
-        std::set<SPFilterPrimitive*> prims;
+    if (filter) {
+        std::set<SPFilterPrimitive *> prims;
         for (auto &child : _dialog._filter_modifier.get_selected_filter()->children) {
             auto prim = cast<SPFilterPrimitive>(&child);
-            if(prim != nullptr){
+            if (prim) {
                 prims.insert(prim);
             }
         }
         for (auto it = nodes[current_filter_id].begin(); it != nodes[current_filter_id].end();) {
             auto node = it->get();
-            FilterEditorPrimitiveNode* prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(node);
-            if (prim_node != nullptr && prims.find(prim_node->get_primitive()) == prims.end()) { 
+            FilterEditorPrimitiveNode *prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(node);
+            if (prim_node && prims.find(prim_node->get_primitive()) == prims.end()) {
                 delete_counter++;
                 prim_node->unparent();
                 for (auto connection : node->connections) {
@@ -1099,21 +1075,18 @@ void FilterEditorCanvas::delete_nodes_without_prims(){
             }
         }
     }
-    else{
-    }
-    
+
     modify_observer(false);
-    
 }
 
-void FilterEditorCanvas::delete_nodes_without_undo(){
-
+void FilterEditorCanvas::delete_nodes_without_undo()
+{
     modify_observer(true);
-     
-    for(auto it = selected_nodes[current_filter_id].begin(); it != selected_nodes[current_filter_id].end();){
+
+    for (auto it = selected_nodes[current_filter_id].begin(); it != selected_nodes[current_filter_id].end(); ) {
         auto node = *it;
-        
-        if(dynamic_cast<FilterEditorOutputNode*>(node) == nullptr){
+
+        if (!dynamic_cast<FilterEditorOutputNode *>(node)) {
             // Delete all the connections
             for (auto connection : node->connections) {
                 destroy_connection(connection);
@@ -1125,40 +1098,37 @@ void FilterEditorCanvas::delete_nodes_without_undo(){
                 node->source_dock.remove(*node->source_dock.get_first_child());
             }
             // Delete the node
-            auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(node);
-            if (prim_node == nullptr){
-            } else {
+            if (auto prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(node)) {
                 auto prim = prim_node->get_primitive();
                 prim_node->unparent();
                 it = selected_nodes[current_filter_id].erase(it);
-                for(auto it2 = nodes[current_filter_id].begin(); it2 != nodes[current_filter_id].end();){
-                    if((it2->get()) == node){
+                for (auto it2 = nodes[current_filter_id].begin(); it2 != nodes[current_filter_id].end();) {
+                    if ((it2->get()) == node) {
                         it2 = nodes[current_filter_id].erase(it2);
-                    }
-                    else{
+                    } else {
                         it2++;
                     }
                 }
-                sp_repr_unparent(prim->getRepr()); 
+                sp_repr_unparent(prim->getRepr());
             }
-        }
-        else{
+        } else {
             it++;
         }
-    } 
+    }
     update_document();
     canvas.queue_draw();
     modify_observer(false);
 }
-void FilterEditorCanvas::delete_nodes(){
 
+void FilterEditorCanvas::delete_nodes()
+{
     modify_observer(true);
-    auto filter = filter_list[current_filter_id]; 
-        
-    for(auto it = selected_nodes[current_filter_id].begin(); it != selected_nodes[current_filter_id].end();){
+    auto filter = filter_list[current_filter_id];
+
+    for (auto it = selected_nodes[current_filter_id].begin(); it != selected_nodes[current_filter_id].end();) {
         auto node = *it;
-        
-        if(dynamic_cast<FilterEditorOutputNode*>(node) == nullptr){
+
+        if (!dynamic_cast<FilterEditorOutputNode *>(node)) {
             // Delete all the connections
             for (auto connection : node->connections) {
                 destroy_connection(connection);
@@ -1170,94 +1140,88 @@ void FilterEditorCanvas::delete_nodes(){
                 node->source_dock.remove(*node->source_dock.get_first_child());
             }
             // Delete the node
-            auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(node);
-            if (prim_node == nullptr){
-            } else {
+            if (auto prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(node)) {
                 auto prim = prim_node->get_primitive();
                 prim_node->unparent();
                 it = selected_nodes[current_filter_id].erase(it);
-                for(auto it2 = nodes[current_filter_id].begin(); it2 != nodes[current_filter_id].end();){
-                    if((it2->get()) == node){
+                for (auto it2 = nodes[current_filter_id].begin(); it2 != nodes[current_filter_id].end(); ) {
+                    if ((it2->get()) == node) {
                         it2 = nodes[current_filter_id].erase(it2);
-                    }
-                    else{
+                    } else {
                         it2++;
                     }
                 }
-                sp_repr_unparent(prim->getRepr()); 
+                sp_repr_unparent(prim->getRepr());
             }
-        }
-        else{
+        } else {
             it++;
         }
-    } 
+    }
     update_document();
     canvas.queue_draw();
     DocumentUndo::done(filter->document, _("Deleted Nodes"), INKSCAPE_ICON("dialog-filters"));
     modify_observer(false);
 }
 
-
-bool FilterEditorCanvas::primitive_node_exists(SPFilterPrimitive* primitive){
-    if(primitive_to_node.find(primitive) != primitive_to_node.end()){
-        return true;
-    }
-    else{
-        return false;
-    }
+bool FilterEditorCanvas::primitive_node_exists(SPFilterPrimitive *primitive)
+{
+    return primitive_to_node.find(primitive) != primitive_to_node.end();
 }
 
-void FilterEditorCanvas::remove_filter(SPFilter* filter){
+void FilterEditorCanvas::remove_filter(SPFilter *filter)
+{
     modify_observer(true);
-    if(filter){
-        if(std::find(filter_list.begin(), filter_list.end(), filter) != filter_list.end()){
-            int filter_id = std::find(filter_list.begin(), filter_list.end(), filter)-filter_list.end();
-            selected_nodes[filter_id].clear();
-            for(int i = 0; i != nodes[filter_id].size(); i++){
-                selected_nodes[filter_id].push_back(nodes[filter_id][i].get());
-            }
-            delete_nodes_without_undo();
-            if(connections.find(filter_id) != connections.end())
-                connections.erase(connections.find(filter_id));
-            if (selected_nodes.find(filter_id) != selected_nodes.end())
-                selected_nodes.erase(selected_nodes.find(filter_id));
-            if (result_manager.find(filter_id) != result_manager.end()) 
-                result_manager.erase(result_manager.find(filter_id));
-            if (nodes.find(filter_id) != nodes.end())
-                nodes.erase(nodes.find(filter_id));
-
+    if (!filter) {
+        return;
+    }
+    if (std::find(filter_list.begin(), filter_list.end(), filter) != filter_list.end()) {
+        int filter_id = std::find(filter_list.begin(), filter_list.end(), filter) - filter_list.end();
+        selected_nodes[filter_id].clear();
+        for (int i = 0; i != nodes[filter_id].size(); i++) {
+            selected_nodes[filter_id].push_back(nodes[filter_id][i].get());
         }
+        delete_nodes_without_undo();
+        if (connections.find(filter_id) != connections.end())
+            connections.erase(connections.find(filter_id));
+        if (selected_nodes.find(filter_id) != selected_nodes.end())
+            selected_nodes.erase(selected_nodes.find(filter_id));
+        if (result_manager.find(filter_id) != result_manager.end())
+            result_manager.erase(result_manager.find(filter_id));
+        if (nodes.find(filter_id) != nodes.end())
+            nodes.erase(nodes.find(filter_id));
     }
 }
 
-void FilterEditorCanvas::align_to_output(){
+void FilterEditorCanvas::align_to_output()
+{
     auto filter = _dialog._filter_modifier.get_selected_filter();
-    if(filter){
-        if(output_node){
+    if (filter) {
+        if (output_node) {
             // Place the centre of the output node at the centre of the canvas
             double centre_node_x, centre_node_y;
             auto alloc_node = output_node->get_allocation();
             auto alloc_canvas = canvas.get_allocation();
             auto zoom_fac = get_zoom_factor();
-            output_node->translate_coordinates(canvas, alloc_node.get_width()/2, alloc_node.get_height()/2, centre_node_x, centre_node_y);
-            centre_node_x -= alloc_canvas.get_width()/(2 * zoom_fac);
-            centre_node_y -= alloc_canvas.get_height()/(2 * zoom_fac);
-            
+            output_node->translate_coordinates(canvas, alloc_node.get_width() / 2, alloc_node.get_height() / 2, centre_node_x, centre_node_y);
+            centre_node_x -= alloc_canvas.get_width() / (2 * zoom_fac);
+            centre_node_y -= alloc_canvas.get_height() / (2 * zoom_fac);
+
             update_offsets(canvas.get_x_offset() + centre_node_x, canvas.get_y_offset() + centre_node_y, true);
             update_positions();
         }
     }
 }
 
-void FilterEditorCanvas::toggle_params(){
+void FilterEditorCanvas::toggle_params()
+{
     _dialog.toggle_params();
 }
 
-
-void FilterEditorCanvas::update_preview_filter(bool single_primitive){
+void FilterEditorCanvas::update_preview_filter(bool single_primitive)
+{
     auto current_filter = get_current_filter();
-    
-    if(current_filter){
+
+    if (current_filter) {
         if (!single_primitive) {
             std::unordered_set<SPFilterPrimitive *> mark_prims;
             auto child_list = current_filter->childList(false);
@@ -1321,22 +1285,20 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
                 }
 
                 repr->setAttribute("in", last_primitive->getAttribute("result"));
-
             }
-        
 
             if (item_ptr != nullptr) {
                 ::remove_filter(item_ptr, false);
                 sp_style_set_property_url(item_ptr, "filter", new_filter, false);
                 item_ptr->requestDisplayUpdate((SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG));
             }
-        }
-        else{
+        } else {
             int prim_index = -1;
-            if(selected_nodes[current_filter_id].size()){
-                for(auto it = selected_nodes[current_filter_id].rbegin(); it != selected_nodes[current_filter_id].rend(); it++){
-                    auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(*it);
-                    if(prim_node && !dynamic_cast<SPFeMerge*>(prim_node)){
+            if (selected_nodes[current_filter_id].size()) {
+                for (auto it = selected_nodes[current_filter_id].rbegin();
+                     it != selected_nodes[current_filter_id].rend(); it++) {
+                    auto prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(*it);
+                    if (prim_node && !dynamic_cast<SPFeMerge *>(prim_node)) {
                         g_assert(cast<SPObject>(prim_node->get_primitive()));
                         auto child_list = current_filter->childList(false);
                         auto it =
@@ -1348,14 +1310,14 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
                     }
                 }
             }
-            if(prim_index == -1){
+            if (prim_index == -1) {
                 // Preview filter should be the one the user uses.
                 auto dup_filter = current_filter->getRepr()->duplicate(preview_doc->getReprDoc());
                 SPFilter *new_filter = nullptr;
                 for (auto &child : preview_doc->getRoot()->children) {
-                    if (cast<SPDefs>(&child)) {
+                    if (is<SPDefs>(&child)) {
                         for (auto &defs_child : child.children) {
-                            if (cast<SPFilter>(&defs_child)) {
+                            if (is<SPFilter>(&defs_child)) {
                                 sp_repr_unparent(defs_child.getRepr());
                                 break;
                             }
@@ -1365,13 +1327,13 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
                     } else {
                     }
                 }
-                SPItem *item_ptr = cast<SPItem>(preview_doc->getObjectById("path234")); 
-                if (item_ptr != nullptr) {
+                SPItem *item_ptr = cast<SPItem>(preview_doc->getObjectById("path234"));
+                if (item_ptr) {
                     ::remove_filter(item_ptr, false);
                     sp_style_set_property_url(item_ptr, "filter", new_filter, false);
                     item_ptr->requestDisplayUpdate((SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG));
                 }
-            } else{
+            } else {
                 SPFilter *dup_filter = new_filter(preview_doc.get());
                 for (auto &defs_child : preview_doc->getDefs()->children) {
                     if (cast<SPFilter>(&defs_child)) {
@@ -1379,8 +1341,7 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
                         break;
                     }
                 }
-                    
-                
+
                 SPItem *item_ptr = cast<SPItem>(preview_doc->getObjectById("path234"));
                 if (prim_index != -1) {
                     auto last_primitive = current_filter->childList(false)[prim_index];
@@ -1395,108 +1356,97 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
                     item_ptr->requestDisplayUpdate((SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG));
                 }
             }
-            
-
         }
     }
 }
 
-void FilterEditorCanvas::toggle_preview(bool hide){
+void FilterEditorCanvas::toggle_preview(bool hide)
+{
     preview_active = !hide;
-    if(hide){
-        if(_preview->get_parent())
+    if (hide) {
+        if (_preview->get_parent()) {
             canvas.remove(*_preview);
-            // _preview->unparent();
-    }
-    else{
-        if(!_preview->get_parent()){
-            
+        }
+    } else {
+        if (!_preview->get_parent()) {
             canvas.put(*_preview, 0, 0);
-            for(auto it: canvas.get_children()){
-                // auto node = dynamic_cast<FilterEditorNode*>(it);
-                if(it != static_cast<Gtk::Widget*>(_preview.get())){
+            for (auto it : canvas.get_children()) {
+                if (it != _preview.get()) {
                     double x, y;
                     canvas.get_child_position(*it, x, y);
                     canvas.remove(*it);
                     canvas.put(*it, x, y);
                 }
             }
-
-        } 
+        }
     }
     queue_draw();
 }
 
-
-
-
 void FilterEditorCanvas::refreshPreview(bool single_primitive)
 {
-    if(!preview_active){
+    if (!preview_active) {
         return;
     }
     std::vector<SPItem const *> selected;
-    SPDesktop* _desktop = _dialog.getDesktop();
+    SPDesktop *_desktop = _dialog.getDesktop();
 
-    if(!_desktop){
+    if (!_desktop) {
         return;
     }
-    
-
 
     _preview->resetPixels();
     auto document = preview_doc.get();
-    if(!_preview_drawing){
+    if (!_preview_drawing) {
         _preview_drawing = std::make_shared<PreviewDrawing>(document);
         _preview->setDrawing(_preview_drawing);
         auto col = Colors::Color(0);
         _preview->setBackgroundColor(col.toRGBA());
     }
     update_preview_filter(single_primitive);
-    SPItem *item_ptr = cast<SPItem>(preview_doc->getObjectById("path234")); 
+    SPItem *item_ptr = cast<SPItem>(preview_doc->getObjectById("path234"));
     _preview_drawing->set_shown_items(std::move(selected));
     auto alloc = get_allocation();
-    _preview->set_size_request(alloc.get_width()/(zoom_fac), alloc.get_height()/(zoom_fac));
-    _preview->setSize(alloc.get_width()/(zoom_fac));
-    
+    _preview->set_size_request(alloc.get_width() / (zoom_fac), alloc.get_height() / (zoom_fac));
+    _preview->setSize(alloc.get_width() / (zoom_fac));
+
     auto bbox = item_ptr->documentVisualBounds();
-    
+
     _preview->setBox(
         Geom::Rect(bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]) *
-        document->dt2doc()); 
+        document->dt2doc());
     _preview->queueRefresh();
 }
 
-
 /**
-* Update the canvas according to the current contents of the document.
-* Important things to note: This should never update any content of
-* the document on it's own since that would hamper with the undo system.
-* Everytime an undo is called, only update canvas is called.
-*/
-void FilterEditorCanvas::update_canvas_new(){
-    modify_observer(true); 
-    
-    if(!_preview->get_parent()){
+ * Update the canvas according to the current contents of the document.
+ * Important things to note: This should never update any content of
+ * the document on it's own since that would hamper with the undo system.
+ * Everytime an undo is called, only update canvas is called.
+ */
+void FilterEditorCanvas::update_canvas_new()
+{
+    modify_observer(true);
+
+    if (!_preview->get_parent()) {
         canvas.put(*_preview, 0, 0);
     }
 
-    SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
-    
-    
+    SPFilter *filter = _dialog._filter_modifier.get_selected_filter();
+
     clear_nodes();
     delete_nodes_without_prims();
-    if(filter){
-        auto col = Colors::Color::parse("#ffffff"); 
+    if (filter) {
+        auto col = Colors::Color::parse("#ffffff");
         // refreshPreview();
         update_offset_from_document();
-        if (std::find(filter_list.begin(), filter_list.end(), filter) == filter_list.end()){
+        if (std::find(filter_list.begin(), filter_list.end(), filter) == filter_list.end()) {
             filter_list.push_back(filter);
-            current_filter_id = filter_list.size()-1;
+            current_filter_id = filter_list.size() - 1;
             nodes.insert({current_filter_id, std::vector<std::unique_ptr<FilterEditorNode>>()});
-            selected_nodes.insert({current_filter_id, std::vector<FilterEditorNode*>()});
-            connections.insert({current_filter_id, std::vector<FilterEditorConnection*>()});
-            result_manager.insert({current_filter_id, std::map<Glib::ustring, FilterEditorPrimitiveNode*> ()});
+            selected_nodes.insert({current_filter_id, std::vector<FilterEditorNode *>()});
+            connections.insert({current_filter_id, std::vector<FilterEditorConnection *>()});
+            result_manager.insert({current_filter_id, std::map<Glib::ustring, FilterEditorPrimitiveNode *>()});
             double x_position = filter->getRepr()->getAttributeDouble("inkscape:output-x", 150.0);
             double y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", 100.0);
             output_node = create_output_node(filter, x_position, y_position, "Output");
@@ -1513,76 +1463,73 @@ void FilterEditorCanvas::update_canvas_new(){
 
         current_filter_id = std::find(filter_list.begin(), filter_list.end(), filter) - filter_list.begin();
         double x_position, y_position;
-        
-        // Clear the connections and recreate them. 
+
+        // Clear the connections and recreate them.
         auto connections_copy = connections[current_filter_id];
-        for(auto conn : connections_copy){
+        for (auto conn : connections_copy) {
             destroy_connection(conn, false);
-        } 
+        }
         connections[current_filter_id].clear();
         int count = 0, reuse_count = 0;
-        std::map<Glib::ustring, FilterEditorPrimitiveNode*> result_to_primitive;
-        std::vector<FilterEditorPrimitiveNode*> nodes_list;
-        for(auto &child : filter->children){
+        std::map<Glib::ustring, FilterEditorPrimitiveNode *> result_to_primitive;
+        std::vector<FilterEditorPrimitiveNode *> nodes_list;
+        for (auto &child : filter->children) {
             count++;
             auto prim = cast<SPFilterPrimitive>(&child);
-
-            if(prim == nullptr){
+            if (!prim) {
                 continue;
             }
 
-            FilterEditorPrimitiveNode* primitive_node = nullptr;  
-            if(primitive_node_exists(prim)){
+            FilterEditorPrimitiveNode *primitive_node = nullptr;
+            if (primitive_node_exists(prim)) {
                 reuse_count++;
                 primitive_node = get_node_from_primitive(prim);
-                if(primitive_node == nullptr){
+                if (!primitive_node) {
                     g_error("There's some error here %d", __LINE__);
                 }
                 primitive_node->update_position_from_document();
                 place_node(primitive_node, primitive_node->x, primitive_node->y);
-            }
-            else{
+            } else {
                 auto type_id = FPConverter.get_id_from_key(prim->getRepr()->name());
                 auto type = static_cast<Filters::FilterPrimitiveType>(type_id);
                 int num_sinks = input_count(prim);
                 double x_cp_global, y_cp_global;
-                local_to_global(100.0, 50.0+count * 100.0, x_cp_global, y_cp_global);
+                local_to_global(100.0, 50.0 + count * 100.0, x_cp_global, y_cp_global);
                 double x_position = prim->getRepr()->getAttributeDouble("inkscape:filter-x", x_cp_global);
                 double y_position = prim->getRepr()->getAttributeDouble("inkscape:filter-y", y_cp_global);
                 primitive_node = add_primitive_node(prim, x_position, y_position, type, FPConverter.get_label(type), num_sinks, false);
-                if(primitive_node == nullptr){
+                if (!primitive_node) {
                     g_error("There's some error here %d", __LINE__);
-                } 
+                }
             }
 
-            if(primitive_node == nullptr){
+            if (!primitive_node) {
                 g_error("there's some problem here %d", __LINE__);
             }
             Glib::ustring _label_text = "";
-            if(prim->getAttribute("aria-label") == nullptr){
+            if (!prim->getAttribute("aria-label")) {
                 _label_text = "";
-            }
-            else{
+            } else {
                 _label_text = prim->getAttribute("aria-label");
             }
             primitive_node->label.set_text(_label_text.c_str());
             primitive_node->label_updated();
-            if (cast<SPFeMerge>(prim) != nullptr) {
+            if (is<SPFeMerge>(prim)) {
                 // TODO: Implement merge
                 int counter = 0;
-                auto merge_node = dynamic_cast<FilterEditorPrimitiveMergeNode*>(primitive_node);
-                if(merge_node == nullptr){
+                auto merge_node = dynamic_cast<FilterEditorPrimitiveMergeNode *>(primitive_node);
+                if (!merge_node) {
                     continue;
                 }
                 merge_node->remove_extra_sinks();
                 auto merge = cast<SPFeMerge>(prim);
-                for(auto &child : merge->children){
+                for (auto &child : merge->children) {
                     auto merge_child = cast<SPFeMergeNode>(&child);
-                    if(merge_child == nullptr){
+                    if (!merge_child) {
                         continue;
                     }
                     auto inp = merge_child->getAttribute("in");
-                    if (inp == nullptr) {
+                    if (!inp) {
                         // Shouldn't be happening but should handle anyways
 
                         // TODO: Verify this behaviour
@@ -1593,7 +1540,7 @@ void FilterEditorCanvas::update_canvas_new(){
                             create_connection(source, merge_node->get_sink(counter++), true);
                         } else {
                             // Do nothing, we will fix this in the document
-                        } 
+                        }
                     } else {
                         if (std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()) {
                             merge_node->add_sink(merge_child);
@@ -1604,7 +1551,7 @@ void FilterEditorCanvas::update_canvas_new(){
                                 // Perfect, we found the node we were looking for. Now just create a connection between that and this sink of it.
                                 auto source_prim = result_to_primitive[inp];
                                 auto source = source_prim->get_source();
-                                merge_node->add_sink(merge_child); 
+                                merge_node->add_sink(merge_child);
                                 create_connection(source, merge_node->get_sink(counter++), true);
                             } else {
                                 if (nodes_list.size() > 0) {
@@ -1624,83 +1571,74 @@ void FilterEditorCanvas::update_canvas_new(){
             } else {
                 int num_sinks = input_count(prim);
                 Glib::ustring in_attributes[] = {"in", "in2"};
-                for(int i = 0; i != num_sinks; i++){
+                for (int i = 0; i != num_sinks; i++) {
                     auto inp = prim->getAttribute(in_attributes[i].c_str());
-                    FilterEditorSink* sink;
-                    if(primitive_node->sinks.size() > i)
+                    FilterEditorSink *sink;
+                    if (primitive_node->sinks.size() > i) {
                         sink = primitive_node->sinks[i];
-                    else
+                    } else {
                         g_error("There's an issue here");
-                    if(inp == nullptr){
+                    }
+                    if (!inp) {
                         // Set to previous or SourceGraphic if previous is none;
-                        if(nodes_list.size() > 0){
+                        if (nodes_list.size() > 0) {
                             auto source = (*nodes_list.rbegin())->get_source();
                             create_connection(source, sink, true);
-                        }
-                        else{
+                        } else {
                             // TODO: Use source graphic, but don't update it over here, by default it should use SourceGraphic
                             sink->set_result_inp(0);
                         }
-                    } 
-                    else{
-                        if(std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()){
-                        }
-                        else{
-                            if(result_to_primitive.find(inp) != result_to_primitive.end()){
+                    } else {
+                        if (std::find(result_inputs.begin(), result_inputs.end(), inp) == result_inputs.end()) {
+                            if (result_to_primitive.find(inp) != result_to_primitive.end()) {
                                 auto source_prim = result_to_primitive[inp];
                                 auto source = source_prim->get_source();
                                 create_connection(source, sink, true);
-                            }
-                            else{
-                                if(nodes_list.size() > 0){
+                            } else {
+                                if (nodes_list.size() > 0) {
                                     auto source_node = nodes_list.back();
                                     auto source = source_node->get_source();
                                     create_connection(source, sink, true);
-                                }
-                                else{
+                                } else {
                                     // TODO: Use SourceGraphic
                                     sink->set_result_inp(0);
                                 }
                             }
                         }
-                        
                     }
                 }
             }
-            if(prim->getAttribute("result") != nullptr){
-                if(result_to_primitive.find(prim->getAttribute("result")) != result_to_primitive.end()){
+            if (prim->getAttribute("result")) {
+                if (result_to_primitive.find(prim->getAttribute("result")) != result_to_primitive.end()) {
                     result_to_primitive[prim->getAttribute("result")] = primitive_node;
-                }
-                else{
+                } else {
                     result_to_primitive.insert({prim->getAttribute("result"), primitive_node});
                 }
             }
-            
+
             nodes_list.push_back(primitive_node);
-            
         }
-        local_to_global(100.0, 50 + (count+1) * 100.0, x_position, y_position); 
+        local_to_global(100.0, 50 + (count + 1) * 100.0, x_position, y_position);
         x_position = filter->getRepr()->getAttributeDouble("inkscape:output-x", x_position);
-        y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", y_position); 
+        y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", y_position);
         place_node(output_node, x_position, y_position);
         output_node->update_filter(filter);
         output_node->update_position_from_document();
         place_node(output_node, output_node->x, output_node->y);
         update_positions();
-        if(nodes_list.size() >= 1){
+        if (nodes_list.size() >= 1) {
             create_connection(nodes_list.back()->get_source(), output_node->get_sink());
-
         }
-        // Get the nodes corresponding to prim
     }
     modify_observer(false);
 }
 
-void FilterEditorCanvas::duplicate_nodes(){
+void FilterEditorCanvas::duplicate_nodes()
+{
     // Should I update the document first?
     modify_observer(true);
     auto filter = _dialog._filter_modifier.get_selected_filter();
-    if(!filter){
+    if (!filter) {
         return;
     }
 
@@ -1713,30 +1651,28 @@ void FilterEditorCanvas::duplicate_nodes(){
     The order to be placed is the order in which they occur in the document,
     this way connections will be copied
     */
-    std::vector<SPFilterPrimitive*> primitives_order;
-    for(auto &child : filter->children){
+    std::vector<SPFilterPrimitive *> primitives_order;
+    for (auto &child : filter->children) {
         auto prim = cast<SPFilterPrimitive>(&child);
-        if(prim == nullptr){
+        if (!prim) {
             continue;
         }
         primitives_order.push_back(prim);
-
     }
-    std::set<std::pair<int, SPFilterPrimitive*>> new_primitives;
-    for(auto node : selected_nodes[current_filter_id]){
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
+    std::set<std::pair<int, SPFilterPrimitive *>> new_primitives;
+    for (auto node : selected_nodes[current_filter_id]) {
+        if (dynamic_cast<FilterEditorPrimitiveNode *>(node)) {
             auto prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(node);
             auto prim = prim_node->get_primitive();
             _dialog._filter_modifier.get_selected_filter();
             new_primitives.insert({std::find(primitives_order.begin(), primitives_order.end(), prim) - primitives_order.begin(), prim});
-            
         }
     }
-    for(auto it = new_primitives.rbegin(); it != new_primitives.rend(); it++){
+    for (auto it = new_primitives.rbegin(); it != new_primitives.rend(); it++) {
         auto new_prim = it->second->getRepr()->duplicate(it->second->getRepr()->document());
         auto filter = _dialog._filter_modifier.get_selected_filter();
-        filter->getRepr()->addChild(new_prim, 0); 
-        g_assert(new_prim->attribute("inkscape:filter-x") != nullptr);
+        filter->getRepr()->addChild(new_prim, 0);
+        g_assert(new_prim->attribute("inkscape:filter-x"));
         new_prim->setAttributeCssDouble("inkscape:filter-x", new_prim->getAttributeDouble("inkscape:filter-x", 0.0) + 50.0);
     }
     DocumentUndo::done(filter->document, _("Duplicated primitives"), INKSCAPE_ICON("dialog-filters"));
@@ -1745,110 +1681,101 @@ void FilterEditorCanvas::duplicate_nodes(){
     modify_observer(false);
 }
 
-void FilterEditorCanvas::clear_nodes(){
-    // Allternate approach:
-    
-
-
+void FilterEditorCanvas::clear_nodes()
+{
     auto _canvas_children = canvas.get_children();
-    for(auto it: _canvas_children){
-        if(dynamic_cast<FilterEditorNode*>(it) != nullptr){
+    for (auto it : _canvas_children) {
+        if (dynamic_cast<FilterEditorNode *>(it)) {
             canvas.remove(*it);
         }
-
-    } 
-    #ifdef DELETE_NODES // TODO: Remove this
+    }
+#ifdef DELETE_NODES // TODO: Remove this
     nodes[current_filter_id].clear();
     primitive_to_node.clear();
     output_node = nullptr;
     connections[current_filter_id].clear();
-    #endif
+#endif
     canvas.queue_draw();
-
 }
-SPFilter* FilterEditorCanvas::get_current_filter(){
+
+SPFilter *FilterEditorCanvas::get_current_filter()
+{
     return _dialog._filter_modifier.get_selected_filter();
-
 }
 
-void FilterEditorCanvas::update_document(bool add_undo){
-    
+void FilterEditorCanvas::update_document(bool add_undo)
+{
     modify_observer(true);
-    if(add_undo){
+    if (add_undo) {
         auto filter = _dialog._filter_modifier.get_selected_filter();
         filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
-        DocumentUndo::done(_dialog.getDocument(), _("Update filter"), INKSCAPE_ICON("dialog-filters")); 
+        DocumentUndo::done(_dialog.getDocument(), _("Update filter"), INKSCAPE_ICON("dialog-filters"));
     }
-    std::vector<FilterEditorPrimitiveNode*> nodes_order;
+    std::vector<FilterEditorPrimitiveNode *> nodes_order;
     g_assert(output_node != nullptr);
 
     /*Ensure that each primitive is wired correctly:
     1. Each primitive either has correct ins, either a valid result or a SourceGraphic, SourceAlpha, etc.
     */
-    if(output_node->connected_up_nodes.size()==1){
-        std::map<FilterEditorPrimitiveNode*, std::pair<int, int>> visited;
-        for(auto& node:nodes[current_filter_id]){
-            if(dynamic_cast<FilterEditorPrimitiveNode*>(node.get()) != nullptr){
-                dynamic_cast<FilterEditorPrimitiveNode*>(node.get())->part_of_chain = false;
-                if(dynamic_cast<FilterEditorPrimitiveNode*>(node.get())->get_primitive() != nullptr){
-                    auto prim = dynamic_cast<FilterEditorPrimitiveNode*>(node.get())->get_primitive();
-                    if(prim == nullptr){
+    if (output_node->connected_up_nodes.size() == 1) {
+        std::map<FilterEditorPrimitiveNode *, std::pair<int, int>> visited;
+        for (auto &node : nodes[current_filter_id]) {
+            if (dynamic_cast<FilterEditorPrimitiveNode *>(node.get())) {
+                dynamic_cast<FilterEditorPrimitiveNode *>(node.get())->part_of_chain = false;
+                if (dynamic_cast<FilterEditorPrimitiveNode *>(node.get())->get_primitive()) {
+                    auto prim = dynamic_cast<FilterEditorPrimitiveNode *>(node.get())->get_primitive();
+                    if (!prim) {
                         g_error("The error is here %d", __LINE__);
                     }
                     auto result = prim->getAttribute("result");
-                    if(result == nullptr){
+                    if (!result) {
                         auto filter = _dialog._filter_modifier.get_selected_filter();
                         auto new_result = filter->get_new_result_name();
                         prim->setAttribute("result", new_result);
                     }
                 }
-                visited.insert({dynamic_cast<FilterEditorPrimitiveNode*>(node.get()), {-1, G_MININT}});
+                visited.insert({dynamic_cast<FilterEditorPrimitiveNode *>(node.get()), {-1, G_MININT}});
             }
         }
-        visited.find(static_cast<FilterEditorPrimitiveNode*>(output_node->connected_up_nodes[0].second))->second = {0, 0};
-        create_nodes_order(nullptr, static_cast<FilterEditorPrimitiveNode*>(output_node->connected_up_nodes[0].second), nodes_order, visited, true, true);
-        for(auto it : visited){
-            if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(it.first) != nullptr){
-
-            }
-            else{
+        visited.find(static_cast<FilterEditorPrimitiveNode *>(output_node->connected_up_nodes[0].second))->second = {0, 0};
+        create_nodes_order(nullptr, static_cast<FilterEditorPrimitiveNode *>(output_node->connected_up_nodes[0].second), nodes_order, visited, true, true);
+        for (auto it : visited) {
+            if (!dynamic_cast<FilterEditorPrimitiveMergeNode *>(it.first)) {
                 it.first->update_sink_results();
             }
-            if(it.second.first == -1){
-                create_nodes_order(nullptr, static_cast<FilterEditorPrimitiveNode*>(it.first), nodes_order, visited, true);
+            if (it.second.first == -1) {
+                create_nodes_order(nullptr, static_cast<FilterEditorPrimitiveNode *>(it.first), nodes_order, visited, true);
             }
         }
-        std::multimap<std::pair<int, int>, FilterEditorPrimitiveNode*> pos_map;
+        std::multimap<std::pair<int, int>, FilterEditorPrimitiveNode *> pos_map;
 
-        std::multiset<std::pair<int, std::pair<int, FilterEditorPrimitiveNode*>>> pos_map2;
-        for(auto it : visited) {
+        std::multiset<std::pair<int, std::pair<int, FilterEditorPrimitiveNode *>>> pos_map2;
+        for (auto it : visited) {
             pos_map.insert({it.second, it.first});
-            
             pos_map2.insert({it.second.first, {it.second.second, it.first}});
         }
         nodes_order.clear();
         int x = 0;
-        auto first_node = static_cast<FilterEditorPrimitiveNode*>(output_node->connected_up_nodes[0].second);
+        auto first_node = static_cast<FilterEditorPrimitiveNode *>(output_node->connected_up_nodes[0].second);
         nodes_order.push_back(first_node);
-        for(auto it : pos_map2){
-            if(it.second.second != first_node){
+        for (auto it : pos_map2) {
+            if (it.second.second != first_node) {
                 nodes_order.push_back(it.second.second);
             }
             x++;
-        } 
-        for (int i = 0; i != nodes_order.size(); i++) {
-            nodes_order[i]->get_primitive()->getRepr()->setPosition(nodes_order.size()-1-i);
         }
-    }
-    else{
+        for (int i = 0; i != nodes_order.size(); i++) {
+            nodes_order[i]->get_primitive()->getRepr()->setPosition(nodes_order.size() - 1 - i);
+        }
+    } else {
         // TODO: If the output node is not connected, handle in Canvas Updates
     }
-    SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
-    if(filter){
-        std::map<Glib::ustring, SPFilterPrimitive*> result_to_primitive;
-        std::vector<SPFilterPrimitive*> primitive_list;
+    SPFilter *filter = _dialog._filter_modifier.get_selected_filter();
+    if (filter) {
+        std::map<Glib::ustring, SPFilterPrimitive *> result_to_primitive;
+        std::vector<SPFilterPrimitive *> primitive_list;
         std::map<Glib::ustring, Glib::ustring> old_to_new_result;
-        
+
         for (auto &child : filter->children) {
             // count++;
             auto prim = cast<SPFilterPrimitive>(&child);
@@ -1858,20 +1785,19 @@ void FilterEditorCanvas::update_document(bool add_undo){
             if (cast<SPFeMerge>(prim) != nullptr) {
                 // TODO: Implement merge
                 auto merge = cast<SPFeMerge>(prim);
-                for(auto &child : merge->children){
+                for (auto &child : merge->children) {
                     auto merge_child = cast<SPFeMergeNode>(&child);
                     auto inp = merge_child->getAttribute("in");
                     if (inp == nullptr) {
                         // Shouldn't be happening but should handle anyways
-                        if(primitive_list.size() > 0){
+                        if (primitive_list.size() > 0) {
                             auto prev_prim = primitive_list.back();
                             auto prev_prim_result = prev_prim->getAttribute("result");
                             merge_child->setAttribute("in", prev_prim_result);
+                        } else {
+                            merge_child->setAttribute("in", "SourceGraphic");
                         }
-                        else{
-                            merge_child->setAttribute("in", "SourceGraphic");                         
-                        }
-                        //TODO: Consider switching to getPrev instead of primitive_list 
+                        // TODO: Consider switching to getPrev instead of primitive_list
                     } else {
                         if (std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()) {
                         } else if (old_to_new_result.find(inp) != old_to_new_result.end()) {
@@ -1885,22 +1811,21 @@ void FilterEditorCanvas::update_document(bool add_undo){
                                     auto prev_prim = primitive_list.back();
                                     auto prev_prim_result = prev_prim->getAttribute("result");
                                     merge_child->setAttribute("in", prev_prim_result);
-                                    
                                 } else {
                                     merge_child->setAttribute("in", "SourceGraphic");
-                                } 
+                                }
                             }
                         }
                     }
-                    }
+                }
             } else {
                 int num_sinks = input_count(prim);
                 Glib::ustring in_attributes[] = {"in", "in2"};
                 for (int i = 0; i != num_sinks; i++) {
                     auto inp = prim->getAttribute(in_attributes[i].c_str());
                     if (inp == nullptr) {
-                        // Set to previous or SourceGraphic if previous is none; 
-                        if(primitive_list.size() > 0){
+                        // Set to previous or SourceGraphic if previous is none;
+                        if (primitive_list.size() > 0) {
                             auto prev_prim = primitive_list.back();
                             auto prev_prim_result = prev_prim->getAttribute("result");
                             prim->setAttribute(in_attributes[i].c_str(), prev_prim_result);
@@ -1909,19 +1834,18 @@ void FilterEditorCanvas::update_document(bool add_undo){
                         if (std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()) {
                             // TODO: Implement this
                         } else {
-                            if(old_to_new_result.find(inp) != old_to_new_result.end()){
+                            if (old_to_new_result.find(inp) != old_to_new_result.end()) {
                                 prim->setAttribute(in_attributes[i].c_str(), old_to_new_result[inp]);
                             }
                             auto inp = prim->getAttribute(in_attributes[i].c_str());
                             if (result_to_primitive.find(inp) != result_to_primitive.end()) {
                                 // No problems here, since we find a result that exists.
                             } else {
-                                if(primitive_list.size() > 0){
+                                if (primitive_list.size() > 0) {
                                     auto prev_prim = primitive_list.back();
                                     auto prev_prim_result = prev_prim->getAttribute("result");
                                     prim->setAttribute(in_attributes[i].c_str(), prev_prim_result);
-                                }
-                                else{
+                                } else {
                                     // Set it to SourceGraphic
                                     prim->setAttribute(in_attributes[i].c_str(), "SourceGraphic");
                                 }
@@ -1930,85 +1854,75 @@ void FilterEditorCanvas::update_document(bool add_undo){
                     }
                 }
             }
-            if (prim->getAttribute("result") == nullptr || result_to_primitive.find(prim->getAttribute("result")) != result_to_primitive.end()) {
+            if (!prim->getAttribute("result") || result_to_primitive.find(prim->getAttribute("result")) != result_to_primitive.end()) {
                 auto new_result = filter->get_new_result_name();
-                if(prim->getAttribute("result") != nullptr){
-                    if(old_to_new_result.find("result") != old_to_new_result.end()){
+                if (prim->getAttribute("result")) {
+                    if (old_to_new_result.find("result") != old_to_new_result.end()) {
                         old_to_new_result[prim->getAttribute("result")] = new_result;
-                    }
-                    else{
+                    } else {
                         old_to_new_result.insert({prim->getAttribute("result"), new_result});
                     }
                 }
                 prim->setAttribute("result", new_result);
-                
             }
-            if(result_to_primitive.find(prim->getAttribute("result")) != result_to_primitive.end()){
+            if (result_to_primitive.find(prim->getAttribute("result")) != result_to_primitive.end()) {
                 result_to_primitive[prim->getAttribute("result")] = prim;
-            }
-            else{
+            } else {
                 result_to_primitive.insert({prim->getAttribute("result"), prim});
             }
             primitive_list.push_back(prim);
         }
     }
-    if(filter)
+    if (filter) {
         filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    
+    }
+
     update_canvas_new();
 
-    
     modify_observer(false);
 }
 
-FilterEditorPrimitiveNode* FilterEditorCanvas::get_node_from_primitive(SPFilterPrimitive* prim){
-    if(primitive_to_node.find(prim) != primitive_to_node.end()){
+FilterEditorPrimitiveNode *FilterEditorCanvas::get_node_from_primitive(SPFilterPrimitive *prim)
+{
+    if (primitive_to_node.find(prim) != primitive_to_node.end()) {
         return primitive_to_node[prim];
-    }
-    else{
+    } else {
         return nullptr;
     }
 }
 FilterEditorPrimitiveNode *FilterEditorCanvas::add_primitive_node(SPFilterPrimitive *primitive, double x_click, double y_click, Filters::FilterPrimitiveType type, Glib::ustring label_text, int num_sinks, bool local)
 {
-    if(type == Filters::FilterPrimitiveType::NR_FILTER_MERGE){
-        // TODO: Fix this 
+    if (type == Filters::FilterPrimitiveType::NR_FILTER_MERGE) {
+        // TODO: Fix this
         std::unique_ptr<FilterEditorPrimitiveMergeNode> prim_node =
             std::make_unique<FilterEditorPrimitiveMergeNode>(100, 0, 0, primitive, num_sinks);
-        std::unique_ptr<FilterEditorNode> node = std::move(prim_node); 
-        primitive_to_node[primitive] = dynamic_cast<FilterEditorPrimitiveNode*>(node.get());
+        std::unique_ptr<FilterEditorNode> node = std::move(prim_node);
+        primitive_to_node[primitive] = dynamic_cast<FilterEditorPrimitiveNode *>(node.get());
         place_node((node.get()), x_click, y_click, local);
         nodes[current_filter_id].push_back(std::move(node));
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(nodes[current_filter_id].back().get()) == nullptr){
+        if (!dynamic_cast<FilterEditorPrimitiveNode *>(nodes[current_filter_id].back().get())) {
             g_error("There's an error here %d", __LINE__);
         }
-        return dynamic_cast<FilterEditorPrimitiveNode*>(nodes[current_filter_id].back().get());
-
-    }
-    else{
+        return dynamic_cast<FilterEditorPrimitiveNode *>(nodes[current_filter_id].back().get());
+    } else {
         std::unique_ptr<FilterEditorPrimitiveNode> prim_node = std::make_unique<FilterEditorPrimitiveNode>(100, 0, 0, label_text, primitive, num_sinks);
-        std::unique_ptr<FilterEditorNode> node = std::move(prim_node); 
-        primitive_to_node[primitive] = dynamic_cast<FilterEditorPrimitiveNode*>(node.get());
+        std::unique_ptr<FilterEditorNode> node = std::move(prim_node);
+        primitive_to_node[primitive] = dynamic_cast<FilterEditorPrimitiveNode *>(node.get());
         place_node((node.get()), x_click, y_click, local);
         nodes[current_filter_id].push_back(std::move(node));
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(nodes[current_filter_id].back().get()) == nullptr){
+        if (!dynamic_cast<FilterEditorPrimitiveNode *>(nodes[current_filter_id].back().get())) {
             g_error("There's an error here %d", __LINE__);
         }
-        return dynamic_cast<FilterEditorPrimitiveNode*>(nodes[current_filter_id].back().get());
-
+        return dynamic_cast<FilterEditorPrimitiveNode *>(nodes[current_filter_id].back().get());
     }
-};
+}
 
-
-FilterEditorConnection* FilterEditorCanvas::create_connection(FilterEditorSource *source, FilterEditorSink *sink, bool break_old_connection)
+FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorSource *source, FilterEditorSink *sink, bool break_old_connection)
 {
     modify_observer(true);
-    if(break_old_connection){
-        if(sink->can_add_connection()){
-
-        }
-        else{
-            for(auto connection : sink->get_connections()){
+    if (break_old_connection) {
+        if (!sink->can_add_connection()) {
+            for (auto connection : sink->get_connections()) {
                 destroy_connection(connection);
             }
         }
@@ -2019,21 +1933,18 @@ FilterEditorConnection* FilterEditorCanvas::create_connection(FilterEditorSource
         source->get_parent_node()->add_connected_node(source, sink->get_parent_node(), connection);
         sink->get_parent_node()->add_connected_node(sink, source->get_parent_node(), connection);
 
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(sink->get_parent_node()) != nullptr && dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node()) != nullptr){
-            dynamic_cast<FilterEditorPrimitiveNode*>(sink->get_parent_node())->set_sink_result(sink, dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node())->get_result_string());
+        if (dynamic_cast<FilterEditorPrimitiveNode *>(sink->get_parent_node()) && dynamic_cast<FilterEditorPrimitiveNode *>(source->get_parent_node())) {
+            dynamic_cast<FilterEditorPrimitiveNode *>(sink->get_parent_node())->set_sink_result(sink, dynamic_cast<FilterEditorPrimitiveNode *>(source->get_parent_node())->get_result_string());
         }
 
-        //TODO: convert add connected node to a virtual method
-        if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node()) != nullptr && dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node()) != nullptr){
-            dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node())->create_sink_merge_node(sink);
-            dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node())->set_sink_result(sink, dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node())->get_result_string());
+        // TODO: convert add connected node to a virtual method
+        if (dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node()) && dynamic_cast<FilterEditorPrimitiveNode *>(source->get_parent_node())) {
+            dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node())->create_sink_merge_node(sink);
+            dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node())->set_sink_result(sink, dynamic_cast<FilterEditorPrimitiveNode *>(source->get_parent_node())->get_result_string());
         }
-         
+
         return connection;
-        
-        
-    }
-    else{
+    } else {
         if (sink->can_add_connection()) {
             FilterEditorConnection *connection = new FilterEditorConnection(source, sink, this);
             sink->add_connection(connection);
@@ -2041,8 +1952,8 @@ FilterEditorConnection* FilterEditorCanvas::create_connection(FilterEditorSource
             source->add_connection(connection);
             source->get_parent_node()->add_connected_node(source, sink->get_parent_node(), connection);
             sink->get_parent_node()->add_connected_node(sink, source->get_parent_node(), connection);
-            //TODO: convert add connected node to a virtual method
-            if (dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node()) != nullptr) {
+            // TODO: convert add connected node to a virtual method
+            if (dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node())) {
                 dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node())->add_sink();
             }
             return connection;
@@ -2051,12 +1962,13 @@ FilterEditorConnection* FilterEditorCanvas::create_connection(FilterEditorSource
         }
     }
     modify_observer(false);
-};
+}
 
-FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorPrimitiveNode *source_node, FilterEditorNode *sink_node){
+FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorPrimitiveNode *source_node, FilterEditorNode *sink_node)
+{
     modify_observer(true);
     auto sink = sink_node->get_next_available_sink();
-    if(sink == nullptr){
+    if (!sink) {
         return nullptr;
     }
     auto source = source_node->get_source();
@@ -2073,11 +1985,10 @@ FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorPrimit
 
 bool FilterEditorCanvas::destroy_connection(FilterEditorConnection *connection, bool update_document)
 {
-    
-    if(std::find(connections[current_filter_id].begin(), connections[current_filter_id].end(), connection) == connections[current_filter_id].end()){
+    if (std::find(connections[current_filter_id].begin(), connections[current_filter_id].end(), connection) ==
+        connections[current_filter_id].end()) {
         return false;
-    }
-    else{
+    } else {
         connections[current_filter_id].erase(std::find(connections[current_filter_id].begin(), connections[current_filter_id].end(), connection));
         connections[current_filter_id].erase(std::remove(connections[current_filter_id].begin(), connections[current_filter_id].end(), connection), connections[current_filter_id].end());
         connection->get_source()->get_connections().erase(
@@ -2088,12 +1999,17 @@ bool FilterEditorCanvas::destroy_connection(FilterEditorConnection *connection, 
                                                                     connection->get_sink()->get_connections().end(),
                                                                     connection),
                                                         connection->get_sink()->get_connections().end());
-        
 
         connection->get_source()->update_width();
-        connection->get_source_node()->connected_down_nodes.erase(std::find(connection->get_source_node()->connected_down_nodes.begin(), connection->get_source_node()->connected_down_nodes.end(), std::make_pair(connection->get_source(), connection->get_sink_node())));
-        connection->get_sink_node()->connected_up_nodes.erase(std::find(connection->get_sink_node()->connected_up_nodes.begin(), connection->get_sink_node()->connected_up_nodes.end(), std::make_pair(connection->get_sink(), connection->get_source_node())));
-        if(update_document){
+        connection->get_source_node()->connected_down_nodes.erase(
+            std::find(connection->get_source_node()->connected_down_nodes.begin(),
+                      connection->get_source_node()->connected_down_nodes.end(),
+                      std::make_pair(connection->get_source(), connection->get_sink_node())));
+        connection->get_sink_node()->connected_up_nodes.erase(
+            std::find(connection->get_sink_node()->connected_up_nodes.begin(),
+                      connection->get_sink_node()->connected_up_nodes.end(),
+                      std::make_pair(connection->get_sink(), connection->get_source_node())));
+        if (update_document) {
             connection->get_sink_node()->set_sink_result(connection->get_sink(), 0);
 
             if (dynamic_cast<FilterEditorPrimitiveMergeNode *>(connection->get_sink()->get_parent_node()) != nullptr) {
@@ -2102,28 +2018,31 @@ bool FilterEditorCanvas::destroy_connection(FilterEditorConnection *connection, 
                         ->sink_nodes.find(connection->get_sink())
                         ->second->getRepr());
                 dynamic_cast<FilterEditorPrimitiveMergeNode *>(connection->get_sink()->get_parent_node())
-                    ->sink_nodes.erase(connection->get_sink()); 
+                    ->sink_nodes.erase(connection->get_sink());
             }
-        }     
-        delete connection; 
+        }
+        delete connection;
         return true;
     }
-    
-};
-FilterEditorFixed* FilterEditorCanvas::get_canvas(){
+}
+
+FilterEditorFixed *FilterEditorCanvas::get_canvas()
+{
     return &canvas;
 }
+
 double FilterEditorCanvas::get_zoom_factor()
 {
     return zoom_fac;
-};
+}
+
 void FilterEditorCanvas::update_offsets(double x, double y, bool update_to_document)
 {
     canvas.update_offset(x, y);
-    if(update_to_document){
+    if (update_to_document) {
         modify_observer(true);
         auto filter = _dialog._filter_modifier.get_selected_filter();
-        if(filter){
+        if (filter) {
             filter->getRepr()->setAttributeSvgDouble("inkscape:offset-x", x);
             filter->getRepr()->setAttributeSvgDouble("inkscape:offset-y", y);
         }
@@ -2131,26 +2050,27 @@ void FilterEditorCanvas::update_offsets(double x, double y, bool update_to_docum
     }
 }
 
-
-void FilterEditorCanvas::update_offset_from_document(){
+void FilterEditorCanvas::update_offset_from_document()
+{
     auto filter = _dialog._filter_modifier.get_selected_filter();
     if (filter) {
         double x, y;
         x = filter->getRepr()->getAttributeDouble("inkscape:offset-x", 0.0);
         y = filter->getRepr()->getAttributeDouble("inkscape:offset-y", 0.0);
         update_offsets(x, y, true);
-    } 
+    }
 }
+
 void FilterEditorCanvas::update_positions()
 {
     for (auto child : canvas.get_children()) {
         double x, y;
-        if(!dynamic_cast<FilterEditorNode*>(child)){
+        if (!dynamic_cast<FilterEditorNode *>(child)) {
             continue;
             // TODO: Figure out why the rubberband tool sometimes stays as a child
         }
-        dynamic_cast<FilterEditorNode*>(child)->get_position(x, y);
-        place_node(dynamic_cast<FilterEditorNode*>(child), x, y);
+        dynamic_cast<FilterEditorNode *>(child)->get_position(x, y);
+        place_node(dynamic_cast<FilterEditorNode *>(child), x, y);
     }
 }
 Gtk::Widget *FilterEditorCanvas::get_widget_under(double xl, double yl)
@@ -2162,22 +2082,22 @@ Gtk::Widget *FilterEditorCanvas::get_widget_under(double xl, double yl)
 template <typename T>
 T *FilterEditorCanvas::resolve_to_type(Gtk::Widget *widget)
 {
-    while (dynamic_cast<T *>(widget) == nullptr) {
-        if (dynamic_cast<FilterEditorCanvas *>(widget) != nullptr) {
+    while (!dynamic_cast<T *>(widget)) {
+        if (dynamic_cast<FilterEditorCanvas *>(widget)) {
             return nullptr;
         }
-        if(widget == nullptr){
+        if (!widget) {
             return nullptr;
         }
         widget = widget->get_parent();
-        
     }
     return dynamic_cast<T *>(widget);
 }
 
-SPFilterPrimitive* FilterEditorCanvas::get_selected_primitive(){
-    SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
-    if(filter){
+SPFilterPrimitive *FilterEditorCanvas::get_selected_primitive()
+{
+    SPFilter *filter = _dialog._filter_modifier.get_selected_filter();
+    if (filter) {
         current_filter_id = std::find(filter_list.begin(), filter_list.end(), filter) - filter_list.begin();
         if (selected_nodes[current_filter_id].size() == 0) {
             return nullptr;
@@ -2185,18 +2105,16 @@ SPFilterPrimitive* FilterEditorCanvas::get_selected_primitive(){
         if (selected_nodes[current_filter_id].size() == 1) {
             if (dynamic_cast<FilterEditorPrimitiveNode *>(selected_nodes[current_filter_id][0]) == nullptr) {
                 return nullptr;
-            } 
-            return dynamic_cast<FilterEditorPrimitiveNode*>(selected_nodes[current_filter_id][0])->get_primitive();
+            }
+            return dynamic_cast<FilterEditorPrimitiveNode *>(selected_nodes[current_filter_id][0])->get_primitive();
         } else {
             return nullptr;
         }
     }
     return nullptr;
-    
 }
 
-
-sigc::signal<void ()>& FilterEditorCanvas::signal_primitive_changed()
+sigc::signal<void()> &FilterEditorCanvas::signal_primitive_changed()
 {
     return _signal_primitive_changed;
 }
@@ -2207,10 +2125,10 @@ bool FilterEditorCanvas::toggle_node_selection(NODE_TYPE *widget)
     if (widget->get_selected()) {
         selected_nodes[current_filter_id].push_back(widget);
     } else {
-        selected_nodes[current_filter_id].erase(std::remove(selected_nodes[current_filter_id].begin(), selected_nodes[current_filter_id].end(), widget), selected_nodes[current_filter_id].end());
+        selected_nodes[current_filter_id].erase( std::remove(selected_nodes[current_filter_id].begin(), selected_nodes[current_filter_id].end(), widget), selected_nodes[current_filter_id].end());
     }
     _signal_primitive_changed.emit();
-    return widget->get_selected(); 
+    return widget->get_selected();
 }
 
 void FilterEditorCanvas::set_node_selection(NODE_TYPE *widget, bool selected)
@@ -2237,11 +2155,11 @@ void FilterEditorCanvas::rubberband_select()
 {
     /*Construct node list in the given region*/
     std::vector<NODE_TYPE *> nodes_in_region;
-    for (auto& node : nodes[current_filter_id]) {
+    for (auto &node : nodes[current_filter_id]) {
         double x, y;
         canvas.get_child_position(*node, x, y);
         auto alloc = node->get_allocation();
-        node->translate_coordinates(canvas, alloc.get_width()/2, alloc.get_height()/2, x, y);
+        node->translate_coordinates(canvas, alloc.get_width() / 2, alloc.get_height() / 2, x, y);
         if (x >= rubberband_x && x <= rubberband_x + rubberband_size_x && y >= rubberband_y &&
             y <= rubberband_y + rubberband_size_y) {
             nodes_in_region.push_back(node.get());
@@ -2255,8 +2173,8 @@ void FilterEditorCanvas::rubberband_select()
     auto const surface = dynamic_cast<Gtk::Native &>(*get_root()).get_surface();
     g_assert(surface);
     surface->get_device_position(device, mx, my, mask);
-    
-    if((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK){
+
+    if ((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK) {
         for (auto node : nodes_in_region) {
             set_node_selection(node);
         }
@@ -2279,263 +2197,251 @@ void FilterEditorCanvas::event_handler(double x, double y)
     g_assert(surface);
     surface->get_device_position(device, mx, my, mask);
     static std::vector<std::pair<NODE_TYPE *, std::pair<double, double>>> start_positions;
-    switch (current_event_type){
-    case FilterEditorEvent::NONE:
-        break; 
-    case FilterEditorEvent::SELECT:
-    {
-        
-        if ((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK){
-            if (active_widget != nullptr) {
-                auto active_node = resolve_to_type<FilterEditorNode>(active_widget);
-                if (active_node != nullptr) {
-                    toggle_node_selection(active_node);
+    switch (current_event_type) {
+        case FilterEditorEvent::NONE:
+            break;
+        case FilterEditorEvent::SELECT: {
+            if ((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK) {
+                if (active_widget) {
+                    auto active_node = resolve_to_type<FilterEditorNode>(active_widget);
+                    if (active_node) {
+                        toggle_node_selection(active_node);
+                    }
+                }
+            } else {
+                clear_selection();
+                if (active_widget) {
+                    auto active_node = resolve_to_type<FilterEditorNode>(active_widget);
+                    if (active_node) {
+                        set_node_selection(active_node);
+                    }
                 }
             }
-        } else {
-            clear_selection();
-            if (active_widget != nullptr) {
-                auto active_node = resolve_to_type<FilterEditorNode>(active_widget);
-                if (active_node != nullptr) {
-                    set_node_selection(active_node);
-                }
+            current_event_type = FilterEditorEvent::NONE;
+            /* TODO: why was the line above commented */
+            break;
+        }
+        case FilterEditorEvent::PAN_START:
+            drag_start_x = canvas.get_x_offset();
+            drag_start_y = canvas.get_y_offset();
+            current_event_type = FilterEditorEvent::PAN_UPDATE;
+            break;
+        case FilterEditorEvent::PAN_UPDATE:
+            double offset_x, offset_y;
+            gesture_drag->get_offset(offset_x, offset_y);
+            update_offsets(drag_start_x - offset_x, drag_start_y - offset_y);
+            update_positions();
+            break;
+        case FilterEditorEvent::PAN_END:
+            drag_start_x = canvas.get_x_offset();
+            drag_start_y = canvas.get_y_offset();
+            current_event_type = FilterEditorEvent::NONE;
+            break;
+        case FilterEditorEvent::MOVE_START:
+            active_widget = resolve_to_type<FilterEditorNode>(active_widget);
+            if (std::find(selected_nodes[current_filter_id].begin(), selected_nodes[current_filter_id].end(),
+                          (NODE_TYPE *)active_widget) == selected_nodes[current_filter_id].end()) {
+                clear_selection();
+                set_node_selection((NODE_TYPE *)active_widget);
             }
-        }
-        current_event_type = FilterEditorEvent::NONE;
-        /* TODO: why was the line above commented */
-        break;
-    }
-    case FilterEditorEvent::PAN_START:
-        drag_start_x = canvas.get_x_offset();
-        drag_start_y = canvas.get_y_offset();
-        current_event_type = FilterEditorEvent::PAN_UPDATE;
-        break;
-    case FilterEditorEvent::PAN_UPDATE:
-        double offset_x, offset_y;
-        gesture_drag->get_offset(offset_x, offset_y);
-        update_offsets(drag_start_x - offset_x, drag_start_y - offset_y);
-        update_positions();
-        break;
-    case FilterEditorEvent::PAN_END:
-        drag_start_x = canvas.get_x_offset();
-        drag_start_y = canvas.get_y_offset();
-        current_event_type = FilterEditorEvent::NONE;
-        break;
-    case FilterEditorEvent::MOVE_START:
-        active_widget = resolve_to_type<FilterEditorNode>(active_widget);
-        if (std::find(selected_nodes[current_filter_id].begin(), selected_nodes[current_filter_id].end(), (NODE_TYPE *)active_widget) ==
-            selected_nodes[current_filter_id].end()) {
-            clear_selection();
-            set_node_selection((NODE_TYPE *)active_widget);
-        }
-        start_positions.clear();
-        for (auto node : selected_nodes[current_filter_id]) {
-            double x, y;
-            canvas.get_child_position(*node, x, y);
-            start_positions.push_back({node, {x, y}});
-        }
-        current_event_type = FilterEditorEvent::MOVE_UPDATE;
-        break;
-    case FilterEditorEvent::MOVE_UPDATE:
-        gesture_drag->get_offset(offset_x, offset_y);
-        for (auto pr : start_positions) {
-            double x, y;
-            x = pr.second.first;
-            y = pr.second.second;
-            place_node(pr.first, x + offset_x, y + offset_y, true);
-        }
-        break;
-    case FilterEditorEvent::MOVE_END:
-    {
-        // TODO: Consider moving this to a seperate function
-        auto filter = _dialog._filter_modifier.get_selected_filter();
-        if(filter)
-            DocumentUndo::maybeDone(filter->document,"moving", _("Moved primitive nodes"), INKSCAPE_ICON("dialog-filters"));
-
-        start_positions.clear(); // Clearing the start positions for safety
-        current_event_type = FilterEditorEvent::NONE;
-        break;
-    }
-    case FilterEditorEvent::CONNECTION_START:
-        if (active_widget != nullptr) {
-            if (dynamic_cast<FilterEditorSource *>(active_widget) != nullptr) {
+            start_positions.clear();
+            for (auto node : selected_nodes[current_filter_id]) {
                 double x, y;
-                gesture_drag->get_start_point(x, y);
-                double x_g, y_g;
-                local_to_global(x, y, x_g, y_g);
-                drag_global_coordinates = {{x_g, y_g}, {x_g, y_g}};
-                starting_source = resolve_to_type<FilterEditorSource>(active_widget);
-                current_event_type = FilterEditorEvent::CONNECTION_UPDATE;
+                canvas.get_child_position(*node, x, y);
+                start_positions.push_back({node, {x, y}});
             }
+            current_event_type = FilterEditorEvent::MOVE_UPDATE;
+            break;
+        case FilterEditorEvent::MOVE_UPDATE:
+            gesture_drag->get_offset(offset_x, offset_y);
+            for (auto pr : start_positions) {
+                double x, y;
+                x = pr.second.first;
+                y = pr.second.second;
+                place_node(pr.first, x + offset_x, y + offset_y, true);
+            }
+            break;
+        case FilterEditorEvent::MOVE_END: {
+            // TODO: Consider moving this to a seperate function
+            auto filter = _dialog._filter_modifier.get_selected_filter();
+            if (filter) {
+                DocumentUndo::maybeDone(filter->document, "moving", _("Moved primitive nodes"), INKSCAPE_ICON("dialog-filters"));
+            }
+            start_positions.clear(); // Clearing the start positions for safety
+            current_event_type = FilterEditorEvent::NONE;
+            break;
         }
-        break;
-    case FilterEditorEvent::CONNECTION_UPDATE:
-    {
-        double x, y;
-        gesture_drag->get_start_point(x, y);
-        double x_offset, y_offset;
-        gesture_drag->get_offset(x_offset, y_offset);
-        double x_end_g, y_end_g;
-        local_to_global(x + x_offset, y + y_offset, x_end_g, y_end_g);
-        drag_global_coordinates.second = {x_end_g, y_end_g};
-        canvas.queue_draw();
-        break;
-    }
-    case FilterEditorEvent::CONNECTION_END:
-    {
-        double x_start, y_start, x_offset, y_offset, x_end, y_end;
-        gesture_drag->get_start_point(x_start, y_start);
-        gesture_drag->get_offset(x_offset, y_offset);
-        x_end = x_start + x_offset;
-        y_end = y_start + y_offset;
-        auto widget = get_widget_under(x_end, y_end);
-        if (widget != nullptr) {
-            auto sink = resolve_to_type<FilterEditorSink>(widget);
-            if (sink != nullptr) {
-                // TODO: Consider moving this check to another function
-                if(output_node->get_connected_up_nodes().size() > 0 && output_node->get_connected_up_nodes()[0].second == starting_source->get_parent_node()){
-                    // Don't create a connection, the upper node is connected to the output node.
-                    // TODO: Give an error message
+        case FilterEditorEvent::CONNECTION_START:
+            if (active_widget) {
+                if (dynamic_cast<FilterEditorSource *>(active_widget)) {
+                    double x, y;
+                    gesture_drag->get_start_point(x, y);
+                    double x_g, y_g;
+                    local_to_global(x, y, x_g, y_g);
+                    drag_global_coordinates = {{x_g, y_g}, {x_g, y_g}};
+                    starting_source = resolve_to_type<FilterEditorSource>(active_widget);
+                    current_event_type = FilterEditorEvent::CONNECTION_UPDATE;
                 }
-                else{
-                    if(dynamic_cast<FilterEditorOutputNode*>(sink->get_parent_node()) != nullptr && starting_source->get_parent_node()->get_connected_down_nodes().size() != 0){
-                        SPFilter* filter = get_current_filter();
-                        _dialog._filter_modifier._observer->set(nullptr);
-                        SPFilterPrimitive *prim = filter_add_primitive(filter, Filters::FilterPrimitiveType::NR_FILTER_MERGE);
-                        int num_sinks = input_count(prim);
-                        double x1, y1, x2, y2;
-                        sink->get_parent_node()->get_position(x1, y1);
-                        starting_source->get_parent_node()->get_position(x2, y2);
-                        double x_final, y_final;
-                        global_to_local((x1+x2)/2, (y1+y2)/2, x_final, y_final);
-                        auto merge_node = add_primitive_node(prim, x_final, y_final, Filters::FilterPrimitiveType::NR_FILTER_MERGE, FPConverter.get_label(Filters::FilterPrimitiveType::NR_FILTER_MERGE), num_sinks);
-                        create_connection(starting_source, merge_node->get_sink(0));
-                        create_connection(merge_node->get_source(), sink); 
-                        update_document(); 
-                        _dialog._filter_modifier._observer->set(filter);
+            }
+            break;
+        case FilterEditorEvent::CONNECTION_UPDATE: {
+            double x, y;
+            gesture_drag->get_start_point(x, y);
+            double x_offset, y_offset;
+            gesture_drag->get_offset(x_offset, y_offset);
+            double x_end_g, y_end_g;
+            local_to_global(x + x_offset, y + y_offset, x_end_g, y_end_g);
+            drag_global_coordinates.second = {x_end_g, y_end_g};
+            canvas.queue_draw();
+            break;
+        }
+        case FilterEditorEvent::CONNECTION_END: {
+            double x_start, y_start, x_offset, y_offset, x_end, y_end;
+            gesture_drag->get_start_point(x_start, y_start);
+            gesture_drag->get_offset(x_offset, y_offset);
+            x_end = x_start + x_offset;
+            y_end = y_start + y_offset;
+            auto widget = get_widget_under(x_end, y_end);
+            if (widget != nullptr) {
+                auto sink = resolve_to_type<FilterEditorSink>(widget);
+                if (sink != nullptr) {
+                    // TODO: Consider moving this check to another function
+                    if (output_node->get_connected_up_nodes().size() > 0 && output_node->get_connected_up_nodes()[0].second == starting_source->get_parent_node()) {
+                        // Don't create a connection, the upper node is connected to the output node.
+                        // TODO: Give an error message
                     } else {
-                        create_connection(starting_source, sink);
+                        if (dynamic_cast<FilterEditorOutputNode *>(sink->get_parent_node()) != nullptr && starting_source->get_parent_node()->get_connected_down_nodes().size() != 0) {
+                            SPFilter *filter = get_current_filter();
+                            _dialog._filter_modifier._observer->set(nullptr);
+                            SPFilterPrimitive *prim = filter_add_primitive(filter, Filters::FilterPrimitiveType::NR_FILTER_MERGE);
+                            int num_sinks = input_count(prim);
+                            double x1, y1, x2, y2;
+                            sink->get_parent_node()->get_position(x1, y1);
+                            starting_source->get_parent_node()->get_position(x2, y2);
+                            double x_final, y_final;
+                            global_to_local((x1 + x2) / 2, (y1 + y2) / 2, x_final, y_final);
+                            auto merge_node = add_primitive_node(prim, x_final, y_final, Filters::FilterPrimitiveType::NR_FILTER_MERGE, FPConverter.get_label(Filters::FilterPrimitiveType::NR_FILTER_MERGE), num_sinks);
+                            create_connection(starting_source, merge_node->get_sink(0));
+                            create_connection(merge_node->get_source(), sink);
+                            update_document();
+                            _dialog._filter_modifier._observer->set(filter);
+                        } else {
+                            create_connection(starting_source, sink);
+                        }
                     }
+                    update_document();
                 }
-                update_document();
+            }
+            canvas.queue_draw();
+            current_event_type = FilterEditorEvent::NONE;
+            break;
+        }
+        case FilterEditorEvent::INVERTED_CONNECTION_START: {
+            if (active_widget != nullptr) {
+                if (dynamic_cast<FilterEditorSink *>(active_widget) != nullptr) {
+                    double x, y;
+                    gesture_drag->get_start_point(x, y);
+                    double x_g, y_g;
+                    local_to_global(x, y, x_g, y_g);
+                    drag_global_coordinates = {{x_g, y_g}, {x_g, y_g}};
+                    starting_sink = resolve_to_type<FilterEditorSink>(active_widget);
+                    current_event_type = FilterEditorEvent::INVERTED_CONNECTION_UPDATE;
+                }
             }
         }
-        canvas.queue_draw();
-        current_event_type = FilterEditorEvent::NONE;
-        break;
-    }
-    case FilterEditorEvent::INVERTED_CONNECTION_START:{
-        if (active_widget != nullptr) {
-            if (dynamic_cast<FilterEditorSink *>(active_widget) != nullptr) {
-                double x, y;
-                gesture_drag->get_start_point(x, y);
-                double x_g, y_g;
-                local_to_global(x, y, x_g, y_g);
-                drag_global_coordinates = {{x_g, y_g}, {x_g, y_g}};
-                starting_sink = resolve_to_type<FilterEditorSink>(active_widget);
-                current_event_type = FilterEditorEvent::INVERTED_CONNECTION_UPDATE;
-            }
+        case FilterEditorEvent::INVERTED_CONNECTION_UPDATE: {
+            double x, y;
+            gesture_drag->get_start_point(x, y);
+            double x_offset, y_offset;
+            gesture_drag->get_offset(x_offset, y_offset);
+            double x_end_g, y_end_g;
+            local_to_global(x + x_offset, y + y_offset, x_end_g, y_end_g);
+            drag_global_coordinates.second = {x_end_g, y_end_g};
+            canvas.queue_draw();
+            break;
         }
-    }
-    case FilterEditorEvent::INVERTED_CONNECTION_UPDATE:{
-        double x, y;
-        gesture_drag->get_start_point(x, y);
-        double x_offset, y_offset;
-        gesture_drag->get_offset(x_offset, y_offset);
-        double x_end_g, y_end_g;
-        local_to_global(x + x_offset, y + y_offset, x_end_g, y_end_g);
-        drag_global_coordinates.second = {x_end_g, y_end_g};
-        canvas.queue_draw();
-        break;
-    }
-    case FilterEditorEvent::INVERTED_CONNECTION_END:{
-        double x_start, y_start, x_offset, y_offset, x_end, y_end;
-        gesture_drag->get_start_point(x_start, y_start);
-        gesture_drag->get_offset(x_offset, y_offset);
-        x_end = x_start + x_offset;
-        y_end = y_start + y_offset;
-        auto widget = get_widget_under(x_end, y_end);
-        if (widget != nullptr) {
-            auto source = resolve_to_type<FilterEditorSource>(widget);
-            if (source != nullptr) {
-                if(output_node->get_connected_up_nodes().size() > 0 && output_node->get_connected_up_nodes()[0].second == source->get_parent_node()){
-                    // Don't create a connection, the upper node is connected to the output node.
-                }
-                else{
-                    create_connection(source, starting_sink);
-                }
-                
-            }
-            else{
-                if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(starting_sink->get_parent_node()) != nullptr){
-                    auto parent_merge_node = dynamic_cast<FilterEditorPrimitiveMergeNode*>(starting_sink->get_parent_node());
-                    if(parent_merge_node->is_last_sink(starting_sink)){
-                        // It's the last sink, so we don't need to destroy the sink
+        case FilterEditorEvent::INVERTED_CONNECTION_END: {
+            double x_start, y_start, x_offset, y_offset, x_end, y_end;
+            gesture_drag->get_start_point(x_start, y_start);
+            gesture_drag->get_offset(x_offset, y_offset);
+            x_end = x_start + x_offset;
+            y_end = y_start + y_offset;
+            auto widget = get_widget_under(x_end, y_end);
+            if (widget) {
+                auto source = resolve_to_type<FilterEditorSource>(widget);
+                if (source) {
+                    if (output_node->get_connected_up_nodes().size() > 0 && output_node->get_connected_up_nodes()[0].second == source->get_parent_node()) {
+                        // Don't create a connection, the upper node is connected to the output node.
+                    } else {
+                        create_connection(source, starting_sink);
                     }
-                    else{
-                        // Else, the node needs to be deleted.
-                        g_assert(parent_merge_node->sink_nodes.find(starting_sink) != parent_merge_node->sink_nodes.end());
-                        sp_repr_unparent(parent_merge_node->sink_nodes[starting_sink]->getRepr()); 
+                } else {
+                    if (dynamic_cast<FilterEditorPrimitiveMergeNode *>(starting_sink->get_parent_node()) != nullptr) {
+                        auto parent_merge_node = dynamic_cast<FilterEditorPrimitiveMergeNode *>(starting_sink->get_parent_node());
+                        if (parent_merge_node->is_last_sink(starting_sink)) {
+                            // It's the last sink, so we don't need to destroy the sink
+                        } else {
+                            // Else, the node needs to be deleted.
+                            g_assert(parent_merge_node->sink_nodes.find(starting_sink) != parent_merge_node->sink_nodes.end());
+                            sp_repr_unparent(parent_merge_node->sink_nodes[starting_sink]->getRepr());
+                        }
+                        dynamic_cast<FilterEditorPrimitiveMergeNode *>(starting_sink->get_parent_node())->remove_extra_sinks();
+                        dynamic_cast<FilterEditorPrimitiveMergeNode *>(starting_sink->get_parent_node())->add_sink();
                     }
-                    dynamic_cast<FilterEditorPrimitiveMergeNode*>(starting_sink->get_parent_node())->remove_extra_sinks();
-                    dynamic_cast<FilterEditorPrimitiveMergeNode*>(starting_sink->get_parent_node())->add_sink();
+#ifdef BREAK_LOOSE_CONNECTION
+                    else if (dynamic_cast<FilterEditorPrimitiveNode *>(starting_sink->get_parent_node())) {
+                        dynamic_cast<FilterEditorPrimitiveNode *>(starting_sink->get_parent_node())->set_sink_result(starting_sink, 0);
+                    }
+#endif
                 }
-                #ifdef BREAK_LOOSE_CONNECTION
-                else if(dynamic_cast<FilterEditorPrimitiveNode*>(starting_sink->get_parent_node()) != nullptr){
-                    dynamic_cast<FilterEditorPrimitiveNode*>(starting_sink->get_parent_node())->set_sink_result(starting_sink, 0);
-                }
-                #endif
             }
+            update_document(true);
+            canvas.queue_draw();
+            current_event_type = FilterEditorEvent::NONE;
+            break;
         }
-        update_document(true);
-        canvas.queue_draw();
-        current_event_type = FilterEditorEvent::NONE;
-        break;
-    }
-    case FilterEditorEvent::RUBBERBAND_START:
-    {
-        double x_start, y_start;
-        gesture_drag->get_start_point(x_start, y_start);
-        canvas.put(*rubberband_rectangle, x_start, y_start);
-        rubberband_rectangle->set_size_request(0, 0);
-        current_event_type = FilterEditorEvent::RUBBERBAND_UPDATE;
-    }
-    case FilterEditorEvent::RUBBERBAND_UPDATE:{
-        if (rubberband_rectangle->get_parent() == nullptr) {
-            canvas.put(*rubberband_rectangle, x, y);
+        case FilterEditorEvent::RUBBERBAND_START: {
+            double x_start, y_start;
+            gesture_drag->get_start_point(x_start, y_start);
+            canvas.put(*rubberband_rectangle, x_start, y_start);
+            rubberband_rectangle->set_size_request(0, 0);
+            current_event_type = FilterEditorEvent::RUBBERBAND_UPDATE;
         }
-        double x_start, y_start;
-        gesture_drag->get_start_point(x_start, y_start);
-        double offset_x, offset_y;
-        gesture_drag->get_offset(offset_x, offset_y);
-        double x_end = x_start + offset_x, y_end = y_start + offset_y;
-        if (offset_x < 0) {
-            x_start = x_end;
-            offset_x = -offset_x;
+        case FilterEditorEvent::RUBBERBAND_UPDATE: {
+            if (!rubberband_rectangle->get_parent()) {
+                canvas.put(*rubberband_rectangle, x, y);
+            }
+            double x_start, y_start;
+            gesture_drag->get_start_point(x_start, y_start);
+            double offset_x, offset_y;
+            gesture_drag->get_offset(offset_x, offset_y);
+            double x_end = x_start + offset_x, y_end = y_start + offset_y;
+            if (offset_x < 0) {
+                x_start = x_end;
+                offset_x = -offset_x;
+            }
+            if (offset_y < 0) {
+                y_start = y_end;
+                offset_y = -offset_y;
+            }
+            canvas.move(*rubberband_rectangle, x_start, y_start);
+            rubberband_rectangle->set_size_request(offset_x, offset_y);
+            rubberband_x = x_start;
+            rubberband_y = y_start;
+            rubberband_size_x = offset_x;
+            rubberband_size_y = offset_y;
+            break;
         }
-        if (offset_y < 0) {
-            y_start = y_end;
-            offset_y = -offset_y;
-        }
-        canvas.move(*rubberband_rectangle, x_start, y_start);
-        rubberband_rectangle->set_size_request(offset_x, offset_y);
-        rubberband_x = x_start;
-        rubberband_y = y_start;
-        rubberband_size_x = offset_x;
-        rubberband_size_y = offset_y;
-    }
-    break;
 
-    case FilterEditorEvent::RUBBERBAND_END:
-        canvas.remove(*rubberband_rectangle);
-        rubberband_select();
-        current_event_type = FilterEditorEvent::NONE;
-        break;
+        case FilterEditorEvent::RUBBERBAND_END:
+            canvas.remove(*rubberband_rectangle);
+            rubberband_select();
+            current_event_type = FilterEditorEvent::NONE;
+            break;
     }
 }
 
-
-void FilterEditorCanvas::on_scroll(const Gtk::EventControllerScroll &scroll) {};
+void FilterEditorCanvas::on_scroll(Gtk::EventControllerScroll const &scroll) {}
 
 void FilterEditorCanvas::initialize_gestures()
 {
@@ -2551,7 +2457,7 @@ void FilterEditorCanvas::initialize_gestures()
         auto const surface = dynamic_cast<Gtk::Native &>(*get_root()).get_surface();
         g_assert(surface);
         surface->get_device_position(device, mx, my, mask);
-        if((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK){
+        if ((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK) {
         }
         grab_focus();
         active_widget = get_widget_under(x, y);
@@ -2563,15 +2469,15 @@ void FilterEditorCanvas::initialize_gestures()
         if (!in_click) {
             in_click = false;
             in_drag = true;
-            if (active_widget != nullptr) {
-                if (resolve_to_type<FilterEditorSource>(active_widget) != nullptr) {
+            if (active_widget) {
+                if (resolve_to_type<FilterEditorSource>(active_widget)) {
                     current_event_type = FilterEditorEvent::CONNECTION_START;
-                } else if (resolve_to_type<FilterEditorSink>(active_widget) != nullptr){
+                } else if (resolve_to_type<FilterEditorSink>(active_widget)) {
                     current_event_type = FilterEditorEvent::INVERTED_CONNECTION_START;
                     active_widget = resolve_to_type<FilterEditorSink>(active_widget);
-                    if(dynamic_cast<FilterEditorSink*>(active_widget)->get_connections().size() > 0){
-                        FilterEditorConnection* conn = dynamic_cast<FilterEditorSink*>(active_widget)->get_connections()[0];
-                        destroy_connection(conn, false); 
+                    if (dynamic_cast<FilterEditorSink *>(active_widget)->get_connections().size() > 0) {
+                        FilterEditorConnection *conn = dynamic_cast<FilterEditorSink *>(active_widget)->get_connections()[0];
+                        destroy_connection(conn, false);
                     }
                 } else if (resolve_to_type<FilterEditorNode>(active_widget) != nullptr) {
                     current_event_type = FilterEditorEvent::MOVE_START;
@@ -2580,8 +2486,7 @@ void FilterEditorCanvas::initialize_gestures()
                 }
             }
             event_handler(0, 0);
-        }
-        else{
+        } else {
             current_event_type = FilterEditorEvent::NONE;
             in_click = false;
             in_drag = false;
@@ -2589,46 +2494,39 @@ void FilterEditorCanvas::initialize_gestures()
     });
     gesture_click->signal_released().connect([this](int n_press, double x, double y) {
         if (!in_drag) {
-            if(resolve_to_type<FilterEditorSink>(active_widget) != nullptr){
+            if (resolve_to_type<FilterEditorSink>(active_widget)) {
                 auto sink = resolve_to_type<FilterEditorSink>(active_widget);
-                if(sink->inp_index != -99){
-                    if(dynamic_cast<FilterEditorPrimitiveNode*>(sink->get_parent_node()) != nullptr){
-                        for(auto conn: sink->get_connections()){{
+                if (sink->inp_index != -99) {
+                    if (dynamic_cast<FilterEditorPrimitiveNode *>(sink->get_parent_node())) {
+                        for (auto conn : sink->get_connections()) {
                             destroy_connection(conn, false);
                             // TODO: Ensure if this should be false or true. Manually update the document
-                        }}
-                        if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node()) != nullptr){
-                            auto node = dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node());
-                            if(node->is_last_sink(sink)){
+                        }
+                        if (dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node())) {
+                            auto node = dynamic_cast<FilterEditorPrimitiveMergeNode *>(sink->get_parent_node());
+                            if (node->is_last_sink(sink)) {
                                 node->create_sink_merge_node(sink);
                             }
                             node->set_sink_result(sink, -2);
                             update_document(); // TODO: Check if replace with update_canvas_new
+                        } else {
+                            dynamic_cast<FilterEditorPrimitiveNode *>(sink->get_parent_node())->set_sink_result(sink, -2);
                         }
-                        else{
-                            dynamic_cast<FilterEditorPrimitiveNode*>(sink->get_parent_node())->set_sink_result(sink, -2);
-                        }
-                        // current_event_type = FilterEditorEvent::SELECT;
-                        
-                    }
-                    else{
+                    } else {
                         sink->get_parent_node()->set_sink_result(sink, -2);
                     }
                     current_event_type = FilterEditorEvent::SELECT;
-                }
-                else{
+                } else {
                     current_event_type = FilterEditorEvent::SELECT;
-                    event_handler(x, y); 
+                    event_handler(x, y);
                 }
-            }
-            else{
+            } else {
                 current_event_type = FilterEditorEvent::SELECT;
                 event_handler(x, y);
             }
             in_drag = false;
             in_click = true;
-        }
-        else{
+        } else {
             in_drag = false;
             in_click = false;
         }
@@ -2638,31 +2536,26 @@ void FilterEditorCanvas::initialize_gestures()
     gesture_drag = Gtk::GestureDrag::create();
     gesture_drag->set_button(0);
     gesture_drag->signal_drag_begin().connect([this](double start_x, double start_y) {
-        if(current_event_type == FilterEditorEvent::NONE){
-        in_drag = false;
-        get_widget_under(start_x, start_y);
-        if (gesture_drag->get_current_button() == GDK_BUTTON_MIDDLE) {
-            current_event_type = FilterEditorEvent::PAN_START;
-            event_handler(0, 0);
-            in_drag = true;
-        } else {
-        }}
-        else{
-
-
+        if (current_event_type == FilterEditorEvent::NONE) {
+            in_drag = false;
+            get_widget_under(start_x, start_y);
+            if (gesture_drag->get_current_button() == GDK_BUTTON_MIDDLE) {
+                current_event_type = FilterEditorEvent::PAN_START;
+                event_handler(0, 0);
+                in_drag = true;
+            }
         }
     });
     gesture_drag->signal_drag_update().connect([this](double x, double y) {
         if (in_drag && !in_click) {
             if (gesture_drag->get_current_button() == GDK_BUTTON_PRIMARY) {
                 // Left click
-                if (active_widget != nullptr) {
-                    if (resolve_to_type<FilterEditorSource>(active_widget) != nullptr) {
+                if (active_widget) {
+                    if (resolve_to_type<FilterEditorSource>(active_widget)) {
                         current_event_type = FilterEditorEvent::CONNECTION_UPDATE;
-                    } else if (resolve_to_type<FilterEditorSink>(active_widget) != nullptr) {
+                    } else if (resolve_to_type<FilterEditorSink>(active_widget)) {
                         current_event_type = FilterEditorEvent::INVERTED_CONNECTION_UPDATE;
-                    }
-                    else if (resolve_to_type<FilterEditorNode>(active_widget) != nullptr) {
+                    } else if (resolve_to_type<FilterEditorNode>(active_widget)) {
                         current_event_type = FilterEditorEvent::MOVE_UPDATE;
                     }
                 } else {
@@ -2675,13 +2568,13 @@ void FilterEditorCanvas::initialize_gestures()
         }
     });
     gesture_drag->signal_drag_end().connect([this](double x, double y) {
-        if(current_event_type == FilterEditorEvent::NONE){
+        if (current_event_type == FilterEditorEvent::NONE) {
             return;
         }
         if (in_drag) {
             if (current_event_type == FilterEditorEvent::CONNECTION_UPDATE) {
                 current_event_type = FilterEditorEvent::CONNECTION_END;
-            } else if (current_event_type == FilterEditorEvent::INVERTED_CONNECTION_UPDATE){
+            } else if (current_event_type == FilterEditorEvent::INVERTED_CONNECTION_UPDATE) {
                 current_event_type = FilterEditorEvent::INVERTED_CONNECTION_END;
             } else if (current_event_type == FilterEditorEvent::MOVE_UPDATE) {
                 current_event_type = FilterEditorEvent::MOVE_END;
@@ -2690,26 +2583,24 @@ void FilterEditorCanvas::initialize_gestures()
             } else if (current_event_type == FilterEditorEvent::PAN_UPDATE) {
                 current_event_type = FilterEditorEvent::PAN_END;
             }
-            
+
             event_handler(x, y);
         }
     });
 
-
     canvas.add_controller(gesture_drag);
-    /*Setting up temporary controllers related to clicks.*/
+    // Setting up temporary controllers related to clicks.
     gesture_right_click = Gtk::GestureClick::create();
     gesture_right_click->set_button(GDK_BUTTON_SECONDARY);
     gesture_right_click->signal_pressed().connect([this](int n_press, double x, double y) {
         grab_focus();
         auto widget = get_widget_under(x, y);
-        auto prim_node = resolve_to_type<FilterEditorNode>(widget); 
-        if(prim_node != nullptr){
+        auto prim_node = resolve_to_type<FilterEditorNode>(widget);
+        if (prim_node) {
             prim_node->label.set_sensitive(true);
             prim_node->label.set_editable(true);
             prim_node->label.start_editing();
-        }
-        else{
+        } else {
             _popover_menu->set_parent(canvas);
             _popover_menu->popup_at(canvas, x, y);
         }
@@ -2719,7 +2610,7 @@ void FilterEditorCanvas::initialize_gestures()
     key_controller = Gtk::EventControllerKey::create();
     key_controller->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
     key_controller->signal_key_pressed().connect(
-        [this](guint keyval, guint keycode, Gdk::ModifierType state) -> bool {
+        [this](guint keyval, guint keycode, Gdk::ModifierType state) {
             if (keyval == GDK_KEY_apostrophe) {
                 _dialog.toggle_params();
             } else if (keyval == GDK_KEY_5) {
@@ -2730,10 +2621,9 @@ void FilterEditorCanvas::initialize_gestures()
             } else if (keyval == GDK_KEY_s) {
                 toggle_preview();
                 refreshPreview(true);
-            } else if (keyval == GDK_KEY_h){
+            } else if (keyval == GDK_KEY_h) {
                 toggle_preview(preview_active);
-            } else if (keyval == GDK_KEY_Delete){
-
+            } else if (keyval == GDK_KEY_Delete) {
                 delete_nodes();
             }
             grab_focus();
@@ -2741,14 +2631,14 @@ void FilterEditorCanvas::initialize_gestures()
         },
         false);
     key_controller->signal_modifiers().connect(
-        [this](Gdk::ModifierType state) -> bool {
-            modifier_state = state; 
+        [this](Gdk::ModifierType state) {
+            modifier_state = state;
             return true;
         },
         true);
 
     key_controller->signal_modifiers().connect(
-        [this](Gdk::ModifierType state) -> bool {
+        [this](Gdk::ModifierType state) {
             modifier_state = state;
             return true;
         },
@@ -2762,7 +2652,7 @@ void FilterEditorCanvas::initialize_gestures()
     scroll_controller->set_propagation_phase(Gtk::PropagationPhase::BUBBLE);
     scroll_controller->signal_scroll().connect(
         [this](double dx, double dy) {
-            if(current_event_type == FilterEditorEvent::NONE){
+            if (current_event_type == FilterEditorEvent::NONE) {
                 grab_focus();
                 double mx{}, my{};
                 Gdk::ModifierType mask;
@@ -2788,23 +2678,21 @@ void FilterEditorCanvas::initialize_gestures()
                 }
                 canvas.queue_draw();
             }
-            else{
-            }
             return true;
         },
         true);
     add_controller(scroll_controller);
 }
 
-void FilterEditorCanvas::modify_observer(bool disable){
+void FilterEditorCanvas::modify_observer(bool disable)
+{
     static int count = 0;
-    if(disable){
+    if (disable) {
         _dialog._filter_modifier._observer->set(nullptr);
         count++;
-    }
-    else{
+    } else {
         count--;
-        if(count == 0){
+        if (count == 0) {
             _dialog._filter_modifier._observer->set(_dialog._filter_modifier.get_selected_filter());
         }
     }
@@ -2823,24 +2711,8 @@ void FilterEditorCanvas::local_to_global(double xl, double yl, double &xg, doubl
 };
 void FilterEditorCanvas::place_node(FilterEditorNode *node, double x, double y, bool local, bool update)
 {
-    if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr() != nullptr){
-            double update_x, update_y;
-            if(local){
-                local_to_global(x, y, update_x, update_y);
-            }
-            else{
-                update_x = x;
-                update_y = y;
-            }
-            if(update){
-                dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-x", update_x);
-                dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-y", update_y);
-            }
-        }
-        
-    }
-    else if(dynamic_cast<FilterEditorOutputNode*>(node) != nullptr){
+    if (dynamic_cast<FilterEditorPrimitiveNode *>(node)) {
+        if (dynamic_cast<FilterEditorPrimitiveNode *>(node)->get_primitive()->getRepr()) {
             double update_x, update_y;
             if (local) {
                 local_to_global(x, y, update_x, update_y);
@@ -2848,15 +2720,26 @@ void FilterEditorCanvas::place_node(FilterEditorNode *node, double x, double y, 
                 update_x = x;
                 update_y = y;
             }
-            auto filter = _dialog._filter_modifier.get_selected_filter();  
-            if(filter && update){
-                filter->getRepr()->setAttributeSvgDouble("inkscape:output-x", update_x);
-                filter->getRepr()->setAttributeSvgDouble("inkscape:output-y", update_y);
+            if (update) {
+                dynamic_cast<FilterEditorPrimitiveNode *>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-x", update_x);
+                dynamic_cast<FilterEditorPrimitiveNode *>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-y", update_y);
             }
+        }
+    } else if (dynamic_cast<FilterEditorOutputNode *>(node)) {
+        double update_x, update_y;
+        if (local) {
+            local_to_global(x, y, update_x, update_y);
+        } else {
+            update_x = x;
+            update_y = y;
+        }
+        auto filter = _dialog._filter_modifier.get_selected_filter();
+        if (filter && update) {
+            filter->getRepr()->setAttributeSvgDouble("inkscape:output-x", update_x);
+            filter->getRepr()->setAttributeSvgDouble("inkscape:output-y", update_y);
+        }
     }
-    else{
 
-    }
     if (!local) {
         node->update_position(x, y);
         double xl, yl;
@@ -2876,7 +2759,7 @@ void FilterEditorCanvas::place_node(FilterEditorNode *node, double x, double y, 
             canvas.move(*node, x, y);
         }
     }
-};
+}
 
 using Inkscape::UI::Widget::AttrWidget;
 using Inkscape::UI::Widget::ComboBoxEnum;
@@ -4118,9 +4001,6 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
     _signal_filters_updated.emit();
 }
 
-
-
-
 std::unique_ptr<UI::Widget::PopoverMenu> FilterEffectsDialog::FilterModifier::create_menu()
 {
     auto menu = std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM);
@@ -4508,7 +4388,6 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
     get_column(0)->set_resizable(true);
     set_headers_visible(false);
 
-    // _observer->signal_changed().connect([this](auto, auto){signal_primitive_changed().emit();});
     get_selection()->signal_changed().connect(sigc::mem_fun(*this, &PrimitiveList::on_primitive_selection_changed));
     signal_primitive_changed().connect(sigc::mem_fun(*this, &PrimitiveList::queue_draw));
 
@@ -4647,7 +4526,6 @@ void FilterEffectsDialog::PrimitiveList::select(SPFilterPrimitive* prim)
 void FilterEffectsDialog::PrimitiveList::remove_selected()
 {
     if (SPFilterPrimitive* prim = get_selected()) {
-        // _observer->set(nullptr);
         _model->erase(get_selection()->get_selected());
 
         //XML Tree being used directly here while it shouldn't be.
