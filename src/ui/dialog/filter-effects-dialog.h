@@ -44,6 +44,7 @@
 #include <gtkmm/snapshot.h>
 #include <gtkmm/editablelabel.h>
 
+#include "display/drawing.h"
 #include "document.h"
 #include "filter-enums.h"
 #include "gtkmm/enums.h"
