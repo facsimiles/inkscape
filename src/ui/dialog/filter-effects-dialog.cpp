@@ -894,7 +894,7 @@ FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
     grab_focus();
     auto controllers = observe_controllers();
     int i = 0;
-    Glib::ustring preview = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "filter_editor_preview.svg");
+    Glib::ustring preview = Inkscape::IO::Resource::get_path_string(IO::Resource::SYSTEM, IO::Resource::UIS, "resources", "filter_editor_preview.svg");
     preview_doc = SPDocument::createNewDoc(preview.c_str(), true, nullptr);
     _preview = std::make_unique<UI::Dialog::ExportPreview>();
     _preview->usePreviewLoading(false);
