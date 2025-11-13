@@ -54,12 +54,17 @@ public:
     // insert a separator on top of that item
     void set_row_separator_func(std::function<bool (unsigned int)> callback);
 
+    // if set, this function will be used to extract string from items stored in the model
+    void set_to_string_func(std::function<Glib::ustring (const Glib::RefPtr<Glib::ObjectBase>&)> callback);
+
 private:
     void _init();
+    Glib::ustring get_item_string(const Glib::RefPtr<Glib::ObjectBase>& item);
     Gtk::Label* set_up_item(bool ellipsize);
     Glib::RefPtr<Gtk::StringList> _model = Gtk::StringList::create({});
     Glib::RefPtr<Gtk::SignalListItemFactory> _factory = Gtk::SignalListItemFactory::create();
     std::function<bool (unsigned int)> _separator_callback;
+    std::function<Glib::ustring (const Glib::RefPtr<Glib::ObjectBase>&)> _to_string;
     int _button_max_chars = -1;
 };
 

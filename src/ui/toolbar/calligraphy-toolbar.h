@@ -99,7 +99,7 @@ private:
     void edit_profile();
     void update_presets_list();
     void tilt_state_changed();
-    void unit_changed(int not_used);
+    void unit_changed();
     void on_pref_toggled(Gtk::ToggleButton *item, Glib::ustring const &path);
 };
 

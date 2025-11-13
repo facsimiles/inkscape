@@ -48,6 +48,7 @@ class ToolBase;
 class TextTool;
 } // namespace Tools
 namespace Widget {
+class UnitMenu;
 class ComboBoxEntryToolItem;
 class ComboToolItem;
 class SpinButton;
@@ -85,9 +86,9 @@ private:
 
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
-    UI::Widget::ComboToolItem *_font_size_units_item;
+    UI::Widget::UnitMenu*_font_size_units_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
-    UI::Widget::ComboToolItem *_line_height_units_item;
+    UI::Widget::UnitMenu*_line_height_units_item;
     UI::Widget::SpinButton &_line_height_item;
     Gtk::ToggleButton &_superscript_btn;
     Gtk::ToggleButton &_subscript_btn;
@@ -133,7 +134,7 @@ private:
     void orientation_changed(int mode);
     void direction_changed(int mode);
     void lineheight_value_changed();
-    void lineheight_unit_changed(int not_used);
+    void lineheight_unit_changed();
     void wordspacing_value_changed();
     void letterspacing_value_changed();
     void dx_value_changed();
@@ -141,7 +142,7 @@ private:
     void prepare_inner();
     void focus_text();
     void rotation_value_changed();
-    void fontsize_unit_changed(int not_used);
+    void fontsize_unit_changed();
     void _selectionChanged(Selection *selection);
     void _selectionModified(Selection *selection, guint flags);
     void _cursorMoved(Tools::TextTool *texttool);

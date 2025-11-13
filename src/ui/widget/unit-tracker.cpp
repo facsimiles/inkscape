@@ -16,6 +16,7 @@
 
 #include "unit-tracker.h"
 
+#include <cassert>
 #include <iostream>
 #include <gtkmm/liststore.h>
 
@@ -33,31 +34,11 @@ UnitTracker::UnitTracker(UnitType unit_type) :
     _store(nullptr),
     _priorValues()
 {
-    auto const &m = Util::UnitTable::get().units(unit_type);
-    
-    ComboToolItemColumns columns;
-    _store = Gtk::ListStore::create(columns);
-    Gtk::TreeModel::Row row;
+    _store = Gio::ListStore<UnitObject>::create();
 
-    for (auto & m_iter : m) {
+    _store->splice(0, 0, UnitTable::get().get_units(unit_type));
 
-        Glib::ustring unit = m_iter.first;
-
-        row = *(_store->append());
-        row[columns.col_label    ] = unit;
-        row[columns.col_value    ] = unit;
-        row[columns.col_tooltip  ] = ("");
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-    }
-
-    // Why?
-    gint count = _store->children().size();
-    if ((count > 0) && (_active > count)) {
-        _setActive(--count);
-    } else {
-        _setActive(_active);
-    }
+    _setActive(_active);
 }
 
 UnitTracker::~UnitTracker()
@@ -76,61 +57,54 @@ bool UnitTracker::isUpdating() const
     return _isUpdating;
 }
 
-Inkscape::Util::Unit const * UnitTracker::getActiveUnit() const
+Unit const * UnitTracker::getActiveUnit() const
 {
     return _activeUnit;
 }
 
 Glib::ustring UnitTracker::getCurrentLabel()
 {
-    ComboToolItemColumns columns;
-    return _store->children()[_active][columns.col_label];
+    return _store->get_item(_active)->unit.abbr;
 }
 
-void UnitTracker::changeLabel(Glib::ustring new_label, gint pos, bool onlylabel)
-{
-    ComboToolItemColumns columns;
-    _store->children()[pos][columns.col_label] = new_label;
-    if (!onlylabel) {
-        _store->children()[pos][columns.col_value] = new_label;
+void UnitTracker::setActiveUnit(UnitPtr unit) {
+    if (!unit) return;
+
+    auto obj = UnitObject::from_unit(unit);
+    auto [found, pos] = _store->find(obj, [](auto& a, auto& b) {
+        return a->unit.abbr == b->unit.abbr;
+    });
+    if (found) {
+        _setActive(pos);
     }
-}
-
-void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
-{
-    if (unit) {
-
-        ComboToolItemColumns columns;
-        int index = 0;
-        for (auto& row: _store->children() ) {
-            Glib::ustring storedUnit = row[columns.col_value];
-            if (!unit->abbr.compare (storedUnit)) {
-                _setActive (index);
-                break;
-            }
-            index++;
-        }
+    else {
+        g_warning("UnitTracker::setActiveUnit: unit '%s' not found!", unit->abbr.c_str());
     }
 }
 
 void UnitTracker::setActiveUnitByLabel(Glib::ustring label)
 {
-    ComboToolItemColumns columns;
-    int index = 0;
-    for (auto &row : _store->children()) {
-        Glib::ustring storedUnit = row[columns.col_label];
-        if (!label.compare(storedUnit)) {
-            _setActive(index);
-            break;
+    for (int i = 0; i < _store->get_n_items(); ++i) {
+        const auto& unit = _store->get_item(i)->unit;
+        if (unit.name == label) {
+            _setActive(i);
+            return;
         }
-        index++;
     }
+
+    g_warning("UnitTracker::setActiveUnitByLabel - unit '%s' not found", label.c_str());
 }
 
 void UnitTracker::setActiveUnitByAbbr(gchar const *abbr)
 {
-    auto u = Util::UnitTable::get().getUnit(abbr);
-    setActiveUnit(u);
+    auto u = UnitTable::get().getUnit(abbr);
+    if (abbr && u->abbr != abbr) {
+        auto tmp = Unit::create(abbr);
+        setActiveUnit(tmp.get());
+    }
+    else {
+        setActiveUnit(u);
+    }
 }
 
 void UnitTracker::addAdjustment(GtkAdjustment *adj)
@@ -143,34 +117,17 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
     }
 }
 
-void UnitTracker::addUnit(Inkscape::Util::Unit const *u)
+void UnitTracker::addUnit(UnitPtr u)
 {
-    ComboToolItemColumns columns;
-
-    Gtk::TreeModel::Row row;
-    row = *(_store->append());
-    row[columns.col_label    ] = u ? u->abbr.c_str() : "";
-    row[columns.col_value    ] = u ? u->abbr.c_str() : "";
-    row[columns.col_tooltip  ] = ("");
-    row[columns.col_icon     ] = "NotUsed";
-    row[columns.col_sensitive] = true;
+    _store->append(UnitObject::from_unit(u));
 }
 
-void UnitTracker::prependUnit(Inkscape::Util::Unit const *u)
+void UnitTracker::prependUnit(UnitPtr u)
 {
-    ComboToolItemColumns columns;
-
-    Gtk::TreeModel::Row row;
-    row = *(_store->prepend());
-    row[columns.col_label    ] = u ? u->abbr.c_str() : "";
-    row[columns.col_value    ] = u ? u->abbr.c_str() : "";
-    row[columns.col_tooltip  ] = ("");
-    row[columns.col_icon     ] = "NotUsed";
-    row[columns.col_sensitive] = true;
+    _store->insert(0, UnitObject::from_unit(u));
 
     /* Re-shuffle our default selection here (_active gets out of sync) */
     setActiveUnit(_activeUnit);
-
 }
 
 void UnitTracker::setFullVal(GtkAdjustment * const adj, double const val)
@@ -178,22 +135,15 @@ void UnitTracker::setFullVal(GtkAdjustment * const adj, double const val)
     _priorValues[adj] = val;
 }
 
-ComboToolItem *
-UnitTracker::create_tool_item(Glib::ustring const &label,
-                              Glib::ustring const &tooltip)
-{
-    auto combo = ComboToolItem::create(label, tooltip, "NotUsed", _store);
-    combo->set_active(_active);
-    combo->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
-    combo->set_name("unit-tracker");
-    combo->set_data(Glib::Quark("unit-tracker"), this);
-    _combo_list.push_back(combo);
-    return combo;    
-}
-
-void UnitTracker::_unitChangedCB(int active)
-{
-    _setActive(active);
+UnitMenu* UnitTracker::create_unit_menu() {
+    auto menu = new UnitMenu();
+    menu->set_name("unit-tracker");
+    menu->set_to_string_func([](auto& item){ return std::dynamic_pointer_cast<UnitObject>(item)->unit.abbr; });
+    menu->set_model(_store);
+    menu->set_selected(_active);
+    menu->signal_changed().connect([this, menu]{ _setActive(menu->get_selected()); });
+    _combo_list.push_back(menu);
+    return menu;
 }
 
 void UnitTracker::_adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was)
@@ -217,78 +167,68 @@ void UnitTracker::_adjustmentFinalized(GObject *where_the_object_was)
 
 void UnitTracker::_setActive(gint active)
 {
-    auto const &unit_table = Util::UnitTable::get();
+    auto const &unit_table = UnitTable::get();
 
-    if ( active != _active || !_activeUnitInitialized ) {
-        gint oldActive = _active;
+    if (active == _active && _activeUnitInitialized) return;
 
-        if (_store) {
+    auto oldActive = _active;
 
-            // Find old and new units
-            ComboToolItemColumns columns;
-            int index = 0;
-            Glib::ustring oldAbbr( "NotFound" );
-            Glib::ustring newAbbr( "NotFound" );
-            for (auto& row: _store->children() ) {
-                if (index == _active) {
-                    oldAbbr = row[columns.col_value];
+    if (_store) {
+        // Find old and new units
+        Glib::ustring oldAbbr( "NotFound" );
+        Glib::ustring newAbbr( "NotFound" );
+        if (auto obj = _store->get_item(_active)) {
+            oldAbbr = obj->unit.abbr;
+        }
+        if (auto obj = _store->get_item(active)) {
+            newAbbr = obj->unit.abbr;
+        }
+        if (oldAbbr != "NotFound") {
+            if (newAbbr != "NotFound") {
+                auto oldUnit = unit_table.getUnit(oldAbbr);
+                auto newUnit = unit_table.getUnit(newAbbr);
+                _activeUnit = newUnit;
+
+                if (!_adjList.empty()) {
+                    _fixupAdjustments(oldUnit, newUnit);
                 }
-                if (index == active) {
-                    newAbbr = row[columns.col_value];
-                }
-                if (newAbbr != "NotFound" && oldAbbr != "NotFound") break;
-                ++index;
-            }
-
-            if (oldAbbr != "NotFound") {
-
-                if (newAbbr != "NotFound") {
-                    Inkscape::Util::Unit const *oldUnit = unit_table.getUnit(oldAbbr);
-                    Inkscape::Util::Unit const *newUnit = unit_table.getUnit(newAbbr);
-                    _activeUnit = newUnit;
-
-                    if (!_adjList.empty()) {
-                        _fixupAdjustments(oldUnit, newUnit);
-                    }
-                } else {
-                    std::cerr << "UnitTracker::_setActive: Did not find new unit: " << active << std::endl;
-                }
-
             } else {
-                std::cerr << "UnitTracker::_setActive: Did not find old unit: " << oldActive
-                          << "  new: " << active << std::endl;
+                std::cerr << "UnitTracker::_setActive: Did not find new unit: " << active << std::endl;
             }
+        } else {
+            std::cerr << "UnitTracker::_setActive: Did not find old unit: " << oldActive
+                      << "  new: " << active << std::endl;
         }
-        _active = active;
-
-        for (auto combo : _combo_list) {
-            if(combo) combo->set_active(active);
-        }
-
-        _activeUnitInitialized = true;
     }
+    _active = active;
+
+    for (auto combo : _combo_list) {
+        if (combo) combo->set_selected(active);
+    }
+
+    _activeUnitInitialized = true;
 }
 
-void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit)
+void UnitTracker::_fixupAdjustments(Unit const *oldUnit, Unit const *newUnit)
 {
     _isUpdating = true;
     for ( auto adj : _adjList ) {
         auto const oldVal = gtk_adjustment_get_value(adj);
         auto val = oldVal;
 
-        if ( (oldUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
-            && (newUnit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
+        if (oldUnit->type != UNIT_TYPE_DIMENSIONLESS
+            && newUnit->type == UNIT_TYPE_DIMENSIONLESS)
         {
             val = newUnit->factor * 100;
-            _priorValues[adj] = Inkscape::Util::Quantity::convert(oldVal, oldUnit, "px");
-        } else if ( (oldUnit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
-            && (newUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
+            _priorValues[adj] = Quantity::convert(oldVal, oldUnit, "px");
+        } else if (oldUnit->type == UNIT_TYPE_DIMENSIONLESS
+            && newUnit->type != UNIT_TYPE_DIMENSIONLESS)
         {
             if (_priorValues.find(adj) != _priorValues.end()) {
-                val = Inkscape::Util::Quantity::convert(_priorValues[adj], "px", newUnit);
+                val = Quantity::convert(_priorValues[adj], "px", newUnit);
             }
         } else {
-            val = Inkscape::Util::Quantity::convert(oldVal, oldUnit, newUnit);
+            val = Quantity::convert(oldVal, oldUnit, newUnit);
         }
 
         gtk_adjustment_set_value(adj, val);

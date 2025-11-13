@@ -199,14 +199,15 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 
     // Line height unit tracker.
     auto const &unit_table = Util::UnitTable::get();
-    _tracker->prependUnit(unit_table.getUnit("")); // Ratio
-    _tracker->addUnit(unit_table.getUnit("%"));
-    _tracker->addUnit(unit_table.getUnit("em"));
-    _tracker->addUnit(unit_table.getUnit("ex"));
-    _tracker->setActiveUnit(unit_table.getUnit(""));
+    auto lines = Unit::create("lines");
+    _tracker->prependUnit(lines.get()); //unit_table.getUnit("")); // Ratio
+    _tracker->addUnit(unit_table.unit("%"));
+    _tracker->addUnit(unit_table.unit("em"));
+    _tracker->addUnit(unit_table.unit("ex"));
+    _tracker->setActiveUnit(lines.get()); // unit_table.getUnit(""));
 
     // We change only the display value
-    _tracker->changeLabel("lines", 0, true);
+    // _tracker->changeLabel("lines", 0, true);
     _tracker_fs->setActiveUnit(unit_table.getUnit("mm"));
 
     // Setup the spin buttons.
@@ -321,15 +322,14 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     get_widget<Gtk::Box>(builder, "font_size_box").append(*_font_size_item);
 
     // Font size units
-    _font_size_units_item = _tracker_fs->create_tool_item(_("Units"), "");
-    _font_size_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_unit_changed));
-    _font_size_units_item->focus_on_click(false);
+    _font_size_units_item = _tracker_fs->create_unit_menu();
+    _font_size_units_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_unit_changed));
+    // _font_size_units_item->focus_on_click(false);
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*_font_size_units_item);
 
     // Line height units
-    _line_height_units_item = _tracker->create_tool_item( _("Units"), "");
-    _line_height_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
-    _line_height_units_item->focus_on_click(false);
+    _line_height_units_item = _tracker->create_unit_menu();
+    _line_height_units_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
     get_widget<Gtk::Box>(builder, "line_height_unit_box").append(*_line_height_units_item);
 
     // Superscript button.
@@ -1067,7 +1067,7 @@ bool TextToolbar::mergeDefaultStyle(SPCSSAttr *css)
     return result_numbers != QUERY_STYLE_NOTHING;
 }
 
-void TextToolbar::lineheight_unit_changed(int /* Not Used */)
+void TextToolbar::lineheight_unit_changed()
 {
     // quit if run by the _changed callbacks or is not text tool
     if (_freeze || !SP_TEXT_CONTEXT(_desktop->getTool())) {
@@ -1266,7 +1266,7 @@ void TextToolbar::lineheight_unit_changed(int /* Not Used */)
     _freeze = false;
 }
 
-void TextToolbar::fontsize_unit_changed(int /* Not Used */)
+void TextToolbar::fontsize_unit_changed(/* Not Used */)
 {
     // quit if run by the _changed callbacks
     auto const unit = _tracker_fs->getActiveUnit();
@@ -1700,7 +1700,7 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
         if (line_height_unit == SP_CSS_UNIT_NONE) {
             // Function 'sp_style_get_css_unit_string' returns 'px' for unit none.
             // We need to avoid this.
-            _tracker->setActiveUnitByAbbr("");
+            _tracker->setActiveUnitByAbbr("lines");
         } else {
             _tracker->setActiveUnitByAbbr(sp_style_get_css_unit_string(line_height_unit));
         }

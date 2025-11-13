@@ -74,7 +74,7 @@ private:
     void setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name, double default_value,
                                    ValueChangedMemFun const value_change_mem_fun);
     void fontsize_value_changed();
-    void unit_changed(int notUsed);
+    void unit_changed();
     void precision_value_changed();
     void scale_value_changed();
     void offset_value_changed();

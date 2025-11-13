@@ -38,33 +38,15 @@
     <tic>16384</tic>
     <tic>32768</tic>
 </metric>
-<unit type="DIMENSIONLESS" pri="y">
-    <name>%</name>
-    <plural>%</plural>
-    <abbr>%</abbr>
-    <factor>1.00</factor>
-    <description>Percentage</description>
-</unit>
+
+<!-- Units used by Inkscape.
+    Note: units will be presented in the UI in the order they are defined here. -->
 <unit type="LINEAR" pri="y">
     <name>pixel</name>
     <plural>pixels</plural>
     <abbr>px</abbr>
     <factor>1.00</factor>
     <description>CSS Pixels (96/inch)</description>
-</unit>
-<unit type="LINEAR" pri="n">
-    <name>point</name>
-    <plural>points</plural>
-    <abbr>pt</abbr>
-    <factor>1.333333333333333</factor>
-    <description>PostScript points (72/inch)</description>
-</unit>
-<unit type="LINEAR" pri="n">
-    <name>pica</name>
-    <plural>picas</plural>
-    <abbr>pc</abbr>
-    <factor>16.0</factor>
-    <description>12 points</description>
 </unit>
 <unit type="LINEAR" pri="n" metric="dyadic">
     <name>inch</name>
@@ -100,6 +82,20 @@
     <abbr>m</abbr>
     <factor>3779.527559055119</factor>
     <description>Meters (100 cm/m)</description>
+</unit>
+<unit type="LINEAR" pri="n">
+    <name>point</name>
+    <plural>points</plural>
+    <abbr>pt</abbr>
+    <factor>1.333333333333333</factor>
+    <description>PostScript points (72/inch)</description>
+</unit>
+<unit type="LINEAR" pri="n">
+    <name>pica</name>
+    <plural>picas</plural>
+    <abbr>pc</abbr>
+    <factor>16.0</factor>
+    <description>12 points</description>
 </unit>
 <unit type="RADIAL" pri="y">
     <name>degree</name>
@@ -150,4 +146,12 @@
     <factor>0.50</factor>
     <description>Half of font height</description>
 </unit>
+<unit type="DIMENSIONLESS" pri="y">
+    <name>%</name>
+    <plural>%</plural>
+    <abbr>%</abbr>
+    <factor>1.00</factor>
+    <description>Percentage</description>
+</unit>
+
 </unitdefs>

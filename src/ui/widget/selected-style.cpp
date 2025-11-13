@@ -653,7 +653,8 @@ void SelectedStyle::make_popup_units()
     _popup_sw->append_section_label(_("Unit"));
     Gtk::CheckButton *group = nullptr;
     auto const &unit_table = Util::UnitTable::get();
-    for (auto const &[key, value] : unit_table.units(Inkscape::Util::UNIT_TYPE_LINEAR)) {
+    for (auto unit : unit_table.units(Inkscape::Util::UNIT_TYPE_LINEAR)) {
+        auto key = unit->abbr;
         auto const item = Gtk::make_managed<UI::Widget::PopoverMenuItem>();
         auto const radio = Gtk::make_managed<Gtk::CheckButton>(key);
         if (!group) {

@@ -26,7 +26,7 @@ void DropDownList::_init() {
     // enable expression to support search early on, as it resets the item factory;
     // search can be enabled/disabled separately as needed
     auto expression = Gtk::ClosureExpression<Glib::ustring>::create([this](auto& item){
-        return std::dynamic_pointer_cast<Gtk::StringObject>(item)->get_string();
+        return get_item_string(item);
     });
     set_expression(expression);
 
@@ -82,8 +82,7 @@ void DropDownList::_init() {
     });
     dropdown_button->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
         auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());
-        auto item = std::dynamic_pointer_cast<Gtk::StringObject>(list_item->get_item());
-        label.set_label(item->get_string());
+        label.set_label(get_item_string(list_item->get_item()));
     });
 
     _factory->signal_setup().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
@@ -98,8 +97,7 @@ void DropDownList::_init() {
                 label.get_parent()->add_css_class("top-separator");
             }
         }
-        auto item = std::dynamic_pointer_cast<Gtk::StringObject>(list_item->get_item());
-        label.set_label(item->get_string());
+        label.set_label(get_item_string(list_item->get_item()));
     });
 
     // separate factory to allow dropdown button to shrink (ellipsis)
@@ -107,6 +105,14 @@ void DropDownList::_init() {
     // normal list items without ellipsis
     set_list_factory(_factory);
     set_model(_model);
+}
+
+Glib::ustring DropDownList::get_item_string(const Glib::RefPtr<Glib::ObjectBase>& item) {
+    if (_to_string) {
+        return _to_string(item);
+    }
+    auto str_item = std::dynamic_pointer_cast<Gtk::StringObject>(item);
+    return str_item->get_string();
 }
 
 Gtk::Label* DropDownList::set_up_item(bool ellipsize) {
@@ -136,6 +142,10 @@ void DropDownList::enable_search(bool enable) {
 
 void DropDownList::set_row_separator_func(std::function<bool (unsigned int)> callback) {
     _separator_callback = callback;
+}
+
+void DropDownList::set_to_string_func(std::function<Glib::ustring(const Glib::RefPtr<Glib::ObjectBase>&)> callback) {
+    _to_string = callback;
 }
 
 } // namespace

@@ -17,8 +17,10 @@
 #define INKSCAPE_UI_WIDGET_UNIT_TRACKER_H
 
 #include <map>
+#include <giomm/liststore.h>
 #include <glibmm/refptr.h>
 
+#include "unit-menu.h"
 #include "util/units.h"
 
 using Inkscape::Util::Unit;
@@ -43,42 +45,39 @@ public:
 
     bool isUpdating() const;
 
-    void setActiveUnit(Inkscape::Util::Unit const *unit);
+    void setActiveUnit(UnitPtr unit);
     void setActiveUnitByAbbr(gchar const *abbr);
     void setActiveUnitByLabel(Glib::ustring label);
-    Inkscape::Util::Unit const * getActiveUnit() const;
+    Unit const * getActiveUnit() const;
 
-    void addUnit(Inkscape::Util::Unit const *u);
+    void addUnit(UnitPtr u);
     void addAdjustment(GtkAdjustment *adj);
-    void prependUnit(Inkscape::Util::Unit const *u);
+    void prependUnit(UnitPtr u);
     void setFullVal(GtkAdjustment *adj, double val);
     Glib::ustring getCurrentLabel();
-    void changeLabel(Glib::ustring new_label, gint pos, bool onlylabel = false);
 
-    ComboToolItem *create_tool_item(Glib::ustring const &label,
-                                    Glib::ustring const &tooltip);
+    UnitMenu* create_unit_menu();
 
 protected:
     UnitType _type;
 
 private:
     // Callbacks
-    void _unitChangedCB(int active);
     static void _adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was);
 
     void _setActive(gint index);
-    void _fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit);
+    void _fixupAdjustments(Unit const *oldUnit, Unit const *newUnit);
 
     // Cleanup
     void _adjustmentFinalized(GObject *where_the_object_was);
 
     gint _active;
     bool _isUpdating;
-    Inkscape::Util::Unit const *_activeUnit;
+    Unit const *_activeUnit;
     bool _activeUnitInitialized;
 
-    Glib::RefPtr<Gtk::ListStore> _store;
-    std::vector<ComboToolItem *> _combo_list;
+    Glib::RefPtr<Gio::ListStore<UnitObject>> _store;
+    std::vector<UnitMenu*> _combo_list;
     std::vector<GtkAdjustment*> _adjList;
     std::map <GtkAdjustment *, double> _priorValues;
 };

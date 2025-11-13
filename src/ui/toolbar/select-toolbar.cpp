@@ -65,13 +65,13 @@ SelectToolbar::SelectToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     setup_derived_spin_button(_w_item, "width");
     setup_derived_spin_button(_h_item, "height");
 
-    auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
+    auto unit_menu = _tracker->create_unit_menu();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
     _select_touch_btn.set_active(prefs->getBool("/tools/select/touch_box", false));
     _select_touch_btn.signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_touch));
 
-    _tracker->addUnit(Util::UnitTable::get().getUnit("%"));
+    _tracker->addUnit(Util::UnitTable::get().unit("%"));
 
     // Use StyleContext to check if the child is a context item (an item that is disabled if there is no selection).
     auto children = UI::get_children(_toolbar);

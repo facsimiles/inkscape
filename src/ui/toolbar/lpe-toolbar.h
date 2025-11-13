@@ -44,6 +44,7 @@ class Selection;
 namespace Tools { class ToolBase; }
 namespace UI {
 namespace Widget {
+class UnitMenu;
 class ComboToolItem;
 class UnitTracker;
 } // namespace Widget
@@ -74,7 +75,7 @@ private:
     Gtk::ToggleButton &_measuring_btn;
     Gtk::ToggleButton &_open_lpe_dialog_btn;
     UI::Widget::ComboToolItem *_line_segment_combo;
-    UI::Widget::ComboToolItem *_units_item;
+    UI::Widget::UnitMenu*_units_item;
 
     OperationBlocker _blocker;
 
@@ -85,7 +86,7 @@ private:
     sigc::connection c_selection_changed;
 
     void mode_changed(int mode);
-    void unit_changed(int not_used);
+    void unit_changed();
     void sel_modified(Inkscape::Selection *selection, guint flags);
     void sel_changed(Inkscape::Selection *selection);
     void change_line_segment_type(int mode);

@@ -81,7 +81,7 @@ RectToolbar::RectToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     , _rx_item{UI::get_derived_widget<DerivedSpinButton>(builder, "_rx_item", "rx", &SPRect::getVisibleRx, &SPRect::setVisibleRx)}
     , _ry_item{UI::get_derived_widget<DerivedSpinButton>(builder, "_ry_item", "ry", &SPRect::getVisibleRy, &SPRect::setVisibleRy)}
 {
-    auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
+    auto unit_menu = _tracker->create_unit_menu();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
     _not_rounded.signal_clicked().connect([this] { _setDefaults(); });

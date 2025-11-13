@@ -36,8 +36,8 @@ bool UnitMenu::setUnitType(UnitType unit_type, bool svg_length)
 
     for (auto & i : m) {
         // We block the use of non SVG units if requested
-        if (!svg_length || i.second.svgUnit() > 0) {
-            append(i.first);
+        if (!svg_length || i->svgUnit() > 0) {
+            append(i->abbr);
         }
     }
     _type = unit_type;
@@ -55,7 +55,7 @@ bool UnitMenu::resetUnitType(UnitType unit_type, bool svg_length)
 
 void UnitMenu::addUnit(Unit const& u)
 {
-    Util::UnitTable::get().addUnit(u, false);
+    // Util::UnitTable::get().addUnit(u, false);
     append(u.abbr);
 }
 

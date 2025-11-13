@@ -73,7 +73,7 @@ MeasureToolbar::MeasureToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 {
     auto prefs = Preferences::get();
 
-    auto unit_menu = _tracker->create_tool_item(_("Units"), "");
+    auto unit_menu = _tracker->create_unit_menu();
     unit_menu->signal_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::unit_changed));
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
@@ -169,7 +169,7 @@ void MeasureToolbar::fontsize_value_changed()
     }
 }
 
-void MeasureToolbar::unit_changed(int)
+void MeasureToolbar::unit_changed()
 {
     Glib::ustring const unit = _tracker->getActiveUnit()->abbr;
     Preferences::get()->setString("/tools/measure/unit", unit);

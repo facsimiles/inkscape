@@ -13,10 +13,13 @@
 
 #include <unordered_map>
 #include <vector>
+#include <memory>
 #include <boost/operators.hpp>
+#include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
 #include <glibmm/ustring_hash.h>
 #include <2geom/coord.h>
+#include <glibmm/object.h>
 
 #include "svg/svg-length.h"
 
@@ -24,8 +27,7 @@
 #define DEFAULT_UNIT_NAME "mm"
 #endif
 
-namespace Inkscape {
-namespace Util {
+namespace Inkscape::Util {
 
 enum UnitType {
     UNIT_TYPE_DIMENSIONLESS,     /* Percentage */
@@ -47,8 +49,7 @@ struct UnitMetric
     std::vector<int>    subdivide;
 };
 
-class Unit
-    : boost::equality_comparable<Unit>
+class Unit : boost::equality_comparable<Unit>
 {
 public:
     Unit();
@@ -58,8 +59,12 @@ public:
          Glib::ustring name_plural,
          Glib::ustring abbr,
          Glib::ustring description);
+    Unit(const Unit& src) = default;
 
-    void clear();
+    // create a new Unit definition with abbreviation alone
+    static std::unique_ptr<const Unit> create(const Glib::ustring& abbr) {
+        return std::make_unique<Unit>(UnitType::UNIT_TYPE_DIMENSIONLESS, 1.0, abbr, "", abbr, "");
+    }
 
     bool           isAbsolute() const { return type != UNIT_TYPE_DIMENSIONLESS; }
 
@@ -84,7 +89,7 @@ public:
 
     /** Check if units are equal. */
     bool operator==(Unit const &other) const;
-    
+
     /** Get SVG unit code. */
     int svgUnit() const;
 
@@ -97,34 +102,36 @@ public:
     UnitMetric const *getUnitMetric() const;
 };
 
+using UnitPtr = const Unit*;
+
 class Quantity
-    : boost::totally_ordered<Quantity>
+        : boost::totally_ordered<Quantity>
 {
 public:
-    Unit const *unit;
+    UnitPtr unit;
     double quantity;
-    
+
     /** Initialize a quantity. */
-    Quantity(double q, Unit const *u);
+    Quantity(double q, UnitPtr u);
     Quantity(double q, Glib::ustring const &u);
     Quantity(double q, char const *u);
-    
+
     /** Checks if a quantity is compatible with the specified unit. */
     bool compatibleWith(Unit const *u) const;
     bool compatibleWith(Glib::ustring const &u) const;
     bool compatibleWith(char const *u) const;
-    
+
     /** Return the quantity's value in the specified unit. */
     double value(Unit const *u) const;
     double value(Glib::ustring const &u) const;
     double value(char const *u) const;
-    
+
     /** Return a printable string of the value in the specified unit. */
     Glib::ustring string(Unit const *u) const;
     Glib::ustring string(Glib::ustring const &u) const;
     Glib::ustring string() const;
-    
-    /** Convert distances. 
+
+    /** Convert distances.
        no NULL check is performed on the passed pointers to Unit objects!  */
     static double convert(double from_dist, Unit const *from, Unit const *to);
     static double convert(double from_dist, Glib::ustring const &from, Unit const *to);
@@ -142,7 +149,18 @@ inline bool are_near(Quantity const &a, Quantity const &b, double eps=Geom::EPSI
     return Geom::are_near(a.quantity, b.value(a.unit), eps);
 }
 
-class UnitTable {
+// Gio ListModel-friendly unit wrapper
+struct UnitObject: Glib::Object {
+    Unit unit;
+
+    UnitObject(UnitPtr p) : unit(*p) {}
+
+    static Glib::RefPtr<UnitObject> from_unit(UnitPtr unit) {
+        return Glib::make_refptr_for_instance(new UnitObject(unit));
+    }
+};
+
+class UnitTable final {
 public:
     /**
      * Initializes the unit tables and identifies the primary unit types.
@@ -151,29 +169,35 @@ public:
      */
     UnitTable();
     UnitTable(std::string const &filename);
-    virtual ~UnitTable();
+    ~UnitTable() = default;
+
+    UnitTable(UnitTable const &t) = delete;
+    UnitTable operator = (UnitTable const &t) = delete;
 
     typedef std::unordered_map<Glib::ustring, UnitMetric> MetricMap;
-    typedef std::unordered_map<Glib::ustring, Unit> UnitMap;
-    typedef std::unordered_map<unsigned, Unit*> UnitCodeMap;
+    typedef std::unordered_map<unsigned, UnitPtr> UnitCodeMap;
 
     /** Unit metrics **/
     void    addMetric(UnitMetric const &u, bool primary);
     UnitMetric const *getUnitMetric(Glib::ustring const &name) const;
 
     /** Add a new unit to the table */
-    void    addUnit(Unit const &u, bool primary);
+    void    addUnit(std::unique_ptr<Unit> unit, bool primary);
 
     /** Retrieve a given unit based on its string identifier */
-    Unit const *getUnit(Glib::ustring const &name) const;
-    Unit const *getUnit(char const *name) const;
+    UnitPtr getUnit(Glib::ustring const &name) const;
+    UnitPtr getUnit(char const *name) const;
+
+    // Take a predefined unit definition
+    UnitPtr unit(const std::string& abbr) const;
+    UnitPtr unit(const char* abbr) const;
 
     /** Try to find a unit based on its conversion factor to the primary */
-    Unit const *findUnit(double factor, UnitType type) const;
-    
+    UnitPtr findUnit(double factor, UnitType type) const;
+
     /** Retrieve a given unit based on its SVGLength unit */
-    Unit const *getUnit(SVGLength::Unit u) const;
-    
+    UnitPtr getUnit(SVGLength::Unit u) const;
+
     /** Retrieve a quantity based on its string identifier */
     Quantity parseQuantity(Glib::ustring const &q) const;
 
@@ -185,7 +209,8 @@ public:
     bool    hasUnit(Glib::ustring const &name) const;
 
     /** Provides an iterable list of items in the given unit table */
-    UnitMap units(UnitType type) const;
+    std::vector<UnitPtr> units(UnitType type) const;
+    std::vector<Glib::RefPtr<UnitObject>> get_units(UnitType type) const;
 
     /** Returns the default unit abbr for the given type */
     Glib::ustring primary(UnitType type) const;
@@ -203,28 +228,20 @@ public:
      */
     bool    load(std::string const &filename);
 
-    /* * Saves the current UnitTable to the given file. */
-    //bool    save(std::string const &filename);
-
     static UnitTable &get();
 
-protected:
+private:
+    // keep track of units
+    std::vector<std::unique_ptr<Unit>>_ordered_store;
     MetricMap           _metric_map;
     UnitCodeMap         _unit_map;
     Glib::ustring       _primary_unit[UNIT_TYPE_QTY];
     Glib::ustring       _default_metric;
-
     double              _linear_scale;
     static Unit         _empty_unit;
-
-private:
-    UnitTable(UnitTable const &t);
-    UnitTable operator=(UnitTable const &t);
-
 };
 
-} // namespace Util
-} // namespace Inkscape
+}
 
 #endif // define INKSCAPE_UTIL_UNITS_H
 /*

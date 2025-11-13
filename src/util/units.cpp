@@ -9,10 +9,12 @@
 
 #include "util/units.h"
 
+#include <cassert>
 #include <cerrno>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <ranges>
 #include <unordered_map>
 #include <utility>
 #include <glib.h>
@@ -21,6 +23,7 @@
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 #include <2geom/coord.h>
+#include <boost/mpl/assert.hpp>
 
 #include "io/resource.h"
 #include "path-prefix.h"
@@ -134,7 +137,7 @@ public:
     UnitTable *tbl;
     bool primary;
     bool skip;
-    Unit unit;
+    std::unique_ptr<Unit> unit;
     std::optional<UnitMetric> metric;
     bool is_div;
 };
@@ -146,15 +149,9 @@ UnitParser::UnitParser(UnitTable *table) :
 {
 }
 
-#define BUFSIZE (255)
-
 Unit::Unit() :
     type(UNIT_TYPE_DIMENSIONLESS), // should this or NONE be the default?
-    factor(1.0),
-    name(),
-    name_plural(),
-    abbr(),
-    description()
+    factor(1.0)
 {
 }
 
@@ -171,12 +168,7 @@ Unit::Unit(UnitType type,
     , abbr(std::move(abbr))
     , description(std::move(description))
 {
-    g_return_if_fail(factor <= 0);
-}
-
-void Unit::clear()
-{
-    *this = Unit();
+    assert(factor > 0);
 }
 
 int Unit::defaultDigits() const
@@ -269,14 +261,6 @@ UnitTable::UnitTable(std::string const &filename)
     load(filename);
 }
 
-UnitTable::~UnitTable()
-{
-    for (auto & iter : _unit_map)
-    {
-        delete iter.second;
-    }
-}
-
 void UnitTable::addMetric(UnitMetric const &m, bool primary)
 {
     _metric_map[m.name] = m;
@@ -297,28 +281,45 @@ UnitMetric const *UnitTable::getUnitMetric(Glib::ustring const &name) const
     return getUnitMetric(_default_metric);
 }
 
-void UnitTable::addUnit(Unit const &u, bool primary)
+void UnitTable::addUnit(std::unique_ptr<Unit> unit, bool primary)
 {
-    _unit_map[make_unit_code(u.abbr.c_str())] = new Unit(u);
     if (primary) {
-        _primary_unit[u.type] = u.abbr;
+        _primary_unit[unit->type] = unit->abbr;
     }
+
+    _unit_map[make_unit_code(unit->abbr.c_str())] = unit.get();
+    // remember units in the exact order they were added
+    _ordered_store.push_back(std::move(unit));
 }
 
-Unit const *UnitTable::getUnit(char const *abbr) const
+UnitPtr UnitTable::getUnit(char const *abbr) const
 {
     UnitCodeMap::const_iterator f = _unit_map.find(make_unit_code(abbr));
     if (f != _unit_map.end()) {
-        return &(*f->second);
+        return f->second;
     }
     return &_empty_unit;
 }
 
-Unit const *UnitTable::getUnit(Glib::ustring const &unit_abbr) const
+UnitPtr UnitTable::unit(const std::string& abbr) const {
+    return unit(abbr.c_str());
+}
+
+UnitPtr UnitTable::unit(const char* abbr) const {
+    auto it = _unit_map.find(make_unit_code(abbr));
+    if (it != _unit_map.end()) {
+        return it->second;
+    }
+
+    throw std::runtime_error("Unit '" + std::string(abbr) + "' does not exist in unit table.");
+}
+
+UnitPtr UnitTable::getUnit(Glib::ustring const &unit_abbr) const
 {
     return getUnit(unit_abbr.c_str());
 }
-Unit const *UnitTable::getUnit(SVGLength::Unit u) const
+
+UnitPtr UnitTable::getUnit(SVGLength::Unit u) const
 {
     if (u == 0 || u > SVGLength::LAST_UNIT) {
         return &_empty_unit;
@@ -326,12 +327,12 @@ Unit const *UnitTable::getUnit(SVGLength::Unit u) const
 
     UnitCodeMap::const_iterator f = _unit_map.find(svg_length_lookup[u]);
     if (f != _unit_map.end()) {
-        return &(*f->second);
+        return f->second;
     }
     return &_empty_unit;
 }
 
-Unit const *UnitTable::findUnit(double factor, UnitType type) const
+UnitPtr UnitTable::findUnit(double factor, UnitType type) const
 {
     const double eps = factor * 0.01; // allow for 1% deviation
 
@@ -404,16 +405,18 @@ bool UnitTable::hasUnit(Glib::ustring const &unit) const
     return (iter != _unit_map.end());
 }
 
-UnitTable::UnitMap UnitTable::units(UnitType type) const
-{
-    UnitMap submap;
-    for (auto iter : _unit_map) {
-        if (iter.second->type == type) {
-            submap.insert(UnitMap::value_type(iter.second->abbr, *iter.second));
-        }
-    }
+std::vector<UnitPtr> UnitTable::units(UnitType type) const {
+    auto range = _ordered_store
+        | std::views::filter([type](auto& unit){ return unit->type == type; })
+        | std::views::transform([](auto& unit) { return unit.get(); });
+    return std::vector<UnitPtr>(range.begin(), range.end());
+}
 
-    return submap;
+std::vector<Glib::RefPtr<UnitObject>> UnitTable::get_units(UnitType type) const {
+    auto range = _ordered_store
+        | std::views::filter([type](auto& unit){ return unit->type == type; })
+        | std::views::transform([](auto& unit) { return UnitObject::from_unit(unit.get()); });
+    return std::vector(range.begin(), range.end());
 }
 
 Glib::ustring UnitTable::primary(UnitType type) const
@@ -445,14 +448,6 @@ UnitTable &UnitTable::get()
     return instance;
 }
 
-/*
-bool UnitTable::save(std::string const &filename) {
-    g_warning("UnitTable::save(): not implemented");
-
-    return false;
-}
-*/
-
 void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrMap const &attrs)
 {
     if (name == "metric") {
@@ -476,7 +471,7 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
     }
     if (name == "unit") {
         // reset for next use
-        unit.clear();
+        unit = std::make_unique<Unit>();
         primary = false;
         skip = false;
 
@@ -484,7 +479,7 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
             Glib::ustring type = f->second;
             TypeMap::const_iterator tf = type_map.find(type);
             if (tf != type_map.end()) {
-                unit.type = tf->second;
+                unit->type = tf->second;
             } else {
                 g_warning("Skipping unknown unit type '%s'.\n", type.c_str());
                 skip = true;
@@ -494,7 +489,7 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
             primary = parse_bool(f->second);
         }
         if (auto f = attrs.find("metric"); f != attrs.end()) {
-            unit.metric_name = f->second;
+            unit->metric_name = f->second;
         }
     }
 }
@@ -503,15 +498,15 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
 {
     Glib::ustring element = ctx.get_element();
     if (element == "name") {
-        unit.name = text;
+        unit->name = text;
     } else if (element == "plural") {
-        unit.name_plural = text;
+        unit->name_plural = text;
     } else if (element == "abbr") {
-        unit.abbr = text;
+        unit->abbr = text;
     } else if (element == "factor") {
-        unit.factor = Glib::Ascii::strtod(text);
+        unit->factor = Glib::Ascii::strtod(text);
     } else if (element == "description") {
-        unit.description = text;
+        unit->description = text;
     } else if (element == "tic" && metric) {
         auto tic = Glib::Ascii::strtod(text);
         metric->ruler_scale.push_back(tic);
@@ -524,7 +519,8 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
 void UnitParser::on_end_element(Ctx &/*ctx*/, Glib::ustring const &name)
 {
     if (name == "unit" && !skip) {
-        tbl->addUnit(unit, primary);
+        tbl->addUnit(std::move(unit), primary);
+        unit.reset();
     } else if (name == "metric") {
         if (metric) {
             tbl->addMetric(*std::move(metric), primary);
@@ -533,7 +529,7 @@ void UnitParser::on_end_element(Ctx &/*ctx*/, Glib::ustring const &name)
     }
 }
 
-Quantity::Quantity(double q, Unit const *u)
+Quantity::Quantity(double q, UnitPtr u)
   : unit(u)
   , quantity(q)
 {

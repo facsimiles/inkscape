@@ -75,7 +75,7 @@ NodeToolbar::NodeToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     setup_derived_spin_button(_nodes_y_item, "y");
     setup_derived_spin_button(_nodes_d_item, "d");
 
-    auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
+    auto unit_menu = _tracker->create_unit_menu();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
     // Attach the signals.

@@ -70,8 +70,8 @@ CalligraphyToolbar::CalligraphyToolbar(Glib::RefPtr<Gtk::Builder> const &builder
 {
     auto prefs = Preferences::get();
 
-    _tracker->prependUnit(UnitTable::get().getUnit("px"));
-    _tracker->changeLabel("%", 0, true);
+    auto percent = Unit::create("%");
+    _tracker->prependUnit(percent.get());
     if (prefs->getBool("/tools/calligraphic/abs_width")) {
         _tracker->setActiveUnitByLabel(prefs->getString("/tools/calligraphic/unit"));
     }
@@ -174,9 +174,9 @@ CalligraphyToolbar::CalligraphyToolbar(Glib::RefPtr<Gtk::Builder> const &builder
     _profile_selector_combo.signal_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::change_profile));
 
     // Unit menu.
-    auto unit_menu = _tracker->create_tool_item(_("Units"), "");
+    auto unit_menu = _tracker->create_unit_menu();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
-    unit_menu->signal_changed_after().connect(sigc::mem_fun(*this, &CalligraphyToolbar::unit_changed));
+    unit_menu->signal_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::unit_changed));
 
     // Use pressure button.
     _widget_map["usepressure"] = &usepressure_btn;
@@ -413,7 +413,7 @@ void CalligraphyToolbar::edit_profile()
     save_profile(nullptr);
 }
 
-void CalligraphyToolbar::unit_changed(int)
+void CalligraphyToolbar::unit_changed()
 {
     auto const unit = _tracker->getActiveUnit();
     auto prefs = Preferences::get();
