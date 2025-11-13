@@ -26,6 +26,7 @@
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/popover-bin.h"
 #include "ui/widget/preferences-widget.h"
+#include "ui/widget/style-subject.h"
 
 namespace Glib {
 class ValueBase;
@@ -151,6 +152,9 @@ private:
     sigc::scoped_connection _tree_style;
     Gtk::TreeRow _clicked_item_row;
     UI::Widget::PopoverBin _popoverbin;
+
+    // Manage selection and apply style changes
+    UI::Widget::StyleSubject::Selection _subject;
 
     void _activateAction(const std::string& layerAction, const std::string& selectionAction);
 
