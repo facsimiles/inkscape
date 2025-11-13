@@ -417,13 +417,6 @@ if(WITH_CAPYPDF)
   endif()
 endif()
 
-# added so that locally installed inkscape can find lib2geom if it's not installed systemwide
-if(NOT APPLE)
-    set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "$ORIGIN/..:${CMAKE_INSTALL_RPATH}")
-else()
-    set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "@loader_path/..")
-endif()
-
 # Link the inkscape_base library against all external dependencies
 target_link_libraries(inkscape_base
     PRIVATE
