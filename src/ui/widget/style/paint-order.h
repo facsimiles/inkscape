@@ -28,13 +28,16 @@ public:
         add_option(_("Fill"),   "paint-order-fill",    _("The content of the shape"),         SP_CSS_PAINT_ORDER_FILL);
     }
 
-    void setValue(SPIPaintOrder &po)
+    void setValue(SPIPaintOrder &po, bool has_markers)
     {
         // array to vector
         auto values = po.get_layers();
         // Note: what's painted first is presented at the bottom of the stack.
         std::vector<int> vec = {values[2], values[1], values[0]};
         setValues(vec);
+
+        // Hide the markers if the style has no markers
+        setVisible((int)SP_CSS_PAINT_ORDER_MARKER, has_markers);
     }
 
     SPIPaintOrder getValue()

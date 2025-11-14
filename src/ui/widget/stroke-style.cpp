@@ -760,12 +760,12 @@ StrokeStyle::setCapType (unsigned const captype)
  * Sets the cap type for a line, and updates the stroke style widget's buttons
  */
 void
-StrokeStyle::setPaintOrder (gchar const *paint_order)
+StrokeStyle::setPaintOrder (gchar const *paint_order, bool enable_markers)
 {
     std::vector<std::string> compiled;
     SPIPaintOrder temp;
     temp.read( paint_order );
-    _paint_order->setValue(temp);
+    _paint_order->setValue(temp, enable_markers);
 }
 
 /**
@@ -876,22 +876,23 @@ StrokeStyle::updateLine()
         setCapButtons(nullptr);
     }
 
-    if (! is_query_style_updateable(result_order)) {
-        setPaintOrder (query.paint_order.value);
-    } else {
-        setPaintOrder (nullptr);
-    }
-
+    bool has_markers = false;
     auto const objects = sel->items_vector();
     if (!objects.empty()) {
         auto const style = objects.front()->style;
         /* Markers */
-        updateAllMarkers(objects, true); // FIXME: make this desktop query too
+        has_markers = updateAllMarkers(objects); // FIXME: make this desktop query too
 
         /* Dash */
         setDashSelectorFromStyle(dashSelector, style); // FIXME: make this desktop query too
     }
     table->set_sensitive(true);
+
+    if (! is_query_style_updateable(result_order)) {
+        setPaintOrder (query.paint_order.value, has_markers);
+    } else {
+        setPaintOrder (nullptr, true);
+    }
 
     update = false;
 }
@@ -1135,9 +1136,11 @@ static void buildGroupedItemList(SPObject *element, std::vector<SPObject*> &simp
 /**
  * Updates the marker combobox to highlight the appropriate marker and scroll to
  * that marker.
+ *
+ * @returns true if any of the objects, children of groups, have markers applied
  */
-void
-StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo)
+bool
+StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
 {
     struct { MarkerComboBox *key; int loc; } const keyloc[] = {
             { startMarkerCombo, SP_MARKER_LOC_START },
@@ -1159,9 +1162,9 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
         }
     }
 
-    // We show markers of the last object in the list only
-    // FIXME: use the first in the list that has the marker of each type, if any
+    bool has_markers = false;
 
+    // Use the first in the list that has the marker of each type, if any
     for (auto const &markertype : keyloc) {
         // For all three marker types,
 
@@ -1170,7 +1173,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
         // Quit if we're in update state
         if (combo->in_update()) {
-            return;
+            return true; // Assume markers
         }
 
         // Per SVG spec, text objects cannot have markers; disable combobox if only texts are selected
@@ -1190,12 +1193,15 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
                 // Extract the name of the marker that the object uses
                 marker = getMarkerObj(value, object->document);
+                has_markers = true;
             }
         }
 
         // Scroll the combobox to that marker
         combo->set_current(marker);
     }
+
+    return has_markers;
 }
 
 } // namespace Inkscape::UI::Widget

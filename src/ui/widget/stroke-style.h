@@ -95,11 +95,11 @@ private:
             gchar const *stroke_style;         ///< The stroke style associated with the button
     };
 
-    void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
+    bool updateAllMarkers(std::vector<SPItem*> const &objects);
     void setDashSelectorFromStyle(DashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
     void setCapType (unsigned const captype);
-    void setPaintOrder (gchar const *paint_order);
+    void setPaintOrder (gchar const *paint_order, bool enable_markers);
     void setJoinButtons(Gtk::ToggleButton *active);
     void setCapButtons(Gtk::ToggleButton *active);
     void setStrokeWidth();

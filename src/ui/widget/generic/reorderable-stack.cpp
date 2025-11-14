@@ -30,6 +30,9 @@ ReorderableStack::ReorderableStack(Gtk::Orientation orientation)
     _tabs.set_new_tab_popup(nullptr);
 }
 
+/**
+ * Add an option to the stack, this should be done on construction.
+ */
 void ReorderableStack::add_option(std::string const &label, std::string const &icon, std::string const &tooltip, int value)
 {
     // Build a row
@@ -40,6 +43,22 @@ void ReorderableStack::add_option(std::string const &label, std::string const &i
 
 }
 
+/**
+ * Show or hide one of the values in the stack.
+ */
+void ReorderableStack::setVisible(int value, bool is_visible)
+{
+    for (auto &[widget, row_val] : _rows) {
+        if (value == row_val) {
+            widget->set_visible(is_visible);
+            break;
+        }
+    }
+}
+
+/**
+ * Set the order of the values as they are in the vector.
+ */
 void ReorderableStack::setValues(std::vector<int> const &values)
 {
     std::vector<Gtk::Widget *> widgets;
@@ -51,6 +70,9 @@ void ReorderableStack::setValues(std::vector<int> const &values)
     _tabs.set_tabs_order(widgets);
 }
 
+/**
+ * Get the order of the values as a vector.
+ */
 std::vector<int> ReorderableStack::getValues() const
 {
     std::vector<int> values;

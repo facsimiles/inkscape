@@ -25,6 +25,7 @@ public:
 
     void add_option(std::string const &label, std::string const &icon, std::string const &tooltip, int value);
 
+    void setVisible(int value, bool is_visible);
     void setValues(std::vector<int> const &values);
     std::vector<int> getValues() const;
 
