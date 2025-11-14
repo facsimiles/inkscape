@@ -130,7 +130,7 @@ appimage:linux:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     # ICM = inkscape ci macos
     # https://gitlab.com/inkscape/infra/inkscape-ci-macos
-    ICM_REPO_REF: 51926b27afb84e0d2a0a97a99131892b097f0a15
+    ICM_REPO_REF: c722fc920cecc5c348fbf20f44ada169661412a0
     ICM_REPO_URL: https://gitlab.com/inkscape/infra/inkscape-ci-macos.git
     # build number
     INK_BUILD: $CI_PIPELINE_IID
