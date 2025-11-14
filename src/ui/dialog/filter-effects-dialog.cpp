@@ -550,6 +550,7 @@ public:
         , _label(C_("Label", "None"), Gtk::Align::START)
     {
         _saturation.set_adjustment_values(0, 1, 0.1, 0.01);
+        _saturation.set_digits(2);
         _saturation.set_value(1.0);
 
         _angle.set_adjustment_values(0, 360, 0.1, 0.01);
