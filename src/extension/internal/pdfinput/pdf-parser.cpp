@@ -278,8 +278,6 @@ PdfParser::PdfParser(std::shared_ptr<PDFDoc> pdf_doc, Inkscape::Extension::Inter
     , ignoreUndef(0)
     , formDepth(0)
     , parser(nullptr)
-    , colorDeltas()
-    , maxDepths()
     , operatorHistory(nullptr)
 {
     setDefaultApproximationPrecision();
@@ -339,8 +337,6 @@ PdfParser::PdfParser(XRef *xrefA, Inkscape::Extension::Internal::SvgBuilder *bui
     , ignoreUndef(0)
     , formDepth(0)
     , parser(nullptr)
-    , colorDeltas()
-    , maxDepths()
     , operatorHistory(nullptr)
 {
     setDefaultApproximationPrecision();
@@ -1609,6 +1605,8 @@ void PdfParser::opShFill(Object args[], int /*numArgs*/)
   // set the color space
   if (savedState)
     state->setFillColorSpace(shading->getColorSpace()->copy());
+  
+  
 
   // do shading type-specific operations
   switch (shading->getType()) {
@@ -1655,7 +1653,6 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
   GfxColor fillColor;
   GfxColor color0M, color1M, colorM0, colorM1, colorMM;
   GfxColor colors2[4];
-  double functionColorDelta = colorDeltas[pdfFunctionShading-1];
   double xM, yM;
   int nComps, i, j;
 
@@ -1665,7 +1662,7 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
   // compare the four corner colors
   for (i = 0; i < 4; ++i) {
     for (j = 0; j < nComps; ++j) {
-      if (abs(colors[i].c[j] - colors[(i+1)&3].c[j]) > functionColorDelta) {
+      if (abs(colors[i].c[j] - colors[(i+1)&3].c[j]) > colorDelta) {
 	break;
       }
     }
@@ -1682,7 +1679,7 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
   // -- fill the rectangle; but require at least one subdivision
   // (depth==0) to avoid problems when the four outer corners of the
   // shaded region are the same color
-  if ((i == 4 && depth > 0) || depth == maxDepths[pdfFunctionShading-1]) {
+  if ((i == 4 && depth > 0) || depth == maxDepth) {
 
     // use the center color
     shading->getColor(xM, yM, &fillColor);
@@ -1756,17 +1753,65 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
 }
 
 void PdfParser::doGouraudTriangleShFill(GfxGouraudTriangleShading *shading) {
+  // adapted from poppler/Gfx.cc
   double x0, y0, x1, y1, x2, y2;
-  GfxColor color0, color1, color2;
-  int i;
+  if (shading->isParameterized()) {
+    double color0, color1, color2;
+    // a relative threshold, also copied from poppler/Gfx.cc
+    const double refineColorThreshold = gouraudParameterizedColorDelta * 
+                                        (shading->getParameterDomainMax() - shading->getParameterDomainMin());
+    for (int i = 0; i < shading->getNTriangles(); ++i) {
+        shading->getTriangle(i, &x0, &y0, &color0, &x1, &y1, &color1, &x2, &y2, &color2);
+        gouraudFillTriangle(x0, y0, color0, x1, y1, color1, x2, y2, color2, refineColorThreshold, 0, shading);
+    }
+  } else {
+    GfxColor color0, color1, color2;
 
-  for (i = 0; i < shading->getNTriangles(); ++i) {
-    shading->getTriangle(i, &x0, &y0, &color0,
-			 &x1, &y1, &color1,
-			 &x2, &y2, &color2);
-    gouraudFillTriangle(x0, y0, &color0, x1, y1, &color1, x2, y2, &color2,
-			shading->getColorSpace()->getNComps(), 0);
+    for (int i = 0; i < shading->getNTriangles(); ++i) {
+      shading->getTriangle(i, &x0, &y0, &color0, &x1, &y1, &color1, &x2, &y2, &color2);
+      gouraudFillTriangle(x0, y0, &color0, x1, y1, &color1, x2, y2, &color2,
+                          shading->getColorSpace()->getNComps(), 0);
+    }
   }
+}
+
+void PdfParser::gouraudFillTriangle(double x0, double y0, double color0, 
+                                    double x1, double y1, double color1, 
+                                    double x2, double y2, double color2, 
+                                    double refineColorThreshold, int depth, 
+                                    GfxGouraudTriangleShading *shading)
+{
+    const double meanColor = (color0 + color1 + color2) / 3;
+
+    const bool isFineEnough = fabs(color0 - meanColor) < refineColorThreshold && 
+      fabs(color1 - meanColor) < refineColorThreshold && fabs(color2 - meanColor) < refineColorThreshold;
+
+    if (isFineEnough || depth == maxDepth) {
+        GfxColor color;
+        shading->getParameterizedColor(meanColor, &color);
+        state->setFillColor(&color);
+        state->moveTo(x0, y0);
+        state->lineTo(x1, y1);
+        state->lineTo(x2, y2);
+        state->closePath();
+        builder->addPath(state, true, false);
+        state->clearPath();
+    } else {
+        const double x01 = 0.5 * (x0 + x1);
+        const double y01 = 0.5 * (y0 + y1);
+        const double x12 = 0.5 * (x1 + x2);
+        const double y12 = 0.5 * (y1 + y2);
+        const double x20 = 0.5 * (x2 + x0);
+        const double y20 = 0.5 * (y2 + y0);
+        const double color01 = (color0 + color1) / 2.;
+        const double color12 = (color1 + color2) / 2.;
+        const double color20 = (color2 + color0) / 2.;
+        ++depth;
+        gouraudFillTriangle(x0, y0, color0, x01, y01, color01, x20, y20, color20, refineColorThreshold, depth, shading);
+        gouraudFillTriangle(x01, y01, color01, x1, y1, color1, x12, y12, color12, refineColorThreshold, depth, shading);
+        gouraudFillTriangle(x01, y01, color01, x12, y12, color12, x20, y20, color20, refineColorThreshold, depth, shading);
+        gouraudFillTriangle(x20, y20, color20, x12, y12, color12, x2, y2, color2, refineColorThreshold, depth, shading);
+    }
 }
 
 void PdfParser::gouraudFillTriangle(double x0, double y0, GfxColor *color0,
@@ -1774,17 +1819,16 @@ void PdfParser::gouraudFillTriangle(double x0, double y0, GfxColor *color0,
 			      double x2, double y2, GfxColor *color2,
 			      int nComps, int depth) {
   double x01, y01, x12, y12, x20, y20;
-  double gouraudColorDelta = colorDeltas[pdfGouraudTriangleShading-1];
   GfxColor color01, color12, color20;
   int i;
 
   for (i = 0; i < nComps; ++i) {
-    if (abs(color0->c[i] - color1->c[i]) > gouraudColorDelta ||
-       abs(color1->c[i] - color2->c[i]) > gouraudColorDelta) {
+    if (abs(color0->c[i] - color1->c[i]) > colorDelta ||
+       abs(color1->c[i] - color2->c[i]) > colorDelta) {
       break;
     }
   }
-  if (i == nComps || depth == maxDepths[pdfGouraudTriangleShading-1]) {
+  if (i == nComps || depth == maxDepth) {
     state->setFillColor(color0);
     state->moveTo(x0, y0);
     state->lineTo(x1, y1);
@@ -1845,24 +1889,23 @@ void PdfParser::fillPatch(_POPPLER_CONST GfxPatch *patch, int nComps, int depth)
   double yy[4][8];
   double xxm;
   double yym;
-  double patchColorDelta = colorDeltas[pdfPatchMeshShading - 1];
 
   int i;
 
   for (i = 0; i < nComps; ++i) {
     if (std::abs(patch->color[0][0].c[i] - patch->color[0][1].c[i])
-	  > patchColorDelta ||
+	  > colorDelta ||
 	std::abs(patch->color[0][1].c[i] - patch->color[1][1].c[i])
-	  > patchColorDelta ||
+	  > colorDelta ||
 	std::abs(patch->color[1][1].c[i] - patch->color[1][0].c[i])
-	  > patchColorDelta ||
+	  > colorDelta ||
 	std::abs(patch->color[1][0].c[i] - patch->color[0][0].c[i])
-	  > patchColorDelta) {
+	  > colorDelta) {
       break;
     }
     color.c[i] = GfxColorComp(patch->color[0][0].c[i]);
   }
-  if (i == nComps || depth == maxDepths[pdfPatchMeshShading-1]) {
+  if (i == nComps || depth == maxDepth) {
     state->setFillColor(&color);
     state->moveTo(patch->x[0][0], patch->y[0][0]);
     state->curveTo(patch->x[0][1], patch->y[0][1],
@@ -3107,19 +3150,15 @@ void PdfParser::popResources() {
 }
 
 void PdfParser::setDefaultApproximationPrecision() {
-  for (int i = 1; i <= pdfNumShadingTypes; ++i) {
-    setApproximationPrecision(i, defaultShadingColorDelta, defaultShadingMaxDepth);
-  }
+  setApproximationPrecision(defaultShadingColorDelta, defaultShadingMaxDepth);
 }
 
-void PdfParser::setApproximationPrecision(int shadingType, double colorDelta,
-                                          int maxDepth) {
-
-  if (shadingType > pdfNumShadingTypes || shadingType < 1) {
-    return;
-  }
-  colorDeltas[shadingType-1] = dblToCol(colorDelta);
-  maxDepths[shadingType-1] = maxDepth;
+void PdfParser::setApproximationPrecision(double colorDelta, int maxDepth) {
+  this->colorDelta = dblToCol(colorDelta);
+  this->maxDepth = maxDepth;
+  // Might need to be tweaked somewhat, but the finest value somewhat smaller
+  // with the value #defined in poppler/Gfx.cc as 5e-3
+  gouraudParameterizedColorDelta = colorDelta;
 }
 
 /**

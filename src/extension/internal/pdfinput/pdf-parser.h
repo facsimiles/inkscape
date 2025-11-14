@@ -132,7 +132,7 @@ public:
     GfxState *getState() { return state; }
 
     // Set the precision of approximation for specific shading fills.
-    void setApproximationPrecision(int shadingType, double colorDelta, int maxDepth);
+    void setApproximationPrecision(double colorDelta, int maxDepth);
     void loadOptionalContentLayers(Dict *resources);
     void loadPatternColorProfiles(Dict *resources);
     void loadColorProfile();
@@ -166,10 +166,13 @@ private:
 
     static PdfOperator opTab[]; // table of operators
 
-    int colorDeltas[pdfNumShadingTypes];
-    // max deltas allowed in any color component
+    int colorDelta;
+    // max delta allowed in any color component
     // for the approximation of shading fills
-    int maxDepths[pdfNumShadingTypes]; // max recursive depths
+    // parameterized version
+    double gouraudParameterizedColorDelta;
+
+    int maxDepth; // max recursive depth
 
     OpHistoryEntry *operatorHistory; // list containing the last N operators
 
@@ -250,6 +253,9 @@ private:
     void doGouraudTriangleShFill(GfxGouraudTriangleShading *shading);
     void gouraudFillTriangle(double x0, double y0, GfxColor *color0, double x1, double y1, GfxColor *color1, double x2,
                              double y2, GfxColor *color2, int nComps, int depth);
+    // parameterized version
+    void gouraudFillTriangle(double x0, double y0, double color0, double x1, double y1, double color1, 
+                             double x2, double y2, double color2, double refineColorThreshold, int depth, GfxGouraudTriangleShading *shading);
     void doPatchMeshShFill(GfxPatchMeshShading *shading);
     void fillPatch(_POPPLER_CONST GfxPatch *patch, int nComps, int depth);
     void doEndPath();

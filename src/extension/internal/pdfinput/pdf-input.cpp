@@ -842,9 +842,7 @@ PdfInput::add_builder_page(std::shared_ptr<PDFDoc>pdf_doc, SvgBuilder *builder, 
     } else {
         color_delta = 1.0 / color_delta;
     }
-    for ( int i = 1 ; i <= pdfNumShadingTypes ; i++ ) {
-        pdf_parser.setApproximationPrecision(i, color_delta, 6);
-    }
+    pdf_parser.setApproximationPrecision(color_delta, 6);
 
     // Parse the document structure
     Object obj = page->getContents();
