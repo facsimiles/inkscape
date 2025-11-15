@@ -46,6 +46,7 @@
 #include "dialog-container.h"
 #include "filter-chemistry.h"
 #include "filter-enums.h"
+#include "id-clash.h"
 #include "layer-manager.h"
 #include "livepatheffect-editor.h"
 #include "mod360.h"
@@ -370,6 +371,8 @@ details::AttributesPanel::AttributesPanel()
     , _obj_label(get_widget<Gtk::Entry>(_builder, "obj-label"))
     , _locked(get_widget<Gtk::Button>(_builder, "obj-lock"))
     , _obj_title(get_widget<Gtk::Entry>(_builder, "obj-title"))
+    , _obj_id(get_widget<Gtk::Entry>(_builder, "obj-id"))
+    , _obj_set_id(get_widget<Gtk::Button>(_builder, "obj-set-id"))
     , _obj_description(get_widget<Gtk::TextView>(_builder, "obj-description"))
     , _filter_primitive(get_widget<Gtk::Entry>(_builder, "filter-primitive"))
     , _clear_filters(get_widget<Gtk::Button>(_builder, "clear-filters"))
@@ -477,9 +480,6 @@ void details::AttributesPanel::add_name_properties() {
         show_name_properties(_name_props_visibility);
     };
 
-    // ID editing has been removed, as IDs are internal details that need no exposure;
-    // as discussed in UX channel;
-#if 0
     _obj_set_id.signal_clicked().connect([this] {
         if (_update.pending() || !_current_object || !_current_object->document) return;
 
@@ -497,7 +497,6 @@ void details::AttributesPanel::add_name_properties() {
         // check entered ID and show the warning icon as needed
         validate_obj_id();
     });
-#endif
 
     _obj_title.signal_changed().connect([this] {
         if (_update.pending() || !_current_object || !_current_object->document) return;
@@ -926,6 +925,8 @@ void details::AttributesPanel::update_names(SPObject* object) {
     auto description = object->desc();
     _obj_description.get_buffer()->set_text(description ? description : "");
     g_free(description);
+    auto id = object->getId();
+    _obj_id.set_text(id ? id : "");
 }
 
 void details::AttributesPanel::update_interactive_props(SPObject* object) {
@@ -936,7 +937,6 @@ void details::AttributesPanel::update_interactive_props(SPObject* object) {
     _obj_interactivity->get_attr_table()->change_object(object);
 }
 
-#if 0
 void details::AttributesPanel::validate_obj_id() {
     auto id = _obj_id.get_text();
     auto [valid, warning] = is_object_id_valid(id.raw());
@@ -953,7 +953,6 @@ void details::AttributesPanel::validate_obj_id() {
 
     _obj_set_id.set_sensitive(valid);
 }
-#endif
 
 void details::AttributesPanel::show_name_properties(bool expand) {
     _name_group.set_visible(expand);

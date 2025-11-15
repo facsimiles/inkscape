@@ -106,6 +106,7 @@ private:
     void select_lpe_row(int dir = 0);
     void apply_selected_lpe();
     void refilter_lpes();
+    void validate_obj_id();
 
     Glib::RefPtr<Gtk::Builder> _builder;
     Widget::InkSpinButton& _x;
@@ -124,6 +125,8 @@ private:
     Gtk::Button* _name_toggle = nullptr;
     Widget::WidgetGroup _name_group;
     Gtk::Entry& _obj_title;
+    Gtk::Entry& _obj_id;
+    Gtk::Button& _obj_set_id;
     Gtk::TextView& _obj_description;
     Gtk::Entry& _obj_label;
     Gtk::Button& _locked;

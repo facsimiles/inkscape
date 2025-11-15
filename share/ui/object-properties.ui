@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <placeholder width="349" height="17"></placeholder>
+  <placeholder width="349" height="177"></placeholder>
   <requires lib="gtk" version="4.0"></requires>
   <object class="GtkGrid" id="name-props">
     <property name="name">text-main</property>
@@ -9,7 +9,7 @@
     <child>
       <placeholder></placeholder>
     </child>
-    <!--dim: 5, 2-->
+    <!--dim: 5, 3-->
     <child>
       <object class="GtkLabel">
         <property name="label" translatable="yes">Title</property>
@@ -60,6 +60,40 @@
           <property name="row">1</property>
           <property name="column-span">2</property>
         </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">ID</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <layout>
+          <property name="column">2</property>
+          <property name="row">2</property>
+          <property name="column-span">2</property>
+        </layout>
+        <style>
+          <class name="linked"></class>
+        </style>
+        <child>
+          <object class="GtkEntry" id="obj-id">
+            <property name="tooltip-text" translatable="yes">Element&apos;s unique identifier</property>
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="obj-set-id">
+            <property name="tooltip-text" translatable="yes">Change element&apos;s identifier</property>
+            <property name="label" translatable="yes">Set</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>
@@ -154,8 +188,8 @@
       </object>
     </child>
   </object>
-  <object class="GtkGrid" id="label-props">
-    <!--dim: 5, 1-->
+  <object class="GtkGrid" id="label-props">    <!--dim: 5, 1-->
+
     <child>
       <object class="GtkLabel">
         <property name="use-markup">false</property>
@@ -197,7 +231,7 @@
     <child>
       <object class="GtkBox">
         <child>
-          <object class="GtkEntry" id="obj-id">
+          <object class="GtkEntry" id="obj-id-old">
             <property name="hexpand">true</property>
             <property name="hexpand-set">true</property>
           </object>
@@ -398,7 +432,7 @@
               <object class="GtkListBox" id="lpe-menu">
                 <property name="activate-on-single-click">true</property>
                 <property name="selection-mode">browse</property>
-<!-- v4.18              <property name="tab-behavior">item</property>-->
+                <!-- v4.18              <property name="tab-behavior">item</property>-->
               </object>
             </property>
           </object>
