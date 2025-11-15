@@ -70,6 +70,7 @@ set(TEST_SOURCES
     uri-test
     util-test
     util-units-test
+    util-expression-evaluator-test
     util-uri-test
     drag-and-drop-svgz
     drawing-pattern-test
