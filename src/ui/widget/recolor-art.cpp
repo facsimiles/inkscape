@@ -540,6 +540,9 @@ void RecolorArt::onResetClicked()
     updateColorModel();
     _manager.revertToOriginalColors(true);
     guint index = _selection_model->get_selected();
+    if (index == GTK_INVALID_LIST_POSITION) { 
+        return;
+    }
     auto item = _color_model->get_item(index);
     auto color_item = std::dynamic_pointer_cast<ColorItem>(item);
 
