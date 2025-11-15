@@ -204,14 +204,6 @@ bool ArcTool::root_handler(CanvasEvent const &event)
                     }
                     break;
 
-                case GDK_KEY_x:
-                case GDK_KEY_X:
-                    if (mod_alt_only(event)) {
-                        _desktop->setToolboxFocusTo("arc-rx");
-                        ret = true;
-                    }
-                    break;
-
                 case GDK_KEY_Escape:
                     if (dragging) {
                         dragging = false;

@@ -212,14 +212,6 @@ bool StarTool::root_handler(CanvasEvent const &event)
                                                nullptr);
                     break;
 
-                case GDK_KEY_x:
-                case GDK_KEY_X:
-                    if (mod_alt_only(event)) {
-                        _desktop->setToolboxFocusTo("altx-star");
-                        ret = true;
-                    }
-                    break;
-
                 case GDK_KEY_Escape:
                     if (dragging) {
         		dragging = false;

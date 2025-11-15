@@ -221,13 +221,6 @@ bool RectTool::root_handler(CanvasEvent const &event)
                                                    _("<b>Alt</b>: use with Ctrl to make square"));
                     }
                     break;
-                case GDK_KEY_x:
-                case GDK_KEY_X:
-                    if (mod_alt_only(event)) {
-                        _desktop->setToolboxFocusTo("rect-width");
-                        ret = true;
-                    }
-                    break;
 
                 case GDK_KEY_g:
                 case GDK_KEY_G:

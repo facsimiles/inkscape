@@ -152,6 +152,12 @@ void Toolbars::setActiveUnit(Util::Unit const *unit)
     }
 }
 
+Toolbar *Toolbars::get_current_toolbar()
+{
+    return _current_toolbar;
+}
+
+
 } // namespace Inkscape::UI::Toolbar
 
 /*

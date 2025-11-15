@@ -205,14 +205,6 @@ bool SpiralTool::root_handler(CanvasEvent const &event)
                                                _("<b>Alt</b>: lock spiral radius"));
                     break;
 
-                case GDK_KEY_x:
-                case GDK_KEY_X:
-                    if (mod_alt_only(event)) {
-                        _desktop->setToolboxFocusTo("spiral-revolutions");
-                        ret = true;
-                    }
-                    break;
-
                 case GDK_KEY_Escape:
                     if (dragging) {
                         dragging = false;

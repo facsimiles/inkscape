@@ -333,6 +333,11 @@ void SPDesktopWidget::switchDesktop(SPDesktop *desktop)
     _window->setActiveTab(_desktop);
 }
 
+Inkscape::UI::Toolbar::Toolbar *SPDesktopWidget::get_current_toolbar()
+{
+    return tool_toolbars->get_current_toolbar();
+}
+
 void SPDesktopWidget::advanceTab(int by)
 {
     auto tabs = _canvas_grid->getTabsWidget();

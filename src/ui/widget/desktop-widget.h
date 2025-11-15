@@ -70,6 +70,7 @@ class SwatchesPanel;
 namespace Toolbar {
 class Toolbars;
 class CommandToolbar;
+class Toolbar;
 class SnapToolbar;
 class ToolToolbar;
 } // namespace Toolbars
@@ -93,6 +94,7 @@ public:
     SPDesktopWidget(InkscapeWindow *inkscape_window);
     ~SPDesktopWidget() override;
 
+    Inkscape::UI::Toolbar::Toolbar* get_current_toolbar();
     Inkscape::UI::Widget::CanvasGrid *get_canvas_grid()  { return _canvas_grid; }  // Temp, I hope!
     Inkscape::UI::Widget::Canvas     *get_canvas()       { return _canvas; }
     std::vector<SPDesktop *> const   &get_desktops() const { return _desktops; }

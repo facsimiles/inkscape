@@ -588,14 +588,6 @@ bool GradientTool::root_handler(CanvasEvent const &event)
                                         nullptr);
             break;
 
-        case GDK_KEY_x:
-        case GDK_KEY_X:
-            if (mod_alt_only(event)) {
-                _desktop->setToolboxFocusTo("altx-grad");
-                ret = true;
-            }
-            break;
-
         case GDK_KEY_A:
         case GDK_KEY_a:
             if (mod_ctrl_only(event) && _grdrag->isNonEmpty()) {

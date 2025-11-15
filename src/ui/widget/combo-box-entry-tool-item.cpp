@@ -129,6 +129,11 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
  *   Text is not in the list store (i.e. default font-family is not on system):
  *     In this case we have a row number of -1, and the text must be set by hand.
  */
+
+Gtk::Entry* ComboBoxEntryToolItem::get_entry() const {
+    return _entry;
+}
+
 bool ComboBoxEntryToolItem::set_active_text(Glib::ustring text, int row)
 {
     _text = std::move(text);

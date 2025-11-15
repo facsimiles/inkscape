@@ -1307,13 +1307,6 @@ bool TweakTool::root_handler(CanvasEvent const &event)
                     sp_tweak_update_area(this);
                     ret = true;
                     break;
-                case GDK_KEY_x:
-                case GDK_KEY_X:
-                    if (mod_alt_only(event)) {
-                        _desktop->setToolboxFocusTo("tweak-width");
-                        ret = true;
-                    }
-                    break;
 
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:

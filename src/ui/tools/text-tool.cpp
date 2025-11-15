@@ -696,14 +696,6 @@ bool TextTool::root_handler(CanvasEvent const &event)
 
                     // Neither unimode nor IM consumed key; process text tool shortcuts.
                     switch (group0_keyval) {
-                        case GDK_KEY_x:
-                        case GDK_KEY_X:
-                            if (mod_alt_only(event)) {
-                                _desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
-                                ret = true;
-                                return;
-                            }
-                            break;
                         case GDK_KEY_space:
                             if (mod_ctrl_only(event)) {
                                 // No-break space

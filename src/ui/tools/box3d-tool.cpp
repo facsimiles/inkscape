@@ -347,10 +347,6 @@ bool Box3dTool::root_handler(CanvasEvent const &event)
 
         case GDK_KEY_x:
         case GDK_KEY_X:
-            if (mod_alt_only(event)) {
-                _desktop->setToolboxFocusTo("box3d-angle-x");
-                ret = true;
-            }
             if (mod_shift_only(event)) {
                 Persp3D::toggle_VPs(selection->perspList(), Proj::X);
                 _vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?

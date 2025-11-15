@@ -102,6 +102,7 @@ public:
     virtual bool item_handler(SPItem *item, CanvasEvent const &event);
     virtual void menu_popup(CanvasEvent const &event, SPObject *obj = nullptr);
     virtual bool can_undo(bool redo = false) { return false; }
+    virtual void focus_first_widget();
     virtual bool is_ready() const { return true; }
     virtual void switching_away(std::string const &new_tool) {}
 
@@ -217,6 +218,7 @@ protected:
     Util::ActionAccel _acc_quick_preview;
     Util::ActionAccel _acc_quick_zoom;
     Util::ActionAccel _acc_quick_pan;
+    Util::ActionAccel _acc_focus_first_widget;
 private:
     void _filterEventForSnapping(SPItem *item, CanvasEvent const &event, DelayedSnapEvent::Origin origin);
     bool _keyboardMove(KeyEvent const &event, Geom::Point const &dir);

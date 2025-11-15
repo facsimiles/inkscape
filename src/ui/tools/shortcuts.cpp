@@ -20,6 +20,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_tools_shortcuts = {
       {"tool.all.quick-preview",    N_("Quick Preview"),          "Tools", N_("Preview how the document will look while the key is pressed.")     }
     , {"tool.all.quick-zoom",       N_("Quick Zoom"),             "Tools", N_("Zoom into the selected objects while the key is pressed.")         }
     , {"tool.all.quick-pan",        N_("Quick Pan Canvas"),       "Tools", N_("Pan the canvas with the mouse while the key is pressed.")          }
+    , {"tool.all.focus-first-widget", N_("Focus First Widget"),   "Tools", N_("Focus the first input widget in the active tool's toolbar.")       }
 
     , {"tool.pen.to-line",          N_("Pen Segment To Line"),    "Tools", N_("Convert the last pen segment to a straight line.")                 }
     , {"tool.pen.to-curve",         N_("Pen Segment To Curve"),   "Tools", N_("Convert the last pen segment to a curved line.")                   }

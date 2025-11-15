@@ -39,6 +39,7 @@ public:
 
     void setTool(Tools::ToolBase *tool);
     void setActiveUnit(Util::Unit const *unit);
+    Toolbar *get_current_toolbar();
 
 private:
     std::unordered_map<std::string, std::unique_ptr<Toolbar>> _toolbars;

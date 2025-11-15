@@ -67,6 +67,7 @@ public:
     void set_tooltip   (Glib::ustring const &tooltip);
 
     // Accessor methods
+    Gtk::Entry* get_entry() const;
     int get_active() const { return _active; }
     sigc::connection connectChanged(sigc::slot<void ()> &&slot) { return _signal_changed.connect(std::move(slot)); }
 

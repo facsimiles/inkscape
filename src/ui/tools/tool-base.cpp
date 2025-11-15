@@ -41,6 +41,8 @@
 #include "ui/knot/knot.h"
 #include "ui/modifiers.h"
 #include "ui/popup-menu.h"
+#include "ui/toolbar/toolbars.h"
+#include "ui/toolbar/toolbar.h"
 #include "ui/shape-editor.h"
 #include "ui/shortcuts.h"
 #include "ui/tool/control-point.h"
@@ -51,6 +53,9 @@
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
+#include "ui/widget/combo-box-entry-tool-item.h"
+#include <gtkmm/entry.h>
+#include <gtkmm/spinbutton.h>
 #include "ui/widget/events/canvas-event.h"
 #include "ui/widget/events/debug.h"
 
@@ -100,6 +105,7 @@ ToolBase::ToolBase(SPDesktop *desktop, std::string &&prefs_path, std::string &&c
     , _acc_quick_preview{"tool.all.quick-preview"}
     , _acc_quick_zoom{"tool.all.quick-zoom"}
     , _acc_quick_pan{"tool.all.quick-pan"}
+    , _acc_focus_first_widget{"tool.all.focus-first-widget"}
 {
     pref_observer = Inkscape::Preferences::PreferencesObserver::create(_prefs_path, [this] (auto &val) { set(val); });
     set_cursor(_cursor_default);
@@ -121,6 +127,55 @@ ToolBase::ToolBase(SPDesktop *desktop, std::string &&prefs_path, std::string &&c
 ToolBase::~ToolBase()
 {
     enableSelectionCue(false);
+}
+
+/**
+ * @brief Helper function to recursively search a Gtk::Widget container for the first focusable and sensitive widget.
+ * @param container The Gtk::Widget (which might be a container) to search within.
+ * @return A pointer to the first focusable widget found, or nullptr if none is found.
+ */
+static Gtk::Widget* find_first_focusable_input(Gtk::Widget* container) {
+    if (!container || !container->get_sensitive() || !container->get_visible()) {
+        return nullptr;
+    }
+
+    if (auto* combo = dynamic_cast<UI::Widget::ComboBoxEntryToolItem*>(container)) {
+        Gtk::Entry* entry = combo->get_entry();
+        return (entry && entry->get_sensitive()) ? entry : nullptr;
+    }
+
+    if (dynamic_cast<Gtk::SpinButton*>(container) || dynamic_cast<Gtk::Entry*>(container)) {
+        return (container->get_focusable() && container->get_sensitive()) ? container : nullptr;
+    }
+
+
+    // If the widget is not an input type itself, it might be a generic container. Search its children.
+    for (auto child = container->get_first_child(); child != nullptr; child = child->get_next_sibling()) {
+        if (auto* found_widget = find_first_focusable_input(child)) {
+            return found_widget;
+        }
+    }
+
+    return nullptr;
+}
+
+/**
+ * @brief Find the first focusable widget on the tool's toolbar and grab focus.
+ * This is the generic implementation that will be used by all tools unless they override it.
+ */
+void ToolBase::focus_first_widget()
+{
+    if (!_desktop) return;
+
+    auto* dt_widget = _desktop->getDesktopWidget();
+    if (!dt_widget) return;
+
+    auto* curr_toolbar = dt_widget->get_current_toolbar();
+    if (!curr_toolbar) return;
+
+    if (auto* first_focusable = find_first_focusable_input(curr_toolbar)) {
+        first_focusable->grab_focus();
+    }
 }
 
 /**
@@ -603,7 +658,11 @@ bool ToolBase::root_handler(CanvasEvent const &event)
             message_context->set(Inkscape::INFORMATION_MESSAGE, _("<b>Space+mouse move</b> to pan canvas"));
             ret = true;
         }
-
+        if (_acc_focus_first_widget.isTriggeredBy(event)) {
+            focus_first_widget();
+            ret = true;
+            return;
+        }
 
         switch (get_latin_keyval(event)) {
         // GDK insists on stealing the tab keys for cycling widgets in the

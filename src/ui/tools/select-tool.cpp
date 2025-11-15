@@ -918,14 +918,6 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                     }
                     break;
                     
-                case GDK_KEY_x:
-                case GDK_KEY_X:
-                    if (mod_alt_only(event)) {
-                        _desktop->setToolboxFocusTo("select-x");
-                        ret = true;
-                    }
-                    break;
-                    
                 case GDK_KEY_Return:
                     if (mod_ctrl_only(event)) {
                         if (selection->singleItem()) {

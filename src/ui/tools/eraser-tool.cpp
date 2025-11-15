@@ -518,14 +518,6 @@ bool EraserTool::_handleKeypress(KeyPressEvent const &key)
             ret = true;
             break;
 
-        case GDK_KEY_x:
-        case GDK_KEY_X:
-            if (just_alt) {
-                _desktop->setToolboxFocusTo("eraser-width");
-                ret = true;
-            }
-            break;
-
         case GDK_KEY_Escape:
             if (mode == EraserToolMode::DELETE) {
                 Inkscape::Rubberband::get(_desktop)->stop();
