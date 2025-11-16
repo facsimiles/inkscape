@@ -77,6 +77,7 @@
 #include "live_effects/lpe-test-doEffect-stack.h"
 #include "live_effects/lpe-text_label.h"
 #include "live_effects/lpe-tiling.h"
+#include "live_effects/lpe-trim-shape.h"
 #include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-vonkoch.h"
 #include "message-stack.h"
@@ -691,6 +692,21 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//on_text
         false ,//experimental
     },
+    /* 1.5 */
+    {
+        TRIM_SHAPE,
+        NC_("path effect", "Trim shapes") ,//label
+        "trim_shape" ,//key
+        "trim" ,//icon
+        N_("Trim shape") ,//description
+        LPECategory::EditTools ,//category
+        true  ,//on_path
+        true  ,//on_shape
+        false  ,//on_group
+        false ,//on_image
+        false ,//on_text
+        false ,//experimental
+    },
     // VISIBLE experimental LPEs
     {
         ANGLE_BISECTOR,
@@ -1112,6 +1128,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case TILING:
             neweffect = static_cast<Effect*> ( new LPETiling(lpeobj) );
+            break;
+        case TRIM_SHAPE:
+            neweffect = static_cast<Effect*> ( new LPETrimShape(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);

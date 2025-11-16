@@ -23,11 +23,16 @@
 
 namespace Inkscape::LivePathEffect {
 
-namespace TpS {
+namespace TapperStrokeNS {
 // we need a separate namespace to avoid clashes with other LPEs
 class KnotHolderEntityAttachBegin;
 class KnotHolderEntityAttachEnd;
-} // namespace TpS
+} // namespace TapperStrokeNS
+
+namespace TrimShapeNS {
+// we need a separate namespace to avoid clashes with other LPEs
+class KnotHolderEntityAttach;
+} // namespace TrimShapeNS
 
 template <typename StorageType>
 class ArrayParam : public Parameter {
@@ -99,8 +104,9 @@ public:
     bool valid_index(int index) const { return _vector.size() > index; }
 
 protected:
-    friend class TpS::KnotHolderEntityAttachBegin;
-    friend class TpS::KnotHolderEntityAttachEnd;
+    friend class TapperStrokeNS::KnotHolderEntityAttachBegin;
+    friend class TapperStrokeNS::KnotHolderEntityAttachEnd;
+    friend class TrimShapeNS::KnotHolderEntityAttach;
     std::vector<StorageType> _vector;
     std::size_t _default_size;
 

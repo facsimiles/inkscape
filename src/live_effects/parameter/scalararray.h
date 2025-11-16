@@ -58,6 +58,7 @@ public:
 
 private:
     friend class LPETaperStroke;
+    friend class LPETrimShape;
 
     size_t _active_index = 0;
     double min;

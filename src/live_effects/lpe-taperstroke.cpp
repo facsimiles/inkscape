@@ -38,7 +38,7 @@ inline bool withinRange(T value, T low, T high) {
 namespace Inkscape {
 namespace LivePathEffect {
 
-namespace TpS {
+namespace TapperStrokeNS {
     class KnotHolderEntityAttachBegin : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityAttachBegin(LPETaperStroke * effect, size_t index) 
@@ -51,7 +51,7 @@ namespace TpS {
         bool valid_index(unsigned int index) const {
             return (_effect->attach_start._vector.size() > index);
         };
-    private:
+    protected:
         size_t _index;
         LPETaperStroke * _effect;
     };
@@ -66,13 +66,13 @@ namespace TpS {
         void knot_click(guint state) override;
         Geom::Point knot_get() const override;
         bool valid_index(unsigned int index) const {
-            return (_effect->attach_end._vector.size() > index);
+            return (_effect->attach_start._vector.size() > index);
         };
-    private:
+    protected:
         size_t _index;
         LPETaperStroke * _effect;
     };
-} // TpS
+} // TapperStrokeNS
 
 static const Util::EnumData<unsigned> JoinType[] = {
     // clang-format off
@@ -611,19 +611,19 @@ LPETaperStroke::doBeforeEffect (SPLPEItem const* lpeitem)
 void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     for (size_t i = 0 ; i < attach_start._vector.size(); i++) {
-        KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this, i);
+        KnotHolderEntity *e = new TapperStrokeNS::KnotHolderEntityAttachBegin(this, i);
         e->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:TaperStrokeBegin",
                 _("<b>Start point of the taper</b>: drag to alter the taper, <b>Shift+click</b> changes the taper direction"));
         knotholder->add(e);
 
-        KnotHolderEntity *f = new TpS::KnotHolderEntityAttachEnd(this, i);
+        KnotHolderEntity *f = new TapperStrokeNS::KnotHolderEntityAttachEnd(this, i);
         f->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:TaperStrokeEnd",
                 _("<b>End point of the taper</b>: drag to alter the taper, <b>Shift+click</b> changes the taper direction"));
         knotholder->add(f);
     }
 }
 
-namespace TpS {
+namespace TapperStrokeNS {
 
 void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point const&/*origin*/, guint state)
 {
@@ -737,7 +737,7 @@ Geom::Point KnotHolderEntityAttachEnd::knot_get() const
     return Geom::Point();
 }
 
-} // namespace TpS
+} // namespace TapperStrokeNS
 } // namespace LivePathEffect
 } // namespace Inkscape
 
