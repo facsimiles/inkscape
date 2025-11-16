@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-set(libgc_SRC
+
+target_sources(inkscape_base PRIVATE
 	gc.cpp
 
 	# -------
@@ -8,6 +9,3 @@ set(libgc_SRC
 	gc-core.h
 	gc-managed.h
 )
-
-add_inkscape_lib(gc_LIB "${libgc_SRC}")
-# add_inkscape_source("${libgc_SRC}")

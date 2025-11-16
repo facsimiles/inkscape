@@ -1127,10 +1127,11 @@ SPPattern* PaintSelector::getPattern() {
     return cast<SPPattern>(pat_obj);
 }
 
-std::string PaintSelector::getOtherSetting() const {
-    g_return_val_if_fail(_mode == MODE_OTHER, nullptr);
-
-    if (!_selector_other) return {};
+std::string PaintSelector::getOtherSetting() const
+{
+    if (_mode != MODE_OTHER || !_selector_other) {
+        return {};
+    }
 
     // Get value from _selector_other widget and return as string.
     return get_inherited_paint_css_mode(_selector_other->get_mode());

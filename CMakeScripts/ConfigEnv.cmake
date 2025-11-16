@@ -21,7 +21,7 @@ if(WIN32)
 endif()
 
 if(APPLE)
-  message("-- Mac OS X build detected, setting default features")
+  message("-- macOS build detected, setting default features")
 
   # prefer macports and/or user-installed libraries over system ones
   #LIST(APPEND CMAKE_PREFIX_PATH /opt/local /usr/local)

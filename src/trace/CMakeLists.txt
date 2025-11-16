@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-set(trace_SRC
+
+target_sources(inkscape_base PRIVATE
 	cielab.cpp
 	filterset.cpp
 	imagemap.cpp
@@ -28,6 +29,3 @@ set(trace_SRC
 	autotrace/inkscape-autotrace.h
 	depixelize/inkscape-depixelize.h
 )
-
-add_inkscape_source("${trace_SRC}")
-

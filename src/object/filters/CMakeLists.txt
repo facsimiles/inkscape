@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(filters_SRC
+target_sources(inkscape_base PRIVATE
   sp-filter-primitive.cpp
   blend.cpp
   colormatrix.cpp
@@ -25,7 +25,6 @@ set(filters_SRC
   slot-resolver.cpp
   tile.cpp
   turbulence.cpp
-
 
   # -------
   # Headers
@@ -54,5 +53,3 @@ set(filters_SRC
   tile.h
   turbulence.h
 )
-
-add_inkscape_source("${filters_SRC}")

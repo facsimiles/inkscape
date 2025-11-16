@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(object_algorithms_SRC
+target_sources(inkscape_base PRIVATE
   graphlayout.cpp
   removeoverlap.cpp
   unclump.cpp
@@ -12,5 +12,3 @@ set(object_algorithms_SRC
   removeoverlap.h
   unclump.h
 )
-
-add_inkscape_source("${object_algorithms_SRC}")

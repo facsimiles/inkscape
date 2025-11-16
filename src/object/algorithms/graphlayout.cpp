@@ -30,8 +30,8 @@
 #include "inkscape.h"
 #include "preferences.h"
 
-#include "3rdparty/adaptagrams/libcola/cola.h"
-#include "3rdparty/adaptagrams/libcola/connected_components.h"
+#include "libcola/cola.h"
+#include "libcola/connected_components.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"

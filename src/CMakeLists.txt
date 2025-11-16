@@ -1,9 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-# -----------------------------------------------------------------------------
-# Define the main source
-# -----------------------------------------------------------------------------
 
-set(inkscape_SRC
+add_library(inkscape_base)
+
+target_sources(inkscape_base PRIVATE
   alignment-snapper.cpp
   attribute-rel-css.cpp
   attribute-rel-svg.cpp
@@ -78,8 +77,8 @@ set(inkscape_SRC
   vanishing-point.cpp
   version.cpp
 
-  # -------
   # Headers
+
   alignment-snapper.h
   attribute-rel-css.h
   attribute-rel-svg.h
@@ -174,92 +173,11 @@ set(inkscape_SRC
   vanishing-point.h
   version.h
 
-  # TEMP  Need to detangle inkscape-view from ui/interface.cpp
   inkscape-window.h
   inkscape-window.cpp
 
   inkscape-application.h
   inkscape-application.cpp
-  actions/actions-effect-data.h
-  actions/actions-effect-data.cpp
-  actions/actions-extra-data.h
-  actions/actions-extra-data.cpp
-  actions/actions-hint-data.h
-  actions/actions-hint-data.cpp
-
-  actions/actions-base.h
-  actions/actions-base.cpp
-  actions/actions-canvas-mode.h
-  actions/actions-canvas-mode.cpp
-  actions/actions-canvas-snapping.h
-  actions/actions-canvas-snapping.cpp
-  actions/actions-canvas-transform.h
-  actions/actions-canvas-transform.cpp
-  actions/actions-dialogs.cpp
-  actions/actions-dialogs.h
-  actions/actions-edit-document.h
-  actions/actions-edit-document.cpp
-  actions/actions-edit-window.h
-  actions/actions-edit-window.cpp
-  actions/actions-edit.h
-  actions/actions-edit.cpp
-  actions/actions-effect.h
-  actions/actions-effect.cpp
-  actions/actions-element-a.h
-  actions/actions-element-a.cpp
-  actions/actions-element-image.h
-  actions/actions-element-image.cpp
-  actions/actions-file-window.h
-  actions/actions-file-window.cpp
-  actions/actions-file.h
-  actions/actions-file.cpp
-  actions/actions-helper.h
-  actions/actions-helper.cpp
-  actions/actions-helper-gui.h
-  actions/actions-helper-gui.cpp
-  actions/actions-help-url.h
-  actions/actions-help-url.cpp
-  actions/actions-hide-lock.h
-  actions/actions-hide-lock.cpp
-  actions/actions-layer.h
-  actions/actions-layer.cpp
-  actions/actions-node-align.h
-  actions/actions-node-align.cpp
-  actions/actions-object.h
-  actions/actions-object.cpp
-  actions/actions-object-align.h
-  actions/actions-object-align.cpp
-  actions/actions-output.h
-  actions/actions-output.cpp
-  actions/actions-paths.h
-  actions/actions-paths.cpp
-  actions/actions-selection-object.h
-  actions/actions-selection-object.cpp
-  actions/actions-selection-window.h
-  actions/actions-selection-window.cpp
-  actions/actions-selection.h
-  actions/actions-selection.cpp
-  actions/actions-text.h
-  actions/actions-text.cpp
-  actions/actions-tools.h
-  actions/actions-tools.cpp
-  actions/actions-tutorial.h
-  actions/actions-tutorial.cpp
-  actions/actions-transform.h
-  actions/actions-transform.cpp
-  actions/actions-undo-document.h
-  actions/actions-undo-document.cpp
-  actions/actions-view-mode.h
-  actions/actions-view-mode.cpp
-  actions/actions-view-window.h
-  actions/actions-view-window.cpp
-  actions/actions-window.h
-  actions/actions-window.cpp
-  actions/actions-pages.h
-  actions/actions-pages.cpp
-  actions/actions-svg-processing.h
-  actions/actions-svg-processing.cpp
-
   inkview-application.h
   inkview-application.cpp
   inkview-window.h
@@ -268,7 +186,7 @@ set(inkscape_SRC
   manipulation/copy-resource.h
   manipulation/copy-resource.cpp
 )
-  
+
 # -----------------------------------------------------------------------------
 # Generate version file
 # -----------------------------------------------------------------------------
@@ -285,7 +203,7 @@ add_custom_command(
         -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     COMMENT "Generating inkscape-version.cpp")
 
-list(APPEND inkscape_SRC
+target_sources(inkscape_base PRIVATE
   ${CMAKE_BINARY_DIR}/src/inkscape-version.cpp
 )
 
@@ -294,8 +212,6 @@ list(APPEND inkscape_SRC
 # Load in subdirectories
 # -----------------------------------------------------------------------------
 
-# All folders for internal inkscape
-# these call add_inkscape_source
 add_subdirectory(actions)
 add_subdirectory(async)
 add_subdirectory(colors)
@@ -323,13 +239,6 @@ add_subdirectory(inkgc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
 include_directories("3rdparty/adaptagrams")
-
-get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)
-
-set(inkscape_SRC
-  ${inkscape_global_SRC}
-  ${inkscape_SRC}
-)
 
 # -----------------------------------------------------------------------------
 # Relative RPATH handling
@@ -361,7 +270,7 @@ if(WITH_INTERNAL_2GEOM)
 endif()
 
 # -----------------------------------------------------------------------------
-# Setup the executable
+# Set up the executable
 # -----------------------------------------------------------------------------
 set(main_SRC
   inkscape-main.cpp
@@ -415,31 +324,8 @@ if(WIN32)
 endif()
 
 
-set(INKSCAPE_TARGET_LIBS
-        croco_LIB
-        avoid_LIB
-        cola_LIB
-        vpsc_LIB
-        livarot_LIB
-        uemf_LIB
-        depixelize_LIB
-        autotrace_LIB
-        util_LIB
-        gc_LIB
-)
-
-# Build everything except main and inkview.c in a shared library.
-add_library(inkscape_base ${inkscape_SRC} ${sp_SRC})
 set_target_properties(inkscape_base PROPERTIES SOVERSION "${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR}.${INKSCAPE_VERSION_PATCH}.0")
 set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "${LIBINKSCAPE_INSTALL_RPATH}")
-if(NOT GTKMM4_FOUND)
-    add_dependencies(util_LIB gtkmm)
-    add_dependencies(util_LIB glibmm)
-    add_dependencies(depixelize_LIB gtkmm)
-    add_dependencies(depixelize_LIB glibmm)
-    target_link_directories(inkscape_base PUBLIC ${CMAKE_BINARY_DIR}/deps/lib)
-    SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--disable-new-dtags")
-endif()
 
 if(WITH_CAPYPDF)
   if(TARGET capypdf)
@@ -450,11 +336,17 @@ endif()
 # Link the inkscape_base library against all external dependencies
 target_link_libraries(inkscape_base
     PRIVATE
-        ${INKSCAPE_TARGET_LIBS}
+        autotrace_LIB
+        depixelize_LIB
+        croco_LIB
+        avoid_LIB
+        cola_LIB
+        vpsc_LIB
+        uemf_LIB
     PUBLIC
         ${INKSCAPE_LIBS}
         2Geom::2geom
-  )
+)
 
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)

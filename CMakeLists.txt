@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-cmake_minimum_required(VERSION 3.12.0)
+cmake_minimum_required(VERSION 3.24.0)
 
 if(POLICY CMP0167)
     cmake_policy(SET CMP0167 NEW) # use FindBoost from boost 1.70+ (cmake 3.30+)
@@ -22,13 +22,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 
-# avoid having empty buildtype
-set(CMAKE_BUILD_TYPE_INIT "Release")
+# Build in Release mode by default.
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+    "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel Strict.")
+
+project(inkscape)
 
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
 
-project(inkscape)
 set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME inkscape) # needs to be before any install() commands
 
 include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
@@ -73,10 +75,6 @@ set(CMAKE_C_FLAGS_STRICT   "${CMAKE_C_FLAGS_DEBUG}   -Werror=deprecated-declarat
 mark_as_advanced(
     CMAKE_CXX_FLAGS_STRICT
     CMAKE_C_FLAGS_STRICT)
-
-set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING
-    "Choose the type of build, options are: None(CMAKE_CXXFLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel Strict."
-    FORCE)
 
 # -----------------------------------------------------------------------------
 # Redirect output files
@@ -125,16 +123,11 @@ option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
 
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
-include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
-# -----------------------------------------------------------------------------
-# BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
+# Allow static libraries to be linked into shared libraries.
 if(BUILD_SHARED_LIBS AND NOT WIN32)
-    add_definitions(-fPIC)
+    add_compile_options(-fPIC)
 endif()
-#
-# end badness
-# -----------------------------------------------------------------------------
 
 
 
@@ -145,7 +138,7 @@ add_subdirectory(src)
 
 if(ENABLE_NLS)
     add_subdirectory(po)
-endif(ENABLE_NLS)
+endif()
 
 if(NOT WIN32)
     include(CMakeScripts/Pod2man.cmake)

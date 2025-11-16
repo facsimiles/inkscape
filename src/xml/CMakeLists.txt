@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(xml_SRC
+target_sources(inkscape_base PRIVATE
 	composite-node-observer.cpp
 	croco-node-iface.cpp
 	event.cpp
@@ -21,8 +21,6 @@ set(xml_SRC
 	rebase-hrefs.cpp
 	href-attribute-helper.cpp
 
-
-	# -------
 	# Headers
 	attribute-record.h
 	comment-node.h
@@ -53,6 +51,3 @@ set(xml_SRC
 	text-node.h
 	href-attribute-helper.h
 )
-
-# add_inkscape_lib(xml_LIB "${xml_SRC}")
-add_inkscape_source("${xml_SRC}")

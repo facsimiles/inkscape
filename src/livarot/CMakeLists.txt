@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(livarot_SRC
+target_sources(inkscape_base PRIVATE
 	AVL.cpp
 	float-line.cpp
 	PathConversion.cpp
@@ -19,8 +19,6 @@ set(livarot_SRC
 	sweep-tree.cpp
 	sweep-tree-list.cpp
 
-
-	# -------
 	# Headers
 	AVL.h
 	LivarotDefs.h
@@ -33,6 +31,3 @@ set(livarot_SRC
 	sweep-tree-list.h
 	sweep-tree.h
 )
-
-add_inkscape_lib(livarot_LIB "${livarot_SRC}")
-target_link_libraries(livarot_LIB PUBLIC 2Geom::2geom)

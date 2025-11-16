@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(extension_SRC
+target_sources(inkscape_base PRIVATE
 	db.cpp
 	dependency.cpp
-        processing-action.cpp
+	processing-action.cpp
 	effect.cpp
 	execution-env.cpp
 	extension.cpp
@@ -165,37 +165,32 @@ set(extension_SRC
 	prefdialog/widget-spacer.h
 )
 
-if(WIN32)
-	list(APPEND extension_SRC
-	)
-endif()
-
 if(WITH_CAPYPDF)
-    list(APPEND extension_SRC
-	internal/pdfoutput/build-document.cpp
-	internal/pdfoutput/build-drawing.cpp
-	internal/pdfoutput/build-images.cpp
-	internal/pdfoutput/build-page.cpp
-	internal/pdfoutput/build-paths.cpp
-	internal/pdfoutput/build-patterns.cpp
-	internal/pdfoutput/build-styles.cpp
+    target_sources(inkscape_base PRIVATE
+	    internal/pdfoutput/build-document.cpp
+	    internal/pdfoutput/build-drawing.cpp
+	    internal/pdfoutput/build-images.cpp
+	    internal/pdfoutput/build-page.cpp
+	    internal/pdfoutput/build-paths.cpp
+	    internal/pdfoutput/build-patterns.cpp
+	    internal/pdfoutput/build-styles.cpp
         internal/pdfoutput/build-text.cpp
-	internal/pdfoutput/pdf-output.cpp
-	internal/pdfoutput/remember-styles.cpp
+	    internal/pdfoutput/pdf-output.cpp
+	    internal/pdfoutput/remember-styles.cpp
 
-        #Header
-	internal/pdfoutput/build-document.h
-	internal/pdfoutput/build-drawing.h
-	internal/pdfoutput/build-page.h
-	internal/pdfoutput/build-patterns.h
-	internal/pdfoutput/build-text.h
-	internal/pdfoutput/pdf-output.h
-	internal/pdfoutput/remember-styles.h
+        # Header
+	    internal/pdfoutput/build-document.h
+	    internal/pdfoutput/build-drawing.h
+	    internal/pdfoutput/build-page.h
+	    internal/pdfoutput/build-patterns.h
+	    internal/pdfoutput/build-text.h
+	    internal/pdfoutput/pdf-output.h
+	    internal/pdfoutput/remember-styles.h
     )
 endif()
 
 if(WITH_POPPLER)
-    list(APPEND extension_SRC
+    target_sources(inkscape_base PRIVATE
         internal/pdfinput/pdf-utils.cpp
         internal/pdfinput/pdf-input.cpp
         internal/pdfinput/pdf-parser.cpp
@@ -214,35 +209,35 @@ if(WITH_POPPLER)
 endif()
 
 if(WITH_LIBCDR)
-	list(APPEND extension_SRC
+    target_sources(inkscape_base PRIVATE
 		internal/cdr-input.cpp
 		internal/cdr-input.h
 	)
 endif()
 
 if(WITH_LIBVISIO)
-	list(APPEND extension_SRC
+    target_sources(inkscape_base PRIVATE
 		internal/vsd-input.cpp
 		internal/vsd-input.h
 	)
 endif()
 
 if(WITH_LIBWPG)
-	list(APPEND extension_SRC
+    target_sources(inkscape_base PRIVATE
 		internal/wpg-input.cpp
 		internal/wpg-input.h
 	)
 endif()
 
 if(WITH_LIBCDR OR WITH_LIBVISIO)
-	list(APPEND extension_SRC
+    target_sources(inkscape_base PRIVATE
 		internal/rvng-import-dialog.cpp
 		internal/rvng-import-dialog.h
 	)
 endif()
 
 if(WITH_MAGICK)
-	list(APPEND extension_SRC
+    target_sources(inkscape_base PRIVATE
 		internal/bitmap/adaptiveThreshold.cpp
 		internal/bitmap/adaptiveThreshold.h
 		internal/bitmap/addNoise.cpp
@@ -318,7 +313,4 @@ if(WITH_MAGICK)
 	)
 endif()
 
-# add_inkscape_lib(extension_LIB "${extension_SRC}")
-add_inkscape_source("${extension_SRC}")
-
-add_subdirectory( plugins )
+add_subdirectory(plugins)

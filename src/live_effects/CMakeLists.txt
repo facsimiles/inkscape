@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-set(live_effects_SRC
+
+target_sources(inkscape_base PRIVATE
 	effect.cpp
 	fill-conversion.cpp
 	lpe-angle_bisector.cpp
@@ -193,6 +194,3 @@ set(live_effects_SRC
 	parameter/unit.h
 	parameter/vector.h
 )
-
-# add_inkscape_lib(live_effects_LIB "${live_effects_SRC}")
-add_inkscape_source("${live_effects_SRC}")

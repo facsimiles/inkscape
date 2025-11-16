@@ -316,7 +316,7 @@ private:
     Geom::Point get_marker_point(int index);
     int _active_index = 0;
     int _hover_index = -1;
-    bool _hue_lock = 0;
+    bool _hue_lock = false;
     std::vector<double>_relative_hue_angles;
     static constexpr double marker_click_tolerance = 5.0;
     sigc::signal<void ()> _signal_color_hovered;

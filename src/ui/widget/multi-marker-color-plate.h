@@ -14,8 +14,8 @@
 #include <gtkmm/stackswitcher.h>
 #include <gtkmm/togglebutton.h>
 
-#include "src/colors/color-set.h"
-#include "src/colors/manager.h"
+#include "colors/color-set.h"
+#include "colors/manager.h"
 #include "ui/widget/color-page.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/icon-combobox.h"

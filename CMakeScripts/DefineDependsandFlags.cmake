@@ -1,10 +1,8 @@
 set(INKSCAPE_LIBS "")
-set(INKSCAPE_INCS "")
-set(INKSCAPE_INCS_SYS "")
 set(INKSCAPE_CXX_FLAGS "")
 set(INKSCAPE_CXX_FLAGS_DEBUG "")
 
-list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
+include_directories(
     ${PROJECT_SOURCE_DIR}/src
 
     # generated includes
@@ -86,18 +84,6 @@ ENDIF()
 
 
 # ----------------------------------------------------------------------------
-# Helper macros
-# ----------------------------------------------------------------------------
-
-# Turns linker arguments like "-framework Foo" into "-Wl,-framework,Foo" to
-# make them safe for appending to INKSCAPE_LIBS
-macro(sanitize_ldflags_for_libs ldflags_var)
-    # matches dash-argument followed by non-dash-argument
-    string(REGEX REPLACE "(^|;)(-[^;]*);([^-])" "\\1-Wl,\\2,\\3" ${ldflags_var} "${${ldflags_var}}")
-endmacro()
-
-
-# ----------------------------------------------------------------------------
 # Files we include
 # ----------------------------------------------------------------------------
 if(WIN32)
@@ -127,7 +113,7 @@ if(WIN32)
 endif()
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(INKSCAPE_DEP REQUIRED
+pkg_check_modules(INKSCAPE_DEP REQUIRED IMPORTED_TARGET
                   harfbuzz>=2.6.5
                   pangocairo>=1.44
                   pangoft2
@@ -137,11 +123,7 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
                   bdw-gc #boehm-demers-weiser gc
                   lcms2)
 
-sanitize_ldflags_for_libs(INKSCAPE_DEP_LDFLAGS)
-list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
-list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
-
-add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
+list(APPEND INKSCAPE_LIBS PkgConfig::INKSCAPE_DEP)
 
 if(WITH_JEMALLOC)
     find_package(JeMalloc)
@@ -152,38 +134,28 @@ if(WITH_JEMALLOC)
     endif()
 endif()
 
-pkg_search_module(ICU_UC REQUIRED icu-uc)
-list(APPEND INKSCAPE_INCS_SYS ${ICU_UC_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${ICU_UC_LIBRARIES})
-link_directories(${ICU_UC_LIBRARY_DIRS})
+pkg_search_module(ICU_UC REQUIRED IMPORTED_TARGET icu-uc)
+list(APPEND INKSCAPE_LIBS PkgConfig::ICU_UC)
 
 find_package(Iconv REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${Iconv_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${Iconv_LIBRARIES})
+list(APPEND INKSCAPE_LIBS Iconv::Iconv)
 
 find_package(Intl REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${Intl_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${Intl_LIBRARIES})
-add_definitions(${Intl_DEFINITIONS})
+list(APPEND INKSCAPE_LIBS Intl::Intl)
 
 # Check for system-wide version of 2geom and fallback to internal copy if not found
 if(NOT WITH_INTERNAL_2GEOM)
-    pkg_check_modules(2Geom QUIET IMPORTED_TARGET GLOBAL 2geom>=${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR})
-    if(2Geom_FOUND)
-        add_library(2Geom::2geom ALIAS PkgConfig::2Geom)
-    else()
+    find_package(2Geom ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR} QUIET)
+    if(NOT TARGET 2Geom::2geom)
         set(WITH_INTERNAL_2GEOM ON CACHE BOOL "Prefer internal copy of lib2geom" FORCE)
         message(STATUS "lib2geom not found, using internal copy in src/3rdparty/2geom")
     endif()
 endif()
 
 if(WITH_CAPYPDF)
-  pkg_check_modules(CAPYPDF capypdf>=0.18)
+  pkg_check_modules(CAPYPDF IMPORTED_TARGET capypdf>=0.18)
   if(CAPYPDF_FOUND)
-    sanitize_ldflags_for_libs(CAPYPDF_LDFLAGS)
-    list(APPEND INKSCAPE_INCS_SYS ${CAPYPDF_INCLUDE_DIRS})
-    list(APPEND INKSCAPE_LIBS     ${CAPYPDF_LDFLAGS})
-    add_definitions(-DWITH_CAPYPDF)
+    add_library(Inkscape::CapyPDF ALIAS PkgConfig::CAPYPDF)
   else()
     if(APPLE)
       message(STATUS "New CMYK PDF exporter disabled on macOS")
@@ -200,27 +172,25 @@ if(WITH_CAPYPDF)
           BUILD_COMMAND meson compile
           INSTALL_COMMAND meson install
       )
-      include_directories("${CAPY_PREFIX}/include/capypdf-0")
-      link_directories("${CAPY_LIBDIR}")
+      add_library(CapyPDF_LIB INTERFACE)
+      target_include_directories(CapyPDF_LIB INTERFACE "${CAPY_PREFIX}/include/capypdf-0")
+      target_link_directories(CapyPDF_LIB INTERFACE "${CAPY_LIBDIR}")
+      target_link_libraries(CapyPDF_LIB INTERFACE -lcapypdf)
+      add_library(Inkscape::CapyPDF ALIAS CapyPDF_LIB)
       list(APPEND CMAKE_INSTALL_RPATH ${CAPY_LIBDIR})
-      list(APPEND INKSCAPE_LIBS -lcapypdf)
-      add_definitions(-DWITH_CAPYPDF)
     endif()
   endif()
 endif()
+if(WITH_CAPYPDF)
+  list(APPEND INKSCAPE_LIBS Inkscape::CapyPDF)
+  add_definitions(-DWITH_CAPYPDF)
+endif()
 
 if(WITH_POPPLER)
-    find_package(PopplerCairo)
+    pkg_check_modules(POPPLER IMPORTED_TARGET poppler>=0.20.0 poppler-glib>=0.20.0)
     if(POPPLER_FOUND)
-        if(ENABLE_POPPLER_CAIRO)
-            if(POPPLER_CAIRO_FOUND AND POPPLER_GLIB_FOUND)
-                set(HAVE_POPPLER_CAIRO ON)
-            endif()
-        endif()
-
-        list(APPEND INKSCAPE_INCS_SYS ${POPPLER_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${POPPLER_LIBRARIES})
-        add_definitions(${POPPLER_DEFINITIONS})
+        list(APPEND INKSCAPE_LIBS PkgConfig::POPPLER)
+        set(HAVE_POPPLER_CAIRO ${ENABLE_POPPLER_CAIRO})
         add_definitions(-DWITH_POPPLER)
     else()
         set(WITH_POPPLER OFF)
@@ -231,55 +201,43 @@ else()
 endif()
 
 if(WITH_LIBWPG)
-    pkg_check_modules(LIBWPG libwpg-0.3 librevenge-0.0 librevenge-stream-0.0)
+    pkg_check_modules(LIBWPG IMPORTED_TARGET libwpg-0.3 librevenge-0.0 librevenge-stream-0.0)
     if(LIBWPG_FOUND)
-        sanitize_ldflags_for_libs(LIBWPG_LDFLAGS)
-        list(APPEND INKSCAPE_INCS_SYS ${LIBWPG_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${LIBWPG_LDFLAGS})
-        add_definitions(${LIBWPG_DEFINITIONS})
+        list(APPEND INKSCAPE_LIBS PkgConfig::LIBWPG)
     else()
         set(WITH_LIBWPG OFF)
     endif()
 endif()
 
 if(WITH_LIBVISIO)
-    pkg_check_modules(LIBVISIO libvisio-0.1 librevenge-0.0 librevenge-stream-0.0)
+    pkg_check_modules(LIBVISIO IMPORTED_TARGET libvisio-0.1 librevenge-0.0 librevenge-stream-0.0)
     if(LIBVISIO_FOUND)
-        sanitize_ldflags_for_libs(LIBVISIO_LDFLAGS)
-        list(APPEND INKSCAPE_INCS_SYS ${LIBVISIO_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${LIBVISIO_LDFLAGS})
-        add_definitions(${LIBVISIO_DEFINITIONS})
+        list(APPEND INKSCAPE_LIBS PkgConfig::LIBVISIO)
     else()
         set(WITH_LIBVISIO OFF)
     endif()
 endif()
 
 if(WITH_LIBCDR)
-    pkg_check_modules(LIBCDR libcdr-0.1 librevenge-0.0 librevenge-stream-0.0)
+    pkg_check_modules(LIBCDR IMPORTED_TARGET libcdr-0.1 librevenge-0.0 librevenge-stream-0.0)
     if(LIBCDR_FOUND)
-        sanitize_ldflags_for_libs(LIBCDR_LDFLAGS)
-        list(APPEND INKSCAPE_INCS_SYS ${LIBCDR_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${LIBCDR_LDFLAGS})
-        add_definitions(${LIBCDR_DEFINITIONS})
+        list(APPEND INKSCAPE_LIBS PkgConfig::LIBCDR)
     else()
         set(WITH_LIBCDR OFF)
     endif()
 endif()
 
-FIND_PACKAGE(JPEG)
-IF(JPEG_FOUND)
-    list(APPEND INKSCAPE_INCS_SYS ${JPEG_INCLUDE_DIR})
-    list(APPEND INKSCAPE_LIBS ${JPEG_LIBRARIES})
+find_package(JPEG)
+if(JPEG_FOUND)
+    list(APPEND INKSCAPE_LIBS JPEG::JPEG)
     set(HAVE_JPEG ON)
-ENDIF()
+endif()
 
 find_package(PNG REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${PNG_PNG_INCLUDE_DIR})
-list(APPEND INKSCAPE_LIBS ${PNG_LIBRARY})
+list(APPEND INKSCAPE_LIBS PNG::PNG)
 
 find_package(Potrace REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${POTRACE_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${POTRACE_LIBRARIES})
+list(APPEND INKSCAPE_LIBS Potrace::Potrace)
 
 if(WITH_SVG2)
     add_definitions(-DWITH_MESH -DWITH_CSSBLEND -DWITH_SVG2)
@@ -294,36 +252,46 @@ endif()
 # Include dependencies:
 
 pkg_check_modules(
-    MM REQUIRED
+    MM REQUIRED IMPORTED_TARGET
     cairomm-1.16
     pangomm-2.48
     gdk-pixbuf-2.0
     graphene-1.0
+)
+list(APPEND INKSCAPE_LIBS PkgConfig::MM)
+
+# if system's gtk is new enough for gtkmm, pick it, otherwise ignore it and gtkmm build will build it
+pkg_check_modules(GTK IMPORTED_TARGET gtk4>=4.14.0)
+if(GTK_FOUND)
+    list(APPEND INKSCAPE_LIBS PkgConfig::GTK)
+endif()
+
+pkg_check_modules(GLIBMM IMPORTED_TARGET glibmm-2.68>=2.78.1 giomm-2.68)
+if(GLIBMM_FOUND)
+    add_library(GLibmm::GLibmm ALIAS PkgConfig::GLIBMM)
+else()
+    message("GLIBMM too old, glibmm 2.78.1 will be compiled from source")
+    include(ExternalProject)
+    ExternalProject_Add(glibmm
+        URL https://download.gnome.org/sources/glibmm/2.78/glibmm-2.78.1.tar.xz
+        URL_HASH SHA256=f473f2975d26c3409e112ed11ed36406fb3843fa975df575c22d4cb843085f61
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        CONFIGURE_COMMAND meson setup --libdir lib . ../glibmm --prefix=${CMAKE_CURRENT_BINARY_DIR}/deps
+        BUILD_COMMAND meson compile
+        INSTALL_COMMAND meson install
     )
-list(APPEND INKSCAPE_CXX_FLAGS ${MM_CFLAGS_OTHER})
-list(APPEND INKSCAPE_INCS_SYS ${MM_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${MM_LIBRARIES})
-link_directories(${MM_LIBRARY_DIRS})
+    add_library(GLibmm_LIB INTERFACE)
+    target_include_directories(GLibmm_LIB INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/deps/include/glibmm-2.68/ ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/glibmm-2.68/include ${CMAKE_CURRENT_BINARY_DIR}/deps/include/giomm-2.68/ ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/giomm-2.68/include)
+    target_link_directories(GLibmm_LIB INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/deps/lib)
+    target_link_libraries(GLibmm_LIB INTERFACE -lglibmm-2.68)
+    add_library(GLibmm::GLibmm ALIAS GLibmm_LIB)
+endif()
 
-# if system's gtk4 is new enough for gtkmm, pick it, otherwise ignore it and gtkmm build will build it
-pkg_check_modules(G4 gtk4>=4.14.0)
-list(APPEND INKSCAPE_CXX_FLAGS ${G4_CFLAGS_OTHER})
-list(APPEND INKSCAPE_INCS_SYS ${G4_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${G4_LIBRARIES})
-link_directories(${G4_LIBRARY_DIRS})
-
-pkg_check_modules(
-    GTKMM4
-    glibmm-2.68>=2.78.1
-    gtkmm-4.0>=4.13.3
-    )
-    list(APPEND INKSCAPE_CXX_FLAGS ${GTKMM4_CFLAGS_OTHER})
-    list(APPEND INKSCAPE_INCS_SYS ${GTKMM4_INCLUDE_DIRS})
-    list(APPEND INKSCAPE_LIBS ${GTKMM4_LIBRARIES})
-    link_directories(${GTKMM4_LIBRARY_DIRS})
-
-if(NOT GTKMM4_FOUND)
-    message("GTKMM too old, gtkmm 4.14.0 and glibmm 2.78.1 will be compiled from source")
+pkg_check_modules(GTKMM IMPORTED_TARGET gtkmm-4.0>=4.13.3)
+if(GTKMM_FOUND)
+    add_library(GTKmm::GTKmm ALIAS PkgConfig::GTKMM)
+else()
+    message("GTKMM too old, gtkmm 4.14.0 will be compiled from source")
     include(ExternalProject)
     ExternalProject_Add(gtkmm
         URL https://download.gnome.org/sources/gtkmm/4.14/gtkmm-4.14.0.tar.xz
@@ -332,18 +300,14 @@ if(NOT GTKMM4_FOUND)
         CONFIGURE_COMMAND meson setup --libdir lib . ../gtkmm --prefix=${CMAKE_CURRENT_BINARY_DIR}/deps
         BUILD_COMMAND meson compile
         INSTALL_COMMAND meson install
-        )
-    ExternalProject_Add(glibmm
-        URL https://download.gnome.org/sources/glibmm/2.78/glibmm-2.78.1.tar.xz
-        URL_HASH SHA256=f473f2975d26c3409e112ed11ed36406fb3843fa975df575c22d4cb843085f61
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-        CONFIGURE_COMMAND meson setup --libdir lib . ../glibmm --prefix=${CMAKE_CURRENT_BINARY_DIR}/deps
-        BUILD_COMMAND meson compile
-        INSTALL_COMMAND meson install
-        )
-    include_directories(${CMAKE_CURRENT_BINARY_DIR}/deps/include/gtkmm-4.0 ${CMAKE_CURRENT_BINARY_DIR}/deps/include/glibmm-2.68/ ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/gtkmm-4.0/include ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/glibmm-2.68/include ${CMAKE_CURRENT_BINARY_DIR}/deps/include/gtk-4.0/ ${CMAKE_CURRENT_BINARY_DIR}/deps/include/giomm-2.68/ ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/giomm-2.68/include)
-    link_directories(${CMAKE_CURRENT_BINARY_DIR}/deps/lib)
-    list(APPEND INKSCAPE_LIBS -lgtkmm-4.0 -lglibmm-2.68)
+    )
+    add_library(GTKmm_LIB INTERFACE)
+    target_include_directories(GTKmm_LIB INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/deps/include/gtkmm-4.0 ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/gtkmm-4.0/include ${CMAKE_CURRENT_BINARY_DIR}/deps/include/gtk-4.0/)
+    target_link_directories(GTKmm_LIB INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/deps/lib)
+    target_link_libraries(GTKmm_LIB INTERFACE -lgtkmm-4.0)
+    add_library(GTKmm::GTKmm ALIAS GTKmm_LIB)
+endif()
+if(NOT (GTKMM_FOUND AND GLIBMM_FOUND))
     list(APPEND CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/deps/lib")
 
     # check we can actually build it
@@ -353,26 +317,23 @@ if(NOT GTKMM4_FOUND)
     find_program(mmcp mm-common-prepare REQUIRED)
     pkg_check_modules(TMP-gtkmm-gstreamer gstreamer-player-1.0 REQUIRED)
 endif()
+list(APPEND INKSCAPE_LIBS GLibmm::GLibmm GTKmm::GTKmm)
 
 if(WITH_LIBSPELLING)
-    pkg_check_modules(LIBSPELLING libspelling-1)
+    pkg_check_modules(LIBSPELLING IMPORTED_TARGET libspelling-1)
     if("${LIBSPELLING_FOUND}")
         message(STATUS "Using libspelling")
-        list(APPEND INKSCAPE_INCS_SYS ${LIBSPELLING_INCLUDE_DIRS})
-        sanitize_ldflags_for_libs(LIBSPELLING_LDFLAGS)
-        list(APPEND INKSCAPE_LIBS ${LIBSPELLING_LDFLAGS})
+        list(APPEND INKSCAPE_LIBS PkgConfig::LIBSPELLING)
     else()
         set(WITH_LIBSPELLING OFF)
     endif()
 endif()
 
 if(WITH_GSOURCEVIEW)
-    pkg_check_modules(GSOURCEVIEW gtksourceview-5)
+    pkg_check_modules(GSOURCEVIEW IMPORTED_TARGET gtksourceview-5)
     if("${GSOURCEVIEW_FOUND}")
         message(STATUS "Using gtksourceview-5")
-        list(APPEND INKSCAPE_INCS_SYS ${GSOURCEVIEW_INCLUDE_DIRS})
-        sanitize_ldflags_for_libs(GSOURCEVIEW_LDFLAGS)
-        list(APPEND INKSCAPE_LIBS ${GSOURCEVIEW_LDFLAGS})
+        list(APPEND INKSCAPE_LIBS PkgConfig::GSOURCEVIEW)
     else()
         set(WITH_GSOURCEVIEW OFF)
     endif()
@@ -408,33 +369,22 @@ if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 7 AND
     list(APPEND INKSCAPE_LIBS "-lstdc++fs")
 endif()
 
-list(APPEND INKSCAPE_INCS_SYS ${Boost_INCLUDE_DIRS})
-# list(APPEND INKSCAPE_LIBS ${Boost_LIBRARIES})
-
-#find_package(OpenSSL)
-#list(APPEND INKSCAPE_INCS_SYS ${OPENSSL_INCLUDE_DIR})
-#list(APPEND INKSCAPE_LIBS ${OPENSSL_LIBRARIES})
+list(APPEND INKSCAPE_LIBS Boost::headers)
 
 find_package(LibXslt REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${LIBXSLT_INCLUDE_DIR})
-list(APPEND INKSCAPE_LIBS ${LIBXSLT_LIBRARIES})
-add_definitions(${LIBXSLT_DEFINITIONS})
+list(APPEND INKSCAPE_LIBS LibXslt::LibXslt)
 
 find_package(LibXml2 REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${LIBXML2_INCLUDE_DIR})
-list(APPEND INKSCAPE_LIBS ${LIBXML2_LIBRARIES})
-add_definitions(${LIBXML2_DEFINITIONS})
+list(APPEND INKSCAPE_LIBS LibXml2::LibXml2)
 
 find_package(ZLIB REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
+list(APPEND INKSCAPE_LIBS ZLIB::ZLIB)
 
 if(WITH_GNU_READLINE)
-  pkg_check_modules(Readline readline)
+  pkg_check_modules(Readline IMPORTED_TARGET readline)
   if(Readline_FOUND)
     message(STATUS "Found GNU Readline: ${Readline_LIBRARY}")
-    list(APPEND INKSCAPE_INCS_SYS ${Readline_INCLUDE_DIRS})
-    list(APPEND INKSCAPE_LIBS ${Readline_LDFLAGS})
+    list(APPEND INKSCAPE_LIBS PkgConfig::Readline)
   else()
     message(STATUS "Did not find GNU Readline")
     set(WITH_GNU_READLINE OFF)
@@ -443,7 +393,7 @@ endif()
 
 if(WITH_IMAGE_MAGICK)
     # we want "<" but pkg_check_modules only offers "<=" for some reason; let's hope nobody actually has 7.0.0
-    pkg_check_modules(MAGICK ImageMagick++<=7)
+    pkg_check_modules(MAGICK IMPORTED_TARGET ImageMagick++<=7)
     if(MAGICK_FOUND)
         set(WITH_GRAPHICS_MAGICK OFF)  # prefer ImageMagick for now and disable GraphicsMagick if found
     else()
@@ -451,17 +401,13 @@ if(WITH_IMAGE_MAGICK)
     endif()
 endif()
 if(WITH_GRAPHICS_MAGICK)
-    pkg_check_modules(MAGICK GraphicsMagick++)
+    pkg_check_modules(MAGICK IMPORTED_TARGET GraphicsMagick++)
     if(NOT MAGICK_FOUND)
         set(WITH_GRAPHICS_MAGICK OFF)
     endif()
 endif()
 if(MAGICK_FOUND)
-    sanitize_ldflags_for_libs(MAGICK_LDFLAGS)
-    list(APPEND INKSCAPE_LIBS ${MAGICK_LDFLAGS})
-    add_definitions(${MAGICK_CFLAGS_OTHER})
-    list(APPEND INKSCAPE_INCS_SYS ${MAGICK_INCLUDE_DIRS})
-
+    list(APPEND INKSCAPE_LIBS PkgConfig::MAGICK)
     set(WITH_MAGICK ON) # enable 'Extensions > Raster'
 endif()
 
@@ -483,15 +429,12 @@ if(WITH_NLS)
     endif()
 endif(WITH_NLS)
 
-pkg_check_modules(SIGC++ REQUIRED sigc++-3.0>=3.6)
-sanitize_ldflags_for_libs(SIGC++_LDFLAGS)
-list(APPEND INKSCAPE_LIBS ${SIGC++_LDFLAGS})
-list(APPEND INKSCAPE_CXX_FLAGS ${SIGC++_CFLAGS_OTHER} "-DSIGCXX_DISABLE_DEPRECATED")
+pkg_check_modules(SIGC++ REQUIRED IMPORTED_TARGET sigc++-3.0>=3.6)
+list(APPEND INKSCAPE_LIBS PkgConfig::SIGC++)
+list(APPEND INKSCAPE_CXX_FLAGS "-DSIGCXX_DISABLE_DEPRECATED")
 
-pkg_check_modules(EPOXY REQUIRED epoxy )
-sanitize_ldflags_for_libs(EPOXY_LDFLAGS)
-list(APPEND INKSCAPE_LIBS ${EPOXY_LDFLAGS})
-list(APPEND INKSCAPE_CXX_FLAGS ${EPOXY_CFLAGS_OTHER})
+pkg_check_modules(EPOXY REQUIRED IMPORTED_TARGET epoxy)
+list(APPEND INKSCAPE_LIBS PkgConfig::EPOXY)
 
 
 # end Dependencies
@@ -514,14 +457,8 @@ if ("${CMAKE_GENERATOR}" MATCHES "Ninja")
 endif ()
 
 list(REMOVE_DUPLICATES INKSCAPE_LIBS)
-list(REMOVE_DUPLICATES INKSCAPE_INCS_SYS)
-
-include_directories(${INKSCAPE_INCS})
-include_directories(SYSTEM ${INKSCAPE_INCS_SYS})
 
 include(${CMAKE_CURRENT_LIST_DIR}/ConfigChecks.cmake) # TODO: Check if this needs to be "hidden" here
 
-unset(INKSCAPE_INCS)
-unset(INKSCAPE_INCS_SYS)
 unset(INKSCAPE_CXX_FLAGS)
 unset(INKSCAPE_CXX_FLAGS_DEBUG)

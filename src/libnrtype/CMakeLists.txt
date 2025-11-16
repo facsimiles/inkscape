@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(nrtype_SRC
+target_sources(inkscape_base PRIVATE
 	font-factory.cpp
 	font-instance.cpp
 	font-lister.cpp
@@ -24,5 +24,3 @@ set(nrtype_SRC
 	OpenTypeUtil.h
 	style-attachments.h
 )
-
-add_inkscape_source("${nrtype_SRC}")

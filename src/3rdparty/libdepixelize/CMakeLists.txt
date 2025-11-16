@@ -1,8 +1,8 @@
+add_library(depixelize_LIB STATIC)
 
-set(libdepixelize_SRC
+target_sources(depixelize_LIB PRIVATE
 	kopftracer2011.cpp
 
-	# -------
 	# Headers
 	kopftracer2011.h
 	splines.h
@@ -20,5 +20,4 @@ set(libdepixelize_SRC
 	priv/splines-kopf2011.h
 )
 
-add_inkscape_lib(depixelize_LIB "${libdepixelize_SRC}")
-target_link_libraries(depixelize_LIB PUBLIC 2Geom::2geom)
+target_link_libraries(depixelize_LIB PUBLIC GTKmm::GTKmm 2Geom::2geom)

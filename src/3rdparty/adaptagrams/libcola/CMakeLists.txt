@@ -1,5 +1,6 @@
+add_library(cola_LIB STATIC)
 
-set(libcola_SRC
+target_sources(cola_LIB PRIVATE
 	box.cpp
     cluster.cpp
 	cola.cpp
@@ -11,9 +12,6 @@ set(libcola_SRC
 	shapepair.cpp
 	straightener.cpp
 
-
-	# -------
-	# Headers
 	box.h
     cluster.h
 	cola.h
@@ -26,5 +24,4 @@ set(libcola_SRC
 	straightener.h
 )
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
-add_inkscape_lib(cola_LIB "${libcola_SRC}")
+target_include_directories(cola_LIB PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(util_SRC
+target_sources(inkscape_base PRIVATE
 	action-accel.cpp
     document-fonts.cpp
     drawing-utils.cpp
@@ -78,7 +78,3 @@ set(util_SRC
     ziptool.h
     numeric/converters.h
 )
-
-add_inkscape_lib(util_LIB "${util_SRC}")
-target_link_libraries(util_LIB PUBLIC 2Geom::2geom)
-# add_inkscape_source("${util_SRC}")

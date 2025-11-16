@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(async_SRC
+target_sources(inkscape_base PRIVATE
 	async.cpp
 	async.h
 	channel.h
@@ -10,5 +10,3 @@ set(async_SRC
 	progress.h
 	progress-splitter.h
 )
-
-add_inkscape_source("${async_SRC}")

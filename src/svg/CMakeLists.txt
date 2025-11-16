@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(svg_SRC
+target_sources(inkscape_base PRIVATE
 	css-ostringstream.cpp
 	path-string.cpp
     # sp-svg.def
@@ -13,7 +13,6 @@ set(svg_SRC
 	svg-length.cpp
 	svg-bool.cpp
 	svg-path.cpp
-
 
 	# -------
 	# Headers
@@ -28,6 +27,3 @@ set(svg_SRC
 	svg.h
 
 )
-
-# add_inkscape_lib(svg_LIB "${svg_SRC}")
-add_inkscape_source("${svg_SRC}")

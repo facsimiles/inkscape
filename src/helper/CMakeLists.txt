@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(helper_SRC
+target_sources(inkscape_base PRIVATE
 	geom.cpp
 	geom-nodetype.cpp
 	geom-pathstroke.cpp
@@ -10,7 +10,6 @@ set(helper_SRC
 	pixbuf-ops.cpp
 	png-write.cpp
 	stock-items.cpp
-	#units-test.cpp
 
 	# -------
 	# Headers
@@ -26,6 +25,3 @@ set(helper_SRC
 	png-write.h
 	stock-items.h
 )
-
-# add_inkscape_lib(helper_LIB "${helper_SRC}")
-add_inkscape_source("${helper_SRC}")

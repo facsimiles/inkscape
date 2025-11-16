@@ -432,6 +432,7 @@ codeprotect:
   script:
     - git fetch $CI_MERGE_REQUEST_PROJECT_URL.git $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
     - git diff --name-only $CI_MERGE_REQUEST_DIFF_BASE_SHA src/3rdparty/*/ > changed
+    - sed -i '/\/CMakeLists\.txt$/d' changed
     - git submodule foreach --quiet 'echo $name' > submodules
     - comm -23 changed submodules | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi

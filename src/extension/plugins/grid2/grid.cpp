@@ -87,7 +87,7 @@ Glib::ustring build_lines(Geom::Rect bounding_area,
     \param  document What should be edited.
 */
 void
-Grid::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+Grid::effect (Inkscape::Extension::Effect *module, ExecutionEnv *, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
 
     std::cerr << "Executing effect" << std::endl;

@@ -1,5 +1,6 @@
+add_library(uemf_LIB STATIC)
 
-set(libuemf_SRC
+target_sources(uemf_LIB PRIVATE
 	symbol_convert.c
 	uemf.c
 	uemf_endian.c
@@ -12,8 +13,6 @@ set(libuemf_SRC
 	upmf.c
 	upmf_print.c
 
-	# -------
-	# Headers
 	symbol_convert.h
 	uemf.h
 	uemf_endian.h
@@ -27,4 +26,4 @@ set(libuemf_SRC
 	upmf_print.h
 )
 
-add_inkscape_lib(uemf_LIB "${libuemf_SRC}")
+target_link_libraries(uemf_LIB PUBLIC Iconv::Iconv)

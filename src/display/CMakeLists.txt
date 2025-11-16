@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(display_SRC
+target_sources(inkscape_base PRIVATE
     cairo-utils.cpp
     curve.cpp
     dispatch-pool.cpp
@@ -142,6 +142,3 @@ set(display_SRC
     control/canvas-item-text.h
     control/canvas-page.h
 )
-
-# add_inkscape_lib(display_LIB "${display_SRC}")
-add_inkscape_source("${display_SRC}")

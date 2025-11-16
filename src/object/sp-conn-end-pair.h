@@ -13,11 +13,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstddef>
 #include <sigc++/sigc++.h>
 #include <2geom/pathvector.h>
 
-#include "3rdparty/adaptagrams/libavoid/connector.h"
 #include "attributes.h"
 
 class SPConnEnd;
@@ -25,17 +23,16 @@ class SPPath;
 class SPItem;
 class SPObject;
 
+namespace Avoid { class ConnRef; }
 namespace Geom { class Point; }
-namespace Inkscape {
-namespace XML {
-class Node;
-}
-}
+namespace Inkscape::XML { class Node; }
 
-class SPConnEndPair {
+class SPConnEndPair
+{
 public:
-    SPConnEndPair(SPPath *);
+    explicit SPConnEndPair(SPPath *);
     ~SPConnEndPair();
+
     void release();
     void setAttr(const SPAttr key, char const *const value);
     void writeRepr(Inkscape::XML::Node *const repr) const;

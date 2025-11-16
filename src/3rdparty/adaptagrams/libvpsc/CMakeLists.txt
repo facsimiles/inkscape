@@ -1,5 +1,6 @@
+add_library(vpsc_LIB STATIC)
 
-set(libvpsc_SRC
+target_sources(vpsc_LIB PRIVATE
 	block.cpp
 	blocks.cpp
 	cbuffer.cpp
@@ -8,9 +9,6 @@ set(libvpsc_SRC
 	solve_VPSC.cpp
 	variable.cpp
 
-
-	# -------
-	# Headers
 	assertions.h
 	block.h
 	blocks.h
@@ -24,5 +22,4 @@ set(libvpsc_SRC
 	variable.h
 )
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
-add_inkscape_lib(vpsc_LIB "${libvpsc_SRC}")
+target_include_directories(vpsc_LIB PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")

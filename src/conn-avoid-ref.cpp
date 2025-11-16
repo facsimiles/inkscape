@@ -28,8 +28,8 @@
 
 #include "display/curve.h"
 
-#include "3rdparty/adaptagrams/libavoid/router.h"
-#include "3rdparty/adaptagrams/libavoid/shape.h"
+#include "libavoid/router.h"
+#include "libavoid/shape.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-shape.h"

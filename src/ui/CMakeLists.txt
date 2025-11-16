@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-set(ui_SRC
+
+target_sources(inkscape_base PRIVATE
 	builder-utils.cpp
 	clipboard.cpp
 	contextmenu.cpp
@@ -641,14 +642,10 @@ set(ui_SRC
 	view/svg-view-widget.h
 )
 
-add_inkscape_source("${ui_SRC}")
-
-set ( ui_spellcheck_SRC
-	dialog/spellcheck.cpp
-	dialog/spellcheck.h
-	libspelling-wrapper.h
-)
-
-if ("${WITH_LIBSPELLING}")
-	add_inkscape_source("${ui_spellcheck_SRC}")
+if(${WITH_LIBSPELLING})
+	target_sources(inkscape_base PRIVATE
+		dialog/spellcheck.cpp
+		dialog/spellcheck.h
+		libspelling-wrapper.h
+	)
 endif()

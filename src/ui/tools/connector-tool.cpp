@@ -72,7 +72,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
 
-#include "3rdparty/adaptagrams/libavoid/router.h"
+#include "libavoid/router.h"
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "display/control/canvas-item-bpath.h"

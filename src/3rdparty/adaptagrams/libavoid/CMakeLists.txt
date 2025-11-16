@@ -1,5 +1,6 @@
+add_library(avoid_LIB STATIC)
 
-set(libavoid_SRC
+target_sources(avoid_LIB PRIVATE
 	actioninfo.cpp
 	connectionpin.cpp
 	connector.cpp
@@ -24,9 +25,6 @@ set(libavoid_SRC
 	visibility.cpp
 	vpsc.cpp
 
-
-	# -------
-	# Headers
 	actioninfo.h
 	assertions.h
 	connectionpin.h
@@ -54,5 +52,5 @@ set(libavoid_SRC
 	visibility.h
 	vpsc.h
 )
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
-add_inkscape_lib(avoid_LIB "${libavoid_SRC}")
+
+target_include_directories(avoid_LIB PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")

@@ -27,7 +27,8 @@
 #include "sp-use.h"
 #include "uri.h"
 
-#include "3rdparty/adaptagrams/libavoid/router.h"
+#include "libavoid/router.h"
+#include "libavoid/connector.h"
 #include "xml/node.h"
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)

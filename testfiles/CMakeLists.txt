@@ -1,9 +1,11 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # -----------------------------------------------------------------------------
 
+include_directories(${PROJECT_SOURCE_DIR})
+
 # custom "check" target with proper dependencies (builds inkscape and tests)
 file(TO_NATIVE_PATH "/" _separator)
-ADD_DEFINITIONS(-DINKSCAPE_TESTS_DIR="${CMAKE_SOURCE_DIR}/testfiles")
+add_definitions(-DINKSCAPE_TESTS_DIR="${CMAKE_SOURCE_DIR}/testfiles")
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
                         DEPENDS tests unit_tests
                         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -44,7 +46,6 @@ set(INKSCAPE_TEST_PROFILE_DIR_ENV INKSCAPE_PROFILE_DIR=${INKSCAPE_TEST_PROFILE_D
 configure_file(CTestCustom.cmake.in ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
 
 ### tests using gtest
-include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams") # TODO: remove this hack
 
 if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     set(LPE_TESTS_64bit
@@ -185,10 +186,10 @@ add_unit_tests(TEST_SOURCES "colors/cms-profile-test.cpp"
 
 add_unit_test(css-syntactic-decomposition-test TEST_SOURCE "css-syntactic-decomposition-test.cpp"
                                                    SOURCES "css/syntactic-decomposition.cpp"
-                                                EXTRA_LIBS croco_LIB)
+                                                EXTRA_LIBS GLibmm::GLibmm croco_LIB)
 add_unit_test(xslt-extension-test TEST_SOURCE "xslt-extension-test.cpp"
                                       SOURCES "extension/implementation/xslt.cpp"
-                                   EXTRA_LIBS 2Geom::2geom)
+                                   EXTRA_LIBS LibXml2::LibXml2 PkgConfig::SIGC++ GLibmm::GLibmm 2Geom::2geom)
 add_unit_test(mod360-test TEST_SOURCE "mod360-test.cpp"
                               SOURCES "mod360.cpp"
                            EXTRA_LIBS 2Geom::2geom)

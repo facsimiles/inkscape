@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(io_SRC
+target_sources(inkscape_base PRIVATE
   dir-util.cpp
   file.cpp
   file-export-cmd.cpp
@@ -35,6 +35,3 @@ set(io_SRC
   stream/xsltstream.h
   sys.h
 )
-
-# add_inkscape_lib(io_LIB "${io_SRC}")
-add_inkscape_source("${io_SRC}")

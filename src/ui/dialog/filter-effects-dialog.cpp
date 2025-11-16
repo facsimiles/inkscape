@@ -175,15 +175,14 @@ public:
 class SpinScaleAttr : public Inkscape::UI::Widget::SpinScale, public AttrWidget
 {
 public:
-    SpinScaleAttr(const SPAttr a)
-        : SpinScale()
-        , AttrWidget(a)
+    explicit SpinScaleAttr(SPAttr a)
+        : AttrWidget(a)
     {
         signal_value_changed().connect([this](double) { signal_attr_changed().emit(); });
     }
 
-    Glib::ustring get_as_attribute() const { return as_string(); }
-    void set_from_attribute(SPObject* o) { set_value(o->getAttributeDouble(get_attribute_name(), 0.0)); }
+    Glib::ustring get_as_attribute() const override { return as_string(); }
+    void set_from_attribute(SPObject* o) override { set_value(o->getAttributeDouble(get_attribute_name(), 0.0)); }
 };
 
 class DualSpinScaleAttr : public Inkscape::UI::Widget::DualSpinScale, public AttrWidget
@@ -200,7 +199,7 @@ public:
     }
 
 
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         auto value = get_value();
         Inkscape::CSSOStringStream os;
@@ -211,7 +210,7 @@ public:
         return os.str();
     }
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject *o) override
     {
         const gchar* val = attribute_value(o);
         if(val) {

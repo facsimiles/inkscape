@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-set(debug_SRC
+target_sources(inkscape_base PRIVATE
 	console-output-undo-observer.cpp
 	demangle.cpp
 	heap.cpp
@@ -21,6 +21,3 @@ set(debug_SRC
 	sysv-heap.h
 	timestamp.h
 )
-
-# add_inkscape_lib(debug_LIB "${debug_SRC}")
-add_inkscape_source("${debug_SRC}")

@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
-set(object_SRC
+target_sources(inkscape_base PRIVATE
   box3d-side.cpp
   box3d.cpp
   color-profile.cpp
@@ -181,8 +180,6 @@ set(object_SRC
   weakptr.h
   tags.h
 )
-
-add_inkscape_source("${object_SRC}")
 
 add_subdirectory(filters)
 add_subdirectory(algorithms)

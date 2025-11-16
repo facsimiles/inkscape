@@ -8,6 +8,7 @@ set(colors_SRC
 	color-set.cpp    # Uses unnlinkable sigc+
 	xml-color.cpp    # sp-document and document-cms
 
+	cms/system.h
 	cms/profile.h
 	document-cms.h
 	dragndrop.h
@@ -17,5 +18,4 @@ set(colors_SRC
 
 include("${CMAKE_CURRENT_LIST_DIR}/CMakeUnit.txt")
 
-add_inkscape_source("${colors_unit_SRC}")
-add_inkscape_source("${colors_SRC}")
+target_sources(inkscape_base PRIVATE ${colors_unit_SRC} ${colors_SRC})

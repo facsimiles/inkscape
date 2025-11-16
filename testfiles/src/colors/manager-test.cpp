@@ -11,16 +11,11 @@
 
 #include <gtest/gtest.h>
 
-#include "colors/cms/system.h"
 #include "colors/color.h"
 #include "colors/spaces/base.h"
-#include "colors/spaces/cms.h"
 #include "colors/spaces/rgb.h"
 #include "colors/spaces/components.h"
 #include "colors/spaces/enum.h"
-#include "document.h"
-#include "inkscape.h"
-#include "object/color-profile.h"
 
 using namespace Inkscape;
 using namespace Inkscape::Colors;
