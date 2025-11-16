@@ -102,36 +102,34 @@ public:
     UnitMetric const *getUnitMetric() const;
 };
 
-using UnitPtr = const Unit*;
-
 class Quantity
-        : boost::totally_ordered<Quantity>
+    : boost::totally_ordered<Quantity>
 {
 public:
-    UnitPtr unit;
+    Unit const *unit;
     double quantity;
-
+    
     /** Initialize a quantity. */
-    Quantity(double q, UnitPtr u);
+    Quantity(double q, Unit const *u);
     Quantity(double q, Glib::ustring const &u);
     Quantity(double q, char const *u);
-
+    
     /** Checks if a quantity is compatible with the specified unit. */
     bool compatibleWith(Unit const *u) const;
     bool compatibleWith(Glib::ustring const &u) const;
     bool compatibleWith(char const *u) const;
-
+    
     /** Return the quantity's value in the specified unit. */
     double value(Unit const *u) const;
     double value(Glib::ustring const &u) const;
     double value(char const *u) const;
-
+    
     /** Return a printable string of the value in the specified unit. */
     Glib::ustring string(Unit const *u) const;
     Glib::ustring string(Glib::ustring const &u) const;
     Glib::ustring string() const;
-
-    /** Convert distances.
+    
+    /** Convert distances. 
        no NULL check is performed on the passed pointers to Unit objects!  */
     static double convert(double from_dist, Unit const *from, Unit const *to);
     static double convert(double from_dist, Glib::ustring const &from, Unit const *to);
@@ -153,9 +151,9 @@ inline bool are_near(Quantity const &a, Quantity const &b, double eps=Geom::EPSI
 struct UnitObject: Glib::Object {
     Unit unit;
 
-    UnitObject(UnitPtr p) : unit(*p) {}
+    UnitObject(Unit const *p) : unit(*p) {}
 
-    static Glib::RefPtr<UnitObject> from_unit(UnitPtr unit) {
+    static Glib::RefPtr<UnitObject> from_unit(Unit const *unit) {
         return Glib::make_refptr_for_instance(new UnitObject(unit));
     }
 };
@@ -175,7 +173,7 @@ public:
     UnitTable operator = (UnitTable const &t) = delete;
 
     typedef std::unordered_map<Glib::ustring, UnitMetric> MetricMap;
-    typedef std::unordered_map<unsigned, UnitPtr> UnitCodeMap;
+    typedef std::unordered_map<unsigned, Unit const *> UnitCodeMap;
 
     /** Unit metrics **/
     void    addMetric(UnitMetric const &u, bool primary);
@@ -185,18 +183,18 @@ public:
     void    addUnit(std::unique_ptr<Unit> unit, bool primary);
 
     /** Retrieve a given unit based on its string identifier */
-    UnitPtr getUnit(Glib::ustring const &name) const;
-    UnitPtr getUnit(char const *name) const;
+    Unit const *getUnit(Glib::ustring const &name) const;
+    Unit const *getUnit(char const *name) const;
 
     // Take a predefined unit definition
-    UnitPtr unit(const std::string& abbr) const;
-    UnitPtr unit(const char* abbr) const;
+    Unit const *unit(const std::string& abbr) const;
+    Unit const *unit(const char* abbr) const;
 
     /** Try to find a unit based on its conversion factor to the primary */
-    UnitPtr findUnit(double factor, UnitType type) const;
+    Unit const *findUnit(double factor, UnitType type) const;
 
     /** Retrieve a given unit based on its SVGLength unit */
-    UnitPtr getUnit(SVGLength::Unit u) const;
+    Unit const *getUnit(SVGLength::Unit u) const;
 
     /** Retrieve a quantity based on its string identifier */
     Quantity parseQuantity(Glib::ustring const &q) const;
@@ -209,7 +207,7 @@ public:
     bool    hasUnit(Glib::ustring const &name) const;
 
     /** Provides an iterable list of items in the given unit table */
-    std::vector<UnitPtr> units(UnitType type) const;
+    std::vector<Unit const *> units(UnitType type) const;
     std::vector<Glib::RefPtr<UnitObject>> get_units(UnitType type) const;
 
     /** Returns the default unit abbr for the given type */

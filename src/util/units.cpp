@@ -292,7 +292,7 @@ void UnitTable::addUnit(std::unique_ptr<Unit> unit, bool primary)
     _ordered_store.push_back(std::move(unit));
 }
 
-UnitPtr UnitTable::getUnit(char const *abbr) const
+Unit const *UnitTable::getUnit(char const *abbr) const
 {
     UnitCodeMap::const_iterator f = _unit_map.find(make_unit_code(abbr));
     if (f != _unit_map.end()) {
@@ -301,11 +301,11 @@ UnitPtr UnitTable::getUnit(char const *abbr) const
     return &_empty_unit;
 }
 
-UnitPtr UnitTable::unit(const std::string& abbr) const {
+Unit const *UnitTable::unit(const std::string& abbr) const {
     return unit(abbr.c_str());
 }
 
-UnitPtr UnitTable::unit(const char* abbr) const {
+Unit const *UnitTable::unit(const char* abbr) const {
     auto it = _unit_map.find(make_unit_code(abbr));
     if (it != _unit_map.end()) {
         return it->second;
@@ -314,12 +314,12 @@ UnitPtr UnitTable::unit(const char* abbr) const {
     throw std::runtime_error("Unit '" + std::string(abbr) + "' does not exist in unit table.");
 }
 
-UnitPtr UnitTable::getUnit(Glib::ustring const &unit_abbr) const
+Unit const *UnitTable::getUnit(Glib::ustring const &unit_abbr) const
 {
     return getUnit(unit_abbr.c_str());
 }
 
-UnitPtr UnitTable::getUnit(SVGLength::Unit u) const
+Unit const *UnitTable::getUnit(SVGLength::Unit u) const
 {
     if (u == 0 || u > SVGLength::LAST_UNIT) {
         return &_empty_unit;
@@ -332,7 +332,7 @@ UnitPtr UnitTable::getUnit(SVGLength::Unit u) const
     return &_empty_unit;
 }
 
-UnitPtr UnitTable::findUnit(double factor, UnitType type) const
+Unit const *UnitTable::findUnit(double factor, UnitType type) const
 {
     const double eps = factor * 0.01; // allow for 1% deviation
 
@@ -405,11 +405,11 @@ bool UnitTable::hasUnit(Glib::ustring const &unit) const
     return (iter != _unit_map.end());
 }
 
-std::vector<UnitPtr> UnitTable::units(UnitType type) const {
+std::vector<Unit const *> UnitTable::units(UnitType type) const {
     auto range = _ordered_store
         | std::views::filter([type](auto& unit){ return unit->type == type; })
         | std::views::transform([](auto& unit) { return unit.get(); });
-    return std::vector<UnitPtr>(range.begin(), range.end());
+    return std::vector<Unit const *>(range.begin(), range.end());
 }
 
 std::vector<Glib::RefPtr<UnitObject>> UnitTable::get_units(UnitType type) const {
@@ -529,7 +529,7 @@ void UnitParser::on_end_element(Ctx &/*ctx*/, Glib::ustring const &name)
     }
 }
 
-Quantity::Quantity(double q, UnitPtr u)
+Quantity::Quantity(double q, Unit const *u)
   : unit(u)
   , quantity(q)
 {

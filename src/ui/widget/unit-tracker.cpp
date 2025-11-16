@@ -67,7 +67,7 @@ Glib::ustring UnitTracker::getCurrentLabel()
     return _store->get_item(_active)->unit.abbr;
 }
 
-void UnitTracker::setActiveUnit(UnitPtr unit) {
+void UnitTracker::setActiveUnit(Unit const *unit) {
     if (!unit) return;
 
     auto obj = UnitObject::from_unit(unit);
@@ -117,12 +117,12 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
     }
 }
 
-void UnitTracker::addUnit(UnitPtr u)
+void UnitTracker::addUnit(Unit const *u)
 {
     _store->append(UnitObject::from_unit(u));
 }
 
-void UnitTracker::prependUnit(UnitPtr u)
+void UnitTracker::prependUnit(Unit const *u)
 {
     _store->insert(0, UnitObject::from_unit(u));
 

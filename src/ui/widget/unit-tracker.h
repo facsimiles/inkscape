@@ -45,14 +45,14 @@ public:
 
     bool isUpdating() const;
 
-    void setActiveUnit(UnitPtr unit);
+    void setActiveUnit(Unit const *unit);
     void setActiveUnitByAbbr(gchar const *abbr);
     void setActiveUnitByLabel(Glib::ustring label);
     Unit const * getActiveUnit() const;
 
-    void addUnit(UnitPtr u);
+    void addUnit(Unit const *u);
     void addAdjustment(GtkAdjustment *adj);
-    void prependUnit(UnitPtr u);
+    void prependUnit(Unit const *u);
     void setFullVal(GtkAdjustment *adj, double val);
     Glib::ustring getCurrentLabel();
 
