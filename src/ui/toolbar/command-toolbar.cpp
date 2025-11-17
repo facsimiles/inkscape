@@ -24,6 +24,8 @@ CommandToolbar::CommandToolbar(SPDesktop *desktop)
     , _builder(create_builder("toolbar-commands.ui"))
 {
     _toolbar = &get_widget<Gtk::Box>(_builder, "commands-toolbar");
+    // For expanding and collapsing individual buttons. See ui/toolbar/toolbar.cpp
+    _toolbar->set_name("commands-toolbar");
 
     // Fetch all the ToolbarMenuButtons at once from the UI file
     // Menu Button #1

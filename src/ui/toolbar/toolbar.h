@@ -44,8 +44,16 @@ private:
     std::stack<UI::Widget::ToolbarMenuButton *> _expanded_menu_btns;
     std::stack<UI::Widget::ToolbarMenuButton *> _collapsed_menu_btns;
 
+    std::vector<std::pair<int, Gtk::Widget *>> _expanded_children;
+    std::vector<std::pair<int, Gtk::Widget *>> _collapsed_children;
+
     void _resize_handler(Gtk::Allocation &allocation);
     void _move_children(Gtk::Box *src, Gtk::Box *dest, std::vector<std::pair<int, Gtk::Widget *>> const &children, bool is_expanding = false);
+    void _move_child(Gtk::Box *src, Gtk::Box *dest, bool is_expanding = false);
+    int _compensation = 0;
+    int _default_compensation = 0;
+    int _last_allocated = 0;
+    bool _resizing = false;
 };
 
 } // namespace Inkscape::UI::Toolbar
