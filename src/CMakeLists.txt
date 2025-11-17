@@ -332,6 +332,35 @@ set(inkscape_SRC
 )
 
 # -----------------------------------------------------------------------------
+# Relative RPATH handling
+# -----------------------------------------------------------------------------
+
+file(RELATIVE_PATH
+    INKSCAPE_INSTALL_LIBDIR_RELATIVE_TO_BINDIR
+    "${CMAKE_INSTALL_FULL_BINDIR}"
+    "${CMAKE_INSTALL_FULL_LIBDIR}")
+
+if(APPLE)
+    set(CMAKE_MACOSX_RPATH TRUE)
+    set(ORIGIN "@loader_path")
+else()
+    set(ORIGIN "$ORIGIN")
+endif()
+
+set(BINS_INSTALL_RPATH ${CMAKE_INSTALL_RPATH})
+set(LIBINKSCAPE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH})
+
+# Binaries must be able to find libinkscape_base
+list(APPEND BINS_INSTALL_RPATH "${ORIGIN}/${INKSCAPE_INSTALL_LIBDIR_RELATIVE_TO_BINDIR}/inkscape")
+
+if(WITH_INTERNAL_2GEOM)
+    # Binaries must be able to find lib2geom
+    list(APPEND BINS_INSTALL_RPATH "${ORIGIN}/${INKSCAPE_INSTALL_LIBDIR_RELATIVE_TO_BINDIR}")
+    # libinkscape_base must be able to find lib2geom
+    list(APPEND LIBINKSCAPE_INSTALL_RPATH "${ORIGIN}/..")
+endif()
+
+# -----------------------------------------------------------------------------
 # Setup the executable
 # -----------------------------------------------------------------------------
 set(main_SRC
@@ -402,6 +431,7 @@ set(INKSCAPE_TARGET_LIBS
 # Build everything except main and inkview.c in a shared library.
 add_library(inkscape_base ${inkscape_SRC} ${sp_SRC})
 set_target_properties(inkscape_base PROPERTIES SOVERSION "${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR}.${INKSCAPE_VERSION_PATCH}.0")
+set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "${LIBINKSCAPE_INSTALL_RPATH}")
 if(NOT GTKMM4_FOUND)
     add_dependencies(util_LIB gtkmm)
     add_dependencies(util_LIB glibmm)
@@ -429,9 +459,13 @@ target_link_libraries(inkscape_base
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)
 target_link_libraries(inkview inkscape_base)
+set_target_properties(inkscape PROPERTIES INSTALL_RPATH "${BINS_INSTALL_RPATH}")
+set_target_properties(inkview PROPERTIES INSTALL_RPATH "${BINS_INSTALL_RPATH}")
 if(WIN32)
     target_link_libraries(inkscape_com inkscape_base)
     target_link_libraries(inkview_com inkscape_base)
+    set_target_properties(inkscape_com PROPERTIES INSTALL_RPATH "${BINS_INSTALL_RPATH}")
+    set_target_properties(inkview_com PROPERTIES INSTALL_RPATH "${BINS_INSTALL_RPATH}")
 endif()
 
 

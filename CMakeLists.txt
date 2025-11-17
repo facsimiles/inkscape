@@ -53,20 +53,6 @@ endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
-file(RELATIVE_PATH
-    INKSCAPE_INSTALL_LIBDIR_RELATIVE_TO_BINDIR
-    "${CMAKE_INSTALL_FULL_BINDIR}"
-    "${CMAKE_INSTALL_FULL_LIBDIR}")
-
-if(APPLE)
-    set(CMAKE_MACOSX_RPATH TRUE)
-    set(ORIGIN "@loader_path")
-else()
-    set(ORIGIN "$ORIGIN")
-endif()
-
-set(CMAKE_INSTALL_RPATH "${ORIGIN}/${INKSCAPE_INSTALL_LIBDIR_RELATIVE_TO_BINDIR}/inkscape")
-
 # console output is slow as hell on Windows and as a result status messages of the "install" target slow down
 # the whole build process considerably (especially since we also copy a lot of files from the devlibs)
 # TODO: Is this worth to be configurable / also applicable to other platforms?
@@ -140,11 +126,6 @@ option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
-
-if(WITH_INTERNAL_2GEOM)
-    # So that locally installed Inkscape can find lib2geom if it's not installed systemwide.
-    list(APPEND CMAKE_INSTALL_RPATH ${ORIGIN}/${INKSCAPE_INSTALL_LIBDIR_RELATIVE_TO_BINDIR})
-endif()
 
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
