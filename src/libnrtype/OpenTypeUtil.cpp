@@ -313,15 +313,17 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
         for (size_t i = 0; i < mmvar->num_axis; ++i) {
             FT_Var_Axis* axis = &mmvar->axis[i];
             char tag[5];
-            for (int i = 0; i < 4; ++i) {
-                tag[i] = (axis->tag >> (3 - i) * 8) & 0xff;
+            for (int j = 0; j < 4; ++j) {
+                tag[j] = (axis->tag >> (3 - j) * 8) & 0xff;
             }
             tag[4] = 0;
-            axes[axis->name] =  OTVarAxis(FTFixedToDouble(axis->minimum),
-                                          FTFixedToDouble(axis->def),
-                                          FTFixedToDouble(axis->maximum),
-                                          FTFixedToDouble(coords[i]),
-                                          i, tag);
+            if (axes.find(axis->name) == axes.end()) {
+                axes[axis->name] =  OTVarAxis(FTFixedToDouble(axis->minimum),
+                                              FTFixedToDouble(axis->def),
+                                              FTFixedToDouble(axis->maximum),
+                                              FTFixedToDouble(coords[i]),
+                                              i, tag);
+            }
         }
 
         // for (auto a: axes) {
