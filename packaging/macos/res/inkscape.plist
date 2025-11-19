@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html -->
 <plist version="1.0">
 	<dict>
 		<key>ATSApplicationFontsPath</key>
@@ -12,7 +13,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>svg</string>
-					<string>SVG</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>image-svg+xml.icns</string>
@@ -35,7 +35,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>svgz</string>
-					<string>SVGZ</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>image-svg+xml-compressed.icns</string>
@@ -58,7 +57,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>ai</string>
-					<string>AI</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-illustrator.icns</string>
@@ -86,7 +84,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>aisvg</string>
-					<string>AISVG</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-illustrator-svg.icns</string>
@@ -107,7 +104,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>wmf</string>
-					<string>WMF</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>image-vnd.windows-metafile.icns</string>
@@ -130,7 +126,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>pdf</string>
-					<string>PDF</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-pdf.icns</string>
@@ -157,7 +152,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>ggr</string>
-					<string>GGR</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-gimp-gradient.icns</string>
@@ -180,7 +174,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>ccx</string>
-					<string>CCX</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-vnd.corel-draw-compressed.icns</string>
@@ -203,7 +196,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>cdt</string>
-					<string>CDT</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-vnd.corel-draw-template.icns</string>
@@ -226,7 +218,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>cdr</string>
-					<string>CDR</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-vnd.corel-draw.icns</string>
@@ -249,7 +240,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>xaml</string>
-					<string>XAML</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-vnd.ms.xaml.icns</string>
@@ -272,7 +262,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>dxf</string>
-					<string>DXF</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>image-vnd.dxf.icns</string>
@@ -295,7 +284,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>wpg</string>
-					<string>WPG</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>application-vnd.wordperfect-graphic.icns</string>
@@ -319,7 +307,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>emf</string>
-					<string>EMF</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>Inkscape-Generic.icns</string>
@@ -342,7 +329,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>vsd</string>
-					<string>VSD</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>Inkscape-Generic.icns</string>
@@ -361,7 +347,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>vdx</string>
-					<string>VDX</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>Inkscape-Generic.icns</string>
@@ -380,9 +365,7 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>vsdm</string>
-					<string>VSDM</string>
 					<string>vsdx</string>
-					<string>VSDX</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>Inkscape-Generic.icns</string>
@@ -401,8 +384,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>plt</string>
-					<string>PLT</string>
-					<string>hpgl</string>
 					<string>hpgl</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
@@ -425,7 +406,6 @@
 				<key>CFBundleTypeExtensions</key>
 				<array>
 					<string>png</string>
-					<string>PNG</string>
 				</array>
 				<key>CFBundleTypeIconFile</key>
 				<string>Inkscape-Generic.icns</string>
@@ -438,6 +418,51 @@
 				<key>CFBundleTypeOSTypes</key>
 				<array>
 					<string>PNGf</string>
+				</array>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>LSHandlerRank</key>
+				<string>None</string>
+			</dict>
+			<dict>
+				<key>CFBundleTypeExtensions</key>
+				<array>
+					<string>jpg</string>
+					<string>jpeg</string>
+				</array>
+				<key>CFBundleTypeIconFile</key>
+				<string>Inkscape-Generic.icns</string>
+				<key>CFBundleTypeMIMETypes</key>
+				<array>
+					<string>image/jpeg</string>
+				</array>
+				<key>CFBundleTypeName</key>
+				<string>Joint Photgraphic Experts Group</string>
+				<key>CFBundleTypeOSTypes</key>
+				<array>
+					<string>JPEG</string>
+				</array>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>LSHandlerRank</key>
+				<string>None</string>
+			</dict>
+			<dict>
+				<key>CFBundleTypeExtensions</key>
+				<array>
+					<string>webp</string>
+				</array>
+				<key>CFBundleTypeIconFile</key>
+				<string>Inkscape-Generic.icns</string>
+				<key>CFBundleTypeMIMETypes</key>
+				<array>
+					<string>image/webp</string>
+				</array>
+				<key>CFBundleTypeName</key>
+				<string>WebP image</string>
+				<key>CFBundleTypeOSTypes</key>
+				<array>
+					<string>WEBP</string>
 				</array>
 				<key>CFBundleTypeRole</key>
 				<string>Viewer</string>
