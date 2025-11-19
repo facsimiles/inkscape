@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html -->
 <plist version="1.0">
 	<dict>
 		<key>ATSApplicationFontsPath</key>
@@ -440,6 +441,28 @@
 				<key>CFBundleTypeOSTypes</key>
 				<array>
 					<string>JPEG</string>
+				</array>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>LSHandlerRank</key>
+				<string>None</string>
+			</dict>
+			<dict>
+				<key>CFBundleTypeExtensions</key>
+				<array>
+					<string>webp</string>
+				</array>
+				<key>CFBundleTypeIconFile</key>
+				<string>Inkscape-Generic.icns</string>
+				<key>CFBundleTypeMIMETypes</key>
+				<array>
+					<string>image/webp</string>
+				</array>
+				<key>CFBundleTypeName</key>
+				<string>WebP image</string>
+				<key>CFBundleTypeOSTypes</key>
+				<array>
+					<string>WEBP</string>
 				</array>
 				<key>CFBundleTypeRole</key>
 				<string>Viewer</string>
