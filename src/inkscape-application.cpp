@@ -1032,6 +1032,10 @@ void
 InkscapeApplication::on_startup()
 {
     std::cout << "InkscapeApplication::on_startup(): Entrance" << std::endl;
+    std::cout << "  Sleeping" << std::endl;
+    sleep(20);
+    std::cout << "  Waking" << std::endl;
+
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
         // Migrate settings first; see ui/dialog/startup.cpp
@@ -1043,7 +1047,6 @@ InkscapeApplication::on_startup()
             gtk_app()->add_window(*_start_screen);
         }
     }
-    sleep(20);
 
 #if defined(GDK_WINDOWING_X11)
     if (_with_gui) {
