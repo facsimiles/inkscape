@@ -66,7 +66,8 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     start_point(_("Mirror line start"), _("Start point of mirror line"), "start_point", &wr, this, _("Adjust start point of mirror line")),
     end_point(_("Mirror line end"), _("End point of mirror line"), "end_point", &wr, this, _("Adjust end point of mirror line")),
     center_point(_("Mirror line mid"), _("Center point of mirror line"), "center_point", &wr, this, _("Adjust center point of mirror line")),
-    link_styles(_("Link styles"), _("Link styles on split mode"), "link_styles", &wr, this, false)
+    link_styles(_("Link styles"), _("Link styles on split mode"), "link_styles", &wr, this, false),
+    reverse_mirror(_("Reverse mirrored path"), _("Reverse the direction of the mirrored path."), "reverse_mirror", &wr, this, false)
 {
     registerParameter(&lpesatellites);
     registerParameter(&mode);
@@ -76,6 +77,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter(&split_items);
     registerParameter(&split_open);
     registerParameter(&link_styles);
+    registerParameter(&reverse_mirror);
     registerParameter(&start_point);
     registerParameter(&end_point);
     registerParameter(&center_point);
@@ -124,7 +126,7 @@ void LPEMirrorSymmetry::doAfterEffect(SPLPEItem const* lpeitem, Geom::PathVector
         return;
     }
     container = sp_lpe_item->parent;
-    
+
     if (split_items && !discard_orig_path) {
         bool active = !lpesatellites.data().size() || is_load;
         for (auto lpereference : lpesatellites.data()) {
@@ -598,6 +600,9 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         if (position == 1) {
                             if (!split_items) {
                                 Geom::Path mirror = portion.reversed() * m;
+                                if (reverse_mirror) {
+                                    mirror = mirror.reversed();
+                                }
                                 mirror.setInitial(portion.finalPoint());
                                 portion.append(mirror);
                                 if(i != 0) {
@@ -623,6 +628,9 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         portion = portion.reversed();
                         if (!split_items) {
                             Geom::Path mirror = portion.reversed() * m;
+                            if (reverse_mirror) {
+                                mirror = mirror.reversed();
+                            }
                             mirror.setInitial(portion.finalPoint());
                             portion.append(mirror);
                         }
@@ -662,7 +670,11 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             if (cs.size() == 0 && position == 1) {
                 tmp_pathvector.push_back(original);
                 if (!split_items) {
-                    tmp_pathvector.push_back(original * m);
+                    Geom::Path mirrored = original * m;
+                    if (reverse_mirror) {
+                        mirrored = mirrored.reversed();
+                    }
+                    tmp_pathvector.push_back(mirrored);
                 }
             }
             path_out.insert(path_out.end(), tmp_pathvector.begin(), tmp_pathvector.end());
@@ -670,7 +682,11 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         }
     } else if (!fuse_paths || discard_orig_path) {
         for (const auto & i : original_pathv) {
-            path_out.push_back(i * m);
+            Geom::Path mirrored = i * m;
+            if (reverse_mirror) {
+                mirrored = mirrored.reversed();
+            }
+            path_out.push_back(mirrored);
         }
     }
     return path_out;

@@ -70,6 +70,7 @@ private:
     BoolParam oposite_fuse;
     BoolParam split_open;
     BoolParam link_styles;
+    BoolParam reverse_mirror;
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;
