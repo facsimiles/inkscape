@@ -212,6 +212,12 @@ FontVariations::FontVariations()
 {
     // std::cout << "FontVariations::FontVariations" << std::endl;
     set_name("FontVariations");
+
+    set_margin_start(10);
+    set_margin_end(10);
+    set_margin_top(10);
+    set_margin_bottom(10);
+    
     _size_group = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     _size_group_edit = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
 }

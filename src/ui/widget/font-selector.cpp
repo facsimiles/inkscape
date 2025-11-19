@@ -149,7 +149,7 @@ FontSelector::FontSelector(bool with_size, bool with_variations)
     font_variations.connectChanged(sigc::mem_fun(*this, &FontSelector::on_variations_changed));
     family_treeview.signal_realize().connect(sigc::mem_fun(*this, &FontSelector::on_realize_list));
 
-    font_variations_scroll.set_vexpand(false);
+    font_variations_scroll.set_vexpand(true);
 
     // Initialize font family lists. (May already be done.) Should be done on document change.
     font_lister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
@@ -448,6 +448,10 @@ FontSelector::on_family_changed() {
     if (it_best) {
         style_treeview.get_selection()->select (it_best);
     }
+
+    // variation sliders are refreshed immediately,
+    // rather than waiting for an Apply.
+    update_variations(get_fontspec(false));
 
     signal_block = false;
 
