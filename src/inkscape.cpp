@@ -148,9 +148,11 @@ Application::exists()
 Application&
 Application::instance()
 {
+    std::cout << "Application::instance(): Entrance" << std::endl;
     if (!exists()) {
          g_error("Inkscape::Application does not yet exist.");
     }
+    std::cout << "Application::instance(): Exit" << std::endl;
     return *Application::_S_inst;
 }
 
@@ -563,6 +565,11 @@ Application::add_desktop (SPDesktop * desktop)
 void
 Application::remove_desktop (SPDesktop * desktop)
 {
+    std::cout << "Application::remove_desktop: Entrance" << std::endl;
+    if (desktop == nullptr) {
+        std::cout << "  desktop is null" << std::endl;
+    }
+
     g_return_if_fail (desktop != nullptr);
 
     if (std::find (_desktops->begin(), _desktops->end(), desktop) == _desktops->end() ) {

@@ -244,6 +244,7 @@ SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
 void
 SPDesktopWidget::on_unrealize()
 {
+    std::cout << "SPDesktopWidget::on_unrealize: Entrance" << std::endl;
     if (_tbbox) {
         Inkscape::Preferences::get()->setInt("/toolbox/tools/width", _tbbox->get_position());
     }
@@ -264,6 +265,7 @@ SPDesktopWidget::on_unrealize()
     }
 
     parent_type::on_unrealize();
+    std::cout << "SPDesktopWidget::on_unrealize: Exit" << std::endl;
 }
 
 SPDesktopWidget::~SPDesktopWidget() = default;

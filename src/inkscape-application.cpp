@@ -1031,6 +1031,7 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
 void
 InkscapeApplication::on_startup()
 {
+    std::cout << "InkscapeApplication::on_startup(): Entrance" << std::endl;
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
         // Migrate settings first; see ui/dialog/startup.cpp
@@ -1042,6 +1043,7 @@ InkscapeApplication::on_startup()
             gtk_app()->add_window(*_start_screen);
         }
     }
+    sleep(20);
 
 #if defined(GDK_WINDOWING_X11)
     if (_with_gui) {
@@ -1103,6 +1105,7 @@ InkscapeApplication::on_startup()
 void
 InkscapeApplication::on_activate()
 {
+    std::cout << "InkscapeApplication::on_activate(): Entrance" << std::endl;
     std::string output;
     auto prefs = Inkscape::Preferences::get();
 
@@ -1150,6 +1153,7 @@ InkscapeApplication::on_activate()
 void
 InkscapeApplication::startup_close()
 {
+    std::cout << "InkscapeApplication::startup_close()" << std::endl;
     _start_screen.reset();
 }
 
@@ -1158,6 +1162,7 @@ InkscapeApplication::startup_close()
 void
 InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
+    std::cout << "InkscapeApplication::on_open: Entrance: files: " << files.size() << " hint: " << hint << std::endl;
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
     if(!_pages.empty())
@@ -1178,6 +1183,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
     for (auto file : files) {
 
         // Open file
+        std::cout << "  Opening document: " << file->get_uri() << std::endl;
         SPDocument *document = document_open (file);
         if (!document) {
             std::cerr << "ConcreteInkscapeApplication::on_open: failed to create document!" << std::endl;
@@ -1185,6 +1191,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         }
 
         // Process document (command line actions, shell, create window)
+        std::cout << "  Processing document: " << std::endl;
         process_document (document, file->get_path());
     }
 
@@ -1192,6 +1199,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
+    std::cout << "InkscapeApplication::on_open: Exit" << std::endl;
 }
 
 void
@@ -1490,6 +1498,7 @@ void InkscapeApplication::redirect_output()
 int
 InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
 {
+    std::cout << "InkscapeApplication::on_handle_local_options: Entrance" << std::endl;
     auto prefs = Inkscape::Preferences::get();
     if (!options) {
         std::cerr << "InkscapeApplication::on_handle_local_options: options is null!" << std::endl;
