@@ -496,7 +496,7 @@ translations:weekly:
     - if: $SCHEDULED_JOB_NAME == "translations-weekly"
       allow_failure: true # to deal with empty changesets
   script:
-    - git submodule update --remote po && git add po && git commit --author "Inkscape <inkscape-translator@lists.inkscape.org>" -m "update translations" && git push https://ci:${TRANSLATION_TOKEN}@gitlab.com/inkscape/inkscape.git
+    - git submodule update --remote po && git add po && git commit --author "Inkscape <inkscape-translator@lists.inkscape.org>" -m "update translations" && git push https://ci:${TRANSLATION_TOKEN}@gitlab.com/inkscape/inkscape.git HEAD:${CI_COMMIT_BRANCH}
 
 
 
