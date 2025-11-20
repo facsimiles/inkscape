@@ -1043,8 +1043,12 @@ InkscapeApplication::on_startup()
         auto prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/options/boot/showsplash", true)) {
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-            _start_screen->show_now();
-            gtk_app()->add_window(*_start_screen);
+            if (_start_screen) {
+                _start_screen->show_now();
+                gtk_app()->add_window(*_start_screen);
+            } else {
+                std::cerr << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;
+            }
         }
     }
 
