@@ -1036,6 +1036,9 @@ InkscapeApplication::on_startup()
     sleep(20);
     std::cout << "  Waking" << std::endl;
 
+    // Deprecated...
+    Inkscape::Application::create(_with_gui);
+
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
         // Migrate settings first; see ui/dialog/startup.cpp
@@ -1074,9 +1077,6 @@ InkscapeApplication::on_startup()
 
     // Autosave
     Inkscape::AutoSave::getInstance().init(this);
-
-    // Deprecated...
-    Inkscape::Application::create(_with_gui);
 
     // Extensions
     Inkscape::Extension::init();
