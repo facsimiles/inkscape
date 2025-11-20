@@ -47,7 +47,7 @@ std::optional<double> object_query_blur_filter(const SPObject* object);
 SPFilterPrimitive* get_first_filter_component(SPObject* object);
 // count number of SPFilterPrimitive components in object's attached filter
 size_t get_filter_primitive_count(const SPObject* object);
-// add/change Gausian blur filter with percent 'amount'
+// add/change Gaussian blur filter with percent 'amount'
 bool modify_filter_gaussian_blur_amount(SPItem* item, double amount);
 
 #endif

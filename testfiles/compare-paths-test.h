@@ -25,9 +25,9 @@
 
 using namespace Inkscape;
 
-/* This class allow test LPE's. To make possible in latest release of Inkscape
- * LPE is not updated on load (if in the future any do we must take account) so we load
- * a svg, get all "d" attribute from paths, shapes...
+/* This class allows for testing LPE's. To make available in the latest release of Inkscape
+ * LPE is not updated on load (if in the future any do, we must take account). So we load
+ * an svg, get all "d" attribute from paths, shapes...
  * Update all path effects with root object and check equality of paths.
  * We use some helpers inside the SVG document to test:
  * inkscape:test-threshold="0.1" can be global using in root element or per item
@@ -38,8 +38,8 @@ class ComparePathsTest : public ::testing::Test
 {
 protected:
     /*
-    * @a is in LPE the path data before LPE in store integrity is the file just opened before save
-    * @b is in LPE the path with LPE updated in, in integrity is the data in path after save to disk
+    * @a within LPE is the path data before LPE is stored integrity is the file just opened before save
+    * @b within LPE is the path in which LPE is updated in, in integrity is the data in path after save to disk
     * @c the svg file name to compare
     */
     void pathCompare(char const *a, char const *b, Glib::ustring const &id, std::string const &svg, double precision = 0.001)
@@ -53,8 +53,8 @@ protected:
         }
     }
     /*
-    * succes is pased because functions with gtest asserts usualy be void you can override using 
-    * HasFatalFailure() or similar on caller but but fail in all next calls and we want the list of all failed id only
+    * success is passed because functions with gtest asserts usually are void, and can be overridden using 
+    * HasFatalFailure() or similar on caller - but fail in all next calls and we want the list of all failed id only
     */
     void pathCompareInternal(char const *a, char const *b, double precision, bool &success)
     {
@@ -121,7 +121,7 @@ protected:
             ASSERT_NEAR(pointe[Geom::Y], pointf[Geom::Y], precision);
             initial++;
         }
-        // we do whoole function without a fail so inform tall be sacessfull
+        // we do whole function without a fail so inform all successful
         success = true;
     }
     

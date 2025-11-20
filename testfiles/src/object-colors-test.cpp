@@ -161,7 +161,7 @@ TEST_F(ObjectColorSetFixture, SetSelectedNewColors)
     char const *style1 = nodes[0]->attribute("style");
     EXPECT_NE(strstr(style1, "fill:device-cmyk(0.1 0.8 0 0)"), nullptr);
 
-    // test reseting just object color without reseting it in the map for livepreview purposes 
+    // test resetting just object color without resetting it in the map for livepreview purposes 
     set.revertToOriginalColors(false);
     EXPECT_EQ(vector[0]->style->fill.getColor().toRGBA(), Colors::Color(0xffff00ff).toRGBA());
     char const *style2 = nodes[0]->attribute("style");

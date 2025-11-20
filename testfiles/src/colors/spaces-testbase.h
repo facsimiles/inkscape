@@ -254,7 +254,7 @@ TEST_P(convertColorSpace, inPlace)
 
 /**
  * Create many random tests of the conversion functions, outputs and fed to inputs
- * to guarentee stability in both directions.
+ * to guarantee stability in both directions.
  *
  * @arg from_func - A conversion function in one direction
  * @arg to_func - The reverse function
@@ -298,10 +298,10 @@ TEST_P(convertColorSpace, inPlace)
 
 /**
  * Create many random tests of the conversion stack, outputs and fed to inputs
- * to guarentee stability in both directions.
+ * to guarantee stability in both directions.
  *
  * @arg from - A color space to convert in one direction
- * @arg to_func - A color space to convert in the oposite direction
+ * @arg to_func - A color space to convert in the opposite direction
  * @arg count - The number of tests to create
  */
 ::testing::AssertionResult RandomPassthrough(

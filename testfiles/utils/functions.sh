@@ -10,7 +10,7 @@
 # Released under GNU GPL v2+, read the file 'COPYING' for more information.
 #
 
-# Ensure consistancy between comparison functions with the same bash
+# Ensure consistency between comparison functions with the same bash
 # elements.
 #
 get_outputs()

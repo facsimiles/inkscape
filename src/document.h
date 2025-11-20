@@ -478,7 +478,7 @@ private:
     using ReconstructionStart = sigc::signal<void ()>;
     using ReconstructionFinish = sigc::signal<void ()>;
     using CommitSignal = sigc::signal<void ()>;
-    using BeforeCommitSignal = sigc::signal<void ()>; // allow to add actions berfore commit to include in undo
+    using BeforeCommitSignal = sigc::signal<void ()>; // allow to add actions before commit to include in undo
 
     using IDChangedSignalMap = std::map<GQuark, SPDocument::IDChangedSignal>;
     using ResourcesChangedSignalMap = std::map<GQuark, SPDocument::ResourcesChangedSignal>;

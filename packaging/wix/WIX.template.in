@@ -194,7 +194,7 @@ CMake was initially developed by Kitware with the following sponsorship:
         </Property>
 
         <!--
-        Brutal workaround to avoid broken upgrades from old Inkscape .EXE or .MSI verisons:
+        Brutal workaround to avoid broken upgrades from old Inkscape .EXE or .MSI versions:
         Refuse to install/update when inkscape.exe already exists.
         
         ## Background

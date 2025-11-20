@@ -238,4 +238,4 @@ LineSnapper::LineList GridSnapper::getSnapLinesAxonom(Geom::Point const &p) cons
     return s;
 }
 
-} // namepsace Inkscape
+} // namespace Inkscape

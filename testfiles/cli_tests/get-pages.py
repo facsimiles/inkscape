@@ -6,7 +6,7 @@
 #
 """
 Parse an SVG file for it's inkscape paages and output page numbers in stderr 
-and the page labels in stdout. This is used by CMake to contruct tests.
+and the page labels in stdout. This is used by CMake to construct tests.
 """
 
 import os
