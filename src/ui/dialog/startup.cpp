@@ -161,6 +161,7 @@ StartScreen::StartScreen()
     , close_btn      (get_widget<Gtk::Button>  (build_splash, "close_window"))
     , messages       (get_widget<Gtk::Label>   (build_splash, "messages"))
 {
+    std::cout << "StartScreen::StartScreen" << std::endl;
     set_name("start-screen-window");
     set_title(Inkscape::inkscape_version());
     set_can_focus(true);
@@ -176,6 +177,7 @@ StartScreen::StartScreen()
 
 void StartScreen::show_now()
 {
+    std::cout << "StartScreen::show_now(): Entrance" << std::endl;
     set_resizable(false);
 
     // Show the main banner when already welcomed for the first time
@@ -193,8 +195,12 @@ void StartScreen::show_now()
 
     // The main loop won't get called until the main window is initialized,
     // so we need to iterate the loop a few times here to show the splash screen.
-    while (Gtk::Main::events_pending())
+    std::cout << "StartScreen::show_now(): before loop" << std::endl;
+    while (Gtk::Main::events_pending()) {
         Gtk::Main::iteration(false);
+    }
+
+    std::cout << "StartScreen::show_now(): Exit" << std::endl;
 }
 
 void StartScreen::setup_welcome()
