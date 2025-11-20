@@ -18,7 +18,7 @@
 
 namespace Inkscape::UI::Widget {
 
-class ReorderableStack : public Gtk::Box
+class ReorderableStack : public TabStrip
 {
 public:
     ReorderableStack(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);
@@ -34,7 +34,6 @@ public:
 private:
     sigc::signal<void ()> _signal_values_changed;
 
-    TabStrip _tabs;
     std::vector<std::pair<Gtk::Widget *, int>> _rows;
 };
 

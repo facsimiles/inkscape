@@ -27,7 +27,7 @@ struct TabWidget;
 class TabWidgetDrag;
 
 /// Widget that implements strip of tabs
-class TabStrip final : public Gtk::Orientable, public Gtk::Widget
+class TabStrip : public Gtk::Orientable, public Gtk::Widget
 {
 public:
     TabStrip(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);

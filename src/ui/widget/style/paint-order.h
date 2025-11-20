@@ -21,7 +21,8 @@ class PaintOrderWidget : public ReorderableStack
 {
 public:
     PaintOrderWidget()
-        : ReorderableStack(Gtk::Orientation::VERTICAL)
+        : Glib::ObjectBase("PaintOrderWidget")
+        , ReorderableStack(Gtk::Orientation::VERTICAL)
     {
         add_option(_("Marker"), "paint-order-markers", _("Arrows, markers and points"),       SP_CSS_PAINT_ORDER_MARKER);
         add_option(_("Stroke"), "paint-order-stroke",  _("The border line around the shape"), SP_CSS_PAINT_ORDER_STROKE);
