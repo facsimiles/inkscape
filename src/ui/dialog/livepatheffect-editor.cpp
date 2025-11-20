@@ -43,10 +43,15 @@
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "io/resource.h"
+#include "object/box3d.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-group.h"
+#include "object/sp-line.h"
 #include "object/sp-lpe-item.h"
+#include "object/sp-offset.h"
 #include "object/sp-path.h"
+#include "object/sp-polygon.h"
+#include "object/sp-polyline.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
@@ -479,11 +484,39 @@ LivePathEffectEditor::selection_info()
     SPItem * selected = nullptr;
     _LPESelectionInfo.set_visible(false);
     if (selection && (selected = selection->singleItem()) ) {
-        if (is<SPText>(selected) || is<SPFlowtext>(selected)) {
-            _LPESelectionInfo.set_text(_("Text objects do not support Live Path Effects"));
+
+        if (!Inkscape::LivePathEffect::can_have_lpe(selected)) {
+
+            char* info = _("Selected object does not support Live Path Effects");
+            char* labeltext = _("Convert object to path");
+            if (is<SPText>(selected) || is<SPFlowtext>(selected)) {
+                info = _("Text objects do not support Live Path Effects");
+                labeltext = _("Convert text to paths");
+            }
+            else if (is<SPPolygon>(selected)) {
+                info = _("Polygon objects do not support Live Path Effects");
+                labeltext = _("Convert polygon to path");
+            }
+            else if (is<SPPolyLine>(selected)) {
+                info = _("Polyline objects do not support Live Path Effects");
+                labeltext = _("Convert polyline to path");
+            }
+            else if (is<SPLine>(selected)) {
+                info = _("Line objects do not support Live Path Effects");
+                labeltext = _("Convert line to path");
+            }
+            else if (is<SPBox3D>(selected)) {
+                info = _("3D Box objects do not support Live Path Effects");
+                labeltext = _("Convert box to paths");
+            }
+            else if (is<SPOffset>(selected)) {
+                info = _("Offset paths do not support Live Path Effects");
+                labeltext = _("Convert offset path to path");
+            }
+
+            _LPESelectionInfo.set_text(info);
             _LPESelectionInfo.set_visible(true);
 
-            Glib::ustring labeltext = _("Convert text to paths");
             auto const selectbutton = Gtk::make_managed<Gtk::Button>();
             auto const boxc = Gtk::make_managed<Gtk::Box>();
             auto const lbl = Gtk::make_managed<Gtk::Label>(labeltext);
@@ -498,22 +531,25 @@ LivePathEffectEditor::selection_info()
             });
             _LPEParentBox.add(*selectbutton);
 
-            Glib::ustring labeltext2 = _("Clone");
-            auto const selectbutton2 = Gtk::make_managed<Gtk::Button>();
-            auto const boxc2 = Gtk::make_managed<Gtk::Box>();
-            auto const lbl2 = Gtk::make_managed<Gtk::Label>(labeltext2);
-            auto const type2 = get_shape_image("clone", selected->highlight_color());
-            UI::pack_start(*boxc2, *type2, false, false);
-            UI::pack_start(*boxc2, *lbl2, false, false);
-            type2->set_margin_start(4);
-            type2->set_margin_end(4);
-            selectbutton2->add(*boxc2);
-            selectbutton2->signal_clicked().connect([=](){
-                selection->clone();;
-            });
-            _LPEParentBox.add(*selectbutton2);
+            if (is<SPText>(selected) ||
+                is<SPFlowtext>(selected)) {
+                Glib::ustring labeltext2 = _("Clone");
+                auto const selectbutton2 = Gtk::make_managed<Gtk::Button>();
+                auto const boxc2 = Gtk::make_managed<Gtk::Box>();
+                auto const lbl2 = Gtk::make_managed<Gtk::Label>(labeltext2);
+                auto const type2 = get_shape_image("clone", selected->highlight_color());
+                UI::pack_start(*boxc2, *type2, false, false);
+                UI::pack_start(*boxc2, *lbl2, false, false);
+                type2->set_margin_start(4);
+                type2->set_margin_end(4);
+                selectbutton2->add(*boxc2);
+                selectbutton2->signal_clicked().connect([=](){
+                    selection->clone();;
+                });
+                _LPEParentBox.add(*selectbutton2);
 
-            _LPEParentBox.show_all();
+                _LPEParentBox.show_all();
+            }
         } else if (!is<SPLPEItem>(selected) && !is<SPUse>(selected)) {
             _LPESelectionInfo.set_text(_("Select a path, shape, clone or group"));
             _LPESelectionInfo.set_visible(true);

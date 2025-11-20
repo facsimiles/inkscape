@@ -80,9 +80,20 @@
 #include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-vonkoch.h"
 #include "message-stack.h"
+
+#include "object/box3d.h"
 #include "object/sp-defs.h"
+#include "object/sp-ellipse.h" // ellipse, circle, path
+#include "object/sp-item-group.h"
+#include "object/sp-offset.h"
+#include "object/sp-path.h"
+#include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
+#include "object/sp-spiral.h"
+#include "object/sp-star.h"
+#include "object/sp-use.h"
+
 #include "path-chemistry.h"
 #include "ui/icon-loader.h"
 #include "ui/pack.h"
@@ -2037,6 +2048,19 @@ Effect::providesKnotholder() const
     }
 
     return false;
+}
+
+bool can_have_lpe(SPObject const* object) {
+
+    return (
+        is<SPGenericEllipse>(object) ||
+        (is<SPGroup>(object) && !is<SPBox3D>(object)) ||
+        (is<SPPath>(object) && !is<SPOffset>(object)) ||
+        is<SPRect>(object) ||
+        is<SPSpiral>(object) ||
+        is<SPStar>(object) ||
+        is<SPUse>(object)
+        );
 }
 
 } /* namespace LivePathEffect */

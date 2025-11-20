@@ -212,6 +212,12 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
         return false;
     }
 
+    if (!Inkscape::LivePathEffect::can_have_lpe(current)) {
+        // Reject things that have curves put can't have path
+        // effects: polygons, paths with offsets, etc.
+        return false;
+    }
+
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
         PathEffectList path_effect_list(*this->path_effect_list);
         auto const path_effect_list_size = path_effect_list.size();
