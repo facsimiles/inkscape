@@ -131,13 +131,11 @@ document_cleanup(InkscapeWindow* win)
     }
 }
 
-// Close window, checking for data loss. If it's the last window, keep open with new document.
-void
-document_close(InkscapeWindow* win)
+// Close tab, checking for data loss. If it's the last tab, keep open with new document.
+void document_close(InkscapeWindow *win)
 {
-    // Close
     auto app = InkscapeApplication::instance();
-    app->destroyDesktop(win->get_desktop(), true); // true == keep alive last window
+    app->destroyDesktop(win->get_desktop(), true); // true == keep alive with new new document
 }
 
 const Glib::ustring SECTION = NC_("Action Section", "Window-File");
@@ -156,7 +154,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_dialog_window =
     {"win.document-import",           N_("Import"),            SECTION,   N_("Import a bitmap or SVG image into this document")},
     {"win.document-print",            N_("Print"),             SECTION,   N_("Print document")},
     {"win.document-cleanup",          N_("Clean Up Document"), SECTION,   N_("Remove unused definitions (such as gradients or clipping paths) from the document")},
-    {"win.document-close",            N_("Close"),             SECTION,   N_("Close window (unless last window)")},
+    {"win.document-close",            N_("Close"),             SECTION,   N_("Close document (unless last document)")},
     // clang-format on
 };
 

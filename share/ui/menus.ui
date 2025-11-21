@@ -99,12 +99,17 @@
       </section>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_Close</attribute>
+          <attribute name="label" translatable="yes">_Close Document</attribute>
           <attribute name="action">win.document-close</attribute>
+          <attribute name="icon">document-close</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Close Window</attribute>
+          <attribute name="action">window.close</attribute>
           <attribute name="icon">window-close</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">_Quit</attribute>
+          <attribute name="label" translatable="yes">_Quit Inkscape</attribute>
           <attribute name="action">app.quit</attribute>
           <attribute name="icon">application-exit</attribute>
           <attribute name="hidden-when">macos-menubar</attribute>
