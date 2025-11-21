@@ -618,12 +618,6 @@
           <attribute name="target">Swatches</attribute>
           <attribute name="icon">swatches</attribute>
         </item>
-        <item>
-          <attribute name="label" translatable="yes">_Messages...</attribute>
-          <attribute name="action">win.dialog-open</attribute>
-          <attribute name="target">Messages</attribute>
-          <attribute name="icon">dialog-messages</attribute>
-        </item>
       </section>
       <section>
         <item>
