@@ -247,9 +247,6 @@ FontList::FontList(Glib::ustring preferences_path) :
     _font_list_store = Gtk::ListStore::create(g_column_model);
 
     get_widget<Gtk::Box>(_builder, "variants").append(_font_variations);
-    // takes up available space in the dialog instead of collapsing.
-    _font_variations.set_vexpand(true);
-    _font_variations.set_valign(Gtk::Align::FILL);
     _font_variations.get_size_group(0)->add_widget(get_widget<Gtk::Label>(_builder, "font-size-label"));
     _font_variations.get_size_group(1)->add_widget(_font_size);
     _font_variations.connectChanged([this]{
