@@ -62,6 +62,7 @@
 #include "ui/dialog-run.h"
 #include "ui/pack.h"
 #include "ui/shape-editor.h"
+#include "xml/node.h"
 
 using Inkscape::DocumentUndo;
 
@@ -717,6 +718,61 @@ void sp_file_fix_lpe(SPDocument *doc)
         }
     }
 }
+
+/*
+ * This is a compat for 1.5.x allowing 1.4 to open newer svg files with svg:view
+ * elements in them and convertig them to inkscape:page elements.
+ */
+void sp_file_fix_page_elements(SPDocument *doc)
+{
+    static const std::vector<std::string> attrs = {"x", "y", "width", "height"};
+    std::vector<Inkscape::XML::Node *> to_delete;
+    std::vector<Inkscape::XML::Node *> to_add;
+
+    if (auto nv = doc->getNamedView()->getRepr()) {
+        bool done = false;
+        auto defs = doc->getDefs()->getRepr();
+        for (auto child = defs->firstChild() ; child != nullptr; child = child->next()) {
+            if (child->name() && std::string(child->name()) == "svg:view") {
+                auto viewbox = child->attribute("viewBox");
+                if (!viewbox) {
+                    continue; // Malformed
+                }
+                gchar *eptr = const_cast<gchar*>(viewbox);
+                auto page = doc->getReprDoc()->createElement("inkscape:page");
+                for (auto &attr : attrs) {
+                    // Viewbox parsing copied from viewbox.cpp for consistancy
+                    double val = g_ascii_strtod (eptr, &eptr);
+                    while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+                        eptr++;
+                    }
+                    page->setAttributeSvgDouble(attr.c_str(), val);
+                }
+
+                page->copyAttribute("id", child, true);
+                page->copyAttribute("inkscape:label", child, true);
+                page->setAttributeOrRemoveIfEmpty("margin", child->attribute("inkscape:margin"));
+                page->setAttributeOrRemoveIfEmpty("bleed", child->attribute("inkscape:bleed"));
+                page->setAttributeOrRemoveIfEmpty("page-size", child->attribute("inkscape:page-size"));
+                to_delete.push_back(child);
+                to_add.push_back(page);
+                done = true;
+            }
+        }
+        if (done) {
+            for (auto &i : to_delete) {
+                defs->removeChild(i);
+            }
+            // To preserve ids, we remove and then add replacements
+            for (auto &i : to_add) {
+                nv->appendChild(i);
+                Inkscape::GC::release(i);
+            }
+            DocumentUndo::done(doc, _("Convert Pages from SVG2"), "");
+        }
+    }
+}
+
 
 /*
   Local Variables:

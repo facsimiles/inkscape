@@ -505,6 +505,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
             document->getRoot()->updateRepr(SP_OBJECT_CHILD_MODIFIED_FLAG);
         }
     }
+
+    /** Break 1.5 files for compat, move SVG view to inkscape page elements **/
+    sp_file_fix_page_elements(document);
+
     /** Fix dpi (pre-92 files). With GUI fixed in Inkscape::Application::fix_document. **/
     if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
         sp_file_convert_dpi(document);
