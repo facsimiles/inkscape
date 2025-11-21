@@ -34,6 +34,7 @@
 #include "sp-factory.h"
 #include "sp-font.h"
 #include "sp-paint-server.h"
+#include "sp-page.h"
 #include "sp-root.h"
 #include "sp-use.h"
 #include "sp-use-reference.h"
@@ -466,6 +467,8 @@ void SPObject::requestOrphanCollection() {
     } else if (!prefs->getBool("/options/cleanupswatches/value", false) && is<SPPaintServer>(this) && static_cast<SPPaintServer*>(this)->isSwatch()) {
         // leave it
     } else if (is<Inkscape::ColorProfile>(this)) {
+        // leave it
+    } else if (is<SPPage>(this)) {
         // leave it
     } else if (is<LivePathEffectObject>(this)) {
         document->queueForOrphanCollection(this);

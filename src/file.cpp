@@ -181,13 +181,6 @@ file_save(Gtk::Window &parentWindow,
     auto path = file->get_path();
     auto display_name = file->get_parse_name();
 
-    // Delete unreferenced defs before saving.
-    for (auto child: doc->getDefs()->childList(false)) {
-        if (child->hrefList.empty()) {
-            child->deleteObject();
-        }
-    }
-
     try {
         Inkscape::Extension::save(key, doc, file->get_path().c_str(),
                                   checkoverwrite, official,
