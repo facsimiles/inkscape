@@ -121,7 +121,7 @@ protected:
             ASSERT_NEAR(pointe[Geom::Y], pointf[Geom::Y], precision);
             initial++;
         }
-        // we do whole function without a fail so inform all successful
+        // the whole function is done without failures, inform success
         success = true;
     }
     
