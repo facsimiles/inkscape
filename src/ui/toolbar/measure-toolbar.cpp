@@ -73,7 +73,7 @@ MeasureToolbar::MeasureToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 {
     auto prefs = Preferences::get();
 
-    auto unit_menu = _tracker->create_unit_menu();
+    auto unit_menu = _tracker->create_unit_dropdown();
     unit_menu->signal_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::unit_changed));
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 

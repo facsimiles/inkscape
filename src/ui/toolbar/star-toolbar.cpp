@@ -131,7 +131,7 @@ StarToolbar::StarToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 
     _spoke_box.set_visible(!is_flat_sided);
 
-    auto unit_menu = _tracker->create_unit_menu();
+    auto unit_menu = _tracker->create_unit_dropdown();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
     _tracker->addAdjustment(_length_item.get_adjustment()->gobj());
 

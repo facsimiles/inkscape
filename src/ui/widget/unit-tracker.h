@@ -46,7 +46,7 @@ public:
     bool isUpdating() const;
 
     void setActiveUnit(Unit const *unit);
-    void setActiveUnitByAbbr(gchar const *abbr);
+    void setActiveUnitByAbbr(char const *abbr);
     void setActiveUnitByLabel(Glib::ustring label);
     Unit const * getActiveUnit() const;
 
@@ -56,7 +56,7 @@ public:
     void setFullVal(GtkAdjustment *adj, double val);
     Glib::ustring getCurrentLabel();
 
-    UnitMenu* create_unit_menu();
+    UnitMenu* create_unit_dropdown();
 
 protected:
     UnitType _type;

@@ -55,7 +55,6 @@ bool UnitMenu::resetUnitType(UnitType unit_type, bool svg_length)
 
 void UnitMenu::addUnit(Unit const& u)
 {
-    // Util::UnitTable::get().addUnit(u, false);
     append(u.abbr);
 }
 

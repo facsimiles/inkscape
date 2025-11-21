@@ -109,7 +109,7 @@ PaintbucketToolbar::PaintbucketToolbar(Glib::RefPtr<Gtk::Builder> const &builder
         _autogap_item->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::autogap_changed));
         get_widget<Gtk::Box>(builder, "autogap_box").append(*_autogap_item);
 
-        auto units_menu = _tracker->create_unit_menu();
+        auto units_menu = _tracker->create_unit_dropdown();
         get_widget<Gtk::Box>(builder, "unit_menu_box").append(*units_menu);
     }
 

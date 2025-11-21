@@ -65,7 +65,7 @@ SelectToolbar::SelectToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     setup_derived_spin_button(_w_item, "width");
     setup_derived_spin_button(_h_item, "height");
 
-    auto unit_menu = _tracker->create_unit_menu();
+    auto unit_menu = _tracker->create_unit_dropdown();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
     _select_touch_btn.set_active(prefs->getBool("/tools/select/touch_box", false));

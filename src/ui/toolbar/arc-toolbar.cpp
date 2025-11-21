@@ -69,7 +69,7 @@ ArcToolbar::ArcToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
           &get_widget<Gtk::ToggleButton>(builder, "chord_btn")
       }
 {
-    auto unit_menu = _tracker->create_unit_menu();
+    auto unit_menu = _tracker->create_unit_dropdown();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
 
     _setupDerivedSpinButton(_rx_item, "rx");

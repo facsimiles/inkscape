@@ -174,7 +174,7 @@ CalligraphyToolbar::CalligraphyToolbar(Glib::RefPtr<Gtk::Builder> const &builder
     _profile_selector_combo.signal_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::change_profile));
 
     // Unit menu.
-    auto unit_menu = _tracker->create_unit_menu();
+    auto unit_menu = _tracker->create_unit_dropdown();
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*unit_menu);
     unit_menu->signal_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::unit_changed));
 

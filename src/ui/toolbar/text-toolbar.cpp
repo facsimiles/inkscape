@@ -200,14 +200,12 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     // Line height unit tracker.
     auto const &unit_table = Util::UnitTable::get();
     auto lines = Unit::create("lines");
-    _tracker->prependUnit(lines.get()); //unit_table.getUnit("")); // Ratio
+    _tracker->prependUnit(lines.get());
     _tracker->addUnit(unit_table.unit("%"));
     _tracker->addUnit(unit_table.unit("em"));
     _tracker->addUnit(unit_table.unit("ex"));
-    _tracker->setActiveUnit(lines.get()); // unit_table.getUnit(""));
+    _tracker->setActiveUnit(lines.get());
 
-    // We change only the display value
-    // _tracker->changeLabel("lines", 0, true);
     _tracker_fs->setActiveUnit(unit_table.getUnit("mm"));
 
     // Setup the spin buttons.
@@ -322,13 +320,12 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     get_widget<Gtk::Box>(builder, "font_size_box").append(*_font_size_item);
 
     // Font size units
-    _font_size_units_item = _tracker_fs->create_unit_menu();
+    _font_size_units_item = _tracker_fs->create_unit_dropdown();
     _font_size_units_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_unit_changed));
-    // _font_size_units_item->focus_on_click(false);
     get_widget<Gtk::Box>(builder, "unit_menu_box").append(*_font_size_units_item);
 
     // Line height units
-    _line_height_units_item = _tracker->create_unit_menu();
+    _line_height_units_item = _tracker->create_unit_dropdown();
     _line_height_units_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
     get_widget<Gtk::Box>(builder, "line_height_unit_box").append(*_line_height_units_item);
 
@@ -1266,7 +1263,7 @@ void TextToolbar::lineheight_unit_changed()
     _freeze = false;
 }
 
-void TextToolbar::fontsize_unit_changed(/* Not Used */)
+void TextToolbar::fontsize_unit_changed()
 {
     // quit if run by the _changed callbacks
     auto const unit = _tracker_fs->getActiveUnit();

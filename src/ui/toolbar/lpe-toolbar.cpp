@@ -89,7 +89,7 @@ LPEToolbar::LPEToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     _mode_buttons[mode]->set_active();
 
     // Add the units menu
-    _units_item = _tracker->create_unit_menu();
+    _units_item = _tracker->create_unit_dropdown();
     _units_item->signal_changed().connect(sigc::mem_fun(*this, &LPEToolbar::unit_changed));
     _units_item->set_sensitive(prefs->getBool("/tools/lpetool/show_measuring_info", true));
     get_widget<Gtk::Box>(builder, "units_box").append(*_units_item);

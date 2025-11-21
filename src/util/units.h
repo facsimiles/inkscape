@@ -61,7 +61,8 @@ public:
          Glib::ustring description);
     Unit(const Unit& src) = default;
 
-    // create a new Unit definition with abbreviation alone
+    // create a new Unit definition with abbreviation alone; this is useful when
+    // we want to add an item to a list of units, like "lines" for line-height
     static std::unique_ptr<const Unit> create(const Glib::ustring& abbr) {
         return std::make_unique<Unit>(UnitType::UNIT_TYPE_DIMENSIONLESS, 1.0, abbr, "", abbr, "");
     }

@@ -95,15 +95,17 @@ void UnitTracker::setActiveUnitByLabel(Glib::ustring label)
     g_warning("UnitTracker::setActiveUnitByLabel - unit '%s' not found", label.c_str());
 }
 
-void UnitTracker::setActiveUnitByAbbr(gchar const *abbr)
+void UnitTracker::setActiveUnitByAbbr(char const *abbr)
 {
-    auto u = UnitTable::get().getUnit(abbr);
-    if (abbr && u->abbr != abbr) {
+    auto unit = UnitTable::get().getUnit(abbr);
+    if (abbr && unit->abbr != abbr) {
+        // if abbreviation does not match any registered unit, create a temp one,
+        // so we can use setActiveUnit method and let it search for a match in a _store
         auto tmp = Unit::create(abbr);
         setActiveUnit(tmp.get());
     }
     else {
-        setActiveUnit(u);
+        setActiveUnit(unit);
     }
 }
 
@@ -135,7 +137,7 @@ void UnitTracker::setFullVal(GtkAdjustment * const adj, double const val)
     _priorValues[adj] = val;
 }
 
-UnitMenu* UnitTracker::create_unit_menu() {
+UnitMenu* UnitTracker::create_unit_dropdown() {
     auto menu = new UnitMenu();
     menu->set_name("unit-tracker");
     menu->set_to_string_func([](auto& item){ return std::dynamic_pointer_cast<UnitObject>(item)->unit.abbr; });

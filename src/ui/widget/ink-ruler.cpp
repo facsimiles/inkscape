@@ -494,8 +494,8 @@ std::unique_ptr<Gtk::Popover> Ruler::create_context_menu()
 {
     auto unit_menu = Gio::Menu::create();
 
-    for (auto u : Util::UnitTable::get().units(Inkscape::Util::UNIT_TYPE_LINEAR)) {
-        auto unit = u->abbr;
+    for (auto unit_ptr : Util::UnitTable::get().units(Inkscape::Util::UNIT_TYPE_LINEAR)) {
+        auto unit = unit_ptr->abbr;
         Glib::ustring action_name = "doc.set-display-unit('" + unit + "')";
         auto item = Gio::MenuItem::create(unit, action_name);
         unit_menu->append_item(item);
