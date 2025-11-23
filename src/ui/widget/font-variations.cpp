@@ -156,9 +156,9 @@ FontVariationAxis::FontVariationAxis(Glib::ustring name_, OTVarAxis const &axis,
     //           << " max:  " << axis.maximum
     //           << " val:  " << axis.set_val << std::endl;
 
-    set_spacing(3);
+    set_spacing(4);
 
-    label = Gtk::make_managed<Gtk::Label>(label_ + ":");
+    label = Gtk::make_managed<Gtk::Label>(label_);
     label->set_tooltip_text(tooltip);
     label->set_xalign(0.0f); // left-align
     append(*label);

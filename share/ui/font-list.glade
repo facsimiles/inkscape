@@ -136,6 +136,7 @@
     </property>
   </object>
   <object class="GtkGrid" id="main-grid">
+    <property name="name">FontList</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="column-spacing">3</property>
@@ -164,6 +165,7 @@
         </layout>
         <style>
           <class name="active-background"></class>
+          <class name="font-list"></class>
         </style>
       </object>
     </child>
@@ -560,6 +562,7 @@
         </layout>
         <style>
           <class name="active-background"></class>
+          <class name="font-list"></class>
         </style>
       </object>
     </child>
