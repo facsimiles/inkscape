@@ -1,55 +1,48 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * This is the C++ glue between Inkscape and Potrace
+ * This is the C++ glue between Inkscape and libdepixelize
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
  *   Stéphane Gimenez <dev@gim.name>
  *
  * Copyright (C) 2004-2006 Authors
- *
- * Released under GNU GPL v2+, read the file 'COPYING' for more information.
- *
- * Potrace, the wonderful tracer located at http://potrace.sourceforge.net,
- * is provided by the generosity of Peter Selinger, to whom we are grateful.
- *
  */
-#include <iomanip>
-#include <thread>
-#include <glibmm/i18n.h>
 
 #include "inkscape-depixelize.h"
 
+#include <glibmm/i18n.h>
+#include <depixelize/depixelize.h>
+
 #include "colors/utils.h"
-#include "preferences.h"
 #include "async/progress.h"
 #include "svg/css-ostringstream.h"
 
-namespace Inkscape {
-namespace Trace {
-namespace Depixelize {
+namespace Inkscape::Trace::Depixelize {
 
 DepixelizeTracingEngine::DepixelizeTracingEngine(TraceType traceType, double curves, int islands, int sparsePixels, double sparseMultiplier, bool optimize)
     : traceType(traceType)
 {
-    params.curvesMultiplier = curves;
-    params.islandsWeight = islands;
-    params.sparsePixelsRadius = sparsePixels;
-    params.sparsePixelsMultiplier = sparseMultiplier;
-    params.optimize = optimize;
-    params.nthreads = Inkscape::Preferences::get()->getIntLimited("/options/threading/numthreads", std::thread::hardware_concurrency(), 1, 256);
+    params = std::make_unique<::Depixelize::Options>();
+    params->curves_multiplier = curves;
+    params->islands_weight = islands;
+    params->sparse_pixels_radius = sparsePixels;
+    params->sparse_pixels_multiplier = sparseMultiplier;
+    params->optimize = optimize;
 }
+
+DepixelizeTracingEngine::~DepixelizeTracingEngine() = default;
 
 TraceResult DepixelizeTracingEngine::trace(Glib::RefPtr<Gdk::Pixbuf> const &pixbuf, Async::Progress<double> &progress)
 {
     TraceResult res;
 
-    ::Tracer::Splines splines;
+    ::Depixelize::Splines splines;
 
     if (traceType == TraceType::VORONOI) {
-        splines = ::Tracer::Kopf2011::to_voronoi(pixbuf, params);
+        splines = ::Depixelize::to_voronoi(pixbuf, *params);
     } else {
-        splines = ::Tracer::Kopf2011::to_splines(pixbuf, params);
+        splines = ::Depixelize::to_splines(pixbuf, *params);
     }
 
     progress.report_or_throw(0.5);
@@ -87,9 +80,7 @@ bool DepixelizeTracingEngine::check_image_size(Geom::IntPoint const &size) const
     return size.x() > 256 || size.y() > 256;
 }
 
-} // namespace Depixelize
-} // namespace Trace
-} // namespace Inkscape
+} // namespace Inkscape::Trace::Depixelize
 
 /*
   Local Variables:

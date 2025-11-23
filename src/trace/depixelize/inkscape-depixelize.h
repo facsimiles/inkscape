@@ -14,11 +14,10 @@
 #define INKSCAPE_TRACE_DEPIXELIZE_H
 
 #include "trace/trace.h"
-#include "3rdparty/libdepixelize/kopftracer2011.h" // Cannot move to source file due to nested class.
 
-namespace Inkscape {
-namespace Trace {
-namespace Depixelize {
+namespace Depixelize { class Options; }
+
+namespace Inkscape::Trace::Depixelize {
 
 enum class TraceType
 {
@@ -32,19 +31,18 @@ class DepixelizeTracingEngine final
 public:
     DepixelizeTracingEngine() = default;
     DepixelizeTracingEngine(TraceType traceType, double curves, int islands, int sparsePixels, double sparseMultiplier, bool optimize);
+    ~DepixelizeTracingEngine() override;
 
     TraceResult trace(Glib::RefPtr<Gdk::Pixbuf> const &pixbuf, Async::Progress<double> &progress) override;
     Glib::RefPtr<Gdk::Pixbuf> preview(Glib::RefPtr<Gdk::Pixbuf> const &pixbuf) override;
     bool check_image_size(Geom::IntPoint const &size) const override;
 
 private:
-    ::Tracer::Kopf2011::Options params;
+    std::unique_ptr<::Depixelize::Options> params;
     TraceType traceType = TraceType::VORONOI;
 };
 
-} // namespace Depixelize
-} // namespace Trace
-} // namespace Inkscape
+} // Inkscape::Trace::Depixelize
 
 #endif // INKSCAPE_TRACE_DEPIXELIZE_H
 

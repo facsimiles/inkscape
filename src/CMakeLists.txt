@@ -337,7 +337,7 @@ endif()
 target_link_libraries(inkscape_base
     PRIVATE
         autotrace_LIB
-        depixelize_LIB
+        Depixelize::Depixelize
         croco_LIB
         avoid_LIB
         cola_LIB
