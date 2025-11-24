@@ -2133,9 +2133,9 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_group_header( _("Text and Font dialog"));
     std::vector<PrefItem> lister = {
         { _("List fonts and styles"), 0, _("List fonts and styles separately"), true },
-        { _("Unified font browser (experimental)"), 1, _("Show all font styles in a single list") }
+        { _("Unified font browser"), 1, _("Show all font styles in a single list or tree view") }
     };
-    _page_windows.add_line(true, _("Font selector"), *Gtk::make_managed<PrefRadioButtons>(lister, "/options/font/browser"), "", "", false, reset_icon());
+    _page_windows.add_line(true, _("Font selector"), *Gtk::make_managed<PrefRadioButtons>(lister, "/options/font/browser"), "", "", true, reset_icon());
 
     _page_windows.add_group_header( _("Miscellaneous"));
 

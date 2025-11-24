@@ -48,6 +48,10 @@ std::pair<Glib::ustring, Glib::ustring> get_axis_name(const std::string& tag, co
     // mainly from https://fonts.google.com/knowledge/using_type/introducing_parametric_axes
     // CC BY-SA 4.0
     // Standard axes guide for reference: https://variationsguide.typenetwork.com
+    // Other references:
+    // - https://fonts.google.com/variablefonts#axis-definitions
+    // - https://canary.grida.co/docs/reference/open-type-variable-axes
+
     static std::map<std::string, std::pair<Glib::ustring, Glib::ustring>> map = {
         // TRANSLATORS: “Grade” (GRAD in CSS) is an axis that can be used to alter stroke thicknesses (or other forms)
         // without affecting the type's overall width, inter-letter spacing, or kerning — unlike altering weight.
@@ -97,8 +101,46 @@ std::pair<Glib::ustring, Glib::ustring> get_axis_name(const std::string& tag, co
         {"WONK", std::make_pair(C_("Variable font axis", "Wonky"),         _("Binary switch used to control substitution of “wonky” forms"))},
         // Element shape
         {"ESHP", std::make_pair(C_("Variable font axis", "Element shape"), _("Selection of the base element glyphs are composed of"))},
+        // Element shape
+        {"ELSH", std::make_pair(C_("Variable font axis", "Element shape"), _("Controls element shape characteristics"))},
+        // Element grid
+        {"ELGR", std::make_pair(C_("Variable font axis", "Element grid"),  _("Controls how many elements are used per one grid unit"))},
         // Element grid
         {"EGRD", std::make_pair(C_("Variable font axis", "Element grid"),  _("Controls how many elements are used per one grid unit"))},
+        // Proposed axis "height"
+        {"HGHT", std::make_pair(C_("Variable font axis", "Height"),        _("Controls the font file’s height parameter"))},
+        // Non-standard Y-axis stem thickness
+        {"YAXS", std::make_pair(C_("Variable font axis", "Y-Axis"),        _("Controls stem thickness in vertical direction"))},
+        // Vertical Element Alignment
+        {"YELA", std::make_pair(C_("Variable font axis", "Vertical align"), _("Controls vertical element alignment"))},
+        // Corner roundness
+        {"ROND", std::make_pair(C_("Variable font axis", "Roundness"),     _("Controls corner roundness"))},
+        // Bleed
+        {"BLED", std::make_pair(C_("Variable font axis", "Bleed"),         _("Controls ink bleed effect"))},
+        // Scanlines
+        {"SCAN", std::make_pair(C_("Variable font axis", "Scanlines"),     _("Controls scanline effect"))},
+        // Morph
+        {"MORF", std::make_pair(C_("Variable font axis", "Morph"),         _("Controls morphing characteristics"))},
+        // Extrusion
+        {"EDPT", std::make_pair(C_("Variable font axis", "Extrusion depth"), _("Controls depth of extrusion"))},
+        // Edge highlight
+        {"EHLT", std::make_pair(C_("Variable font axis", "Edge highlight"), _("Controls edge highlighting"))},
+        // Hyper expansion
+        {"HEXP", std::make_pair(C_("Variable font axis", "Hyper expansion"), _("Controls hyper expansion characteristics"))},
+        // Bounce
+        {"BNCE", std::make_pair(C_("Variable font axis", "Bounce"),        _("Controls bounce/spring effect"))},
+        // Informal
+        {"INFM", std::make_pair(C_("Variable font axis", "Informality"),   _("Controls informality characteristics"))},
+        // Spacing
+        {"SPAC", std::make_pair(C_("Variable font axis", "Spacing"),       _("Controls character spacing"))},
+        // Negative space
+        {"NEGA", std::make_pair(C_("Variable font axis", "Negative space"), _("Controls negative spacing"))},
+        // X-rotation
+        {"XROT", std::make_pair(C_("Variable font axis", "X rotation"),    _("Controls character 3D horizontal rotation"))},
+        // Y-rotation
+        {"YROT", std::make_pair(C_("Variable font axis", "Y rotation"),    _("Controls character 3D vertical rotation"))},
+        // Sharpness
+        {"SHRP", std::make_pair(C_("Variable font axis", "Sharpness"),     _("Controls sharpness characteristics"))},
         // TRANSLATORS: “Optical Size”
         // Optical sizes in a variable font are different versions of a typeface optimized for use at singular specific sizes,
         // such as 14 pt or 144 pt. Small (or body) optical sizes tend to have less stroke contrast, more open and wider spacing,
@@ -369,6 +411,21 @@ Glib::RefPtr<Gtk::SizeGroup> FontVariations::get_size_group(int index) {
         case 1: return _size_group_edit;
         default: return Glib::RefPtr<Gtk::SizeGroup>();
     }
+}
+
+int FontVariations::measure_height(int axis_count) {
+    std::map<Glib::ustring, OTVarAxis> axes;
+    for (int i = 0; i < axis_count; ++i) {
+        auto name = std::to_string(i);
+        OTVarAxis axis;
+        axis.tag = name;
+        axes[name] = axis;
+    }
+    build_ui(axes);
+    int min=0,nat=0,b1,b2;
+    measure(Gtk::Orientation::VERTICAL, 9999, min, nat, b1, b2);
+    build_ui({});
+    return nat;
 }
 
 } // namespace Widget

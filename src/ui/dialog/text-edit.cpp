@@ -98,7 +98,7 @@ TextEdit::TextEdit()
     , _redo{"doc.redo"}
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _use_browser = prefs->getInt("/options/font/browser", 0) != 0;
+    _use_browser = prefs->getInt("/options/font/browser", 1) != 0;
 
     font_list = _use_browser ?
         Inkscape::UI::Widget::FontList::create_font_list("/font-selector") :

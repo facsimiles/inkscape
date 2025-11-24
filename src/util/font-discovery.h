@@ -3,7 +3,6 @@
 #include <functional>
 #include <glibmm/ustring.h>
 #include <memory>
-#include <sigc++/connection.h>
 #include <sigc++/signal.h>
 #include <vector>
 #include <pangomm.h>
@@ -25,14 +24,23 @@ struct FontInfo {
     bool oblique = false;       // italic or oblique font
     bool variable_font = false; // this is variable font
     bool synthetic = false;     // this is an alias, like "Sans" or "Monospace"
+
+    bool operator == (const FontInfo&) const = default;
 };
 
-enum class FontOrder { by_name, by_weight, by_width };
+enum class FontOrder {
+    _First = 0,
+    ByName = 0,
+    ByWeight,
+    ByWidth,
+    ByFamily,
+    _Last = ByFamily
+};
 
 class FontDiscovery : public Util::EnableSingleton<FontDiscovery, Util::Depends<FontFactory>>
 {
 public:
-    using FontsPayload = std::shared_ptr<const std::vector<FontInfo>>;
+    using FontsPayload = std::shared_ptr<const std::vector<std::vector<FontInfo>>>;
     using MessageType = Async::Msg::Message<FontsPayload, double, Glib::ustring, std::vector<FontInfo>>;
 
     sigc::scoped_connection connect_to_fonts(std::function<void (const MessageType&)> fn);
@@ -52,6 +60,13 @@ std::vector<FontInfo> get_all_fonts();
 
 // change order
 void sort_fonts(std::vector<FontInfo>& fonts, FontOrder order, bool sans_first);
+
+// sort font families
+void sort_font_families(std::vector<std::vector<FontInfo>>& fonts, bool sans_first);
+
+// get regular font from the family
+const FontInfo& get_family_font(const std::vector<FontInfo>& family);
+FontInfo& get_family_font(std::vector<FontInfo>& family);
 
 Pango::FontDescription get_font_description(const Glib::RefPtr<Pango::FontFamily>& ff, const Glib::RefPtr<Pango::FontFace>& face);
 

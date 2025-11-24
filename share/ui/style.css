@@ -1787,6 +1787,37 @@ padding:0 1px;
     border: none;
 }
 
+#FontList indent {
+    /* Set indent to align listview items with and without leaf nodes (i.e. with and without expander icon) */
+    -gtk-icon-size: 16px;
+}
+
 #FontList .font-list {
     min-height: 8em;
+}
+
+/* Allow scrollwindow to become smaller than it normally is to let font variations take up as little space as they need */
+#FontList .collapse-scrollbar scrollbar slider {
+    min-height: 0;
+}
+
+.compact-menu-button box {
+    border-spacing: 0;
+}
+
+/* Style used by font grid items */
+.round-rect-shade {
+    border-radius: 3px;
+    background: mix(@theme_base_color, @theme_fg_color, 0.04);
+    color: @theme_fg_color;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.30);
+}
+#FontGrid > child {
+    padding: 4px;
+    border-radius: 6px;
+}
+#FontGrid > child box.item-box {
+    padding: 2px 0;
+    margin: 0;
+    border-spacing: 0;
 }

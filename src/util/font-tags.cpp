@@ -32,7 +32,7 @@ void FontTags::add_tag(const FontTag& tag) {
     _tags.push_back(tag);
 }
 
-std::set<std::string> FontTags::get_font_tags(Glib::RefPtr<Pango::FontFace>& face) const {
+std::set<std::string> FontTags::get_font_tags(const Glib::RefPtr<Pango::FontFace>& face) const {
     auto it = _map.find(face);
     if (it != _map.end()) {
         return it->second;

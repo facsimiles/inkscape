@@ -102,6 +102,9 @@ public:
     // provide access to label and spin button size groups
     Glib::RefPtr<Gtk::SizeGroup> get_size_group(int index);
 
+    // construct temp UI with N axes and report its height
+    int measure_height(int axis_count);
+
 private:
     void build_ui(const std::map<Glib::ustring, OTVarAxis>& axes);
 

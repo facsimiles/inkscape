@@ -133,17 +133,18 @@ void sort_fonts_by_name(std::vector<FontInfo>& fonts, bool sans_first) {
 // sort fonts in requested order, in-place
 void sort_fonts(std::vector<FontInfo>& fonts, FontOrder order, bool sans_first) {
     switch (order) {
-        case FontOrder::by_name:
+        case FontOrder::ByName:
+        case FontOrder::ByFamily:
             sort_fonts_by_name(fonts, sans_first);
             break;
 
-        case FontOrder::by_weight:
+        case FontOrder::ByWeight:
             // there are many repetitions for weight, due to font substitutions, so sort by name first
             sort_fonts_by_name(fonts, sans_first);
             std::stable_sort(begin(fonts), end(fonts), [](const FontInfo& a, const FontInfo& b) { return a.weight < b.weight; });
             break;
 
-        case FontOrder::by_width:
+        case FontOrder::ByWidth:
             sort_fonts_by_name(fonts, sans_first);
             std::stable_sort(begin(fonts), end(fonts), [](const FontInfo& a, const FontInfo& b) { return a.width < b.width; });
             break;
@@ -152,6 +153,44 @@ void sort_fonts(std::vector<FontInfo>& fonts, FontOrder order, bool sans_first) 
             g_warning("Missing case in sort_fonts");
             break;
     }
+}
+
+const FontInfo& get_family_font(const std::vector<FontInfo>& family) {
+    assert(!family.empty());
+    auto it = std::ranges::find_if(family, [](auto& fam) {
+        return fam.face &&
+            (fam.face->get_name().raw().find("Regular") != std::string::npos ||
+             fam.face->get_name().raw().find("Normal")  != std::string::npos);
+    });
+    if (it != end(family)) {
+        return *it;
+    }
+    return family.front();
+}
+
+FontInfo& get_family_font(std::vector<FontInfo>& family) {
+    return const_cast<FontInfo&>(get_family_font(const_cast<const std::vector<FontInfo>&>(family)));
+}
+
+void sort_font_families(std::vector<std::vector<FontInfo>>& fonts, bool sans_first) {
+    std::sort(begin(fonts), end(fonts), [=](const auto& a, const auto& b) {
+        auto& f1 = get_family_font(a);
+        auto& f2 = get_family_font(b);
+
+        auto na = f1.ff->get_name();
+        auto nb = f2.ff->get_name();
+        if (sans_first) {
+            bool sans_a = f1.synthetic && f1.ff->get_name() == "Sans";
+            bool sans_b = f2.synthetic && f2.ff->get_name() == "Sans";
+            if (sans_a != sans_b) {
+                return sans_a;
+            }
+        }
+        // lexicographical order:
+        return na < nb;
+        // alphabetical order:
+        //return na.raw() < nb.raw();
+    });
 }
 
 Glib::ustring get_fontspec(const Glib::ustring& family, const Glib::ustring& face, const Glib::ustring& variations) {
@@ -203,35 +242,37 @@ enum FontCacheFlags : int {
     Synthetic = 0x08,
 };
 
-void save_font_cache(const std::vector<FontInfo>& fonts) {
+void save_font_cache(const std::vector<std::vector<FontInfo>>& fonts) {
     auto keyfile = Glib::KeyFile::create();
 
     keyfile->set_double(cache_header, "version", cache_version);
     Glib::ustring weight("weight");
     Glib::ustring width("width");
-    Glib::ustring family("family");
+    Glib::ustring ffamily("family");
     Glib::ustring fontflags("flags");
 
-    for (auto&& font : fonts) {
-        auto desc = get_font_description(font.ff, font.face);
-        auto group = desc.to_string(); 
-        int flags = FontCacheFlags::Normal;
-        if (font.monospaced) {
-            flags |= FontCacheFlags::Monospace;
+    for (auto&& family : fonts) {
+        for (auto&& font : family) {
+            auto desc = get_font_description(font.ff, font.face);
+            auto group = desc.to_string();
+            int flags = FontCacheFlags::Normal;
+            if (font.monospaced) {
+                flags |= FontCacheFlags::Monospace;
+            }
+            if (font.oblique) {
+                flags |= FontCacheFlags::Oblique;
+            }
+            if (font.variable_font) {
+                flags |= FontCacheFlags::Variable;
+            }
+            if (font.synthetic) {
+                flags |= FontCacheFlags::Synthetic;
+            }
+            keyfile->set_double(group, weight, font.weight);
+            keyfile->set_double(group, width, font.width);
+            keyfile->set_integer(group, ffamily, font.family_kind);
+            keyfile->set_integer(group, fontflags, flags);
         }
-        if (font.oblique) {
-            flags |= FontCacheFlags::Oblique;
-        }
-        if (font.variable_font) {
-            flags |= FontCacheFlags::Variable;
-        }
-        if (font.synthetic) {
-            flags |= FontCacheFlags::Synthetic;
-        }
-        keyfile->set_double(group, weight, font.weight);
-        keyfile->set_double(group, width, font.width);
-        keyfile->set_integer(group, family, font.family_kind);
-        keyfile->set_integer(group, fontflags, flags);
     }
 
     std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), font_cache);
@@ -298,8 +339,8 @@ std::vector<FontInfo> get_all_fonts() {
     return fonts;
 }
 
-std::shared_ptr<const std::vector<FontInfo>> get_all_fonts(Async::Progress<double, Glib::ustring, std::vector<FontInfo>>& progress) {
-    auto result = std::make_shared<std::vector<FontInfo>>();
+std::shared_ptr<const std::vector<std::vector<FontInfo>>> get_all_fonts(Async::Progress<double, Glib::ustring, std::vector<FontInfo>>& progress) {
+    auto result = std::make_shared<std::vector<std::vector<FontInfo>>>();
     auto& fonts = *result;
     auto cache = load_cached_font_info();
 
@@ -385,9 +426,11 @@ std::shared_ptr<const std::vector<FontInfo>> get_all_fonts(Async::Progress<doubl
             if (valid) {
                 info.ff = ff;
                 info.face = face;
-                fonts.emplace_back(info);
                 family.emplace_back(info);
             }
+        }
+        if (!family.empty()) {
+            fonts.push_back(family);
         }
         progress.report_or_throw(++counter / families.size(), "", family);
     }

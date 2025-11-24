@@ -31,7 +31,7 @@ public:
     std::vector<FontTag> get_tags() const;
     void add_tag(const FontTag& tag);
 
-    std::set<std::string> get_font_tags(Glib::RefPtr<Pango::FontFace>& face) const;
+    std::set<std::string> get_font_tags(const Glib::RefPtr<Pango::FontFace>& face) const;
     void tag_font(Glib::RefPtr<Pango::FontFace>& face, std::string tag);
   
     const std::vector<FontTag>& get_selected_tags() const;
