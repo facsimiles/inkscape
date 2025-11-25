@@ -1058,7 +1058,9 @@ ObjectsPanel::ObjectsPanel()
     update();
 }
 
-ObjectsPanel::~ObjectsPanel() = default;
+ObjectsPanel::~ObjectsPanel() {
+    _subject.setDesktop(nullptr);
+};
 
 void ObjectsPanel::desktopReplaced()
 {
