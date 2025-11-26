@@ -29,6 +29,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/recentmanager.h>
+#include <gtkmm/settings.h>
 #include <gtkmm/textbuffer.h>
 
 #include "desktop.h"
@@ -189,6 +190,14 @@ Application::Application(bool use_gui) :
         themecontext->getChangeThemeSignal().connect([this](){
             themecontext->themechangecallback();
         });
+
+        /* Set animations to user-defined value */
+        if (prefs->hasPref("/theme/enableAnimations")) {
+            // If the animation setting is overridden, set the enableAnimations
+            // value and set it (Gtk::Settings is not persistent)
+            bool enabled = prefs->getBool("/theme/enableAnimations", false);
+            Gtk::Settings::get_default()->property_gtk_enable_animations().set_value(enabled);
+        }
     }
 
     /* Initialize font factory */

@@ -272,6 +272,7 @@ protected:
     UI::Widget::PrefCombo _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefSlider _contrast_theme;
+    UI::Widget::PrefCheckButton _enable_animations;
     UI::Widget::PrefCheckButton _narrow_spinbutton;
     UI::Widget::PrefCheckButton _compact_colorselector;
     UI::Widget::PrefCheckButton _symbolic_icons;

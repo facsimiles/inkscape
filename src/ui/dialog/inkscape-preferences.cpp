@@ -1716,6 +1716,17 @@ void InkscapePreferences::initPageUI()
     _narrow_spinbutton.init(_("Use narrow number entry boxes"), "/theme/narrowSpinButton", false);
     _page_ui.add_line(false, "", _narrow_spinbutton, "", _("Make number editing boxes smaller by limiting padding"), false);
 
+    // The preference will not exist until the user explicitly changes the setting.
+    // That means no default in preferences-skeleton.h.
+    // What is done here instead is to get the setting from Gtk::Settings
+    // and presenting it as such.
+    bool current_enabled = Gtk::Settings::get_default()->property_gtk_enable_animations().get_value();
+    _enable_animations.init(_("Enable interface animations"), "/theme/enableAnimations", current_enabled);
+    _page_ui.add_line(false, "", _enable_animations, "", _("Set whether the GTK interface animations are enabled"));
+    _enable_animations.signal_toggled().connect([this]() {
+        Gtk::Settings::get_default()->property_gtk_enable_animations().set_value(_enable_animations.get_active());
+    });
+
     _page_ui.add_group_header(_("Status bar"), 2);
     auto const sb_style = Gtk::make_managed<UI::Widget::PrefCheckButton>();
     sb_style->init(_("Show current style"), "/statusbar/visibility/style", true);
