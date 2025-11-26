@@ -10,7 +10,10 @@
 
 #include "toolbar-menu-button.h"
 
+#include <gdk/gdkkeysyms.h>
 #include <gtkmm/box.h>
+#include <gtkmm/spinbutton.h>
+#include "ui/util.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -45,6 +48,21 @@ void ToolbarMenuButton::init(int priority, std::string tag, Gtk::Box *popover_bo
         if (is_child) {
             _children.emplace_back(pos, child);
         }
+        // When pressing Enter, the spinbutton emits the Activate signal causing the popover to be
+        // closed. Capture them and do a manual update instead.
+        for_each_descendant(*child, [&](Gtk::Widget &widget) {
+            if (Gtk::SpinButton *child_spinbutton = dynamic_cast<Gtk::SpinButton *>(&widget)) {
+                child_spinbutton->signal_key_press_event().connect([child_spinbutton](GdkEventKey *event) -> bool {
+                    if (event->keyval == GDK_KEY_Return || event->keyval == GDK_KEY_KP_Enter) {
+                        child_spinbutton->update();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }, false);
+            }
+            return ForEachResult::_continue;
+        });
         pos++;
     }
 }
