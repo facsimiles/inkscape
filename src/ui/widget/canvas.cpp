@@ -946,6 +946,7 @@ bool Canvas::on_button_press_event(GdkEventButton *gdkevent)
     event.time = gdkevent->time;
     event.num_press = gdkevent->type == GDK_BUTTON_PRESS ? 1 : gdkevent->type == GDK_2BUTTON_PRESS ? 2 : 3;
     event.extinput = extinput_from_gdkevent(reinterpret_cast<GdkEvent *>(gdkevent));
+    event.original = GdkEventUniqPtr(gdk_event_copy(reinterpret_cast<GdkEvent *>(gdkevent)));
 
     return d->process_event(event);
 }

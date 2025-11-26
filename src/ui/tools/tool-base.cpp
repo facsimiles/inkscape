@@ -47,7 +47,6 @@
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-ptr.h"
 #include "ui/modifiers.h"
-#include "ui/popup-menu.h"
 #include "ui/shape-editor.h"
 #include "ui/shortcuts.h"
 #include "ui/tool/control-point.h"
@@ -1337,22 +1336,19 @@ void ToolBase::menu_popup(CanvasEvent const &event, SPObject *obj)
         }
     }
 
-    auto const popup = [&](auto const &event)
-    {
-        // Get a list of items under the cursor, used for unhiding and unlocking.
-        auto point_win = _desktop->point() * _desktop->d2w();
-        auto items_under_cursor = _desktop->getItemsAtPoints({point_win}, true, false, 0, false);
-        auto menu = std::make_shared<ContextMenu>(_desktop, obj, items_under_cursor);
-        UI::popup_at(*menu, *_desktop->getCanvas(), event.orig_pos);
-        UI::on_hide_reset(std::move(menu));
-    };
+    auto menu = new ContextMenu(_desktop, obj);
+    menu->attach_to_widget(*_desktop->getCanvas()); // So actions work!
+    menu->set_visible(true);
+
 
     inspect_event(event,
         [&] (ButtonPressEvent const &event) {
-            popup(event);
+            menu->popup_at_pointer(event.original.get());
+            // popup(event);
         },
         [&] (KeyPressEvent const &event) {
-            popup(event);
+            menu->popup_at_pointer(event.original.get());
+            // popup(event);
         },
         [&] (CanvasEvent const &event) {}
     );

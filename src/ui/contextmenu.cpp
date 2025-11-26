@@ -52,10 +52,10 @@
 #include "ui/widget/desktop-widget.h"
 
 static void
-AppendItemFromAction(Glib::RefPtr<Gio::Menu> const &gmenu,
-                     Glib::ustring const &action,
-                     Glib::ustring const &label,
-                     Glib::ustring const &icon = {})
+AppendItemFromAction(Glib::RefPtr<Gio::Menu> gmenu,
+                     Glib::ustring action,
+                     Glib::ustring label,
+                     Glib::ustring icon)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show_icons = prefs->getInt("/theme/menuIcons", true);
@@ -69,7 +69,9 @@ AppendItemFromAction(Glib::RefPtr<Gio::Menu> const &gmenu,
 }
 
 /** @brief Create a menu section containing the standard editing actions:
- *         Cut, Copy, Paste, Paste... (in place, on page, style, size, width, height, size separately, width separately, height separately).
+ *         Cut, Copy, Paste, Paste...
+ *         (in place, on page, style, size, width, height,
+ *          size separately, width separately, height separately).
  *
  *  @param paste_only If true, only the Paste action will be included.
  *  @return A new menu containing the requested actions.
@@ -82,24 +84,24 @@ static Glib::RefPtr<Gio::Menu> create_clipboard_actions(bool const paste_only = 
         AppendItemFromAction(result, "app.copy", _("_Copy"), "edit-copy");
     }
     AppendItemFromAction(result, "win.paste", _("_Paste"), "edit-paste");
-    
-    /// Also appending special paste options 
-    /// (in place, paste on page, paste style, paste size, paste width, paste height, paste size separately,
-    /// paste width separately, paste height separately), to increase discoverability.
-    auto gmenu_paste_section = Gio::Menu::create();
-    auto gmenu_paste_submenu = Gio::Menu::create();
-    AppendItemFromAction(gmenu_paste_submenu, "win.paste-in-place", _("_In Place"), "edit-paste-in-place");
-    AppendItemFromAction(gmenu_paste_submenu, "win.paste-on-page", _("_On Page"), "");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-style", _("_Style"), "edit-paste-style");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-size", _("Si_ze"), "edit-paste-size");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-width", _("_Width"), "edit-paste-width");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-height", _("_Height"), "edit-paste-height");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-size-separately", _("Size Separately"), "edit-paste-size-separately");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-width-separately", _("Width Separately"), "edit-paste-width-separately");
-    AppendItemFromAction(gmenu_paste_submenu, "app.paste-height-separately", _("Height Separately"), "edit-paste-height-separately");
-    gmenu_paste_section->append_submenu(_("Paste..."), gmenu_paste_submenu);
-    result->append_section(gmenu_paste_section);
 
+     /// Also appending special paste options 
+     /// (in place, paste on page, paste style, paste size, paste width, paste height, paste size separately,
+     /// paste width separately, paste height separately), to increase discoverability.
+     auto gmenu_paste_section = Gio::Menu::create();
+     auto gmenu_paste_submenu = Gio::Menu::create();
+     AppendItemFromAction(gmenu_paste_submenu, "win.paste-in-place", _("_In Place"), "edit-paste-in-place");
+     AppendItemFromAction(gmenu_paste_submenu, "win.paste-on-page", _("_On Page"), "");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-style", _("_Style"), "edit-paste-style");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-size", _("Si_ze"), "edit-paste-size");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-width", _("_Width"), "edit-paste-width");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-height", _("_Height"), "edit-paste-height");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-size-separately", _("Size Separately"), "edit-paste-size-separately");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-width-separately", _("Width Separately"), "edit-paste-width-separately");
+     AppendItemFromAction(gmenu_paste_submenu, "app.paste-height-separately", _("Height Separately"), "edit-paste-height-separately");
+     gmenu_paste_section->append_submenu(_("Paste..."), gmenu_paste_submenu);
+
+     result->append_section(gmenu_paste_section);
     return result;
 }
 
@@ -139,7 +141,7 @@ static bool childrenIncludedInSelection(SPItem *item, Inkscape::Selection &selec
     });
 }
 
-ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPItem*> const &items, bool hide_layers_and_objects_menu_item)
+ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_and_objects_menu_item)
 {
     set_name("ContextMenu");
 
@@ -159,7 +161,8 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
     auto root = desktop->layerManager().currentRoot();
 
     // Save the items in context
-    items_under_cursor = items;
+    auto point_win = desktop->point() * desktop->d2w();
+    items_under_cursor = document->getItemsAtPoints(desktop->dkey, {point_win}, true, false);
 
     bool has_hidden_below_cursor = false;
     bool has_locked_below_cursor = false;
@@ -374,11 +377,8 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
 
     auto const widget = desktop->getDesktopWidget();
     g_assert(widget);
-    set_relative_to(*widget);
-    bind_model(gmenu);
-    set_position(Gtk::POS_BOTTOM);
+    bind_model(gmenu, true);
     show_all_images(*this);
-    Inkscape::UI::menuize_popover(*this);
 
     // Do not install this CSS provider; it messes up menus with icons (like popup menu with all dialogs).
     // It doesn't work well with context menu either, introducing disturbing visual glitch 

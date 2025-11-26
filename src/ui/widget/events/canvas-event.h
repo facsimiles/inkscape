@@ -127,6 +127,8 @@ struct ButtonPressEvent final : ButtonEvent
 
     /// Extended input data for graphics tablet input. Fields may be empty.
     ExtendedInput extinput;
+
+    GdkEventUniqPtr original;
 };
 
 /**
@@ -175,7 +177,7 @@ struct KeyEvent : CanvasEvent
     /// Timestamp of the event in milliseconds.
     uint32_t time = 0;
 
-    // Todo: (GTK4) Remove me! Currently only used by text-tool.cpp (input method).
+    // Todo: (GTK4) Remove me! Currently only used by tool-base.cpp and text-tool.cpp (input method).
     GdkEventUniqPtr original;
 
     /// Location of the cursor, in world coordinates.

@@ -13,9 +13,11 @@
 #ifndef SEEN_CONTEXTMENU_H
 #define SEEN_CONTEXTMENU_H
 
+#include <gtkmm/menu.h>
+#include <giomm/menu.h>
 #include <vector>
 #include <glibmm/refptr.h>
-#include <gtkmm/popover.h>
+
 
 namespace Gio {
 class SimpleActionGroup;
@@ -29,10 +31,10 @@ class SPItem;
 /**
  * Implements the Inkscape context menu.
  */
-class ContextMenu final : public Gtk::Popover
+class ContextMenu : public Gtk::Menu
 {
 public:
-    ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPItem*> const &items_under_cursor, bool hide_layers_and_objects_menu_item = false);
+    ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_and_objects_menu_item = false);
 
 private:
     // Used for unlock and unhide actions
