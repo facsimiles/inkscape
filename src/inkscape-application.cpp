@@ -36,6 +36,7 @@
  */
 
 #include "inkscape-application.h"
+#include "preferences.h"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"      // Defines ENABLE_NLS
@@ -1031,11 +1032,15 @@ void
 InkscapeApplication::on_startup()
 {
     // Add the start/splash screen to the app as soon as possible
-    if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app() &&
-        Inkscape::UI::Dialog::StartScreen::get_start_mode() > 0) {
-        _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-        _start_screen->show_now();
-        gtk_app()->add_window(*_start_screen);
+    if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
+        // Migrate settings first; see ui/dialog/startup.cpp
+        Inkscape::UI::Dialog::StartScreen::migrate_settings();
+        auto prefs = Inkscape::Preferences::get();
+        if (prefs->getBool("/options/boot/showsplash", true)) {
+            _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+            _start_screen->show_now();
+            gtk_app()->add_window(*_start_screen);
+        }
     }
 
 #if defined(GDK_WINDOWING_X11)
@@ -1099,6 +1104,7 @@ void
 InkscapeApplication::on_activate()
 {
     std::string output;
+    auto prefs = Inkscape::Preferences::get();
 
     // Create new document, either from pipe or from template.
     SPDocument *document = nullptr;
@@ -1111,7 +1117,10 @@ InkscapeApplication::on_activate()
         document = document_open (s);
         output = "-";
 
-    } else if (_start_screen && Inkscape::UI::Dialog::StartScreen::get_start_mode() == 2) {
+    } else if (_with_gui && !_use_command_line_argument && gtk_app()
+            && prefs->getBool("/options/boot/showwelcome", true)) {
+        // Show welcome screen. Instantiate start screen if it hasn't yet.
+        if (!_start_screen) _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
         _start_screen->setup_welcome();
         _start_screen->run(); // Blocks until document selected
         document = _start_screen->get_document();

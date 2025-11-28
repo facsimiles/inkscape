@@ -14,7 +14,6 @@
 #include <string>             // for string
 #include <gdk/gdk.h>          // for GdkModifierType
 #include <glibmm/refptr.h>    // for RefPtr
-#include <glibmm/timer.h>     // for Timer
 #include <glibmm/ustring.h>   // for ustring
 #include <gtk/gtk.h>          // for GtkEventControllerKey
 #include <gtkmm/dialog.h>     // for Dialog
@@ -47,7 +46,7 @@ public:
     StartScreen();
     ~StartScreen() override;
 
-    static int get_start_mode();
+    static void migrate_settings();
 
     SPDocument* get_document() { return _document; }
 
@@ -82,7 +81,6 @@ private:
 
 private:
     const std::string opt_shown;
-    Glib::Timer timer;
 
     Glib::RefPtr<Gtk::Builder> build_splash;
     Gtk::Overlay &banners;

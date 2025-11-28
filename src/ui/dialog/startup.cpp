@@ -190,7 +190,6 @@ void StartScreen::show_now()
     property_resizable() = false;
     set_visible(true);
     present(); // This makes the widget actually appear
-    timer.start();
 
     // The main loop won't get called until the main window is initialized,
     // so we need to iterate the loop a few times here to show the splash screen.
@@ -294,22 +293,10 @@ void StartScreen::setup_welcome()
 #endif
 
     show();
-
-    // Splash screen is now finished
-    timer.stop();
 }
 
 StartScreen::~StartScreen()
 {
-    // Let than a second, we'll hide the splash if needed.
-    if (timer.elapsed() < 1.0) {
-        auto prefs = Inkscape::Preferences::get();
-        // But only if the welcome screen is disabled
-        if (prefs->getInt("/options/boot/mode", 2) == 1) {
-            prefs->setInt("/options/boot/mode", 0);
-        }
-    }
-
     // These are "owned" by builder... don't delete them!
     banners.get_parent()->remove(banners);
     messages.get_parent()->remove(messages);
@@ -321,19 +308,28 @@ StartScreen::~StartScreen()
 }
 
 /**
- * Get the preference for the startup mode.
- *
- * @returns
- *    0 - Show nothing
- *    1 - Show only the splash screen
- *    2 = Show the splash and startup screens
+ * Migrate settings to the newest scheme.
  */
-int StartScreen::get_start_mode()
+void StartScreen::migrate_settings()
 {
     auto prefs = Inkscape::Preferences::get();
-    auto old_enabled = prefs->getBool("/options/boot/enabled", true);
-    prefs->remove("/options/boot/enabled");
-    return prefs->getInt("/options/boot/mode", old_enabled ? 2 : 1);
+    // Check if the new setting is set. We keep old settings for backwards compatibility.
+    // Migrate if it isn't set.
+    if (!prefs->getEntry("/options/boot/showsplash").isValid() &&
+            !prefs->getEntry("/options/boot/showwelcome").isValid()) {
+        if (prefs->getEntry("/options/boot/enabled").isValid()) {
+            // Migrate settings for Inkscape 1.1 - 1.3.2
+            bool enabled = prefs->getBool("/options/boot/enabled", true);
+            prefs->setBool("/options/boot/showsplash", enabled);
+            prefs->setBool("/options/boot/showwelcome", enabled);
+        }
+        if (prefs->getEntry("/options/boot/mode").isValid()) {
+            // Migrate settings for Inkscape 1.4 - 1.4.2
+            int mode = prefs->getInt("/options/boot/mode", 2);
+            prefs->setBool("/options/boot/showsplash", mode >= 1);
+            prefs->setBool("/options/boot/showwelcome", mode == 2);
+        }
+    }
 }
 
 /**
@@ -575,8 +571,7 @@ StartScreen::show_toggle()
 {
     auto &button = get_widget<Gtk::ToggleButton>(build_welcome, "show_toggle");
     auto prefs = Inkscape::Preferences::get();
-    prefs->setInt("/options/boot/mode", button.get_active() ? 2 : 1);
-
+    prefs->setInt("/options/boot/showwelcome", button.get_active());
 }
 
 /**

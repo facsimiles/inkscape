@@ -1967,16 +1967,14 @@ void InkscapePreferences::initPageUI()
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
-    {
-        Glib::ustring startModeLabels[] = {C_("Start mode", "Nothing"),
-                                             C_("Start mode", "Splash screen only"),
-                                             C_("Start mode", "Welcome screen")};
-        int startModeValues[] = {0, 1, 2};
+    _page_windows.add_group_header( _("Show at startup"));
 
-        _win_start_mode.init( "/options/boot/mode", startModeLabels, startModeValues, 2);
-        _page_windows.add_line( false, _("Show when starting:"),  _win_start_mode, "",
-                           _("Set what shows when loading the program normally."), false);
-    }
+    _win_show_splash_screen.init ( _("Splash screen"), "/options/boot/showsplash", true);
+    _page_windows.add_line( true, "", _win_show_splash_screen, "",
+                            _("Whether the splash screen will be shown when Inkscape starts."));
+    _win_show_welcome_screen.init ( _("Welcome dialog"), "/options/boot/showwelcome", true);
+    _page_windows.add_line( true, "", _win_show_welcome_screen, "",
+                            _("Whether the Welcome dialog will be shown when Inkscape starts."));
 
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
