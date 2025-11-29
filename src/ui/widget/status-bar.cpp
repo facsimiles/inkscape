@@ -28,7 +28,6 @@ namespace Inkscape::UI::Widget {
 StatusBar::StatusBar()
     : Gtk::Box(Gtk::Orientation::HORIZONTAL)
 {
-    UI::Widget::InkSpinButton::register_type();
     auto builder = Inkscape::UI::create_builder("statusbar.ui");
 
     auto &statusbar = UI::get_widget<Gtk::Box>(builder, "statusbar");

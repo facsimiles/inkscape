@@ -58,6 +58,8 @@ constexpr int icon_margin = 2;
 static Glib::RefPtr<Gdk::Cursor> g_resizing_cursor;
 static Glib::RefPtr<Gdk::Cursor> g_text_cursor;
 
+GType InkSpinButton::gtype = 0;
+
 void InkSpinButton::construct() {
     set_name("InkSpinButton");
 
@@ -289,14 +291,6 @@ InkSpinButton::InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Bu
     INIT_PROPERTIES {
 
     construct();
-}
-
-InkSpinButton::InkSpinButton(BaseObjectType* cobject):
-    CALL_CONSTRUCTORS,
-    Gtk::Widget(cobject),
-    INIT_PROPERTIES {
-
-     construct();
 }
 
 #undef INIT_PROPERTIES
@@ -1014,8 +1008,6 @@ void InkSpinButton::set_transformers(std::function<double(double)> input, std::f
     _output_transformer = std::move(output);
     update(false); // apply transformer
 }
-
-GType InkSpinButton::gtype = 0;
 
 // a fade-out mask for overflowing numbers
 void InkSpinButton::FadeOut::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {

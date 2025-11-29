@@ -30,8 +30,7 @@ namespace Inkscape::UI::Widget {
 class InkSpinButton : public CssNameClassInit, public Gtk::Widget {
 public:
     InkSpinButton();
-    InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
-    explicit InkSpinButton(BaseObjectType* cobject);
+    explicit InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
 
     ~InkSpinButton() override;
 
@@ -223,30 +222,7 @@ public:
     Glib::PropertyProxy<bool> property_enter_exit() { return _enter_exit.get_proxy(); }
     Glib::PropertyProxy<bool> property_wrap_around() { return _wrap_around.get_proxy(); }
 
-    // Construct a C++ object from a parent (=base) C class object
-
-    static Glib::ObjectBase* wrap_new(GObject* o) {
-        auto obj = new InkSpinButton(GTK_WIDGET(o));
-
-        //TODO: check if this is needed
-        // // if (gtk_widget_is_toplevel(GTK_WIDGET(o)))
-        //     return obj;
-        // else
-            return Gtk::manage(obj);
-    }
-
-    // Register a "new" type in Glib and bind it to the C++ wrapper function
-    static void register_type() {
-        if (gtype) return;
-
-        InkSpinButton dummy;
-        gtype = G_OBJECT_TYPE(dummy.gobj());
-
-        Glib::wrap_register(gtype, InkSpinButton::wrap_new);
-    }
-private:
     static GType gtype;
-
 };
 
 } // namespace Inkscape::UI::Widget

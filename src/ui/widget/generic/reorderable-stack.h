@@ -12,8 +12,6 @@
 #include <vector>
 #include <ranges>
 
-#include <gtkmm/box.h>
-
 #include "tab-strip.h"
 
 namespace Inkscape::UI::Widget {
@@ -21,7 +19,8 @@ namespace Inkscape::UI::Widget {
 class ReorderableStack : public TabStrip
 {
 public:
-    ReorderableStack(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);
+    ReorderableStack();
+    explicit ReorderableStack(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
 
     void add_option(std::string const &label, std::string const &icon, std::string const &tooltip, int value);
 
@@ -31,7 +30,10 @@ public:
 
     sigc::signal<void ()>& signal_values_changed() { return _signal_values_changed; }
 
+    static GType gtype;
 private:
+    void construct();
+
     sigc::signal<void ()> _signal_values_changed;
 
     std::vector<std::pair<Gtk::Widget *, int>> _rows;

@@ -38,4 +38,78 @@ Because of how Gtk works, if you inherit from Glib or CssNameClassInit, or imple
  * All sub-widgets should come from this directory OR Gtkmm NOT from parent directories.
  * All sub-widgets should be deconstructed by regular Gtkmm referencing (destroyed when unparented for example)
 
+## Template
+
+Because the creation of widgets is quite delicate, this template should help you make a new widget, while understanding why
+each parent of the copypasta is necessary to interact with gtkmm and glibmm.
+
+### Header file
+
+```
+class MyNewWidget : public ParentWidget
+    // ParentWidget may be any other generic widget, or any widget from the Gtk:: namespace
+
+public:
+    // Bare constructor is used in registration to initalise the GType
+    MyNewWidget();
+
+    // The Gtk builder constructor allows this widget to be created by ux xml files
+    MyNewWidget(GtkWidget *cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
+
+    // We store the new gtype for our registered class here, public so register_type<>() can modify it.
+    static GType gtype;
+
+private:
+    // Optional constructor method for duplicated constructor logic
+    void construct();
+};
+```
+
+### Code file
+
+```
+// First the bare constructor, it must be EXACTLY the same as the builder constructor.
+MyNewWidget::MyNewWidget()
+// This allows the new widget to be correctly registered and for gobject properties of the parent
+//   to be accessable to this class too.
+ , Glib::ObjectBase("MyNewWidget")
+// The parent constructor must omit the cobject entirely because the chain of construction generates
+//   a new cobject only if there is no argument, and not if that argument is nullptr.
+// : ParentWidget() // This isn't required, just noted here for explicit symmetry
+ // More construction here
+{
+   construct(); // optional
+}
+
+// This constructor means we already have a gobject, and the builder is passing it
+// to us so we can bind it to our C++ code correctly.
+MyNewWidget::MyNewWidget(GtkWidget *cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+ , Glib::ObjectBase("MyNewWidget")
+// As above the cobject must be passed into the parent widget. builder can be omitted
+// if the parent is a Gtk widget and not a custom widget.
+ : ParentWidget(cobject, builder)
+ // The same construction here, you may want to use a define to reduce duplication
+{
+   construct(); // optional
+}
+
+// Ensure that the gtype static is constructed in the object file to avoid linking errors
+GType MyNewWidget::gtype = 0;
+```
+
+### Registration in gtk-registry.cpp
+
+```
+
+#include "generic/my-new-widget.h"
+
+void register_all()
+{
+   // This makes sure the ctype is ready for the Gtk Builder and adds the required
+   // names to the lookup. Our widget will be available as gtkmm__CustomObject_MyNewWidget
+   register_type<MyNewWidget>();
+}
+
+```
+
 

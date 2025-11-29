@@ -542,14 +542,9 @@ static std::shared_ptr<TabWidgetDrag> get_tab_drag(Gtk::DropTarget &droptarget)
     return content->lock();
 }
 
-TabStrip::TabStrip(Gtk::Orientation orientation)
-    : Glib::ObjectBase("TabStrip")
-    , Gtk::Orientable()
-    , Gtk::Widget()
-    , _overlay{Gtk::make_managed<PointerTransparentWidget>()}
+void TabStrip::construct()
 {
     set_name("TabStrip");
-    set_orientation(orientation);
     set_overflow(Gtk::Overflow::HIDDEN);
     containerize(*this);
 
@@ -671,6 +666,23 @@ TabStrip::TabStrip(Gtk::Orientation orientation)
     add_controller(droptarget);
 
     _updateVisibility();
+}
+
+GType TabStrip::gtype = 0;
+
+TabStrip::TabStrip()
+    : Glib::ObjectBase("TabStrip")
+    , _overlay{Gtk::make_managed<PointerTransparentWidget>()}
+{
+    construct();
+}
+
+TabStrip::TabStrip(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& /*builder*/)
+    : Glib::ObjectBase("TabStrip")
+    , Gtk::Widget(cobject)
+    , _overlay{Gtk::make_managed<PointerTransparentWidget>()}
+{
+    construct();
 }
 
 TabStrip::~TabStrip()

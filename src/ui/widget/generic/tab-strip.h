@@ -16,6 +16,7 @@
 #define INKSCAPE_UI_WIDGET_TAB_STRIP_H
 
 #include <2geom/point.h>
+#include <gtkmm/builder.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/orientable.h>
 
@@ -30,7 +31,8 @@ class TabWidgetDrag;
 class TabStrip : public Gtk::Orientable, public Gtk::Widget
 {
 public:
-    TabStrip(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);
+    TabStrip();
+    explicit TabStrip(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
     ~TabStrip() override;
 
     // create a new tab
@@ -85,7 +87,10 @@ public:
     // tab d&d has ended; bool argument is true if it was cancelled
     sigc::signal<void (bool)> signal_dnd_end() { return _signal_dnd_end; }
 
+    static GType gtype;
 private:
+    void construct();
+
     Gtk::Widget *const _overlay;
     Gtk::Popover *_popover = nullptr;
     Gtk::MenuButton _plus_btn;

@@ -246,6 +246,7 @@ target_sources(inkscape_base PRIVATE
 	widget/gradient-selector.cpp
 	widget/gradient-vector-selector.cpp
 	widget/gradient-with-stops.cpp
+        widget/gtk-registry.cpp
 	widget/icon-combobox.cpp
 	widget/handle-preview.cpp
 	widget/image-properties.cpp
@@ -293,6 +294,7 @@ target_sources(inkscape_base PRIVATE
 	widget/style/marker-combo-box.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
+        widget/style/paint-order.cpp
 	widget/swatch-editor.cpp
 	widget/swatch-selector.cpp
 	widget/tabs-widget.cpp
@@ -577,6 +579,7 @@ target_sources(inkscape_base PRIVATE
 	widget/gradient-selector.h
 	widget/gradient-vector-selector.h
 	widget/gradient-with-stops.h
+        widget/gtk-registry.h
 	widget/icon-combobox.h
 	widget/handle-preview.h
 	widget/image-properties.h
@@ -625,6 +628,7 @@ target_sources(inkscape_base PRIVATE
 	widget/style/marker-combo-box.h
 	widget/style-subject.h
 	widget/style-swatch.h
+        widget/style/paint-order.h
 	widget/swatch-editor.h
 	widget/swatch-selector.h
 	widget/tabs-widget.h

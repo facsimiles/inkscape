@@ -10,9 +10,9 @@
 
 namespace Inkscape::UI::Widget {
 
-ReorderableStack::ReorderableStack(Gtk::Orientation orientation)
-    : Glib::ObjectBase("ReorderableStack")
-    , TabStrip(orientation)
+GType ReorderableStack::gtype = 0;
+
+void ReorderableStack::construct()
 {
     set_name("ReorderableStack");
     set_hexpand();
@@ -28,6 +28,18 @@ ReorderableStack::ReorderableStack(Gtk::Orientation orientation)
         _signal_values_changed.emit();
     });
     set_new_tab_popup(nullptr);
+}
+
+ReorderableStack::ReorderableStack()
+    : Glib::ObjectBase("ReorderableStack")
+{
+    construct();
+}
+ReorderableStack::ReorderableStack(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+    : Glib::ObjectBase("ReorderableStack")
+    , TabStrip(cobject, builder)
+{
+    construct();
 }
 
 /**

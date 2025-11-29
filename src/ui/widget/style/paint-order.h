@@ -9,50 +9,24 @@
 #ifndef SEEN_UI_WIDGET_PAINT_ORDER_H
 #define SEEN_UI_WIDGET_PAINT_ORDER_H
 
-#include <glibmm/i18n.h>
-
 #include "ui/widget/generic/reorderable-stack.h"
 
-#include "style-internal.h"
+class SPIPaintOrder;
 
 namespace Inkscape::UI::Widget {
 
 class PaintOrderWidget : public ReorderableStack
 {
 public:
-    PaintOrderWidget()
-        : Glib::ObjectBase("PaintOrderWidget")
-        , ReorderableStack(Gtk::Orientation::VERTICAL)
-    {
-        add_option(_("Marker"), "paint-order-markers", _("Arrows, markers and points"),       SP_CSS_PAINT_ORDER_MARKER);
-        add_option(_("Stroke"), "paint-order-stroke",  _("The border line around the shape"), SP_CSS_PAINT_ORDER_STROKE);
-        add_option(_("Fill"),   "paint-order-fill",    _("The content of the shape"),         SP_CSS_PAINT_ORDER_FILL);
-    }
+    PaintOrderWidget();
+    explicit PaintOrderWidget(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
 
-    void setValue(SPIPaintOrder &po, bool has_markers)
-    {
-        // array to vector
-        auto values = po.get_layers();
-        // Note: what's painted first is presented at the bottom of the stack.
-        std::vector<int> vec = {values[2], values[1], values[0]};
-        setValues(vec);
+    void setValue(SPIPaintOrder &po, bool has_markers);
+    SPIPaintOrder getValue();
 
-        // Hide the markers if the style has no markers
-        setVisible((int)SP_CSS_PAINT_ORDER_MARKER, has_markers);
-    }
-
-    SPIPaintOrder getValue()
-    {
-        SPIPaintOrder po;
-        auto values = getValues();
-        for (auto i = 0; i < 3; i++) {
-            // Note the reversed order to match setValue()
-            po.layer[i] = (SPPaintOrderLayer)values[2 - i];
-            po.layer_set[i] = true;
-        }
-        po.set = true;
-        return po;
-    }
+    static GType gtype;
+private:
+    void construct();
 };
 
 } // namespace Inkscape::UI::Widget

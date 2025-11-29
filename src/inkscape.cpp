@@ -54,7 +54,7 @@
 #include "ui/themes.h"
 #include "ui/tools/tool-base.h"
 #include "ui/util.h"
-#include "ui/widget/generic/spin-button.h"
+#include "ui/widget/gtk-registry.h"
 #include "util/font-discovery.h"
 
 static bool desktop_is_active(SPDesktop const *d)
@@ -164,8 +164,9 @@ Application::Application(bool use_gui) :
         auto scale = prefs->getDoubleLimited(UI::ThemeContext::get_font_scale_pref_path(), 100, 50, 200);
         themecontext->adjustGlobalFontScale(scale / 100.0);
         Inkscape::UI::ThemeContext::initialize_source_syntax_styles();
+
         // register custom widget types
-        Inkscape::UI::Widget::InkSpinButton::register_type();
+        Inkscape::UI::Widget::register_all();
     }
 
     /* set language for user interface according setting in preferences */
