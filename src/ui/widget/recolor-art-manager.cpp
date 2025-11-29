@@ -13,10 +13,32 @@
 #include "object/sp-gradient.h"
 #include "object/sp-pattern.h"
 #include "object/sp-use.h"
+#include "object/sp-marker.h"
 #include "style.h"
 
 namespace Inkscape::UI::Widget {
 namespace {
+
+class MoreThan1ColorChecker
+{
+public:
+    bool operator()(SPIPaint const &paint)
+    {
+        if (!paint.isColor()) {
+            return false;
+        }
+
+        if (!_first) {
+            _first = paint.getColor();
+            return false;
+        } else {
+            return paint.getColor() != _first;
+        }
+    }
+
+private:
+    std::optional<Colors::Color> _first;
+};
 
 bool has_colors_pattern(SPItem const *item)
 {
@@ -24,22 +46,7 @@ bool has_colors_pattern(SPItem const *item)
         return false;
     }
 
-    std::optional<Colors::Color> first_col;
-
-    // Return true when a second colour is found.
-    auto check_color = [&] (SPIPaint const &paint) {
-        if (!paint.isColor()) {
-            return false;
-        }
-
-        if (!first_col) {
-            first_col = paint.getColor();
-            return false;
-        } else {
-            return paint.getColor() != first_col;
-        }
-    };
-
+    MoreThan1ColorChecker check;
     // Search a pattern for colours, returning true when a second colour is found.
     auto search_pattern = [&] (SPPaintServer const *ps) {
         auto pat = cast<SPPattern>(ps);
@@ -51,14 +58,14 @@ bool has_colors_pattern(SPItem const *item)
             if (auto group = cast<SPGroup>(&child)) {
                 for (auto const &child : group->children) {
                     if (auto c = cast<SPItem>(&child)) {
-                        if (check_color(c->style->fill) || check_color(c->style->stroke)) {
+                        if (check(c->style->fill) || check(c->style->stroke)) {
                             return true;
                         }
                     }
                 }
             }
 
-            if (check_color(child.style->fill) || check_color(child.style->stroke)) {
+            if (check(child.style->fill) || check(child.style->stroke)) {
                 return true;
             }
         }
@@ -115,6 +122,40 @@ bool RecolorArtManager::checkSelection(Inkscape::Selection *selection)
            is<SPUse>(item) ||
            item->getMaskObject() ||
            has_colors_pattern(item);
+}
+
+bool RecolorArtManager::checkMarkerObject(SPMarker *marker)
+{
+    if (!marker) {
+        return false;
+    }
+
+    if (marker->getMaskObject()) {
+        return true;
+    }
+
+    MoreThan1ColorChecker check;
+    for (auto const &child : marker->children) {
+        
+        if (auto item = cast<SPItem>(&child)) {
+            if (item->style) {
+                if (check(item->style->fill) || check(item->style->stroke)) {
+                    return true;
+                }
+            }
+        }
+        if (auto group = cast<SPGroup>(&child)) {
+            for (auto const &child : group->children) {
+                if (auto c = cast<SPItem>(&child)) {
+                    if (check(c->style->fill) || check(c->style->stroke)) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 bool RecolorArtManager::checkMeshObject(Inkscape::Selection *selection)

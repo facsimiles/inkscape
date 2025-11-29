@@ -30,6 +30,7 @@ public:
 
     static bool checkSelection(Inkscape::Selection *selection);
     static bool checkMeshObject(Inkscape::Selection *selection);
+    static bool checkMarkerObject(SPMarker *marker);
 
 private:
     RecolorArtManager();

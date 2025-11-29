@@ -604,8 +604,6 @@ void RecolorArt::updateFromSelection()
         generateVisualList();
         auto first_button_id = _manager.getFirstKey();
         onOriginalColorClicked(first_button_id);
-    }
-    if (!_manager.isColorsEmpty()) {
         _color_wheel->setColors(_manager.getColors());
     }
 }
@@ -628,8 +626,6 @@ void RecolorArt::showForObject(SPDesktop *desktop, SPObject *object)
         generateVisualList();
         auto first_button_id = _manager.getFirstKey();
         onOriginalColorClicked(first_button_id);
-    }
-    if (!_manager.isColorsEmpty()) {
         _color_wheel->setColors(_manager.getColors());
     }
 }

@@ -396,9 +396,10 @@ void MarkerComboBox::update_widgets_from_marker(SPMarker* marker) {
             _orient_angle.set_active();
             _angle_btn.set_sensitive(true);
         }
-    }
 
-    _recolorButtonTrigger->set_visible(marker);
+        bool should_show = RecolorArtManager::checkMarkerObject(marker);
+        _recolorButtonTrigger->set_visible(should_show);
+    }
 }
 
 void MarkerComboBox::update_scale_link() {
@@ -631,6 +632,11 @@ void MarkerComboBox::set_current(SPObject *marker)
         // if popup is hidden, there's no need to rebuild the store;
         // update menu button only
         update_menu_btn();
+    }
+
+    auto& mgr = RecolorArtManager::get();
+    if (mgr.popover.is_visible() && RecolorArtManager::checkMarkerObject(get_current())) {
+        mgr.widget.showForObject(_desktop, get_current());
     }
 }
 
