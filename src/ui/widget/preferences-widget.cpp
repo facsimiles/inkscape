@@ -36,6 +36,7 @@
 #include "ui/pack.h"
 #include "ui/util.h"
 #include "ui/widget/preferences-widget.h"
+#include "ui/widget/scrollprotected.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -504,7 +505,7 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
 
     _ruler.set_size(ruler_width, ruler_height);
 
-    _slider = Gtk::make_managed<Gtk::Scale>(Gtk::ORIENTATION_HORIZONTAL);
+    _slider = Gtk::make_managed<ScrollProtected<Gtk::Scale>>(Gtk::ORIENTATION_HORIZONTAL);
 
     _slider->set_size_request(_ruler.width(), -1);
     _slider->set_range (lower, upper);
@@ -586,7 +587,7 @@ PrefSlider::init(Glib::ustring const &prefs_path,
 
     freeze = false;
 
-    _slider = Gtk::make_managed<Gtk::Scale>(Gtk::ORIENTATION_HORIZONTAL);
+    _slider = Gtk::make_managed<ScrollProtected<Gtk::Scale>>(Gtk::ORIENTATION_HORIZONTAL);
 
     _slider->set_range (lower, upper);
     _slider->set_increments (step_increment, page_increment);
