@@ -153,12 +153,12 @@ inkscape:macos:
     INK_BUILD: $CI_PIPELINE_IID
     WRK_DIR: /Users/Shared/work
     # ICM = inkscape ci macos
-    # https://gitlab.com/inkscape/infra/inkscape-ci-macos
-    ICM_VERSION: 0.81
+    ICM_REPO_REF: a2b53fc7
+    ICM_REPO_URL: https://gitlab.com/inkscape/infra/inkscape-ci-macos
   before_script:
     - |
-      git clone https://gitlab.com/inkscape/infra/inkscape-ci-macos icm
-      git -C icm checkout v$ICM_VERSION
+      git clone $ICM_REPO_URL icm
+      git -C icm checkout $ICM_REPO_REF
       git -C icm submodule update --init --recursive
   script:
     - icm/jhb/usr/bin/archive install_dmg
