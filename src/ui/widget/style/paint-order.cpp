@@ -30,7 +30,7 @@ PaintOrderWidget::PaintOrderWidget()
 
 PaintOrderWidget::PaintOrderWidget(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
     : Glib::ObjectBase("PaintOrderWidget")
-    , ReorderableStack(cobject, builder)
+    , BuildableWidget(cobject, builder)
 {
     construct();
 }
@@ -59,8 +59,6 @@ SPIPaintOrder PaintOrderWidget::getValue()
     po.set = true;
     return po;
 }
-
-GType PaintOrderWidget::gtype = 0;
 
 } // namespace Inkscape::UI::Widget
 

@@ -24,14 +24,10 @@ Widgets are expected to be generic and not have specific implementation for data
 All widgets should be usable via Gtk Builder, and use well understood mechanisms to communicate and be in a Gtkmm style:
 
  * Implement GtkBuilder constructors
- * Use a initaliser so they can be used in ui xml files
+ * Use an initaliser so they can be used in ui xml files
  * Add properties where needed so they can be used
  * Report changes using signals with non-Gtk/Gdk values
  * Have setters and getters for their data using non-Gtk/Gdk values
-
-## Final Glib class
-
-Because of how Gtk works, if you inherit from Glib or CssNameClassInit, or implement an interface like Gtk::Orientable then your class must be marked as `final` to avoid broken widget classes.
 
 ## Mixing Widgets
 
@@ -46,18 +42,15 @@ each parent of the copypasta is necessary to interact with gtkmm and glibmm.
 ### Header file
 
 ```
-class MyNewWidget : public ParentWidget
-    // ParentWidget may be any other generic widget, or any widget from the Gtk:: namespace
+class MyNewWidget : public BuildableWidget<MyNewWidget, BaseWidget>
+    // BaseWidget may be any other generic widget, or any widget from the Gtk:: namespace
 
 public:
     // Bare constructor is used in registration to initalise the GType
     MyNewWidget();
 
-    // The Gtk builder constructor allows this widget to be created by ux xml files
+    // The Gtk builder constructor allows this widget to be created by ui xml files
     MyNewWidget(GtkWidget *cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
-
-    // We store the new gtype for our registered class here, public so register_type<>() can modify it.
-    static GType gtype;
 
 private:
     // Optional constructor method for duplicated constructor logic
@@ -65,13 +58,25 @@ private:
 };
 ```
 
+We use `BuildableWidget` to implement registration code that is specific to each custom widget.
+
+Note 1: If your widget implements an interface, like `Gtk::Orientable`, you will need to add a `using` alias
+to disambiguate `BaseObjectType` definition, as it appears in two places in a hierarchy.
+
+Example: a custom widget that derives from `Gtk::Widget` will need to add `using BaseObjectType = GtkWidget;` line.
+
+Note 2: Interfaces (like `Gtk::Orientable`) or helper classes (like `CssNameClassInit`) need to be specified *before* `BuildableWidget` to be initialized properly.
+
+Note 3: To change the name of `MyNewWidget` as seen by CSS, we can use 
+`CssNameClassInit` to provide a new one. For example `CssNameClassInit("my-new-widget")`.
+
 ### Code file
 
 ```
 // First the bare constructor, it must be EXACTLY the same as the builder constructor.
 MyNewWidget::MyNewWidget()
 // This allows the new widget to be correctly registered and for gobject properties of the parent
-//   to be accessable to this class too.
+//   to be accessible to this class too.
  , Glib::ObjectBase("MyNewWidget")
 // The parent constructor must omit the cobject entirely because the chain of construction generates
 //   a new cobject only if there is no argument, and not if that argument is nullptr.
@@ -85,17 +90,21 @@ MyNewWidget::MyNewWidget()
 // to us so we can bind it to our C++ code correctly.
 MyNewWidget::MyNewWidget(GtkWidget *cobject, const Glib::RefPtr<Gtk::Builder>& builder)
  , Glib::ObjectBase("MyNewWidget")
-// As above the cobject must be passed into the parent widget. builder can be omitted
-// if the parent is a Gtk widget and not a custom widget.
- : ParentWidget(cobject, builder)
+// As above the cobject must be passed into the base widget. builder can be omitted
+// if the base is a Gtk widget and not a custom widget.
+ : BaseWidget(cobject, builder)
  // The same construction here, you may want to use a define to reduce duplication
 {
    construct(); // optional
 }
 
-// Ensure that the gtype static is constructed in the object file to avoid linking errors
-GType MyNewWidget::gtype = 0;
 ```
+
+Note the call to the `Glib::ObjectBase` constructor. It is a virtual base, and as such it needs to be
+initialized by the most derived class (here: `MyNewWidget`).
+This call is what creates a unique `Glib` `GType` for `MyNewWidget`.
+
+Reference: [Derived widgets](https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/sec-builder-using-derived-widgets.html)
 
 ### Registration in gtk-registry.cpp
 
@@ -107,7 +116,7 @@ void register_all()
 {
    // This makes sure the ctype is ready for the Gtk Builder and adds the required
    // names to the lookup. Our widget will be available as gtkmm__CustomObject_MyNewWidget
-   register_type<MyNewWidget>();
+   MyNewWidget::register_type();
 }
 
 ```

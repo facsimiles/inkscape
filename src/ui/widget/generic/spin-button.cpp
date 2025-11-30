@@ -58,8 +58,6 @@ constexpr int icon_margin = 2;
 static Glib::RefPtr<Gdk::Cursor> g_resizing_cursor;
 static Glib::RefPtr<Gdk::Cursor> g_text_cursor;
 
-GType InkSpinButton::gtype = 0;
-
 void InkSpinButton::construct() {
     set_name("InkSpinButton");
 
@@ -287,7 +285,7 @@ InkSpinButton::InkSpinButton():
 
 InkSpinButton::InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder):
     CALL_CONSTRUCTORS,
-    Gtk::Widget(cobject),
+    BuildableWidget(cobject, builder),
     INIT_PROPERTIES {
 
     construct();

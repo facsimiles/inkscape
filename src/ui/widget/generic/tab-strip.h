@@ -20,6 +20,8 @@
 #include <gtkmm/menubutton.h>
 #include <gtkmm/orientable.h>
 
+#include "ui/widget/gtk-registry.h"
+
 namespace Gtk { class Popover; }
 
 namespace Inkscape::UI::Widget {
@@ -28,11 +30,13 @@ struct TabWidget;
 class TabWidgetDrag;
 
 /// Widget that implements strip of tabs
-class TabStrip : public Gtk::Orientable, public Gtk::Widget
+class TabStrip : public Gtk::Orientable, public BuildableWidget<TabStrip, Gtk::Widget>
 {
 public:
-    TabStrip();
-    explicit TabStrip(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
+    using BaseObjectType = GtkWidget;
+
+    TabStrip(Gtk::Orientation orientation = Gtk::Orientation::HORIZONTAL);
+    explicit TabStrip(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
     ~TabStrip() override;
 
     // create a new tab
@@ -87,7 +91,6 @@ public:
     // tab d&d has ended; bool argument is true if it was cancelled
     sigc::signal<void (bool)> signal_dnd_end() { return _signal_dnd_end; }
 
-    static GType gtype;
 private:
     void construct();
 

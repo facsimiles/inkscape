@@ -16,7 +16,7 @@
 
 namespace Inkscape::UI::Widget {
 
-class ReorderableStack : public TabStrip
+class ReorderableStack : public BuildableWidget<ReorderableStack, TabStrip>
 {
 public:
     ReorderableStack();
@@ -30,7 +30,6 @@ public:
 
     sigc::signal<void ()>& signal_values_changed() { return _signal_values_changed; }
 
-    static GType gtype;
 private:
     void construct();
 

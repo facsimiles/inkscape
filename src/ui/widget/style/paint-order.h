@@ -15,7 +15,7 @@ class SPIPaintOrder;
 
 namespace Inkscape::UI::Widget {
 
-class PaintOrderWidget : public ReorderableStack
+class PaintOrderWidget : public BuildableWidget<PaintOrderWidget, ReorderableStack>
 {
 public:
     PaintOrderWidget();
@@ -24,7 +24,6 @@ public:
     void setValue(SPIPaintOrder &po, bool has_markers);
     SPIPaintOrder getValue();
 
-    static GType gtype;
 private:
     void construct();
 };

@@ -10,8 +10,6 @@
 
 namespace Inkscape::UI::Widget {
 
-GType ReorderableStack::gtype = 0;
-
 void ReorderableStack::construct()
 {
     set_name("ReorderableStack");
@@ -37,7 +35,7 @@ ReorderableStack::ReorderableStack()
 }
 ReorderableStack::ReorderableStack(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
     : Glib::ObjectBase("ReorderableStack")
-    , TabStrip(cobject, builder)
+    , BuildableWidget(cobject, builder)
 {
     construct();
 }

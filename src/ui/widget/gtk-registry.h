@@ -8,8 +8,12 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_GTK_REGISTRY_H
 #define SEEN_INKSCAPE_UI_WIDGET_GTK_REGISTRY_H
 
-#include "glibmm/wrap.h"
-#include "gtkmm/widget.h"
+#include <glibmm/wrap.h>
+#include <gtkmm/widget.h>
+
+namespace Gtk {
+class Builder;
+}
 
 namespace Inkscape::UI::Widget {
 
@@ -17,24 +21,35 @@ namespace Inkscape::UI::Widget {
 // Used from glade/ui xml files.
 void register_all();
 
-// Construct a C++ object from a parent (=base) C class object
-template<class T>
-Glib::ObjectBase* wrap_new(GObject* o) {
-    auto obj = new T(GTK_WIDGET(o));
-    return Gtk::manage(obj);
-}
+// helper class to handle Glib type registration details for custom widgets
+template<class T, class Base> class BuildableWidget : public Base {
+    static GType gtype;
 
-/**
- * Register a "new" type in Glib and bind it to the C++ wrapper function
- */
-template<class T>
-static void register_type()
-{
-    if (T::gtype) return;
-    auto dummy = T();
-    T::gtype = G_OBJECT_TYPE(dummy.Gtk::Widget::gobj());
-    Glib::wrap_register(T::gtype, wrap_new<T>);
-}
+    static Glib::ObjectBase* wrap_new(GObject* o) {
+        auto obj = new T(GTK_WIDGET(o));
+        return Gtk::manage(obj);
+    }
+
+protected:
+    BuildableWidget() = default;
+    BuildableWidget(typename Base::BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>&) : Base(cobject) {}
+
+public:
+    static void register_type() {
+        if (gtype) return;
+
+        auto dummy = T();
+        gtype = G_OBJECT_TYPE(dummy.Gtk::Widget::gobj());
+        Glib::wrap_register(gtype, wrap_new);
+    }
+
+    static GType get_gtype() {
+        return gtype;
+    }
+};
+
+template<class T, class Base>
+GType BuildableWidget<T, Base>::gtype = 0;
 
 } // namespace Dialog::UI::Widget
 

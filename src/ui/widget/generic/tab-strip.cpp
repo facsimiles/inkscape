@@ -668,18 +668,17 @@ void TabStrip::construct()
     _updateVisibility();
 }
 
-GType TabStrip::gtype = 0;
-
-TabStrip::TabStrip()
+TabStrip::TabStrip(Gtk::Orientation orientation)
     : Glib::ObjectBase("TabStrip")
     , _overlay{Gtk::make_managed<PointerTransparentWidget>()}
 {
+    set_orientation(orientation);
     construct();
 }
 
-TabStrip::TabStrip(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& /*builder*/)
+TabStrip::TabStrip(GtkWidget* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
     : Glib::ObjectBase("TabStrip")
-    , Gtk::Widget(cobject)
+    , BuildableWidget(cobject, builder)
     , _overlay{Gtk::make_managed<PointerTransparentWidget>()}
 {
     construct();

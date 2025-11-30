@@ -13,6 +13,7 @@
 #include <sigc++/scoped_connection.h>
 
 #include "css-name-class-init.h"
+#include "ui/widget/gtk-registry.h"
 
 namespace Gtk {
 class EventControllerKey;
@@ -27,8 +28,10 @@ namespace Inkscape::UI { class DefocusTarget; }
 
 namespace Inkscape::UI::Widget {
 
-class InkSpinButton : public CssNameClassInit, public Gtk::Widget {
+class InkSpinButton : public CssNameClassInit, public BuildableWidget<InkSpinButton, Gtk::Widget> {
 public:
+    typedef GtkWidget BaseObjectType;
+
     InkSpinButton();
     explicit InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder = {});
 
@@ -221,8 +224,6 @@ public:
     Glib::PropertyProxy<bool> property_show_arrows() { return _show_arrows.get_proxy(); }
     Glib::PropertyProxy<bool> property_enter_exit() { return _enter_exit.get_proxy(); }
     Glib::PropertyProxy<bool> property_wrap_around() { return _wrap_around.get_proxy(); }
-
-    static GType gtype;
 };
 
 } // namespace Inkscape::UI::Widget
