@@ -12,6 +12,7 @@
 #define INKSCAPE_UI_TOOLBAR_TOOLBAR_H
 
 #include <stack>
+#include <gtkmm/box.h>
 
 #include "ui/defocus-target.h"
 #include "ui/widget/generic/bin.h"

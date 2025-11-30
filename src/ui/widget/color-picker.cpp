@@ -13,6 +13,8 @@
 
 #include "color-picker.h"
 
+#include <gtkmm/button.h>
+
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape.h"

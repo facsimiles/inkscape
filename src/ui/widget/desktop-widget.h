@@ -36,6 +36,8 @@
 #ifndef SEEN_SP_DESKTOP_WIDGET_H
 #define SEEN_SP_DESKTOP_WIDGET_H
 
+#include <gtkmm/box.h>
+
 #include "message.h"
 #include "preferences.h"
 

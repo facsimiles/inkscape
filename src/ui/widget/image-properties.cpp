@@ -17,6 +17,7 @@
 #include <gtkmm/dropdown.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
+#include <gtkmm/window.h>
 
 #include "generic/spin-button.h"
 #include "display/cairo-utils.h"

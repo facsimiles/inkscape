@@ -27,6 +27,7 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/gestureclick.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/popovermenu.h>
 
@@ -38,6 +39,7 @@
 #include "inkscape.h"
 #include "object/sp-image.h"
 #include "object/sp-namedview.h"
+#include "ui/dialog-run.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/swatches.h"

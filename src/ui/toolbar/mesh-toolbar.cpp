@@ -22,6 +22,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/togglebutton.h>
 
 #include "desktop.h"
@@ -32,6 +33,7 @@
 #include "selection.h"
 #include "style.h"
 #include "ui/builder-utils.h"
+#include "ui/dialog-run.h"
 #include "ui/icon-names.h"
 #include "ui/simple-pref-pusher.h"
 #include "ui/tools/mesh-tool.h"

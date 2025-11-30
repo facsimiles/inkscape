@@ -11,6 +11,7 @@
 #ifndef SEEN_TOOLBAR_SNAP_H
 #define SEEN_TOOLBAR_SNAP_H
 
+#include <gtkmm/box.h>
 #include <gtkmm/builder.h>
 
 #include "preferences.h"

@@ -20,6 +20,7 @@
 #include <glibmm/miscutils.h>
 #include <gtkmm/error.h>
 #include <gtkmm/filedialog.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/progressbar.h>
 
@@ -35,6 +36,7 @@
 #include "object/sp-root.h"
 #include "selection.h"
 #include "ui/builder-utils.h"
+#include "ui/dialog-run.h"
 #include "ui/dialog/export.h"
 #include "ui/icon-names.h"
 #include "ui/widget/color-picker.h"

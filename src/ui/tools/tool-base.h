@@ -14,6 +14,7 @@
 #define INKSCAPE_UI_TOOLS_TOOL_BASE_H
 
 #include <boost/noncopyable.hpp>
+#include <gdkmm/cursor.h>
 
 #include "preferences.h"
 #include "ui/widget/events/enums.h"

@@ -16,6 +16,7 @@
 #include "selectorsdialog.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
@@ -28,6 +29,7 @@
 #include "preferences.h"
 #include "selection.h"
 #include "style.h"
+#include "ui/dialog-run.h"
 #include "ui/dialog/styledialog.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"

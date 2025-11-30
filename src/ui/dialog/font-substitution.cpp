@@ -10,6 +10,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
 #include <libnrtype/font-factory.h>
@@ -25,6 +26,7 @@
 #include "selection.h"
 #include "text-editing.h"
 #include "ui/dialog-events.h"
+#include "ui/dialog-run.h"
 #include "ui/pack.h"
 
 namespace Inkscape::UI::Dialog {

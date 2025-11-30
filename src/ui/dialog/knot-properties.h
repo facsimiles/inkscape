@@ -13,9 +13,12 @@
 #ifndef INKSCAPE_DIALOG_KNOT_PROPERTIES_H
 #define INKSCAPE_DIALOG_KNOT_PROPERTIES_H
 
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
+#include <gtkmm/window.h>
 
 #include "ui/tools/measure-tool.h"
 

@@ -15,6 +15,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/version.h>
+#include <gtkmm/window.h>
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>

@@ -20,7 +20,6 @@
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
 #include <iomanip>
-#include <sstream>
 #include <utility>
 
 #include "attribute-rel-util.h"
@@ -28,6 +27,7 @@
 #include "colors/manager.h"
 #include "io/resource.h"
 #include "preferences-skeleton.h"
+#include "ui/error-reporter.h"
 #include "util-string/ustring-format.h"
 #include "util/units.h"
 #include "xml/attribute-record.h"

@@ -16,6 +16,8 @@
 #include <glibmm/miscutils.h>
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/binlayout.h>
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/picture.h>

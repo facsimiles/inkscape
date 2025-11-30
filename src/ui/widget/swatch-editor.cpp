@@ -13,13 +13,13 @@
 #include <gtkmm/label.h>
 #include <gtkmm/object.h>
 #include <gtkmm/signallistitemfactory.h>
+#include <gtkmm/window.h>
 
 #include "color-preview.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"
-#include "generic/spin-button.h"
 #include "preferences.h"
 #include "object/sp-defs.h"
 #include "object/sp-stop.h"

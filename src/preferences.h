@@ -27,15 +27,13 @@
 
 #include "xml/repr.h"
 #include "util/scope_exit.h"
-#include "ui/error-reporter.h"
 
 class SPCSSAttr;
-typedef unsigned int guint32;
 
 namespace Inkscape {
-namespace Colors {
-class Color;
-}
+
+namespace Colors { class Color; }
+class ErrorReporter;
 
 /**
  * Preference storage class.

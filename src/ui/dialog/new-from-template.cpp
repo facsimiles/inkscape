@@ -17,6 +17,7 @@
 #include "inkscape.h"
 #include "preferences.h"
 #include "object/sp-namedview.h"
+#include "ui/dialog-run.h"
 
 namespace Inkscape::UI {
 

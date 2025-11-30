@@ -100,6 +100,7 @@
 #include "ui/dialog/dialog-window.h"
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/dialog/startup.h"
+#include "ui/error-reporter.h"
 #include "ui/interface.h"                 // sp_ui_error_dialog
 #include "ui/tools/shortcuts.h"
 #include "ui/widget/desktop-widget.h"

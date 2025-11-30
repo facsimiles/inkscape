@@ -16,17 +16,16 @@
 
 #include "inkscape-preferences.h"
 
-#include <2geom/path-sink.h>
-#include <glibmm/markup.h>
-
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
 #endif
 
 #include <fstream>
 #include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 #include <giomm/themedicon.h>
 #include <gtkmm/binlayout.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/treemodelsort.h>
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/accelerator.h>
@@ -39,14 +38,14 @@
 #include <gtkmm/revealer.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/settings.h>
-#include <iomanip>
+#include <2geom/path-sink.h>
 
 #include "display/control/ctrl-handle-manager.h"
 #include "ui/widget/icon-combobox.h"
 #include "ui/widget/handle-preview.h"
 
 #if WITH_GSOURCEVIEW
-#   include <gtksourceview/gtksource.h>
+#include <gtksourceview/gtksource.h>
 #endif
 
 #include <glibmm/convert.h>
@@ -67,6 +66,7 @@
 #include "object/box3d.h"
 #include "object/box3d-side.h"
 #include "ui/builder-utils.h"
+#include "ui/dialog-run.h"
 #include "ui/modifiers.h"
 #include "ui/pack.h"
 #include "ui/shortcuts.h"
@@ -77,7 +77,6 @@
 #include "ui/toolbar/toolbar-constants.h"
 #include "ui/util.h"
 #include "ui/widget/style-swatch.h"
-#include "util-string/ustring-format.h"
 #include "util/recently-used-fonts.h"
 #include "util/trim.h"
 #include "widgets/spw-utilities.h"

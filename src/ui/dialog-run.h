@@ -3,6 +3,8 @@
 #ifndef INKSCAPE_UI_DIALOG_RUN_H
 #define INKSCAPE_UI_DIALOG_RUN_H
 
+#include <memory>
+
 namespace Gtk {
 class Dialog;
 class Root;
@@ -20,8 +22,8 @@ namespace Inkscape::UI {
 int dialog_run(Gtk::Dialog &dialog);
 
 /**
- * Show a dialog modally, destroying it when the user dismisses it.
- * If toplevel is not null, the dialog is shown as a transient for toplevel.
+ * Show @p dialog modally, destroying it when the user dismisses it.
+ * If @p root is not null, the dialog is shown as a transient for @p root.
  */
 void dialog_show_modal_and_selfdestruct(std::unique_ptr<Gtk::Dialog> dialog, Gtk::Root *root = nullptr);
 

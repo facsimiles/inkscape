@@ -17,6 +17,7 @@
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
+#include <gtkmm/window.h>
 
 #include "io/resource.h"
 #include "object/sp-gradient.h"

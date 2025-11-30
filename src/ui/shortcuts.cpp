@@ -17,6 +17,7 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
 #include <gtkmm/accelerator.h>
+#include <gtkmm/actionable.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/shortcut.h>
 

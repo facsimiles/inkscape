@@ -16,6 +16,8 @@
 #include <glibmm/regex.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/adjustment.h>
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/listbox.h>

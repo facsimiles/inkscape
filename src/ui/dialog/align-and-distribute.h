@@ -20,6 +20,7 @@
 #define INKSCAPE_UI_WIDGET_ALIGN_AND_DISTRIBUTE_H
 
 #include <set>
+#include <gtkmm/box.h>
 
 #include "preferences.h"
 

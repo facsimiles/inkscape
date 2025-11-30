@@ -23,6 +23,7 @@
 
 #include <giomm/themedicon.h>
 #include <glibmm/main.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/spinbutton.h>
 
