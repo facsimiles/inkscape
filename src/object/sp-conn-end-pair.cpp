@@ -15,8 +15,9 @@
 #include "sp-conn-end-pair.h"
 
 #include <cstring>
-#include <string>
 #include <glibmm/stringutils.h>
+#include <libavoid/router.h>
+#include <libavoid/connector.h>
 #include <2geom/path-sink.h>
 
 #include "attributes.h"
@@ -27,8 +28,6 @@
 #include "sp-use.h"
 #include "uri.h"
 
-#include "libavoid/router.h"
-#include "libavoid/connector.h"
 #include "xml/node.h"
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)

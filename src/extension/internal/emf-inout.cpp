@@ -26,9 +26,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
-#include <3rdparty/libuemf/symbol_convert.h>
 
 #include "emf-inout.h"
+#include "util-string/symbol-convert.h"
 
 #include "clear-n_.h"
 #include "colors/color.h"

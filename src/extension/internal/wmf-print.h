@@ -12,7 +12,7 @@
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_WMF_PRINT_H
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_WMF_PRINT_H
 
-#include <3rdparty/libuemf/uwmf.h>
+#include <libuemf/uwmf.h>
 #include "extension/internal/metafile-print.h"
 
 namespace Inkscape {

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Enhanced Metafile Input/Output
  */
@@ -5,16 +6,15 @@
  *   David Mathog <mathog@caltech.edu>
  *
  * Copyright (C) 2012 Authors
- *
- * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#ifndef SEEN_UNICODE_CONVERT_H
+#define SEEN_UNICODE_CONVERT_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
- 
-#ifndef SEEN_UNICODE_CONVERT_H
-#define SEEN_UNICODE_CONVERT_H
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -35,7 +35,7 @@ extern "C" {
 }
 #endif
 
-#endif /* SEEN_UNICODE_CONVERT_H */
+#endif // SEEN_UNICODE_CONVERT_H
 
 /*
   Local Variables:
@@ -47,5 +47,3 @@ extern "C" {
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
-
-

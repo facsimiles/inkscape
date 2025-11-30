@@ -41,9 +41,9 @@
 #include <vector>
 #include <glibmm/main.h>
 #include <glibmm/miscutils.h>
+#include <libavoid/router.h>
 #include <2geom/transforms.h>
 
-#include "libavoid/router.h"
 #include "3rdparty/libcroco/src/cr-sel-eng.h"
 #include "3rdparty/libcroco/src/cr-selector.h"
 #include "actions/actions-edit-document.h"

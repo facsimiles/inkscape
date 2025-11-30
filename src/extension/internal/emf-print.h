@@ -13,7 +13,7 @@
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_EMF_PRINT_H
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_EMF_PRINT_H
 
-#include <3rdparty/libuemf/uemf.h>
+#include <libuemf/uemf.h>
 #include "extension/internal/metafile-print.h"
 
 class SPItem;

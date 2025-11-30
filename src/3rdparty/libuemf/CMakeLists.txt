@@ -1,7 +1,6 @@
 add_library(uemf_LIB STATIC)
 
 target_sources(uemf_LIB PRIVATE
-	symbol_convert.c
 	uemf.c
 	uemf_endian.c
 	uemf_print.c
@@ -13,7 +12,6 @@ target_sources(uemf_LIB PRIVATE
 	upmf.c
 	upmf_print.c
 
-	symbol_convert.h
 	uemf.h
 	uemf_endian.h
 	uemf_print.h
@@ -27,3 +25,4 @@ target_sources(uemf_LIB PRIVATE
 )
 
 target_link_libraries(uemf_LIB PUBLIC Iconv::Iconv)
+target_include_directories(uemf_LIB PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")

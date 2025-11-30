@@ -12,17 +12,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <utility>
-
+#include <libvpsc/rectangle.h>
 #include <2geom/transforms.h>
 
 #include "removeoverlap.h"
 
-#include "libvpsc/rectangle.h"
-
 #include "object/sp-item.h"
 #include "object/sp-item-transform.h"
-
 
 using vpsc::Rectangle;
 

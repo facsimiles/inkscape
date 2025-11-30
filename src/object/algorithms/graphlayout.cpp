@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <cstring>
-#include <iostream>
 #include <list>
 #include <map>
 #include <string>
@@ -23,15 +22,14 @@
 #include <vector>
 #include <array>
 
+#include <libcola/cola.h>
+#include <libcola/connected_components.h>
 #include <2geom/transforms.h>
 
 #include "desktop.h"
 #include "graphlayout.h"
 #include "inkscape.h"
 #include "preferences.h"
-
-#include "libcola/cola.h"
-#include "libcola/connected_components.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"

@@ -12,7 +12,7 @@
 #ifndef SEEN_EXTENSION_INTERNAL_WMF_H
 #define SEEN_EXTENSION_INTERNAL_WMF_H
 
-#include <3rdparty/libuemf/uwmf.h>
+#include <libuemf/uwmf.h>
 #include "extension/internal/metafile-inout.h"  // picks up PNG
 #include "extension/implementation/implementation.h"
 #include "style.h"

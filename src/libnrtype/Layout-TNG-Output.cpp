@@ -19,9 +19,8 @@
 #include "font-instance.h"
 #include "extension/internal/cairo-render-context.h"
 #include "display/curve.h"
-#include <3rdparty/libuemf/symbol_convert.h>
 #include "libnrtype/font-factory.h"
-
+#include "util-string/symbol-convert.h"
 
 using Extension::Internal::CairoRenderContext;
 using Extension::Internal::CairoGlyphInfo;

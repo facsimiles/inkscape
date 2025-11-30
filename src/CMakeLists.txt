@@ -221,7 +221,10 @@ add_subdirectory(display)
 add_subdirectory(extension)
 add_subdirectory(helper)
 add_subdirectory(include)
+add_subdirectory(inkgc)
 add_subdirectory(io)
+add_subdirectory(libnrtype)
+add_subdirectory(livarot)
 add_subdirectory(live_effects)
 add_subdirectory(object)
 add_subdirectory(path)
@@ -235,10 +238,6 @@ add_subdirectory(xml)
 
 # Directories containing lists files that describe building internal libraries
 add_subdirectory(3rdparty)
-add_subdirectory(inkgc)
-add_subdirectory(livarot)
-add_subdirectory(libnrtype)
-include_directories("3rdparty/adaptagrams")
 
 # -----------------------------------------------------------------------------
 # Relative RPATH handling

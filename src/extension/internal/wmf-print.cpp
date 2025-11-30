@@ -24,24 +24,23 @@
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
 
+#include <cstring>
+
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/elliptical-arc.h>
-
 #include <2geom/path.h>
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
+#include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 #include <2geom/curves.h>
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
-
-#include "inkscape-version.h"
 
 #include "util/units.h"
 
 #include "extension/system.h"
 #include "extension/print.h"
 #include "document.h"
-#include "path-prefix.h"
 
 #include "object/sp-pattern.h"
 #include "object/sp-image.h"
@@ -53,14 +52,10 @@
 
 #include "path/path-boolop.h"
 
-#include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
-
 #include "display/cairo-utils.h"   // for Inkscape::Pixbuf::PF_CAIRO
 
+#include "util-string/symbol-convert.h"
 #include "wmf-print.h"
-
-#include <cstring>
-#include <3rdparty/libuemf/symbol_convert.h>
 
 namespace Inkscape {
 namespace Extension {

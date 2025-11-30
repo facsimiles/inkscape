@@ -28,12 +28,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
-#include <3rdparty/libuemf/symbol_convert.h>
 
 #include "clear-n_.h"
 #include "document.h"
 #include "print.h"
 #include "metafile-print.h"
+#include "util-string/symbol-convert.h"
 
 #include "display/drawing.h"
 #include "extension/db.h"

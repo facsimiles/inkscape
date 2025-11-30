@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Windows-only Enhanced Metafile input and output.
  */
@@ -5,8 +6,6 @@
  *   David mathog <mathog@caltech.edu>
  *
  * Copyright (C) 2012 Authors
- *
- * Released under GNU GPL, read the file 'COPYING' for more information
  *
  * References:
  *  see unicode-convert.h
@@ -23,17 +22,9 @@
  *     mapped in UnicodeToNon and SingleUnicodeToNon
  */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
+#include "symbol-convert.h"
 
 #include <string.h>
-#include "symbol_convert.h"
-
 
 static bool hold_symb=0;  // if any of these change, (re)generate the map table
 static bool hold_wing=0;
@@ -1002,7 +993,3 @@ int i;
        if(hold_symb)table_filler(&symbol_convert[0],CVTSYM);
    }
 }
-
-#ifdef __cplusplus
-}
-#endif

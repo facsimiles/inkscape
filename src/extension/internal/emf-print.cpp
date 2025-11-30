@@ -27,7 +27,6 @@
 
 #include <cstring>
 #include <glibmm/miscutils.h>
-#include <3rdparty/libuemf/symbol_convert.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
 #include <2geom/pathvector.h>
@@ -38,7 +37,6 @@
 #include "inkscape-version.h"
 
 #include "document.h"
-#include "path-prefix.h"
 #include "style.h"
 #include "style-enums.h"          // Fill rules
 
@@ -61,6 +59,8 @@
 #include "object/sp-clippath.h"
 
 #include "path/path-boolop.h"
+
+#include "util-string/symbol-convert.h"
 
 #include "util/units.h"
 
