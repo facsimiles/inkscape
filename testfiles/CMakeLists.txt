@@ -69,6 +69,7 @@ set(TEST_SOURCES
     colors/color-set-test
     colors/xml-color-test
     uri-test
+    uri-references-test
     util-test
     util-units-test
     util-expression-evaluator-test
