@@ -221,6 +221,7 @@ FontFactory::FontFactory()
     : fontServer(pango_ft2_font_map_new())
     , fontContext(pango_font_map_create_context(fontServer))
 {
+    pango_context_set_language(fontContext, pango_language_from_string("und"));
     _font_map = Glib::wrap(fontServer);
     pango_ft2_font_map_set_resolution(PANGO_FT2_FONT_MAP(fontServer), 72, 72);
 #if PANGO_VERSION_CHECK(1,48,0)
