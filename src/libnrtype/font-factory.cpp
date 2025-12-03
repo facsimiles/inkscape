@@ -214,6 +214,8 @@ FontFactory::FontFactory()
     , fontConfig(pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer)))
 {
     Pango::wrap_init();
+    // Prevent system language from over-riding the font language
+    pango_context_set_language(fontContext, pango_language_from_string("und"));
     _font_map = Glib::wrap(fontServer);
     pango_ft2_font_map_set_resolution(PANGO_FT2_FONT_MAP(fontServer), 72, 72);
 #if PANGO_VERSION_CHECK(1,48,0)
