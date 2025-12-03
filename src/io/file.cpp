@@ -18,6 +18,8 @@
 #include <glibmm/miscutils.h>
 #include <giomm/file.h>
 
+#include "inkscape-application.h"
+
 #include "document.h"
 #include "document-undo.h"
 #include "extension/system.h"     // Extension::open()
@@ -82,6 +84,9 @@ ink_file_open(std::string const &data)
 SPDocument *
 ink_file_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled_param)
 {
+    auto debug_out = &InkscapeApplication::instance()->debug_out;
+    *debug_out << "ink_file_open: Entrance" << std::endl;
+
     bool cancelled = false;
     SPDocument *doc = nullptr;
     std::string path = file->get_path();
@@ -90,12 +95,16 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled_param)
     //       If we can't properly handle them (e.g. by showing a user-visible message) don't catch them!
     // TODO: Why do we reset `doc` to nullptr? Surely if open() throws, we will never assign to it?
     try {
+        *debug_out << "  Trying to open: " << path << std::endl;
         doc = Inkscape::Extension::open(nullptr, path.c_str());
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
+        *debug_out << "  No extension" << std::endl;
         doc = nullptr;
     } catch (Inkscape::Extension::Input::open_failed &e) {
+        *debug_out << "  Open failed" << std::endl;
         doc = nullptr;
     } catch (Inkscape::Extension::Input::open_cancelled &e) {
+        *debug_out << "  Open cancelled" << std::endl;
         cancelled = true;
         doc = nullptr;
     }
@@ -104,12 +113,16 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled_param)
     // TODO: Why is this necessary? Shouldn't this be handled by the first call already?
     if (doc == nullptr && !cancelled) {
         try {
+            *debug_out << "  Trying to open explicitly as SVG: " << path << std::endl;
             doc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), path.c_str());
         } catch (Inkscape::Extension::Input::no_extension_found &e) {
+            *debug_out << "  No extension" << std::endl;
             doc = nullptr;
         } catch (Inkscape::Extension::Input::open_failed &e) {
+            *debug_out << "  Open failed" << std::endl;
             doc = nullptr;
         } catch (Inkscape::Extension::Input::open_cancelled &e) {
+            *debug_out << "  Open cancelled" << std::endl;
             cancelled = true;
             doc = nullptr;
         }
@@ -122,6 +135,7 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled_param)
         root->original.svg      = root->version.svg;
     } else if (!cancelled) {
         std::cerr << "ink_file_open: '" << path << "' cannot be opened!" << std::endl;
+        *debug_out << "ink_file_open: '" << path << "' cannot be opened!" << std::endl;
     }
 
     if (cancelled_param) {

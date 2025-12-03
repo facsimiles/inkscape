@@ -181,6 +181,15 @@ InkscapeApplication::document_new(const std::string &Template)
 SPDocument*
 InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled)
 {
+    debug_out << "InkscapeApplication::document_open: entrance: " << file->get_uri() << std::endl;
+    if (!file->query_exists()) {
+        debug_out << "  File does not exist" << std::endl;
+    }
+    auto file_info = file->query_info("*");
+    for (auto attribute : file_info->list_attributes()) {
+        debug_out << "  " << attribute << ": " << file_info->get_attribute_as_string(attribute) << std::endl;
+    }
+
     // Open file
     SPDocument *document = ink_file_open(file, cancelled);
 
@@ -216,8 +225,12 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file, bool *ca
         document_add (document);
     } else if (cancelled == nullptr || !(*cancelled)) {
         std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name().raw() << std::endl;
+        debug_out << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name().raw() << std::endl;
+    } else {
+        debug_out << "InkscapeApplication::document_open: Failed to open 2: " << file->get_parse_name().raw() << std::endl;
     }
 
+    debug_out << "InkscapeApplication::document_open: exit " << std::endl;
     return document;
 }
 
@@ -442,6 +455,10 @@ InkscapeApplication::get_documents()
 InkscapeWindow*
 InkscapeApplication::window_open(SPDocument* document)
 {
+    debug_out << "InkscapeApplication::window_open: Entrance" << std::endl;
+    if (!document) {
+        debug_out << "InkscapeApplication::window_open: No document!" << std::endl;
+    }
     // Once we've removed Inkscape::Application (separating GUI from non-GUI stuff)
     // it will be more easy to start up the GUI after-the-fact. Until then, prevent
     // opening a window if GUI not selected at start-up time.
@@ -451,6 +468,9 @@ InkscapeApplication::window_open(SPDocument* document)
     }
 
     InkscapeWindow* window = new InkscapeWindow(document);
+    if (!window) {
+        debug_out << "InkscapeApplication::window_open: No window!" << std::endl;
+    }
     // TODO Add window to application. (Instead of in InkscapeWindow constructor.)
 
     // To be removed (add once per window)!
@@ -470,6 +490,7 @@ InkscapeApplication::window_open(SPDocument* document)
 
     document_fix(window); // May need flag to prevent this from being called more than once.
 
+    debug_out << "InkscapeApplication::window_open: Exit" << std::endl;
     return window;
 }
 
@@ -478,6 +499,7 @@ InkscapeApplication::window_open(SPDocument* document)
 void
 InkscapeApplication::window_close(InkscapeWindow* window)
 {
+    debug_out << "InkscapeApplication::window_close: Entrance" << std::endl;
     // std::cout << "InkscapeApplication::close_window" << std::endl;
     // dump();
 
@@ -519,6 +541,7 @@ InkscapeApplication::window_close(InkscapeWindow* window)
     } else {
         std::cerr << "InkscapeApplication::close_window: No window!" << std::endl;
     }
+    debug_out << "InkscapeApplication::window_close: Exit" << std::endl;
 
     // dump();
 }
@@ -528,11 +551,13 @@ InkscapeApplication::window_close(InkscapeWindow* window)
 void
 InkscapeApplication::window_close_active()
 {
+    debug_out << "InkscapeApplication::window_close_active: Entrance" << std::endl;
     if (_active_window) {
         window_close (_active_window);
     } else {
         std::cerr << "InkscapeApplication::window_close_active: no active window!" << std::endl;
     }
+    debug_out << "InkscapeApplication::window_close_active: Exit" << std::endl;
 }
 
 
@@ -608,6 +633,10 @@ InkscapeApplication::InkscapeApplication()
         std::terminate();
     }
     _instance = this;
+
+    std::string debug_path = Glib::build_filename(Inkscape::IO::Resource::homedir_path(), "debug.txt");
+    debug_out.open(debug_path);
+    debug_out << "InkscapeApplication::InkscapeApplication: Entrance" << std::endl;
 
     using T = Gio::Application;
 
@@ -810,6 +839,7 @@ InkscapeApplication::InkscapeApplication()
         //   - system menu "Quit"
         gtk_app()->property_register_session() = true;
     }
+    debug_out << "InkscapeApplication::InkscapeApplication: Exit" << std::endl;
 }
 
 InkscapeApplication::~InkscapeApplication()
@@ -823,6 +853,7 @@ InkscapeApplication::~InkscapeApplication()
 InkscapeWindow*
 InkscapeApplication::create_window(SPDocument *document, bool replace)
 {
+    debug_out << "InkscapeApplication::create_window: Entrance" << std::endl;
     if (!gtk_app()) {
         g_assert_not_reached();
         return nullptr;
@@ -846,8 +877,11 @@ InkscapeApplication::create_window(SPDocument *document, bool replace)
     }
     window->set_visible(true);
 
+    debug_out << "InkscapeApplication::create_window: before startup_close" << std::endl;
     startup_close();
+    debug_out << "InkscapeApplication::create_window: after startup_close" << std::endl;
 
+    debug_out << "InkscapeApplication::create_window: Exit" << std::endl;
     return window;
 }
 
@@ -859,6 +893,7 @@ InkscapeApplication::create_window(SPDocument *document, bool replace)
 void
 InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
 {
+    debug_out << "InkscapeApplication::create_window: Entrance 2" << std::endl;
     if (!gtk_app()) {
         g_assert_not_reached();
         return;
@@ -901,6 +936,7 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
 
     _active_document = document;
     _active_window   = window;
+    debug_out << "InkscapeApplication::create_window: Exit 2" << std::endl;
 }
 
 /** Destroy a window and close the document it contains. Aborts if document needs saving.
@@ -989,6 +1025,7 @@ InkscapeApplication::destroy_all()
 void
 InkscapeApplication::process_document(SPDocument* document, std::string output_path)
 {
+    debug_out << "InkscapeApplication::process_document: Entrance" << std::endl;
     // Add to Inkscape::Application...
     INKSCAPE.add_document(document);
 
@@ -1022,6 +1059,7 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
         // Save... can't use action yet.
         _file_export.do_export(document, output_path);
     }
+    debug_out << "InkscapeApplication::process_document: Exit" << std::endl;
 }
 
 /*
@@ -1031,26 +1069,33 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
 void
 InkscapeApplication::on_startup()
 {
-    std::cout << "InkscapeApplication::on_startup(): Entrance" << std::endl;
-    std::cout << "  Sleeping" << std::endl;
-    sleep(20);
-    std::cout << "  Waking" << std::endl;
+    debug_out << "InkscapeApplication::on_startup(): Entrance" << std::endl;
+    debug_out << "  Sleeping" << std::endl;
+    sleep(10);
+    debug_out << "  Waking" << std::endl;
 
     // Deprecated...
     Inkscape::Application::create(_with_gui);
 
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
+        debug_out << "  Using GUI" << std::endl;
         // Migrate settings first; see ui/dialog/startup.cpp
         Inkscape::UI::Dialog::StartScreen::migrate_settings();
         auto prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/options/boot/showsplash", true)) {
+            debug_out << "  Requested splash" << std::endl;
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
             if (_start_screen) {
+                debug_out << "  before _start_screen->show_now()" << std::endl;
                 _start_screen->show_now();
-                gtk_app()->add_window(*_start_screen);
+                debug_out << "  after _start_screen->show_now()" << std::endl;
+                debug_out << "  COMMENTED OUT (gtk_app()->add_window())" << std::endl;
+                // gtk_app()->add_window(*_start_screen);
+                debug_out << "  after add_window()" << std::endl;
             } else {
                 std::cerr << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;
+                debug_out << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;
             }
         }
     }
@@ -1079,7 +1124,9 @@ InkscapeApplication::on_startup()
     Inkscape::AutoSave::getInstance().init(this);
 
     // Extensions
+    debug_out << "  calling Inkscape::Extension::init()" << std::endl;
     Inkscape::Extension::init();
+    debug_out << "  after calling Inkscape::Extension::init()" << std::endl;
 
     // After extensions are loaded query effects to construct action data
     init_extension_action_data();
@@ -1106,13 +1153,14 @@ InkscapeApplication::on_startup()
 
     // Add tool based shortcut meta-data
     init_tool_shortcuts(this);
+    debug_out << "InkscapeApplication::on_startup(): Exit" << std::endl;
 }
 
 // Open document window with default document or pipe. Either this or on_open() is called.
 void
 InkscapeApplication::on_activate()
 {
-    std::cout << "InkscapeApplication::on_activate(): Entrance" << std::endl;
+    debug_out << "InkscapeApplication::on_activate(): Entrance" << std::endl;
     std::string output;
     auto prefs = Inkscape::Preferences::get();
 
@@ -1130,12 +1178,20 @@ InkscapeApplication::on_activate()
     } else if (_with_gui && !_use_command_line_argument && gtk_app()
             && prefs->getBool("/options/boot/showwelcome", true)) {
         // Show welcome screen. Instantiate start screen if it hasn't yet.
-        if (!_start_screen) _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+        debug_out << "  Requested welcome screen" << std::endl;
+        if (!_start_screen) {
+            debug_out << "  No start screen creating" << std::endl;
+            _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+        }
         _start_screen->setup_welcome();
+        debug_out << "  Before _start_screen->run()" << std::endl;
         _start_screen->run(); // Blocks until document selected
+        debug_out << "  After _start_screen->run()" << std::endl;
         document = _start_screen->get_document();
         if (!document) {
+            debug_out << "  Before deleting _start_Screen" << std::endl;
             _start_screen.reset();
+            debug_out << "  After deleting _start_Screen" << std::endl;
             return; // Start screen forcefully closed.
         }
     } else {
@@ -1155,13 +1211,15 @@ InkscapeApplication::on_activate()
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
+    debug_out << "InkscapeApplication::on_activate(): Exit" << std::endl;
 }
 
 void
 InkscapeApplication::startup_close()
 {
-    std::cout << "InkscapeApplication::startup_close()" << std::endl;
+    debug_out << "InkscapeApplication::startup_close(): Entrance" << std::endl;
     _start_screen.reset();
+    debug_out << "InkscapeApplication::startup_close(): Exit" << std::endl;
 }
 
 // Open document window for each file. Either this or on_activate() is called.
@@ -1169,7 +1227,7 @@ InkscapeApplication::startup_close()
 void
 InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
-    std::cout << "InkscapeApplication::on_open: Entrance: files: " << files.size() << " hint: " << hint << std::endl;
+    debug_out << "InkscapeApplication::on_open: Entrance: files: " << files.size() << " hint: " << hint << std::endl;
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
     if(!_pages.empty())
@@ -1186,19 +1244,23 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         return;
     }
 
-    startup_close();
+    debug_out << "InkscapeApplication::on_open: before startup_close()" << std::endl;
+    debug_out << "InkscapeApplication::on_open: COMMENTED OUT (startup_close())" << std::endl;
+    // startup_close();
+    debug_out << "InkscapeApplication::on_open: after startup_close()" << std::endl;
     for (auto file : files) {
 
         // Open file
-        std::cout << "  Opening document: " << file->get_uri() << std::endl;
+        debug_out << "  Opening document: " << file->get_uri() << std::endl;
         SPDocument *document = document_open (file);
         if (!document) {
             std::cerr << "ConcreteInkscapeApplication::on_open: failed to create document!" << std::endl;
+            debug_out << "ConcreteInkscapeApplication::on_open: failed to create document!" << std::endl;
             continue;
         }
 
         // Process document (command line actions, shell, create window)
-        std::cout << "  Processing document: " << std::endl;
+        debug_out << "  Processing document." << std::endl;
         process_document (document, file->get_path());
     }
 
@@ -1206,7 +1268,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
-    std::cout << "InkscapeApplication::on_open: Exit" << std::endl;
+    debug_out << "InkscapeApplication::on_open: Exit" << std::endl;
 }
 
 void
@@ -1505,7 +1567,7 @@ void InkscapeApplication::redirect_output()
 int
 InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
 {
-    std::cout << "InkscapeApplication::on_handle_local_options: Entrance" << std::endl;
+    debug_out << "InkscapeApplication::on_handle_local_options: Entrance" << std::endl;
     auto prefs = Inkscape::Preferences::get();
     if (!options) {
         std::cerr << "InkscapeApplication::on_handle_local_options: options is null!" << std::endl;
@@ -1918,6 +1980,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     g_variant_dict_unref(options_copy);
     g_variant_unref(options_var);
 
+    debug_out << "InkscapeApplication::on_handle_local_options: Exit" << std::endl;
     return -1; // Keep going
 }
 
