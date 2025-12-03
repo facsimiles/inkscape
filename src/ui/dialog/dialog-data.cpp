@@ -41,7 +41,6 @@ std::span<const DialogData> get_dialog_data_list() {
     {"Spellcheck",         _("Check Spellin_g"),       INKSCAPE_ICON("tools-check-spelling"),        DialogData::Typography,     ScrollProvider::NOPROVIDE },
 #endif
     {"Find",               _("_Find/Replace"),         INKSCAPE_ICON("edit-find"),                   DialogData::Typography,     ScrollProvider::NOPROVIDE },
-    {"Glyphs",             _("_Unicode Characters"),   INKSCAPE_ICON("accessories-character-map"),   DialogData::Typography,     ScrollProvider::NOPROVIDE },
     {"SVGFonts",           _("SVG Font Editor"),       INKSCAPE_ICON("dialog-svg-font"),             DialogData::Typography,     ScrollProvider::NOPROVIDE },
 
     // EFFECTS ---------------------------------------

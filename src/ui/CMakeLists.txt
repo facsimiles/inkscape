@@ -143,7 +143,6 @@ target_sources(inkscape_base PRIVATE
 	dialog/font-collections-manager.cpp
 	dialog/font-substitution.cpp
 	dialog/global-palettes.cpp
-	dialog/glyphs.cpp
 	dialog/grid-arrange-tab.cpp
 	dialog/guides.cpp
 	dialog/icon-preview.cpp
@@ -380,7 +379,6 @@ target_sources(inkscape_base PRIVATE
 	dialog/font-collections-manager.h
 	dialog/font-substitution.h
 	dialog/global-palettes.h
-	dialog/glyphs.h
 	dialog/grid-arrange-tab.h
 	dialog/guides.h
 	dialog/icon-preview.h

@@ -28,7 +28,6 @@
 #include "ui/dialog/filter-effects-dialog.h"
 #include "ui/dialog/find.h"
 #include "ui/dialog/font-collections-manager.h"
-#include "ui/dialog/glyphs.h"
 #include "ui/dialog/icon-preview.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/livepatheffect-editor.h"
@@ -116,7 +115,6 @@ std::unique_ptr<DialogBase> DialogContainer::dialog_factory(Glib::ustring const 
     else if (dialog_type == "FilterGallery")      return std::make_unique<ExtensionsGallery>(ExtensionsGallery::Filters);
     else if (dialog_type == "Find")               return std::make_unique<Find>();
     else if (dialog_type == "FontCollections")    return std::make_unique<FontCollectionsManager>();
-    else if (dialog_type == "Glyphs")             return std::make_unique<GlyphsPanel>();
     else if (dialog_type == "IconPreview")        return std::make_unique<IconPreviewPanel>();
     else if (dialog_type == "LivePathEffect")     return std::make_unique<LivePathEffectEditor>();
     else if (dialog_type == "ObjectProperties")   return std::make_unique<ObjectAttributes>();
