@@ -59,8 +59,7 @@ PaintMode get_mode_from_paint(const SPIPaint& paint) {
             return PaintMode::Pattern;
         }
         else if (is<SPHatch>(server)) {
-            // not supported
-            // mode = MODE_HATCH;
+            return PaintMode::Hatch;
         }
         else {}
     }
@@ -86,7 +85,8 @@ const struct Paint { PaintMode mode; const char* icon; const char* name; const c
 #ifdef WITH_MESH
     {PaintMode::Mesh,        "paint-gradient-mesh",   C_("Paint type", "Mesh"),     _("Mesh fill")},
 #endif
-    {PaintMode::Pattern,     "paint-pattern",         C_("Paint type", "Pattern"),  _("Pattern fill")},
+    // Note: there's no hatch mode; hatches are "patterns"
+    {PaintMode::Pattern,     "paint-pattern",         C_("Paint type", "Pattern"),  _("Pattern and hatch fill")},
     {PaintMode::Swatch,      "paint-swatch",          C_("Paint type", "Swatch"),   _("Swatch color")},
     {PaintMode::Derived,     "paint-unknown",         C_("Paint type", "Inherited"),_("Inherited")},
     {PaintMode::None,        "paint-none",            C_("Paint type", "None"),     _("No paint")},
@@ -184,9 +184,14 @@ public:
     sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Color>, Glib::ustring)> get_swatch_changed() override {
         return _signal_swatch_changed;
     }
+    // patterns and hatches
     sigc::signal<void (SPPattern* pattern, std::optional<Color> color, const Glib::ustring& label,
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() override {
         return _signal_pattern_changed;
+    }
+    sigc::signal<void (SPHatch* hatch, std::optional<Colors::Color> color, const Glib::ustring& label,
+        const Geom::Affine& transform, const Geom::Point& offset, double pitch, double rotation, double thickness)> get_hatch_changed() override {
+        return _signal_hatch_changed;
     }
     sigc::signal<void (FillRule)> get_fill_rule_changed() override {
         return _signal_fill_rule_changed;
@@ -199,25 +204,39 @@ public:
 
         _signal_color_changed.emit(_color->getAverage());
     }
+    // get selected pattern/hatch
+    SPPaintServer* get_paint() {
+        SPPaintServer* paint = nullptr;
+        auto id = _pattern.get_selected_doc_pattern();
+        if (!id.empty() && _document) {
+            paint = cast<SPPaintServer>(_document->getObjectById(id));
+        }
+        if (!paint) {
+            auto [id, stock_doc] = _pattern.get_selected_stock_pattern();
+            if (!id.empty() && stock_doc) {
+                id = "urn:inkscape:pattern:" + id;
+                paint = cast<SPPaintServer>(get_stock_item(id.c_str(), true, stock_doc));
+            }
+        }
+        return paint;
+    }
     void fire_pattern_changed() {
         if (_update.pending()) return;
 
         auto scoped(_update.block());
-        SPPattern* pattern = nullptr;
-        auto id = _pattern.get_selected_doc_pattern();
-        if (!id.empty() && _document) {
-            pattern = cast<SPPattern>(_document->getObjectById(id));
+        auto paint = get_paint();
+        if (auto pattern = cast<SPPattern>(paint)) {
+            _signal_pattern_changed.emit(pattern,
+                _pattern.get_selected_color(), _pattern.get_label(), _pattern.get_selected_transform(),
+                _pattern.get_selected_offset(), _pattern.is_selected_scale_uniform(), _pattern.get_selected_gap());
         }
-        if (!pattern) {
-            auto [id, stock_doc] = _pattern.get_selected_stock_pattern();
-            if (!id.empty() && stock_doc) {
-                id = "urn:inkscape:pattern:" + id;
-                pattern = cast<SPPattern>(get_stock_item(id.c_str(), true, stock_doc));
-            }
+        else if (auto hatch = cast<SPHatch>(paint)) {
+            _signal_hatch_changed.emit(hatch,
+                _pattern.get_selected_color(), _pattern.get_label(), _pattern.get_selected_transform(),
+                _pattern.get_selected_offset(),
+                _pattern.get_selected_pitch(), _pattern.get_selected_rotation(), _pattern.get_selected_thickness()
+            );
         }
-        _signal_pattern_changed.emit(pattern,
-            _pattern.get_selected_color(), _pattern.get_label(), _pattern.get_selected_transform(),
-            _pattern.get_selected_offset(), _pattern.is_selected_scale_uniform(), _pattern.get_selected_gap());
     }
     void fire_gradient_changed(SPGradient* gradient, PaintMode mode) {
         if (_update.pending()) return;
@@ -253,6 +272,7 @@ public:
     sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Color>, Glib::ustring)> _signal_swatch_changed;
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
                        bool, const Geom::Scale&)> _signal_pattern_changed;
+    sigc::signal<void (SPHatch*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&, double, double, double)> _signal_hatch_changed;
     sigc::signal<void (FillRule)> _signal_fill_rule_changed;
     sigc::signal<void (PaintDerivedMode)> _signal_inherit_mode_changed;
     std::map<PaintMode, Gtk::Widget*> _pages;
@@ -373,10 +393,13 @@ PaintSwitchImpl::PaintSwitchImpl(bool support_no_paint, bool support_fill_rule) 
     _pages[PaintMode::Swatch]   = &_swatch;
     _pages[PaintMode::Gradient] = &_gradient;
     _pages[PaintMode::Pattern]  = &_pattern;
+    _pages[PaintMode::Hatch]    = &_pattern;
     _pages[PaintMode::Mesh]     = &_mesh;
     _pages[PaintMode::Derived]  = &_inherited;
     for (auto [mode, child] : _pages) {
-        if (child) _stack.add(*child);
+        if (child && mode != PaintMode::Hatch) {
+            _stack.add(*child);
+        }
     }
 
     _color->signal_changed.connect([this] {
@@ -395,6 +418,7 @@ void PaintSwitchImpl::switch_paint_mode(PaintMode mode) {
         fire_flat_color_changed();
         break;
     case PaintMode::Pattern:
+    case PaintMode::Hatch:
         fire_pattern_changed();
         break;
     case PaintMode::Gradient:
@@ -451,7 +475,7 @@ void PaintSwitchImpl::_set_mode(PaintMode mode) {
             }
         }
     }
-    if (auto mode_btn = _mode_buttons[mode]) {
+    if (auto mode_btn = _mode_buttons[mode == PaintMode::Hatch ? PaintMode::Pattern : mode]) {
         mode_btn->set_active();
     }
     // color picker available?
@@ -521,6 +545,10 @@ void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
         else if (is<SPPattern>(server)) {
             // pattern
             _pattern.set_selected(cast<SPPattern>(server));
+        }
+        else if (is<SPHatch>(server)) {
+            // hatch
+            _pattern.set_selected(cast<SPHatch>(server));
         }
     }
     else if (auto inherited = get_inherited_paint_mode(paint)) {

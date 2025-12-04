@@ -9,14 +9,13 @@
  */
 
 #include <gtkmm/widget.h>
+#include <optional>
 
 #include "ui/filtered-store.h"
 
 class SPDocument;
 
-namespace Inkscape {
-namespace UI {
-namespace Widget {
+namespace Inkscape::UI::Widget {
 
 // pattern parameters
 class PatternItem : public Glib::Object
@@ -26,25 +25,33 @@ public:
     std::string id;
     std::string label;
     bool stock = false;
-    bool uniform_scale = false;
+    std::optional<bool> uniform_scale;
     Geom::Affine transform;
+    std::optional<double> rotation;
+    std::optional<double> pitch;
+    std::optional<double> stroke;
     Geom::Point offset;
     std::optional<Inkscape::Colors::Color> color;
     Geom::Scale gap;
+    bool editable = true;
     SPDocument* collection = nullptr;
 
     bool operator == (const PatternItem& item) const {
         // compare all attributes apart from pixmap preview
         return
-            id == item.id &&
-            label == item.label &&
-            stock == item.stock &&
-            uniform_scale == item.uniform_scale &&
-            transform == item.transform &&
-            offset == item.offset &&
-            color == item.color &&
-            gap == item.gap &&
-            collection == item.collection;
+                id == item.id &&
+                label == item.label &&
+                stock == item.stock &&
+                uniform_scale == item.uniform_scale &&
+                transform == item.transform &&
+                rotation == item.rotation &&
+                pitch == item.pitch &&
+                stroke == item.stroke &&
+                offset == item.offset &&
+                color == item.color &&
+                gap == item.gap &&
+                editable == item.editable &&
+                collection == item.collection;
     }
 
     static Glib::RefPtr<PatternItem> create() {
@@ -60,8 +67,6 @@ struct PatternStore {
     std::map<Gtk::Widget*, Glib::RefPtr<PatternItem>> widgets_to_pattern;
 };
 
-}
-}
 }
 
 #endif

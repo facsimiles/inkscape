@@ -1685,7 +1685,7 @@ button.reduced-padding {
 
 /* Pattern editor in a popup - give it some vertical size to reveal a list of patterns */
 #PatternEditorPopup {
-    min-height: 400px;
+    min-height: 450px;
 }
 
 /* TabStrip widget is used for switching docked dialogs */

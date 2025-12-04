@@ -340,7 +340,7 @@ enum class SPAttr {
     /* SPHatch */
     HATCHUNITS,
     HATCHCONTENTUNITS,
-    HATCHTRANSFORM,
+    // HATCHTRANSFORM,
     PITCH,
     /* SPClipPath */
     CLIPPATHUNITS,

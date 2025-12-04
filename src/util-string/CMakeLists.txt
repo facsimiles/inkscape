@@ -4,4 +4,5 @@ target_sources(inkscape_base PRIVATE
   ustring-format.h
   string-convert.cpp
   string-convert.h
+  string-compare.h
 )

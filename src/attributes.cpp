@@ -340,7 +340,7 @@ static SPStyleProp const props[] = {
     /* SPHatch */
     {SPAttr::HATCHUNITS, "hatchUnits"},
     {SPAttr::HATCHCONTENTUNITS, "hatchContentUnits"},
-    {SPAttr::HATCHTRANSFORM, "hatchTransform"},
+    // {SPAttr::HATCHTRANSFORM, "transform"},
     {SPAttr::PITCH, "pitch"},
     /* SPClipPath */
     {SPAttr::CLIPPATHUNITS, "clipPathUnits"},

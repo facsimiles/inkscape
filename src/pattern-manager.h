@@ -24,7 +24,7 @@ class PatternManager
 public:
     struct Category {
         const Glib::ustring name;
-        const std::vector<SPPattern*> patterns;
+        const std::vector<SPPaintServer*> patterns;
         const bool all;
     };
 
@@ -45,13 +45,13 @@ public:
     Glib::RefPtr<Gtk::TreeModel> get_categories();
 
     // get pattern description item
-    Glib::RefPtr<Inkscape::UI::Widget::PatternItem> get_item(SPPattern* pattern);
+    Glib::RefPtr<Inkscape::UI::Widget::PatternItem> get_item(SPPaintServer* pattern);
 
     // get pattern image on a solid background for use in UI lists
-    Cairo::RefPtr<Cairo::Surface> get_image(SPPattern* pattern, int width, int height, double device_scale);
+    Cairo::RefPtr<Cairo::Surface> get_image(SPPaintServer* pattern, int width, int height, double device_scale);
 
     // get pattern image on a checkerboard background for use as a larger preview
-    Cairo::RefPtr<Cairo::Surface> get_preview(SPPattern* pattern, int width, int height, unsigned int rgba_background, double device_scale);
+    Cairo::RefPtr<Cairo::Surface> get_preview(SPPaintServer* pattern, int width, int height, unsigned int rgba_background, double device_scale);
 
 protected:
     PatternManager();
@@ -60,7 +60,7 @@ private:
     void init();
     Glib::RefPtr<Gtk::TreeModel> _model;
     std::vector<std::shared_ptr<Category>> _categories;
-    std::unordered_map<SPPattern*, Glib::RefPtr<Inkscape::UI::Widget::PatternItem>> _cache;
+    std::unordered_map<SPPaintServer*, Glib::RefPtr<Inkscape::UI::Widget::PatternItem>> _cache;
     std::unique_ptr<SPDocument> _preview_doc;
     std::unique_ptr<SPDocument> _big_preview_doc;
     bool _initialized = false;

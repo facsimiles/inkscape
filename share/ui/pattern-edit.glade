@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <placeholder width="219" height="291"></placeholder>
+  <placeholder width="216" height="492"></placeholder>
   <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="adjustment-angle">
     <property name="lower">-180</property>
@@ -306,15 +306,16 @@
           <object class="GtkLabel">
             <property name="halign">start</property>
             <property name="margin-end">4</property>
-            <property name="label" translatable="yes">Orientation</property>
+            <property name="label" translatable="yes">Rotation</property>
             <layout>
               <property name="column">0</property>
-              <property name="row">5</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="gtkmm__CustomObject_InkSpinButton" id="angle">
+            <property name="icon">transform-rotate</property>
             <property name="suffix" translatable="yes">°</property>
             <property name="focusable">True</property>
             <property name="adjustment">adjustment-angle</property>
@@ -322,7 +323,7 @@
             <property name="wrap-around">True</property>
             <layout>
               <property name="column">2</property>
-              <property name="row">5</property>
+              <property name="row">6</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -334,7 +335,7 @@
             <property name="label" translatable="yes">Offset</property>
             <layout>
               <property name="column">0</property>
-              <property name="row">6</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -346,7 +347,7 @@
             <property name="digits">3</property>
             <layout>
               <property name="column">2</property>
-              <property name="row">6</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -358,17 +359,17 @@
             <property name="digits">3</property>
             <layout>
               <property name="column">3</property>
-              <property name="row">6</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="gap-label">
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="pattern tile gap" comments="A gap between pattern tiles">Gap</property>
             <layout>
               <property name="column">0</property>
-              <property name="row">7</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -498,7 +499,7 @@
             <property name="digits">1</property>
             <layout>
               <property name="column">2</property>
-              <property name="row">7</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -512,7 +513,7 @@
             <property name="digits">1</property>
             <layout>
               <property name="column">3</property>
-              <property name="row">7</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -522,7 +523,52 @@
         <child>
           <placeholder></placeholder>
         </child>
-        <!--dim: 5, 8-->
+        <!--dim: 5, 10-->
+        <child>
+          <object class="GtkLabel" id="pitch-label">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Pitch</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">9</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="pitch-spin">
+            <property name="icon">distance</property>
+            <property name="min-value">1.000000</property>
+            <property name="max-value">1000000.000000</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">9</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="stroke-label">
+            <property name="label" translatable="yes">Stroke</property>
+            <property name="halign">start</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">5</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="stroke-spin">
+            <property name="min-value">0.001000</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">1000000.000000</property>
+            <property name="icon">stroke-widths</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">5</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
       </object>
     </child>
   </object>

@@ -83,6 +83,7 @@ public:
     Geom::Affine hatchTransform() const;
     SPHatch const *rootHatch() const;
     SPHatch *rootHatch() { return const_cast<SPHatch *>(std::as_const(*this).rootHatch()); }
+    Geom::Affine get_this_transform() const;
 
     std::vector<SPHatchPath *> hatchPaths();
     std::vector<SPHatchPath const *> hatchPaths() const;
@@ -136,7 +137,7 @@ private:
     std::optional<HatchUnits> _hatch_units;
     std::optional<HatchUnits> _hatch_content_units;
 
-    // hatchTransform attribute
+    // transform attribute
     std::optional<Geom::Affine> _hatch_transform;
 
     // Strip

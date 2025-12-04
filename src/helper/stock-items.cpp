@@ -26,6 +26,7 @@
 #include "io/resource.h"
 #include "manipulation/copy-resource.h"
 #include "object/sp-gradient.h"
+#include "object/sp-hatch.h"
 #include "object/sp-pattern.h"
 #include "object/sp-marker.h"
 #include "object/sp-defs.h"
@@ -114,14 +115,19 @@ static SPObject *sp_marker_load_from_svg(char const *name, SPDocument *current_d
     return copied;
 }
 
+// return pattern or hatch object, if found
 static SPObject* sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc, SPDocument* source_doc) {
     if (!current_doc || !source_doc) {
         return nullptr;
     }
     // Try to load from document
     // Get the pattern we want
-    if (auto pattern = cast<SPPattern>(source_doc->getObjectById(name))) {
+    auto obj = source_doc->getObjectById(name);
+    if (auto pattern = cast<SPPattern>(obj)) {
         return sp_copy_resource(pattern, current_doc);
+    }
+    if (auto hatch = cast<SPHatch>(obj)) {
+        return sp_copy_resource(hatch, current_doc);
     }
     return nullptr;
 }
@@ -203,7 +209,7 @@ SPObject *get_stock_item(gchar const *urn, bool stock, SPDocument* stock_doc)
             {
                 if (child.getRepr()->attribute("inkscape:stockid") &&
                     !strcmp(name_p, child.getRepr()->attribute("inkscape:stockid")) &&
-                    is<SPPattern>(&child))
+                    (is<SPPattern>(&child) || is<SPHatch>(&child))) // allow hatches too
                 {
                     object = &child;
                 }

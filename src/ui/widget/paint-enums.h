@@ -19,6 +19,7 @@ enum class PaintMode {
     Gradient,
     Mesh,
     Pattern,
+    Hatch,
     Derived,
     None,   // set to no paint
 };

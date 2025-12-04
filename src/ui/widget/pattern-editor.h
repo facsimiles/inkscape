@@ -13,6 +13,7 @@
 #include "pattern-manager.h"
 #include "ink-property-grid.h"
 #include "generic/spin-button.h"
+#include "object/sp-paint-server.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/color-picker.h"
 
@@ -47,8 +48,9 @@ public:
 
     // pass current document to extract patterns
     void set_document(SPDocument* document);
-    // set the selected pattern
+    // set the selected pattern/hatch
     void set_selected(SPPattern* pattern);
+    void set_selected(SPHatch* hatch);
     // selected pattern ID if any plus stock pattern collection document (or null)
     std::pair<std::string, SPDocument*> get_selected();
     // get the selected pattern ID from a list of current document patterns
@@ -67,7 +69,10 @@ public:
     Geom::Scale get_selected_gap();
     // get pattern label
     Glib::ustring get_label();
-
+    // hatch-specific attributes
+    double get_selected_rotation();
+    double get_selected_pitch();
+    double get_selected_thickness();
 private:
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void (Colors::Color const &)> _signal_color_changed;
@@ -88,13 +93,16 @@ private:
     void update_scale_link();
     void update_ui(Glib::RefPtr<PatternItem> pattern);
     std::vector<Glib::RefPtr<PatternItem>> update_doc_pattern_list(SPDocument* document);
-    void set_stock_patterns(const std::vector<SPPattern*>& patterns);
+    void set_stock_patterns(const std::vector<SPPaintServer*>& patterns);
     void select_pattern_set(int index);
     void apply_filter(bool stock);
     void update_pattern_tiles();
     void draw_preview(const Cairo::RefPtr<Cairo::Context>& ctx, int width, int height);
     void on_map() override;
     void initial_select();
+    void _set_selected(SPPaintServer* link_paint, SPPaintServer* root_paint, Geom::Point offset);
+    // select some stock pattern initially before presenting an editor
+    void set_initial_selection();
 
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::Paned& _paned;
@@ -106,6 +114,11 @@ private:
     InkSpinButton& _angle_btn;
     InkSpinButton& _gap_x_spin;
     InkSpinButton& _gap_y_spin;
+    InkSpinButton& _pitch_spin;
+    InkSpinButton& _stroke_spin;
+    Gtk::Label& _gap_label;
+    Gtk::Label& _pitch_label;
+    Gtk::Label& _stroke_label;
     Gtk::Button& _edit_btn;
     Gtk::Button& _link_scale;
     Gtk::DrawingArea& _preview;
@@ -118,6 +131,7 @@ private:
     Gtk::CheckButton& _show_names;
     Glib::RefPtr<Gtk::TreeModel> _categories;
     bool _scale_linked = true;
+    bool _uniform_supported = true;
     Glib::ustring _prefs;
     PatternStore _doc_pattern_store;
     PatternStore _stock_pattern_store;

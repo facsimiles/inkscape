@@ -9,8 +9,10 @@
 #include "document.h"
 #include "manipulation/copy-resource.h"
 #include "style.h"
+#include "2geom/symbolic/matrix.h"
 #include "object/sp-pattern.h"
 #include "object/sp-defs.h"
+#include "object/sp-hatch.h"
 #include "object/sp-root.h"
 #include "util/units.h"
 #include "ui/svg-renderer.h"
@@ -81,20 +83,26 @@ void PatternManager::init() {
 
     auto model = Gtk::ListStore::create(columns);
 
-    std::vector<SPPattern*> all;
+    std::vector<SPPaintServer*> all;
 
-    for (auto doc : sp_get_stock_patterns()) {
+    auto stock = sp_get_stock_patterns();
+    auto hatch = sp_get_stock_hatches();
+    stock.insert(stock.end(), hatch.begin(), hatch.end());
+
+    for (auto doc : stock) {
         auto patterns = sp_get_pattern_list(doc);
+        auto hatches = sp_get_hatch_list(doc);
         all.insert(all.end(), patterns.begin(), patterns.end());
+        all.insert(all.end(), hatches.begin(), hatches.end());
 
         Glib::ustring name = doc->getDocumentName();
         name = name.substr(0, name.rfind(".svg"));
-        _categories.push_back(std::make_shared<Category>(Category{name, std::move(patterns), false}));
+        _categories.push_back(std::make_shared<Category>(Category{name, std::move( patterns.empty() ? hatches : patterns), false}));
     }
 
     for (auto pat : all) {
         // create empty items for stock patterns
-        _cache[pat] = Glib::RefPtr<Inkscape::UI::Widget::PatternItem>();
+        _cache[pat] = Glib::RefPtr<PatternItem>();
     }
 
     // special "all patterns" category
@@ -154,7 +162,7 @@ static Cairo::RefPtr<Cairo::Surface> create_pattern_image(SPDocument &sandbox,
         cairo_surface_set_device_scale(surface->cobj(), scale, scale);
     }
 
-    // delete sample to relese href to the original pattern, if any has been referenced by 'copy'
+    // delete sample to release href to the original pattern, if any has been referenced by 'copy'
     SPObject* oldpattern = sandbox.getObjectById("sample");
     if (oldpattern) {
         oldpattern->deleteObject(false);
@@ -162,9 +170,60 @@ static Cairo::RefPtr<Cairo::Surface> create_pattern_image(SPDocument &sandbox,
     return surface;
 }
 
+// given a hatch, create a PatternItem instance that describes it;
+// input pattern can be a link or a root pattern
+static Glib::RefPtr<PatternItem> create_hatch_item(SPHatch* hatch, bool stock_hatch, double scale) {
+    if (!hatch) return {};
+
+    auto item = PatternItem::create();
+
+    //  this is a link:     this is a root:
+    // <hatch href="abc"/> <hatch id="abc"/>
+    auto link_hatch = hatch;
+    auto root_hatch = hatch->rootHatch();
+
+    // get label and ID from root pattern
+    XML::Node* repr = root_hatch->getRepr();
+    if (auto id = repr->attribute("id")) {
+        item->id = id;
+    }
+    item->label = sp_get_pattern_label(root_hatch);
+    item->stock = stock_hatch;
+    item->transform = link_hatch->get_this_transform();
+    item->rotation = link_hatch->rotate();
+    item->pitch = link_hatch->pitch();
+    item->offset = Geom::Point(link_hatch->x(), link_hatch->y());
+
+    // reading color style form "root" hatch; linked one won't have any effect, as it's not a parent;
+    // hatches (through <hatchpath>) support stroke colors, and there could be multiple potentially different ones,
+    // but if stroke color is defined on a <hatch> element, we use it:
+    if (root_hatch->style && root_hatch->style->isSet(SPAttr::STROKE) && root_hatch->style->stroke.isColor()) {
+        item->color.emplace(root_hatch->style->stroke.getColor());
+    }
+    // likewise, use stroke width if it is set:
+    if (root_hatch->style) {
+        auto& stroke = root_hatch->style->stroke_width;
+        if (stroke.set) {
+            item->stroke = stroke.computed ? stroke.computed : 1.0;
+        }
+    }
+
+    //TODO uniform scaling? no such attribute
+
+    // item->uniform_scale = true; // there's no viewbox
+
+    // hatch tile pitch; on a root hatch
+    item->gap = Geom::Scale(root_hatch->pitch(), 0);
+
+    // which collection stock pattern comes from
+    item->collection = stock_hatch ? hatch->document : nullptr;
+
+    return item;
+}
+
 // given a pattern, create a PatternItem instance that describes it;
 // input pattern can be a link or a root pattern
-static Glib::RefPtr<PatternItem> create_pattern_item(SPDocument *sandbox, SPPattern* pattern, bool stock_pattern, double scale) {
+static Glib::RefPtr<PatternItem> create_pattern_item(SPPattern* pattern, bool stock_pattern, double scale) {
     if (!pattern) return {};
 
     auto item = PatternItem::create();
@@ -186,7 +245,7 @@ static Glib::RefPtr<PatternItem> create_pattern_item(SPDocument *sandbox, SPPatt
     item->transform = link_pattern->get_this_transform();
     item->offset = Geom::Point(link_pattern->x(), link_pattern->y());
 
-    // reading color style form "root" pattern; linked one won't have any effect, as it's not a parrent
+    // reading color style form "root" pattern; linked one won't have any effect, as it's not a parent
     if (root_pattern->style && root_pattern->style->isSet(SPAttr::FILL) && root_pattern->style->fill.isColor()) {
         item->color.emplace(root_pattern->style->fill.getColor());
     }
@@ -195,13 +254,11 @@ static Glib::RefPtr<PatternItem> create_pattern_item(SPDocument *sandbox, SPPatt
         auto preserve = link_pattern->getAttribute("preserveAspectRatio");
         item->uniform_scale = preserve && strcmp(preserve, "none") != 0;
     }
+    else {
+        item->uniform_scale = false;
+    }
     // pattern tile gap (only valid for link patterns)
     item->gap = link_pattern != root_pattern ? sp_pattern_get_gap(link_pattern) : Geom::Scale(0, 0);
-
-    if (sandbox) {
-        // generate preview
-        item->pix = create_pattern_image(*sandbox, link_pattern->getId(), *link_pattern->document, scale);
-    }
 
     // which collection stock pattern comes from
     item->collection = stock_pattern ? pattern->document : nullptr;
@@ -209,7 +266,7 @@ static Glib::RefPtr<PatternItem> create_pattern_item(SPDocument *sandbox, SPPatt
     return item;
 }
 
-Cairo::RefPtr<Cairo::Surface> PatternManager::get_image(SPPattern* pattern, int width, int height, double device_scale) {
+Cairo::RefPtr<Cairo::Surface> PatternManager::get_image(SPPaintServer* pattern, int width, int height, double device_scale) {
     if (!pattern) return {};
 
     _preview_doc->setWidth(Inkscape::Util::Quantity(width, "px"));
@@ -217,7 +274,7 @@ Cairo::RefPtr<Cairo::Surface> PatternManager::get_image(SPPattern* pattern, int 
     return create_pattern_image(*_preview_doc, pattern->getId(), *pattern->document, device_scale);
 }
 
-Cairo::RefPtr<Cairo::Surface> PatternManager::get_preview(SPPattern* pattern, int width, int height, unsigned int rgba_background, double device_scale) {
+Cairo::RefPtr<Cairo::Surface> PatternManager::get_preview(SPPaintServer* pattern, int width, int height, unsigned int rgba_background, double device_scale) {
     if (!pattern) return {};
 
     _big_preview_doc->setWidth(Inkscape::Util::Quantity(width, "px"));
@@ -226,20 +283,21 @@ Cairo::RefPtr<Cairo::Surface> PatternManager::get_preview(SPPattern* pattern, in
     return create_pattern_image(*_big_preview_doc, pattern->getId(), *pattern->document, device_scale, rgba_background);
 }
 
-Glib::RefPtr<Inkscape::UI::Widget::PatternItem> PatternManager::get_item(SPPattern* pattern) {
-    Glib::RefPtr<Inkscape::UI::Widget::PatternItem> item;
-    if (!pattern) return item;
+Glib::RefPtr<PatternItem> PatternManager::get_item(SPPaintServer* paint) {
+    Glib::RefPtr<PatternItem> item;
+    if (!paint) return item;
 
     init();
-    auto it = _cache.find(pattern);
+    auto it = _cache.find(paint);
     // if pattern entry was present in the cache, then it is a stock pattern
     bool stock = it != _cache.end();
     if (!stock || !it->second) {
         // generate item
-        item = create_pattern_item(nullptr, pattern, stock, 0);
+        auto pattern = cast<SPPattern>(paint);
+        item = pattern ? create_pattern_item(pattern, stock, 0) : create_hatch_item(cast<SPHatch>(paint), stock, 0);
 
         if (stock) {
-            _cache[pattern] = item;
+            _cache[paint] = item;
         }
     }
     else {

@@ -155,7 +155,6 @@ class PaintSelector : public Gtk::Box {
     void set_mode_mesh(PaintSelector::Mode mode);
 #endif
     void set_mode_pattern(PaintSelector::Mode mode);
-    void set_mode_hatch(PaintSelector::Mode mode);
     void set_mode_swatch(PaintSelector::Mode mode);
     void set_mode_ex(Mode mode, bool switch_style);
 
@@ -202,16 +201,20 @@ class PaintSelector : public Gtk::Box {
     void setInheritedPaint(PaintDerivedMode mode);
     std::string getOtherSetting() const;
     void updatePatternList(SPPattern *pat);
+    void updateHatch(SPHatch* hatch);
     inline decltype(_mode) get_mode() const { return _mode; }
 
     SPGradient *getGradientVector();
     void pushAttrsToGradient(SPGradient *gr) const;
-    SPPattern *getPattern();
+    SPPaintServer *getPattern();
     std::optional<Colors::Color> get_pattern_color();
     Geom::Affine get_pattern_transform();
     Geom::Point get_pattern_offset();
     Geom::Scale get_pattern_gap();
     Glib::ustring get_pattern_label();
+    double get_pattern_rotation();
+    double get_pattern_pitch();
+    double get_pattern_stroke();
     bool is_pattern_scale_uniform();
     void setDesktop(SPDesktop *desktop);
 };

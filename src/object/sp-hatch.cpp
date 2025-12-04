@@ -63,7 +63,7 @@ void SPHatch::build(SPDocument *doc, Inkscape::XML::Node *repr)
 
     readAttr(SPAttr::HATCHUNITS);
     readAttr(SPAttr::HATCHCONTENTUNITS);
-    readAttr(SPAttr::HATCHTRANSFORM);
+    readAttr(SPAttr::TRANSFORM);
     readAttr(SPAttr::X);
     readAttr(SPAttr::Y);
     readAttr(SPAttr::PITCH);
@@ -148,7 +148,7 @@ void SPHatch::set(SPAttr key, char const *value)
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SPAttr::HATCHTRANSFORM: {
+    case SPAttr::TRANSFORM: {
         Geom::Affine t;
         if (value && sp_svg_transform_read(value, &t)) {
             _hatch_transform = t;
@@ -220,6 +220,10 @@ bool SPHatch::_hasHatchPatchChildren(SPHatch const *hatch)
     return std::any_of(hatch->children.begin(),
                        hatch->children.end(),
                        [] (auto &c) { return is<SPHatchPath>(&c); });
+}
+
+Geom::Affine SPHatch::get_this_transform() const {
+    return _hatch_transform.value_or(Geom::identity());
 }
 
 std::vector<SPHatchPath *> SPHatch::hatchPaths()

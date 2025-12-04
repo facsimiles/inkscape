@@ -20,6 +20,7 @@
 #include "property-utils.h"
 #include "stroke-style.h"
 #include "object/sp-gradient.h"
+#include "object/sp-hatch.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-paint-server.h"
 #include "object/sp-pattern.h"
@@ -368,6 +369,18 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         }
     });
 
+    _switch->get_hatch_changed().connect([this, fill, tag](auto hatch, auto color, auto label, auto transform, auto offset, auto pitch, auto rotation, auto stroke) {
+        if (!can_update()) return;
+
+        if (auto item = cast<SPItem>(_current_item)) {
+            auto kind = fill ? FILL : STROKE;
+            sp_item_apply_hatch(item, hatch, kind, color, label, transform, offset, pitch, rotation, stroke);
+            DocumentUndo::maybeDone(item->document, fill ? "fill-pattern-change" : "stroke-pattern-change", fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke", tag);
+            update_preview_indicators(_current_item);
+            set_paint(_current_item);
+        }
+    });
+
     _switch->get_gradient_changed().connect([this, fill, tag](auto vector, auto gradient_type) {
         if (!can_update()) return;
 
@@ -493,7 +506,7 @@ void PaintAttribute::PaintStrip::set_preview(const SPIPaint& paint, double paint
         return;
     }
 
-    if (mode == PaintMode::Solid || mode == PaintMode::Swatch || mode == PaintMode::Gradient || mode == PaintMode::Pattern) {
+    if (mode == PaintMode::Solid || mode == PaintMode::Swatch || mode == PaintMode::Gradient || mode == PaintMode::Pattern || mode == PaintMode::Hatch) {
         _alpha.set_value(paint_opacity);
         _paint_icon.set_visible(false);
         _color_preview.set_visible();
@@ -519,9 +532,9 @@ void PaintAttribute::PaintStrip::set_preview(const SPIPaint& paint, double paint
             _color_preview.setRgba32(color.toRGBA());
             _color_preview.setIndicator(ColorPreview::Swatch);
         }
-        else if (mode == PaintMode::Pattern) {
-            // patterns
-            auto server = cast<SPPattern>(paint.href->getObject());
+        else if (mode == PaintMode::Pattern || mode == PaintMode::Hatch) {
+            // patterns and hatches
+            auto server = cast<SPPaintServer>(paint.href->getObject());
             unsigned int background = 0xffffffff; // use white background for patterns
             // create a pattern preview with arbitrarily selected width
             auto surface = PatternManager::get().get_preview(server, 200, COLOR_TILE, background, _color_preview.get_scale_factor());
@@ -939,6 +952,7 @@ void PaintAttribute::update_reset_opacity_button() {
 
     auto& opacity = _current_item->style->opacity;
     // no reset btn available
+    //TODO: find place for reset btn
     // _reset_opacity.set_visible(opacity.inherit || (opacity.set && static_cast<double>(opacity) < 1.0));
 }
 

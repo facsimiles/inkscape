@@ -22,11 +22,13 @@
 
 #include "document.h"
 #include "object/sp-pattern.h"
+#include "object/sp-hatch.h"
 #include "preferences.h"
 #include "pattern-manager.h"
 #include "pattern-manipulation.h"
 #include "ui/builder-utils.h"
 #include "ui/util.h"
+#include "util-string/string-compare.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -44,16 +46,6 @@ double tile_to_slider(int tile) {
     return (tile - 30) / 5.0;
 }
 
-Glib::ustring get_attrib(SPPattern* pattern, const char* attrib) {
-    auto value = pattern->getAttribute(attrib);
-    return value ? value : "";
-}
-
-double get_attrib_num(SPPattern* pattern, const char* attrib) {
-    auto val = get_attrib(pattern, attrib);
-    return strtod(val.c_str(), nullptr);
-}
-
 } // namespace
 
 PatternEditor::PatternEditor(const char* prefs, PatternManager& manager) :
@@ -66,6 +58,11 @@ PatternEditor::PatternEditor(const char* prefs, PatternManager& manager) :
     _angle_btn(get_widget<InkSpinButton>(_builder, "angle")),
     _gap_x_spin(get_widget<InkSpinButton>(_builder, "gap-x-spin")),
     _gap_y_spin(get_widget<InkSpinButton>(_builder, "gap-y-spin")),
+    _pitch_spin(get_widget<InkSpinButton>(_builder, "pitch-spin")),
+    _stroke_spin(get_widget<InkSpinButton>(_builder, "stroke-spin")),
+    _gap_label(get_widget<Gtk::Label>(_builder, "gap-label")),
+    _pitch_label(get_widget<Gtk::Label>(_builder, "pitch-label")),
+    _stroke_label(get_widget<Gtk::Label>(_builder, "stroke-label")),
     _edit_btn(get_widget<Gtk::Button>(_builder, "edit-pattern")),
     _preview(get_widget<Gtk::DrawingArea>(_builder, "preview")),
     _paned(get_widget<Gtk::Paned>(_builder, "paned")),
@@ -116,7 +113,7 @@ PatternEditor::PatternEditor(const char* prefs, PatternManager& manager) :
         Preferences::get()->setBool(_prefs + "/showLabels", _show_names.get_active());
     });
 
-    for (auto spin : {&_gap_x_spin, &_gap_y_spin}) {
+    for (auto spin : {&_gap_x_spin, &_gap_y_spin, &_pitch_spin, &_stroke_spin}) {
         spin->signal_value_changed().connect([spin, this](double value){
             if (_update.pending() || !spin->is_sensitive()) return;
             _signal_changed.emit();
@@ -138,7 +135,7 @@ PatternEditor::PatternEditor(const char* prefs, PatternManager& manager) :
             _scale_x.set_value(_scale_y.get_value());
         }
         update_scale_link();
-        _signal_changed.emit();
+        if (_uniform_supported) _signal_changed.emit();
     });
 
     for (auto el : {&_scale_x, &_scale_y, &_offset_x, &_offset_y}) {
@@ -260,37 +257,60 @@ void PatternEditor::update_widgets_from_pattern(Glib::RefPtr<PatternItem>& patte
     static auto const empty = PatternItem::create();
     auto const &item = pattern ? *pattern : *empty;
 
-    _name_box.set_text(item.label.c_str());
+    if (_name_box.get_text().raw() != item.label) {
+        _name_box.set_text(item.label.c_str());
+    }
 
-    _scale_x.set_value(item.transform.xAxis().length());
-    _scale_y.set_value(item.transform.yAxis().length());
+    auto scale_x = item.transform.xAxis().length();
+    auto scale_y = item.transform.yAxis().length();
+    _scale_x.set_value(scale_x);
+    _scale_y.set_value(scale_y);
 
     // TODO if needed
     // auto units = get_attrib(pattern, "patternUnits");
 
-    _scale_linked = item.uniform_scale;
+    // if uniform scale attribute is not supported, then we simulate it by comparing scale values
+    _scale_linked = item.uniform_scale.value_or(Geom::are_near(scale_x, scale_y));
+    _uniform_supported = item.uniform_scale.has_value();
     update_scale_link();
 
     _offset_x.set_value(item.offset.x());
     _offset_y.set_value(item.offset.y());
 
-    auto degrees = 180.0 / M_PI * Geom::atan2(item.transform.xAxis());
+    // show rotation in degrees
+    auto degrees = item.rotation.has_value() ? *item.rotation : 180.0 / M_PI * Geom::atan2(item.transform.xAxis());
     _angle_btn.set_value(degrees);
 
-    _gap_x_spin.set_value(item.gap[Geom::X]);
-    _gap_y_spin.set_value(item.gap[Geom::Y]);
+    if (item.pitch.has_value()) {
+        _pitch_spin.set_value(item.pitch.value());
+    }
+    else {
+        _gap_x_spin.set_value(item.gap[Geom::X]);
+        _gap_y_spin.set_value(item.gap[Geom::Y]);
+    }
+    _pitch_spin.set_visible(item.pitch.has_value());
+    _pitch_label.set_visible(item.pitch.has_value());
+    _gap_x_spin.set_visible(!item.pitch.has_value());
+    _gap_y_spin.set_visible(!item.pitch.has_value());
+    _gap_label.set_visible(!item.pitch.has_value());
 
+    _stroke_spin.set_value(item.stroke.value_or(0));
+    _stroke_spin.set_visible(item.stroke.has_value());
+    _stroke_label.set_visible(item.stroke.has_value());
+
+    // is coloring possible?
     if (item.color.has_value()) {
         _color_picker.setColor(*item.color);
         _color_picker.set_sensitive();
-        // _color_label.set_opacity(1.0); // hack: sensitivity doesn't change appearance, so using opacity directly
     }
     else {
         _color_picker.setColor(Colors::Color(0x0));
         _color_picker.set_sensitive(false);
-        // _color_label.set_opacity(0.6);
         _color_picker.close();
     }
+
+    // pattern/hatch tile editing
+    _edit_btn.set_sensitive(item.editable);
 }
 
 void PatternEditor::update_ui(Glib::RefPtr<PatternItem> pattern) {
@@ -304,34 +324,53 @@ void sort_patterns(std::vector<Glib::RefPtr<PatternItem>>& list) {
         if (a->label == b->label) {
             return a->id < b->id;
         }
-        return a->label < b->label;
+        return natural_compare(a->label, b->label);
     });
 }
 
-// given a pattern, create a PatternItem instance that describes it;
-// the input pattern can be a link or a root pattern
-Glib::RefPtr<PatternItem> create_pattern_item(PatternManager& manager, SPPattern* pattern, int tile_size, double scale) {
-    auto item = manager.get_item(pattern);
+// given a pattern/hatch, create a PatternItem instance that describes it;
+// the input pattern/hatch can be a link or a root pattern/hatch
+Glib::RefPtr<PatternItem> create_pattern_item(PatternManager& manager, SPPaintServer* paint, int tile_size, double scale) {
+    auto item = manager.get_item(paint);
     if (item && scale > 0) {
-        item->pix = manager.get_image(pattern, tile_size, tile_size, scale);
+        item->pix = manager.get_image(paint, tile_size, tile_size, scale);
     }
     return item;
 }
 
+void PatternEditor::set_initial_selection() {
+    auto [id, doc] = get_selected();
+    if (id.empty()) return;
+
+    auto scoped(_update.block());
+    auto element = doc ? doc->getObjectById(id) : (_current_document ? _current_document->getObjectById(id) : nullptr);
+    if (auto paint = cast<SPPaintServer>(element)) {
+        auto item = create_pattern_item(_manager, paint, 0, 0);
+        update_widgets_from_pattern(item);
+    }
+}
+
 // update editor UI
 void PatternEditor::set_selected(SPPattern* pattern) {
+    // current 'pattern' (should be a link)
+    auto offset = pattern ? pattern->getTransform().translation() : Geom::Point();
+    _set_selected(pattern, pattern ? pattern->rootPattern() : nullptr, offset);
+}
+
+void PatternEditor::set_selected(SPHatch* hatch) {
+    auto offset = Geom::Point(); // no need to preserve 'transform' offset; hatch has dedicated x, y attributes that we change
+    _set_selected(hatch, hatch ? hatch->rootHatch() : nullptr, offset);
+}
+
+void PatternEditor::_set_selected(SPPaintServer* link_paint, SPPaintServer* root_paint, Geom::Point offset) {
     auto scoped(_update.block());
 
     _stock_gallery.unselect_all();
 
-    // current pattern (should be a link)
-    auto link_pattern = pattern;
-    if (pattern) pattern = pattern->rootPattern();
-
-    if (pattern && pattern != link_pattern) {
-        _current_pattern.id = pattern->getId();
-        _current_pattern.link_id = link_pattern->getId();
-        _current_pattern.offset = link_pattern->getTransform().translation();
+    if (root_paint && root_paint != link_paint) {
+        _current_pattern.id = root_paint->getId();
+        _current_pattern.link_id = link_paint->getId();
+        _current_pattern.offset = offset;
     }
     else {
         _current_pattern.id.clear();
@@ -339,12 +378,12 @@ void PatternEditor::set_selected(SPPattern* pattern) {
         _current_pattern.offset = {};
     }
 
-    auto item = create_pattern_item(_manager, link_pattern, 0, 0);
+    auto item = create_pattern_item(_manager, link_paint, 0, 0);
 
     update_widgets_from_pattern(item);
 
-    auto list = update_doc_pattern_list(pattern ? pattern->document : nullptr);
-    if (pattern) {
+    auto list = update_doc_pattern_list(root_paint ? root_paint->document : nullptr);
+    if (root_paint) {
         // patch up a tile image on a list of document root patterns, it might have changed;
         // color attribute, for instance, is being set directly on the root pattern;
         // other attributes are per-object, so should not be taken into account when rendering a tile
@@ -352,7 +391,7 @@ void PatternEditor::set_selected(SPPattern* pattern) {
             if (pattern_item->id == item->id && pattern_item->collection == nullptr) {
                 // update preview
                 const double device_scale = get_scale_factor();
-                pattern_item->pix = _manager.get_image(pattern, _tile_size, _tile_size, device_scale);
+                pattern_item->pix = _manager.get_image(root_paint, _tile_size, _tile_size, device_scale);
                 item->pix = pattern_item->pix;
                 break;
             }
@@ -365,7 +404,7 @@ void PatternEditor::set_selected(SPPattern* pattern) {
 }
 
 // generate preview images for patterns
-std::vector<Glib::RefPtr<PatternItem>> create_pattern_items(PatternManager& manager, const std::vector<SPPattern*>& list, int tile_size, double device_scale) {
+std::vector<Glib::RefPtr<PatternItem>> create_pattern_items(PatternManager& manager, const std::vector<SPPaintServer*>& list, int tile_size, double device_scale) {
     std::vector<Glib::RefPtr<PatternItem>> output;
     output.reserve(list.size());
 
@@ -381,6 +420,8 @@ std::vector<Glib::RefPtr<PatternItem>> create_pattern_items(PatternManager& mana
 // populate the store with document patterns if a list has changed, minimize the amount of work by using cached previews
 std::vector<Glib::RefPtr<PatternItem>> PatternEditor::update_doc_pattern_list(SPDocument* document) {
     auto list = sp_get_pattern_list(document);
+    auto hatch = sp_get_hatch_list(document);
+    list.insert(list.begin(), hatch.begin(), hatch.end());
     const double device_scale = get_scale_factor();
     // create pattern items (cheap), but skip preview generation (expensive)
     auto patterns = create_pattern_items(_manager, list, 0, 0);
@@ -394,7 +435,7 @@ std::vector<Glib::RefPtr<PatternItem>> PatternEditor::update_doc_pattern_list(SP
         else {
             if (!item->pix) {
                 // generate a preview for a newly added pattern
-                item->pix = _manager.get_image(cast<SPPattern>(document->getObjectById(item->id)), _tile_size, _tile_size, device_scale);
+                item->pix = _manager.get_image(cast<SPPaintServer>(document->getObjectById(item->id)), _tile_size, _tile_size, device_scale);
             }
             modified = true;
             _cached_items[item->id] = item;
@@ -410,10 +451,11 @@ void PatternEditor::set_document(SPDocument* document) {
     _current_document = document;
     _cached_items.clear();
     update_doc_pattern_list(document);
+    set_initial_selection();
 }
 
 // populate store with stock patterns
-void PatternEditor::set_stock_patterns(const std::vector<SPPattern*>& list) {
+void PatternEditor::set_stock_patterns(const std::vector<SPPaintServer*>& list) {
     const double device_scale = get_scale_factor();
     auto patterns = create_pattern_items(_manager, list, _tile_size, device_scale);
     sort_patterns(patterns);
@@ -551,9 +593,25 @@ Geom::Affine PatternEditor::get_selected_transform() {
     Geom::Affine matrix;
 
     matrix *= Geom::Scale(_scale_x.get_value(), _scale_y.get_value());
-    matrix *= Geom::Rotate(_angle_btn.get_value() / 180.0 * M_PI);
+    auto pat = get_active();
+    if (pat.first && !pat.first->rotation.has_value()) {
+        // bake rotation into transform, unless current item has dedicated rotation attribute (hatch)
+        matrix *= Geom::Rotate(_angle_btn.get_value() / 180.0 * M_PI);
+    }
     matrix.setTranslation(_current_pattern.offset);
     return matrix;
+}
+
+double PatternEditor::get_selected_rotation() {
+    return _angle_btn.get_value();
+}
+
+double PatternEditor::get_selected_pitch() {
+    return _pitch_spin.get_value();
+}
+
+double PatternEditor::get_selected_thickness() {
+    return _stroke_spin.get_value();
 }
 
 bool PatternEditor::is_selected_scale_uniform() {
@@ -568,11 +626,11 @@ Glib::ustring PatternEditor::get_label() {
     return _name_box.get_text();
 }
 
-SPPattern* get_pattern(const PatternItem& item, SPDocument* document) {
+static SPPaintServer* get_pattern(const PatternItem& item, SPDocument* document) {
     auto doc = item.collection ? item.collection : document;
     if (!doc) return nullptr;
 
-    return cast<SPPattern>(doc->getObjectById(item.id));
+    return cast<SPPaintServer>(doc->getObjectById(item.id));
 }
 
 void regenerate_tile_images(PatternManager& manager, PatternStore& pat_store, int tile_size, double device_scale, SPDocument* current) {
@@ -594,7 +652,7 @@ void PatternEditor::update_pattern_tiles() {
 void PatternEditor::draw_preview(const Cairo::RefPtr<Cairo::Context>& ctx, int width, int height) {
     if (!width || !height || _current_pattern.link_id.empty() || !_current_document) return;
 
-    auto link_pattern = cast<SPPattern>(_current_document->getObjectById(_current_pattern.link_id.raw()));
+    auto link_pattern = cast<SPPaintServer>(_current_document->getObjectById(_current_pattern.link_id.raw()));
     if (!link_pattern) return;
 
     const double device_scale = get_scale_factor();

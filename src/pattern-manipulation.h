@@ -9,6 +9,8 @@
 
 #include "fill-or-stroke.h"
 
+class SPHatch;
+class SPPaintServer;
 class SPItem;
 class SPDocument;
 class SPPattern;
@@ -20,11 +22,16 @@ class Color;
 // Find and load stock patterns if not yet loaded and return them.
 // Their lifetime is bound to StockPaintDocuments.
 std::vector<SPDocument *> sp_get_stock_patterns();
+// Ditto for hatches
+std::vector<SPDocument *> sp_get_stock_hatches();
 
 // Returns a list of "root" patterns in the defs of the given source document
 // Note: root pattern is the one with elements that are rendered; other patterns
 // may refer to it (through href) and have their own transformation; those are skipped
-std::vector<SPPattern*> sp_get_pattern_list(SPDocument* source);
+std::vector<SPPaintServer*> sp_get_pattern_list(SPDocument* source);
+
+// Ditto, but for hatches
+std::vector<SPPaintServer*> sp_get_hatch_list(SPDocument* source);
 
 // Set fill color for a pattern.
 // If elements comprising pattern have no fill, they will inherit it.
@@ -49,11 +56,23 @@ void sp_pattern_set_gap(SPPattern* link_pattern, Geom::Scale gap_percent);
 // Get pattern gap size as a percentage
 Geom::Scale sp_pattern_get_gap(SPPattern* link_pattern);
 
-// get pattern display name
-std::string sp_get_pattern_label(SPPattern* pattern);
+// get pattern/hatch display name
+std::string sp_get_pattern_label(SPPaintServer* pattern);
 
-//
+void sp_hatch_set_pitch(SPHatch* hatch, double pitch);
+void sp_hatch_set_rotation(SPHatch* hatch, double angle);
+
+// apply pattern to item
 void sp_item_apply_pattern(SPItem* item, SPPattern* pattern, FillOrStroke kind, std::optional<Inkscape::Colors::Color> color, const Glib::ustring& label,
     const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap);
+
+// apply hatch to item
+void sp_item_apply_hatch(SPItem* item, SPHatch* hatch, FillOrStroke kind, std::optional<Inkscape::Colors::Color> color, const Glib::ustring& label,
+    const Geom::Affine& transform, const Geom::Point& offset, double pitch, double rotation, double thickness);
+
+void sp_hatch_set_transform(SPHatch* hatch, const Geom::Affine& transform);
+void sp_hatch_set_offset(SPHatch* hatch, const Geom::Point& offset);
+void sp_hatch_set_color(SPHatch* hatch, Inkscape::Colors::Color const &c);
+void sp_hatch_set_stroke_width(SPHatch* hatch, double thickness);
 
 #endif

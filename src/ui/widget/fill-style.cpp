@@ -33,6 +33,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
+#include "object/sp-hatch.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-stop.h"
@@ -259,6 +260,9 @@ void FillNStroke::performUpdate()
 #endif
                     } else if (is<SPPattern>(server)) {
                         _psel->updatePatternList(cast<SPPattern>(server));
+                    }
+                    else if (auto hatch = cast<SPHatch>(server)) {
+                        _psel->updateHatch(hatch);
                     }
                 }
             }
@@ -627,84 +631,118 @@ void FillNStroke::updateFromPaint(bool switch_style)
 #endif
 
         case UI::Widget::PaintSelector::MODE_PATTERN:
+        case UI::Widget::PaintSelector::MODE_HATCH:
 
             if (!items.empty()) {
 
-                auto pattern = _psel->getPattern();
-                if (!pattern) {
+                auto paint = _psel->getPattern();
+                if (!paint) {
                     /* No Pattern in paint selector should mean that we just
                      * changed mode - don't do jack.
                      */
                 } else {
-                    auto link_pattern = pattern;
-                    auto root_pattern = pattern->rootPattern();
-                    if (auto color = _psel->get_pattern_color()) {
-                        sp_pattern_set_color(root_pattern, color.value());
-                    }
-                    // pattern name is applied to the root
-                    root_pattern->setAttribute("inkscape:label", _psel->get_pattern_label().c_str());
-                    // remaining settings apply to link pattern
-                    if (link_pattern != root_pattern) {
-                        auto transform = _psel->get_pattern_transform();
-                        sp_pattern_set_transform(link_pattern, transform);
-                        auto offset = _psel->get_pattern_offset();
-                        sp_pattern_set_offset(link_pattern, offset);
-                        auto uniform = _psel->is_pattern_scale_uniform();
-                        sp_pattern_set_uniform_scale(link_pattern, uniform);
-                        // gap requires both patterns, but they are only created later by calling "adjust_pattern" below
-                        // it is OK to ignore it for now, during initial creation gap is 0,0
-                        auto gap = _psel->get_pattern_gap();
-                        sp_pattern_set_gap(link_pattern, gap);
-                    }
+                    SPPaintServer* root = nullptr;
 
-                    Inkscape::XML::Node *patrepr = root_pattern->getRepr();
-                    SPCSSAttr *css = sp_repr_css_attr_new();
-                    gchar *urltext = g_strdup_printf("url(#%s)", patrepr->attribute("id"));
-                    sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", urltext);
-
-                    // HACK: reset fill-opacity and stroke-opacity.
-                    // TODO: Remove this when we have an opacity slider
-
-                    // for all tabs
-                    if (kind == FILL) {
-                        sp_repr_css_unset_property(css, "fill-opacity");
-                    } else if (kind == STROKE) {
-                        sp_repr_css_unset_property(css, "stroke-opacity");
-                    }
-
-                    // cannot just call sp_desktop_set_style, because we don't want to touch those
-                    // objects who already have the same root pattern but through a different href
-                    // chain. FIXME: move this to a sp_item_set_pattern
-                    for (auto item : items) {
-                        Inkscape::XML::Node *selrepr = item->getRepr();
-                        if ((kind == STROKE) && !selrepr) {
-                            continue;
+                    if (auto pattern = cast<SPPattern>(paint)) {
+                        auto link_pattern = pattern;
+                        auto root_pattern = pattern->rootPattern();
+                        if (auto color = _psel->get_pattern_color()) {
+                            sp_pattern_set_color(root_pattern, color.value());
                         }
-                        SPObject *selobj = item;
-
-                        SPStyle *style = selobj->style;
-                        if (style && ((kind == FILL) ? style->fill.isPaintserver() : style->stroke.isPaintserver())) {
-                            SPPaintServer *server = (kind == FILL) ? selobj->style->getFillPaintServer()
-                                                                   : selobj->style->getStrokePaintServer();
-                            if (is<SPPattern>(server) && cast<SPPattern>(server)->rootPattern() == root_pattern)
-                                // only if this object's pattern is not rooted in our selected pattern, apply
-                                continue;
+                        // pattern name is applied to the root
+                        root_pattern->setAttribute("inkscape:label", _psel->get_pattern_label().c_str());
+                        // remaining settings apply to link pattern
+                        if (link_pattern != root_pattern) {
+                            auto transform = _psel->get_pattern_transform();
+                            sp_pattern_set_transform(link_pattern, transform);
+                            auto offset = _psel->get_pattern_offset();
+                            sp_pattern_set_offset(link_pattern, offset);
+                            auto uniform = _psel->is_pattern_scale_uniform();
+                            sp_pattern_set_uniform_scale(link_pattern, uniform);
+                            // gap requires both patterns, but they are only created later by calling "adjust_pattern" below
+                            // it is OK to ignore it for now, during initial creation gap is 0,0
+                            auto gap = _psel->get_pattern_gap();
+                            sp_pattern_set_gap(link_pattern, gap);
                         }
 
+                        root = root_pattern;
+                    }
+                    else if (auto hatch = cast<SPHatch>(paint)) {
+                        // apply changes to the hatch object
+                        auto link_hatch = hatch;
+                        auto root_hatch = hatch->rootHatch();
+                        if (auto color = _psel->get_pattern_color()) {
+                            sp_hatch_set_color(root_hatch, color.value());
+                        }
+                        sp_hatch_set_stroke_width(root_hatch, _psel->get_pattern_stroke());
+                        if (link_hatch != root_hatch) {
+                            sp_hatch_set_pitch(link_hatch, _psel->get_pattern_pitch());
+                            sp_hatch_set_rotation(link_hatch, _psel->get_pattern_rotation());
+                            sp_hatch_set_transform(link_hatch, _psel->get_pattern_transform());
+                            sp_hatch_set_offset(link_hatch, _psel->get_pattern_offset());
+                        }
+                        root = root_hatch;
+                    }
+
+                    if (root) {
+                        Inkscape::XML::Node *patrepr = root->getRepr();
+                        SPCSSAttr *css = sp_repr_css_attr_new();
+                        gchar *urltext = g_strdup_printf("url(#%s)", patrepr->attribute("id"));
+                        sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", urltext);
+
+                        // HACK: reset fill-opacity and stroke-opacity.
+                        // TODO: Remove this when we have an opacity slider
+
+                        // for all tabs
                         if (kind == FILL) {
-                            sp_desktop_apply_css_recursive(selobj, css, true);
-                        } else {
-                            sp_repr_css_change_recursive(selrepr, css, "style");
+                            sp_repr_css_unset_property(css, "fill-opacity");
+                        } else if (kind == STROKE) {
+                            sp_repr_css_unset_property(css, "stroke-opacity");
                         }
 
-                        // create link to pattern right away, without waiting for object to be moved;
-                        // otherwise pattern editor may end up modifying pattern shared by different objects
-                        item->adjust_pattern(Geom::Affine());
-                    }
+                        // cannot just call sp_desktop_set_style, because we don't want to touch those
+                        // objects who already have the same root pattern but through a different href
+                        // chain. FIXME: move this to a sp_item_set_pattern
+                        for (auto item : items) {
+                            Inkscape::XML::Node *selrepr = item->getRepr();
+                            if ((kind == STROKE) && !selrepr) {
+                                continue;
+                            }
+                            SPObject *selobj = item;
 
-                    sp_repr_css_attr_unref(css);
-                    css = nullptr;
-                    g_free(urltext);
+                            SPStyle *style = selobj->style;
+                            if (style && ((kind == FILL) ? style->fill.isPaintserver() : style->stroke.isPaintserver())) {
+                                SPPaintServer *server = (kind == FILL) ? selobj->style->getFillPaintServer()
+                                                                       : selobj->style->getStrokePaintServer();
+                                if (is<SPPattern>(server) && cast<SPPattern>(server)->rootPattern() == root) {
+                                    // only if this object's pattern is not rooted in our selected pattern, apply
+                                    continue;
+                                }
+                                else if (is<SPHatch>(server) && cast<SPHatch>(server)->rootHatch() == root) {
+                                    continue;
+                                }
+                            }
+
+                            if (kind == FILL) {
+                                sp_desktop_apply_css_recursive(selobj, css, true);
+                            } else {
+                                sp_repr_css_change_recursive(selrepr, css, "style");
+                            }
+
+                            // create link to pattern right away, without waiting for object to be moved;
+                            // otherwise pattern editor may end up modifying pattern shared by different objects
+                            if (is<SPPattern>(root)) {
+                                item->adjust_pattern(Geom::identity());
+                            }
+                            else {
+                                item->adjust_hatch(Geom::identity());
+                            }
+                        }
+
+                        sp_repr_css_attr_unref(css);
+                        css = nullptr;
+                        g_free(urltext);
+                    }
                 } // end if
 
                 DocumentUndo::done(document, (kind == FILL) ? _("Set pattern on fill") : _("Set pattern on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));

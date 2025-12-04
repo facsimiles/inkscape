@@ -10,7 +10,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/stack.h>
 #include <memory>
-#include <sigc++/connection.h>
 #include <sigc++/signal.h>
 
 #include "edit-operation.h"
@@ -51,6 +50,8 @@ public:
     virtual sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Colors::Color>, Glib::ustring)> get_swatch_changed() = 0;
     virtual sigc::signal<void (SPPattern* pattern, std::optional<Colors::Color> color, const Glib::ustring& label,
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() = 0;
+    virtual sigc::signal<void (SPHatch* hatch, std::optional<Colors::Color> color, const Glib::ustring& label,
+        const Geom::Affine& transform, const Geom::Point& offset, double pitch, double rotation, double thickness)> get_hatch_changed() = 0;
     virtual sigc::signal<void (SPGradient* mesh)> get_mesh_changed() = 0;
     virtual sigc::signal<void (FillRule)> get_fill_rule_changed() = 0;
     virtual sigc::signal<void (PaintDerivedMode)> get_inherit_mode_changed() = 0;

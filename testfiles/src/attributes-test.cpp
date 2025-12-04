@@ -168,7 +168,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("gradientUnits", true),
         AttributeInfo("hanging", true),
         AttributeInfo("hatchContentUnits", true), // SVG 2.0
-        AttributeInfo("hatchTransform", true), // SVG 2.0  TODO renamed to transform
+        // AttributeInfo("hatchTransform", true), // SVG 2.0  renamed to transform
         AttributeInfo("hatchUnits", true), // SVG 2.0
         AttributeInfo("height", true),
         AttributeInfo("horiz-adv-x", true),

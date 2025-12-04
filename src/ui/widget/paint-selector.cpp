@@ -319,7 +319,7 @@ void PaintSelector::set_mode_ex(Mode mode, bool switch_style) {
                 set_mode_pattern(mode);
                 break;
             case MODE_HATCH:
-                set_mode_hatch(mode);
+                set_mode_pattern(MODE_PATTERN);
                 break;
             case MODE_SWATCH:
                 set_mode_swatch(mode);
@@ -1003,6 +1003,12 @@ void PaintSelector::updatePatternList(SPPattern *pattern)
     _selector_pattern->set_selected(pattern);
 }
 
+void PaintSelector::updateHatch(SPHatch* hatch) {
+    if (_update || !_selector_pattern) return;
+
+    _selector_pattern->set_selected(hatch);
+}
+
 void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
 {
     if (mode == PaintSelector::MODE_PATTERN) {
@@ -1033,26 +1039,6 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
     }
 #ifdef SP_PS_VERBOSE
     g_print("Pattern req\n");
-#endif
-}
-
-void PaintSelector::set_mode_hatch(PaintSelector::Mode mode)
-{
-    if (mode == PaintSelector::MODE_HATCH) {
-        set_style_buttons(_other);
-    }
-
-    _style->set_sensitive(true);
-
-    if (_mode == PaintSelector::MODE_HATCH) {
-        /* Already have hatch menu, for the moment unset */
-    } else {
-        clear_frame();
-
-        _label->set_markup(_("<b>Hatch fill</b>"));
-    }
-#ifdef SP_PS_VERBOSE
-    g_print("Hatch req\n");
 #endif
 }
 
@@ -1102,8 +1088,8 @@ bool PaintSelector::is_pattern_scale_uniform() {
     return _selector_pattern->is_selected_scale_uniform();
 }
 
-SPPattern* PaintSelector::getPattern() {
-    g_return_val_if_fail(_mode == MODE_PATTERN, nullptr);
+SPPaintServer* PaintSelector::getPattern() {
+    g_return_val_if_fail(_mode == MODE_PATTERN || _mode == MODE_HATCH, nullptr);
 
     if (!_selector_pattern) return nullptr;
 
@@ -1124,7 +1110,25 @@ SPPattern* PaintSelector::getPattern() {
         pat_obj = doc->getObjectById(patid);
     }
 
-    return cast<SPPattern>(pat_obj);
+    return cast<SPPaintServer>(pat_obj);
+}
+
+double PaintSelector::get_pattern_rotation() {
+    if (!_selector_pattern) return 0;
+
+    return _selector_pattern->get_selected_rotation();
+}
+
+double PaintSelector::get_pattern_pitch() {
+    if (!_selector_pattern) return 0;
+
+    return _selector_pattern->get_selected_pitch();
+}
+
+double PaintSelector::get_pattern_stroke() {
+    if (!_selector_pattern) return 0;
+
+    return _selector_pattern->get_selected_thickness();
 }
 
 std::string PaintSelector::getOtherSetting() const
