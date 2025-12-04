@@ -61,12 +61,16 @@ private:
     std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
 
     void _layerChanged(SPGroup *layer);
+    void _queueUpdate();
+    void _cancelUpdate();
     void _layerModified();
     void _selectLayer();
     void _hideLayer();
     void _lockLayer();
     void _layerChoose();
     Glib::ustring getThisCssClass() const;
+
+    unsigned _tick_callback = 0;
 };
 
 } // namespace Inkscape::UI::Widget

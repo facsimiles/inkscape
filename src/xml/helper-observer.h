@@ -10,23 +10,21 @@
 #ifndef SEEN_XML_HELPER_OBSERVER
 #define SEEN_XML_HELPER_OBSERVER
 
-#include <cstddef>
-#include <sigc++/sigc++.h>
+#include <sigc++/signal.h>
 
 #include "node-observer.h"
 #include "node.h"
 
 class SPObject;
 
-namespace Inkscape {
-namespace XML {
+namespace Inkscape::XML {
 
 class Node;
 
 // Very simple observer that just emits a signal if anything happens to a node
-class SignalObserver : public NodeObserver {
+class SignalObserver : public NodeObserver
+{
 public:
-    SignalObserver();
     ~SignalObserver() override;
 
     // Add this observer to the SPObject and remove it from any previous object
@@ -39,13 +37,13 @@ public:
     void notifyElementNameChanged(Node&, GQuark, GQuark) override;
     enum Change { ChildAdded, ChildRemoved, Order, Attribute, Content, ElementName };
     sigc::signal<void (Change, const char*)>& signal_changed() { return _signal_changed; }
+
 private:
     sigc::signal<void (Change, const char*)> _signal_changed;
-    SPObject* _oldsel;
+    SPObject *_oldsel = nullptr;
 };
 
-}
-}
+} // namespace Inkscape::XML
 
 #endif // SEEN_XML_HELPER_OBSERVER
 

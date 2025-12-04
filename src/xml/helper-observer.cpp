@@ -15,11 +15,6 @@
 namespace Inkscape {
 namespace XML {
 
-// Very simple observer that just emits a signal if anything happens to a node
-SignalObserver::SignalObserver()
-    : _oldsel(nullptr)
-{}
-
 SignalObserver::~SignalObserver()
 {
     set(nullptr); // if _oldsel!=nullptr, remove observer and decrease refcount
