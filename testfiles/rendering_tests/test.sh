@@ -36,7 +36,7 @@ perform_test()
     COMPARE_OUTPUT="$(compare -metric "$METRIC" "${TESTNAME}${SUFFIX}.png" "${EXPECTED}${SUFFIX}.png" "${TESTNAME}-compare${SUFFIX}.png" 2>&1)"
 
     if [ "$FUZZ" = "" ]; then
-        if [ "$COMPARE_OUTPUT" = 0 ]; then
+        if [ "$COMPARE_OUTPUT" = 0 ] || [ "$COMPARE_OUTPUT" = "0 (0)" ]; then
             echo "${TESTNAME}${SUFFIX}" "PASSED; absolute difference is exactly zero."
             rm "${TESTNAME}${SUFFIX}.png" "${TESTNAME}-compare${SUFFIX}.png"
         else
