@@ -115,19 +115,25 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     Gtk::StyleContext::add_provider_for_screen(_layer_label.get_screen(), _label_style,
                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    _observer->signal_changed().connect(sigc::mem_fun(*this, &LayerSelector::_layerModified));
+    _observer->signal_changed().connect([this] { _queueUpdate(); });
     setDesktop(desktop);
 }
 
-LayerSelector::~LayerSelector() {
-    setDesktop(nullptr);
-}
+LayerSelector::~LayerSelector() = default;
 
-void LayerSelector::setDesktop(SPDesktop *desktop) {
-    if ( desktop == _desktop )
+void LayerSelector::setDesktop(SPDesktop *desktop)
+{
+    if (desktop == _desktop) {
         return;
+    }
 
-    _layer_changed.disconnect();
+    if (_desktop) {
+        _cancelUpdate();
+        _layer_changed.disconnect();
+        _layer = nullptr;
+        _observer->set(nullptr);
+    }
+
     _desktop = desktop;
 
     if (_desktop) {
@@ -143,7 +149,30 @@ void LayerSelector::_layerChanged(SPGroup *layer)
 {
     _layer = layer;
     _observer->set(layer);
-    _layerModified();
+    _queueUpdate();
+}
+
+void LayerSelector::_queueUpdate()
+{
+    if (_tick_callback) {
+        return;
+    }
+
+    _tick_callback = add_tick_callback([this] (Glib::RefPtr<Gdk::FrameClock> const &) {
+        _layerModified();
+        _tick_callback = 0;
+        return false;
+    });
+}
+
+void LayerSelector::_cancelUpdate()
+{
+    if (!_tick_callback) {
+        return;
+    }
+
+    remove_tick_callback(_tick_callback);
+    _tick_callback = 0;
 }
 
 /**
