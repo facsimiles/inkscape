@@ -1077,6 +1077,11 @@ InkscapeApplication::on_startup()
     // Deprecated...
     Inkscape::Application::create(_with_gui);
 
+    // Extensions
+    debug_out << "  calling Inkscape::Extension::init()" << std::endl;
+    Inkscape::Extension::init();
+    debug_out << "  after calling Inkscape::Extension::init()" << std::endl;
+
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
         debug_out << "  Using GUI" << std::endl;
@@ -1122,11 +1127,6 @@ InkscapeApplication::on_startup()
 
     // Autosave
     Inkscape::AutoSave::getInstance().init(this);
-
-    // Extensions
-    debug_out << "  calling Inkscape::Extension::init()" << std::endl;
-    Inkscape::Extension::init();
-    debug_out << "  after calling Inkscape::Extension::init()" << std::endl;
 
     // After extensions are loaded query effects to construct action data
     init_extension_action_data();
