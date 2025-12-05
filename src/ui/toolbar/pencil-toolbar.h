@@ -102,6 +102,7 @@ private:
     void change_cap(int cap);
     void simplify_lpe();
     void simplify_flatten();
+    void show_distance();
     template <typename... T> void _flattenLPE();
 };
 

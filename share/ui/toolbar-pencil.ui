@@ -245,20 +245,21 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox" id="display_box">
+      <object class="GtkBox" id="pen_only_box">
+        <child>
+          <object class="GtkSeparator">
+          </object>
+        </child>
         <child>
           <object class="GtkToggleButton" id="_distance_info_btn">
+            <property name="margin-start">5</property>
             <property name="valign">center</property>
             <property name="focusable">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Show distance to previous note above cursor</property>
+            <property name="tooltip-text" translatable="yes">Show distance to previous node above cursor</property>
             <property name="has-frame">False</property>
-            <property name="icon-name">interactive_simplify</property>
+            <property name="icon-name">show-distance</property>
           </object>
         </child>
       </object>

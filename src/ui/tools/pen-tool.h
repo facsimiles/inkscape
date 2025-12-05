@@ -135,6 +135,8 @@ private:
 
     void _resetColors();
 
+    void _show_distance(Geom::Point const p);
+
     void _disableEvents();
     void _enableEvents();
 

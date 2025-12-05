@@ -125,6 +125,9 @@ PencilToolbar::PencilToolbar(Glib::RefPtr<Gtk::Builder> const &builder, bool pen
 
         // Configure LPE simplify flatten button.
         _flatten_simplify_btn.signal_clicked().connect([this] { _flattenLPE<LivePathEffect::LPESimplify>(); });
+    } else {
+        _distance_info_btn.set_active(prefs->getBool("/tools/freehand/pen/show_distance", true));
+        _distance_info_btn.signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::show_distance));
     }
 
     // Advanced shape options.
@@ -218,7 +221,8 @@ void PencilToolbar::hide_extra_widgets(Glib::RefPtr<Gtk::Builder> const &builder
 {
     auto const pen_only_items = std::vector<Gtk::Widget *>{
         &get_widget<Gtk::Widget>(builder, "zigzag_btn"),
-        &get_widget<Gtk::Widget>(builder, "paraxial_btn")
+        &get_widget<Gtk::Widget>(builder, "paraxial_btn"),
+        &get_widget<Gtk::Widget>(builder, "pen_only_box")
     };
 
     auto const pencil_only_items = std::vector<Gtk::Widget *>{
@@ -435,6 +439,12 @@ void PencilToolbar::simplify_lpe()
     bool simplify = _simplify_btn.get_active();
     Preferences::get()->setBool(freehand_tool_name() + "/simplify", simplify);
     _flatten_simplify_btn.set_visible(simplify);
+}
+
+void PencilToolbar::show_distance()
+{
+    bool show_distance = _distance_info_btn.get_active();
+    Preferences::get()->setBool(freehand_tool_name() + "/show_distance", show_distance);
 }
 
 template <typename... T>
