@@ -182,7 +182,6 @@ public:
     unsigned int uflags : 16;
     unsigned int mflags : 16;
     SPIXmlSpace xml_space;
-    Glib::ustring lang;
     unsigned int hrefcount{0};        /* number of xlink:href references */
     unsigned int _total_hrefcount{0}; /* our hrefcount + total descendants */
     SPDocument *document{nullptr};    /* Document we are part of */
@@ -191,6 +190,11 @@ public:
 private:
     char *id{nullptr};                  /* Our very own unique id */
     Inkscape::XML::Node *repr{nullptr}; /* Our xml representation */
+
+    /**
+     * The value of the `xml:lang` or `lang` attribute, if set.
+     */
+    std::optional<Glib::ustring> _lang_attribute;
 
 public:
     int refCount{1};
@@ -207,6 +211,24 @@ public:
      * Get the id in a URL format.
      */
     std::string getUrl() const;
+
+    /**
+     * Get the value of the language attribute explicitly set on this object, if available.
+     *
+     * To get the effective language of this object, use getLanguage() instead.
+     */
+    std::optional<Glib::ustring> const &getLangAttribute() const { return _lang_attribute; }
+
+    /**
+     * Get the effective language of this object, either set by the `xml:lang`/`lang` attributes or inherited from
+     * the parent.
+     */
+    char const *getLanguage() const;
+
+    /**
+     * Set the language of this object. Use std::nullopt to unset and inherit from the parent.
+     */
+    void setLanguage(std::optional<Glib::ustring> value) { _lang_attribute = std::move(value); }
 
     /**
      * Returns the XML representation of tree

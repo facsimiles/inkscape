@@ -33,6 +33,7 @@
 #include "live_effects/lpeobject.h"
 #include "sp-factory.h"
 #include "sp-font.h"
+#include "sp-glyph.h"
 #include "sp-paint-server.h"
 #include "sp-page.h"
 #include "sp-root.h"
@@ -224,6 +225,17 @@ void SPObject::getIds(std::set<std::string> &ret) const {
 std::string SPObject::getUrl() const {
     if (id) {
         return std::string("url(#") + id + ")";
+    }
+    return "";
+}
+
+char const *SPObject::getLanguage() const
+{
+    if (_lang_attribute) {
+        return _lang_attribute->c_str();
+    }
+    if (parent) {
+        return parent->getLanguage();
     }
     return "";
 }
@@ -797,11 +809,6 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr(SPAttr::INKSCAPE_LABEL);
     object->readAttr(SPAttr::INKSCAPE_COLLECT);
 
-    // Inherit if not set
-    if (lang.empty() && object->parent) {
-        lang = object->parent->lang;
-    }
-
     if(object->cloned && (repr->attribute("id")) ) // The cases where this happens are when the "original" has no id. This happens
                                                    // if it is a SPString (a TextNode, e.g. in a <title>), or when importing
                                                    // stuff externally modified to have no id. 
@@ -1097,18 +1104,22 @@ void SPObject::set(SPAttr key, gchar const* value) {
             break;
 
         case SPAttr::LANG:
-            if (value) {
-                lang = value;
-                // To do: sanity check
+        case SPAttr::XML_LANG: {
+            // Note: An empty string _is_ valid for `xml:lang` and `lang`
+            // `xml:lang` takes precedence
+            if (key == SPAttr::LANG && getAttribute("xml:lang")) {
+                break;
             }
-            break;
-
-        case SPAttr::XML_LANG:
-            if (value) {
-                lang = value;
-                // To do: sanity check
+            gchar const *lang_attr_value = value;
+            if (key == SPAttr::XML_LANG && !lang_attr_value && !is<SPGlyph>(this)) {
+                // Use `lang` only if `xml:lang` is not set.
+                // Also SVG 1.1 <glyph> has a different spec for the `lang` attribute that should not be used.
+                lang_attr_value = getAttribute("lang");
             }
-            break;
+            _lang_attribute = lang_attr_value ? std::make_optional(lang_attr_value) : std::nullopt;
+            // To do: sanity check
+            requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        } break;
 
         case SPAttr::STYLE:
             object->style->readFromObject( object );
@@ -1206,6 +1217,18 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             char const *xml_space;
             xml_space = sp_xml_get_space_string(this->xml_space.value);
             repr->setAttribute("xml:space", xml_space);
+        }
+
+        if (_lang_attribute) {
+            repr->setAttribute("xml:lang", *_lang_attribute);
+        } else {
+            repr->removeAttribute("xml:lang");
+            // SVG 1.1 <glyph> has a different spec for the `lang` attribute, so don't touch that.
+            if (!is<SPGlyph>(this)) {
+                // Only remove `lang` if removing `xml:lang`.
+                // We can leave `lang` otherwise. It does not matter since `xml:lang` takes precedence.
+                repr->removeAttribute("lang");
+            }
         }
 
         if ( flags & SP_OBJECT_WRITE_EXT &&

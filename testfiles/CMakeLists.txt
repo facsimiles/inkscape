@@ -86,6 +86,7 @@ set(TEST_SOURCES
     dir-util-test
     sp-item-test
     sp-object-test
+    sp-object-lang-test
     sp-object-tags-test
     object-links-test
     object-set-test

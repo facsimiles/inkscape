@@ -1378,8 +1378,9 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
 
             // Set language
             SPObject * object = text_source->source;
-            if (!object->lang.empty()) {
-                PangoLanguage* language = pango_language_from_string(object->lang.c_str());
+            char const *lang = object->getLanguage();
+            if (lang && lang[0] != '\0') {
+                PangoLanguage *language = pango_language_from_string(lang);
                 PangoAttribute *attribute_language = pango_attr_language_new( language );
                 pango_attr_list_insert(attributes_list, attribute_language);
             }
