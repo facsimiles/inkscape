@@ -645,12 +645,11 @@ void SPDesktopWidget::layoutWidgets()
         command_toolbar->set_hexpand(false);
     }
     // Toolbar is actually child:
-    Inkscape::UI::for_each_child(*command_toolbar, [=, this](Gtk::Widget &widget) {
+    for (auto &widget : Inkscape::UI::children(*command_toolbar)) {
         if (auto toolbar = dynamic_cast<Gtk::Box *>(&widget)) {
             gtk_orientable_set_orientation(GTK_ORIENTABLE(toolbar->gobj()), orientation_c); // Missing in C++interface!
         }
-        return Inkscape::UI::ForEachResult::_continue;
-    });
+    }
 
     repack_snaptoolbar();
 }
@@ -745,7 +744,7 @@ void SPDesktopWidget::repack_snaptoolbar()
     // This ensures that the Snap toolbox is on the top and only takes the needed space.
     _top_toolbars->remove(aux);
     _top_toolbars->remove(snap);
-    if (Inkscape::UI::get_children(*_top_toolbars).size() == 3 && command_toolbar->get_visible()) {
+    if (Inkscape::UI::get_n_children(*_top_toolbars) == 3 && command_toolbar->get_visible()) {
         _top_toolbars->attach(aux, 0, 1, 2, 1);
         _top_toolbars->attach(snap, 1, 0, 1, 2);
         snap.set_valign(Gtk::Align::START);

@@ -264,31 +264,30 @@ int ColorNotebook::getPageIndex(const Glib::ustring &name)
 
 int ColorNotebook::getPageIndex(Gtk::Widget *widget)
 {
-    auto const pages = UI::get_children(*_book);
-    auto const n_pages = static_cast<int>(pages.size());
-    for (int i = 0; i < n_pages; ++i) {
-        if (pages[i] == widget) {
+    // Todo: (C++23) Use std::views::enumerate.
+    int i = 0;
+    for (auto const &child : UI::children(*_book)) {
+        if (&child == widget) {
             return i;
         }
+        i++;
     }
     return 0;
 }
 
 void ColorNotebook::_setCurrentPage(int i, bool sync_combo)
 {
-    auto const pages = UI::get_children(*_book);
-    auto const n_pages = static_cast<int>(pages.size());
-    if (i >= n_pages) {
-        // page index could be outside the valid range if we manipulate visible color pickers;
-        // default to the first page, so we show something
-        i = 0;
+    auto page = get_nth_child(*_book, i);
+
+    // page index could be outside the valid range if we manipulate visible color pickers;
+    // default to the first page, so we show something
+    if (!page) {
+        page = _book->get_first_child();
     }
 
-    if (i >= 0 && i < n_pages) {
-        _book->set_visible_child(*pages[i]);
-        if (sync_combo) {
-            _combo->set_active_by_id(i);
-        }
+    _book->set_visible_child(*page);
+    if (sync_combo) {
+        _combo->set_active_by_id(i);
     }
 }
 
@@ -298,7 +297,7 @@ void ColorNotebook::_addPageForSpace(std::shared_ptr<Colors::Space::AnySpace> sp
     auto mode_name = space->getName();
     _book->add(*selector_widget, mode_name, mode_name);
 
-    auto const n_pages = static_cast<int>(UI::get_children(*_book).size());
+    auto const n_pages = UI::get_n_children(*_book);
     auto const page_num = n_pages - 1;
     _combo->add_row(space->getIcon(), mode_name, page_num);
 

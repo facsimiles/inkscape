@@ -245,10 +245,10 @@ public:
 
 private:
     void show_viewbox(bool show_widgets) {
-        auto const show = [=](Gtk::Widget * const w){ w->set_visible(show_widgets); };
+        auto const show = [=](Gtk::Widget &w){ w.set_visible(show_widgets); };
 
-        for (auto const widget : UI::get_children(_left_grid)) {
-            if (widget->has_css_class("viewbox")) {
+        for (auto &widget : UI::children(_left_grid)) {
+            if (widget.has_css_class("viewbox")) {
                 show(widget);
             }
         }

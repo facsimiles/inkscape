@@ -449,7 +449,7 @@ SPMarker* MarkerComboBox::get_current() const {
 void MarkerComboBox::set_active(Glib::RefPtr<MarkerItem> item) {
     bool selected = false;
     if (item) {
-        UI::for_each_child(_marker_list, [item, &selected, this] (Gtk::Widget &widget) {
+        for (auto &widget : children(_marker_list)) {
             if (auto box = dynamic_cast<Gtk::FlowBoxChild*>(&widget)) {
                 if (auto marker = _widgets_to_markers[box->get_child()]) {
                     if (*marker == *item) {
@@ -458,8 +458,7 @@ void MarkerComboBox::set_active(Glib::RefPtr<MarkerItem> item) {
                     }
                 }
             }
-            return UI::ForEachResult::_continue;
-        });
+        }
     }
 
     if (!selected) {

@@ -170,11 +170,11 @@ bool PopoverMenu::activate(Glib::ustring const &search) {
             _active_search->set_xalign(0.1);
             _grid.attach_next_to(*_active_search, Gtk::PositionType::BOTTOM);
         }
-        for (auto const widg : UI::get_children(*item)) {
+        for (auto &widg : UI::children(*item)) {
             item->unset_state_flags(Gtk::StateFlags::FOCUSED | Gtk::StateFlags::PRELIGHT);
             if (!search.empty()) {
-                 for (auto const mi : UI::get_children(*widg)) {
-                    if (auto label = dynamic_cast<Gtk::Label *>(mi)) {
+                 for (auto &mi : UI::children(widg)) {
+                    if (auto label = dynamic_cast<Gtk::Label *>(&mi)) {
                         auto text_data = label->get_text();
                         // if not matched and search == begining of label
                         if (!match && text_data.size() >= search.size()) {
@@ -281,16 +281,12 @@ Glib::SignalProxy<void ()> PopoverMenuItem::signal_activate()
 
 PopoverMenu *PopoverMenuItem::get_menu()
 {
-    PopoverMenu *result = nullptr;
-    for_each_parent(*this, [&](Gtk::Widget &parent)
-    {
+    for (auto &parent : parent_chain(*this) | std::views::drop(1)) {
         if (auto const menu = dynamic_cast<PopoverMenu *>(&parent)) {
-            result = menu;
-            return ForEachResult::_break;
+            return menu;
         }
-        return ForEachResult::_continue;
-    });
-    return result;
+    }
+    return nullptr;
 }
 
 void PopoverMenuItem::set_label(Glib::ustring const &name)

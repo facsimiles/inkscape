@@ -282,8 +282,8 @@ Shortcuts::update_gui_text_recursive(Gtk::Widget* widget)
         }
     }
 
-    for (auto const child : UI::get_children(*widget)) {
-        update_gui_text_recursive(child);
+    for (auto &child : UI::children(*widget)) {
+        update_gui_text_recursive(&child);
     }
 }
 
@@ -1148,8 +1148,8 @@ Shortcuts::_dump_all_recursive(Gtk::Widget* widget)
               << ":   " << action
               << std::endl;
 
-    for (auto const child : UI::get_children(*widget)) {
-        _dump_all_recursive(child);
+    for (auto &child : UI::children(*widget)) {
+        _dump_all_recursive(&child);
     }
 
     --indent;

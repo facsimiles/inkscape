@@ -307,8 +307,8 @@ bool DialogNotebook::provide_scroll(Gtk::Widget &page) {
 
 Gtk::ScrolledWindow* DialogNotebook::get_scrolledwindow(Gtk::Widget &page)
 {
-    if (auto const children = UI::get_children(page); !children.empty()) {
-        if (auto const scrolledwindow = dynamic_cast<Gtk::ScrolledWindow *>(children[0])) {
+    if (auto const child = page.get_first_child()) {
+        if (auto const scrolledwindow = dynamic_cast<Gtk::ScrolledWindow *>(child)) {
             return scrolledwindow;
         }
     }
@@ -349,16 +349,17 @@ void DialogNotebook::add_page(Gtk::Widget &page) {
         wrapperbox->set_vexpand(true);
 
         // This used to transfer pack-type and child properties, but now those are set on children.
-        for_each_child(*box, [=](Gtk::Widget &child) {
-            child.reference();
-            box       ->remove(child);
-            wrapperbox->append(child);
-            child.unreference();
-            return ForEachResult::_continue;
-        });
+        for (auto child = box->get_first_child(); child; ) {
+            auto next = child->get_next_sibling();
+            child->reference();
+            box->remove(*child);
+            wrapperbox->append(*child);
+            child->unreference();
+            child = next;
+        }
 
         wrapper->set_child(*wrapperbox);
-        box    ->append(*wrapper);
+        box->append(*wrapper);
 
         if (provide_scroll(page)) {
             wrapper->set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::EXTERNAL);
@@ -619,7 +620,7 @@ void DialogNotebook::on_size_allocate_scroll(int const width)
     //  set or unset scrollbars to completely hide a notebook
     // because we have a "blocking" scroll per tab we need to loop to avoid
     // other page stop out scroll
-    for_each_page(_notebook, [this](Gtk::Widget &page){
+    for (auto &page : notebook_pages(_notebook)) {
         if (!provide_scroll(page)) {
             auto const scrolledwindow = get_scrolledwindow(page);
             if (scrolledwindow) {
@@ -633,13 +634,12 @@ void DialogNotebook::on_size_allocate_scroll(int const width)
                         property.set_value(Gtk::PolicyType::EXTERNAL);
                     } else {
                         // we don't need to update; break
-                        return ForEachResult::_break;
+                        break;
                     }
                 }
             }
         }
-        return ForEachResult::_continue;
-    });
+    }
 }
 
 // [[nodiscard]] static int measure_min_width(Gtk::Widget const &widget)

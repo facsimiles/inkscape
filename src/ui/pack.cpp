@@ -102,9 +102,9 @@ static void add(Gtk::Box &box, PackType const pack_type, Gtk::Widget &child)
         box.prepend(child); // Prepend so PackType::end arranges children from end-to-start as GTK3
     } else {
         auto const position = starts.size();
-        auto &previous = get_nth_child(box, position - 1);
+        auto previous = get_nth_child(box, position - 1);
         box.append(child);
-        box.reorder_child_after(child, previous);
+        box.reorder_child_after(child, *previous);
     }
 
     if (pack_type != PackType::start) return;

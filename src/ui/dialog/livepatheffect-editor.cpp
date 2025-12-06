@@ -239,14 +239,13 @@ void align(Gtk::Widget *top, int const spinbutton_width_chars)
 
     // traverse container, locate n-th child in each row
     auto for_child_n = [=](int child_index, const std::function<void (Gtk::Widget*)>& action) {
-        for (auto const child : UI::get_children(*box)) {
-            auto const container = dynamic_cast<Gtk::Box *>(child);
+        for (auto &child : UI::children(*box)) {
+            auto const container = dynamic_cast<Gtk::Box *>(&child);
             if (!container) continue;
 
             container->set_spacing(2);
-            auto const children = UI::get_children(*container);
-            if (child_index < children.size()) {
-                action(children[child_index]);
+            if (auto child = get_nth_child(*container, child_index)) {
+                action(child);
             }
         }
     };
@@ -583,7 +582,7 @@ LivePathEffectEditor::selection_info()
                 UI::pack_start(*boxc, *type, false, false);
                 UI::pack_start(*boxc, *lbl, false, false);
                 _LPECurrentItem.append(*boxc);
-                UI::get_children(_LPECurrentItem).at(0)->set_halign(Gtk::Align::CENTER);
+                _LPECurrentItem.get_first_child()->set_halign(Gtk::Align::CENTER);
                 _LPESelectionInfo.set_visible(false);
             }
             std::vector<std::pair <Glib::ustring, Glib::ustring> > newrootsatellites;
@@ -693,7 +692,7 @@ LivePathEffectEditor::showParams(LPEExpander const &expanderdata, bool const cha
 
             effectwidget = lpe->newWidget();
 
-            if (UI::get_children(*effectwidget).empty()) {
+            if (!effectwidget->get_first_child()) {
                 auto const label = Gtk::make_managed<Gtk::Label>("", Gtk::Align::START, Gtk::Align::CENTER);
                 label->set_markup(_("<small>Without parameters</small>"));
                 label->set_margin_top(5);
@@ -786,7 +785,7 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
         {
             if (!dnd) return false;
 
-            int pos_target = y < 90 ? 0 : UI::get_children(LPEListBox).size() - 1;
+            int pos_target = y < 90 ? 0 : UI::get_n_children(LPEListBox) - 1;
             bool const accepted = on_drop(_LPEContainer, value, pos_target);
             dnd = false;
             return accepted;

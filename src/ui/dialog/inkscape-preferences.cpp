@@ -139,7 +139,7 @@ static bool fuzzy_search(Glib::ustring const &pattern, Glib::ustring const &stri
         std::vector<Gtk::Widget *> children;
         return children;
     }
-    auto children = UI::get_children(widget);
+    auto children = widget.get_children();
     if (children.empty()) {
         children = widget.list_mnemonic_labels();
     }
@@ -2174,12 +2174,13 @@ void InkscapePreferences::initPageUI()
             btn->signal_toggled().connect([=, path = std::move(path)]() {
                 prefs->setBool(path, btn->get_active());
 
-                auto const buttons = UI::get_children(*container);
-                auto const is_active = [](Gtk::Widget const * const child)
-                    { return dynamic_cast<Gtk::ToggleButton const &>(*child).get_active(); };
-                if (!buttons.empty() && std::none_of(buttons.begin(), buttons.end(), is_active)) {
+                auto const buttons = UI::children(*container);
+                auto const is_active = [](Gtk::Widget const &child) {
+                    return dynamic_cast<Gtk::ToggleButton const &>(child).get_active();
+                };
+                if (!buttons.empty() && std::ranges::none_of(buttons, is_active)) {
                     // all pickers hidden; not a good combination; select first one
-                    dynamic_cast<Gtk::ToggleButton &>(*buttons.front()).set_active(true);
+                    dynamic_cast<Gtk::ToggleButton &>(buttons.front()).set_active(true);
                 }
             });
 

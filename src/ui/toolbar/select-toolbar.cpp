@@ -74,10 +74,9 @@ SelectToolbar::SelectToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     _tracker->addUnit(Util::UnitTable::get().unit("%"));
 
     // Use StyleContext to check if the child is a context item (an item that is disabled if there is no selection).
-    auto children = UI::get_children(_toolbar);
-    for (auto const child : children) {
-        if (child->has_css_class("context_item")) {
-            _context_items.push_back(child);
+    for (auto &child : UI::children(_toolbar)) {
+        if (child.has_css_class("context_item")) {
+            _context_items.push_back(&child);
         }
     }
 

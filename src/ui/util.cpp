@@ -24,10 +24,11 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/tooltip.h>
+#include <2geom/bezier.h>
 
+#include "desktop.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
-#include "object/sp-text.h"
 #include "ui/dialog-run.h"
 // #include "desktop.h"
 // #include "inkscape-window.h"
@@ -146,24 +147,18 @@ void system_open(const Glib::ustring &path)
 #endif
 }
 
-std::vector<Gtk::Widget *> get_children(Gtk::Widget &widget)
-{
-    auto children = std::vector<Gtk::Widget *>{};
-    for (auto child = widget.get_first_child(); child; child = child->get_next_sibling()) {
-        children.push_back(child);
-    }
-    return children;
-}
-
-Gtk::Widget &get_nth_child(Gtk::Widget &widget, std::size_t const index)
+Gtk::Widget *get_nth_child(Gtk::Widget &widget, std::size_t index)
 {
     auto child = widget.get_first_child();
-    for (std::size_t i = 0; true; ++i) {
-        if (!child) throw std::out_of_range{"get_nth_child()"};
-        if (i == index) break;
+    for (std::size_t i = 0; i != index && child; ++i) {
         child = child->get_next_sibling();
     }
-    return *child;
+    return child;
+}
+
+std::size_t get_n_children(Gtk::Widget const &widget)
+{
+    return std::ranges::distance(children(widget));
 }
 
 /**
@@ -202,8 +197,12 @@ Gtk::Widget *find_focusable_widget(Gtk::Widget &parent)
 /// @return Whether the widget of interest is a descendant of the given ancestor.
 bool is_descendant_of(Gtk::Widget const &descendant, Gtk::Widget const &ancestor)
 {
-    return nullptr != for_each_parent(const_cast<Gtk::Widget &>(descendant), [&](auto const &parent)
-          { return &parent == &ancestor ? ForEachResult::_break : ForEachResult::_continue; });
+    for (auto &parent : parent_chain(descendant)) {
+        if (&parent == &ancestor) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /// Returns if widget or one of its descendants has focus.

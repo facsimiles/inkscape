@@ -42,8 +42,7 @@ static int run_dialog(Gtk::Window &window, char const * const save_text,
     // Don't allow text to be selected (via tabbing).
     auto const ma = dialog.get_message_area();
     g_assert(ma);
-    auto const ma_labels = Inkscape::UI::get_children(*ma);
-    ma_labels.at(0)->set_focusable(false);
+    ma->get_first_child()->set_focusable(false);
 
     dialog.set_title(_("Save Document"));
     dialog.add_button(_("Close _without saving"), Gtk::ResponseType::NO);

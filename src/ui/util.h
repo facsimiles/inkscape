@@ -13,6 +13,8 @@
 #ifndef UI_UTIL_SEEN
 #define UI_UTIL_SEEN
 
+#include <ranges>
+#include <boost/iterator/iterator_facade.hpp>
 #include <gtkmm/notebook.h>
 #include <2geom/rect.h>
 
@@ -68,7 +70,62 @@ void set_icon_sizes(GtkWidget *parent, int pixel_size);
 
 void gui_warning(const std::string &msg, Gtk::Window * parent_window = nullptr);
 
-/// Whether for_each_*() will continue or stop after calling Func per child.
+struct NullWidgetSentinel {};
+
+template <typename T>
+class SiblingIterator : public boost::iterator_facade<SiblingIterator<T>, T, boost::bidirectional_traversal_tag>
+{
+public:
+    SiblingIterator() = default;
+    explicit SiblingIterator(T *widget) : _widget(widget) {}
+
+    bool operator==(NullWidgetSentinel) const { return !_widget; };
+
+private:
+    T *_widget = nullptr;
+
+    void increment() { _widget = _widget->get_next_sibling(); }
+    void decrement() { _widget = _widget->get_prev_sibling(); }
+    T &dereference() const { return *_widget; }
+
+    friend class boost::iterator_core_access;
+};
+
+template <typename T>
+class ParentIterator : public boost::iterator_facade<ParentIterator<T>, T, boost::forward_traversal_tag>
+{
+public:
+    ParentIterator() = default;
+    explicit ParentIterator(T *widget) : _widget(widget) {}
+
+    bool operator==(NullWidgetSentinel) const { return !_widget; };
+
+private:
+    T *_widget = nullptr;
+
+    void increment() { _widget = _widget->get_parent(); }
+    T &dereference() const { return *_widget; }
+
+    friend class boost::iterator_core_access;
+};
+
+/**
+ * Returns a widget's direct children starting from get_first_widget() and calling get_next_sibling() each time.
+ * @return A bidirectional range of Gtk::Widget [const] &, where the const is deduced.
+ */
+inline auto children(Gtk::Widget       &widget) { return std::ranges::subrange{SiblingIterator{widget.get_first_child()}, NullWidgetSentinel{}}; }
+inline auto children(Gtk::Widget const &widget) { return std::ranges::subrange{SiblingIterator{widget.get_first_child()}, NullWidgetSentinel{}}; }
+inline auto children(Gtk::Widget      &&widget) = delete;
+
+/**
+ * Returns a widget's parent chain starting from the widget itself and calling get_parent() each time.
+ * @return A forward range of Gtk::Widget [const] &, where the const is deduced.
+ */
+inline auto parent_chain(Gtk::Widget       &widget) { return std::ranges::subrange{ParentIterator{&widget}, NullWidgetSentinel{}}; }
+inline auto parent_chain(Gtk::Widget const &widget) { return std::ranges::subrange{ParentIterator{&widget}, NullWidgetSentinel{}}; }
+inline auto parent_chain(Gtk::Widget      &&widget) = delete;
+
+/// Whether for_each_descendant() will continue or stop after calling Func per child.
 enum class ForEachResult {
     _continue, // go on to the next widget
     _break,    // stop here, return current widget
@@ -77,87 +134,51 @@ enum class ForEachResult {
 
 /// Opens the given path with platform-specific tools.
 void system_open(const Glib::ustring &path);
-/// Get a vector of the widgetʼs children, from get_first_child() through each get_next_sibling().
-std::vector<Gtk::Widget *> get_children(Gtk::Widget &widget);
-/// Get the widgetʼs child at the given position. Throws std::out_of_range if the index is invalid.
-Gtk::Widget &get_nth_child(Gtk::Widget &widget, std::size_t index);
-/// For each child in get_children(widget), call widget.remove(*child). May not cause delete child!
+/// Get the widgetʼs child at the given position. Return null if the index is invalid.
+Gtk::Widget *get_nth_child(Gtk::Widget &widget, std::size_t index);
+/// Get the number of children of a widget.
+std::size_t get_n_children(Gtk::Widget const &widget);
+/// For each child in get_children(widget), call widget.remove(*child). May not necessarily delete child if there are other references.
 template <typename Widget> void remove_all_children(Widget &widget)
 {
-    for (auto const child: get_children(widget)) {
+    for (auto child = widget.get_first_child(); child; ) {
+        auto next = child->get_next_sibling();
         widget.remove(*child);
+        child = next;
     }
 }
 
-/// Call Func with a reference to each child of parent, until it returns _break.
-/// Accessing children changes between GTK3 & GTK4, so best consolidate it here.
-/// @param widget    The initial widget at the top of the hierarchy, to start at
-/// @param func      The widget-testing predicate, returning whether to continue
-/// @param plus_self Whether to call the predicate @a func on the initial widget
-/// @param recurse   Whether to recurse also calling @a func for nested children
-/// @return The first widget for which @a func returns _break or nullptr if none
-template <typename Func>
-Gtk::Widget *for_each_child(Gtk::Widget &widget, Func &&func,
-                            bool const plus_self = false, bool const recurse = false,
-                            int const level = 0)
-{
-    static_assert(std::is_invocable_r_v<ForEachResult, Func, Gtk::Widget &>);
-
-    if (plus_self) {
-        auto ret = func(widget);
-        if (ret == ForEachResult::_break) return &widget;
-
-        // skip this widget?
-        if (ret == ForEachResult::_skip) return nullptr;
-    }
-
-    if (!recurse && level > 0) return nullptr;
-
-    for (auto const child: get_children(widget)) {
-        auto const descendant = for_each_child(*child, func, true, recurse, level + 1);
-        if (descendant) return descendant;
-    }
-
-    return nullptr;
-}
-
-/// Like for_each_child() but also tests the initial widget & recurses through childrenʼs children.
+/// Call Func with a reference to each descendant of @p parent, until it returns _break.
 /// @param widget    The initial widget at the top of the hierarchy, to start at
 /// @param func      The widget-testing predicate, returning whether to continue
 /// @return The first widget for which @a func returns _break or nullptr if none
 template <typename Func>
 Gtk::Widget *for_each_descendant(Gtk::Widget &widget, Func &&func)
 {
-    return for_each_child(widget, std::forward<Func>(func), true, true);
-}
-
-/// Call Func with a reference to successive parents, until Func returns _break.
-template <typename Func>
-Gtk::Widget *for_each_parent(Gtk::Widget &widget, Func &&func)
-{
     static_assert(std::is_invocable_r_v<ForEachResult, Func, Gtk::Widget &>);
-    for (auto parent = widget.get_parent(); parent; parent = parent->get_parent()) {
-        if (func(*parent) == ForEachResult::_break) {
-            return parent;
-        }
+
+    auto ret = func(widget);
+    if (ret == ForEachResult::_break) return &widget;
+
+    // skip this widget?
+    if (ret == ForEachResult::_skip) return nullptr;
+
+    for (auto &child : children(widget)) {
+        auto const descendant = for_each_descendant(child, func);
+        if (descendant) return descendant;
     }
+
     return nullptr;
 }
 
-/// Similar to for_each_child, but only iterates over pages in a notebook
-template <typename Func>
-Gtk::Widget* for_each_page(Gtk::Notebook& notebook, Func&& func) {
-    static_assert(std::is_invocable_r_v<ForEachResult, Func, Gtk::Widget&>);
-
-    const int page_number = notebook.get_n_pages();
-    for (int page_index = 0; page_index < page_number; ++page_index) {
-        auto page = notebook.get_nth_page(page_index);
-        if (!page) continue;
-
-        if (func(*page) == ForEachResult::_break) return page;
-    }
-
-    return nullptr;
+/**
+ * Returns the pages of a Gtk::Notebook.
+ * @return A random-access range of Gtk::Widget &.
+ */
+inline auto notebook_pages(Gtk::Notebook &notebook)
+{
+    return std::ranges::iota_view(0, notebook.get_n_pages()) |
+           std::views::transform([&notebook] (int n) -> auto & { return *notebook.get_nth_page(n); });
 }
 
 [[nodiscard]] Gtk::Widget *find_widget_by_name(Gtk::Widget &parent, Glib::ustring const &name, bool visible_only);

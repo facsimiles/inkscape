@@ -155,11 +155,8 @@ ToggleButtonParam::refresh_button()
         return;
     }
 
-    auto const children = UI::get_children(*box_button);
-    g_assert(!children.empty());
-
     if (!param_label.empty()) {
-        auto const lab = dynamic_cast<Gtk::Label *>(children.back());
+        auto const lab = dynamic_cast<Gtk::Label *>(box_button->get_last_child());
         if (!lab) return;
 
         if (value || inactive_label.empty()) {
@@ -169,8 +166,8 @@ ToggleButtonParam::refresh_button()
         }
     }
 
-    if ( _icon_active ) {
-        auto const im = dynamic_cast<Gtk::Image *>(children.front());
+    if (_icon_active) {
+        auto const im = dynamic_cast<Gtk::Image *>(box_button->get_first_child());
         if (!im) return;
 
         gtk_image_set_from_icon_name(im->gobj(), value ? _icon_active : _icon_inactive);

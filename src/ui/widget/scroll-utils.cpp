@@ -7,35 +7,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "scroll-utils.h"
+
 #include <gtkmm/scrolledwindow.h>
 #include "ui/util.h"
 
 namespace Inkscape::UI::Widget {
 
-/**
- * Get the first ancestor which is scrollable.
- */
-Gtk::Widget *get_scrollable_ancestor(Gtk::Widget *widget)
+Gtk::Widget *get_scrollable_ancestor(Gtk::Widget &widget)
 {
-    g_return_val_if_fail(widget, nullptr);
+    for (auto &parent : parent_chain(widget) | std::views::drop(1)) {
+        if (dynamic_cast<Gtk::ScrolledWindow *>(&parent)) {
+            return &parent;
+        }
+    }
 
-    return for_each_parent(*widget, [](Gtk::Widget &parent)
-    {
-        auto const scrollable = dynamic_cast<Gtk::ScrolledWindow *>(&parent);
-        return scrollable ? ForEachResult::_break : ForEachResult::_continue;
-    });
-}
-
-/**
- * Get the first ancestor which is scrollable.
- */
-Gtk::Widget const *get_scrollable_ancestor(Gtk::Widget const * const widget)
-{
-    g_return_val_if_fail(widget, nullptr);
-
-    auto const mut_widget = const_cast<Gtk::Widget *>(widget);
-    auto const mut_ancestor = get_scrollable_ancestor(mut_widget);
-    return const_cast<Gtk::Widget const *>(mut_ancestor);
+    return nullptr;
 }
 
 } // namespace Inkscape::UI::Widget

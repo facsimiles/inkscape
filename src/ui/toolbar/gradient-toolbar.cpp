@@ -340,24 +340,22 @@ GradientToolbar::GradientToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 
     // Configure mode buttons
     int btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(builder, "new_type_buttons_box"), [&](Gtk::Widget &item){
+    for (auto &item : children(get_widget<Gtk::Box>(builder, "new_type_buttons_box"))) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         _new_type_buttons.push_back(&btn);
         btn.signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &GradientToolbar::new_type_changed), btn_index++));
-        return ForEachResult::_continue;
-    });
+    }
 
     int mode = prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR);
     _new_type_buttons[mode == SP_GRADIENT_TYPE_LINEAR ? 0 : 1]->set_active(); // linear == 1, radial == 2
 
     btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(builder, "new_fillstroke_buttons_box"), [&](Gtk::Widget &item){
+    for (auto &item : children(get_widget<Gtk::Box>(builder, "new_fillstroke_buttons_box"))) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         _new_fillstroke_buttons.push_back(&btn);
         btn.signal_clicked().connect(
             sigc::bind(sigc::mem_fun(*this, &GradientToolbar::new_fillstroke_changed), btn_index++));
-        return ForEachResult::_continue;
-    });
+    }
 
     auto fsmode = prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0 ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
     _new_fillstroke_buttons[fsmode == Inkscape::FOR_FILL ? 0 : 1]->set_active();

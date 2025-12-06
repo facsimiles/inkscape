@@ -72,12 +72,11 @@ PencilToolbar::PencilToolbar(Glib::RefPtr<Gtk::Builder> const &builder, bool pen
 
     // Configure mode buttons
     int btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(builder, "mode_buttons_box"), [&] (Gtk::Widget &item) {
+    for (auto &item : children(get_widget<Gtk::Box>(builder, "mode_buttons_box"))) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         _mode_buttons.push_back(&btn);
         btn.signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &PencilToolbar::mode_changed), btn_index++));
-        return ForEachResult::_continue;
-    });
+    }
 
     // Configure LPE bspline spiro flatten button.
     _flatten_spiro_bspline_btn.signal_clicked().connect([this] {

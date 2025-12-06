@@ -92,7 +92,7 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
         UI::pack_start(*this->get_content_area(), *hbox, false, false);
 
         if (auto const preview_box =  dynamic_cast<Gtk::Box *>(_button_preview)) {
-            _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(UI::get_children(*preview_box).at(0));
+            _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(preview_box->get_first_child());
         }
 
         preview_toggle();

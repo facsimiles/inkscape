@@ -114,7 +114,7 @@ protected:
                  Glib::ustring const &pref);
     void remove(bool do_undo = true);
     void reset();
-    void reset_recursive(Gtk::Widget *w);
+    void reset_recursive(Gtk::Widget &w);
     void switch_to_create();
     void switch_to_fill();
     void unclump();

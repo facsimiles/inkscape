@@ -304,9 +304,8 @@ void
 StartScreen::banner_switch(unsigned page_num)
 {
     auto &stack = get_widget<Gtk::Stack>(build_splash, "banner-stack");
-    auto const pages = UI::get_children(stack);
-    auto &page = *pages.at(page_num);
-    stack.set_visible_child(page);
+    auto page = get_nth_child(stack, page_num);
+    stack.set_visible_child(*page);
 }
 
 void

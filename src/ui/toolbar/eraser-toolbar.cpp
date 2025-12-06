@@ -123,12 +123,11 @@ EraserToolbar::EraserToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 
     // Configure mode buttons
     int btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(builder, "mode_buttons_box"), [&](Gtk::Widget &item){
+    for (auto &item : children(get_widget<Gtk::Box>(builder, "mode_buttons_box"))) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         btn.set_active(btn_index == eraser_mode);
         btn.signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &EraserToolbar::mode_changed), btn_index++));
-        return ForEachResult::_continue;
-    });
+    }
 
     // Pressure button
     _pressure_pusher = std::make_unique<UI::SimplePrefPusher>(_usepressure_btn, "/tools/eraser/usepressure");
@@ -205,17 +204,16 @@ void EraserToolbar::set_eraser_mode_visibility(unsigned const eraser_mode)
     using namespace Inkscape::UI::Tools;
 
     bool const visibility = eraser_mode != _modeAsInt(EraserToolMode::DELETE);
-    auto children = UI::get_children(_toolbar);
     constexpr int visible_children_count = 2;
 
     // Set all the children except the modes as invisible.
     int child_index = 0;
-    for (auto child : children) {
+    for (auto &child : UI::children(_toolbar)) {
         if (child_index++ < visible_children_count) {
             continue;
         }
 
-        child->set_visible(visibility);
+        child.set_visible(visibility);
     }
 
     _split_btn.set_visible(eraser_mode == _modeAsInt(EraserToolMode::CUT));

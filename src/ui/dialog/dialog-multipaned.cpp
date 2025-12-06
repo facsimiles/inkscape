@@ -1085,13 +1085,13 @@ bool can_collapse(Gtk::Widget* widget, Gtk::Widget* handle) {
     size_t panel_index = 0;
     size_t handle_index = 0;
     size_t i = 0;
-    for (auto const child : UI::get_children(*parent)) {
-        if (dynamic_cast<Inkscape::UI::Widget::CanvasGrid *>(child)) {
+    for (auto &child : UI::children(*parent)) {
+        if (dynamic_cast<Inkscape::UI::Widget::CanvasGrid *>(&child)) {
             left_side = false;
-        } else if (child == handle) {
+        } else if (&child == handle) {
             left_handle = left_side;
             handle_index = i;
-        } else if (child == widget) {
+        } else if (&child == widget) {
             panel_index = i;
         }
         ++i;

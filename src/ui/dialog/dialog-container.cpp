@@ -756,12 +756,11 @@ void save_wnd_position(Glib::KeyFile *keyfile, const Glib::ustring &group_name, 
     std::vector<Glib::ustring> dialogs;
     if (!notebook) return dialogs;
 
-    for_each_page(*notebook, [&](Gtk::Widget& page) {
+    for (auto &page : UI::notebook_pages(*notebook)) {
         if (auto const dialog = dynamic_cast<DialogBase *>(&page)) {
             dialogs.push_back(dialog->get_type());
         }
-        return ForEachResult::_continue;
-    });
+    }
     return dialogs;
 }
 

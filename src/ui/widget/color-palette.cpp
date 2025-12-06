@@ -478,9 +478,9 @@ void ColorPalette::_enable_scrollbar(bool show) {
 void ColorPalette::set_up_scrolling() {
     auto &box = get_widget<Gtk::Box>(_builder, "palette-box");
     auto &btn_menu = get_widget<Gtk::MenuButton>(_builder, "btn-menu");
-    auto const colors = UI::get_children(_normal_box);
-    auto normal_count = std::max(1, static_cast<int>(colors.size()));
-    auto pinned_count = std::max(1, static_cast<int>(UI::get_children(_pinned_box).size()));
+    auto const n_colors = UI::get_n_children(_normal_box);
+    auto normal_count = std::max<int>(1, n_colors);
+    auto pinned_count = std::max<int>(1, UI::get_n_children(_pinned_box));
 
     _normal_box.set_max_children_per_line(normal_count);
     _normal_box.set_min_children_per_line(1);
@@ -489,7 +489,7 @@ void ColorPalette::set_up_scrolling() {
 
     auto alloc_width = _normal_box.get_parent()->get_allocated_width();
     // if page-size is defined, align color tiles in columns
-    if (!(_rows == 1 && _force_scrollbar) && _page_size > 1 && alloc_width > 1 && !_show_labels && !colors.empty()) {
+    if (!(_rows == 1 && _force_scrollbar) && _page_size > 1 && alloc_width > 1 && !_show_labels && n_colors > 0) {
         int width = get_tile_width();
         if (width > 1) {
             int cols = alloc_width / (width + _border);
@@ -660,14 +660,12 @@ void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> co
 
     for (auto& item : coloritems) {
         item->signal_modified().connect([item = item.get()] {
-            UI::for_each_child(*item->get_parent(), [=](Gtk::Widget& w) {
+            for (auto &w : children(*item->get_parent())) {
                 if (auto label = dynamic_cast<Gtk::Label *>(&w)) {
                     label->set_text(item->get_description());
                 }
-                return UI::ForEachResult::_continue;
-            });
+            }
         });
-        //
         if (item->is_pinned()) {
             _pinned_items.push_back(std::move(item));
         } else {
@@ -772,7 +770,7 @@ void ColorPalette::set_filter(std::function<bool (const Dialog::ColorItem&)> fil
     _normal_box.set_filter_func([=](Gtk::FlowBoxChild* c){
         auto child = c->get_child();
         if (auto box = dynamic_cast<Gtk::Box*>(child)) {
-            child = UI::get_children(*box).at(0);
+            child = box->get_first_child();
         }
         if (auto color = dynamic_cast<Dialog::ColorItem*>(child)) {
             return filter(*color);

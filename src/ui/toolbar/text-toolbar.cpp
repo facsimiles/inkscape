@@ -411,13 +411,11 @@ void TextToolbar::configure_mode_buttons(std::vector<Gtk::ToggleButton *> &butto
 {
     int btn_index = 0;
 
-    for_each_child(box, [this, mode_changed_mem_fun, &btn_index, &buttons](Gtk::Widget &item) {
+    for (auto &item : children(box)) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         buttons.push_back(&btn);
         btn.signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, mode_changed_mem_fun), btn_index++));
-
-        return ForEachResult::_continue;
-    });
+    }
 
     // Set the active button after all the buttons have been pushed.
     auto const path = "/tools/text/" + name;

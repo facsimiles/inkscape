@@ -283,10 +283,8 @@ LPEPerspectiveEnvelope::newWidget()
             param->param_key == "down_right_point")
         {
             auto &point_hbox = dynamic_cast<Gtk::Box &>(*widg);
-            auto const child_list = UI::get_children(point_hbox);
-            auto &point_hboxHBox = dynamic_cast<Gtk::Box &>(*child_list.at(0));
-            auto const child_list2 = UI::get_children(point_hboxHBox);
-            point_hboxHBox.remove(*child_list2.at(0));
+            auto &point_hboxHBox = dynamic_cast<Gtk::Box &>(*point_hbox.get_first_child());
+            point_hboxHBox.remove(*point_hboxHBox.get_first_child());
 
             if (param->param_key == "up_left_point") {
                 auto const handles = Gtk::make_managed<Gtk::Label>(Glib::ustring(_("Handles:")),Gtk::Align::START);

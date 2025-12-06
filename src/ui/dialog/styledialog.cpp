@@ -791,11 +791,10 @@ void StyleDialog::readStyleElement()
         UI::pack_start(_styleBox, *css_selector_container, UI::PackOptions::expand_widget);
     }
 
-    for (auto const selector : UI::get_children(_styleBox)) {
-        if (auto const box = dynamic_cast<Gtk::Box *>(selector)) {
-            auto const childs = UI::get_children(*box);
-            if (childs.size() > 1) {
-                if (auto const css_tree = dynamic_cast<Gtk::TreeView *>(childs[1])) {
+    for (auto &selector : UI::children(_styleBox)) {
+        if (auto const box = dynamic_cast<Gtk::Box *>(&selector)) {
+            if (auto child = get_nth_child(*box, 1)) {
+                if (auto const css_tree = dynamic_cast<Gtk::TreeView *>(child)) {
                     if (auto const &model = css_tree->get_model()) {
                         model->foreach_iter(sigc::mem_fun(*this, &StyleDialog::_on_foreach_iter));
                     }

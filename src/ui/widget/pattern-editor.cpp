@@ -463,7 +463,7 @@ std::pair<Glib::RefPtr<PatternItem>, SPDocument*> PatternEditor::get_active() {
 void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::RefPtr<PatternItem> item) {
     bool selected = false;
     if (item) {
-        for_each_child(gallery, [this,item,&selected,&pat,&gallery](Widget& widget){
+        for (auto &widget : children(gallery)) {
             if (auto box = dynamic_cast<Gtk::FlowBoxChild*>(&widget)) {
                 if (auto pattern = pat.widgets_to_pattern[box]) {
                     if (pattern->id == item->id && pattern->collection == item->collection) {
@@ -483,8 +483,7 @@ void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::R
                     }
                 }
             }
-            return ForEachResult::_continue;
-        });
+        }
     }
 
     if (!selected) {

@@ -68,13 +68,12 @@ static bool isMatchingPattern(const std::string &str, const std::string &pattern
 void ToolbarWidget::_initMenuBtns()
 {
     std::map<std::string, std::pair<int, std::stack<std::pair<Gtk::Widget *, Gtk::Widget *>>>> menu_btn_groups;
-    auto children = UI::get_children(_toolbar);
     int position = 0;
 
     // Iterate over all the children of this toolbar.
-    for (auto child : children) {
+    for (auto &child : UI::children(_toolbar)) {
         // Find out the CSS classes associated with each child.
-        auto css_classes = child->get_css_classes();
+        auto css_classes = child.get_css_classes();
         int group_size = 1;
 
         // Iterate over all the CSS classes and find out
@@ -92,19 +91,19 @@ void ToolbarWidget::_initMenuBtns()
                 }
 
                 // Store this child in the map.
-                Gtk::Widget *prev_child = (position == 0) ? nullptr : children[position - 1];
+                auto prev_child = child.get_prev_sibling();
                 auto it = menu_btn_groups.find(c);
 
                 if (it != menu_btn_groups.end()) {
                     // This group already exists.
                     // Push this child in the vector.
-                    it->second.second.emplace(prev_child, child);
+                    it->second.second.emplace(prev_child, &child);
                     if (group_size_defined) {
                         it->second.first = group_size;
                     }
                 } else {
                     std::stack<std::pair<Gtk::Widget *, Gtk::Widget *>> toolbar_children;
-                    toolbar_children.emplace(prev_child, child);
+                    toolbar_children.emplace(prev_child, &child);
                     menu_btn_groups.insert({c, {group_size, toolbar_children}});
                 }
             }

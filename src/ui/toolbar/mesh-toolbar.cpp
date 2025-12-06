@@ -184,23 +184,21 @@ MeshToolbar::MeshToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     int mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL);
 
     int btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(builder, "new_type_buttons_box"), [&](Gtk::Widget &item){
+    for (auto &item : children(get_widget<Gtk::Box>(builder, "new_type_buttons_box"))) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         btn.set_active(btn_index == mode);
         btn.signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MeshToolbar::new_geometry_changed), btn_index++));
-        return ForEachResult::_continue;
-    });
+    }
 
     mode = prefs->getInt("/tools/mesh/newfillorstroke");
 
     btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(builder, "new_fillstroke_buttons_box"), [&](Gtk::Widget &item){
+    for (auto &item : children(get_widget<Gtk::Box>(builder, "new_fillstroke_buttons_box"))) {
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         btn.set_active(btn_index == mode);
         btn.signal_clicked().connect(
             sigc::bind(sigc::mem_fun(*this, &MeshToolbar::new_fillstroke_changed), btn_index++));
-        return ForEachResult::_continue;
-    });
+    }
 
     // Edit fill mesh.
     _edit_fill_pusher.reset(new UI::SimplePrefPusher(_edit_fill_btn, "/tools/mesh/edit_fill"));

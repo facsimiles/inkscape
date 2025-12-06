@@ -54,13 +54,12 @@ public:
 
     // given model item find a container's item that refers to it
     Gtk::Widget* find_child_item(Gtk::Widget& container, const Glib::RefPtr<Glib::ObjectBase>& model_item) {
-        auto list_item_widget = UI::for_each_child(container, [&,this](Gtk::Widget& child) {
+        for (auto &child : children(container)) {
             if (find_item(child).get() == model_item.get()) {
-                return ForEachResult::_break;
+                return child.get_first_child();
             }
-            return ForEachResult::_continue;
-        });
-        return list_item_widget ? list_item_widget->get_first_child() : nullptr;
+        }
+        return nullptr;
     }
 
     void set_use_tooltip_markup(bool use_markup = true) { _use_markup = use_markup; }

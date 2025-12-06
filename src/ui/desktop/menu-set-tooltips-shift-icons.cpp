@@ -32,16 +32,12 @@
 
 [[nodiscard]] static Glib::ustring find_label(Gtk::Widget &parent)
 {
-    Glib::ustring label;
-    Inkscape::UI::for_each_child(parent, [&](Gtk::Widget const &child)
-    {
+    for (auto &child : Inkscape::UI::children(parent)) {
         if (auto const label_widget = dynamic_cast<Gtk::Label const *>(&child)) {
-            label = label_widget->get_label();
-            return Inkscape::UI::ForEachResult::_break;
+            return label_widget->get_label();
         }
-        return Inkscape::UI::ForEachResult::_continue;
-    });
-    return label;
+    }
+    return {};
 }
 
 /**
@@ -70,7 +66,7 @@ set_tooltips_and_shift_icons(Gtk::Widget &menu, bool const shift_icons)
     static auto app = InkscapeApplication::instance();
     auto &label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
 
-    Inkscape::UI::for_each_child(menu, [&](Gtk::Widget &child) {
+    for (auto &child : Inkscape::UI::children(menu)) {
 
         // Set tooltip.
         Glib::ustring label;
@@ -122,9 +118,7 @@ set_tooltips_and_shift_icons(Gtk::Widget &menu, bool const shift_icons)
 
         // Recurse
         set_tooltips_and_shift_icons(child, shift_icons);
-
-        return Inkscape::UI::ForEachResult::_continue;
-    });
+    }
 
     return shifted;
 }

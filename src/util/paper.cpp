@@ -50,7 +50,7 @@ const std::vector<PaperSize>& PaperSize::getPageSizes()
             g_strstrip(line[0]);
             g_strstrip(line[3]);
             Glib::ustring name = line[0];
-            ret.push_back(PaperSize(name, width, height, Inkscape::Util::UnitTable::get().getUnit(line[3])));
+            ret.emplace_back(name, width, height, Inkscape::Util::UnitTable::get().getUnit(line[3]));
         }
         g_strfreev(lines); 
         g_free(content);

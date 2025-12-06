@@ -138,8 +138,8 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // must be done on the window level.
     auto prefs = Inkscape::Preferences::get();
     bool shift_icons = prefs->getInt("/theme/shiftIcons", true);
-    for (auto const child : Inkscape::UI::get_children(*this)) {
-        if (auto const menubar = dynamic_cast<Gtk::PopoverMenuBar *>(child)) {
+    for (auto &child : Inkscape::UI::children(*this)) {
+        if (auto const menubar = dynamic_cast<Gtk::PopoverMenuBar *>(&child)) {
             bool const shifted = set_tooltips_and_shift_icons(*menubar, shift_icons);
             if (shifted) shift_icons = false;
         }

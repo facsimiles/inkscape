@@ -244,7 +244,7 @@ void SpinButton::defocus()
     // defocus spinbutton by moving focus to the canvas
     if (_defocus_target) {
         _defocus_target->onDefocus();
-    } else if (auto widget = get_scrollable_ancestor(this)) {
+    } else if (auto widget = get_scrollable_ancestor(*this)) {
         widget->grab_focus();
     }
 }

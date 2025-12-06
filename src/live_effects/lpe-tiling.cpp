@@ -659,9 +659,8 @@ void align_widgets(const std::vector<Gtk::Widget*>& widgets, int spinbutton_char
             auto container = dynamic_cast<Gtk::Box *>(child);
             if (!container) continue;
 
-            auto const children = UI::get_children(*container);
-            if (child_index < children.size()) {
-                action(children[child_index]);
+            if (auto child = UI::get_nth_child(*container, child_index)) {
+                action(child);
             }
         }
     };

@@ -16,8 +16,14 @@ class Widget;
 
 namespace Inkscape::UI::Widget {
 
-Gtk::Widget       *get_scrollable_ancestor(Gtk::Widget       *widget);
-Gtk::Widget const *get_scrollable_ancestor(Gtk::Widget const *widget);
+/// Get the first ancestor which is scrollable.
+Gtk::Widget *get_scrollable_ancestor(Gtk::Widget &widget);
+
+/// Get the first ancestor which is scrollable.
+inline Gtk::Widget const *get_scrollable_ancestor(Gtk::Widget const &widget)
+{
+    return get_scrollable_ancestor(const_cast<Gtk::Widget &>(widget));
+}
 
 } // namespace Inkscape::UI::Widget
 

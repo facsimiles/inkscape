@@ -2579,39 +2579,33 @@ void CloneTiler::pick_to(Gtk::CheckButton *tb, Glib::ustring const &pref)
 }
 
 
-void CloneTiler::reset_recursive(Gtk::Widget *w)
+void CloneTiler::reset_recursive(Gtk::Widget &w)
 {
-    if (w) {
-        auto sb = dynamic_cast<Inkscape::UI::Widget::SpinButton *>(w);
-        auto tb = dynamic_cast<Inkscape::UI::Widget::CheckButtonInternal *>(w);
+    auto sb = dynamic_cast<Inkscape::UI::Widget::SpinButton *>(&w);
+    auto tb = dynamic_cast<Inkscape::UI::Widget::CheckButtonInternal *>(&w);
 
-        {
-            if (sb && sb->get_zeroable()) { // spinbutton
-                auto a = sb->get_adjustment();
-                a->set_value(0);
-            }
-        }
-        {
-            if (sb && sb->get_oneable()) { // spinbutton
-                auto a = sb->get_adjustment();
-                a->set_value(1);
-            }
-        }
-        {
-            if (tb && tb->uncheckable) { // checkbox
-                tb->set_active(false);
-            }
-        }
+    if (sb && sb->get_zeroable()) { // spinbutton
+        auto a = sb->get_adjustment();
+        a->set_value(0);
     }
 
-    for (auto const i : UI::get_children(*w)) {
-        reset_recursive(i);
+    if (sb && sb->get_oneable()) { // spinbutton
+        auto a = sb->get_adjustment();
+        a->set_value(1);
+    }
+
+    if (tb && tb->uncheckable) { // checkbox
+        tb->set_active(false);
+    }
+
+    for (auto &c : UI::children(w)) {
+        reset_recursive(c);
     }
 }
 
 void CloneTiler::reset()
 {
-    reset_recursive(this);
+    reset_recursive(*this);
 }
 
 void CloneTiler::table_attach(Gtk::Grid *table, Gtk::Widget *widget, float align, int row, int col)

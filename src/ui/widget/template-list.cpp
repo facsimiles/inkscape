@@ -327,8 +327,8 @@ void TemplateList::refilter(Glib::ustring search) {
 void TemplateList::reset_selection(Gtk::Widget* current_page)
 {
     // TODO: Add memory here for the new document default (see new_document).
-    for (auto const widget : UI::get_children(current_page ? *current_page : *this)) {
-        if (auto iconview = get_iconview(widget)) {
+    for (auto &widget : UI::children(current_page ? *current_page : *this)) {
+        if (auto iconview = get_iconview(&widget)) {
             auto sel = std::dynamic_pointer_cast<Gtk::SingleSelection>(iconview->get_model());
             sel->unselect_all();
         }
@@ -342,8 +342,8 @@ Gtk::GridView *TemplateList::get_iconview(Gtk::Widget *widget)
 {
     if (!widget) return nullptr;
 
-    for (auto const child : UI::get_children(*widget)) {
-        if (auto iconview = get_iconview(child)) {
+    for (auto &child : UI::children(*widget)) {
+        if (auto iconview = get_iconview(&child)) {
             return iconview;
         }
     }

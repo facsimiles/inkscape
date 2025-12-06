@@ -3206,7 +3206,7 @@ void FilterEffectsDialog::update_filter_general_settings_view()
             _filter_general_settings->show_and_update(0, filter);
             _no_filter_selected.set_visible(false);
         } else {
-            UI::get_children(_settings_filter).at(0)->set_visible(false);
+            _settings_filter.get_first_child()->set_visible(false);
             _no_filter_selected.set_visible(true);
         }
 
@@ -3223,8 +3223,8 @@ void FilterEffectsDialog::update_settings_view()
 
     // selected effect parameters
 
-    for (auto const i : UI::get_children(_settings_effect)) {
-        i->set_visible(false);
+    for (auto &c : UI::children(_settings_effect)) {
+        c.set_visible(false);
     }
 
     SPFilterPrimitive* prim = _primitive_list.get_selected();
@@ -3257,7 +3257,7 @@ void FilterEffectsDialog::update_settings_view()
 
     // current filter parameters (area size)
 
-    UI::get_children(_settings_filter).at(0)->set_visible(false);
+    _settings_filter.get_first_child()->set_visible(false);
     _no_filter_selected.set_visible(true);
 
     if (filter) {

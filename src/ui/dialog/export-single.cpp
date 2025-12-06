@@ -320,33 +320,30 @@ void SingleExport::refreshPage()
 void SingleExport::setPagesMode(bool multi)
 {
     // Set set the internal mode to NONE to preserve selections while changing
-    UI::for_each_child(pages_list, [] (Gtk::Widget &widget) {
+    for (auto &widget : children(pages_list)) {
         if (auto item = dynamic_cast<BatchItem *>(&widget)) {
             item->on_mode_changed(Gtk::SelectionMode::NONE);
         }
-        return UI::ForEachResult::_continue;
-    });
+    }
     pages_list.set_selection_mode(multi ? Gtk::SelectionMode::MULTIPLE : Gtk::SelectionMode::SINGLE);
     // A second call is needed in its own loop because of how updates happen in the FlowBox
-    UI::for_each_child(pages_list, [] (Gtk::Widget &widget) {
+    for (auto &widget : children(pages_list)) {
         if (auto item = dynamic_cast<BatchItem *>(&widget)) {
             item->update_selected();
         }
-        return UI::ForEachResult::_continue;
-    });
+    }
     refreshPage();
 }
 
 void SingleExport::selectPage(SPPage *page)
 {
-    UI::for_each_child(pages_list, [=] (Gtk::Widget &widget) {
+    for (auto &widget : children(pages_list)) {
         if (auto item = dynamic_cast<BatchItem *>(&widget)) {
             if (item->getPage() == page) {
                 item->set_selected(true);
             }
         }
-        return UI::ForEachResult::_continue;
-    });
+    }
 }
 
 std::vector<SPPage const *> SingleExport::getSelectedPages() const
@@ -1063,8 +1060,8 @@ void SingleExport::refreshPreview()
     bool show = si_show_preview.get_active();
     if (!show || current_key == SELECTION_PAGE) {
         bool have_pages = false;
-        for (auto const child : UI::get_children(pages_list)) {
-            if (auto bi = dynamic_cast<BatchItem *>(child)) {
+        for (auto &child : UI::children(pages_list)) {
+            if (auto bi = dynamic_cast<BatchItem *>(&child)) {
                 bi->refresh(!show, _background_color.get_current_color().toRGBA());
                 have_pages = true;
             }
