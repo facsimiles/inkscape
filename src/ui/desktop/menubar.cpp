@@ -33,9 +33,17 @@
 #include "io/resource.h" // UI File location
 #include "preferences.h" // Use icons or not
 
-// =================== Main Menu ================
-void
-build_menu()
+enum class UseIcons {
+    never = -1, // Match existing preference numbering.
+    as_requested,
+    always,
+};
+
+// Rebuild menu with icons enabled or disabled. Recursive.
+static void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Menu> const &menu_copy,
+                         UseIcons useIcons, Glib::Quark const &quark, Glib::RefPtr<Gio::Menu> &recent_files);
+
+void build_menu()
 {
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
     auto refBuilder = Gtk::Builder::create();
@@ -57,7 +65,7 @@ build_menu()
         return;
     }
 
-    static auto app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
     enable_effect_actions(app, false);
     auto &label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
     label_to_tooltip_map.clear();
@@ -198,7 +206,7 @@ build_menu()
 void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Menu> const &menu_copy,
                   UseIcons const useIcons, Glib::Quark const &quark, Glib::RefPtr<Gio::Menu>& recent_files)
 {
-    static auto app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
     auto& extra_data = app->get_action_extra_data();
     auto& label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
 
