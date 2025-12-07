@@ -137,19 +137,20 @@ bool SelectTool::sp_select_context_abort() {
             }
             item = nullptr;
 
-            _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
-            return true;
-        }
-    } else {
-        if (Inkscape::Rubberband::get(_desktop)->isStarted()) {
+                    _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
+                    return true;
+                }
+            } else {
+                if (Inkscape::Rubberband::get(_desktop)->isStarted()) {
             Inkscape::Rubberband::get(_desktop)->stop();
             rb_escaped = 1;
             defaultMessageContext()->clear();
             _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
             return true;
+            }
         }
-    }
-    return false;
+        _duplicate_drag_reset();
+        return false;
 }
 
 static bool
@@ -436,8 +437,13 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
                 saveDragOrigin(event.pos);
 
+                bool has_selection = !selection->isEmpty();
+                _duplicate_drag_on_press = has_selection && _duplicate_drag_state(event.modifiers);
+                auto item_down = has_selection ? _desktop->getItemAtPoint(event.pos, false) : nullptr;
+                _duplicate_down_on_selected = item_down && selection->includes(item_down, true);
+                bool suppress_touch_path = _duplicate_drag_on_press && _duplicate_down_on_selected;
                 auto rubberband = Inkscape::Rubberband::get(_desktop);
-                if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
+                if (!suppress_touch_path && Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
                     rubberband->setMode(Rubberband::Mode::TOUCHPATH);
                     rubberband->setHandle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH_SELECT);
                 } else {
@@ -481,6 +487,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
+            bool duplicate_drag = _duplicate_drag_on_press;
             bool force_drag = Modifier::get(Modifiers::Type::SELECT_FORCE_DRAG)->active(button_press_state);
             bool always_box = Modifier::get(Modifiers::Type::SELECT_ALWAYS_BOX)->active(button_press_state);
 
@@ -496,6 +503,11 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                     // but not with shift) we want to drag rather than rubberband
                     dragging = true;
                     set_cursor("select-dragging.svg");
+                }
+
+                if (!dragging && duplicate_drag && (force_drag || _duplicate_down_on_selected) && !selection->isEmpty()) {
+                    // allow duplicate-drag to initiate a drag even when force-drag is off
+                    dragging = true;
                 }
 
                 if (dragging) {
@@ -545,7 +557,14 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                                 }
                             } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
 
-                            _seltrans->grab(p, -1, -1, false, true);
+                            bool down_on_selected = item_at_point && selection->includes(item_at_point, true);
+                            bool allow_duplicate = duplicate_drag && (force_drag || _duplicate_down_on_selected || down_on_selected);
+
+                            if (allow_duplicate) {
+                                _duplicate_drag(p);
+                            } else {
+                                _seltrans->grab(p, -1, -1, false, true);
+                            }
                             moved = true;
                         }
 
@@ -646,6 +665,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                     }
 
                     item = nullptr;
+                    _duplicate_drag_reset();
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(_desktop);
 
@@ -1014,6 +1034,29 @@ bool SelectTool::root_handler(CanvasEvent const &event)
     );
 
     return ret || ToolBase::root_handler(event);
+}
+
+void SelectTool::_duplicate_drag(Geom::Point const &p)
+{
+    auto selection = _desktop->getSelection();
+    if (selection->isEmpty()) {
+        return;
+    }
+
+    selection->duplicate(true);
+    _seltrans->grab(p, -1, -1, false, true);
+}
+
+bool SelectTool::_duplicate_drag_state(unsigned int state) const
+{
+    auto mod = Modifier::get(Modifiers::Type::SELECT_DUPLICATE);
+    return mod && mod->active(state);
+}
+
+void SelectTool::_duplicate_drag_reset()
+{
+    _duplicate_drag_on_press = false;
+    _duplicate_down_on_selected = false;
 }
 
 /**

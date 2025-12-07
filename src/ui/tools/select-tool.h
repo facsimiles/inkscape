@@ -56,6 +56,11 @@ private:
     void sp_select_context_cycle_through_items(Selection *selection, ScrollEvent const &scroll_event);
     void sp_select_context_reset_opacities();
     static std::pair<Rubberband::Mode, CanvasItemCtrlType> get_default_rubberband_state();
+    void _duplicate_drag(Geom::Point const &p);
+    bool _duplicate_drag_state(unsigned int state) const;
+    void _duplicate_drag_reset();
+    bool _duplicate_drag_on_press = false;
+    bool _duplicate_down_on_selected = false;
 
     bool _alt_on = false;
     bool _force_dragging = false;
