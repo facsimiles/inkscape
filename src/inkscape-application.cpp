@@ -1084,10 +1084,10 @@ InkscapeApplication::on_startup()
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
             if (_start_screen) {
                 debug_out << "  before _start_screen->show_now()" << std::endl;
+                gtk_app()->add_window(*_start_screen);
                 _start_screen->show_now();
                 debug_out << "  after _start_screen->show_now()" << std::endl;
                 // debug_out << "  COMMENTED OUT (gtk_app()->add_window())" << std::endl;
-                gtk_app()->add_window(*_start_screen);
                 debug_out << "  after add_window()" << std::endl;
             } else {
                 std::cerr << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;

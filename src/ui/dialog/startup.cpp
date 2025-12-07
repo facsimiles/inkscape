@@ -318,7 +318,7 @@ void StartScreen::setup_welcome()
 StartScreen::~StartScreen()
 {
     auto debug_out = &InkscapeApplication::instance()->debug_out;
-    *debug_out << "StartScreen::~StartScreen: Entrance" << std::endl;
+    *debug_out << "StartScreen::~StartScreen: DESTRUCTOR: Entrance" << std::endl;
 
     // These are "owned" by builder... don't delete them!
     banners.get_parent()->remove(banners);
@@ -328,7 +328,7 @@ StartScreen::~StartScreen()
         auto tabs = &get_widget<Gtk::Notebook>(build_welcome, "tabs");
         tabs->get_parent()->remove(*tabs);
     }
-    *debug_out << "StartScreen::~StartScreen: Exit" << std::endl;
+    *debug_out << "StartScreen::~StartScreen: DESTRUCTOR: Exit" << std::endl;
 }
 
 /**
