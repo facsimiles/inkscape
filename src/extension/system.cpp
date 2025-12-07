@@ -21,8 +21,6 @@
 
 #include <glibmm/miscutils.h>
 
-#include "inkscape-application.h"
-
 #include "db.h"
 #include "document.h"
 #include "document-undo.h"
@@ -68,50 +66,38 @@ namespace Extension {
  */
 SPDocument *open(Extension *key, gchar const *filename, bool is_importing)
 {
-    auto debug_out = &InkscapeApplication::instance()->debug_out;
-    *debug_out << "Inkscape::Extension::open: Entrance" << std::endl;
-    *debug_out << "  input key: " << (key ? (char*)key : "null") << std::endl;
     Input *imod = dynamic_cast<Input *>(key ? key : Input::find_by_filename(filename));
 
     bool last_chance_svg = false;
     if (key == nullptr && imod == nullptr) {
-        *debug_out << "  Undetected file type" << std::endl;
         last_chance_svg = true;
         imod = dynamic_cast<Input *>(db.get(SP_MODULE_KEY_INPUT_SVG));
     }
 
     if (imod == nullptr) {
-        *debug_out << "  No extension found, throwing." << std::endl;
         throw Input::no_extension_found();
     }
 
     // Hide pixbuf extensions depending on user preferences.
     //g_warning("Extension: %s", imod->get_id());
 
-    *debug_out << "  Opening as: " << imod->get_id() << std::endl;
     bool show = true;
     if (strlen(imod->get_id()) > 21) {
-        *debug_out << "  Here A" << std::endl;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool ask = prefs->getBool("/dialogs/import/ask");
         bool ask_svg = prefs->getBool("/dialogs/import/ask_svg");
         Glib::ustring id = Glib::ustring(imod->get_id(), 22);
         if (id.compare("org.inkscape.input.svg") == 0) {
-        *debug_out << "  Here B" << std::endl;
             if (ask_svg && is_importing) {
-        *debug_out << "  Here C" << std::endl;
                 show = true;
                 imod->set_gui(true);
             } else {
-        *debug_out << "  Here D" << std::endl;
                 show = false;
                 imod->set_gui(false);
             }
         } else if(strlen(imod->get_id()) > 27) {
-        *debug_out << "  Here E" << std::endl;
             id = Glib::ustring(imod->get_id(), 28);
             if (!ask && id.compare( "org.inkscape.input.gdkpixbuf") == 0) {
-        *debug_out << "  Here F" << std::endl;
                 show = false;
                 imod->set_gui(false);
             }
@@ -120,8 +106,7 @@ SPDocument *open(Extension *key, gchar const *filename, bool is_importing)
     imod->set_state(Extension::STATE_LOADED);
 
     if (!imod->loaded()) {
-        *debug_out << "  Loading failed" << std::endl;
-         throw Input::open_failed();
+        throw Input::open_failed();
     }
 
     if (!imod->prefs()) {
@@ -131,13 +116,11 @@ SPDocument *open(Extension *key, gchar const *filename, bool is_importing)
     SPDocument *doc = imod->open(filename, is_importing);
 
     if (!doc) {
-        *debug_out << "  No document" << std::endl;
         if (last_chance_svg) {
             if ( INKSCAPE.use_gui() ) {
                 sp_ui_error_dialog(_("Could not detect file format. Tried to open it as an SVG anyway but this also failed."));
             } else {
                 g_warning("%s", _("Could not detect file format. Tried to open it as an SVG anyway but this also failed."));
-                *debug_out << "  Could not detect file format. Tried to open it as an SVG anyway but this also failed." << std::endl;
             }
         }
         throw Input::open_failed();
@@ -150,7 +133,6 @@ SPDocument *open(Extension *key, gchar const *filename, bool is_importing)
         imod->set_gui(true);
     }
 
-    *debug_out << "Inkscape::Extension::open: Exit" << std::endl;
     return doc;
 }
 

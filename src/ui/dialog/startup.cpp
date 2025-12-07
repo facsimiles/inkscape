@@ -203,10 +203,12 @@ void StartScreen::show_now()
     // The main loop won't get called until the main window is initialized,
     // so we need to iterate the loop a few times here to show the splash screen.
     *debug_out << "StartScreen::show_now(): before loop" << std::endl;
+    int count = 0;
     while (Gtk::Main::events_pending()) {
+        count++;
         Gtk::Main::iteration(false);
     }
-    *debug_out << "StartScreen::show_now(): after loop" << std::endl;
+    *debug_out << "StartScreen::show_now(): after loop: number of loops: " << count << std::endl;
 
     *debug_out << "StartScreen::show_now(): Exit" << std::endl;
 }

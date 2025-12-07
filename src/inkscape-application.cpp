@@ -185,10 +185,6 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file, bool *ca
     if (!file->query_exists()) {
         debug_out << "  File does not exist" << std::endl;
     }
-    auto file_info = file->query_info("*");
-    for (auto attribute : file_info->list_attributes()) {
-        debug_out << "  " << attribute << ": " << file_info->get_attribute_as_string(attribute) << std::endl;
-    }
 
     // Open file
     SPDocument *document = ink_file_open(file, cancelled);
@@ -1070,17 +1066,12 @@ void
 InkscapeApplication::on_startup()
 {
     debug_out << "InkscapeApplication::on_startup(): Entrance" << std::endl;
-    debug_out << "  Sleeping" << std::endl;
-    sleep(10);
-    debug_out << "  Waking" << std::endl;
 
     // Deprecated...
     Inkscape::Application::create(_with_gui);
 
     // Extensions
-    debug_out << "  calling Inkscape::Extension::init()" << std::endl;
     Inkscape::Extension::init();
-    debug_out << "  after calling Inkscape::Extension::init()" << std::endl;
 
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
@@ -1095,8 +1086,8 @@ InkscapeApplication::on_startup()
                 debug_out << "  before _start_screen->show_now()" << std::endl;
                 _start_screen->show_now();
                 debug_out << "  after _start_screen->show_now()" << std::endl;
-                debug_out << "  COMMENTED OUT (gtk_app()->add_window())" << std::endl;
-                // gtk_app()->add_window(*_start_screen);
+                // debug_out << "  COMMENTED OUT (gtk_app()->add_window())" << std::endl;
+                gtk_app()->add_window(*_start_screen);
                 debug_out << "  after add_window()" << std::endl;
             } else {
                 std::cerr << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;
@@ -1567,7 +1558,6 @@ void InkscapeApplication::redirect_output()
 int
 InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
 {
-    debug_out << "InkscapeApplication::on_handle_local_options: Entrance" << std::endl;
     auto prefs = Inkscape::Preferences::get();
     if (!options) {
         std::cerr << "InkscapeApplication::on_handle_local_options: options is null!" << std::endl;
@@ -1980,7 +1970,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     g_variant_dict_unref(options_copy);
     g_variant_unref(options_var);
 
-    debug_out << "InkscapeApplication::on_handle_local_options: Exit" << std::endl;
     return -1; // Keep going
 }
 

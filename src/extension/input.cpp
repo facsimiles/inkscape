@@ -10,8 +10,6 @@
 
 #include "input.h"
 
-#include "inkscape-application.h"
-
 #include "timer.h"
 
 #include "db.h"
@@ -149,9 +147,6 @@ Input::check ()
 SPDocument *
 Input::open (const gchar *uri, bool is_importing)
 {
-    auto debug_out = &InkscapeApplication::instance()->debug_out;
-    *debug_out << "Inkscape::Extension::Input::open: Entrance: " << (uri ? uri : " no uri") <<  std::endl;
-
     if (!loaded()) {
         set_state(Extension::STATE_LOADED);
     }
@@ -244,8 +239,6 @@ Input::get_filetypetooltip(bool translated) const
  */
 Extension *Input::find_by_mime(char const *mime)
 {
-    auto debug_out = &InkscapeApplication::instance()->debug_out;
-    *debug_out << "Inkscape::Extension::Input::find_by_mime: Entrance: " << (mime ? mime : "no mime type!") << std::endl;
     DB::InputList list;
     db.get_input_list(list);
 
@@ -266,20 +259,13 @@ Extension *Input::find_by_mime(char const *mime)
  */
 Extension *Input::find_by_filename(char const *filename)
 {
-    auto debug_out = &InkscapeApplication::instance()->debug_out;
-    *debug_out << "Inkscape::Extension::Input::find_by_filename: Entrance: " << (filename ? filename : "no file name!") << std::endl;
-
     DB::InputList list;
-    db.get_input_list(list);
-    *debug_out << "  input list size: " << list.size() << std::endl;
+
     for (auto imod : db.get_input_list(list)) {
-        *debug_out << "  checking: " << imod->get_extension() << std::endl;
         if (imod->can_open_filename(filename)) {
-            *debug_out << "  found (Exit)" << std::endl;
             return imod;
         }
     }
-    *debug_out << "  not found (Exit)" << std::endl;
     return nullptr;
 }
 
