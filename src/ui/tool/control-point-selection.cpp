@@ -386,6 +386,10 @@ void ControlPointSelection::_pointGrabbed(SelectableControlPoint *point)
 
 void ControlPointSelection::_pointDragged(Geom::Point &new_pos, MotionEvent const &event)
 {
+    if (!_grabbed_point) {
+        return;
+    }
+
     Geom::Point abs_delta = new_pos - _original_positions[_grabbed_point];
     double fdist = Geom::distance(_original_positions[_grabbed_point], _original_positions[_farthest_point]);
     if (mod_alt_only(event) && fdist > 0) {
