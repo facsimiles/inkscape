@@ -257,14 +257,6 @@ void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Me
         //           << "  tooltip: " << tooltip.c_str()
         //           << std::endl;
 
-#ifdef __APPLE__
-        // Workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/5667
-        // Convert document actions to window actions
-        if (strncmp(detailed_action.c_str(), "doc.", 4) == 0) {
-            detailed_action = "win." + detailed_action.raw().substr(4);
-        }
-#endif
-
         auto menu_item = Gio::MenuItem::create(label, detailed_action);
         if (icon &&
             (useIcons == UseIcons::always ||
