@@ -9,6 +9,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">New</property>
         <property name="action-name">win.document-new</property>
@@ -27,6 +28,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Open...</property>
         <property name="action-name">win.document-open</property>
@@ -45,6 +47,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Save</property>
         <property name="action-name">win.document-save</property>
@@ -63,6 +66,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Print...</property>
         <property name="action-name">win.document-print</property>
@@ -88,6 +92,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Import...</property>
         <property name="action-name">win.document-import</property>
@@ -106,6 +111,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Export...</property>
         <property name="action-name">win.dialog-open</property>
@@ -132,6 +138,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Undo</property>
         <property name="action-name">doc.undo</property>
@@ -150,6 +157,7 @@
       <object class="GtkButton">
         <property name="valign">center</property>
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Redo</property>
         <property name="action-name">doc.redo</property>
@@ -174,6 +182,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Copy</property>
         <property name="action-name">app.copy</property>
@@ -191,6 +200,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Cut</property>
         <property name="action-name">app.cut</property>
@@ -208,6 +218,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Paste</property>
         <property name="action-name">win.paste</property>
@@ -232,6 +243,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Zoom Selection</property>
         <property name="action-name">win.canvas-zoom-selection</property>
@@ -249,6 +261,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Zoom Drawing</property>
         <property name="action-name">win.canvas-zoom-drawing</property>
@@ -266,6 +279,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Zoom Page</property>
         <property name="action-name">win.canvas-zoom-page</property>
@@ -283,6 +297,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Zoom Center Page</property>
         <property name="action-name">win.canvas-zoom-center-page</property>
@@ -307,6 +322,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Duplicate</property>
         <property name="action-name">app.duplicate</property>
@@ -324,6 +340,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Create Clone</property>
         <property name="action-name">app.clone</property>
@@ -341,6 +358,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Unlink Clone</property>
         <property name="action-name">app.clone-unlink</property>
@@ -365,6 +383,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes" context="Verb">Group</property>
         <property name="action-name">app.selection-group</property>
@@ -382,6 +401,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Ungroup</property>
         <property name="action-name">app.selection-ungroup</property>
@@ -406,6 +426,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Fill and Stroke</property>
         <property name="action-name">win.dialog-open</property>
@@ -424,6 +445,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Text and Font</property>
         <property name="action-name">win.dialog-open</property>
@@ -442,6 +464,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Layers and Objects</property>
         <property name="action-name">win.dialog-open</property>
@@ -460,6 +483,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">XML Editor</property>
         <property name="action-name">win.dialog-open</property>
@@ -478,6 +502,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Selectors and CSS...</property>
         <property name="action-name">win.dialog-open</property>
@@ -496,6 +521,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Align and Distribute...</property>
         <property name="action-name">win.dialog-open</property>
@@ -521,6 +547,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Document Properties...</property>
         <property name="action-name">win.dialog-open</property>
@@ -539,6 +566,7 @@
     <child>
       <object class="GtkButton">
         <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Preferences...</property>
         <property name="action-name">win.dialog-open</property>

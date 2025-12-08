@@ -64,7 +64,6 @@ class PolicyChecker:
     def __init__(self):
         self._e = defaultdict(list)
         self.policies = [f for n, f in type(self).__dict__.items() if n.startswith("policy_")]
-        print(self.policies)
 
     def check(self):
         for file in glob(os.path.join(UI_PATH, self.search)):
@@ -109,7 +108,7 @@ class PolicyChecker:
 class PolicyCheckerToolbars(PolicyChecker):
     name = "TOOLBAR"
     search = "toolbar-*.ui"
-    ignore = ['toolbar-commands.ui', 'toolbar-tool-prefs.ui']
+    ignore = ['toolbar-tool-prefs.ui']
     errors = {
         'button-focus1': ("Button Takes Focus", "A toolbar button can have focus and will take that focus when clicked. Add focus-on-click=False to fix this."),
         'button-focus2': ("Button Refuses Focus", "A toolbar button is refusing focus, which makes it inaccessable to keyboard navigation. Remove focusable=False"),
