@@ -57,6 +57,7 @@ endif()
 
 set(LIBNRTYPE_TESTS
     libnrtype/Layout-TNG-Compute
+    libnrtype/Layout-TNG-Compute-lang
     )
 
 # Integration tests (linking all of Inkscape)

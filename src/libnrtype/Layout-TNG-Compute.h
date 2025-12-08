@@ -18,6 +18,8 @@
 #include "Layout-TNG-Scanline-Maker.h"
 #include "Layout-TNG.h"
 
+class LibnrtypeLayoutTNGComputeTest;
+
 namespace Inkscape {
 namespace Text {
 
@@ -50,6 +52,8 @@ foreach(paragraph) {
 */
 class Layout::Calculator
 {
+    friend class ::LibnrtypeLayoutTNGComputeTest;
+
     class SpanPosition;
     friend class SpanPosition;
     Layout &_flow;
