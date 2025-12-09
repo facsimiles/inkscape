@@ -34,7 +34,7 @@ class SPItem;
 class ContextMenu : public Gtk::Menu
 {
 public:
-    ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_and_objects_menu_item = false);
+    ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPItem*> const &items, bool hide_layers_and_objects_menu_item = false);
 
 private:
     // Used for unlock and unhide actions

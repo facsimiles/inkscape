@@ -141,7 +141,7 @@ static bool childrenIncludedInSelection(SPItem *item, Inkscape::Selection &selec
     });
 }
 
-ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_and_objects_menu_item)
+ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPItem*> const &items, bool hide_layers_and_objects_menu_item)
 {
     set_name("ContextMenu");
 
@@ -161,8 +161,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_
     auto root = desktop->layerManager().currentRoot();
 
     // Save the items in context
-    auto point_win = desktop->point() * desktop->d2w();
-    items_under_cursor = document->getItemsAtPoints(desktop->dkey, {point_win}, true, false);
+    items_under_cursor = items;
 
     bool has_hidden_below_cursor = false;
     bool has_locked_below_cursor = false;

@@ -1338,7 +1338,10 @@ void ToolBase::menu_popup(CanvasEvent const &event, SPObject *obj)
         }
     }
 
-    auto menu = new ContextMenu(_desktop, obj);
+    // Get a list of items under the cursor, used for unhiding and unlocking.
+    auto point_win = _desktop->point() * _desktop->d2w();
+    auto items_under_cursor = _desktop->getItemsAtPoints({point_win}, true, false, 0, false);
+    auto menu = new ContextMenu(_desktop, obj, items_under_cursor);
     menu->attach_to_widget(*_desktop->getCanvas()); // So actions work!
     menu->set_visible(true);
 
