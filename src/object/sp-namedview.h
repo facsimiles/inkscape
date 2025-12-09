@@ -36,19 +36,15 @@ namespace Inkscape {
     }
 }
 
-using namespace Inkscape;
-
 class SPGrid;
-
-typedef unsigned int guint32;
-typedef guint32 GQuark;
 
 enum {
     SP_BORDER_LAYER_BOTTOM,
     SP_BORDER_LAYER_TOP
 };
 
-class SPNamedView final : public SPObjectGroup {
+class SPNamedView final : public SPObjectGroup
+{
 public:
     SPNamedView();
     ~SPNamedView() override;
@@ -111,7 +107,7 @@ public:
     void newGridCreated();
 
     // page background, border, desk colors
-    void change_color(SPAttr color_key, SPAttr opacity_key,Colors::Color const &color);
+    void change_color(SPAttr color_key, SPAttr opacity_key, Inkscape::Colors::Color const &color);
     // show border, border on top, anti-aliasing, ...
     void change_bool_setting(SPAttr key, bool value);
     // sync desk colors
@@ -131,9 +127,10 @@ public:
 
     SPGrid *getFirstEnabledGrid();
 
-    Colors::Color getDeskColor() const;
-    Colors::Color getGuideColor() const;
-    Colors::Color getGuideHiColor() const;
+    Inkscape::Colors::Color getDeskColor() const;
+    Inkscape::Colors::Color getGuideColor() const;
+    Inkscape::Colors::Color getGuideHiColor() const;
+
 private:
     void updateGuides();
     void updateGrids();
@@ -144,9 +141,9 @@ private:
 
     std::unique_ptr<Inkscape::CanvasPage> _viewport;
     bool _sync_grids = true;
-    std::optional<Colors::Color> _desk_color;
-    std::optional<Colors::Color> _guide_color;
-    std::optional<Colors::Color> _guide_hi_color;
+    std::optional<Inkscape::Colors::Color> _desk_color;
+    std::optional<Inkscape::Colors::Color> _guide_color;
+    std::optional<Inkscape::Colors::Color> _guide_hi_color;
     double _guide_opacity = 0.6;
     double _guide_hi_opacity = 0.5;
     // if true, move coordinate system origin to the current page; if false - keep origin on front page

@@ -728,7 +728,7 @@ void SPNamedView::setDefaultAttribute(std::string attribute, std::string prefere
     if (!getAttribute(attribute.c_str())) {
         std::string value = "";
         if (!preference.empty()) {
-            value = Preferences::get()->getString(preference);
+            value = Inkscape::Preferences::get()->getString(preference);
         }
         if (value.empty() && !fallback.empty()) {
             value = fallback;

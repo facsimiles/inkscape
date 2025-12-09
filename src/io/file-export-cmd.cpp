@@ -445,7 +445,7 @@ Inkscape::Colors::Color InkFileExportCmd::get_bgcolor(SPDocument *doc) {
     Inkscape::Colors::Color bgcolor(0xffffffff);
     if (!export_background.empty()) {
         // override the page color
-        if (auto c = Color::parse(export_background)) {
+        if (auto c = Inkscape::Color::parse(export_background)) {
             bgcolor = *c;
         }
         // default is opaque if a color is given on commandline
@@ -456,7 +456,7 @@ Inkscape::Colors::Color InkFileExportCmd::get_bgcolor(SPDocument *doc) {
         // read from namedview
         Inkscape::XML::Node *nv = doc->getReprNamedView();
         if (nv && nv->attribute("pagecolor")){
-            if (auto c = Color::parse(nv->attribute("pagecolor"))) {
+            if (auto c = Inkscape::Color::parse(nv->attribute("pagecolor"))) {
                 bgcolor = *c;
             }
         }

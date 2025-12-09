@@ -1921,7 +1921,7 @@ int InkscapeApplication::get_number_of_windows() const {
 void action_effect(Inkscape::Extension::Effect* effect, bool show_prefs) {
     auto desktop = InkscapeApplication::instance()->get_active_desktop();
     if (!effect->check()) {
-        auto handler = ErrorReporter((bool)desktop);
+        auto handler = Inkscape::ErrorReporter((bool)desktop);
         handler.handleError(effect->get_name(), effect->getErrorReason());
     } else if (effect->_workingDialog && show_prefs && desktop) {
         effect->prefs(desktop);

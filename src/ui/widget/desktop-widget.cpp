@@ -62,6 +62,7 @@
 #include "ui/widget/tabs-widget.h"
 #include "util/units.h"
 
+using namespace Inkscape;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::DialogContainer;
 using Inkscape::UI::Dialog::DialogMultipaned;

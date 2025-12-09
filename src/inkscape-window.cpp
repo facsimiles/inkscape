@@ -45,7 +45,6 @@
 #include "actions/actions-view-mode.h"
 #include "actions/actions-view-window.h"
 #include "inkscape.h"
-#include "object/sp-namedview.h"  // TODO Remove need for this!
 #include "ui/desktop/menubar.h"
 #include "ui/desktop/menu-set-tooltips-shift-icons.h"
 #include "ui/dialog/dialog-manager.h"
@@ -199,7 +198,7 @@ static void retransientize_dialogs(Gtk::Window &parent)
 {
     assert(!dynamic_cast<DialogWindow *>(&parent));
 
-    auto prefs = Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     bool window_above = prefs->getInt("/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL) != PREFS_DIALOGS_WINDOWS_NONE;
 
     for (auto const &window : parent.get_application()->get_windows()) {
@@ -320,7 +319,7 @@ void InkscapeWindow::on_size_changed()
         return;
     }
 
-    auto prefs = Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     bool maxed = isMaximised();
     bool full = isFullscreen();
     prefs->setBool("/desktop/geometry/fullscreen", full);
