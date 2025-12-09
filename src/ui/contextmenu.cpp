@@ -44,20 +44,20 @@
 #include "ui/util.h"
 
 static void
-AppendItemFromAction(Glib::RefPtr<Gio::Menu> const &gmenu,
+AppendItemFromAction(Glib::RefPtr<Gio::Menu> const &menu,
                      Glib::ustring const &action,
                      Glib::ustring const &label,
-                     Glib::ustring const &icon = {})
+                     Glib::ustring const &icon_name = {})
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool show_icons = prefs->getInt("/theme/menuIcons", true);
+    auto prefs = Inkscape::Preferences::get();
+    int use_icons = prefs->getInt("/theme/menuIcons", 0);
 
     auto menu_item = Gio::MenuItem::create(label, action);
-    if (icon != "" && show_icons) {
-        auto _icon = Gio::Icon::create(icon);
-        menu_item->set_icon(_icon);
+    if (!icon_name.empty() && use_icons >= 1) {
+        auto icon = Gio::Icon::create(icon_name);
+        menu_item->set_icon(icon);
     }
-    gmenu->append_item(menu_item);
+    menu->append_item(menu_item);
 }
 
 /** @brief Create a menu section containing the standard editing actions:
@@ -378,9 +378,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
     // Do not install this CSS provider; it messes up menus with icons (like popup menu with all dialogs).
     // It doesn't work well with context menu either, introducing disturbing visual glitch 
     // where menu shifts upon opening.
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool const shift_icons = prefs->getInt("/theme/shiftIcons", true);
-    set_tooltips_and_shift_icons(*this, shift_icons);
+    show_icons_and_tooltips(*this);
     // Set the style and icon theme of the new menu based on the desktop
     if (auto const window = desktop->getInkscapeWindow()) {
         if (window->has_css_class("dark")) {
@@ -388,6 +386,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, std::vector<SPIte
         } else {
             add_css_class("bright");
         }
+        auto prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             add_css_class("symbolic");
         } else {

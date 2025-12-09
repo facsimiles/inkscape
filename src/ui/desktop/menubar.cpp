@@ -12,7 +12,7 @@
  *   Kris De Gussem     <Kris.DeGussem@gmail.com>
  *   Sushant A.A.       <sushant.co19@gmail.com>
  *
- * Copyright (C) 2018 Authors
+ * Copyright (C) 2025 Authors
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
  * Read the file 'COPYING' for more information.
@@ -20,7 +20,7 @@
 
 #include "menubar.h"
 
-#include <regex>
+#include <glibmm/regex.h>
 #include <giomm/menu.h>
 #include <giomm/menuattributeiter.h>
 #include <giomm/menulinkiter.h>
@@ -31,36 +31,27 @@
 #include "inkscape-application.h"
 #include "io/recent-files.h"
 #include "io/resource.h" // UI File location
-#include "preferences.h" // Use icons or not
-
-enum class UseIcons {
-    never = -1, // Match existing preference numbering.
-    as_requested,
-    always,
-};
+#include "preferences.h" // max recent documents
 
 // Rebuild menu with icons enabled or disabled. Recursive.
-static void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Menu> const &menu_copy,
-                         UseIcons useIcons, Glib::Quark const &quark, Glib::RefPtr<Gio::Menu> &recent_files);
+static void rewrite_menu(Glib::RefPtr<Gio::Menu> const &menu, int use_icons);
 
 void build_menu()
 {
-    std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
-    auto refBuilder = Gtk::Builder::create();
+    auto const filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
+    auto const builder = Gtk::Builder::create();
 
     try {
-        refBuilder->add_from_file(filename);
+        builder->add_from_file(filename);
     } catch (Glib::Error const &err) {
         std::cerr << "build_menu: failed to load Main menu from: "
-                    << filename <<": "
-                    << err.what() << std::endl;
+                  << filename << ": "
+                  << err.what() << std::endl;
         return;
     }
 
-    const auto object = refBuilder->get_object("menus");
-    const auto gmenu = std::dynamic_pointer_cast<Gio::Menu>(object);
-
-    if (!gmenu) {
+    auto const menu = builder->get_object<Gio::Menu>("menus");
+    if (!menu) {
         std::cerr << "build_menu: failed to build Main menu!" << std::endl;
         return;
     }
@@ -71,11 +62,8 @@ void build_menu()
     label_to_tooltip_map.clear();
 
     { // Filters and Extensions
-        auto effects_object = refBuilder->get_object("effect-menu-effects");
-        auto filters_object = refBuilder->get_object("filter-menu-filters");
-        auto effects_menu = std::dynamic_pointer_cast<Gio::Menu>(effects_object);
-        auto filters_menu = std::dynamic_pointer_cast<Gio::Menu>(filters_object);
-
+        auto const effects_menu = builder->get_object<Gio::Menu>("effect-menu-effects");
+        auto const filters_menu = builder->get_object<Gio::Menu>("filter-menu-filters");
         if (!filters_menu) {
             std::cerr << "build_menu(): Couldn't find Filters menu entry!" << std::endl;
         }
@@ -85,7 +73,7 @@ void build_menu()
 
         std::map<std::string, Glib::RefPtr<Gio::Menu>> submenus;
 
-        for (auto &&entry : app->get_action_effect_data().give_all_data()) {
+        for (auto const &entry : app->get_action_effect_data().give_all_data()) {
             auto const &submenu_name_list = entry.submenu;
 
             // Effect data is used for both filters menu and extensions menu... we need to
@@ -99,7 +87,7 @@ void build_menu()
                 path = "Filters";
             }
 
-            if (!top_menu) { // It's possible that the menu doesn't exist (Kid's Inkscape?)
+            if (!top_menu) { // It's possible that the menu doesn't exist (Kids' Inkscape?)
                 std::cerr << "build_menu(): menu doesn't exist!" << std::endl; // Warn for now.
                 continue;
             }
@@ -109,28 +97,21 @@ void build_menu()
                 path.reserve(path.size() + submenu_name.size() + 1);
                 path.append(submenu_name).append(1, '-');
 
-                auto it = submenus.lower_bound(path);
+                auto &submenu = submenus[path];
 
-                if (it == submenus.end() || it->first != path) {
-                    auto submenu = Gio::Menu::create();
+                if (!submenu) {
+                    submenu = Gio::Menu::create();
                     current_menu->append_submenu(submenu_name, submenu);
-                    it = submenus.emplace_hint(it, path, std::move(submenu));
                 }
 
-                current_menu = it->second;
+                current_menu = submenu;
             }
             current_menu->append(entry.effect_name, "app." + entry.effect_id);
         }
     }
 
     // Recent file
-    auto recent_manager = Gtk::RecentManager::get_default();
-    auto recent_object = refBuilder->get_object("recent-files");
-    auto recent_gmenu = std::dynamic_pointer_cast<Gio::Menu>(recent_object);
-    auto recent_menu_quark = Glib::Quark("recent-manager");
-    if (recent_gmenu) {
-        recent_gmenu->set_data(recent_menu_quark, recent_manager.get()); // mark submenu, so we can find it
-    }
+    auto const recent_menu = builder->get_object<Gio::Menu>("recent-files");
 
     auto rebuild_recent = [](Glib::RefPtr<Gio::Menu> const &submenu) {
         if (!submenu) {
@@ -147,18 +128,17 @@ void build_menu()
 
         auto recent_files = Inkscape::getInkscapeRecentFiles(max_files);
         auto shortened_path_map = Inkscape::getShortenedPathMap(recent_files);
+        auto regex = Glib::Regex::create("_");
 
-        unsigned inserted_entries = 0;
+        int inserted_entries = 0;
         for (auto const &recent_file : recent_files) {
             // check if given was generated by inkscape
 
             // Escape underscores to prevent them from being interpreted as accelerator mnemonics
-            std::regex underscore{"_"};
-            std::string const dunder{"__"};
-            std::string raw_name = shortened_path_map[recent_file->get_uri_display()]; // recent_file->get_short_name();
-            Glib::ustring escaped = std::regex_replace(raw_name, underscore, dunder);
-            auto item { Gio::MenuItem::create(std::move(escaped), Glib::ustring()) };
-            auto target { Glib::Variant<Glib::ustring>::create(recent_file->get_uri_display()) };
+            Glib::ustring raw_name = shortened_path_map[recent_file->get_uri_display()]; // recent_file->get_short_name();
+            auto escaped = regex->replace_literal(raw_name, 0, "__", Glib::Regex::MatchFlags::DEFAULT);
+            auto item = Gio::MenuItem::create(std::move(escaped), "");
+            auto target = Glib::Variant<Glib::ustring>::create(recent_file->get_uri_display());
             // note: setting action and target separately rather than using convenience menu method append
             // since some filename characters can result in invalid "direct action" string
             item->set_action_and_target(Glib::ustring("app.file-open-window"), target);
@@ -167,25 +147,24 @@ void build_menu()
             inserted_entries++;
         }
 
-        if (!inserted_entries) { // Create a placeholder with a non-existent action
+        if (inserted_entries == 0) { // Create a placeholder with a non-existent action
             auto nothing2c = Gio::MenuItem::create(_("No items found"), "app.nop");
             submenu->append_item(nothing2c);
         }
     };
 
-    rebuild_recent(recent_gmenu);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
+    rebuild_recent(recent_menu);
 
     // Remove all or some icons. Also create label to tooltip map.
-    auto gmenu_copy = Gio::Menu::create();
-    // menu gets recreated; keep track of new recent items submenu
-    rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
-    app->gtk_app()->set_menubar(gmenu_copy);
+    auto prefs = Inkscape::Preferences::get();
+    auto use_icons = prefs->getInt("/theme/menuIcons", 0);
+    rewrite_menu(menu, use_icons);
+
+    app->gtk_app()->set_menubar(menu);
 
     // rebuild recent items submenu when the list changes
-    recent_manager->signal_changed().connect([=](){ rebuild_recent(recent_gmenu); });
+    auto recent_manager = Gtk::RecentManager::get_default();
+    recent_manager->signal_changed().connect([=] { rebuild_recent(recent_menu); });
 }
 
 /*
@@ -197,14 +176,9 @@ void build_menu()
  * the needed information to the children of Gtk::PopoverMenu and no
  * way to set visibility via CSS.
  *
- * MenuItems are immutable and not copyable so you have to recreate
- * the menu tree. The format for accessing MenuItem data is not the
- * same as what you need to create a new MenuItem.
- *
- * NOTE: Input is a Gio::MenuModel, Output is a Gio::Menu!!
+ * MenuItems are immutable and not copyable so you have to recreate them.
  */
-void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Menu> const &menu_copy,
-                  UseIcons const useIcons, Glib::Quark const &quark, Glib::RefPtr<Gio::Menu>& recent_files)
+void rewrite_menu(Glib::RefPtr<Gio::Menu> const &menu, int use_icons)
 {
     auto app = InkscapeApplication::instance();
     auto& extra_data = app->get_action_extra_data();
@@ -215,33 +189,32 @@ void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Me
         Glib::ustring action;
         Glib::ustring target;
         Glib::VariantBase icon;
-        Glib::ustring use_icon;
+        bool use_icon = false;
 
         std::unordered_map<Glib::ustring, Glib::VariantBase> attributes;
 
-        auto attribute_iter = menu->iterate_item_attributes(i);
-        while (attribute_iter->next()) {
+        for (auto attr = menu->iterate_item_attributes(i); attr->next(); ) {
             // Attributes we need to create MenuItem or set icon.
-            if          (attribute_iter->get_name() == "label") {
+            if (attr->get_name() == "label") {
                 // Convert label while preserving unicode translations
-                label = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(attribute_iter->get_value()).get();
-            } else if   (attribute_iter->get_name() == "action") {
-                action  = attribute_iter->get_value().print();
+                label = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(attr->get_value()).get();
+            } else if (attr->get_name() == "action") {
+                action = attr->get_value().print();
                 action.erase(0, 1);
                 action.erase(action.size()-1, 1);
-            } else if   (attribute_iter->get_name() == "target") {
-                target  = attribute_iter->get_value().print();
-            } else if   (attribute_iter->get_name() == "icon") {
-                icon     = attribute_iter->get_value();
-            } else if (attribute_iter->get_name() == "use-icon") {
-                use_icon =  attribute_iter->get_value().print();
+            } else if (attr->get_name() == "target") {
+                target = attr->get_value().print();
+            } else if (attr->get_name() == "icon") {
+                icon = attr->get_value();
+            } else if (attr->get_name() == "use-icon") {
+                use_icon = true;
             } else {
                 // All the remaining attributes.
-                attributes[attribute_iter->get_name()] = attribute_iter->get_value();
+                attributes[attr->get_name()] = attr->get_value();
             }
         }
         Glib::ustring detailed_action = action;
-        if (target.size() > 0) {
+        if (!target.empty()) {
             detailed_action += "(" + target + ")";
         }
 
@@ -258,35 +231,30 @@ void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Me
         //           << std::endl;
 
         auto menu_item = Gio::MenuItem::create(label, detailed_action);
-        if (icon &&
-            (useIcons == UseIcons::always ||
-             (useIcons == UseIcons::as_requested && use_icon.size() > 0))) {
+        if (icon && !use_icon <= use_icons) {
             menu_item->set_attribute_value("icon", icon);
         }
 
         // Add remaining attributes
-        for (auto const& [key, value] : attributes) {
+        for (auto const &[key, value] : attributes) {
             menu_item->set_attribute_value(key, value);
         }
 
         // Add submenus
-        auto link_iter = menu->iterate_item_links(i);
-        while (link_iter->next()) {
-            auto submenu = Gio::Menu::create();
-            if (link_iter->get_name() == "submenu") {
+        for (auto link = menu->iterate_item_links(i); link->next(); ) {
+            auto submenu = std::dynamic_pointer_cast<Gio::Menu>(link->get_value());
+            rewrite_menu(submenu, use_icons);
+            if (link->get_name() == "submenu") {
                 menu_item->set_submenu(submenu);
-                if (link_iter->get_value()->get_data(quark)) {
-                    recent_files = submenu;
-                }
-            } else if (link_iter->get_name() == "section") {
+            } else if (link->get_name() == "section") {
                 menu_item->set_section(submenu);
             } else {
-                std::cerr << "rebuild_menu: Unknown link type: " << link_iter->get_name().raw() << std::endl;
+                std::cerr << "rebuild_menu: Unknown link type: " << link->get_name().raw() << std::endl;
             }
-            rebuild_menu (link_iter->get_value(), submenu, useIcons, quark, recent_files);
         }
 
-        menu_copy->append_item(menu_item);
+        menu->remove(i);
+        menu->insert_item(i, menu_item);
     }
 }
 

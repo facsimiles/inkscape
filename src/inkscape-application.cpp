@@ -2007,7 +2007,7 @@ void InkscapeApplication::_openStartScreen()
     auto win = Gtk::make_managed<Inkscape::UI::Dialog::StartScreen>();
     gtk_app()->add_window(*win);
     win->present();
-    win->connectOpen([this] (SPDocument *document) { // self outlives win
+    win->connectOpen([this] (SPDocument *document) { // this outlives win
         if (!document) {
             document = document_new();
         }

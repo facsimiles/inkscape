@@ -249,7 +249,8 @@ PopoverMenuItem::PopoverMenuItem(Glib::ustring const &text,
     }
 
     if (!icon_name.empty()) {
-        image = Gtk::make_managed<Gtk::Image>(Gio::ThemedIcon::create(icon_name));
+        image = Gtk::make_managed<Gtk::Image>();
+        image->set_from_icon_name(icon_name);
         image->set_icon_size(icon_size);
     }
 

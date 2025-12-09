@@ -12,25 +12,18 @@
  *   Kris De Gussem     <Kris.DeGussem@gmail.com>
  *   Sushant A.A.       <sushant.co19@gmail.com>
  *
- * Copyright (C) 2018 Authors
+ * Copyright (C) 2025 Authors
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
  * Read the file 'COPYING' for more information.
  */
 
-#ifndef SEEN_DESKTOP_MENUBAR_H
-#define SEEN_DESKTOP_MENUBAR_H
-
-#include <glibmm/refptr.h>
-
-namespace Gio {
-class MenuModel;
-class Menu;
-} // namespace Gio;
+#ifndef INKSCAPE_UI_DESKTOP_MENUBAR_H
+#define INKSCAPE_UI_DESKTOP_MENUBAR_H
 
 void build_menu();
 
-#endif // SEEN_DESKTOP_MENUBAR_H
+#endif // INKSCAPE_UI_DESKTOP_MENUBAR_H
 
 /*
   Local Variables:

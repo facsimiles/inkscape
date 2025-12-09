@@ -1901,14 +1901,11 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(false, "", *icon_buttons_def, "",
                          _("Reset theme colors for some symbolic icon themes"),
                          false);
-        Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
+        Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Important only")};
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, 0);
         _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
                              _("You can either enable or disable all icons in menus. By default, the setting for the 'use-icon' attribute in the 'menus.ui' file determines whether to display icons in menus."), false, reset_icon());
-        _shift_icons.init(_("Shift icons in menus"), "/theme/shiftIcons", true);
-        _page_theme.add_line(true, "", _shift_icons, "",
-                             _("This preference fixes icon positions in menus."), false, reset_icon());
 
     _page_theme.add_group_header(_("XML Editor"));
 #if WITH_GSOURCEVIEW

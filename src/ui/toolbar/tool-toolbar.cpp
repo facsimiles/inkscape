@@ -103,8 +103,8 @@ void ToolToolbar::set_visible_buttons(Gtk::ScrolledWindow &tool_toolbar)
 std::unique_ptr<UI::Widget::PopoverMenu> ToolToolbar::makeContextMenu(InkscapeWindow *window)
 {
     Glib::ustring icon_name;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getInt("/theme/menuIcons", true)) {
+    auto prefs = Inkscape::Preferences::get();
+    if (prefs->getInt("/theme/menuIcons", 0) >= 1) {
         icon_name = "preferences-system";
     }
 

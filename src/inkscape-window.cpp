@@ -71,15 +71,6 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
 
     _app->gtk_app()->add_window(*this);
 
-    // On macOS, once a main window is opened, closing it should not quit the app.
-#ifdef __APPLE__
-    static bool called_hold = false;
-    if (!called_hold) {
-        _app->gtk_app()->hold();
-        called_hold = true;
-    }
-#endif
-
     // =================== Actions ===================
 
     // After canvas has been constructed.. move to canvas proper.
@@ -109,9 +100,19 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
         connection->export_action_group(document_action_group_name, _document->getActionGroup());
     }
 
-    // This is called here (rather than in InkscapeApplication) solely to add win level action
-    // tooltips to the menu label-to-tooltip map.
-    build_menu();
+    static bool first_window = true;
+    if (first_window) {
+        // This is called here (rather than in InkscapeApplication) solely to add win level action
+        // tooltips to the menu label-to-tooltip map.
+        build_menu();
+
+       // On macOS, once a main window is opened, closing it should not quit the app.
+#ifdef __APPLE__
+        _app->gtk_app()->hold();
+#endif
+
+        first_window = false;
+    }
 
     // =============== Build interface ===============
 
@@ -132,15 +133,12 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     bool include_short_lived = _app->get_number_of_windows() == 1;
     DialogManager::singleton().restore_dialogs_state(_desktop_widget->getDialogContainer(), include_short_lived);
 
-    // ================= Shift Icons =================
-    // Note: The menu is defined at the app level but shifting icons requires actual widgets and
+    // ================= Menu icons/tooltips =================
+    // Note: The menu is defined at the app level but showing icons/tooltips requires actual widgets and
     // must be done on the window level.
-    auto prefs = Inkscape::Preferences::get();
-    bool shift_icons = prefs->getInt("/theme/shiftIcons", true);
     for (auto &child : Inkscape::UI::children(*this)) {
         if (auto const menubar = dynamic_cast<Gtk::PopoverMenuBar *>(&child)) {
-            bool const shifted = set_tooltips_and_shift_icons(*menubar, shift_icons);
-            if (shifted) shift_icons = false;
+            show_icons_and_tooltips(*menubar);
         }
     }
 

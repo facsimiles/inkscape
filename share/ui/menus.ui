@@ -101,7 +101,7 @@
         <item>
           <attribute name="label" translatable="yes">_Close Document</attribute>
           <attribute name="action">win.document-close</attribute>
-          <attribute name="icon">document-close</attribute>
+          <attribute name="icon">window-close</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Close Window</attribute>

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Go over a widget representing a menu, & set tooltips on its items from app label-to-tooltip map.
- * Optionally (per Preference) shift Gtk::MenuItems with icons to align with Toggle & Radio buttons
+ * Go over a widget representing a menu, make the icons visible,
+ * and set tooltips from the application's label-to-tooltip map.
  */
 /*
  * Authors:
@@ -10,11 +10,10 @@
  *   Patrick Storz      <eduard.braun2@gmx.de>
  *   Daniel Boles       <dboles.src+inkscape@gmail.com>
  *
- * Copyright (C) 2020-2023 Authors
+ * Copyright (C) 2020-2025 Authors
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
  * Read the file 'COPYING' for more information.
- *
  */
 
 #include "ui/desktop/menu-set-tooltips-shift-icons.h"
@@ -47,10 +46,8 @@ static T *find_child(Gtk::Widget &parent)
  * The CSS will apply to all menu icons but is updated as each menu is shown.
  * @returns whether icons were shifted during this or an inner recursive call
  */
-bool set_tooltips_and_shift_icons(Gtk::Widget &menu, bool shift_icons)
+void show_icons_and_tooltips(Gtk::Widget &menu)
 {
-    bool shifted = false;
-
     auto app = InkscapeApplication::instance();
     auto &label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
 
@@ -88,10 +85,8 @@ bool set_tooltips_and_shift_icons(Gtk::Widget &menu, bool shift_icons)
             }
         }
 
-        set_tooltips_and_shift_icons(child, shift_icons);
+        show_icons_and_tooltips(child);
     }
-
-    return shifted;
 }
 
 /*
