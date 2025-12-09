@@ -558,7 +558,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                             } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
 
                             bool down_on_selected = item_at_point && selection->includes(item_at_point, true);
-                            bool allow_duplicate = duplicate_drag && (force_drag || _duplicate_down_on_selected || down_on_selected);
+                            bool allow_duplicate = duplicate_drag && (_duplicate_down_on_selected || down_on_selected);
 
                             if (allow_duplicate) {
                                 _duplicate_drag(p);
