@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <placeholder width="916" height="63"></placeholder>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="_maxpressure_adj">
     <property name="upper">100</property>
     <property name="step-increment">1</property>
@@ -26,7 +27,7 @@
     <child>
       <object class="GtkLabel">
         <property name="tooltip-text" translatable="yes">Mode of new lines drawn by this tool</property>
-        <property name="label" translatable="yes">Mode:</property>
+        <property name="label" translatable="yes">Mode</property>
       </object>
     </child>
     <child>
@@ -89,8 +90,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkButton" id="_flatten_spiro_bspline_btn">
@@ -106,6 +106,7 @@
     </child>
     <child>
       <object class="GtkBox" id="pencil_only_box">
+        <property name="spacing">2</property>
         <child>
           <object class="GtkToggleButton" id="_usepressure_btn">
             <property name="valign">center</property>
@@ -122,6 +123,7 @@
             <property name="tooltip-text" translatable="yes">Min percent of pressure</property>
             <child>
               <object class="GtkLabel">
+                <property name="margin-end">0</property>
                 <property name="margin-start">5</property>
                 <property name="label" translatable="yes">Min</property>
               </object>
@@ -156,11 +158,20 @@
         <child>
           <object class="GtkBox" id="powerstroke_cap_box">
             <property name="tooltip-text" translatable="yes">Line endings when drawing with pressure-sensitive PowerPencil</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Caps</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown" id="cap-list">
+                <property name="tooltip-text" translatable="yes">Line endings when drawing with pressure-sensitive PowerPencil</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
-          <object class="GtkSeparator">
-          </object>
+          <object class="GtkSeparator"></object>
         </child>
         <child>
           <object class="GtkBox" id="tolerance_box">
@@ -203,11 +214,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkSeparator">
-          </object>
+          <object class="GtkSeparator"></object>
         </child>
         <style>
-          <class name="pencil-only"/>
+          <class name="pencil-only"></class>
         </style>
       </object>
     </child>
@@ -215,6 +225,14 @@
       <object class="GtkBox" id="shape_box">
         <property name="margin-start">5</property>
         <property name="tooltip-text" translatable="yes">Shape of new paths drawn by this tool</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Shape</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="shape-list"></object>
+        </child>
       </object>
     </child>
     <child>
@@ -237,7 +255,7 @@
       </object>
     </child>
     <style>
-      <class name="inkscape-toolbar"/>
+      <class name="inkscape-toolbar"></class>
     </style>
   </object>
 </interface>

@@ -40,6 +40,7 @@ class ToggleButton;
 
 namespace Inkscape {
 namespace UI::Widget {
+class DropDownList;
 class SpinButton;
 class ComboToolItem;
 } // namespace UI::Widget
@@ -70,12 +71,14 @@ private:
     UI::Widget::SpinButton &_minpressure_item;
     Gtk::Box &_maxpressure_box;
     UI::Widget::SpinButton &_maxpressure_item;
-    UI::Widget::ComboToolItem *_cap_item;
+    UI::Widget::DropDownList& _cap_item;
+    Gtk::Box& _cap_box;
     UI::Widget::SpinButton &_tolerance_item;
     Gtk::ToggleButton &_simplify_btn;
     Gtk::Button &_flatten_simplify_btn;
 
-    UI::Widget::ComboToolItem *_shape_item;
+    UI::Widget::DropDownList& _shape_item;
+    Gtk::Box& _shape_box;
     Gtk::Box &_shapescale_box;
     UI::Widget::SpinButton &_shapescale_item;
     bool _set_shape = false;

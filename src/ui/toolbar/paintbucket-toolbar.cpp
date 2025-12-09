@@ -48,6 +48,8 @@ PaintbucketToolbar::PaintbucketToolbar(Glib::RefPtr<Gtk::Builder> const &builder
     , _tracker{std::make_unique<UI::Widget::UnitTracker>(Inkscape::Util::UNIT_TYPE_LINEAR)}
     , _threshold_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_threshold_item"))
     , _offset_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_offset_item"))
+    , _channels_item(get_derived_widget<UI::Widget::DropDownList>(builder, "channel-list"))
+    , _autogap_item(get_derived_widget<UI::Widget::DropDownList>(builder, "autogap-list"))
 {
     auto prefs = Preferences::get();
 
@@ -61,24 +63,14 @@ PaintbucketToolbar::PaintbucketToolbar(Glib::RefPtr<Gtk::Builder> const &builder
 
     // Channel
     {
-        UI::Widget::ComboToolItemColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
         for (auto item : Inkscape::UI::Tools::FloodTool::channel_list) {
-            Gtk::TreeModel::Row row = *store->append();
-            row[columns.col_label    ] = _(item);
-            row[columns.col_sensitive] = true;
+            _channels_item.append(_(item));
         }
 
-        _channels_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Fill by"), "", "Not Used", store));
-        _channels_item->use_group_label(true);
-
         int channels = prefs->getInt("/tools/paintbucket/channels", 0);
-        _channels_item->set_active(channels);
+        _channels_item.set_selected(channels);
 
-        _channels_item->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::channels_changed));
-        get_widget<Gtk::Box>(builder, "channels_box").append(*_channels_item);
+        _channels_item.signal_changed().connect([this] { channels_changed(_channels_item.get_selected()); });
 
         // Create the units menu.
         Glib::ustring stored_unit = prefs->getString("/tools/paintbucket/offsetunits");
@@ -90,24 +82,14 @@ PaintbucketToolbar::PaintbucketToolbar(Glib::RefPtr<Gtk::Builder> const &builder
 
     // Auto Gap
     {
-        UI::Widget::ComboToolItemColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
         for (auto item : Inkscape::UI::Tools::FloodTool::gap_list) {
-            Gtk::TreeModel::Row row = *store->append();
-            row[columns.col_label    ] = g_dpgettext2(nullptr, "Flood autogap", item);
-            row[columns.col_sensitive] = true;
+            _autogap_item.append(g_dpgettext2(nullptr, "Flood autogap", item));
         }
 
-        _autogap_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Close gaps"), Glib::ustring(), "Not Used", store));
-        _autogap_item->use_group_label(true);
-
         int autogap = prefs->getInt("/tools/paintbucket/autogap", 0);
-        _autogap_item->set_active(autogap);
+        _autogap_item.set_selected(autogap);
 
-        _autogap_item->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::autogap_changed));
-        get_widget<Gtk::Box>(builder, "autogap_box").append(*_autogap_item);
+        _autogap_item.signal_changed().connect([this] { autogap_changed(_autogap_item.get_selected()); });
 
         auto units_menu = _tracker->create_unit_dropdown();
         get_widget<Gtk::Box>(builder, "unit_menu_box").append(*units_menu);
@@ -179,8 +161,8 @@ void PaintbucketToolbar::defaults()
     _threshold_item.get_adjustment()->set_value(15);
     _offset_item.get_adjustment()->set_value(0.0);
 
-    _channels_item->set_active(Inkscape::UI::Tools::FLOOD_CHANNELS_RGB);
-    _autogap_item->set_active(0);
+    _channels_item.set_selected(Inkscape::UI::Tools::FLOOD_CHANNELS_RGB);
+    _autogap_item.set_selected(0);
 }
 
 } // namespace Inkscape::UI::Toolbar

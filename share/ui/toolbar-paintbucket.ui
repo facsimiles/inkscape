@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="_offset_adj">
     <property name="lower">-10000</property>
     <property name="upper">10000</property>
@@ -18,11 +18,18 @@
     <property name="hexpand">True</property>
     <child>
       <object class="GtkBox" id="channels_box">
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Fill by</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="channel-list"></object>
+        </child>
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkBox" id="threshold_box">
@@ -62,25 +69,31 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="unit_menu_box">
-      </object>
+      <object class="GtkBox" id="unit_menu_box"></object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkBox" id="autogap_box">
         <property name="margin-start">5</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Close gaps</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="autogap-list"></object>
+        </child>
       </object>
     </child>
     <child>
       <object class="GtkSeparator">
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -93,7 +106,7 @@
         <property name="tooltip-text" translatable="yes">Reset paint bucket parameters to defaults (use Inkscape Preferences &gt; Tools to change defaults)</property>
         <property name="has-frame">False</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
         <child>
           <object class="GtkImage" id="image1">
@@ -103,7 +116,7 @@
       </object>
     </child>
     <style>
-      <class name="inkscape-toolbar"/>
+      <class name="inkscape-toolbar"></class>
     </style>
   </object>
 </interface>

@@ -33,6 +33,7 @@
 namespace Gtk { class Builder; }
 
 namespace Inkscape::UI::Widget {
+class DropDownList;
 class ComboToolItem;
 class UnitTracker;
 class SpinButton;
@@ -55,8 +56,8 @@ private:
 
     std::unique_ptr<UI::Widget::UnitTracker> _tracker;
 
-    UI::Widget::ComboToolItem *_channels_item;
-    UI::Widget::ComboToolItem *_autogap_item;
+    UI::Widget::DropDownList& _channels_item;
+    UI::Widget::DropDownList& _autogap_item;
 
     UI::Widget::SpinButton &_threshold_item;
     UI::Widget::SpinButton &_offset_item;

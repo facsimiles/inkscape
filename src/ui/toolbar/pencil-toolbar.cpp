@@ -67,6 +67,10 @@ PencilToolbar::PencilToolbar(Glib::RefPtr<Gtk::Builder> const &builder, bool pen
     , _flatten_simplify_btn(get_widget<Gtk::Button>(builder, "_flatten_simplify_btn"))
     , _shapescale_box(get_widget<Gtk::Box>(builder, "_shapescale_box"))
     , _shapescale_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_shapescale_item"))
+    , _shape_box(get_widget<Gtk::Box>(builder, "shape_box"))
+    , _shape_item(get_derived_widget<UI::Widget::DropDownList>(builder, "shape-list"))
+    , _cap_box(get_widget<Gtk::Box>(builder, "powerstroke_cap_box"))
+    , _cap_item(get_derived_widget<UI::Widget::DropDownList>(builder, "cap-list"))
 {
     auto prefs = Preferences::get();
 
@@ -139,40 +143,23 @@ PencilToolbar::PencilToolbar(Glib::RefPtr<Gtk::Builder> const &builder, bool pen
     _initMenuBtns();
 }
 
-void PencilToolbar::add_powerstroke_cap(Glib::RefPtr<Gtk::Builder> const &builder)
-{
+void PencilToolbar::add_powerstroke_cap(Glib::RefPtr<Gtk::Builder> const &builder) {
     // Powerstroke cap combo tool item.
-    UI::Widget::ComboToolItemColumns columns;
-
-    auto store = Gtk::ListStore::create(columns);
-
     for (auto item : std::vector<char const *>{C_("Cap", "Butt"), _("Square"), _("Round"), _("Peak"), _("Zero width")}) {
-        Gtk::TreeModel::Row row = *store->append();
-        row[columns.col_label] = item;
-        row[columns.col_sensitive] = true;
+        _cap_item.append(item);
     }
-
-    _cap_item = Gtk::manage(UI::Widget::ComboToolItem::create(
-        _("Caps"), _("Line endings when drawing with pressure-sensitive PowerPencil"), "Not Used", store));
 
     auto prefs = Preferences::get();
 
     int cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 2);
-    _cap_item->set_active(cap);
-    _cap_item->use_group_label(true);
+    _cap_item.set_selected(cap);
 
-    _cap_item->signal_changed().connect(sigc::mem_fun(*this, &PencilToolbar::change_cap));
-
-    get_widget<Gtk::Box>(builder, "powerstroke_cap_box").append(*_cap_item);
+    _cap_item.signal_changed().connect([this] { change_cap(_cap_item.get_selected()); });
 }
 
 void PencilToolbar::add_shape_option(Glib::RefPtr<Gtk::Builder> const &builder)
 {
-    UI::Widget::ComboToolItemColumns columns;
-
-    auto store = Gtk::ListStore::create(columns);
-
-    std::vector<char const *> freehand_shape_dropdown_items_list = {(C_("Freehand shape", "None")),
+    std::array<const char*, 7> freehand_shape_dropdown_items_list = {(C_("Freehand shape", "None")),
                                                                _("Triangle in"),
                                                                _("Triangle out"),
                                                                _("Ellipse"),
@@ -181,21 +168,14 @@ void PencilToolbar::add_shape_option(Glib::RefPtr<Gtk::Builder> const &builder)
                                                                _("Last applied")};
 
     for (auto item : freehand_shape_dropdown_items_list) {
-        Gtk::TreeModel::Row row = *store->append();
-        row[columns.col_label] = item;
-        row[columns.col_sensitive] = true;
+        _shape_item.append(item);
     }
-
-    _shape_item = Gtk::manage(
-        UI::Widget::ComboToolItem::create(_("Shape"), _("Shape of new paths drawn by this tool"), "Not Used", store));
-    _shape_item->use_group_label(true);
 
     int shape =
         Preferences::get()->getInt(_tool_is_pencil ? "/tools/freehand/pencil/shape" : "/tools/freehand/pen/shape", 0);
-    _shape_item->set_active(shape);
+    _shape_item.set_selected(shape);
 
-    _shape_item->signal_changed().connect(sigc::mem_fun(*this, &PencilToolbar::change_shape));
-    get_widget<Gtk::Box>(builder, "shape_box").append(*_shape_item);
+    _shape_item.signal_changed().connect([this] { change_shape(_shape_item.get_selected()); });
 }
 
 void PencilToolbar::setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name,
@@ -317,7 +297,7 @@ void PencilToolbar::shapewidth_value_changed()
     double width = _shapescale_item.get_adjustment()->get_value();
 
     using namespace LivePathEffect;
-    switch (_shape_item->get_active()) {
+    switch (_shape_item.get_selected()) {
         case Tools::TRIANGLE_IN:
         case Tools::TRIANGLE_OUT:
             prefs->setDouble("/live_effects/powerstroke/width", width);
@@ -368,8 +348,8 @@ void PencilToolbar::use_pencil_pressure()
 
     _minpressure_box.set_visible(pressure);
     _maxpressure_box.set_visible(pressure);
-    _cap_item->set_visible(pressure);
-    _shape_item->set_visible(!pressure);
+    _cap_box.set_visible(pressure);
+    _shape_box.set_visible(!pressure);
     _shapescale_box.set_visible(!pressure);
 
     if (pressure) {
