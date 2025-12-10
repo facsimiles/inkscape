@@ -1226,9 +1226,11 @@ InkscapeApplication::startup_close()
 {
     debug_out << "InkscapeApplication::startup_close(): Entrance" << std::endl;
 #ifdef __APPLE__
-    debug_out << "InkscapeApplication::startup_close(): APPLE Hiding startup window" << std::endl;
-    _start_screen->hide();
-    debug_out << "InkscapeApplication::startup_close(): APPLE After Hiding startup window" << std::endl;
+    if (_start_screen) {
+        debug_out << "InkscapeApplication::startup_close(): APPLE Hiding startup window" << std::endl;
+        _start_screen->hide();
+        debug_out << "InkscapeApplication::startup_close(): APPLE After Hiding startup window" << std::endl;
+    }
 #else
     _start_screen.reset();
 #endif
