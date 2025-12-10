@@ -840,6 +840,9 @@ InkscapeApplication::InkscapeApplication()
 
 InkscapeApplication::~InkscapeApplication()
 {
+#ifdef __APPPLE__
+    _start_screen.reset(); // Start screen may be just hidden.
+#endif
     _instance = nullptr;
     Inkscape::Util::StaticsBin::get().destroy();
 }
