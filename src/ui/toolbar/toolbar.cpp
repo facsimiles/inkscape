@@ -129,7 +129,8 @@ void Toolbar::_resize_handler(Gtk::Allocation &allocation)
                 // make sure that the allocated size is larger than
                 // the minimum + next widget size + compensation
                 // (to prevent GTK3 from prematurely expanding icons)
-                while (allocated_size > min_size + next_min + _compensation && !_collapsed_children.empty()) {
+                // minus 1 to compensate the reported allocated size (prevent glitching)
+                while (allocated_size - 1 > min_size + next_min + _compensation && !_collapsed_children.empty()) {
                     _move_child(menu_btn->get_popover_box(), _toolbar, true);
                     // min size needs to be recalculated every round
                     min_size = min_dimension(_toolbar, orientation);
