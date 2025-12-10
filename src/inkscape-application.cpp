@@ -873,10 +873,6 @@ InkscapeApplication::create_window(SPDocument *document, bool replace)
     }
     window->set_visible(true);
 
-    debug_out << "InkscapeApplication::create_window: before startup_close" << std::endl;
-    startup_close();
-    debug_out << "InkscapeApplication::create_window: after startup_close" << std::endl;
-
     debug_out << "InkscapeApplication::create_window: Exit" << std::endl;
     return window;
 }
@@ -900,7 +896,6 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
     bool cancelled = false;
 
     if (file) {
-        startup_close();
         document = document_open(file, &cancelled);
         if (document) {
             // Remember document so much that we'll add it to recent documents
@@ -1070,7 +1065,7 @@ InkscapeApplication::on_startup()
     // Deprecated...
     Inkscape::Application::create(_with_gui);
 
-    // Extensions
+    // Extensions: Must be done before _start_screen->show_now(). See #5740
     Inkscape::Extension::init();
 
     // Add the start/splash screen to the app as soon as possible
@@ -1084,7 +1079,7 @@ InkscapeApplication::on_startup()
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
             if (_start_screen) {
                 debug_out << "  before _start_screen->show_now()" << std::endl;
-                gtk_app()->add_window(*_start_screen);
+                gtk_app()->add_window(*_start_screen); // Must be before _start_screen->show_now(). See #5740
                 _start_screen->show_now();
                 debug_out << "  after _start_screen->show_now()" << std::endl;
                 // debug_out << "  COMMENTED OUT (gtk_app()->add_window())" << std::endl;
@@ -1152,6 +1147,22 @@ void
 InkscapeApplication::on_activate()
 {
     debug_out << "InkscapeApplication::on_activate(): Entrance" << std::endl;
+#ifdef __APPLE__
+    // See #5740
+    if (gtk_app()) {
+        debug_out << "  APPLE: Have app" << std::endl;
+        for (auto window : gtk_app()->get_windows()) {
+        debug_out << "  APPLE: Window" << std::endl;
+            if (dynamic_cast<InkscapeWindow*>(window)) {
+                // Window already opened in on_open().
+    debug_out << "InkscapeApplication::on_activate(): Exiting: Window already open" << std::endl;
+                return;
+            }
+        }
+    }
+    debug_out << "InkscapeApplication::on_activate(): After APPLE window check" << std::endl;
+#endif
+
     std::string output;
     auto prefs = Inkscape::Preferences::get();
 
@@ -1171,7 +1182,7 @@ InkscapeApplication::on_activate()
         // Show welcome screen. Instantiate start screen if it hasn't yet.
         debug_out << "  Requested welcome screen" << std::endl;
         if (!_start_screen) {
-            debug_out << "  No start screen creating" << std::endl;
+            debug_out << "  No start screen, creating one" << std::endl;
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
         }
         _start_screen->setup_welcome();
@@ -1179,10 +1190,10 @@ InkscapeApplication::on_activate()
         _start_screen->run(); // Blocks until document selected
         debug_out << "  After _start_screen->run()" << std::endl;
         document = _start_screen->get_document();
+        debug_out << "  Before deleting _start_Screen" << std::endl;
+        _start_screen.reset();
+        debug_out << "  After deleting _start_Screen" << std::endl;
         if (!document) {
-            debug_out << "  Before deleting _start_Screen" << std::endl;
-            _start_screen.reset();
-            debug_out << "  After deleting _start_Screen" << std::endl;
             return; // Start screen forcefully closed.
         }
     } else {
@@ -1235,10 +1246,6 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         return;
     }
 
-    debug_out << "InkscapeApplication::on_open: before startup_close()" << std::endl;
-    debug_out << "InkscapeApplication::on_open: COMMENTED OUT (startup_close())" << std::endl;
-    // startup_close();
-    debug_out << "InkscapeApplication::on_open: after startup_close()" << std::endl;
     for (auto file : files) {
 
         // Open file
@@ -1255,10 +1262,15 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         process_document (document, file->get_path());
     }
 
+    debug_out << "InkscapeApplication::on_open: before startup_close()" << std::endl;
+    startup_close();
+    debug_out << "InkscapeApplication::on_open: after startup_close()" << std::endl;
+
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
+
     debug_out << "InkscapeApplication::on_open: Exit" << std::endl;
 }
 
