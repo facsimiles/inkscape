@@ -118,7 +118,6 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED IMPORTED_TARGET
                   pangocairo>=1.44
                   pangoft2
                   fontconfig
-                  gsl
                   gmodule-2.0
                   bdw-gc #boehm-demers-weiser gc
                   lcms2)
@@ -142,6 +141,12 @@ list(APPEND INKSCAPE_LIBS Iconv::Iconv)
 
 find_package(Intl REQUIRED)
 list(APPEND INKSCAPE_LIBS Intl::Intl)
+
+find_package(GSL REQUIRED)
+list(APPEND INKSCAPE_LIBS GSL::gsl)
+
+find_package(double-conversion CONFIG REQUIRED)
+list(APPEND INKSCAPE_LIBS double-conversion::double-conversion)
 
 # Check for system-wide version of 2geom and fallback to internal copy if not found
 if(NOT WITH_INTERNAL_2GEOM)

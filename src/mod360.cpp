@@ -7,11 +7,10 @@
  * Copyright (C) 2018 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#include <glib.h>
-#include <cmath>
-
-#include <2geom/angle.h>
 #include "mod360.h"
+
+#include <cmath>
+#include <2geom/angle.h>
 
 /** Returns \a x wrapped around to between 0 and less than 360,
     or 0 if \a x isn't finite.
