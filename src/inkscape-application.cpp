@@ -840,7 +840,7 @@ InkscapeApplication::InkscapeApplication()
 
 InkscapeApplication::~InkscapeApplication()
 {
-#ifdef __APPPLE__
+#ifdef __APPLE__
     _start_screen.reset(); // Start screen may be just hidden.
 #endif
     _instance = nullptr;
@@ -1226,6 +1226,7 @@ InkscapeApplication::startup_close()
 {
     debug_out << "InkscapeApplication::startup_close(): Entrance" << std::endl;
 #ifdef __APPLE__
+    debug_out << "InkscapeApplication::startup_close(): APPLE Hiding startup window" << std::endl;
     _start_screen->hide();
 #else
     _start_screen.reset();
