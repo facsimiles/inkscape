@@ -1078,12 +1078,11 @@ InkscapeApplication::on_startup()
             debug_out << "  Requested splash" << std::endl;
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
             if (_start_screen) {
-                debug_out << "  before _start_screen->show_now()" << std::endl;
                 gtk_app()->add_window(*_start_screen); // Must be before _start_screen->show_now(). See #5740
+                debug_out << "  after gtk_app()->add_window()" << std::endl;
+                debug_out << "  before _start_screen->show_now()" << std::endl;
                 _start_screen->show_now();
                 debug_out << "  after _start_screen->show_now()" << std::endl;
-                // debug_out << "  COMMENTED OUT (gtk_app()->add_window())" << std::endl;
-                debug_out << "  after add_window()" << std::endl;
             } else {
                 std::cerr << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;
                 debug_out << "InkscapeApplication::on_startup(): Could not create start screen!" << std::endl;
@@ -1152,10 +1151,10 @@ InkscapeApplication::on_activate()
     if (gtk_app()) {
         debug_out << "  APPLE: Have app" << std::endl;
         for (auto window : gtk_app()->get_windows()) {
-        debug_out << "  APPLE: Window" << std::endl;
+            debug_out << "  APPLE: some window" << std::endl;
             if (dynamic_cast<InkscapeWindow*>(window)) {
                 // Window already opened in on_open().
-    debug_out << "InkscapeApplication::on_activate(): Exiting: Window already open" << std::endl;
+                debug_out << "InkscapeApplication::on_activate(): Exiting: InkscapeWindow already open" << std::endl;
                 return;
             }
         }
@@ -1199,6 +1198,9 @@ InkscapeApplication::on_activate()
     } else {
         // Create a blank document from template
         document = document_new();
+        debug_out << "  Before deleting _start_Screen (document_new)" << std::endl;
+        _start_screen.reset(); // Must reset in case splash screen opened.
+        debug_out << "  After deleting _start_Screen (document_new)" << std::endl;
     }
 
     if (!document) {
