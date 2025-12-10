@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <placeholder width="620" height="12"></placeholder>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="_offset_adj">
     <property name="upper">1</property>
     <property name="step-increment">0.01</property>
@@ -69,11 +70,22 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkBox" id="select_box">
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Select</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="gradient-list">
+            <property name="focus-on-click">false</property>
+            <property name="focusable">false</property>
+            <property name="can-focus">true</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -100,24 +112,48 @@
     </child>
     <child>
       <object class="GtkBox" id="spread_box">
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Repeat</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="spread-list">
+            <property name="focus-on-click">false</property>
+            <property name="focusable">false</property>
+            <property name="can-focus">true</property>
+            <property name="tooltip-text" translatable="yes" comments="TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute">Whether to fill with flat color beyond the ends of the gradient vector (spreadMethod=&quot;pad&quot;), or repeat the gradient in the same direction (spreadMethod=&quot;repeat&quot;), or repeat the gradient in alternating opposite directions (spreadMethod=&quot;reflect&quot;)</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkBox" id="stop_box">
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Stop</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="stop-list">
+            <property name="focus-on-click">false</property>
+            <property name="focusable">false</property>
+            <property name="can-focus">true</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
       <object class="GtkBox" id="offset_box">
         <property name="tooltip-text" translatable="yes">Offset of selected stop</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
         <child>
           <object class="GtkLabel">
@@ -146,7 +182,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">node-add</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -160,12 +196,12 @@
         <property name="has-frame">False</property>
         <property name="icon-name">node-delete</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
     <style>
-      <class name="inkscape-toolbar"/>
+      <class name="inkscape-toolbar"></class>
     </style>
   </object>
 </interface>

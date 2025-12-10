@@ -1997,11 +1997,13 @@ void GrDrag::selectByCoords(std::vector<Geom::Point> coords)
  */
 void GrDrag::selectByStop(SPStop *stop, bool add_to_selection, bool override )
 {
+    if (_update.pending()) return;
+
+    auto block = _update.block();
+
     for (auto dragger : this->draggers) {
 
-        for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j) {
-
-            GrDraggable *d = *j;
+        for (auto& d : dragger->draggables) {
             SPGradient *gradient = getGradient(d->item, d->fill_or_stroke);
             SPGradient *vector = gradient->getVector(false);
             SPStop *stop_i = sp_get_stop_i(vector, d->point_i);
@@ -2022,6 +2024,46 @@ void GrDrag::selectRect(Geom::Rect const &r)
            setSelected (d, true, true);
         }
     }
+}
+
+SPStop* GrDrag::getStop(GrDragger *dragger, SPGradient* gradient) {
+    if (!dragger || !gradient) return nullptr;
+
+    gint n = 0;
+    SPStop* stop = nullptr;
+    auto vector = gradient->getVector(false);
+
+    // For all draggables of dragger
+    for (auto draggable : dragger->draggables) {
+        if (draggable->point_type != POINT_RG_FOCUS) {
+            n++;
+            if (n > 1) break;
+        }
+
+        stop = vector->getFirstStop();
+
+        switch (draggable->point_type) {
+        case POINT_LG_MID:
+        case POINT_RG_MID1:
+        case POINT_RG_MID2:
+            stop = sp_get_stop_i(vector, draggable->point_i);
+            break;
+        case POINT_LG_END:
+        case POINT_RG_R1:
+        case POINT_RG_R2:
+            stop = sp_last_stop(vector);
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (n > 1) {
+        // Multiple stops selected
+        return nullptr;
+    }
+
+    return stop;
 }
 
 /**
@@ -2066,7 +2108,13 @@ void GrDrag::setSelected(GrDragger *dragger, bool add_to_selection, bool overrid
         }
     }
     if (seldragger) {
-        desktop->emit_gradient_stop_selected(nullptr);
+        SPStop* stop = nullptr;
+        if (!seldragger->draggables.empty()) {
+            auto d = seldragger->draggables.front();
+            stop = getStop(seldragger, getGradient(d->item, d->fill_or_stroke));
+        }
+        auto block = _update.block();
+        desktop->emit_gradient_stop_selected(stop);
     }
 }
 

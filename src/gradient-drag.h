@@ -31,6 +31,7 @@
 #include "object/sp-gradient.h" // TODO refactor enums to external .h file
 #include "object/sp-mesh-array.h"
 #include "display/control/canvas-item-ptr.h"
+#include "ui/operation-blocker.h"
 
 class SPKnot;
 
@@ -173,6 +174,7 @@ public: // FIXME: make more of this private!
     void selectByCoords(std::vector<Geom::Point> coords);
     void selectByStop(SPStop *stop,  bool add_to_selection = true, bool override = true);
     void selectRect(Geom::Rect const &r);
+    static SPStop* getStop(GrDragger* dragger, SPGradient* gradient);
 
     void addColorToDragger(GrDragger &dragger, const char *color);
     void dropColorOnCorrespondingRegion(const char *color, Geom::Point p);
@@ -254,6 +256,7 @@ private:
 
     sigc::connection style_set_connection;
     sigc::connection style_query_connection;
+    OperationBlocker _update;
 };
 
 #endif // SEEN_GRADIENT_DRAG_H

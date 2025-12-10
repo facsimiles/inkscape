@@ -21,6 +21,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/togglebutton.h>
+#include <2geom/point.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -38,8 +39,11 @@
 #include "ui/tools/gradient-tool.h"
 #include "ui/util.h"
 #include "ui/widget/combo-tool-item.h"
+#include "ui/widget/drop-down-list.h"
+#include "ui/widget/gradient-editor.h"
 #include "ui/widget/gradient-image.h"
 #include "ui/widget/gradient-vector-selector.h"
+#include "ui/widget/paint-selector.h"
 #include "ui/widget/spinbutton.h"
 
 using Inkscape::DocumentUndo;
@@ -47,6 +51,11 @@ using Inkscape::UI::Tools::ToolBase;
 
 namespace Inkscape::UI::Toolbar {
 namespace {
+
+using GradientItem = Widget::IconComboBox::ListItem;
+constexpr Geom::Point GradientSize = Geom::Point{64, 16};
+using StopItem = Widget::IconComboBox::ListItem;
+constexpr Geom::Point StopSize = Geom::Point{32, 16};
 
 void gr_apply_gradient_to_item(SPItem *item, SPGradient *gr, SPGradientType initialType, PaintTarget initialMode, PaintTarget mode)
 {
@@ -96,7 +105,7 @@ void gr_apply_gradient(Selection *selection, GrDrag *drag, SPGradient *gr)
     }
 }
 
-int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
+int gr_vector_list(Glib::RefPtr<Gio::ListStore<GradientItem>> store, SPDesktop *desktop,
                    bool selection_empty, SPGradient *gr_selected, bool gr_multi)
 {
     int selected = -1;
@@ -112,63 +121,38 @@ int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
         }
     }
 
-    store->clear();
-    Inkscape::UI::Widget::ComboToolItemColumns columns;
-    Gtk::TreeModel::Row row;
+    store->remove_all();
+    Glib::RefPtr<Gdk::Texture> no_image;
 
     if (labels_gradients.empty()) {
         // The document has no gradients
-        row = *(store->append());
-        row[columns.col_label    ] = _("No gradient");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(GradientItem::create(0, _("No gradient"), no_image));
         return selected;
     }
 
     if (selection_empty) {
         // Document has gradients, but nothing is currently selected.
-        row = *(store->append());
-        row[columns.col_label    ] = _("Nothing selected");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(GradientItem::create(0, _("Nothing selected"), no_image));
         return selected;
     }
 
     // Document has gradients and a selection.
 
     if (gr_selected == nullptr) {
-        row = *(store->append());
-        row[columns.col_label    ] = _("No gradient");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(GradientItem::create(0, _("No gradient"), no_image));
     }
 
     if (gr_multi) {
-        row = *(store->append());
-        row[columns.col_label    ] = _("Multiple gradients");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(GradientItem::create(0, _("Multiple gradients"), no_image));
     }
 
     int idx = 0;
     for (auto const &[label, gradient] : labels_gradients) {
-        Glib::RefPtr<Gdk::Pixbuf> pixbuf = sp_gradient_to_pixbuf_ref(gradient, 64, 16);
-
-        row = *(store->append());
-        row[columns.col_label    ] = label;
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_pixbuf   ] = pixbuf;
-        row[columns.col_data     ] = gradient;
-        row[columns.col_sensitive] = true;
+        auto image = sp_gradient_to_surface(gradient, GradientSize.x(), GradientSize.y());
+        auto id = gradient->getId();
+        auto item = GradientItem::create(idx, label, to_texture(image));
+        item->uid = id ? id : "";
+        store->append(item);
 
         if (gradient == gr_selected) {
             selected = idx;
@@ -329,10 +313,16 @@ GradientToolbar::GradientToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     , _offset_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_offset_item")}
     , _stops_add_btn{get_widget<Gtk::Button>(builder, "_stops_add_btn")}
     , _stops_delete_btn{get_widget<Gtk::Button>(builder, "_stops_delete_btn")}
+    , _select_cb(get_derived_widget<UI::Widget::IconComboBox>(builder, "gradient-list", _gradient_store, false))
+    , _spread_cb(get_derived_widget<UI::Widget::IconComboBox>(builder, "spread-list"))
+    , _stop_cb(get_derived_widget<UI::Widget::IconComboBox>(builder, "stop-list", _stop_store, false))
 {
+    _select_cb.set_image_size(GradientSize);
+    _stop_cb.set_image_size(StopSize);
+
     auto prefs = Preferences::get();
 
-    // Setup the spin buttons.
+    // Set up the spin buttons.
     setup_derived_spin_button(_offset_item, "stopoffset", 0);
 
     // Values auto-calculated.
@@ -360,30 +350,10 @@ GradientToolbar::GradientToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     auto fsmode = prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0 ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
     _new_fillstroke_buttons[fsmode == Inkscape::FOR_FILL ? 0 : 1]->set_active();
 
-    /* Gradient Select list */
-    {
-        UI::Widget::ComboToolItemColumns columns;
-        auto store = Gtk::ListStore::create(columns);
-        Gtk::TreeModel::Row row;
-        row = *(store->append());
-        row[columns.col_label    ] = _("No gradient");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        _select_cb = UI::Widget::ComboToolItem::create(_("Select"),         // Label
-                                                       "",                  // Tooltip
-                                                       "Not Used",          // Icon
-                                                       store );             // Tree store
-        _select_cb->use_icon( false );
-        _select_cb->use_pixbuf( true );
-        _select_cb->use_group_label( true );
-        _select_cb->set_active( 0 );
-        _select_cb->set_sensitive( false );
-
-        get_widget<Gtk::Box>(builder, "select_box").append(*_select_cb);
-        _select_cb->signal_changed().connect(sigc::mem_fun(*this, &GradientToolbar::gradient_changed));
-    }
+    _gradient_store->append(GradientItem::create(0, _("No gradient"), {}));
+    _select_cb.set_selected(0);
+    _select_cb.set_sensitive(false);
+    _select_cb.property_selected().signal_changed().connect([this]{ gradient_changed(_select_cb.get_selected()); });
 
     // Configure the linked button.
     _linked_btn.signal_toggled().connect(sigc::mem_fun(*this, &GradientToolbar::linked_changed));
@@ -396,67 +366,19 @@ GradientToolbar::GradientToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     _stops_reverse_btn.set_sensitive(false);
 
     // Gradient Spread type (how a gradient is drawn outside its nominal area)
-    {
-        UI::Widget::ComboToolItemColumns columns;
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        std::vector<gchar*> spread_dropdown_items_list = {
-            const_cast<gchar *>(C_("Gradient repeat type", "None")),
-            _("Reflected"),
-            _("Direct")
-        };
-
-        for (auto item: spread_dropdown_items_list) {
-            Gtk::TreeModel::Row row = *(store->append());
-            row[columns.col_label    ] = item;
-            row[columns.col_sensitive] = true;
-        }
-
-        _spread_cb = Gtk::manage(UI::Widget::ComboToolItem::create(_("Repeat"),
-                                        // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-                                        _("Whether to fill with flat color beyond the ends of the gradient vector "
-                                          "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
-                                          "(spreadMethod=\"repeat\"), or repeat the gradient in alternating opposite "
-                                          "directions (spreadMethod=\"reflect\")"),
-                                          "Not Used", store));
-        _spread_cb->use_group_label(true);
-
-        _spread_cb->set_active(0);
-        _spread_cb->set_sensitive(false);
-
-        _spread_cb->signal_changed().connect(sigc::mem_fun(*this, &GradientToolbar::spread_changed));
-        get_widget<Gtk::Box>(builder, "spread_box").append(*_spread_cb);
+    for (auto [mode, label, icon] : UI::Widget::sp_get_spread_repeats()) {
+        _spread_cb.add_row(icon, label, static_cast<int>(mode));
     }
+    _spread_cb.set_selected(0);
+    _spread_cb.set_sensitive(false);
+
+    _spread_cb.signal_changed().connect([this](auto sel) { spread_changed(sel); });
 
     // Gradient Stop list
-    {
-        UI::Widget::ComboToolItemColumns columns;
-
-        auto store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("No stops");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        _stop_cb =
-            UI::Widget::ComboToolItem::create(_("Stops" ),         // Label
-                                              "",                  // Tooltip
-                                              "Not Used",          // Icon
-                                              store );             // Tree store
-
-        _stop_cb->use_icon( false );
-        _stop_cb->use_pixbuf( true );
-        _stop_cb->use_group_label( true );
-        _stop_cb->set_active( 0 );
-        _stop_cb->set_sensitive( false );
-
-        get_widget<Gtk::Box>(builder, "stop_box").append(*_stop_cb);
-        _stop_cb->signal_changed().connect(sigc::mem_fun(*this, &GradientToolbar::stop_changed));
-    }
+    _stop_store->append(StopItem::create(0, _("No stops in gradient"), {}));
+    _stop_cb.set_selected(0);
+    _stop_cb.set_sensitive(false);
+    _stop_cb.signal_changed().connect([this](int sel){ stop_changed(sel); });
 
     // Configure the stops add button.
     _stops_add_btn.signal_clicked().connect(sigc::mem_fun(*this, &GradientToolbar::add_stop));
@@ -490,7 +412,12 @@ void GradientToolbar::setDesktop(SPDesktop *desktop)
         // connect to selection modified and changed signals
         _connection_changed = sel->connectChanged([this] (auto) { _update(); });
         _connection_modified = sel->connectModified([this] (auto, auto) { _update(); });
-        _connection_subselection_changed = desktop->connect_gradient_stop_selected([this] (auto) { _update(); });
+        _connection_subselection_changed = desktop->connect_gradient_stop_selected([this] (auto stop) {
+            if (_blocker.pending()) return;
+            _update();
+            auto guard = _blocker.block();
+            select_dragger_by_stop(stop, _desktop->getTool());
+        });
         _update();
 
         // connect to release and modified signals of the defs (i.e. when someone changes gradient)
@@ -560,16 +487,12 @@ void GradientToolbar::gradient_changed(int active)
  */
 SPGradient *GradientToolbar::get_selected_gradient()
 {
-    int active = _select_cb->get_active();
+    auto item = _select_cb.current_item();
+    if (auto doc = _desktop->getDocument()) {
+        return item ? cast<SPGradient>(doc->getObjectById(item->uid)) : nullptr;
+    }
 
-    auto store = _select_cb->get_store();
-    auto row   = store->children()[active];
-    UI::Widget::ComboToolItemColumns columns;
-
-    void* pointer = row[columns.col_data];
-    SPGradient *gr = static_cast<SPGradient *>(pointer);
-
-    return gr;
+    return nullptr;
 }
 
 /**
@@ -609,16 +532,16 @@ void GradientToolbar::stop_changed(int active)
 
     auto guard = _blocker.block();
 
-    select_dragger_by_stop(get_selected_gradient(), _desktop->getTool());
+    auto stop = get_selected_stop();
+    select_dragger_by_stop(stop, _desktop->getTool());
 }
 
-void GradientToolbar::select_dragger_by_stop(SPGradient *gradient, ToolBase *ev)
+void GradientToolbar::select_dragger_by_stop(SPStop* stop, ToolBase *ev)
 {
     if (!_blocker.pending()) {
         std::cerr << "select_dragger_by_stop: should be blocked!" << std::endl;
     }
-
-    if (!ev || !gradient) {
+    if (!ev || !stop) {
         return;
     }
 
@@ -627,9 +550,9 @@ void GradientToolbar::select_dragger_by_stop(SPGradient *gradient, ToolBase *ev)
         return;
     }
 
-    drag->selectByStop(get_selected_stop(), false, true);
+    drag->selectByStop(stop, false, true);
 
-    stop_set_offset();
+    stop_set_offset(stop);
 }
 
 /**
@@ -637,12 +560,8 @@ void GradientToolbar::select_dragger_by_stop(SPGradient *gradient, ToolBase *ev)
  */
 SPStop *GradientToolbar::get_selected_stop()
 {
-    int active = _stop_cb->get_active();
-
-    auto store = _stop_cb->get_store();
-    auto row   = store->children()[active];
-    UI::Widget::ComboToolItemColumns columns;
-    void* pointer = row[columns.col_data];
+    auto item = _stop_cb.current_item();
+    void* pointer = item ? item->data : nullptr;
     return static_cast<SPStop *>(pointer);
 }
 
@@ -651,27 +570,27 @@ SPStop *GradientToolbar::get_selected_stop()
  *
  *  Set the offset widget value (based on which stop is selected)
  */
-void GradientToolbar::stop_set_offset()
+void GradientToolbar::stop_set_offset(SPStop* stop)
 {
     if (!_blocker.pending()) {
         std::cerr << "gr_stop_set_offset: should be blocked!" << std::endl;
     }
 
-    auto stop = get_selected_stop();
     if (!stop) {
-        // std::cerr << "gr_stop_set_offset: no stop!" << std::endl;
         return;
     }
 
-    SPStop *prev = nullptr;
-    prev = stop->getPrevStop();
     auto adj = _offset_item.get_adjustment();
-    adj->set_lower(prev != nullptr ? prev->offset : 0);
+    adj->freeze_notify();
+    adj->set_lower(0);
+    adj->set_upper(1);
 
-    SPStop *next = nullptr;
-    next = stop->getNextStop();
-    adj->set_lower(next != nullptr ? next->offset : 1.0);
+    auto prev = stop->getPrevStop();
+    auto next = stop->getNextStop();
+    adj->set_lower(prev ? prev->offset : 0);
+    adj->set_upper(next ? next->offset : 1.0);
     adj->set_value(stop->offset);
+    adj->thaw_notify();
     _offset_item.set_sensitive(true);
 }
 
@@ -803,28 +722,27 @@ void GradientToolbar::_update()
         gr_read_selection(selection, drag, gr_selected, gr_multi, spr_selected, spr_multi);
 
         // Gradient selection menu
-        auto store = _select_cb->get_store();
-        int gradient = gr_vector_list (store, _desktop, selection->isEmpty(), gr_selected, gr_multi);
+        int gradient = gr_vector_list(_gradient_store, _desktop, selection->isEmpty(), gr_selected, gr_multi);
 
         if (gradient < 0) {
             // No selection or no gradients
-            _select_cb->set_active(0);
-            _select_cb->set_sensitive(false);
+            _select_cb.set_selected(0);
+            _select_cb.set_sensitive(false);
         } else {
             // Single gradient or multiple gradients
-            _select_cb->set_active(gradient);
-            _select_cb->set_sensitive(true);
+            _select_cb.set_selected(gradient);
+            _select_cb.set_sensitive(true);
         }
 
         // Spread menu
-        _spread_cb->set_sensitive(gr_selected );
-        _spread_cb->set_active(gr_selected ? (int)spr_selected : 0);
+        _spread_cb.set_sensitive(gr_selected );
+        _spread_cb.set_selected(gr_selected ? (int)spr_selected : 0);
 
         _stops_add_btn.set_sensitive((gr_selected && !gr_multi && drag && !drag->selected.empty()));
         _stops_delete_btn.set_sensitive((gr_selected && !gr_multi && drag && !drag->selected.empty()));
         _stops_reverse_btn.set_sensitive((gr_selected != nullptr));
 
-        _stop_cb->set_sensitive(gr_selected && !gr_multi);
+        _stop_cb.set_sensitive(gr_selected && !gr_multi);
         _offset_item.set_sensitive(!gr_multi);
 
         update_stop_list(gr_selected, nullptr, gr_multi);
@@ -843,60 +761,35 @@ int GradientToolbar::update_stop_list(SPGradient *gradient, SPStop *new_stop, bo
 
     int selected = -1;
 
-    auto store = _stop_cb->get_store();
-    if (!store) {
-        return selected;
-    }
+    auto store = _stop_store;
 
-    store->clear();
-    UI::Widget::ComboToolItemColumns columns;
-    Gtk::TreeModel::Row row;
+    store->remove_all();
+
+    Glib::RefPtr<Gdk::Texture> no_image;
 
     if (gr_multi) {
-        row = *(store->append());
-        row[columns.col_label    ] = _("Multiple gradients");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(StopItem::create(0, _("Multiple gradients"), no_image));
         selected = 0;
         return selected;
     }
 
     if (!gradient) {
         // No valid gradient
-        row = *(store->append());
-        row[columns.col_label    ] = _("No gradient");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(StopItem::create(0, _("No gradient"), no_image));
     } else if (!gradient->hasStops()) {
         // Has gradient but it has no stops
-        row = *(store->append());
-        row[columns.col_label    ] = _("No stops in gradient");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_data     ] = nullptr;
-        row[columns.col_sensitive] = true;
+        store->append(StopItem::create(0, _("No stops in gradient"), no_image));
     } else {
         // Gradient has stops
+        int index = 0;
         for (auto& ochild: gradient->children) {
-            if (is<SPStop>(&ochild)) {
-
-                auto stop = cast<SPStop>(&ochild);
-                Glib::RefPtr<Gdk::Pixbuf> pixbuf = sp_gradstop_to_pixbuf_ref(stop, 32, 16);
-
-                Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(&ochild)->getRepr();
-                Glib::ustring label = gr_ellipsize_text(repr->attribute("id"), 25);
-
-                row = *(store->append());
-                row[columns.col_label    ] = label;
-                row[columns.col_tooltip  ] = "";
-                row[columns.col_icon     ] = "NotUsed";
-                row[columns.col_pixbuf   ] = pixbuf;
-                row[columns.col_data     ] = stop;
-                row[columns.col_sensitive] = true;
+            if (auto stop = cast<SPStop>(&ochild)) {
+                auto surface = sp_gradstop_to_surface(stop, StopSize.x(), StopSize.y());
+                auto id = stop->getId();
+                auto label = gr_ellipsize_text(id ? id : "", 25);
+                auto item = StopItem::create(index++, label, to_texture(surface));
+                item->data = stop;
+                store->append(item);
             }
         }
     }
@@ -944,8 +837,8 @@ void GradientToolbar::select_stop_by_draggers(SPGradient *gradient, ToolBase *ev
     GrDrag *drag = ev->get_drag();
 
     if (!drag || drag->selected.empty()) {
-        _stop_cb->set_active(0);
-        stop_set_offset();
+        _stop_cb.set_selected(0);
+        stop_set_offset(get_selected_stop());
         return;
     }
 
@@ -989,14 +882,7 @@ void GradientToolbar::select_stop_by_draggers(SPGradient *gradient, ToolBase *ev
         _offset_item.set_sensitive(false);
 
         // Stop list always updated first... reinsert "Multiple stops" as first entry.
-        UI::Widget::ComboToolItemColumns columns;
-        auto store = _stop_cb->get_store();
-
-        auto row = *(store->prepend());
-        row[columns.col_label    ] = _("Multiple stops");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
+        _stop_store->insert(0, StopItem::create(-1, _("Multiple stops"), {}));
         selected = 0;
 
     } else {
@@ -1004,12 +890,12 @@ void GradientToolbar::select_stop_by_draggers(SPGradient *gradient, ToolBase *ev
     }
 
     if (selected < 0) {
-        _stop_cb->set_active (0);
-        _stop_cb->set_sensitive (false);
+        _stop_cb.set_selected(0);
+        _stop_cb.set_sensitive(false);
     } else {
-        _stop_cb->set_active (selected);
-        _stop_cb->set_sensitive (true);
-        stop_set_offset();
+        _stop_cb.set_selected(selected);
+        _stop_cb.set_sensitive();
+        stop_set_offset(stop);
     }
 }
 

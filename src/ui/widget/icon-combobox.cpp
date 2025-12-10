@@ -12,38 +12,22 @@
 
 namespace Inkscape::UI::Widget {
 
-struct IconComboBox::ListItem : public Glib::Object {
-    int id;
-    Glib::ustring label;
-    Glib::ustring short_name;
-    Glib::ustring icon;  // icon's name to load if icons have been enabled
-    Glib::RefPtr<Gdk::Texture> image;  // image to present instead of icon if icons are disabled
-    bool is_visible = true;
+IconComboBox::IconComboBox(Glib::RefPtr<Gio::ListStore<ListItem>> store, bool use_icons, HeaderType header) {
+    construct(store, use_icons, header);
+}
 
-    static Glib::RefPtr<ListItem> create(
-        int id,
-        Glib::ustring label,
-        Glib::ustring short_name,
-        Glib::ustring icon,
-        Glib::RefPtr<Gdk::Texture> image
-    ) {
-        auto item = Glib::make_refptr_for_instance<ListItem>(new ListItem());
-        item->id = id;
-        item->label = label;
-        item->short_name = short_name;
-        item->icon = icon;
-        item->image = image;
-        return item;
-    }
-private:
-    ListItem() {}
-};
+IconComboBox::IconComboBox(bool use_icons, HeaderType header) {
+    construct({}, use_icons, header);
+}
 
-IconComboBox::IconComboBox(bool use_icons, HeaderType header)
-{
+IconComboBox::IconComboBox(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>&, Glib::RefPtr<Gio::ListStore<ListItem>> store, bool use_icons, HeaderType header): Gtk::DropDown(cobject) {
+    construct(store, use_icons, header);
+}
+
+void IconComboBox::construct(Glib::RefPtr<Gio::ListStore<ListItem>> store, bool use_icons, HeaderType header) {
     _factory = Gtk::SignalListItemFactory::create();
 
-    auto set_up_image = [=](Gtk::Box& box, int size, bool center) {
+    auto set_up_image = [=](Gtk::Box& box, Geom::Point size, bool center) {
         if (use_icons) {
             auto icon = Gtk::make_managed<Gtk::Image>();
             icon->set_icon_size(Gtk::IconSize::NORMAL);
@@ -57,8 +41,7 @@ IconComboBox::IconComboBox(bool use_icons, HeaderType header)
         else {
             auto image = Gtk::make_managed<Gtk::Picture>();
             image->set_layout_manager(Gtk::BinLayout::create());
-            // int size = get_image_size();
-            image->set_size_request(size, size);
+            image->set_size_request(size.x(), size.y());
             image->set_can_shrink(true);
             image->set_content_fit(Gtk::ContentFit::CONTAIN);
             image->set_valign(Gtk::Align::CENTER);
@@ -71,7 +54,7 @@ IconComboBox::IconComboBox(bool use_icons, HeaderType header)
         }
     };
 
-    _factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+    _factory->signal_setup().connect([this, set_up_image](const Glib::RefPtr<Gtk::ListItem>& list_item) {
         auto box = Gtk::make_managed<Gtk::Box>();
         box->add_css_class("item-box");
         box->set_orientation(Gtk::Orientation::HORIZONTAL);
@@ -120,7 +103,9 @@ IconComboBox::IconComboBox(bool use_icons, HeaderType header)
             dynamic_cast<Gtk::Image&>(*first).set_from_icon_name(item->icon);
         }
         else {
-            dynamic_cast<Gtk::Picture&>(*first).set_paintable(item->image);
+            auto& picture = dynamic_cast<Gtk::Picture&>(*first);
+            picture.set_paintable(item->image);
+            picture.set_visible(!!item->image);
         }
         label.set_label(item->label);
     });
@@ -131,7 +116,7 @@ IconComboBox::IconComboBox(bool use_icons, HeaderType header)
         // show only icon in closed combobox
         _compact_factory = Gtk::SignalListItemFactory::create();
 
-        _compact_factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+        _compact_factory->signal_setup().connect([this, set_up_image](const Glib::RefPtr<Gtk::ListItem>& list_item) {
             auto box = Gtk::make_managed<Gtk::Box>();
             box->add_css_class("item-box");
             box->set_orientation(Gtk::Orientation::HORIZONTAL);
@@ -181,7 +166,7 @@ IconComboBox::IconComboBox(bool use_icons, HeaderType header)
         set_factory(_factory);
     }
 
-    _store = Gio::ListStore<ListItem>::create();
+    _store = store ? store : Gio::ListStore<ListItem>::create();
     _filter = Gtk::BoolFilter::create({});
     _filtered_model = Gtk::FilterListModel::create(_store, _filter);
     _selection_model = Gtk::SingleSelection::create(_filtered_model);

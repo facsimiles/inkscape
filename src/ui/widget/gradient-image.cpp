@@ -108,11 +108,25 @@ sp_gradient_to_pixbuf_ref (SPGradient *gr, int width, int height)
     return Glib::wrap(sp_gradient_to_pixbuf(gr, width, height));
 }
 
-Glib::RefPtr<Gdk::Pixbuf>
-sp_gradstop_to_pixbuf_ref (SPStop *stop, int width, int height)
+Cairo::RefPtr<Cairo::ImageSurface> sp_gradient_to_surface(SPGradient* gr, int width, int height) {
+    // cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, height);
+    auto ctx = Cairo::Context::create(surface);
+    // cairo_t *ct = cairo_create(s);
+    sp_gradient_draw(gr, width, height, ctx->cobj());
+    // cairo_destroy(ct);
+    // cairo_surface_flush(s);
+    surface->flush();
+
+    return surface;
+}
+
+Cairo::RefPtr<Cairo::ImageSurface> sp_gradstop_to_surface(SPStop *stop, int width, int height)
 {
-    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-    cairo_t *ct = cairo_create(s);
+    auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, height);
+    auto ctx = Cairo::Context::create(surface);
+    // cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    cairo_t *ct = ctx->cobj(); // cairo_create(s);
 
     /* Checkerboard background */
     auto check = ink_cairo_pattern_create_checkerboard();
@@ -134,16 +148,11 @@ sp_gradstop_to_pixbuf_ref (SPStop *stop, int width, int height)
         cairo_fill(ct);
     }
 
-    cairo_destroy(ct);
-    cairo_surface_flush(s);
+    // cairo_destroy(ct);
+    // cairo_surface_flush(s);
+    surface->flush();
 
-    Cairo::RefPtr<Cairo::Surface> sref = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s));
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf =
-        Gdk::Pixbuf::create(sref, 0, 0, width, height);
-
-    cairo_surface_destroy(s);
-
-    return pixbuf;
+    return surface;
 }
 
 /*

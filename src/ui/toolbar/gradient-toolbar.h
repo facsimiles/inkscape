@@ -17,8 +17,11 @@
 
 #include "toolbar.h"
 #include "ui/operation-blocker.h"
+#include "ui/widget/icon-combobox.h"
 
 namespace Gtk {
+class SingleSelection;
+class DropDown;
 class Builder;
 class Button;
 class ToggleButton;
@@ -33,6 +36,7 @@ class Selection;
 namespace UI {
 namespace Tools { class ToolBase; }
 namespace Widget {
+class DropDownList;
 class ComboToolItem;
 class SpinButton;
 } // namespace Widget
@@ -52,22 +56,20 @@ public:
 private:
     GradientToolbar(Glib::RefPtr<Gtk::Builder> const &builder);
 
+    using Store = Gio::ListStore<UI::Widget::IconComboBox::ListItem>;
+    Glib::RefPtr<Store> _gradient_store = Store::create();
+    Glib::RefPtr<Store> _stop_store = Store::create();
     std::vector<Gtk::ToggleButton *> _new_type_buttons;
     std::vector<Gtk::ToggleButton *> _new_fillstroke_buttons;
-
-    UI::Widget::ComboToolItem *_select_cb;
+    UI::Widget::IconComboBox& _select_cb;
     Gtk::ToggleButton &_linked_btn;
     Gtk::Button &_stops_reverse_btn;
-    UI::Widget::ComboToolItem *_spread_cb;
-
-    UI::Widget::ComboToolItem *_stop_cb;
+    UI::Widget::IconComboBox& _spread_cb;
+    UI::Widget::IconComboBox& _stop_cb;
     UI::Widget::SpinButton &_offset_item;
-
     Gtk::Button &_stops_add_btn;
     Gtk::Button &_stops_delete_btn;
-
     bool _offset_adj_changed = false;
-
     OperationBlocker _blocker;
 
     void setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name, double default_value);
@@ -77,9 +79,9 @@ private:
     SPGradient *get_selected_gradient();
     void spread_changed(int active);
     void stop_changed(int active);
-    void select_dragger_by_stop(SPGradient *gradient, Tools::ToolBase *ev);
+    void select_dragger_by_stop(SPStop* stop, Tools::ToolBase *ev);
     SPStop *get_selected_stop();
-    void stop_set_offset();
+    void stop_set_offset(SPStop* stop);
     void stop_offset_adjustment_changed();
     void add_stop();
     void remove_stop();

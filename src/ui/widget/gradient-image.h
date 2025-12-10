@@ -47,7 +47,8 @@ void                       sp_gradient_draw         (SPGradient *gr, int width, 
                                                      cairo_t *ct);
 GdkPixbuf                 *sp_gradient_to_pixbuf    (SPGradient *gr, int width, int height);
 Glib::RefPtr<Gdk::Pixbuf>  sp_gradient_to_pixbuf_ref(SPGradient *gr, int width, int height);
-Glib::RefPtr<Gdk::Pixbuf>  sp_gradstop_to_pixbuf_ref(SPStop     *gr, int width, int height);
+Cairo::RefPtr<Cairo::ImageSurface> sp_gradient_to_surface(SPGradient* gr, int width, int height);
+Cairo::RefPtr<Cairo::ImageSurface> sp_gradstop_to_surface(SPStop *stop, int width, int height);
 
 #endif // SEEN_SP_GRADIENT_IMAGE_H
 

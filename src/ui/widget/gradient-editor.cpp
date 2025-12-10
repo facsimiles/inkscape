@@ -36,23 +36,32 @@ namespace Inkscape::UI::Widget {
 using namespace Inkscape::IO;
 using Inkscape::UI::Widget::ColorNotebook;
 
-Glib::ustring get_repeat_icon(SPGradientSpread mode) {
-    const char* ico = "";
-    switch (mode) {
-        case SP_GRADIENT_SPREAD_PAD:
-            ico = "gradient-spread-pad";
-            break;
-        case SP_GRADIENT_SPREAD_REPEAT:
-            ico = "gradient-spread-repeat";
-            break;
-        case SP_GRADIENT_SPREAD_REFLECT:
-            ico = "gradient-spread-reflect";
-            break;
-        default:
-            g_warning("Missing case in %s\n", __func__);
-            break;
-    }
-    return ico;
+// const char* get_spread_repeat_icon(SPGradientSpread mode) {
+//     const char* ico = "";
+//     switch (mode) {
+//         case SP_GRADIENT_SPREAD_PAD:
+//             ico = "gradient-spread-pad";
+//             break;
+//         case SP_GRADIENT_SPREAD_REPEAT:
+//             ico = "gradient-spread-repeat";
+//             break;
+//         case SP_GRADIENT_SPREAD_REFLECT:
+//             ico = "gradient-spread-reflect";
+//             break;
+//         default:
+//             g_warning("Missing case in %s\n", __func__);
+//             break;
+//     }
+//     return ico;
+// }
+
+const std::array<std::tuple<SPGradientSpread, const char*, const char*>, 3>& sp_get_spread_repeats() {
+    static auto const repeats = std::to_array({std::tuple
+        {SP_GRADIENT_SPREAD_PAD    , C_("Gradient repeat type", "None"),      "gradient-spread-pad"},
+        {SP_GRADIENT_SPREAD_REPEAT , C_("Gradient repeat type", "Direct"),    "gradient-spread-repeat"},
+        {SP_GRADIENT_SPREAD_REFLECT, C_("Gradient repeat type", "Reflected"), "gradient-spread-reflect"},
+    });
+    return repeats;
 }
 
 GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_type_selector, bool show_colorwheel_expander):
@@ -137,13 +146,7 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_t
     });
 
     // connect gradient repeat modes menu
-    static auto const repeats = std::to_array({std::pair
-        {SP_GRADIENT_SPREAD_PAD    , _("None"     )},
-        {SP_GRADIENT_SPREAD_REPEAT , _("Direct"   )},
-        {SP_GRADIENT_SPREAD_REFLECT, _("Reflected")}
-    });
-    for (auto [mode, text] : repeats) {
-        auto const icon = get_repeat_icon(mode);
+    for (auto [mode, text, icon] : sp_get_spread_repeats()) {
         auto const item = Gtk::make_managed<UI::Widget::PopoverMenuItem>(text, false, icon);
         item->signal_activate().connect([this, mode]{ set_repeat_mode(mode); });
         _repeat_popover->append(*item);
@@ -345,7 +348,7 @@ void GradientEditor::set_repeat_mode(SPGradientSpread mode) {
 }
 
 void GradientEditor::set_repeat_icon(SPGradientSpread mode) {
-    auto icon = get_repeat_icon(mode);
+    auto icon = std::get<2>(sp_get_spread_repeats()[mode]);
     _repeat_mode_btn.set_icon_name(icon);
 }
 

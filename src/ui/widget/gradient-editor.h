@@ -117,6 +117,9 @@ private:
     Gtk::MenuButton& _repeat_mode_btn;
 };
 
+// SPGradientSpread modes, names and icons
+const std::array<std::tuple<SPGradientSpread, const char*, const char*>, 3>& sp_get_spread_repeats();
+
 } // namespace Inkscape::UI::Widget
 
 #endif // SEEN_GRADIENT_EDITOR_H
