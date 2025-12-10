@@ -1190,7 +1190,7 @@ InkscapeApplication::on_activate()
         debug_out << "  After _start_screen->run()" << std::endl;
         document = _start_screen->get_document();
         debug_out << "  Before deleting _start_Screen" << std::endl;
-        _start_screen.reset();
+        startup_close();
         debug_out << "  After deleting _start_Screen" << std::endl;
         if (!document) {
             return; // Start screen forcefully closed.
@@ -1199,7 +1199,7 @@ InkscapeApplication::on_activate()
         // Create a blank document from template
         document = document_new();
         debug_out << "  Before deleting _start_Screen (document_new)" << std::endl;
-        _start_screen.reset(); // Must reset in case splash screen opened.
+        startup_close(); // Must reset in case splash screen opened.
         debug_out << "  After deleting _start_Screen (document_new)" << std::endl;
     }
 
@@ -1222,7 +1222,11 @@ void
 InkscapeApplication::startup_close()
 {
     debug_out << "InkscapeApplication::startup_close(): Entrance" << std::endl;
+#ifdef __APPLE__
+    _start_screen->hide();
+#else
     _start_screen.reset();
+#endif
     debug_out << "InkscapeApplication::startup_close(): Exit" << std::endl;
 }
 
