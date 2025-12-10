@@ -19,7 +19,7 @@ from lxml import etree
 
 UI_PATH = os.path.join(os.path.dirname(__file__), '..', 'share', 'ui')
 
-IGNORE_TOOLBARS = ['toolbar-commands.ui', 'toolbar-tool-prefs.ui']
+IGNORE_TOOLBARS = ['toolbar-tool-prefs.ui']
 
 ERRORS = {
     'parse': ("Parser Error", "Found something unusual in the XML"),
