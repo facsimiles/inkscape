@@ -24,6 +24,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/ustring.h>
 
+#include "inkscape-application.h"
+
 #include "db.h"
 #include "internal/emf-inout.h"
 #include "internal/emf-print.h"
@@ -155,6 +157,9 @@ static std::vector<std::string> shared_extensions;
 void
 init()
 {
+    auto debug_out = &InkscapeApplication::instance()->debug_out;
+    *debug_out << "Inkscape::Extension::init: Entrance" << std::endl;
+
     /* TODO: Change to Internal */
     Internal::Svg::init();
     Internal::Svgz::init();
@@ -267,6 +272,7 @@ init()
                 SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE
                 // Inkscape::Extension::db.get_output_list()
         );
+    *debug_out << "Inkscape::Extension::init: Exit" << std::endl;
 }
 
 // C++23: Just use std::ranges::contains().

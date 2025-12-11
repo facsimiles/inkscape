@@ -161,6 +161,9 @@ StartScreen::StartScreen()
     , close_btn      (get_widget<Gtk::Button>  (build_splash, "close_window"))
     , messages       (get_widget<Gtk::Label>   (build_splash, "messages"))
 {
+    auto debug_out = &InkscapeApplication::instance()->debug_out;
+    *debug_out << "StartScreen::StartScreen: Entrance" << std::endl;
+
     set_name("start-screen-window");
     set_title(Inkscape::inkscape_version());
     set_can_focus(true);
@@ -172,10 +175,14 @@ StartScreen::StartScreen()
     // Move banner to dialog window
     set_titlebar(banners);
     get_content_area()->add(messages);
+    *debug_out << "StartScreen::StartScreen: Exit" << std::endl;
 }
 
 void StartScreen::show_now()
 {
+    auto debug_out = &InkscapeApplication::instance()->debug_out;
+    *debug_out << "StartScreen::show_now: Entrance" << std::endl;
+
     set_resizable(false);
 
     // Show the main banner when already welcomed for the first time
@@ -183,9 +190,11 @@ void StartScreen::show_now()
         banner_switch(2);
     }
 
+    *debug_out << "StartScreen::show_now(): Here A" << std::endl;
     show_all_children();
     show();
     close_btn.hide();
+    *debug_out << "StartScreen::show_now(): Here B" << std::endl;
 
     property_resizable() = false;
     set_visible(true);
@@ -193,12 +202,22 @@ void StartScreen::show_now()
 
     // The main loop won't get called until the main window is initialized,
     // so we need to iterate the loop a few times here to show the splash screen.
-    while (Gtk::Main::events_pending())
+    *debug_out << "StartScreen::show_now(): before loop" << std::endl;
+    int count = 0;
+    while (Gtk::Main::events_pending()) {
+        count++;
         Gtk::Main::iteration(false);
+    }
+    *debug_out << "StartScreen::show_now(): after loop: number of loops: " << count << std::endl;
+
+    *debug_out << "StartScreen::show_now(): Exit" << std::endl;
 }
 
 void StartScreen::setup_welcome()
 {
+    auto debug_out = &InkscapeApplication::instance()->debug_out;
+    *debug_out << "StartScreen::setup_welcome: Entrance" << std::endl;
+
     _welcome = true;
 
     auto prefs = Inkscape::Preferences::get();
@@ -293,10 +312,14 @@ void StartScreen::setup_welcome()
 #endif
 
     show();
+    *debug_out << "StartScreen::setup_welcome: Exit" << std::endl;
 }
 
 StartScreen::~StartScreen()
 {
+    auto debug_out = &InkscapeApplication::instance()->debug_out;
+    *debug_out << "StartScreen::~StartScreen: DESTRUCTOR: Entrance" << std::endl;
+
     // These are "owned" by builder... don't delete them!
     banners.get_parent()->remove(banners);
     messages.get_parent()->remove(messages);
@@ -305,6 +328,7 @@ StartScreen::~StartScreen()
         auto tabs = &get_widget<Gtk::Notebook>(build_welcome, "tabs");
         tabs->get_parent()->remove(*tabs);
     }
+    *debug_out << "StartScreen::~StartScreen: DESTRUCTOR: Exit" << std::endl;
 }
 
 /**

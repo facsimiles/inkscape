@@ -563,6 +563,11 @@ Application::add_desktop (SPDesktop * desktop)
 void
 Application::remove_desktop (SPDesktop * desktop)
 {
+    std::cout << "Application::remove_desktop: Entrance" << std::endl;
+    if (desktop == nullptr) {
+        std::cout << "  desktop is null" << std::endl;
+    }
+
     g_return_if_fail (desktop != nullptr);
 
     if (std::find (_desktops->begin(), _desktops->end(), desktop) == _desktops->end() ) {

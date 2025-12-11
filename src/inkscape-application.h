@@ -10,6 +10,7 @@
 #ifndef INKSCAPE_APPLICATION_H
 #define INKSCAPE_APPLICATION_H
 
+#include <fstream>  // TEMP
 #include <map>
 #include <string>
 #include <utility>
@@ -132,6 +133,7 @@ public:
 
     /******* Debug ********/
     void                  dump();
+    std::ofstream         debug_out;
 
     // These are needed to cast Glib::RefPtr<Gtk::Application> to Glib::RefPtr<InkscapeApplication>,
     // Presumably, Gtk/Gio::Application takes care of ref counting in ConcreteInkscapeApplication
