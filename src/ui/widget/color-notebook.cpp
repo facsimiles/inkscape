@@ -30,7 +30,7 @@
 #include "ui/util.h"
 #include "ui/widget/color-entry.h"
 #include "ui/widget/color-page.h"
-#include "ui/widget/icon-combobox.h"
+#include "ui/widget/generic/icon-combobox.h"
 
 static constexpr int XPAD = 2;
 static constexpr int YPAD = 1;

@@ -18,7 +18,7 @@
 #include "color-page.h"
 #include "color-wheel.h"
 #include "desktop.h"
-#include "icon-combobox.h"
+#include "generic/icon-combobox.h"
 #include "generic/spin-button.h"
 #include "inkscape.h"
 #include "colors/color.h"

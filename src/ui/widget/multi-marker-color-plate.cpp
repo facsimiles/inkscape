@@ -13,7 +13,7 @@
 #include "ui/widget/color-page.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/color-slider.h"
-#include "ui/widget/icon-combobox.h"
+#include "ui/widget/generic/icon-combobox.h"
 #include "ui/widget/generic/spin-button.h"
 
 namespace Inkscape::UI::Widget {

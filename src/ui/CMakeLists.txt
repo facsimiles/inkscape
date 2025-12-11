@@ -245,7 +245,7 @@ target_sources(inkscape_base PRIVATE
 	widget/gradient-vector-selector.cpp
 	widget/gradient-with-stops.cpp
         widget/gtk-registry.cpp
-	widget/icon-combobox.cpp
+        widget/generic/icon-combobox.cpp
 	widget/handle-preview.cpp
 	widget/image-properties.cpp
 	widget/imagetoggler.cpp
@@ -577,7 +577,7 @@ target_sources(inkscape_base PRIVATE
 	widget/gradient-vector-selector.h
 	widget/gradient-with-stops.h
         widget/gtk-registry.h
-	widget/icon-combobox.h
+        widget/generic/icon-combobox.h
 	widget/handle-preview.h
 	widget/image-properties.h
 	widget/imagetoggler.h

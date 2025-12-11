@@ -18,7 +18,7 @@
 #include "colors/manager.h"
 #include "ui/widget/color-page.h"
 #include "ui/widget/color-preview.h"
-#include "ui/widget/icon-combobox.h"
+#include "ui/widget/generic/icon-combobox.h"
 #include "ui/widget/ink-color-wheel.h"
 #include "recolor-art.h"
 

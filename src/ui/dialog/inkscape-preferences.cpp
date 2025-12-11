@@ -41,7 +41,7 @@
 #include <2geom/path-sink.h>
 
 #include "display/control/ctrl-handle-manager.h"
-#include "ui/widget/icon-combobox.h"
+#include "ui/widget/generic/icon-combobox.h"
 #include "ui/widget/handle-preview.h"
 
 #if WITH_GSOURCEVIEW

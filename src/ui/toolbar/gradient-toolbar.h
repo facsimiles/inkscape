@@ -17,7 +17,7 @@
 
 #include "toolbar.h"
 #include "ui/operation-blocker.h"
-#include "ui/widget/icon-combobox.h"
+#include "ui/widget/generic/icon-combobox.h"
 
 namespace Gtk {
 class SingleSelection;
