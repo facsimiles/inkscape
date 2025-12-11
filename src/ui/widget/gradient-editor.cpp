@@ -36,25 +36,6 @@ namespace Inkscape::UI::Widget {
 using namespace Inkscape::IO;
 using Inkscape::UI::Widget::ColorNotebook;
 
-// const char* get_spread_repeat_icon(SPGradientSpread mode) {
-//     const char* ico = "";
-//     switch (mode) {
-//         case SP_GRADIENT_SPREAD_PAD:
-//             ico = "gradient-spread-pad";
-//             break;
-//         case SP_GRADIENT_SPREAD_REPEAT:
-//             ico = "gradient-spread-repeat";
-//             break;
-//         case SP_GRADIENT_SPREAD_REFLECT:
-//             ico = "gradient-spread-reflect";
-//             break;
-//         default:
-//             g_warning("Missing case in %s\n", __func__);
-//             break;
-//     }
-//     return ico;
-// }
-
 const std::array<std::tuple<SPGradientSpread, const char*, const char*>, 3>& sp_get_spread_repeats() {
     static auto const repeats = std::to_array({std::tuple
         {SP_GRADIENT_SPREAD_PAD    , C_("Gradient repeat type", "None"),      "gradient-spread-pad"},

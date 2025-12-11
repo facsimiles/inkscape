@@ -109,13 +109,9 @@ sp_gradient_to_pixbuf_ref (SPGradient *gr, int width, int height)
 }
 
 Cairo::RefPtr<Cairo::ImageSurface> sp_gradient_to_surface(SPGradient* gr, int width, int height) {
-    // cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, height);
     auto ctx = Cairo::Context::create(surface);
-    // cairo_t *ct = cairo_create(s);
     sp_gradient_draw(gr, width, height, ctx->cobj());
-    // cairo_destroy(ct);
-    // cairo_surface_flush(s);
     surface->flush();
 
     return surface;
@@ -125,8 +121,7 @@ Cairo::RefPtr<Cairo::ImageSurface> sp_gradstop_to_surface(SPStop *stop, int widt
 {
     auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, height);
     auto ctx = Cairo::Context::create(surface);
-    // cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-    cairo_t *ct = ctx->cobj(); // cairo_create(s);
+    cairo_t *ct = ctx->cobj();
 
     /* Checkerboard background */
     auto check = ink_cairo_pattern_create_checkerboard();
@@ -148,8 +143,6 @@ Cairo::RefPtr<Cairo::ImageSurface> sp_gradstop_to_surface(SPStop *stop, int widt
         cairo_fill(ct);
     }
 
-    // cairo_destroy(ct);
-    // cairo_surface_flush(s);
     surface->flush();
 
     return surface;
