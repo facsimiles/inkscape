@@ -153,7 +153,7 @@ inkscape:macos:
     INK_BUILD: $CI_PIPELINE_IID
     WRK_DIR: /Users/Shared/work
     # ICM = inkscape ci macos
-    ICM_REPO_REF: a2b53fc7
+    ICM_REPO_REF: 21f3e2d4
     ICM_REPO_URL: https://gitlab.com/inkscape/infra/inkscape-ci-macos
   before_script:
     - |
