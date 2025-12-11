@@ -55,6 +55,17 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
 
 ControlPoint::~ControlPoint()
 {
+    // MUST release the static global lock.
+    // If this point is being deleted (e.g. by LPE Update) 
+    // while it holds the mouse grab,
+    // Otherwise, Inkscape thinks we are still dragging.
+    if (_event_grab) {
+        _canvas_item_ctrl->ungrab();
+        
+        _event_grab = false;
+        _drag_initiated = false;
+    }
+
     // avoid storing invalid points in mouseovered_point
     if (this == mouseovered_point) {
         _clearMouseover();
