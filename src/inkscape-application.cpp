@@ -1200,6 +1200,7 @@ InkscapeApplication::on_activate()
         }
     } else {
         // Create a blank document from template
+        debug_out << "  Did not request welcome screen: opening new document from template." << std::endl;
         document = document_new();
         debug_out << "  Before deleting _start_Screen (document_new)" << std::endl;
         startup_close(); // Must reset in case splash screen opened.
@@ -1243,6 +1244,20 @@ void
 InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
     debug_out << "InkscapeApplication::on_open: Entrance: files: " << files.size() << " hint: " << hint << std::endl;
+#ifdef __APPLE__
+    // See #5740
+    if (gtk_app()) {
+        debug_out << "  APPLE: Have app" << std::endl;
+        for (auto window : gtk_app()->get_windows()) {
+            debug_out << "  APPLE: some window" << std::endl;
+            if (dynamic_cast<InkscapeWindow*>(window)) {
+                // Window already opened in on_activate().
+                debug_out << "InkscapeApplication::on_open(): InkscapeWindow already open" << std::endl;
+            }
+        }
+    }
+    debug_out << "InkscapeApplication::on_activate(): After APPLE window check" << std::endl;
+#endif
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
     if(!_pages.empty())
