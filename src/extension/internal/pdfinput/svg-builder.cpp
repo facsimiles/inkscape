@@ -30,7 +30,10 @@
 #include <poppler/Page.h>
 #include <poppler/Stream.h>
 
+#ifdef _WIN32
 #undef near
+#undef DOUBLE_CLICK
+#endif
 
 #include "document.h"
 #include "pdf-parser.h"

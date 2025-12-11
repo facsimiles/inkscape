@@ -18,8 +18,11 @@
 #include <unistd.h>
 
 #include <boost/stacktrace.hpp>
+#ifdef _WIN32
 #undef near
 #undef IGNORE
+#undef DOUBLE_CLICK
+#endif
 #include <glibmm/regex.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>

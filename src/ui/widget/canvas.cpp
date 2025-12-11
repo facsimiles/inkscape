@@ -17,6 +17,9 @@
 #include <thread>
 #include <boost/asio/thread_pool.hpp>
 #include <boost/asio/post.hpp>
+#ifdef _WIN32
+#undef DOUBLE_CLICK
+#endif
 #include <gtkmm/eventcontrollerfocus.h>
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
