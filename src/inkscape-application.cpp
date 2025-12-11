@@ -1196,7 +1196,8 @@ InkscapeApplication::on_activate()
         startup_close();
         debug_out << "  After deleting _start_Screen" << std::endl;
         if (!document) {
-            return; // Start screen forcefully closed.
+            debug_out << "InkscapeApplication::on_activate(): No document, returning early." << std::endl;
+            return;
         }
     } else {
         // Create a blank document from template
@@ -1209,6 +1210,7 @@ InkscapeApplication::on_activate()
 
     if (!document) {
         std::cerr << "ConcreteInkscapeApplication::on_activate: failed to create document!" << std::endl;
+        debug_out << "ConcreteInkscapeApplication::on_activate: failed to create document!" << std::endl;
         return;
     }
 
@@ -1256,7 +1258,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
             }
         }
     }
-    debug_out << "InkscapeApplication::on_activate(): After APPLE window check" << std::endl;
+    debug_out << "InkscapeApplication::on_open(): After APPLE window check" << std::endl;
 #endif
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
