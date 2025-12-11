@@ -33,7 +33,7 @@ namespace UI {
 class SimplePrefPusher;
 namespace Tools { class MeshTool; }
 namespace Widget {
-class ComboToolItem;
+class DropDownList;
 class SpinButton;
 } // namespace Widget
 } // namespace UI
@@ -56,7 +56,7 @@ private:
 
     std::vector<Gtk::ToggleButton *> _new_type_buttons;
     std::vector<Gtk::ToggleButton *> _new_fillstroke_buttons;
-    UI::Widget::ComboToolItem *_select_type_item;
+    UI::Widget::DropDownList& _select_type_item;
 
     Gtk::ToggleButton *_edit_fill_btn;
     Gtk::ToggleButton *_edit_stroke_btn;

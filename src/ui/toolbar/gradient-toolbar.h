@@ -37,7 +37,6 @@ namespace UI {
 namespace Tools { class ToolBase; }
 namespace Widget {
 class DropDownList;
-class ComboToolItem;
 class SpinButton;
 } // namespace Widget
 } // namespace UI

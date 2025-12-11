@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="_col_adj">
     <property name="lower">1</property>
     <property name="upper">20</property>
@@ -112,8 +112,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkToggleButton" id="_edit_fill_btn">
@@ -125,7 +124,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">object-fill</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -139,14 +138,14 @@
         <property name="has-frame">False</property>
         <property name="icon-name">object-stroke</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
     <child>
       <object class="GtkSeparator">
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -160,7 +159,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">show-node-handles</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -174,7 +173,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">node-segment-line</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -188,7 +187,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">node-segment-curve</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -202,7 +201,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">color-picker</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -216,14 +215,14 @@
         <property name="has-frame">False</property>
         <property name="icon-name">mesh-gradient-fit</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
     <child>
       <object class="GtkSeparator">
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -237,20 +236,31 @@
         <property name="has-frame">False</property>
         <property name="icon-name">dialog-warning</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
     <child>
       <object class="GtkBox" id="select_type_box">
+        <property name="spacing">2</property>
         <property name="margin-start">5</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Smoothing</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="type-selector">
+            <property name="tooltip-text" translatable="yes" comments="TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch">Coons: no smoothing. Bicubic: smoothing across patch boundaries.</property>
+          </object>
+        </child>
       </object>
     </child>
     <style>
-      <class name="inkscape-toolbar"/>
+      <class name="inkscape-toolbar"></class>
     </style>
   </object>
 </interface>

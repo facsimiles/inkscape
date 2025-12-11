@@ -38,7 +38,6 @@
 #include "ui/icon-names.h"
 #include "ui/tools/gradient-tool.h"
 #include "ui/util.h"
-#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/drop-down-list.h"
 #include "ui/widget/gradient-editor.h"
 #include "ui/widget/gradient-image.h"

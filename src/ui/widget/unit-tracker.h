@@ -36,8 +36,6 @@ class ListStore;
 
 namespace Inkscape::UI::Widget {
 
-class ComboToolItem;
-
 class UnitTracker {
 public:
     UnitTracker(UnitType unit_type);

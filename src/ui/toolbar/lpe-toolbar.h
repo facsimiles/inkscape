@@ -44,8 +44,8 @@ class Selection;
 namespace Tools { class ToolBase; }
 namespace UI {
 namespace Widget {
+class DropDownList;
 class UnitMenu;
-class ComboToolItem;
 class UnitTracker;
 } // namespace Widget
 } // namespace UI
@@ -74,7 +74,7 @@ private:
     Gtk::ToggleButton &_bbox_from_selection_btn;
     Gtk::ToggleButton &_measuring_btn;
     Gtk::ToggleButton &_open_lpe_dialog_btn;
-    UI::Widget::ComboToolItem *_line_segment_combo;
+    UI::Widget::DropDownList& _line_segment_combo;
     UI::Widget::UnitMenu*_units_item;
 
     OperationBlocker _blocker;

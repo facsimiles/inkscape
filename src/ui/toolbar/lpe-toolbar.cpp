@@ -34,7 +34,6 @@
 #include "ui/dialog/dialog-container.h"
 #include "ui/tools/lpe-tool.h"
 #include "ui/util.h"
-#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -57,24 +56,16 @@ LPEToolbar::LPEToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     , _measuring_btn(get_widget<Gtk::ToggleButton>(builder, "_measuring_btn"))
     , _open_lpe_dialog_btn(get_widget<Gtk::ToggleButton>(builder, "_open_lpe_dialog_btn"))
     , _tracker{std::make_unique<UnitTracker>(Util::UNIT_TYPE_LINEAR)}
+    , _line_segment_combo(get_derived_widget<UI::Widget::DropDownList>(builder, "line-type"))
 {
     auto prefs = Preferences::get();
 
     // Combo box to choose line segment type
-    UI::Widget::ComboToolItemColumns columns;
-    auto store = Gtk::ListStore::create(columns);
-
     for (auto item : {_("Closed"), _("Open start"), _("Open end"), _("Open both")}) {
-        auto row = *store->append();
-        row[columns.col_label    ] = item;
-        row[columns.col_sensitive] = true;
+        _line_segment_combo.append(item);
     }
-
-    _line_segment_combo = Gtk::manage(UI::Widget::ComboToolItem::create(_("Line Type"), _("Choose a line segment type"), "Not Used", store));
-    _line_segment_combo->use_group_label(false);
-    _line_segment_combo->set_active(0);
-    _line_segment_combo->signal_changed().connect(sigc::mem_fun(*this, &LPEToolbar::change_line_segment_type));
-    get_widget<Gtk::Box>(builder, "line_segment_box").append(*_line_segment_combo);
+    _line_segment_combo.set_selected(0);
+    _line_segment_combo.signal_changed().connect([this] { change_line_segment_type(_line_segment_combo.get_selected()); });
 
     // Configure mode buttons
     int btn_index = 0;
@@ -294,18 +285,18 @@ void LPEToolbar::sel_changed(Selection *selection)
             auto lpels = static_cast<LPELineSegment *>(lpe);
             _currentlpe = lpe;
             _currentlpeitem = lpeitem;
-            _line_segment_combo->set_sensitive(true);
-            _line_segment_combo->set_active( lpels->end_type.get_value() );
+            _line_segment_combo.set_sensitive();
+            _line_segment_combo.set_selected(lpels->end_type.get_value());
         } else {
             _currentlpe = nullptr;
             _currentlpeitem = nullptr;
-            _line_segment_combo->set_sensitive(false);
+            _line_segment_combo.set_sensitive(false);
         }
 
     } else {
         _currentlpe = nullptr;
         _currentlpeitem = nullptr;
-        _line_segment_combo->set_sensitive(false);
+        _line_segment_combo.set_sensitive(false);
     }
 }
 

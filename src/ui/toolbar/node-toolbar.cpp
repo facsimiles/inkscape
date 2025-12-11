@@ -40,7 +40,6 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
-#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 

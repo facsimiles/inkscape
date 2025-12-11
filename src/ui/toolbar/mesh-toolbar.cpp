@@ -38,7 +38,7 @@
 #include "ui/simple-pref-pusher.h"
 #include "ui/tools/mesh-tool.h"
 #include "ui/util.h"
-#include "ui/widget/combo-tool-item.h"
+#include "ui/widget/drop-down-list.h"
 #include "ui/widget/spinbutton.h"
 
 using Inkscape::DocumentUndo;
@@ -126,31 +126,15 @@ MeshToolbar::MeshToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     , _edit_fill_btn{&get_widget<Gtk::ToggleButton>(builder, "_edit_fill_btn")}
     , _edit_stroke_btn{&get_widget<Gtk::ToggleButton>(builder, "_edit_stroke_btn")}
     , _show_handles_btn{&get_widget<Gtk::ToggleButton>(builder, "show_handles_btn")}
+    , _select_type_item(get_derived_widget<UI::Widget::DropDownList>(builder, "type-selector"))
 {
     auto prefs = Preferences::get();
 
     // Configure the types combo box.
-    UI::Widget::ComboToolItemColumns columns;
-    auto store = Gtk::ListStore::create(columns);
-    Gtk::TreeModel::Row row;
-
-    row = *store->append();
-    row[columns.col_label] = C_("Type", "Coons");
-    row[columns.col_sensitive] = true;
-
-    row = *store->append();
-    row[columns.col_label] = _("Bicubic");
-    row[columns.col_sensitive] = true;
-
-    _select_type_item = Gtk::manage(UI::Widget::ComboToolItem::create(
-        _("Smoothing"),
-        // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
-        _("Coons: no smoothing. Bicubic: smoothing across patch boundaries."), "Not Used", store));
-    _select_type_item->use_group_label(true);
-    _select_type_item->set_active(0);
-
-    _select_type_item->signal_changed().connect(sigc::mem_fun(*this, &MeshToolbar::type_changed));
-    get_widget<Gtk::Box>(builder, "select_type_box").append(*_select_type_item);
+    _select_type_item.append(C_("Type", "Coons"));
+    _select_type_item.append(_("Bicubic"));
+    _select_type_item.set_selected(0);
+    _select_type_item.signal_changed().connect([this] { type_changed(_select_type_item.get_selected()); });
 
     // Setup the spin buttons.
     setup_derived_spin_button(_row_item, "mesh_rows", 1, &MeshToolbar::row_changed);
@@ -356,11 +340,9 @@ void MeshToolbar::selection_changed()
         bool ms_type_multi = false;
         ms_read_selection(selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi);
 
-        if (_select_type_item) {
-            _select_type_item->set_sensitive(!ms_type_multi);
-            auto guard = _blocker.block();
-            _select_type_item->set_active(ms_type);
-        }
+        _select_type_item.set_sensitive(!ms_type_multi);
+        auto guard = _blocker.block();
+        _select_type_item.set_selected(ms_type);
     }
 }
 

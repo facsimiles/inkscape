@@ -42,7 +42,6 @@ namespace Inkscape {
 namespace UI::Widget {
 class DropDownList;
 class SpinButton;
-class ComboToolItem;
 } // namespace UI::Widget
 namespace XML { class Node; }
 } // namespace Inkscape

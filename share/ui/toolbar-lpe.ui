@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.0"></requires>
   <object class="GtkBox" id="lpe-toolbar">
     <property name="halign">start</property>
     <property name="valign">center</property>
@@ -99,8 +99,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkToggleButton" id="_show_bbox_btn">
@@ -125,17 +124,20 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkBox" id="line_segment_box">
         <property name="tooltip-text" translatable="yes">Choose a line segment type</property>
+        <child>
+          <object class="GtkDropDown" id="line-type">
+            <property name="tooltip-text" translatable="yes">Choose a line segment type</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
-      <object class="GtkSeparator">
-      </object>
+      <object class="GtkSeparator"></object>
     </child>
     <child>
       <object class="GtkToggleButton" id="_measuring_btn">
@@ -147,7 +149,7 @@
         <property name="has-frame">False</property>
         <property name="icon-name">draw-geometry-show-measuring-info</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -155,14 +157,14 @@
       <object class="GtkBox" id="units_box">
         <property name="tooltip-text" translatable="yes">Scatter randomly the corners and angles</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
     <child>
       <object class="GtkSeparator">
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
@@ -176,12 +178,12 @@
         <property name="has-frame">False</property>
         <property name="icon-name">dialog-geometry</property>
         <style>
-            <class name="priority1"/>
+          <class name="priority1"></class>
         </style>
       </object>
     </child>
     <style>
-      <class name="inkscape-toolbar"/>
+      <class name="inkscape-toolbar"></class>
     </style>
   </object>
 </interface>

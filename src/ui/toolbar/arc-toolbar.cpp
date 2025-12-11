@@ -40,7 +40,6 @@
 #include "selection.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
-#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 

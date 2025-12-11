@@ -34,7 +34,6 @@ namespace Gtk { class Builder; }
 
 namespace Inkscape::UI::Widget {
 class DropDownList;
-class ComboToolItem;
 class UnitTracker;
 class SpinButton;
 } // namespace Inkscape::UI::Widget

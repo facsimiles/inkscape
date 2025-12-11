@@ -44,7 +44,6 @@
 #include "ui/builder-utils.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/util.h"
-#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spinbutton.h"
 
 namespace Inkscape::UI::Toolbar {
