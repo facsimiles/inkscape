@@ -11,6 +11,7 @@
  */
 
 #include <iomanip>
+#include <span>
 
 #include "Layout-TNG.h"
 #include "style.h"
@@ -280,6 +281,8 @@ class Layout::Calculator
     {
         return para.char_attributes[span_pos.iter_span->char_index_in_para + span_pos.char_index];
     }
+
+    void _estimateLigatureSubcomponents(std::span<Character> characters, Glyph &glyph, int positions, float direction);
 
 #ifdef DEBUG_LAYOUT_TNG_COMPUTE
     static void dumpPangoItemsOut(ParagraphInfo *para);
@@ -1117,6 +1120,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     }
 
                     double advance_width = new_glyph.advance;
+                    int cursor_positions = 0; // number of selectable positions within glyph
+                    auto first_char_pos = _flow._characters.size();
                     while (char_byte < end_byte) {
 
                         /* Hack to survive ligatures:  in log_cluster keep the number of available chars >= number of glyphs remaining.
@@ -1135,6 +1140,9 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         new_character.char_attributes = para.char_attributes[unbroken_span.char_index_in_para + char_index_in_unbroken_span];
                         new_character.in_glyph = (hidden ? -1 : _flow._glyphs.size() - 1);
                         _flow._characters.push_back(new_character);
+                        if (new_character.char_attributes.is_cursor_position) {
+                            cursor_positions++;
+                        }
 
                         // Letter/word spacing and justification
                         if (new_character.char_attributes.is_expandable_space)
@@ -1149,6 +1157,10 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         char_byte = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
                         log_cluster_size_chars--;
                     }
+                    _estimateLigatureSubcomponents(
+                        std::span(_flow._characters.begin() + first_char_pos, _flow._characters.end()),
+                        _flow._glyphs.back(), cursor_positions,
+                        direction_sign * (new_span.direction != para.direction ? -1 : 1));
 
                     // Update x position variables
                     advance_width *= direction_sign;
@@ -2058,6 +2070,33 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
 
     TRACE(("    end _buildChunksInScanRun: chunks: %lu\n", chunk_info->size()));
     return true;
+}
+
+/**
+ * Estimate subcomponent positions within ligatures
+ *
+ * Some fonts use ligatures like ff ffi fi ij for finetuning the look of certain character sequences. In such cases
+ * it should still be possible select individual letters even though they are merged into single glyph.
+ *
+ * For various non latin based script the result is less consistent. Some of them stack the symbols in every possible
+ * direction. CJK ones tend to stack in groups of 4-6. "is_cursor_position" helps filter out good chunk of cases
+ * where splitting ligature doesn't make sense.
+ */
+void Layout::Calculator::_estimateLigatureSubcomponents(std::span<Character> characters, Glyph &glyph, int positions,
+                                                        float direction)
+{
+    if (positions <= 1) {
+        return;
+    }
+    int index = 0;
+    for (auto &character : characters) {
+        if (character.char_attributes.is_cursor_position) {
+            if (index > 0) {
+                character.x += direction * (glyph.advance * index) / positions;
+            }
+            index++;
+        }
+    }
 }
 
 #ifdef DEBUG_LAYOUT_TNG_COMPUTE

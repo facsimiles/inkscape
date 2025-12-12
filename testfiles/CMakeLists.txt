@@ -55,6 +55,10 @@ if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     )
 endif()
 
+set(LIBNRTYPE_TESTS
+    libnrtype/Layout-TNG-Compute
+    )
+
 # Integration tests (linking all of Inkscape)
 set(TEST_SOURCES
     actions-svg-processing
@@ -120,6 +124,7 @@ set(TEST_SOURCES
     object-colors-test
     multi-marker-color-wheel-test
     ${LPE_TESTS_64bit}
+    ${LIBNRTYPE_TESTS}
     )
 
 if(WITH_CAPYPDF)
@@ -142,6 +147,11 @@ foreach(test_source ${TEST_SOURCES})
     set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
     add_dependencies(tests ${testname})
 endforeach()
+foreach(test_source ${LIBNRTYPE_TESTS})
+    string(REPLACE "/" "_" testname "test_${test_source}")
+    set_property(TEST ${testname} APPEND PROPERTY ENVIRONMENT "INKSCAPE_FONTCONFIG=${CMAKE_CURRENT_SOURCE_DIR}/rendering_tests/fonts/isolated.conf")
+endforeach()
+
 include(${CMAKE_SOURCE_DIR}/CMakeScripts/UnitTest.cmake)
 
 ### Unit tests
