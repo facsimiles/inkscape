@@ -1050,7 +1050,17 @@ void SelectTool::_duplicate_drag(Geom::Point const &p)
 bool SelectTool::_duplicate_drag_state(unsigned int state) const
 {
     auto mod = Modifier::get(Modifiers::Type::SELECT_DUPLICATE);
-    return mod && mod->active(state);
+    if (!mod) {
+        return false;
+    }
+
+    // Ignore the modifier when it's effectively unset (no required keys).
+    auto mask = mod->get_and_mask();
+    if (mask == Modifiers::ALWAYS || mask == Modifiers::NEVER) {
+        return false;
+    }
+
+    return mod->active(state);
 }
 
 void SelectTool::_duplicate_drag_reset()
