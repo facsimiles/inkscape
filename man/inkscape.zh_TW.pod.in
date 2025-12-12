@@ -59,6 +59,8 @@ C<inkscape [選項] [檔名_1 檔名_2 ...]>
     -j, --export-id-only
     -l, --export-plain-svg
         --export-png-color-mode=COLORMODE
+        --export-png-compression=LEVEL
+        --export-png-antialias=LEVEL
         --export-png-use-dithering=BOOLEAN
         --export-ps-level=LEVEL
         --export-pdf-version=VERSION
@@ -242,7 +244,15 @@ For PNG, PS, EPS, PDF and plain SVG export, only export the object whose id is g
 
 =item B<--export-png-color-mode>=I<COLORMODE>
 
-Sets the color mode (bit depth and color type) for exported bitmaps (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)
+Set the color mode (bit depth and color type) for exported bitmaps (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)
+
+=item B<--export-png-compression>=I<LEVEL>
+
+Set the compression level for PNG export (0 to 9); default is 6.
+
+=item B<--export-png-antialias>=I<LEVEL>
+
+Set the antialiasing level for PNG export (0 to 3); default is 2.
 
 =item B<--export-png-use-dithering>=I<false|true>
 
