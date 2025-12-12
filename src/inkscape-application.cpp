@@ -814,6 +814,9 @@ InkscapeApplication::InkscapeApplication()
 
 InkscapeApplication::~InkscapeApplication()
 {
+#ifdef __APPLE__
+    _start_screen.reset(); // Start screen may be just hidden. See #5740
+#endif
     _instance = nullptr;
     Inkscape::Util::StaticsBin::get().destroy();
 }
@@ -846,8 +849,6 @@ InkscapeApplication::create_window(SPDocument *document, bool replace)
     }
     window->set_visible(true);
 
-    startup_close();
-
     return window;
 }
 
@@ -869,7 +870,6 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
     bool cancelled = false;
 
     if (file) {
-        startup_close();
         document = document_open(file, &cancelled);
         if (document) {
             // Remember document so much that we'll add it to recent documents
@@ -1031,6 +1031,12 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
 void
 InkscapeApplication::on_startup()
 {
+    // Deprecated...
+    Inkscape::Application::create(_with_gui);
+
+    // Extensions: Must be done before _start_screen->show_now(). See #5740
+    Inkscape::Extension::init();
+
     // Add the start/splash screen to the app as soon as possible
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app()) {
         // Migrate settings first; see ui/dialog/startup.cpp
@@ -1038,8 +1044,8 @@ InkscapeApplication::on_startup()
         auto prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/options/boot/showsplash", true)) {
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+            gtk_app()->add_window(*_start_screen); // Must be before _start_screen->show_now(). See #5740
             _start_screen->show_now();
-            gtk_app()->add_window(*_start_screen);
         }
     }
 
@@ -1065,12 +1071,6 @@ InkscapeApplication::on_startup()
 
     // Autosave
     Inkscape::AutoSave::getInstance().init(this);
-
-    // Deprecated...
-    Inkscape::Application::create(_with_gui);
-
-    // Extensions
-    Inkscape::Extension::init();
 
     // After extensions are loaded query effects to construct action data
     init_extension_action_data();
@@ -1103,6 +1103,18 @@ InkscapeApplication::on_startup()
 void
 InkscapeApplication::on_activate()
 {
+#ifdef __APPLE__
+    // See #5740
+    if (gtk_app()) {
+        for (auto window : gtk_app()->get_windows()) {
+            if (dynamic_cast<InkscapeWindow*>(window)) {
+                // Window already opened in on_open().
+                return;
+            }
+        }
+    }
+#endif
+
     std::string output;
     auto prefs = Inkscape::Preferences::get();
 
@@ -1120,17 +1132,20 @@ InkscapeApplication::on_activate()
     } else if (_with_gui && !_use_command_line_argument && gtk_app()
             && prefs->getBool("/options/boot/showwelcome", true)) {
         // Show welcome screen. Instantiate start screen if it hasn't yet.
-        if (!_start_screen) _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+        if (!_start_screen) {
+            _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+        }
         _start_screen->setup_welcome();
         _start_screen->run(); // Blocks until document selected
         document = _start_screen->get_document();
+        startup_close();
         if (!document) {
-            _start_screen.reset();
-            return; // Start screen forcefully closed.
+            return;
         }
     } else {
         // Create a blank document from template
         document = document_new();
+        startup_close();
     }
 
     if (!document) {
@@ -1150,7 +1165,13 @@ InkscapeApplication::on_activate()
 void
 InkscapeApplication::startup_close()
 {
+#ifdef __APPLE__
+    if (_start_screen) {
+        _start_screen->hide(); // See #5740
+    }
+#else
     _start_screen.reset();
+#endif
 }
 
 // Open document window for each file. Either this or on_activate() is called.
@@ -1174,7 +1195,6 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         return;
     }
 
-    startup_close();
     for (auto file : files) {
 
         // Open file
@@ -1187,6 +1207,8 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         // Process document (command line actions, shell, create window)
         process_document (document, file->get_path());
     }
+
+    startup_close();
 
     if (_batch_process) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
