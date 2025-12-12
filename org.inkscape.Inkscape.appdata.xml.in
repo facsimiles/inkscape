@@ -56,6 +56,17 @@
     </screenshot>
   </screenshots>
   <releases>
+   <release version="1.4.3" date="2025-12-25">
+      <description>
+        <p>Inkscape 1.4.3</p>
+        <ul>
+          <li>Many crash fixes</li>
+          <li>Fixed a few UI issues with handles</li>
+          <li>Translation updates</li>
+        </ul>
+      </description>
+      <url>https://inkscape.org/doc/release_notes/1.4.3/Inkscape_1.4.3.html</url>
+    </release>
    <release version="1.4.2" date="2025-05-09">
       <description>
         <p>Inkscape 1.4.2</p>
