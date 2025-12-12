@@ -365,8 +365,6 @@ else()
         list(APPEND INKSCAPE_CXX_FLAGS "-D_GNU_SOURCE")
     endif()
 endif()
-# enable explicit debug symbols
-set(CMAKE_ENABLE_EXPORTS ON)
 
 
 
