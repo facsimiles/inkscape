@@ -183,6 +183,14 @@ if(WITH_CAPYPDF)
       target_link_libraries(CapyPDF_LIB INTERFACE -lcapypdf)
       add_library(Inkscape::CapyPDF ALIAS CapyPDF_LIB)
       list(APPEND CMAKE_INSTALL_RPATH ${CAPY_LIBDIR})
+      if(WIN32)
+        # DLL needs to be copied for tests to run
+        ExternalProject_Add_Step(capypdf copy-dll
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CAPY_PREFIX}/bin/libcapypdf-0.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libcapypdf-0.dll"
+            DEPENDEES install
+            BYPRODUCTS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libcapypdf-0.dll"
+        )
+      endif()
     endif()
   endif()
 endif()
