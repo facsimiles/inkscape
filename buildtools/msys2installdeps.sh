@@ -85,7 +85,8 @@ $ARCH-libspelling \
 $ARCH-libvisio \
 $ARCH-libwpg \
 $ARCH-poppler \
-$ARCH-potrace
+$ARCH-potrace \
+$ARCH-webp-pixbuf-loader
 
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \
