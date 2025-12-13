@@ -35,6 +35,7 @@
 #define Operator Operator_Gfx
 #include <poppler/Gfx.h>
 #undef Operator
+#undef DOUBLE_CLICK
 
 namespace Inkscape::Extension::Internal {
 class SvgBuilder;

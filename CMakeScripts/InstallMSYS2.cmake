@@ -60,6 +60,17 @@ if(WIN32)
     ${MINGW_BIN}/libgraphene-1.0-[0-9].dll
     ${MINGW_BIN}/libgsl-[0-9]*.dll
     ${MINGW_BIN}/libgslcblas-[0-9]*.dll
+    ${MINGW_BIN}/libgstallocators-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstaudio-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstbase-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstd3d12-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstd3dshader-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstgl-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstpbutils-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstplay-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstreamer-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgsttag-1.0-[0-9]*.dll
+    ${MINGW_BIN}/libgstvideo-1.0-[0-9]*.dll
     ${MINGW_BIN}/libgtk-4-[0-9]*.dll
     ${MINGW_BIN}/libgtkmm-4.0-[0-9]*.dll
     ${MINGW_BIN}/libspelling-1-[0-9]*.dll
@@ -73,7 +84,6 @@ if(WIN32)
     ${MINGW_BIN}/libicuuc[0-9]*.dll
     ${MINGW_BIN}/libidn2-[0-9]*.dll
     ${MINGW_BIN}/libintl-[0-9]*.dll
-    ${MINGW_BIN}/libjasper.dll
     ${MINGW_BIN}/libjbig-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
@@ -91,6 +101,7 @@ if(WIN32)
     ${MINGW_BIN}/libopenh264-[0-9]*.dll
     ${MINGW_BIN}/libopenjp2-[0-9]*.dll
     ${MINGW_BIN}/libopenjph-0.[0-9]*.dll
+    ${MINGW_BIN}/liborc-0.4-[0-9]*.dll
     ${MINGW_BIN}/libpango-1.0-[0-9]*.dll
     ${MINGW_BIN}/libpangocairo-1.0-[0-9]*.dll
     ${MINGW_BIN}/libpangoft2-1.0-[0-9]*.dll

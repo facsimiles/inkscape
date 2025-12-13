@@ -38,6 +38,7 @@ class AnySpace;
 #include <gdkmm/enums.h>
 #include <poppler/Gfx.h>
 #undef Operator
+#undef DOUBLE_CLICK
 
 #include <2geom/affine.h>
 #include <2geom/point.h>
