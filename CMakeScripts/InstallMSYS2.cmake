@@ -170,12 +170,18 @@ if(WIN32)
       PATTERN "filters" EXCLUDE)
     file(GLOB MAGICK_LIBS
       ${MINGW_BIN}/libGraphicsMagick[+-]*.dll
+      ${MINGW_BIN}/libbrotlienc.dll
+      ${MINGW_BIN}/libcryptopp.dll
+      ${MINGW_BIN}/libhwy.dll
       ${MINGW_BIN}/libjxl.dll
       ${MINGW_BIN}/libjxl_cms.dll
       ${MINGW_BIN}/libjxl_threads.dll
+      ${MINGW_BIN}/libkvazaar-[0-9]*.dll
       ${MINGW_BIN}/libltdl-[0-9]*.dll
-      ${MINGW_BIN}/libhwy.dll
-      ${MINGW_BIN}/libbrotlienc.dll)
+      ${MINGW_BIN}/libopenh264-[0-9]*.dll
+      ${MINGW_BIN}/libopenjph-0.[0-9]*.dll
+      ${MINGW_BIN}/librav1e.dll
+      ${MINGW_BIN}/libx265-[0-9]*.dll)
     install(FILES ${MAGICK_LIBS} DESTINATION bin)
   endif()
 

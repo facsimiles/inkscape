@@ -79,7 +79,6 @@ $ARCH-libwpg \
 $ARCH-aspell \
 $ARCH-aspell-en \
 $ARCH-gspell \
-$ARCH-graphicsmagick \
 $ARCH-libheif \
 $ARCH-gtksourceview4 \
 $ARCH-libjxl
@@ -136,5 +135,18 @@ for arch in $(eval echo $ARCH); do
       ;;
   esac
 done
+
+(
+  cd /tmp || exit
+  wget https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.46/GraphicsMagick-1.3.46.tar.xz
+  tar xJf GraphicsMagick-1.3.46.tar.xz
+  (
+    cd GraphicsMagick-1.3.46 || exit
+    ./configure --enable-shared
+    make -j "$(nproc)"
+    make install
+  )
+  rm -rf GraphicsMagick-1.3.46
+)
 
 echo "Done :-)"
