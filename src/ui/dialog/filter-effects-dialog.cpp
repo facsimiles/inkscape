@@ -1345,7 +1345,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d, Glib
     _list.add_controller(click);
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
-    _observer->signal_changed().connect([this](auto, auto) {signal_filter_changed().empty();});
+    _observer->signal_changed().connect([this](auto, auto) {signal_filter_changed().emit();});
 }
 
 // Update each filter's sel property based on the current object selection;
