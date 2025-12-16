@@ -73,7 +73,6 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('FillStroke')"          keys="&lt;primary&gt;&lt;shift&gt;f"  />
   <bind gaction="win.dialog-open('FilterEffects')" />
   <bind gaction="win.dialog-open('Find')"                keys="&lt;primary&gt;f" />
-  <bind gaction="win.dialog-open('Glyphs')" />
   <bind gaction="win.dialog-open('IconPreview')" />
   <bind gaction="win.dialog-open('Input')" />
   <bind gaction="win.dialog-open('LivePathEffect')"      keys="&lt;primary&gt;ampersand, &lt;primary&gt;&lt;shift&gt;7" />
@@ -82,7 +81,6 @@ override) the bindings in the main default.xml.
   <bind gaction="win.dialog-open('ObjectAttributes')" />
   <bind gaction="win.dialog-open('ObjectProperties')"    keys="&lt;primary&gt;&lt;shift&gt;o"  />
   <bind gaction="win.dialog-open('Objects')"             keys="&lt;primary&gt;&lt;shift&gt;l" />
-  <bind gaction="win.dialog-open('PaintServers')" />
   <bind gaction="app.preferences"                        keys="&lt;primary&gt;&lt;shift&gt;p, &lt;Meta&gt;comma" />
   <bind gaction="win.dialog-open('Selectors')"           keys="&lt;primary&gt;&lt;shift&gt;q"  />
   <bind gaction="win.dialog-open('Spellcheck')"          keys="&lt;primary&gt;&lt;alt&gt;k"/>
