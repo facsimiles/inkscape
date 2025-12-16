@@ -237,7 +237,7 @@ void Selection::rotateAnchored(double angle_degrees, double zoom)
         }
 
         if (auto d = desktop()) {
-            angle_degrees = d->yaxisdir() ? angle_degrees : -angle_degrees;
+            angle_degrees *= d->yaxisdir();
         }
 
         if (zoom != 1.0) {
