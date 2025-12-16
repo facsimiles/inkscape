@@ -2342,6 +2342,7 @@ bool Layout::Calculator::calculate()
         }
         // dumpPangoItemsOut(&para);
         // dumpUnbrokenSpans(&para);
+        _flow._end_pos_attributes = para.char_attributes.back();
 
         para.free();
         para.first_input_index = para_end_input_index + 1;

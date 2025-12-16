@@ -343,6 +343,14 @@ void Layout::_calculateBaselines()
     }
 }
 
+PangoLogAttr const &Layout::_get_attributes(iterator const &it) const
+{
+    if (it._char_index < _characters.size()) {
+        return _characters[it._char_index].char_attributes;
+    }
+    return _end_pos_attributes;
+}
+
 Geom::Point Layout::chunkAnchorPoint(iterator const &it) const
 {
     unsigned chunk_index;
@@ -852,6 +860,13 @@ bool Layout::iterator::thisStartOfSource()
 bool Layout::iterator::nextStartOfSource()
     NEXT_START_OF_ITEM(_parent_layout->_characters[_char_index].span(_parent_layout).in_input_stream_item);
 
+bool Layout::iterator::charEraseStart()
+{
+    if (_parent_layout->_get_attributes(*this).backspace_deletes_character) {
+        return prevCharacter();
+    }
+    return prevCursorPosition();
+}
 
 bool Layout::iterator::thisEndOfLine()
 {

@@ -908,6 +908,7 @@ private:
     std::vector<Character> _characters;
     std::vector<Glyph> _glyphs;
     std::vector<Geom::LineSegment> _baselines;
+    PangoLogAttr _end_pos_attributes;
 
     inline unsigned _lineToSpan(unsigned line_index) const
     {
@@ -956,6 +957,7 @@ private:
     double _getChunkWidth(unsigned chunk_index) const;
 
     void _calculateBaselines();
+    PangoLogAttr const &_get_attributes(iterator const &it) const;
 };
 
 /** \brief Holds a position within the glyph output of Layout.
@@ -1048,6 +1050,15 @@ public:
     bool prevCursorPosition();
     bool nextLineCursor(int n = 1);
     bool prevLineCursor(int n = 1);
+    /**
+     * Get start of erasing range for deleting single character with backspace
+     *
+     * The behavior of backspace erasing single "character" varies between scripts. Some of the latin based scripts
+     * treat character+diacritics as single unit. But in other scripts backspace erases only the last diacritic.
+     *
+     * @return false if iterator couldn't be moved
+     */
+    bool charEraseStart();
 
     //words
     bool nextStartOfWord();

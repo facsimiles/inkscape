@@ -846,7 +846,7 @@ bool TextTool::root_handler(CanvasEvent const &event)
                                     if (mod_ctrl(event)) {
                                         text_sel_start.prevStartOfWord();
                                     } else {
-                                        text_sel_start.prevCursorPosition();
+                                        text_sel_start.charEraseStart();
                                     }
                                     noSelection = true;
                                 }
