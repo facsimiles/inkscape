@@ -186,7 +186,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool check_overwrit
         omod = dynamic_cast<Output *>(key);
     }
 
-    if (!dynamic_cast<Output *>(omod)) {
+    if (!omod) {
         g_warning("Unable to find output module to handle file: %s\n", filename);
         throw Output::no_extension_found();
     }
