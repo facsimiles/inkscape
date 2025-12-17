@@ -181,16 +181,11 @@ DB::input_internal (Extension * in_plug, gpointer data)
 void
 DB::output_internal (Extension * in_plug, gpointer data)
 {
-	if (dynamic_cast<Output *>(in_plug)) {
-		OutputList * olist;
-		Output * omod;
-
-		omod = dynamic_cast<Output *>(in_plug);
-		olist = reinterpret_cast<OutputList *>(data);
-
-		olist->push_back(omod);
+    if (auto *omod = dynamic_cast<Output *>(in_plug)) {
+        auto olist = reinterpret_cast<OutputList *>(data);
+        olist->push_back(omod);
 		// printf("Added to output list: %s\n", omod->get_id());
-	}
+    }
 }
 
 /**
@@ -207,16 +202,11 @@ DB::output_internal (Extension * in_plug, gpointer data)
 void
 DB::effect_internal (Extension * in_plug, gpointer data)
 {
-	if (dynamic_cast<Effect *>(in_plug)) {
-		EffectList * elist;
-		Effect * emod;
-
-		emod = dynamic_cast<Effect *>(in_plug);
-		elist = reinterpret_cast<EffectList *>(data);
-
-		elist->push_back(emod);
+    if (Effect *emod = dynamic_cast<Effect *>(in_plug)) {
+        auto elist = reinterpret_cast<EffectList *>(data);
+        elist->push_back(emod);
 		// printf("Added to effect list: %s\n", emod->get_id());
-	}
+    }
 }
 
 /**

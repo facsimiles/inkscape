@@ -1068,11 +1068,11 @@ DialogNotebook* DialogContainer::get_notebook(DialogMultipaned* pane, DockLocati
 
     // find top notebook
     DialogNotebook* top = nullptr;
-    auto const it = std::find_if(begin(children), end(children), [](auto& w) {
-        return dynamic_cast<DialogNotebook*>(w.get());
-    });
-    if (it != children.end()) {
-        top = dynamic_cast<DialogNotebook*>(it->get());
+    for (auto& child : children) {
+        if (auto* const notebook = dynamic_cast<DialogNotebook*>(child.get())) {
+            top = notebook;
+            break;
+        }
     }
 
     if (location == TopLeft || location == TopRight) {
@@ -1081,12 +1081,13 @@ DialogNotebook* DialogContainer::get_notebook(DialogMultipaned* pane, DockLocati
 
     // find bottom notebook
     DialogNotebook* bottom = nullptr;
-    auto const it2 = std::find_if(rbegin(children), rend(children), [](auto& w) {
-        return dynamic_cast<DialogNotebook*>(w.get());
-    });
-    if (it2 != children.rend()) {
-        bottom = dynamic_cast<DialogNotebook*>(it2->get());
+    for (auto& child : children | std::views::reverse) {
+        if (auto* const notebook = dynamic_cast<DialogNotebook*>(child.get())) {
+            bottom = notebook;
+            break;
+        }
     }
+
     if (bottom && bottom == top) {
         // there's only one notebook, so there's no bottom one yet;
         // return null, so that new notebook will be created

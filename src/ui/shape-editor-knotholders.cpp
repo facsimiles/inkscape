@@ -2897,13 +2897,11 @@ TextPathKnotHolder::TextPathKnotHolder(SPDesktop *desktop, SPText *text)
 
     // Find the first child that can be successfully cast to SPTextPath
     SPTextPath *textpath = nullptr;
-    const auto children = text->childList(false);
-    const auto it = std::find_if(children.begin(), children.end(), [](auto const* child) {
-            return dynamic_cast<const SPTextPath*>(child) != nullptr;
-    });
-
-    if (it != text->childList(false).end()) {
-        textpath = dynamic_cast<SPTextPath*>(*it);
+    for (auto& child : text->childList(false)) {
+        if (auto* const tp = dynamic_cast<SPTextPath*>(child)) {
+            textpath = tp;
+            break;
+        }
     }
 
     auto tip = _("<b>Drag</b> to adjust the <b>start offset</b>. <b>Click</b> to open on-canvas textPath controls.");

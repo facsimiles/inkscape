@@ -63,7 +63,7 @@ canvas_zoom_helper(SPDesktop* dt, const Geom::Point& midpoint, double zoom_facto
                  dynamic_cast<Inkscape::UI::Tools::PenTool    const *>(tool)))
     {
         // Zoom around end of unfinished path.
-        auto const &freehand_base = dynamic_cast<Inkscape::UI::Tools::FreehandBase const &>(*tool);
+        auto const &freehand_base = static_cast<Inkscape::UI::Tools::FreehandBase const &>(*tool);
         if (auto const zoom_to = freehand_base.red_curve_get_last_point()) {
             dt->zoom_relative(*zoom_to, zoom_factor);
             return;
