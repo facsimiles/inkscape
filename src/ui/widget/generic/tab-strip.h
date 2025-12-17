@@ -65,10 +65,14 @@ public:
     // set label behavior
     enum class ShowLabels { Never, Always, ActiveOnly };
     void set_show_labels(ShowLabels labels);
+    // show/hide (+) button
+    void set_show_plus_button(bool show);
     // return true if tab is active
     bool is_tab_active(const Gtk::Widget& tab) const;
     // show/hide close button in individual tabs
     void set_show_close_button(bool show);
+    // should tabs take up all available space?
+    void set_stretch_tabs(bool stretch);
     // tabs support drag&drop; this is the type used by drop source, so clients can check it
     static GType get_dnd_source_type();
     // given drop source value unpack it to the source TabStrip and tab index
@@ -113,6 +117,8 @@ private:
     ShowLabels _show_labels = ShowLabels::Never;
     bool _show_close_btn = true;
     bool _show_drag_handles = false;
+    bool _show_plus_button = true;
+    bool _stretch_tabs = false;
 
     friend TabWidgetDrag;
     std::shared_ptr<TabWidgetDrag> _drag_src;

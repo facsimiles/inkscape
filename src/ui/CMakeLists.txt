@@ -299,6 +299,7 @@ target_sources(inkscape_base PRIVATE
 	widget/template-list.cpp
 	widget/text.cpp
 	widget/textpath-popover.cpp
+	widget/transform-panel.cpp
 	widget/unit-menu.cpp
 	widget/unit-tracker.cpp
 	widget/xml-treeview.cpp
@@ -631,6 +632,7 @@ target_sources(inkscape_base PRIVATE
 	widget/template-list.h
 	widget/text.h
 	widget/textpath-popover.h
+	widget/transform-panel.cpp
 	widget/unit-menu.h
 	widget/unit-tracker.h
 	widget/xml-treeview.h

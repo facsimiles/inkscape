@@ -1726,6 +1726,9 @@ button.reduced-padding {
 #NewTabButton {
     margin-left: 3px;
 }
+#TabStrip.horizontal.no-indent {
+    padding: 0;
+}
 #DialogMenuButton {
     margin-left: 3px;
 }

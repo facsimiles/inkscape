@@ -20,6 +20,7 @@ target_sources(inkscape_base PRIVATE
     source_date_epoch.cpp
     statics.cpp
     theme-utils.cpp
+	transform-objects.cpp
     recently-used-fonts.cpp
     pool.cpp
     treeify.cpp
@@ -67,6 +68,7 @@ target_sources(inkscape_base PRIVATE
     statics.h
     static-doc.h
     theme-utils.h
+	transform-objects.h
     treeify.h
     trim.h
     smart_ptr_keys.h
