@@ -55,28 +55,28 @@ namespace Inkscape::LivePathEffect {
 
 namespace CoS {
 
-class KnotHolderEntityCopyGapX final : public LPEKnotHolderEntity {
+class KnotHolderEntityCopyGapX final : public LPEKnotHolderEntity<LPETiling> {
 public:
-    KnotHolderEntityCopyGapX(LPETiling * effect) : LPEKnotHolderEntity(effect) {};
+    KnotHolderEntityCopyGapX(LPETiling * effect) : LPEKnotHolderEntity(effect) {}
     ~KnotHolderEntityCopyGapX() final;
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) final;
     void knot_click(guint state) final;
     Geom::Point knot_get() const final;
 
-    double startpos = dynamic_cast<LPETiling const*> (_effect)->gapx_unit;
+    double startpos = _effect->gapx_unit;
 };
 
-class KnotHolderEntityCopyGapY final : public LPEKnotHolderEntity {
+class KnotHolderEntityCopyGapY final : public LPEKnotHolderEntity<LPETiling> {
 public:
-    KnotHolderEntityCopyGapY(LPETiling * effect) : LPEKnotHolderEntity(effect) {};
+    KnotHolderEntityCopyGapY(LPETiling * effect) : LPEKnotHolderEntity(effect) {}
     ~KnotHolderEntityCopyGapY() final;
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) final;
     void knot_click(guint state) final;
     Geom::Point knot_get() const final;
 
-    double startpos = dynamic_cast<LPETiling const*> (_effect)->gapy_unit;
+    double startpos = _effect->gapy_unit;
 };
 
 } // namespace CoS
@@ -1621,18 +1621,12 @@ namespace CoS {
 
 KnotHolderEntityCopyGapX::~KnotHolderEntityCopyGapX()
 {
-    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
-    if (lpe) {
-        lpe->_knotholder = nullptr;
-    }
+    _effect->_knotholder = nullptr;
 }
 
 KnotHolderEntityCopyGapY::~KnotHolderEntityCopyGapY()
 {
-    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
-    if (lpe) {
-        lpe->_knotholder = nullptr;
-    }
+    _effect->_knotholder = nullptr;
 }
 
 void KnotHolderEntityCopyGapX::knot_click(guint state)
@@ -1641,9 +1635,7 @@ void KnotHolderEntityCopyGapX::knot_click(guint state)
         return;
     }
 
-    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
-
-    lpe->gapx.param_set_value(0);
+    _effect->gapx.param_set_value(0);
     startpos = 0;
     sp_lpe_item_update_patheffect(cast<SPLPEItem>(item), false, false);
 }
@@ -1654,89 +1646,81 @@ void KnotHolderEntityCopyGapY::knot_click(guint state)
         return;
     }
 
-    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
-
-    lpe->gapy.param_set_value(0);
+    _effect->gapy.param_set_value(0);
     startpos = 0;
     sp_lpe_item_update_patheffect(cast<SPLPEItem>(item), false, false);
 }
 
 void KnotHolderEntityCopyGapX::knot_set(Geom::Point const &p, Geom::Point const&/*origin*/, guint state)
 {
-    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
-    if (lpe->originalbbox) {
-        Geom::Point point = (*lpe->originalbbox).corner(1);
-        point *= lpe->transformoriginal.inverse();
+    if (_effect->originalbbox) {
+        Geom::Point point = _effect->originalbbox->corner(1);
+        point *= _effect->transformoriginal.inverse();
         double value = s[Geom::X] - point[Geom::X];
-        if (lpe->legacy) {
+        if (_effect->legacy) {
             Glib::ustring doc_unit = SP_ACTIVE_DOCUMENT->getWidth().unit->abbr.c_str();
-            value = Inkscape::Util::Quantity::convert((value/lpe->end_scale(lpe->scaleok, false)) * 2, doc_unit.c_str(),lpe->unit.get_abbreviation());
+            value = Inkscape::Util::Quantity::convert((value/_effect->end_scale(_effect->scaleok, false)) * 2, doc_unit.c_str(),_effect->unit.get_abbreviation());
         } else {
-            value = Inkscape::Util::Quantity::convert((value/lpe->end_scale(lpe->scaleok, false)) * 2, "px", lpe->unit.get_abbreviation()) * SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
+            value = Inkscape::Util::Quantity::convert((value/_effect->end_scale(_effect->scaleok, false)) * 2, "px", _effect->unit.get_abbreviation()) * SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
         }
-        lpe->gapx.param_set_value(value);
-        lpe->gapx.write_to_SVG();
+        _effect->gapx.param_set_value(value);
+        _effect->gapx.write_to_SVG();
     }
 }
 
 void KnotHolderEntityCopyGapY::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
-    LPETiling* lpe = dynamic_cast<LPETiling *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
-    if (lpe->originalbbox) {
-        Geom::Point point = (*lpe->originalbbox).corner(3);
-        point *= lpe->transformoriginal.inverse();
+    if (_effect->originalbbox) {
+        Geom::Point point = _effect->originalbbox->corner(3);
+        point *= _effect->transformoriginal.inverse();
         double value = s[Geom::Y] - point[Geom::Y];
-        if (lpe->legacy) {
+        if (_effect->legacy) {
             Glib::ustring doc_unit = SP_ACTIVE_DOCUMENT->getWidth().unit->abbr.c_str();
-            value = Inkscape::Util::Quantity::convert((value/lpe->end_scale(lpe->scaleok, false)) * 2, doc_unit.c_str(),lpe->unit.get_abbreviation());
+            value = Inkscape::Util::Quantity::convert((value/_effect->end_scale(_effect->scaleok, false)) * 2, doc_unit.c_str(),_effect->unit.get_abbreviation());
         } else {
-            value = Inkscape::Util::Quantity::convert((value/lpe->end_scale(lpe->scaleok, false)) * 2, "px", lpe->unit.get_abbreviation()) * SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
+            value = Inkscape::Util::Quantity::convert((value/_effect->end_scale(_effect->scaleok, false)) * 2, "px", _effect->unit.get_abbreviation()) * SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
         }
-        lpe->gapy.param_set_value(value);
-        lpe->gapy.write_to_SVG();
+        _effect->gapy.param_set_value(value);
+        _effect->gapy.write_to_SVG();
     }
 }
 
 Geom::Point KnotHolderEntityCopyGapX::knot_get() const
 {
-    LPETiling const * lpe = dynamic_cast<LPETiling const*> (_effect);
     Geom::Point ret = Geom::Point(Geom::infinity(),Geom::infinity());
-    if (lpe->originalbbox) {
-        auto bbox = (*lpe->originalbbox);
+    if (_effect->originalbbox) {
+        auto bbox = *_effect->originalbbox;
         double value;
-        if (lpe->legacy) {
+        if (_effect->legacy) {
             Glib::ustring prev_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
-            value = Inkscape::Util::Quantity::convert(lpe->gapx, lpe->unit.get_abbreviation(), prev_unit.c_str());
+            value = Inkscape::Util::Quantity::convert(_effect->gapx, _effect->unit.get_abbreviation(), prev_unit.c_str());
         } else {
-            value = Inkscape::Util::Quantity::convert(lpe->gapx, lpe->unit.get_abbreviation(), "px") / SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
+            value = Inkscape::Util::Quantity::convert(_effect->gapx, _effect->unit.get_abbreviation(), "px") / SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
         }
-        double scale = lpe->scaleok;
-        ret = (bbox).corner(1) + Geom::Point((value * lpe->end_scale(scale, false))/2.0,0);
-        ret *= lpe->transformoriginal.inverse();
+        double scale = _effect->scaleok;
+        ret = bbox.corner(1) + Geom::Point((value * _effect->end_scale(scale, false))/2.0,0);
+        ret *= _effect->transformoriginal.inverse();
     }
     return ret;
 }
 
 Geom::Point KnotHolderEntityCopyGapY::knot_get() const
 {
-    LPETiling const * lpe = dynamic_cast<LPETiling const*> (_effect);
     Geom::Point ret = Geom::Point(Geom::infinity(),Geom::infinity());
-    if (lpe->originalbbox) {
-        auto bbox = (*lpe->originalbbox);
+    if (_effect->originalbbox) {
+        auto bbox = *_effect->originalbbox;
         double value;
-        if (lpe->legacy) {
+        if (_effect->legacy) {
             Glib::ustring prev_unit = SP_ACTIVE_DOCUMENT->getDisplayUnit()->abbr.c_str();
-            value = Inkscape::Util::Quantity::convert(lpe->gapy, lpe->unit.get_abbreviation(), prev_unit.c_str());
+            value = Inkscape::Util::Quantity::convert(_effect->gapy, _effect->unit.get_abbreviation(), prev_unit.c_str());
         } else {
-            value = Inkscape::Util::Quantity::convert(lpe->gapy, lpe->unit.get_abbreviation(), "px") / SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
+            value = Inkscape::Util::Quantity::convert(_effect->gapy, _effect->unit.get_abbreviation(), "px") / SP_ACTIVE_DOCUMENT->getDocumentScale()[Geom::X];
         }
-        double scale = lpe->scaleok;
-        ret = (bbox).corner(3) + Geom::Point(0,(value * lpe->end_scale(scale, false))/2.0);
-        ret *= lpe->transformoriginal.inverse();
+        double scale = _effect->scaleok;
+        ret = bbox.corner(3) + Geom::Point(0,(value * _effect->end_scale(scale, false))/2.0);
+        ret *= _effect->transformoriginal.inverse();
     }
     return ret;
 }

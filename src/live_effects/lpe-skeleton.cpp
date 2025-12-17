@@ -81,7 +81,7 @@ LPESkeleton::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
 /*
 namespace Skeleton {
 
-class KnotHolderEntityMyHandle : public LPEKnotHolderEntity
+class KnotHolderEntityMyHandle : public LPEKnotHolderEntity<LPESkeleton>
 {
 public:
     // the set() and get() methods must be implemented, click() is optional

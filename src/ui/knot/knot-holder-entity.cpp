@@ -129,15 +129,6 @@ Geom::Point KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &
     return s * i2d.inverse();
 }
 
-// LPEs
-
-void LPEKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, unsigned state)
-{
-    if (_effect) {
-        _effect->makeUndoDone(_("Move handle"));
-    }
-}
-
 // Pattern manipulation
 
 void PatternKnotHolderEntity::on_created()

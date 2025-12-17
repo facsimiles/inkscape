@@ -36,7 +36,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-class KnotHolderEntityCrossingSwitcher : public LPEKnotHolderEntity {
+class KnotHolderEntityCrossingSwitcher : public LPEKnotHolderEntity<LPEKnot> {
 public:
     KnotHolderEntityCrossingSwitcher(LPEKnot *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
@@ -663,10 +663,8 @@ void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 void
 KnotHolderEntityCrossingSwitcher::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
 {
-    LPEKnot* lpe = dynamic_cast<LPEKnot *>(_effect);
-
-    lpe->selectedCrossing = idx_of_nearest(lpe->crossing_points,p);
-    lpe->updateSwitcher();
+    _effect->selectedCrossing = idx_of_nearest(_effect->crossing_points,p);
+    _effect->updateSwitcher();
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -674,33 +672,31 @@ KnotHolderEntityCrossingSwitcher::knot_set(Geom::Point const &p, Geom::Point con
 Geom::Point
 KnotHolderEntityCrossingSwitcher::knot_get() const
 {
-    LPEKnot const *lpe = dynamic_cast<LPEKnot const*>(_effect);
-    return lpe->switcher;
+    return _effect->switcher;
 }
 
 void
 KnotHolderEntityCrossingSwitcher::knot_click(guint state)
 {
-    LPEKnot* lpe = dynamic_cast<LPEKnot *>(_effect);
-    unsigned s = lpe->selectedCrossing;
-    if (s < lpe->crossing_points.size()){
+    unsigned s = _effect->selectedCrossing;
+    if (s < _effect->crossing_points.size()){
         if (state & GDK_SHIFT_MASK){
-            for (auto &crossing_point : lpe->crossing_points) {
+            for (auto &crossing_point : _effect->crossing_points) {
                 crossing_point.sign = ((crossing_point.sign + 2) % 3) - 1;
             }
         }
         else if (state & GDK_CONTROL_MASK) {
-            int sign = lpe->crossing_points[s].sign;
-            for (auto &crossing_point : lpe->crossing_points) {
+            int sign = _effect->crossing_points[s].sign;
+            for (auto &crossing_point : _effect->crossing_points) {
                 crossing_point.sign = ((sign + 2) % 3) - 1;
             }
         }else{
-            int sign = lpe->crossing_points[s].sign;
-            lpe->crossing_points[s].sign = ((sign+2)%3)-1;
+            int sign = _effect->crossing_points[s].sign;
+            _effect->crossing_points[s].sign = ((sign+2)%3)-1;
             //std::cout<<"crossing set to"<<lpe->crossing_points[s].sign<<".\n";
         }
-        lpe->crossing_points_vector.param_set_and_write_new_value(lpe->crossing_points.to_vector());
-        lpe->makeUndoDone(_("Change knot crossing"));
+        _effect->crossing_points_vector.param_set_and_write_new_value(_effect->crossing_points.to_vector());
+        _effect->makeUndoDone(_("Change knot crossing"));
         // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
 //        sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
     }

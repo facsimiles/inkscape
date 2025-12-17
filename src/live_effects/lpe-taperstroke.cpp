@@ -39,12 +39,11 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace TpS {
-    class KnotHolderEntityAttachBegin : public LPEKnotHolderEntity {
+    class KnotHolderEntityAttachBegin : public LPEKnotHolderEntity<LPETaperStroke> {
     public:
         KnotHolderEntityAttachBegin(LPETaperStroke * effect, size_t index) 
         : LPEKnotHolderEntity(effect)
-        , _effect(effect)
-        , _index(index) {};
+        , _index(index) {}
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         void knot_click(guint state) override;
         Geom::Point knot_get() const override;
@@ -53,15 +52,13 @@ namespace TpS {
         };
     private:
         size_t _index;
-        LPETaperStroke * _effect;
     };
         
-    class KnotHolderEntityAttachEnd : public LPEKnotHolderEntity {
+    class KnotHolderEntityAttachEnd : public LPEKnotHolderEntity<LPETaperStroke> {
     public:
         KnotHolderEntityAttachEnd(LPETaperStroke * effect, size_t index) 
         : LPEKnotHolderEntity(effect)
-        , _effect(effect)
-        , _index(index) {};
+        , _index(index) {}
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         void knot_click(guint state) override;
         Geom::Point knot_get() const override;
@@ -70,7 +67,6 @@ namespace TpS {
         };
     private:
         size_t _index;
-        LPETaperStroke * _effect;
     };
 } // TpS
 

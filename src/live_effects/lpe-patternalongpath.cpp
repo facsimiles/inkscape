@@ -50,13 +50,12 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace WPAP {
-    class KnotHolderEntityWidthPatternAlongPath : public LPEKnotHolderEntity {
+    class KnotHolderEntityWidthPatternAlongPath : public LPEKnotHolderEntity<LPEPatternAlongPath> {
     public:
         KnotHolderEntityWidthPatternAlongPath(LPEPatternAlongPath * effect) : LPEKnotHolderEntity(effect) {}
         ~KnotHolderEntityWidthPatternAlongPath() override
         {
-            LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
-            lpe->_knotholder = nullptr;
+            _effect->_knotholder = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
@@ -319,11 +318,9 @@ namespace WPAP {
 void 
 KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
-    LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
     SPShape const *sp_shape = cast<SPShape>(cast<SPLPEItem>(item));
-    if (sp_shape && lpe->original_height) {
+    if (sp_shape && _effect->original_height) {
         if (auto c = sp_shape->curveForEdit()) {
             auto curve_before = *c;
             Geom::Path const &path_in = curve_before.front();
@@ -339,16 +336,16 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
             Geom::Point knot_pos = this->knot->pos * item->i2dt_affine().inverse();
             Geom::Coord nearest_to_ray = ray.nearestTime(knot_pos);
             if(nearest_to_ray == 0){
-                lpe->prop_scale.param_set_value(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
+                _effect->prop_scale.param_set_value(-Geom::distance(s , ptA)/(_effect->original_height/2.0));
             } else {
-                lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
+                _effect->prop_scale.param_set_value(Geom::distance(s , ptA)/(_effect->original_height/2.0));
             }
         }
-        if (!lpe->original_height) {
-            lpe->prop_scale.param_set_value(0);
+        if (!_effect->original_height) {
+            _effect->prop_scale.param_set_value(0);
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble("/live_effects/skeletal/width", lpe->prop_scale);
+        prefs->setDouble("/live_effects/skeletal/width", _effect->prop_scale);
     }
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -356,7 +353,6 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
 Geom::Point 
 KnotHolderEntityWidthPatternAlongPath::knot_get() const
 {
-    LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
     if (auto const sp_shape = cast<SPShape>(cast<SPLPEItem>(item))) {
         if (auto c = sp_shape->curveForEdit()) {
             auto curve_before = *c;
@@ -370,12 +366,12 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
                 ray.setPoints(ptA, (*cubic)[1]);
             }
             ray.setAngle(ray.angle() + Geom::rad_from_deg(90));
-            Geom::Point result_point = Geom::Point::polar(ray.angle(), (lpe->original_height/2.0) * lpe->prop_scale) + ptA;
-            lpe->helper_path.clear();
-            if (!lpe->hide_knot) {
+            Geom::Point result_point = Geom::Point::polar(ray.angle(), (_effect->original_height/2.0) * _effect->prop_scale) + ptA;
+            _effect->helper_path.clear();
+            if (!_effect->hide_knot) {
                 Geom::Path hp(result_point);
                 hp.appendNew<Geom::LineSegment>(ptA);
-                lpe->helper_path.push_back(hp);
+                _effect->helper_path.push_back(hp);
                 hp.clear();
             }
             return result_point;

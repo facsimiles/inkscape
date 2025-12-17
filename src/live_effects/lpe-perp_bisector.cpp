@@ -28,52 +28,47 @@ namespace Inkscape {
 namespace LivePathEffect {
 namespace PB {
 
-class KnotHolderEntityEnd : public LPEKnotHolderEntity {
+class KnotHolderEntityEnd : public LPEKnotHolderEntity<LPEPerpBisector>{
 public:
-    KnotHolderEntityEnd(LPEPerpBisector *effect) : LPEKnotHolderEntity(effect) {};
+    KnotHolderEntityEnd(LPEPerpBisector *effect) : LPEKnotHolderEntity(effect) {}
     void bisector_end_set(Geom::Point const &p, guint state, bool left = true);
 };
 
 class KnotHolderEntityLeftEnd : public KnotHolderEntityEnd {
 public:
-    KnotHolderEntityLeftEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
+    KnotHolderEntityLeftEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {}
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
 };
 
 class KnotHolderEntityRightEnd : public KnotHolderEntityEnd {
 public:
-    KnotHolderEntityRightEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
+    KnotHolderEntityRightEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {}
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
 };
 
 Geom::Point
 KnotHolderEntityLeftEnd::knot_get() const {
-    LPEPerpBisector const* lpe = dynamic_cast<LPEPerpBisector const*>(_effect);
-    return Geom::Point(lpe->C);
+    return _effect->C;
 }
 
 Geom::Point
 KnotHolderEntityRightEnd::knot_get() const {
-    LPEPerpBisector const* lpe = dynamic_cast<LPEPerpBisector const*>(_effect);
-    return Geom::Point(lpe->D);
+    return _effect->D;
 }
 
 void
 KnotHolderEntityEnd::bisector_end_set(Geom::Point const &p, guint state, bool left) {
-    LPEPerpBisector *lpe = dynamic_cast<LPEPerpBisector *>(_effect);
-    if (!lpe) return;
-
     Geom::Point const s = snap_knot_position(p, state);
 
-    double lambda = Geom::nearest_time(s, lpe->M, lpe->perp_dir);
+    double lambda = Geom::nearest_time(s, _effect->M, _effect->perp_dir);
     if (left) {
-        lpe->C = lpe->M + lpe->perp_dir * lambda;
-        lpe->length_left.param_set_value(lambda);
+        _effect->C = _effect->M + _effect->perp_dir * lambda;
+        _effect->length_left.param_set_value(lambda);
     } else {
-        lpe->D = lpe->M + lpe->perp_dir * lambda;
-        lpe->length_right.param_set_value(-lambda);
+        _effect->D = _effect->M + _effect->perp_dir * lambda;
+        _effect->length_right.param_set_value(-lambda);
     }
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.

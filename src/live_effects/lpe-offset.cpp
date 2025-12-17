@@ -36,15 +36,12 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace OfS {
-    class KnotHolderEntityOffsetPoint : public LPEKnotHolderEntity {
+    class KnotHolderEntityOffsetPoint : public LPEKnotHolderEntity<LPEOffset> {
     public:
         KnotHolderEntityOffsetPoint(LPEOffset * effect) : LPEKnotHolderEntity(effect) {}
         ~KnotHolderEntityOffsetPoint() override
         {
-            LPEOffset *lpe = dynamic_cast<LPEOffset *>(_effect);
-            if (lpe) {
-                lpe->_knotholder = nullptr;
-            }
+            _effect->_knotholder = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
@@ -335,42 +332,36 @@ namespace OfS {
 void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     using namespace Geom;
-    LPEOffset* lpe = dynamic_cast<LPEOffset *>(_effect);
-    lpe->offset_pt = snap_knot_position(p, state);
-    double offset = lpe->sp_get_offset();
-    if (lpe->update_on_knot_move) {
-        lpe->liveknot = true;
-        lpe->offset.param_set_value(offset);
+    _effect->offset_pt = snap_knot_position(p, state);
+    double offset = _effect->sp_get_offset();
+    if (_effect->update_on_knot_move) {
+        _effect->liveknot = true;
+        _effect->offset.param_set_value(offset);
         sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, false);
     } else {
-        lpe->liveknot = false;
+        _effect->liveknot = false;
     }
 }
 
 void KnotHolderEntityOffsetPoint::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
-    LPEOffset *lpe = dynamic_cast<LPEOffset *>(_effect);
-    lpe->liveknot = false;
+    _effect->liveknot = false;
     using namespace Geom;
-    double offset = lpe->sp_get_offset();
-    lpe->offset.param_set_value(offset);
-    lpe->makeUndoDone(_("Move handle"));
+    double offset = _effect->sp_get_offset();
+    _effect->offset.param_set_value(offset);
+    _effect->makeUndoDone(_("Move handle"));
 }
 
 Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
 {
-    LPEOffset *lpe = dynamic_cast<LPEOffset *>(_effect);
-    if (!lpe) {
-        return Geom::Point();
+    if (!_effect->update_on_knot_move) {
+        return _effect->offset_pt;
     }
-    if (!lpe->update_on_knot_move) {
-        return lpe->offset_pt;
-    }
-    if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
-        lpe->offset_pt = lpe->get_default_point(lpe->pathvector_after_effect);
+    if (_effect->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
+        _effect->offset_pt = _effect->get_default_point(_effect->pathvector_after_effect);
     }
     
-    return lpe->offset_pt;
+    return _effect->offset_pt;
 }
 
 } // namespace OfS

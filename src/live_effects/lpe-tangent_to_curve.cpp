@@ -31,21 +31,21 @@ namespace LivePathEffect {
 
 namespace TtC {
 
-class KnotHolderEntityAttachPt : public LPEKnotHolderEntity {
+class KnotHolderEntityAttachPt : public LPEKnotHolderEntity<LPETangentToCurve> {
 public:
     KnotHolderEntityAttachPt(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
 };
 
-class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
+class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity<LPETangentToCurve> {
 public:
     KnotHolderEntityLeftEnd(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
 };
 
-class KnotHolderEntityRightEnd : public LPEKnotHolderEntity
+class KnotHolderEntityRightEnd : public LPEKnotHolderEntity<LPETangentToCurve>
 {
 public:
     KnotHolderEntityRightEnd(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
@@ -123,19 +123,17 @@ KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*or
 {
     using namespace Geom;
 
-    LPETangentToCurve* lpe = dynamic_cast<LPETangentToCurve *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
 
-    if ( !is<SPShape>(lpe->sp_lpe_item) ) {
+    if ( !is<SPShape>(_effect->sp_lpe_item) ) {
         //lpe->t_attach.param_set_value(0);
         g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
         return;
     }
-    Piecewise<D2<SBasis> > pwd2 = paths_to_pw( lpe->pathvector_before_effect );
+    Piecewise<D2<SBasis> > pwd2 = paths_to_pw( _effect->pathvector_before_effect );
     
     double t0 = nearest_time(s, pwd2);
-    lpe->t_attach.param_set_value(t0);
+    _effect->t_attach.param_set_value(t0);
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
@@ -144,12 +142,10 @@ KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*or
 void
 KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    LPETangentToCurve *lpe = dynamic_cast<LPETangentToCurve *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
 
-    double lambda = Geom::nearest_time(s, lpe->ptA, lpe->derivA);
-    lpe->length_left.param_set_value(-lambda);
+    double lambda = Geom::nearest_time(s, _effect->ptA, _effect->derivA);
+    _effect->length_left.param_set_value(-lambda);
 
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -157,12 +153,10 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
 void
 KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    LPETangentToCurve *lpe = dynamic_cast<LPETangentToCurve *>(_effect);
-    
     Geom::Point const s = snap_knot_position(p, state);
 
-    double lambda = Geom::nearest_time(s, lpe->ptA, lpe->derivA);
-    lpe->length_right.param_set_value(lambda);
+    double lambda = Geom::nearest_time(s, _effect->ptA, _effect->derivA);
+    _effect->length_right.param_set_value(lambda);
 
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -170,22 +164,19 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
 Geom::Point
 KnotHolderEntityAttachPt::knot_get() const
 {
-    LPETangentToCurve const *lpe = dynamic_cast<LPETangentToCurve const*>(_effect);
-    return lpe->ptA;
+    return _effect->ptA;
 }
 
 Geom::Point
 KnotHolderEntityLeftEnd::knot_get() const
 {
-    LPETangentToCurve const *lpe = dynamic_cast<LPETangentToCurve const*>(_effect);
-    return lpe->C;
+    return _effect->C;
 }
 
 Geom::Point
 KnotHolderEntityRightEnd::knot_get() const
 {
-    LPETangentToCurve const *lpe = dynamic_cast<LPETangentToCurve const*>(_effect);
-    return lpe->D;
+    return _effect->D;
 }
 
 } // namespace TtC

@@ -17,6 +17,7 @@
 
 #include <cstdint>
 #include <2geom/forward.h>
+#include <glibmm/i18n.h>
 
 #include "snapper.h"
 
@@ -79,14 +80,20 @@ private:
 
 // LPEs
 
+template <typename T>
 class LPEKnotHolderEntity : public KnotHolderEntity
 {
 public:
-    LPEKnotHolderEntity(Inkscape::LivePathEffect::Effect *effect) : _effect(effect) {};
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, unsigned state) override;
+    LPEKnotHolderEntity(T *effect) : _effect(effect) {}
+
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, unsigned state) override {
+        if (_effect) {
+            _effect->makeUndoDone(_("Move handle"));
+        }
+    }
 
 protected:
-    Inkscape::LivePathEffect::Effect *_effect;
+    T *const _effect;
 };
 
 // Pattern manipulation

@@ -50,14 +50,12 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace BeP {
-class KnotHolderEntityWidthBendPath : public LPEKnotHolderEntity {
+class KnotHolderEntityWidthBendPath : public LPEKnotHolderEntity<LPEBendPath> {
     public:
         KnotHolderEntityWidthBendPath(LPEBendPath * effect) : LPEKnotHolderEntity(effect) {}
         ~KnotHolderEntityWidthBendPath() override
         {
-            if (auto const lpe = dynamic_cast<LPEBendPath *> (_effect)) {
-                lpe->_knotholder = nullptr;
-            }
+            _effect->_knotholder = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
@@ -256,12 +254,8 @@ namespace BeP {
 void 
 KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
-    LPEBendPath *lpe = dynamic_cast<LPEBendPath *> (_effect);
-    if (!lpe)
-        return;
-
     Geom::Point const s = snap_knot_position(p, state);
-    Geom::Path path_in = lpe->bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
+    Geom::Path path_in = _effect->bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
     Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
     Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
     Geom::Curve const *first_curve = &path_in.curveAt(Geom::PathTime(0, 0.0));
@@ -274,15 +268,15 @@ KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const&
     Geom::Point knot_pos = this->knot->pos * item->i2dt_affine().inverse();
     Geom::Coord nearest_to_ray = ray.nearestTime(knot_pos);
     if(nearest_to_ray == 0){
-        lpe->prop_scale.param_set_value(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
+        _effect->prop_scale.param_set_value(-Geom::distance(s , ptA)/(_effect->original_height/2.0));
     } else {
-        lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
+        _effect->prop_scale.param_set_value(Geom::distance(s , ptA)/(_effect->original_height/2.0));
     }
-    if (!lpe->original_height) {
-        lpe->prop_scale.param_set_value(0);
+    if (!_effect->original_height) {
+        _effect->prop_scale.param_set_value(0);
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/live_effects/bend_path/width", lpe->prop_scale);
+    prefs->setDouble("/live_effects/bend_path/width", _effect->prop_scale);
 
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -290,11 +284,7 @@ KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const&
 Geom::Point 
 KnotHolderEntityWidthBendPath::knot_get() const
 {
-    LPEBendPath *lpe = dynamic_cast<LPEBendPath *> (_effect);
-    if (!lpe)
-        return Geom::Point(0, 0);
-
-    Geom::Path path_in = lpe->bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
+    Geom::Path path_in = _effect->bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
     Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
     Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
     Geom::Curve const *first_curve = &path_in.curveAt(Geom::PathTime(0, 0.0));
@@ -304,12 +294,12 @@ KnotHolderEntityWidthBendPath::knot_get() const
         ray.setPoints(ptA, (*cubic)[1]);
     }
     ray.setAngle(ray.angle() + Geom::rad_from_deg(90));
-    Geom::Point result_point = Geom::Point::polar(ray.angle(), (lpe->original_height/2.0) * lpe->prop_scale) + ptA;
-    lpe->helper_path.clear();
-    if (!lpe->hide_knot) {
+    Geom::Point result_point = Geom::Point::polar(ray.angle(), (_effect->original_height/2.0) * _effect->prop_scale) + ptA;
+    _effect->helper_path.clear();
+    if (!_effect->hide_knot) {
         Geom::Path hp(result_point);
         hp.appendNew<Geom::LineSegment>(ptA);
-        lpe->helper_path.push_back(hp);
+        _effect->helper_path.push_back(hp);
         hp.clear();
     }
     return result_point;

@@ -25,14 +25,14 @@ namespace LivePathEffect {
 
 namespace AB {
 
-class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
+class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity<LPEAngleBisector> {
 public:
     KnotHolderEntityLeftEnd(LPEAngleBisector* effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
 };
 
-class KnotHolderEntityRightEnd : public LPEKnotHolderEntity {
+class KnotHolderEntityRightEnd : public LPEKnotHolderEntity<LPEAngleBisector> {
 public:
     KnotHolderEntityRightEnd(LPEAngleBisector* effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
@@ -98,12 +98,10 @@ namespace AB {
 void
 KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    LPEAngleBisector *lpe = dynamic_cast<LPEAngleBisector *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
 
-    double lambda = Geom::nearest_time(s, lpe->ptA, lpe->dir);
-    lpe->length_left.param_set_value(-lambda);
+    double lambda = Geom::nearest_time(s, _effect->ptA, _effect->dir);
+    _effect->length_left.param_set_value(-lambda);
 
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -111,12 +109,10 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
 void
 KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    LPEAngleBisector *lpe = dynamic_cast<LPEAngleBisector *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
 
-    double lambda = Geom::nearest_time(s, lpe->ptA, lpe->dir);
-    lpe->length_right.param_set_value(lambda);
+    double lambda = Geom::nearest_time(s, _effect->ptA, _effect->dir);
+    _effect->length_right.param_set_value(lambda);
 
     sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
 }
@@ -124,15 +120,13 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
 Geom::Point
 KnotHolderEntityLeftEnd::knot_get() const
 {
-    LPEAngleBisector const* lpe = dynamic_cast<LPEAngleBisector const*>(_effect);
-    return lpe->ptA - lpe->dir * lpe->length_left;
+    return _effect->ptA - _effect->dir * _effect->length_left;
 }
 
 Geom::Point
 KnotHolderEntityRightEnd::knot_get() const
 {
-    LPEAngleBisector const* lpe = dynamic_cast<LPEAngleBisector const*>(_effect);
-    return lpe->ptA + lpe->dir * lpe->length_right;
+    return _effect->ptA + _effect->dir * _effect->length_right;
 }
 
 } // namespace AB
