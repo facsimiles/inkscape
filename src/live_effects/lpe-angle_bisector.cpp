@@ -49,8 +49,8 @@ LPEAngleBisector::LPEAngleBisector(LivePathEffectObject *lpeobject) :
     show_orig_path = true;
     _provides_knotholder_entities = true;
 
-    registerParameter( dynamic_cast<Parameter *>(&length_left) );
-    registerParameter( dynamic_cast<Parameter *>(&length_right) );
+    registerParameter( &length_left );
+    registerParameter( &length_right );
 }
 
 LPEAngleBisector::~LPEAngleBisector() = default;

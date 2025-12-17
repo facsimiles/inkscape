@@ -518,7 +518,7 @@ ThemeContext::themechangecallback() {
     auto dark = prefs->getBool("/theme/darkTheme", false);
     std::vector<Gtk::Window *> winds;
     for (auto wnd : Inkscape::UI::Dialog::DialogManager::singleton().get_all_floating_dialog_windows()) {
-        winds.push_back(dynamic_cast<Gtk::Window *>(wnd));
+        winds.push_back(wnd);
     }
     for (auto desktop : INKSCAPE.get_desktops()) {
         if (desktop == SP_ACTIVE_DESKTOP) {

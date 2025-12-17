@@ -382,7 +382,7 @@ int InkFileExportCmd::do_export_vector(SPDocument *doc, std::string const &expor
 
             try {
                 extension.set_gui(false);
-                Inkscape::Extension::save(dynamic_cast<Inkscape::Extension::Extension *>(&extension), copy_doc.get(),
+                Inkscape::Extension::save(&extension, copy_doc.get(),
                                           filename_out.c_str(), false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
             } catch (Inkscape::Extension::Output::save_failed const &) {
                 std::cerr << "InkFileExportCmd::do_export_vector: Failed to save " << (export_plain_svg ? "" : "Inkscape")
@@ -428,7 +428,7 @@ int InkFileExportCmd::do_export_vector(SPDocument *doc, std::string const &expor
         }
         try {
             extension.set_gui(false);
-            Inkscape::Extension::save(dynamic_cast<Inkscape::Extension::Extension *>(&extension), copy_doc.get(),
+            Inkscape::Extension::save(&extension, copy_doc.get(),
                                       filename_out.c_str(), false, false,
                                       export_plain_svg ? Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY
                                                        : Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);

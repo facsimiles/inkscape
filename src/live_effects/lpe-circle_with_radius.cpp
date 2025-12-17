@@ -32,7 +32,7 @@ LPECircleWithRadius::LPECircleWithRadius(LivePathEffectObject *lpeobject) :
     //radius(_("Float parameter"), _("just a real number like 1.4!"), "svgname", &wr, this, 50)
 {
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    //registerParameter( dynamic_cast<Parameter *>(&radius) );
+    //registerParameter( &radius );
 }
 
 LPECircleWithRadius::~LPECircleWithRadius() = default;

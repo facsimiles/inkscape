@@ -64,14 +64,14 @@ LPEEmbroderyStitch::LPEEmbroderyStitch(LivePathEffectObject *lpeobject) :
     show_stitch_gap(_("Show stitch gap"), _("Length of the gap between stitches when showing stitches"), "show-stitch-gap", &wr, this, 0.5),
     jump_if_longer(_("Jump if longer"), _("Jump connection if longer than"), "jump-if-longer", &wr, this, 100)
 {
-    registerParameter(dynamic_cast<Parameter *>(&ordering));
-    registerParameter(dynamic_cast<Parameter *>(&connection));
-    registerParameter(dynamic_cast<Parameter *>(&stitch_length));
-    registerParameter(dynamic_cast<Parameter *>(&stitch_min_length));
-    registerParameter(dynamic_cast<Parameter *>(&stitch_pattern));
-    registerParameter(dynamic_cast<Parameter *>(&show_stitches));
-    registerParameter(dynamic_cast<Parameter *>(&show_stitch_gap));
-    registerParameter(dynamic_cast<Parameter *>(&jump_if_longer));
+    registerParameter(&ordering);
+    registerParameter(&connection);
+    registerParameter(&stitch_length);
+    registerParameter(&stitch_min_length);
+    registerParameter(&stitch_pattern);
+    registerParameter(&show_stitches);
+    registerParameter(&show_stitch_gap);
+    registerParameter(&jump_if_longer);
 
     stitch_length.param_set_digits(1);
     stitch_length.param_set_range(1, 10000);
