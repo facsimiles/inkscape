@@ -41,8 +41,7 @@ node_align(const Glib::VariantBase& value, InkscapeWindow* win, Geom::Dim2 direc
 {
     auto const tool = win->get_desktop()->getTool();
     auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(tool);
-    if (node_tool) {
-    } else {
+    if (!node_tool) {
         show_output("node_align: tool is not Node tool!");
         return;
     }
@@ -77,8 +76,7 @@ node_distribute(InkscapeWindow* win, Geom::Dim2 direction)
 {
     auto const tool = win->get_desktop()->getTool();
     auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(tool);
-    if (node_tool) {
-    } else {
+    if (!node_tool) {
         show_output("node_distribute: tool is not Node tool!");
         return;
     }
