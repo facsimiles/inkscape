@@ -186,7 +186,7 @@
     </child>
     <child>
       <object class="GtkBox" id="mass_box">
-        <property name="tooltip-text" translatable="yes">IIncrease to make the eraser drag behind, as if slowed by inertia</property>
+        <property name="tooltip-text" translatable="yes">Increase to make the eraser drag behind, as if slowed by inertia</property>
         <style>
             <class name="priority1"/>
         </style>
