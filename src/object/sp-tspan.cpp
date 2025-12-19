@@ -505,8 +505,10 @@ void sp_textpath_to_text(SPObject *tp)
         }
         int unused = 0;
         Path::cut_position *cut_pos = path->CurvilignToPosition(1, &offset, unused);
-        Geom::Point tangent;
-        path->PointAndTangentAt(cut_pos[0].piece, cut_pos[0].t, midpoint, tangent);
+        if (cut_pos) {
+            Geom::Point tangent;
+            path->PointAndTangentAt(cut_pos[0].piece, cut_pos[0].t, midpoint, tangent);
+        }
     } else {
         std::cerr << "sp_textpath_to_text: no path" << std::endl;
     }
