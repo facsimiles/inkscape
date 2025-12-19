@@ -830,6 +830,7 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
         auto const &untranslated_label = converter.get_label(effectype);
         auto const &icon = converter.get_icon(effectype);
         auto const tooltip = get_tooltip(effectype, untranslated_label);
+        LPEEffect->set_tooltip_text(tooltip);
 
         LPEIconImage->set_from_icon_name(icon);
 
