@@ -159,7 +159,7 @@
         <property name="focusable">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the width of spray area</property>
+        <property name="tooltip-text" translatable="yes">Use the pressure of the input device to alter the amount of objects sprayed per click</property>
         <property name="has-frame">False</property>
         <property name="icon-name">draw-use-pressure</property>
       </object>
