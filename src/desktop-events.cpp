@@ -356,6 +356,9 @@ static void init_extended()
     auto const devices = seat->get_devices(Gdk::Seat::Capabilities::ALL);
     
     for (auto const &dev : devices) {
+        // Workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/7337
+        if (!dev) continue;
+
         auto const src = dev->get_source();
         if (src == Gdk::InputSource::MOUSE) continue;
 
