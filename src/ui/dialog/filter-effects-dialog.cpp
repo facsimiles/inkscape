@@ -19,6 +19,7 @@
 
 #include <gdkmm/general.h>
 #include <gdkmm/seat.h>
+#include <gtkmm/cssprovider.h>
 #include <glibmm/main.h>
 #include <glibmm/stringutils.h>
 #include <gtkmm/dragsource.h>
@@ -408,6 +409,153 @@ public:
     }
 };
 
+/**
+ * A SpinButton that acts as an Attribute Widget
+ * Returns "" (removes attribute) if the master checkbox is unchecked.
+ */
+class SubregionSpinButtonAttr : public Gtk::SpinButton, public AttrWidget
+{
+public:
+    SubregionSpinButtonAttr(SPAttr a, std::function<bool()> is_active_func)
+        : Gtk::SpinButton()
+        , AttrWidget(a)
+        , _is_active_func(is_active_func)
+    {
+        set_range(-10000000.0, 10000000.0);
+        set_increments(1.0, 10.0);
+        set_digits(3);
+        set_numeric(true);
+
+        signal_value_changed().connect([this](){
+            signal_attr_changed().emit();
+        });
+    }
+
+    Glib::ustring get_as_attribute() const override
+    {
+        if (!_is_active_func()) {
+            return ""; // Remove attribute (Unset)
+        }
+        
+        Inkscape::CSSOStringStream os;
+        os << get_value();
+        return os.str();
+    }
+
+    void set_from_attribute(SPObject* o) override
+    {
+        const gchar* val = attribute_value(o);
+
+        if (val) {
+            double d = g_ascii_strtod(val, nullptr);
+            set_value(d);
+        }
+    }
+
+private:
+    std::function<bool()> _is_active_func;
+};
+
+class SubregionScale : public Gtk::Box, public AttrWidget
+{
+public:
+    SubregionScale()
+        : Gtk::Box(Gtk::Orientation::VERTICAL)
+        , AttrWidget(SPAttr::INVALID)
+        , _check(_("Define subregion"))
+        , _x(SPAttr::X, [this](){ return _check.get_active(); })
+        , _y(SPAttr::Y, [this](){ return _check.get_active(); })
+        , _w(SPAttr::WIDTH, [this](){ return _check.get_active(); })
+        , _h(SPAttr::HEIGHT, [this](){ return _check.get_active(); })
+    {
+        _w.set_value(100.0);
+        _h.set_value(100.0);
+
+        _x.set_tooltip_text(_("Position X"));
+        _y.set_tooltip_text(_("Position Y"));
+        _w.set_tooltip_text(_("Width"));
+        _h.set_tooltip_text(_("Height"));
+
+        auto css_provider = Gtk::CssProvider::create();
+        css_provider->load_from_data(R"(
+            checkbutton {
+                padding-left: 0px;
+            }
+        )");
+
+        _check.get_style_context()->add_provider(
+            css_provider, 
+            GTK_STYLE_PROVIDER_PRIORITY_USER
+        );
+        _check.set_margin_bottom(5);
+        _check.set_tooltip_markup(_("<b>Defines the subregion for this filter primitive.</b>\n• Unchecked: Defaults to 0%, 0%, 100%, 100% <i>(covers the entire filter region)</i>.\n• Checked: Restricts the effect to the specified X, Y, Width, and Height."));
+        append(_check);
+
+        _grid = Gtk::make_managed<Gtk::Grid>();
+        _grid->set_row_spacing(5);
+        _grid->set_column_spacing(10);
+
+        auto add_dual_row = [&](int row, Glib::ustring main_txt, 
+                                Glib::ustring l1_txt, Gtk::Widget& w1, 
+                                Glib::ustring l2_txt, Gtk::Widget& w2) {
+
+            auto* main_lbl = Gtk::make_managed<Gtk::Label>(main_txt);
+            main_lbl->set_xalign(0);
+            _grid->attach(*main_lbl, 0, row, 1, 1);
+
+            auto* l1 = Gtk::make_managed<Gtk::Label>(l1_txt);
+            _grid->attach(*l1, 1, row, 1, 1);
+
+            w1.set_hexpand(true);
+            _grid->attach(w1, 2, row, 1, 1);
+
+            auto* l2 = Gtk::make_managed<Gtk::Label>(l2_txt);
+            _grid->attach(*l2, 3, row, 1, 1);
+
+            w2.set_hexpand(true);
+            _grid->attach(w2, 4, row, 1, 1);
+        };
+
+        add_dual_row(0, _("Location:"), _("X"), _x, _("Y"), _y);
+        add_dual_row(1, _("Size:"),     _("W"), _w, _("H"), _h);
+
+        append(*_grid);
+
+        _check.signal_toggled().connect([this]() {
+            bool active = _check.get_active();
+
+            // Show/Hide parameters based on checkbox
+            _grid->set_visible(active);
+
+            _x.signal_attr_changed().emit();
+            _y.signal_attr_changed().emit();
+            _w.signal_attr_changed().emit();
+            _h.signal_attr_changed().emit();
+        });
+    }
+
+    SubregionSpinButtonAttr* get_x() { return &_x; }
+    SubregionSpinButtonAttr* get_y() { return &_y; }
+    SubregionSpinButtonAttr* get_w() { return &_w; }
+    SubregionSpinButtonAttr* get_h() { return &_h; }
+
+    void set_from_attribute(SPObject* o) override
+    {
+        bool has_attr = o->getAttribute("x") || o->getAttribute("y") || 
+                        o->getAttribute("width") || o->getAttribute("height");
+
+        _check.set_active(has_attr);
+        _grid->set_visible(has_attr); // Ensure visibility matches state on load
+    }
+
+    Glib::ustring get_as_attribute() const override { return ""; }
+
+private:
+    Gtk::CheckButton _check;
+    Gtk::Grid* _grid;
+    SubregionSpinButtonAttr _x, _y, _w, _h;
+};
+
 /* Displays/Edits the matrix for feConvolveMatrix or feColorMatrix */
 class FilterEffectsDialog::MatrixAttr : public Gtk::Frame, public AttrWidget
 {
@@ -791,6 +939,22 @@ public:
         add_widget(cb, "");
         add_attr_widget(cb);
         return cb;
+    }
+
+    SubregionScale* add_subregion_scale()
+    {
+        auto const grp = Gtk::make_managed<SubregionScale>();
+
+        // We pass "" as the label because the Checkbox inside serves as the label
+        add_widget(grp, "");
+        add_attr_widget(grp);
+
+        add_attr_widget(grp->get_x());
+        add_attr_widget(grp->get_y());
+        add_attr_widget(grp->get_w());
+        add_attr_widget(grp->get_h());
+
+        return grp;
     }
 
     // ColorButton
@@ -3041,14 +3205,7 @@ void FilterEffectsDialog::init_settings_widgets()
 
     _settings->type(NR_FILTER_IMAGE);
     _settings->add_fileorelement(SPAttr::XLINK_HREF, _("Source of Image:"));
-    _image_x = _settings->add_entry(SPAttr::X, _("Position X:"), _("Position X"));
-    _image_x->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_x_changed));
-    //This is commented out because we want the default empty value of X or Y and couldn't get it from SpinButton
-    //_image_y = _settings->add_spinbutton(0, SPAttr::Y, _("Y:"), -DBL_MAX, DBL_MAX, 1, 1, 5, _("Y"));
-    _image_y = _settings->add_entry(SPAttr::Y, _("Position Y:"), _("Position Y"));
-    _image_y->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_y_changed));
-    _settings->add_entry(SPAttr::WIDTH, _("Width:"), _("Width"));
-    _settings->add_entry(SPAttr::HEIGHT, _("Height:"), _("Height"));
+    _settings->add_subregion_scale();
 
     _settings->type(NR_FILTER_OFFSET);
     _settings->add_checkbutton(false, SPAttr::PRESERVEALPHA, _("Preserve Alpha"), "true", "false", _("If set, the alpha channel won't be altered by this filter primitive."));
@@ -3067,10 +3224,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->type(NR_FILTER_TILE);
     // add some filter primitive attributes: https://drafts.fxtf.org/filter-effects/#feTileElement
     // issue: https://gitlab.com/inkscape/inkscape/-/issues/1417
-    _settings->add_entry(SPAttr::X, _("Position X:"), _("Position X"));
-    _settings->add_entry(SPAttr::Y, _("Position Y:"), _("Position Y"));
-    _settings->add_entry(SPAttr::WIDTH, _("Width:"), _("Width"));
-    _settings->add_entry(SPAttr::HEIGHT, _("Height:"), _("Height"));
+    _settings->add_subregion_scale();
 
     _settings->type(NR_FILTER_TURBULENCE);
 //    _settings->add_checkbutton(false, SPAttr::STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
@@ -3118,33 +3272,6 @@ void FilterEffectsDialog::convolve_order_changed()
     // MultiSpinButtons orders widgets backwards: so use index 1 and 0
     _convolve_target->get_spinbuttons()[1]->get_adjustment()->set_upper(_convolve_order->get_spinbutton1().get_value() - 1);
     _convolve_target->get_spinbuttons()[0]->get_adjustment()->set_upper(_convolve_order->get_spinbutton2().get_value() - 1);
-}
-
-bool number_or_empy(const Glib::ustring& text) {
-    if (text.empty()) {
-        return true;
-    }
-    double n = g_strtod(text.c_str(), nullptr);
-    if (n == 0.0 && strcmp(text.c_str(), "0") != 0 && strcmp(text.c_str(), "0.0") != 0) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-
-void FilterEffectsDialog::image_x_changed()
-{
-    if (number_or_empy(_image_x->get_text())) {
-        _image_x->set_from_attribute(_primitive_list.get_selected());
-    }
-}
-
-void FilterEffectsDialog::image_y_changed()
-{
-    if (number_or_empy(_image_y->get_text())) {
-        _image_y->set_from_attribute(_primitive_list.get_selected());
-    }
 }
 
 void FilterEffectsDialog::set_attr_direct(const AttrWidget* input)

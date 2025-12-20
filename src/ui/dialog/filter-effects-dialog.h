@@ -280,8 +280,6 @@ private:
     void remove_primitive();
     void duplicate_primitive();
     void convolve_order_changed();
-    void image_x_changed();
-    void image_y_changed();
     void add_filter_primitive(Filters::FilterPrimitiveType type);
 
     void set_attr_direct(const UI::Widget::AttrWidget*);
@@ -344,10 +342,6 @@ private:
     MatrixAttr* _convolve_matrix;
     DualSpinButton* _convolve_order;
     MultiSpinButton* _convolve_target;
-
-    // Image
-    EntryAttr* _image_x;
-    EntryAttr* _image_y;
 
     // For controlling setting sensitivity
     Gtk::Widget* _k1, *_k2, *_k3, *_k4;
