@@ -14,6 +14,7 @@
 
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/sizegroup.h>
 #include <gtkmm/togglebutton.h>
 
 #include "ui/dialog/dialog-base.h"
@@ -149,7 +150,7 @@ protected:
     void layoutPageSkew();
     void layoutPageTransform();
 
-    void _apply();
+    void _apply(bool duplicate_first = false);
     void presentPage(PageType page);
 
     void onSwitchPage(Gtk::Widget *page, guint pagenum);
@@ -157,14 +158,11 @@ protected:
     /**
      * Callbacks for when a user changes values on the panels
      */
-    void onMoveValueChanged();
     void onMoveRelativeToggled();
     void onScaleXValueChanged();
     void onScaleYValueChanged();
-    void onRotateValueChanged();
     void onRotateCounterclockwiseClicked();
     void onRotateClockwiseClicked();
-    void onSkewValueChanged();
     void onTransformValueChanged();
     void onReplaceMatrixToggled();
     void onScaleProportionalToggled();
@@ -192,10 +190,15 @@ protected:
     void applyPageScale(Inkscape::Selection *);
     void applyPageRotate(Inkscape::Selection *);
     void applyPageSkew(Inkscape::Selection *);
-    void applyPageTransform(Inkscape::Selection *);
+    void applyPageTransform(Inkscape::Selection *, bool duplicate_first = false);
 
 private:
+    Geom::Affine getCurrentMatrix();
+    void setButtonsSensitive();
+
+    Glib::RefPtr<Gtk::SizeGroup> _apply_buttons_size_group;
     Gtk::Button *applyButton;
+    Gtk::Button *duplicateButton;
     Gtk::Button *resetButton;
 
     sigc::scoped_connection _tabSwitchConn;

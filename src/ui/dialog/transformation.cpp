@@ -75,8 +75,10 @@ Transformation::Transformation()
       _check_apply_separately  (_("Apply to each _object separately")),
       _check_replace_matrix    (_("Edit c_urrent matrix")),
 
-      resetButton{Gtk::make_managed<Gtk::Button>()},
-      applyButton{Gtk::make_managed<Gtk::Button>(_("_Apply"))}
+      _apply_buttons_size_group{Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL)},
+      applyButton{Gtk::make_managed<Gtk::Button>(_("_Apply"))},
+      duplicateButton{Gtk::make_managed<Gtk::Button>(_("_Duplicate"))},
+      resetButton{Gtk::make_managed<Gtk::Button>()}
 {
     _scalar_move_horizontal.getLabel()->set_hexpand();
     _scalar_move_vertical.getLabel()->set_hexpand();
@@ -93,7 +95,7 @@ Transformation::Transformation()
 
     _check_apply_separately.set_use_underline();
     _check_apply_separately.set_tooltip_text(_("Apply the scale/rotate/skew to each selected object separately; otherwise, transform the selection as a whole"));
-
+    _check_apply_separately.set_margin_start(6);
     _check_replace_matrix.set_use_underline();
     _check_replace_matrix.set_tooltip_text(_("Edit the current transform= matrix; otherwise, post-multiply transform= by this matrix"));
 
@@ -127,11 +129,12 @@ Transformation::Transformation()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _check_apply_separately.set_active(prefs->getBool("/dialogs/transformation/applyseparately"));
     _check_apply_separately.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onApplySeparatelyToggled));
+    _check_apply_separately.set_visible(false);
 
 #if GTKMM_CHECK_VERSION(4, 14, 0)
     // make sure all spinbuttons activate Apply on pressing Enter
     auto const apply_on_activate = [this](UI::Widget::ScalarUnit &scalar) {
-        scalar.getSpinButton().signal_activate().connect([this] { _apply(); });
+        scalar.getSpinButton().signal_activate().connect([this] { _apply(false); });
     };
     apply_on_activate(_scalar_move_horizontal );
     apply_on_activate(_scalar_move_vertical   );
@@ -150,17 +153,26 @@ Transformation::Transformation()
     resetButton->set_sensitive(true);
     resetButton->signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onClear));
 
+    duplicateButton->set_use_underline();
+    duplicateButton->set_halign(Gtk::Align::CENTER);
+    duplicateButton->set_tooltip_text(_("Duplicate selection and apply transformation to the copy"));
+    duplicateButton->set_sensitive(false);
+    duplicateButton->signal_clicked().connect([this] { _apply(true); });
+
     applyButton->set_use_underline();
     applyButton->set_halign(Gtk::Align::CENTER);
     applyButton->set_tooltip_text(_("Apply transformation to selection"));
     applyButton->set_sensitive(false);
-    applyButton->signal_clicked().connect(sigc::mem_fun(*this, &Transformation::_apply));
-    applyButton->add_css_class("wide-apply-button");
+    applyButton->signal_clicked().connect([this] { _apply(false); });
+
+    _apply_buttons_size_group->add_widget(*duplicateButton);
+    _apply_buttons_size_group->add_widget(*applyButton);
 
     auto const button_box = Gtk::make_managed<Gtk::Box>();
     button_box->set_margin_top(4);
     button_box->set_spacing(8);
     button_box->set_halign(Gtk::Align::CENTER);
+    UI::pack_start(*button_box, *duplicateButton);
     UI::pack_start(*button_box, *applyButton);
     UI::pack_start(*button_box, *resetButton);
     UI::pack_start(*this, *button_box, UI::PackOptions::shrink);
@@ -168,6 +180,7 @@ Transformation::Transformation()
 
 void Transformation::selectionChanged(Inkscape::Selection *selection)
 {
+    setButtonsSensitive();
     updateSelection((Inkscape::UI::Dialog::Transformation::PageType)getCurrentPage(), selection);
 }
 void Transformation::selectionModified(Inkscape::Selection *selection, guint flags)
@@ -183,6 +196,26 @@ void Transformation::presentPage(Transformation::PageType page)
 {
     _notebook.set_current_page(page);
     set_visible(true);
+}
+
+void Transformation::setButtonsSensitive()
+{
+    auto selection = getSelection();
+    bool const has_selection = selection && !selection->isEmpty();
+
+    applyButton->set_sensitive(has_selection);
+    duplicateButton->set_sensitive(has_selection);
+}
+
+Geom::Affine Transformation::getCurrentMatrix()
+{
+    double a = _scalar_transform_a.getValue();
+    double b = _scalar_transform_b.getValue();
+    double c = _scalar_transform_c.getValue();
+    double d = _scalar_transform_d.getValue();
+    double e = _scalar_transform_e.getValue("px");
+    double f = _scalar_transform_f.getValue("px");
+    return Geom::Affine(a, b, c, d, e, f);
 }
 
 /*########################################################################
@@ -210,14 +243,8 @@ void Transformation::layoutPageMove()
     _page_move.table().attach(_scalar_move_horizontal, 0, 0, 2, 1);
     _page_move.table().attach(_units_move,             2, 0, 1, 1);
 
-    _scalar_move_horizontal.signal_value_changed()
-        .connect(sigc::mem_fun(*this, &Transformation::onMoveValueChanged));
-
     //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_VER );
     _page_move.table().attach(_scalar_move_vertical, 0, 1, 2, 1);
-
-    _scalar_move_vertical.signal_value_changed()
-        .connect(sigc::mem_fun(*this, &Transformation::onMoveValueChanged));
 
     // Relative moves
     _page_move.table().attach(_check_move_relative, 0, 2, 2, 1);
@@ -278,6 +305,7 @@ void Transformation::layoutPageRotate()
     _scalar_rotate.setDigits(3);
     _scalar_rotate.setIncrements(0.1, 1.0);
     _scalar_rotate.set_hexpand();
+    _scalar_rotate.setWidthChars(7);
 
     _counterclockwise_rotate.set_icon_name("object-rotate-left");
     _counterclockwise_rotate.set_has_frame(false);
@@ -297,9 +325,6 @@ void Transformation::layoutPageRotate()
     _page_rotate.table().attach(_scalar_rotate, 0, 0, 1, 1);
     _page_rotate.table().attach(_units_rotate,  1, 0, 1, 1);
     _page_rotate.table().attach(*box,           1, 1, 1, 1);
-
-    _scalar_rotate.signal_value_changed()
-        .connect(sigc::mem_fun(*this, &Transformation::onRotateValueChanged));
 
     _counterclockwise_rotate.signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onRotateCounterclockwiseClicked));
     _clockwise_rotate.signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onRotateClockwiseClicked));
@@ -328,11 +353,6 @@ void Transformation::layoutPageSkew()
     _page_skew.table().attach(_scalar_skew_horizontal, 0, 0, 2, 1);
     _page_skew.table().attach(_units_skew,             2, 0, 1, 1);
     _page_skew.table().attach(_scalar_skew_vertical,   0, 1, 2, 1);
-
-    _scalar_skew_horizontal.signal_value_changed()
-        .connect(sigc::mem_fun(*this, &Transformation::onSkewValueChanged));
-    _scalar_skew_vertical.signal_value_changed()
-        .connect(sigc::mem_fun(*this, &Transformation::onSkewValueChanged));
 
     //TODO: honour rotation center?
 }
@@ -475,9 +495,11 @@ void Transformation::layoutPageTransform()
 
 void Transformation::updateSelection(PageType page, Inkscape::Selection *selection)
 {
-    applyButton->set_sensitive(selection && !selection->isEmpty());
+    bool const has_selection = selection && !selection->isEmpty();
 
-    if (!selection || selection->isEmpty())
+    _check_apply_separately.set_visible(selection && selection->size() > 1);
+
+    if (!has_selection)
         return;
 
     switch (page) {
@@ -611,13 +633,22 @@ void Transformation::updatePageTransform(Inkscape::Selection *selection)
 # A P P L Y
 ########################################################################*/
 
-void Transformation::_apply()
+void Transformation::_apply(bool duplicate_first)
 {
     auto selection = getSelection();
     if (!selection || selection->isEmpty())
         return;
 
     int const page = _notebook.get_current_page();
+
+    if (page == PAGE_TRANSFORM) {
+        applyPageTransform(selection, duplicate_first);
+        return;
+    }
+
+    if (duplicate_first) {
+        selection->duplicate();
+    }
 
     switch (page) {
         case PAGE_MOVE: {
@@ -641,9 +672,6 @@ void Transformation::_apply()
             break;
         }
     }
-
-    // Let's play with never turning this off
-    applyButton->set_sensitive(false);
 }
 
 void Transformation::applyPageMove(Inkscape::Selection *selection)
@@ -906,19 +934,16 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
     DocumentUndo::done(selection->desktop()->getDocument(), _("Skew"), INKSCAPE_ICON("dialog-transform"));
 }
 
-void Transformation::applyPageTransform(Inkscape::Selection *selection)
+void Transformation::applyPageTransform(Inkscape::Selection *selection, bool duplicate_first)
 {
-    double a = _scalar_transform_a.getValue();
-    double b = _scalar_transform_b.getValue();
-    double c = _scalar_transform_c.getValue();
-    double d = _scalar_transform_d.getValue();
-    double e = _scalar_transform_e.getValue("px");
-    double f = _scalar_transform_f.getValue("px");
-
-    Geom::Affine displayed(a, b, c, d, e, f);
+    Geom::Affine displayed = getCurrentMatrix(); // read values before selection changes
     if (displayed.isSingular()) {
         getDesktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
         return;
+    }
+
+    if (duplicate_first) {
+        selection->duplicate();
     }
 
     if (_check_replace_matrix.get_active()) {
@@ -937,11 +962,6 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
 /*########################################################################
 # V A L U E - C H A N G E D    C A L L B A C K S
 ########################################################################*/
-
-void Transformation::onMoveValueChanged()
-{
-    applyButton->set_sensitive(true);
-}
 
 void Transformation::onMoveRelativeToggled()
 {
@@ -969,8 +989,6 @@ void Transformation::onMoveRelativeToggled()
             _scalar_move_vertical.setValue((  bbox->min()[Geom::Y] + y) / conversion);
         }
     }
-
-    applyButton->set_sensitive(true);
 }
 
 void Transformation::onScaleXValueChanged()
@@ -979,8 +997,6 @@ void Transformation::onScaleXValueChanged()
         _scalar_scale_horizontal.setProgrammatically = false;
         return;
     }
-
-    applyButton->set_sensitive(true);
 
     if (_check_scale_proportional.get_active()) {
         if (!_units_scale.isAbsolute()) { // percentage, just copy over
@@ -999,8 +1015,6 @@ void Transformation::onScaleYValueChanged()
         return;
     }
 
-    applyButton->set_sensitive(true);
-
     if (_check_scale_proportional.get_active()) {
         if (!_units_scale.isAbsolute()) { // percentage, just copy over
             _scalar_scale_horizontal.setValue(_scalar_scale_vertical.getValue("%"));
@@ -1009,11 +1023,6 @@ void Transformation::onScaleYValueChanged()
             _scalar_scale_horizontal.setFromPercentage (scaleYPercentage);
         }
     }
-}
-
-void Transformation::onRotateValueChanged()
-{
-    applyButton->set_sensitive(true);
 }
 
 void Transformation::onRotateCounterclockwiseClicked()
@@ -1030,11 +1039,6 @@ void Transformation::onRotateClockwiseClicked()
     prefs->setBool("/dialogs/transformation/rotateCounterClockwise", getDesktop()->yaxisdown());
 }
 
-void Transformation::onSkewValueChanged()
-{
-    applyButton->set_sensitive(true);
-}
-
 void Transformation::onTransformValueChanged()
 {
 
@@ -1049,8 +1053,6 @@ void Transformation::onTransformValueChanged()
     //g_message("onTransformValueChanged: (%f, %f, %f, %f, %f, %f)\n",
     //          a, b, c, d, e ,f);
     */
-
-    applyButton->set_sensitive(true);
 }
 
 void Transformation::onReplaceMatrixToggled()
