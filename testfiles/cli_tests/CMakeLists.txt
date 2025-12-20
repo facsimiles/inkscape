@@ -307,7 +307,7 @@ add_cli_test(export-area-drawing_eps PARAMETERS --export-area-drawing --export-t
 # add_cli_test(export-area-drawing_emf PARAMETERS --export-area-drawing --export-type=emf INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.emf REFERENCE_FILENAME export-area-drawing_expected.emf)
 # add_cli_test(export-area-drawing_wmf PARAMETERS --export-area-drawing --export-type=wmf INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing.wmf REFERENCE_FILENAME export-area-drawing_expected.wmf)
 
-# --export-area-drawing + --export-area-page should be overriden by --export-area-page
+# --export-area-drawing + --export-area-page should be overridden by --export-area-page
 add_cli_test(export-area-drawing-page_png PARAMETERS --export-area-drawing --export-area-page --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing-page.png REFERENCE_FILENAME export-area-page_expected.png)
 add_cli_test(export-area-drawing-page_svg PARAMETERS --export-area-drawing --export-area-page --export-type=svg INPUT_FILENAME areas.svg OUTPUT_FILENAME export-area-drawing-page.svg REFERENCE_FILENAME export-area-page_expected.svg)
 if(WITH_CAPYPDF)
@@ -474,7 +474,7 @@ add_cli_test(export-id_export-id-only_export-area-page_png PARAMETERS --export-i
 add_cli_test(export-id_export-id-only_export-area-page_svg PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=svg INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.svg REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.svg )
 add_cli_test(export-id_export-id-only_export-area-page_pdf PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=pdf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.pdf REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.pdf )
 add_cli_test(export-id_export-id-only_export-area-page_ps  PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=ps  INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.ps  REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.ps  )
-# EPS: Depents on https://gitlab.com/inkscape/inkscape/-/issues/1074
+# EPS: Depends on https://gitlab.com/inkscape/inkscape/-/issues/1074
 # add_cli_test(export-id_export-id-only_export-area-page_eps PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=eps INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.eps REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.eps )
 # EMF, WMF: There is no support, feature request: https://gitlab.com/inkscape/inkscape/-/issues/1204
 # add_cli_test(export-id_export-id-only_export-area-page_emf PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=emf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.emf REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.emf )
@@ -670,7 +670,7 @@ add_cli_test(export-use-hints_export-area-drawing PARAMETERS --export-use-hints 
 
 # --export-background=COLOR
 ## check for default background color and opacity
-# SVG, PDF, PS, EPS: Format not supoorted. Feature request: https://gitlab.com/inkscape/inbox/issues/2293
+# SVG, PDF, PS, EPS: Format not supported. Feature request: https://gitlab.com/inkscape/inbox/issues/2293
 # EMF, WMF: Format does not support opacity.
  add_cli_test(export-default-background_png  PARAMETERS --export-type=png INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.png REFERENCE_FILENAME export-default-background_expected.png)
  add_cli_test(export-default-background_svg  PARAMETERS --export-type=svg INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.svg REFERENCE_FILENAME export-default-background_expected.svg)
@@ -687,7 +687,7 @@ add_cli_test(export-use-hints_export-area-drawing PARAMETERS --export-use-hints 
 # add_cli_test(export-background_wmf  PARAMETERS --export-background=yellow --export-type=wmf INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.wmf REFERENCE_FILENAME export-background_expected.wmf)
 
 # --export-background-opacity=VALUE
-# SVG, PDF, PS, EPS: Format not supoorted. Feature request: https://gitlab.com/inkscape/inbox/issues/2293
+# SVG, PDF, PS, EPS: Format not supported. Feature request: https://gitlab.com/inkscape/inbox/issues/2293
 # EMF, WMF: Format does not support opacity.
 add_cli_test(export-background-opacity_png  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=png INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.png REFERENCE_FILENAME export-background-opacity_expected.png)
  add_cli_test(export-background-opacity_svg  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=svg INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.svg REFERENCE_FILENAME export-background-opacity_expected.svg)

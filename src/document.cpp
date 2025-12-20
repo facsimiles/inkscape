@@ -664,7 +664,7 @@ void SPDocument::import(SPDocument &input_doc, Inkscape::XML::Node *parent, Inks
         output_doc.dt2doc()    // objectSet operates in dt space, but for following operations it's easier to use doc
         * parent2doc.inverse() // cancel out parent transformation
         * input_doc.getRoot()->c2p // cancel out source doc user scaling and viewport
-        * transform *              // addd the new transform
+        * transform *              // add the new transform
         output_doc.doc2dt();
 
     object_set.setReprList(pasted_objects);
@@ -711,8 +711,8 @@ void SPDocument::rebase(const gchar * file, bool keep_namedview)
     This function first deletes all the root attributes in the old document followed
     by copying all the root attributes from the new document to the old document.    
 
-    Then, it copies all the element in the new XML::Document into the root of document.
-    keep a diferent approach for namedview to not erase it and merge new value
+    Then, it copies all the elements in the new XML::Document into the root of document.
+    Keep a different approach for namedview to not erase it and merge new value
 */
 void SPDocument::rebase(Inkscape::XML::Document * new_xmldoc, bool keep_namedview)
 {

@@ -208,7 +208,7 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
             }
         }
 
-        // Update item type's current style for all seleted item types
+        // Update item type's current style for all selected item types
         // Remap some item type names (for tools that can create more than one item type)
         static const std::unordered_map<std::string, const char*> item_type_map = {
             {"circle", "arc"},

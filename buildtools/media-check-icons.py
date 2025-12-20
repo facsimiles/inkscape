@@ -154,7 +154,7 @@ def find_errors_in(themes):
                         bad_symbolic.append(os.path.join(orig, fname))
                         continue
                     else:
-                        # Make filenames consistant for comparison
+                        # Make filenames consistent for comparison
                         fname = fname.replace('-symbolic.svg', '.svg')
                 elif kind == "scalable" and fname.endswith('-symbolic.svg'):
                     bad_scalable.append(os.path.join(orig, fname))

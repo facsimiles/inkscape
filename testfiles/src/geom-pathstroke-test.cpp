@@ -70,7 +70,7 @@ TEST_F(GeomPathstrokeTest, BoundedHausdorffDistance)
         auto const *comp_item = cast<SPPath>(test_case.reference_object);
         ASSERT_TRUE(test_item && comp_item);
 
-        // Note that transforms etc are not considered. Therefore the objects shoud have equal transforms.
+        // Note that transforms, etc. are not considered. Therefore the objects should have equal transforms.
         auto const test_curve = test_item->curve();
         auto const comp_curve = comp_item->curve();
         ASSERT_TRUE(test_curve && comp_curve);

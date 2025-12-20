@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-2.0-or-later
-# UI Policy consistancy
+# UI Policy consistency
 #
 # Author: Martin Owens <doctormo@geek-2.com>
 # Licensed under GPL version 2 or any later version, read the file "COPYING" for more information.
@@ -111,7 +111,7 @@ class PolicyCheckerToolbars(PolicyChecker):
     ignore = ['toolbar-tool-prefs.ui']
     errors = {
         'button-focus1': ("Button Takes Focus", "A toolbar button can have focus and will take that focus when clicked. Add focus-on-click=False to fix this."),
-        'button-focus2': ("Button Refuses Focus", "A toolbar button is refusing focus, which makes it inaccessable to keyboard navigation. Remove focusable=False"),
+        'button-focus2': ("Button Refuses Focus", "A toolbar button is refusing focus, which makes it inaccessible to keyboard navigation. Remove focusable=False"),
         'entry-focus': ("Entry Refuses Focus", "A toolbar entry doesn't allow itself to be in focus, stopping text from being entered. Change focusable to True and focus-on-click to True (or remove them)"),
 }
 

@@ -693,7 +693,7 @@ void SPDesktop::zoom_quick(bool enable)
                 if (!nt->_selected_nodes->empty()) {
                     Geom::Rect nodes = *nt->_selected_nodes->bounds();
                     double area = nodes.area();
-                    // do not zoom if a single cusp node is selected aand the bounds
+                    // do not zoom if a single cusp node is selected and the bounds
                     // have zero area.
                     if (!Geom::are_near(area, 0)) {
                         set_display_area(nodes, true);
