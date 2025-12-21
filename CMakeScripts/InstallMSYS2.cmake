@@ -281,6 +281,7 @@ if(WIN32)
     ${MINGW_LIB}/girepository-1.0/PangoFc-1.0.typelib
     ${MINGW_LIB}/girepository-1.0/PangoFT2-1.0.typelib
     ${MINGW_LIB}/girepository-1.0/freetype2-2.0.typelib
+    ${MINGW_LIB}/girepository-1.0/GioWin32-2.0.typelib
     DESTINATION lib/girepository-1.0)
 
   # Aspell dictionaries
