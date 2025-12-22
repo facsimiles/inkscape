@@ -121,7 +121,7 @@ Prikazuje GApplication opcije.
 
 =item B<--help-gtk>
 
-Prikzuje GTK+ opcije.
+Prikzujei GTK+ opcije.
 
 =item B<-V>, B<--version>
 
@@ -133,7 +133,7 @@ Ispisuje tehničke informacije uključujući verziju Inkscapea, verzije ovisnost
 
 =item B<--system-data-directory>
 
-Ispisuje mapu sustava u kojoj se spremaju datoteke koje se isporučuju s Inkscapeom. To uključuje datoteke koje Inkscape treba za pokretanje (poput definicija jedinica, ugrađena mapiranja tipki, datoteke koje opisuju izgled korisničkog sučelja, teme ikona itd.), osnovna proširenja, resurse (filtri, fontovi, markeri, palete boja, simboli, predloške) i dokumentaciju (datoteke SVG primjera, vježbe).
+Ispisuje mapu sustava u kojoj se spremaju datoteke koje se isporučuju s Inkscapeom. To uključuje datoteke koje Inkscape treba za pokretanje (poput definicija jedinica, ugrađena mapiranja tipki, datoteke koje opisuju izgled korisničkog sučelja, teme ikona itd.), osnovna proširenja, resurse (filtri, fontovi, markeri, palete boja, simboli, predloške) i dokumentaciju (datoteke SVG primjera, vodiči).
 
 Mjesto na kojem Inkscape očekuje mapu sustava može se prepisati varijablom okruženja L <INKSCAPE_DATADIR>.
 
@@ -151,7 +151,7 @@ Standardno mjesto mape korisničkog profila može se prepisati varijablom okruž
 
 Uvozi zadani popis stranica odvojenih zarezima iz PDF-a ili višestranične SVG datoteke.
 
-Ovo zamjenjuje I<--pdf-page> iz prethodnih Inkscape verzija.
+Ovo zamijenjuje I<--pdf-page> iz prethodnih Inkscape verzija.
 
 =item B<--pdf-poppler>
 
@@ -167,7 +167,7 @@ Ne ispravljaj razmak između redaka starijih datoteka prilikom otvaranja automat
 
 =item B<-o>, B<--export-filename>=I<DATOTEKA>
 
-Postavlja ime izlazne datoteke. Standardno se koristi ponovno korištenje ime ulazne datoteke. Ako se koristi i L <--export-type>, datotečni nastavak će se prilagoditi prema potrebi (ili dodati). Inače će se vrsta datoteke za izvoz odrediti na osnovi nastavka zadane datoteke.
+Postavlja ime izlazne datoteke. Standardno se koristi ime ulazne datoteke. Ako se koristi i L <--export-type>, datotečni nastavak će se prilagoditi prema potrebi (ili dodati). Inače će se vrsta datoteke za izvoz odrediti na osnovi nastavka zadane datoteke.
 
 Upotreba posebne datoteke "-" omogućuje Inkscapeu zapisati slikovne podatke u standardni izlaz (stdout).
 
@@ -221,9 +221,9 @@ Dodaje marginu okolo područja izvoza. Veličina margine određena je u jedinica
 
 =item B<-i> I<ID>, B<--export-page>=I<all|n[,a-b]*>
 
-Izvozi samo odabrane stranice. Ako je navedeno više od jedne stranice, rezultirajući dokument može sadržavati više stranica ako format to podržava.
+Izvozi samo odabrane stranice. Ako je određeno više od jedne stranice, rezultirajući dokument može sadržati više stranica ako format to podržava.
 
-Vrijednost može biti popis brojeva stranica odvojeni zarezom ili rasponi stranica od dva broja odvojeni crticom. Ključna riječ 'all' se može koristiti za označavanje da će se izvesti sve stranice.
+Vrijednost može biti popis brojeva stranica odvojeni zarezom ili rasponi stranica od dva broja odvojena crticom. Ključna riječ „sve” se može koristiti za označavanje da će se izvesti sve stranice.
 
 =item B<-i> I<ID>, B<--export-id>=I<ID-OBJEKTA[;ID-OBJEKTA]*>
 
@@ -241,7 +241,7 @@ Izvezi dokumente u obični SVG format, bez sodipodi: ili inkscape: znakovnih mje
 
 =item B<--export-png-color-mode>=I<COLORMODE>
 
-Postavi modus boja (broj bitova i vrstu boja) za izvezene bitmap slike (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)
+Postavlja modus boja (broj bitova i vrstu boja) za izvezene bitmap slike (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)
 
 =item B<--export-png-compression>=I<LEVEL>
 
@@ -249,7 +249,7 @@ Postavi razinu kompresije za izvoz PNG-a (od 0 do 9); standardna vrijednost je 6
 
 =item B<--export-png-antialias>=I<LEVEL>
 
-Postavi razinu antialiasinga za PNG izvoz (od 0 do 3); standardna vrijednost je 2.
+Postavi razinu zaglađivanja rubova za PNG izvoz (od 0 do 3); standardna vrijednost je 2.
 
 =item B<--export-png-use-dithering>=I<false|true>
 
@@ -257,7 +257,7 @@ Prisilno koristi točkanje ili ga deaktivira (za ovo Inkscape izgradnja mora pod
 
 =item B<--export-ps-level>=I<RAZINA>
 
-Odredi verziju jezika za PS i EPS izvoz. Podržane su PostScript razina 2 i 3. Standardna vrijednost je 3.
+Odrdi verziju jezika za PS i EPS izvoz. Podržane su PostScript razina 2 i 3. Standardno se koristi 3.
 
 =item B<--export-pdf-version>=I<VERZIJA>
 
@@ -460,7 +460,7 @@ Odaberi sve objekte s oznakom elipse, rotiraj ih za 30 stupnjeva, spremi SVG i z
 
 Izvezi objekt s ID oznakom „MojTrokut” s polu-transparetnom ljubičastom pozadinom u datoteku trokut_ljubičasti.png i s crvenom pozadinom u datoteku trokut_crveni.png.
 
-    inkscape --actions="export-id:MyTriangle; export-id-only; export-background:purple; export-background-opacity:0.5;export-filename:triangle_purple.png; export-do; export-background:red; export-background-opacity:1; export-filename:triangle_red.png; export-do" filename.svg
+    inkscape --actions="export-id:MyTriangle; export-id-only; export-background:purple; export-background-opacity:0.5;export-filename:triangle_purple.png; export-do; export-background:red; export-background-opacity:1; export-filename:triangle_red.png; export-do" ime-datoteke.svg
 
 Čitaj SVG datoteku iz standardnog ulaza (stdin) i izvezi je u PDF format:
 
@@ -496,7 +496,7 @@ Za više detalja pogledaj L<http://wiki.inkscape.org/wiki/index.php/Environment_
 
 =head1 DALJNJE INFORMACIJE
 
-Središnje mjesto za informacije o programu Inkscape se nalazi na L<https://www.inkscape.org/>. Web stranica sadrži novosti, dokumentaciju, vodiče, primjere, arhivu pretplatničkih lista, najnoviju izdanu verziju programa, bazu podataka o greškama i podnesenim zahtijevima za proširenje programa, forume itd.
+Središnje mjesto za informacije o programu Inkscape se nalazi na L<https://www.inkscape.org/>. Web stranica sadrži novosti, dokumentaciju, vježbe, primjere, arhivu pretplatničkih lista, najnoviju izdanu verziju programa, bazu podataka o greškama i podnesenim zahtijevima za proširenje programa, forume itd.
 
 =head1 POGLEDAJ TAKOĐER
 
@@ -518,7 +518,7 @@ I<Document Object Model (DOM): Level 2 Core> I<W3C preporuka, 13. studenog 2000.
 
 =head1 NAPOMENE O GRAFIČKOM SUČELJU
 
-Za upoznavanje s grafičkim sučeljem programa, pročitaj priručnik u Pomoć > Priručnik za Inkscape i vodiče u Pomoć > Vodiči.
+Za upoznavanje s grafičkim sučeljem programa, pročitaj priručnik (Pomoć > Priručnik za Inkscape) i vježbe (Pomoć > Vježbe).
 
 Osim SVG formata, Inkscape može uvesti (Datoteka > Uvezi) i većinu bitmap formata (PNG, BMP, JPG, XPM, GIF, itd.), neformatirani tekst (zahtijeva Perl), PS i EPS (zahtijeva Ghostscript), PDF i AI format (AI verzija 9.0 ili novija).
 

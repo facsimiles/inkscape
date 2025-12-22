@@ -27,8 +27,8 @@ Optionen:
 
     -f, --fullscreen
     -r, --recursive
-    -t, --timer=NUMBER
-    -s, --scale=NUMBER
+    -t, --timer=ZAHL
+    -s, --scale=ZAHL
     -p, --preload
 
 =head1 BESCHREIBUNG

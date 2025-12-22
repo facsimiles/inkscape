@@ -371,7 +371,7 @@ Im interaktiven Kommandozeilenmodus erwartet Inkscape eine aufeinanderfolgende R
 
 Diese Option kann mit dem Parameter L<--active-window> kombiniert werden, um die Shell-Befehle in einem bereits geöffneten Inkscape-Dokument auszuführen.
 
-Folgendes Beispiel öffnet eine Datei und exportiert sie in zwei unterschiedliche Formate, öffnet anschließend eine andere Datei und exportiert ein einzelnes Objekt;
+Folgendes Beispiel öffnet eine Datei und exportiert sie in zwei unterschiedliche Formate, öffnet anschließend eine andere Datei und exportiert ein einzelnes Objekt:
 
     file-open:datei1.svg; export-type:pdf; export-do; export-type:png; export-do
     file-open:datei2.svg; export-id:rechteck2; export-id-only; export-filename:nur_rechteck.svg; export-do
@@ -554,7 +554,7 @@ Inkscape hatte einen positiven Einfluss darauf, wie visuell ansprechend Open Sou
 
 =head1 AUTOREN
 
-Dieser Code verdankt seine Existenz einer großen Anzahl von Mitwirkenden an Inkscape und seinen Vorgängern. Die folgende Liste ist mit Sicherheit unvollständig - sie soll jedoch dazu dienen, die Arbeit all derer anzuerkennen, die diese Anwendung zusammen geschaffen haben: 
+Dieser Code verdankt seine Existenz einer großen Anzahl von Mitwirkenden an Inkscape und seinen Vorgängern. Die folgende Liste ist mit Sicherheit unvollständig - sie soll jedoch dazu dienen, die Arbeit all derer anzuerkennen, die diese Anwendung zusammen geschaffen haben:
 
 ${INKSCAPE_AUTHORS}
 

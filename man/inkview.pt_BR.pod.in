@@ -99,7 +99,7 @@ Pré carrega todos os arquivos SVG. Inkview ainda precisa renderizar as imagens 
 
 Abrir dois arquivos SVG para serem visualizados:
 
-    inkview file1.svg file2.svg
+    inkview arquivo1.svg arquivo2.svg
 
 Abra todos os arquivos SVG na pasta de exemplos que foram enviados junto com o Inkscape:
 
@@ -107,7 +107,7 @@ Abra todos os arquivos SVG na pasta de exemplos que foram enviados junto com o I
 
 Carregar um slideshow com tela cheia que automaticamente muda para a próxima imagem a cada 5 segundos:
 
-    inkview --fullscreen --timer=5 [files/folders ...]
+    inkview --fullscreen --timer=5 [arquivos/pastas ...]
 
 =head1 VEJA TAMBÉM
 
@@ -121,7 +121,7 @@ Veja L<inkscape(1)>
 
 =head1 COPYRIGHT E LICENÇA
 
-B<Copyright (C)> 1999-2023 by Authors.
+B<Copyright (C)> 1999-2023 por Autores.
 
 B<Inkscape> é software livre; você pode redistribuí-lo e modificações-lo sob os termos da GPL versão 3 ou mais recente.
 
