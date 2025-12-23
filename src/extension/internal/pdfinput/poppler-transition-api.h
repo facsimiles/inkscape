@@ -30,15 +30,16 @@
 #endif
 
 #if POPPLER_CHECK_VERSION(25, 6, 0)
-#define _POPPLER_DECLARE_TRANSFER_FUNCTION_VECTOR(name) std::vector<std::unique_ptr<Function>> name(4)
-#define _POPPLER_DELETE_TRANSFER_FUNCTION(name) name.reset()
+#define _POPPLER_DECLARE_TRANSFER_FUNCTION(name) std::unique_ptr<Function> name = nullptr
 #define _POPPLER_GET_TRANSFER_FUNCTION_POINTER(name) name.get()
+#define _POPPLER_DELETE_TRANSFER_FUNCTION(name) name.reset()
+
 #else
-#define _POPPLER_DECLARE_TRANSFER_FUNCTION_VECTOR(name) Function *name[4] = {}
+#define _POPPLER_DECLARE_TRANSFER_FUNCTION(name) Function *name = nullptr
+#define _POPPLER_GET_TRANSFER_FUNCTION_POINTER(name) name
 #define _POPPLER_DELETE_TRANSFER_FUNCTION(name) \
     delete name;                                \
     name = nullptr
-#define _POPPLER_GET_TRANSFER_FUNCTION_POINTER(name) name
 #endif
 
 #if POPPLER_CHECK_VERSION(25,2,0)
