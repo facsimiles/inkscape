@@ -753,7 +753,7 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
         _POPPLER_CALL_ARGS(obj2, obj1.dictLookup, "TR");
     }
     if (obj2.isName(const_cast<char *>("Default")) || obj2.isName(const_cast<char *>("Identity"))) {
-        state->setTransfer(std::move(funcs));
+        state->setTransfer({});
     } else if (obj2.isArray() && obj2.arrayGetLength() == 4) {
         int pos = 4;
         for (int i = 0; i < 4; ++i) {
