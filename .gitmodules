@@ -14,6 +14,7 @@
 	path = po
 	url = https://gitlab.com/inkscape/translations.git
 	branch = 1.4.x
+	shallow = true
 [submodule "src/3rdparty/libdepixelize"]
 	path = src/3rdparty/libdepixelize
 	url = https://gitlab.com/inkscape/devel/libdepixelize.git
