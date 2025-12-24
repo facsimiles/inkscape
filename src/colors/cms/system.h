@@ -32,11 +32,7 @@ private:
 
 public:
     // Access the singleton CMS::System object.
-    static System &get()
-    {
-        static System instance;
-        return instance;
-    }
+    static System &get();
 
     DirPaths const &getDirectoryPaths();
     void addDirectoryPath(std::string path, bool is_user);

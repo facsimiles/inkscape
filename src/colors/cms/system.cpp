@@ -27,6 +27,12 @@
 
 namespace Inkscape::Colors::CMS {
 
+System &System::get()
+{
+    static System instance;
+    return instance;
+}
+
 System::System()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
