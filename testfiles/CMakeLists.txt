@@ -73,6 +73,7 @@ set(TEST_SOURCES
     colors/dragndrop-test
     colors/color-set-test
     colors/xml-color-test
+    object/color-profile-test
     uri-test
     uri-references-test
     util-test

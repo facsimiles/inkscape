@@ -45,6 +45,9 @@ public:
     // profile data or ID should instead involve creating a new ColorProfile element.
     void setRenderingIntent(Colors::RenderingIntent intent);
 
+    // For unit test usage
+    Inkscape::URI const *getUri() const { return _uri.get(); }
+
 protected:
     void build(SPDocument *doc, Inkscape::XML::Node *repr) override;
     void release() override;

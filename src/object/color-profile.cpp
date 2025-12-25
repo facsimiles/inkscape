@@ -62,8 +62,8 @@ void ColorProfile::set(SPAttr key, gchar const *value)
         case SPAttr::XLINK_HREF:
             // Href is the filename or the data of the icc profile itself and is used before local
             if (value) {
-                auto fn = document->getDocumentFilename();
-                _uri = std::make_unique<Inkscape::URI>(value, fn ? ("file://" + std::string(fn)).c_str() : nullptr);
+                auto base = document->getDocumentBase();
+                _uri = std::make_unique<Inkscape::URI>(Inkscape::URI::from_href_and_basedir(value, base));
             } else {
                 _uri.reset();
             }
@@ -111,8 +111,9 @@ Inkscape::XML::Node *ColorProfile::write(Inkscape::XML::Document *xml_doc, Inksc
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || _uri) {
-        auto fn = document->getDocumentFilename();
-        Inkscape::setHrefAttribute(*repr, fn ? _uri->str(("file://" + std::string(fn)).c_str()).c_str() : nullptr);
+        auto base = document->getDocumentBase();
+        Inkscape::setHrefAttribute(
+            *repr, _uri ? (_uri->str(base ? URI::from_dirname(base).str().c_str() : nullptr).c_str()) : nullptr);
     }
 
     repr->setAttributeOrRemoveIfEmpty("local", _local);
@@ -190,8 +191,8 @@ ColorProfile *ColorProfile::createFromProfile(SPDocument *doc, Colors::CMS::Prof
             break;
         case ColorProfileStorage::HREF_FILE: {
             auto uri = Inkscape::URI::from_native_filename(profile.getPath().c_str());
-            auto fn = doc->getDocumentFilename();
-            Inkscape::setHrefAttribute(*repr, uri.str(fn ? (std::string("file://") + fn).c_str() : nullptr));
+            auto base = doc->getDocumentBase();
+            Inkscape::setHrefAttribute(*repr, uri.str(base ? URI::from_dirname(base).str().c_str() : nullptr).c_str());
         } break;
     }
     if (intent) {
