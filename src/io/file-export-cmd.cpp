@@ -254,8 +254,11 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
                 std::cerr << "InkFileExportCmd::do_export: Unknown export type: " << type.raw() << ". Allowed values: [";
                 filetypes.sort();
                 filetypes.unique();
-                copy(filetypes.begin(), filetypes.end(), std::ostream_iterator<std::string>(std::cerr, ", "));
-                std::cerr << "\b\b]" << std::endl;
+                for(auto it= filetypes.begin(); it!= filetypes.end(); it++) {
+                    if (it != filetypes.begin()) std::cerr << ", ";
+                    std::cerr << ((*it)[0] == '.' ? it->substr(1) : *it);
+                }
+                std::cerr << "]" << std::endl;
             }
         }
     }
