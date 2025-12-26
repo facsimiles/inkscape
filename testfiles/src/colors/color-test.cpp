@@ -363,6 +363,14 @@ TEST(ColorsColor, jitterColor)
     EXPECT_EQ(color.toString(), "#717878");
     color.jitter(0.2, 0x02);
     EXPECT_EQ(color.toString(), "#5a7881");
+#elif defined(_WIN32)
+    // Random results from from UCRT on Windows 10 22H2
+    color.jitter(0.1);
+    EXPECT_EQ(color.toString(), "#738278");
+    color.jitter(0.2);
+    EXPECT_EQ(color.toString(), "#838677");
+    color.jitter(0.2, 0x02);
+    EXPECT_EQ(color.toString(), "#7b868b");
 #else
     color.jitter(0.1);
     EXPECT_EQ(color.toString(), "#897d87");
