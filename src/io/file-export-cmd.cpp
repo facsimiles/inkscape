@@ -24,6 +24,7 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
 #include <png.h> // PNG export
+#include <ranges>
 
 #include "colors/color.h"
 #include "colors/manager.h"
@@ -254,11 +255,10 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
                 std::cerr << "InkFileExportCmd::do_export: Unknown export type: " << type.raw() << ". Allowed values: [";
                 filetypes.sort();
                 filetypes.unique();
-                for(auto it= filetypes.begin(); it!= filetypes.end(); it++) {
-                    if (it != filetypes.begin()) std::cerr << ", ";
-                    std::cerr << ((*it)[0] == '.' ? it->substr(1) : *it);
-                }
-                std::cerr << "]" << std::endl;
+                std::ranges::copy(filetypes |
+                    std::views::transform([](auto& ext){ return ext.starts_with(".") ? ext.substr(1) : ext; }),
+                    std::ostream_iterator<std::string>(std::cerr, ", "));
+                std::cerr << "\b\b]" << std::endl;
             }
         }
     }
