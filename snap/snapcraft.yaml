@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 name: inkscape
 adopt-info: inkscape
+contact: https://inkscape.org/contribute
 license: GPL-3.0
 confinement: strict
 base: core24
@@ -80,7 +81,6 @@ parts:
 #       NOTE: Most dependencies are already provided by "extension: gnome" (see later).
       - libboost-filesystem1.83.0
       - libcdr-0.1-1
-      - libdouble-conversion3
       - libgc1
       - libgsl27
       - libgslcblas0
@@ -245,16 +245,38 @@ parts:
       - -usr/lib/*/libvorbis.*
       - -usr/lib/*/libvorbisenc.so.*
     override-build: |
+      echo "Fixing Icon path"
       sed -i.bak -e 's|Icon=${INKSCAPE_ICONPATH}|Icon=${SNAP}/share/inkscape/branding/inkscape.svg|g' $SNAPCRAFT_PART_SRC/org.inkscape.Inkscape.desktop.template
+      echo "---"
+      echo "WORKAROUND: forcing system version of poppler over the version contained in gnome-sdk (because gnome-sdk ships libpoppler-dev without libpoppler-private-dev, and pkgconfig does not know the difference )"
+      mount -o bind /dev/null /snap/gnome-*-sdk/current/usr/lib/*-linux-gnu/pkgconfig/poppler.pc
+      mount -o bind /dev/null /snap/gnome-*-sdk/current/usr/lib/*-linux-gnu/pkgconfig/poppler-glib.pc
+      echo "WORKAROUND: Overwriting all system libs with their version from the gnome-sdk snap (to avoid weird linker errors)"
+      echo "(Yes, this is very ugly, it's a major design flaw in the snap build system that the gnome-sdk libraries are not compatible to the Ubuntu base system ones 🤮 )"
+      for lib in $(find /usr/lib/*-linux-gnu/ -maxdepth 1 -name '*.s*'); do
+       if [ -e /snap/gnome-*-sdk/current/$lib ]; then
+          # Skip broken symlinks
+          cat /snap/gnome-*-sdk/current/$lib > /dev/null || continue
+          echo Overwriting system lib $lib
+          mv $lib $lib.disabled
+          cp /snap/gnome-*-sdk/current/$lib $lib
+        fi
+      done
+      echo "---"
+      echo "Building Inkscape"
       craftctl default
+      echo "---"
+      echo "Fixing Inkscape version"
       INKSCAPE_VERSION=`g++ -I${SNAPCRAFT_PART_SRC}/src ${SNAPCRAFT_PART_BUILD}/src/inkscape-version.cpp ${SNAPCRAFT_PROJECT_DIR}/snap/local/print-inkscape-version.cpp -o print-inkscape-version && ./print-inkscape-version`
       echo "Inkscape Version: ${INKSCAPE_VERSION}"
       craftctl set version="${INKSCAPE_VERSION}"
+      echo "---"
+      echo "Installing locally built libcapypdf"
       cp ${CRAFT_PART_BUILD}/deps/lib/libcapy* ${CRAFT_PART_INSTALL}/lib/
     override-prime: |
       craftctl default
       sed -i "s|_have.*$||" $SNAPCRAFT_PRIME/share/bash-completion/completions/inkscape
-    parse-info: [ share/metainfo/org.inkscape.Inkscape.appdata.xml ]
+    parse-info: [ org.inkscape.Inkscape.appdata.xml ] # Note: built from /org.inkscape.Inkscape.appdata.xml.in
     after: [python-deps] # Grab the network stuff first
 
   python-deps:

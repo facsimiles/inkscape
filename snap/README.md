@@ -35,7 +35,7 @@ Build:
 # You can skip this step for quick experiments.
 snapcraft clean
 # Build
-snapcraft
+snapcraft pack
 ```
 
 ```
@@ -50,6 +50,21 @@ sudo snap connect inkscape:dot-config-inkscape
 ### Troubleshooting
 #### General
 If the snap fails to build but it worked before, first run `snapcraft clean` and build again and see if the errors disappear. Too often, snapcraft remembers some parts of the previous build, which causes trouble.
+
+To debug the build process, you can get a shell inside the build environment: `snapcraft package --debug` opens a shell after building fails. `snapcraft package --shell-after` opens a shell after building succeeded. Inside the build environment, `/root/parts/inkscape/src` is the inkscape source dir and `/root/parts/inkscape/build/` is the CMake build dir. The whole git repo is in `/root/project`.
+
+First copy-and-paste this line.
+```
+cd /root/parts/inkscape/build/
+```
+Strangely, it is important that you do not copy-and-paste the above command together with further commands. This is because the shell inside the build environment has some incomplete magic that sets the build environment variables.
+
+You should now see a message `build environment set for part...`. Then you can continue:
+```
+rm CMakeCache.txt
+cmake /root/parts/inkscape/src -G Ninja -DCMAKE_INSTALL_PREFIX=
+cmake --build .
+```
 
 #### Snap directory
 ```

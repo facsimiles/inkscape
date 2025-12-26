@@ -40,6 +40,8 @@
   <url type="faq">https://inkscape.org/learn/faq</url>
   <url type="vcs-browser">https://gitlab.com/inkscape/inkscape</url>
   <url type="contribute">https://inkscape.org/contribute</url>
+  <url type="contact">https://inkscape.org/community</url>
+  <update_contact>inkscape-devel@lists.inkscape.org</update_contact>
   <screenshots>
     <screenshot type="default">
       <image>https://media.inkscape.org/media/resources/file/light-2.png</image>
