@@ -176,6 +176,10 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
         auto type = Type.lowercase();
         g_info("exporting '%s' to type '%s'", filename_in.c_str(), type.c_str());
 
+        // Remove initial "." if present in --export-type
+        if (!type.empty() && type[0] == '.') {
+            type = type.substr(1);
+        }
         export_type_current = type;
 
         // Check for consistency between extension of --export-filename and --export-type if both are given
