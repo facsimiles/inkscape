@@ -13,7 +13,7 @@
 #include "colors/cms/system.h"
 #include "preferences.h"
 
-static std::string icc_dir = INKSCAPE_TESTS_DIR "/data/colors";
+static std::string icc_dir = INKSCAPE_TESTS_DIR "/data/colors/";
 static std::string grb_profile = INKSCAPE_TESTS_DIR "/data/colors/SwappedRedAndGreen.icc";
 static std::string display_profile = INKSCAPE_TESTS_DIR "/data/colors/display.icc";
 

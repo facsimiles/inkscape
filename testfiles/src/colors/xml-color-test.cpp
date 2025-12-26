@@ -21,7 +21,7 @@
 using namespace Inkscape;
 using namespace Inkscape::Colors;
 
-static std::string icc_dir = INKSCAPE_TESTS_DIR "/data/colors";
+static std::string icc_dir = INKSCAPE_TESTS_DIR "/data/colors/";
 static std::string cmyk_profile = INKSCAPE_TESTS_DIR "/data/colors/default_cmyk.icc";
 
 namespace {
