@@ -811,8 +811,9 @@ bool Preferences::Entry::isValidInt() const
         // no valid number found
         return false;
     }
-    // checking for overflow is unecessary because long is the same size
-    // as int on all modern platforms, this is somewhat pedantic
+    // checking for overflow _is_ necessary because while int is 32-bit on all
+    // modern platforms, long is 64-bit on 64-bit Linux and macOS (LP64 model).
+    // For other platforms, the check is optimized out.
     if (errno == ERANGE || value < INT_MIN || value > INT_MAX) {
         return false; // overflow
     }
@@ -835,7 +836,10 @@ bool Preferences::Entry::isValidUInt() const
     errno = 0;
     const char* cstr = s.c_str();
     char* end_ptr = nullptr;
-    unsigned long value = strtoul(cstr, &end_ptr, 0);
+    // Negative value wraps around. We rely on ull being larger than uint to
+    // check for this. Mind that ulong can be the same size as uint on some
+    // platforms.
+    unsigned long long value = strtoull(cstr, &end_ptr, 0);
     if (end_ptr == cstr) {
         return false;
     }

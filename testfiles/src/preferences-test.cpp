@@ -174,6 +174,14 @@ TEST_F(PreferencesTest, testIsValidInt)
     ASSERT_TRUE(prefs->getEntry("/test/intvalue").isValidInt());
     prefs->setString("/test/intvalue", "invalid");
     ASSERT_FALSE(prefs->getEntry("/test/intvalue").isValidInt());
+    prefs->setString("/test/intvalue", "2147483647");
+    ASSERT_TRUE(prefs->getEntry("/test/intvalue").isValidInt());
+    prefs->setString("/test/intvalue", "2147483648");
+    ASSERT_FALSE(prefs->getEntry("/test/intvalue").isValidInt());
+    prefs->setString("/test/intvalue", "-2147483648");
+    ASSERT_TRUE(prefs->getEntry("/test/intvalue").isValidInt());
+    prefs->setString("/test/intvalue", "-2147483649");
+    ASSERT_FALSE(prefs->getEntry("/test/intvalue").isValidInt());
 }
 
 TEST_F(PreferencesTest, testIsValidUInt)
@@ -181,6 +189,12 @@ TEST_F(PreferencesTest, testIsValidUInt)
     prefs->setUInt("/test/uintvalue", 123u);
     ASSERT_TRUE(prefs->getEntry("/test/uintvalue").isValidUInt());
     prefs->setString("/test/uintvalue", "-123");
+    ASSERT_FALSE(prefs->getEntry("/test/uintvalue").isValidUInt());
+    prefs->setString("/test/uintvalue", "4294967295");
+    ASSERT_TRUE(prefs->getEntry("/test/uintvalue").isValidUInt());
+    prefs->setString("/test/uintvalue", "4294967296");
+    ASSERT_FALSE(prefs->getEntry("/test/uintvalue").isValidUInt());
+    prefs->setString("/test/uintvalue", "-4294967296");
     ASSERT_FALSE(prefs->getEntry("/test/uintvalue").isValidUInt());
 }
 
