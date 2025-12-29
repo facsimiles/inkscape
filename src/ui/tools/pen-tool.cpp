@@ -27,6 +27,7 @@
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-curve.h"
+#include "display/control/canvas-item-text.h"
 
 #include "object/sp-path.h"
 
@@ -1641,6 +1642,33 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, unsigned 
             this->_setAngleDistanceStatusMessage(p, 0, message);
         }
     }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool show_distance = prefs->getBool("/tools/freehand/pen/show_distance", true);
+    indicator_tmp_items.clear();
+    if (show_distance) {
+        _show_distance(p);
+    }
+}
+
+void PenTool::_show_distance(Geom::Point const p)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    Geom::Point tooltip_pos = p;
+    double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
+    tooltip_pos += _desktop->w2d(Geom::Point(0, -2*fontsize));
+
+    Geom::Point rel = p - p_array[0];
+    Inkscape::Util::Quantity q = Inkscape::Util::Quantity(Geom::L2(rel), "px");
+    Glib::ustring dist = q.string(_desktop->getNamedView()->display_units);
+
+    auto canvas_tooltip = new Inkscape::CanvasItemText(_desktop->getCanvasTemp(), tooltip_pos, dist);
+    canvas_tooltip->set_fontsize(fontsize);
+    canvas_tooltip->set_fill(0xffffffff);
+    canvas_tooltip->set_background(0x33337f80);
+
+    indicator_tmp_items.emplace_back(canvas_tooltip);
 }
 
 void PenTool::_setCtrl(Geom::Point const q, unsigned const state)
@@ -1881,6 +1909,7 @@ void PenTool::_finish(bool const closed)
 
     this->green_anchor.reset();
     _redo_stack.clear();
+    indicator_tmp_items.clear();
     this->_enableEvents();
 }
 
