@@ -104,6 +104,13 @@ TEST(ExtractUriTest, data_uri)
         ASSERT_STREQ(now, "FALSE");
     }
     {
+        char const *data = "DaTa:iMaGe/pNg;bAsE64,IrReGuLaR";
+        auto [now, type] = extract_uri_data(data);
+        ASSERT_TRUE(now);
+        ASSERT_EQ(type, Base64Data::RASTER);
+        ASSERT_STREQ(now, "IrReGuLaR");
+    }
+    {
         char const *data = "http://example.com/foo.png";
         auto [now, type] = extract_uri_data(data);
         ASSERT_TRUE(now);

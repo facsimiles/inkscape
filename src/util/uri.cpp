@@ -123,33 +123,33 @@ std::tuple<char const *, Base64Data> extract_uri_data(char const *uri_data)
 
     gchar const *data = uri_data;
 
-    if ((*data) && strncmp(data, "data:", 5) == 0) {
+    if ((*data) && g_ascii_strncasecmp(data, "data:", 5) == 0) {
         data += 5;
     }
 
     while (*data) {
-        if (strncmp(data, "base64", 6) == 0) {
+        if (g_ascii_strncasecmp(data, "base64", 6) == 0) {
             /* base64-encoding */
             data_is_base64 = true;
             // Illustrator produces embedded images without MIME type, so we assume it's image if no mime found
             data_is_image = !data_has_mime;
             data += 6;
         }
-        else if (strncmp(data, "image/png", 9) == 0
-              || strncmp(data, "image/jpg", 9) == 0
-              || strncmp(data, "image/jp2", 9) == 0
-              || strncmp(data, "image/bmp", 9) == 0) {
+        else if (g_ascii_strncasecmp(data, "image/png", 9) == 0
+              || g_ascii_strncasecmp(data, "image/jpg", 9) == 0
+              || g_ascii_strncasecmp(data, "image/jp2", 9) == 0
+              || g_ascii_strncasecmp(data, "image/bmp", 9) == 0) {
             /* PNGi, JPEG, JPEG200, BMP image */
             data_is_image = true;
             data += 9;
         }
-        else if (strncmp(data, "image/jpeg", 10) == 0
-              || strncmp(data, "image/tiff", 10) == 0) {
+        else if (g_ascii_strncasecmp(data, "image/jpeg", 10) == 0
+              || g_ascii_strncasecmp(data, "image/tiff", 10) == 0) {
             /* JPEG, TIFF image */
             data_is_image = true;
             data += 10;
         }
-        else if (strncmp(data, "image/svg+xml", 13) == 0) {
+        else if (g_ascii_strncasecmp(data, "image/svg+xml", 13) == 0) {
             /* SVG image */
             data_is_svg = true;
             data_is_image = true;
