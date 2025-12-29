@@ -519,10 +519,18 @@ SPStyle::clear() {
         filter.href = nullptr;
     }
 
-    if (document) {
+    // Prioritize 'object' over 'document' when recreating the filter reference.
+    if (object) {
+        filter.href = new SPFilterReference(object);
+    } else if (document) {
         filter.href = new SPFilterReference(document);
-        filter_changed_connection = filter.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), this));
+    }
 
+    if (filter.href) {
+        filter_changed_connection = filter.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), this));
+    }
+
+    if (document) {
         fill.href = std::make_shared<SPPaintServerReference>(document);
         fill_ps_changed_connection = fill.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_fill_paint_server_ref_changed), this));
 

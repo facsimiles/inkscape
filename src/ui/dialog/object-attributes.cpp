@@ -832,6 +832,9 @@ void details::AttributesPanel::update_size_location() {
 }
 
 void details::AttributesPanel::update_filters(SPObject* object) {
+    // Stop UI from changing filters
+    auto scoped(_update.block());
+
     auto filters = get_filter_primitive_count(object);
     bool gaussian_blur = false;
     if (filters == 1) {
