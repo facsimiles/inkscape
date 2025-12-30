@@ -52,7 +52,7 @@ struct UnitMetric
 class Unit : boost::equality_comparable<Unit>
 {
 public:
-    Unit();
+    Unit() = default;
     Unit(UnitType type,
          double factor,
          Glib::ustring name,
@@ -80,13 +80,15 @@ public:
     bool           compatibleWith(Glib::ustring const &) const;
     bool           compatibleWith(char const *) const;
 
-    UnitType       type;
-    double         factor;
+    UnitType       type = UNIT_TYPE_DIMENSIONLESS;
+    double         factor = 1.0;
     Glib::ustring  name;
     Glib::ustring  name_plural;
     Glib::ustring  abbr;
     Glib::ustring  description;
     Glib::ustring  metric_name;
+    int            precision = 3; // show that many digits after decimal point in spin buttons
+    double         step = 0.1;    // increment/decrement step for spin buttons
 
     /** Check if units are equal. */
     bool operator==(Unit const &other) const;

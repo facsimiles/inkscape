@@ -149,12 +149,6 @@ UnitParser::UnitParser(UnitTable *table) :
 {
 }
 
-Unit::Unit() :
-    type(UNIT_TYPE_DIMENSIONLESS), // should this or NONE be the default?
-    factor(1.0)
-{
-}
-
 Unit::Unit(UnitType type,
            double factor,
            Glib::ustring name,
@@ -173,13 +167,7 @@ Unit::Unit(UnitType type,
 
 int Unit::defaultDigits() const
 {
-    int factor_digits = int(log10(factor));
-    if (factor_digits < 0) {
-        g_warning("factor = %f, factor_digits = %d", factor, factor_digits);
-        g_warning("factor_digits < 0 - returning 0");
-        factor_digits = 0;
-    }
-    return factor_digits;
+    return precision;
 }
 
 bool Unit::compatibleWith(Unit const *u) const
@@ -474,6 +462,7 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
         unit = std::make_unique<Unit>();
         primary = false;
         skip = false;
+        bool step_defined = false;
 
         if (auto f = attrs.find("type"); f != attrs.end()) {
             Glib::ustring type = f->second;
@@ -485,11 +474,25 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
                 skip = true;
             }
         }
-        if (auto f = attrs.find("pri"); f != attrs.end()) {
-            primary = parse_bool(f->second);
+        for (auto& [attr, value] : attrs) {
+            if (attr == "pri") {
+                primary = parse_bool(value);
+            }
+            else if (attr == "metric") {
+                unit->metric_name = value;
+            }
+            else if (attr == "precision") {
+                unit->precision = std::stoi(value);
+            }
+            else if (attr == "step") {
+                unit->step = std::stod(value);
+                step_defined = true;
+            }
         }
-        if (auto f = attrs.find("metric"); f != attrs.end()) {
-            unit->metric_name = f->second;
+
+        if (!step_defined) {
+            int factor_digits = -1 * static_cast<int>(std::log10(unit->factor));
+            unit->step = std::pow(10.0, factor_digits);
         }
     }
 }

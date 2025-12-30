@@ -110,9 +110,8 @@ int UnitMenu::getDefaultDigits() const
 }
 
 double UnitMenu::getDefaultStep() const
-{ 
-    int factor_digits = -1 * static_cast<int>(std::log10(getUnit()->factor));
-    return std::pow(10.0, factor_digits);
+{
+    return getUnit()->step;
 }
 
 double UnitMenu::getDefaultPage() const

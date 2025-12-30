@@ -47,6 +47,8 @@
     <abbr>px</abbr>
     <factor>1.00</factor>
     <description>CSS Pixels (96/inch)</description>
+    <precision>2</precision>
+    <step>1.0</step>
 </unit>
 <unit type="LINEAR" pri="n" metric="dyadic">
     <name>inch</name>
@@ -54,6 +56,8 @@
     <abbr>in</abbr>
     <factor>96.0</factor>
     <description>Inches (96 px/in)</description>
+    <precision>2</precision>
+    <step>0.1</step>
 </unit>
 <unit type="LINEAR" pri="n" metric="dyadic">
     <name>foot</name>
@@ -61,6 +65,8 @@
     <abbr>ft</abbr>
     <factor>1152.0</factor>
     <description>Feet (12 in/ft)</description>
+    <precision>3</precision>
+    <step>0.1</step>
 </unit>
 <unit type="LINEAR" pri="n">
     <name>millimeter</name>
@@ -68,6 +74,8 @@
     <abbr>mm</abbr>
     <factor>3.779527559055119</factor>
     <description>Millimeters (25.4 mm/in)</description>
+    <precision>2</precision>
+    <step>1.0</step>
 </unit>
 <unit type="LINEAR" pri="n">
     <name>centimeter</name>
@@ -75,6 +83,8 @@
     <abbr>cm</abbr>
     <factor>37.79527559055119</factor>
     <description>Centimeters (10 mm/cm)</description>
+    <precision>2</precision>
+    <step>0.1</step>
 </unit>
 <unit type="LINEAR" pri="n">
     <name>meter</name>
@@ -82,6 +92,8 @@
     <abbr>m</abbr>
     <factor>3779.527559055119</factor>
     <description>Meters (100 cm/m)</description>
+    <precision>3</precision>
+    <step>0.1</step>
 </unit>
 <unit type="LINEAR" pri="n">
     <name>point</name>
@@ -89,6 +101,8 @@
     <abbr>pt</abbr>
     <factor>1.333333333333333</factor>
     <description>PostScript points (72/inch)</description>
+    <precision>2</precision>
+    <step>0.1</step>
 </unit>
 <unit type="LINEAR" pri="n">
     <name>pica</name>
@@ -96,6 +110,8 @@
     <abbr>pc</abbr>
     <factor>16.0</factor>
     <description>12 points</description>
+    <precision>3</precision>
+    <step>0.1</step>
 </unit>
 <unit type="RADIAL" pri="y">
     <name>degree</name>
@@ -103,6 +119,8 @@
     <abbr>°</abbr>
     <factor>1.00</factor>
     <description>Degrees</description>
+    <precision>2</precision>
+    <step>1.0</step>
 </unit>
 <unit type="RADIAL" pri="n">
     <name>radian</name>
@@ -110,6 +128,8 @@
     <abbr>rad</abbr>
     <factor>57.29577951308232</factor>
     <description>Radians (180/pi deg/rad)</description>
+    <precision>3</precision>
+    <step>0.1</step>
 </unit>
 <unit type="RADIAL" pri="n">
     <name>gradian</name>
@@ -117,6 +137,8 @@
     <abbr>grad</abbr>
     <factor>0.9</factor>
     <description>Gradians (360/400 deg/grad)</description>
+    <precision>2</precision>
+    <step>1.0</step>
 </unit>
 <unit type="RADIAL" pri="n">
     <name>turn</name>
@@ -124,6 +146,8 @@
     <abbr>turn</abbr>
     <factor>360</factor>
     <description>Turns (360 deg/turn)</description>
+    <precision>3</precision>
+    <step>0.1</step>
 </unit>
 <unit type="FONT_HEIGHT" pri="y">
     <name>font-height</name>
@@ -131,6 +155,8 @@
     <abbr>em</abbr>
     <factor>1.00</factor>
     <description>Font height</description>
+    <precision>2</precision>
+    <step>0.1</step>
 </unit>
 <unit type="FONT_HEIGHT" pri="n">
     <name>x-height</name>
@@ -138,6 +164,8 @@
     <abbr>ex</abbr>
     <factor>0.50</factor>
     <description>Height of letter 'x'</description>
+    <precision>2</precision>
+    <step>0.1</step>
 </unit>
 <unit type="FONT_HEIGHT" pri="n">
     <name>half-em</name>
@@ -145,6 +173,8 @@
     <abbr>en</abbr>
     <factor>0.50</factor>
     <description>Half of font height</description>
+    <precision>2</precision>
+    <step>0.1</step>
 </unit>
 <unit type="DIMENSIONLESS" pri="y">
     <name>%</name>
@@ -152,6 +182,8 @@
     <abbr>%</abbr>
     <factor>1.00</factor>
     <description>Percentage</description>
+    <precision>2</precision>
+    <step>1.0</step>
 </unit>
 
 </unitdefs>
