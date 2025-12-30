@@ -293,9 +293,9 @@ std::tuple<bool, double, double> round_values(double x, double y) {
     return std::make_tuple(a != x || b != y, a, b);
 }
 
-std::tuple<bool, double, double> round_values(Gtk::SpinButton& x, Gtk::SpinButton& y) {
-    return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
-}
+// std::tuple<bool, double, double> round_values(Gtk::SpinButton& x, Gtk::SpinButton& y) {
+//     return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
+// }
 
 std::tuple<bool, double, double> round_values(Widget::InkSpinButton& x, Widget::InkSpinButton& y) {
     return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
@@ -348,13 +348,13 @@ void align_star_shape(SPStar* path) {
     path->updateRepr();
 }
 
-void set_dimension_adj(Widget::InkSpinButton& btn) {
-    btn.set_adjustment(Gtk::Adjustment::create(0, 0, 1'000'000, 1, 5));
-}
-
-void set_location_adj(Widget::InkSpinButton& btn) {
-    btn.set_adjustment(Gtk::Adjustment::create(0, -1'000'000, 1'000'000, 1, 5));
-}
+// void set_dimension_adj(Widget::InkSpinButton& btn) {
+//     btn.set_adjustment(Gtk::Adjustment::create(0, 0, 1'000'000, 1, 5));
+// }
+//
+// void set_location_adj(Widget::InkSpinButton& btn) {
+//     btn.set_adjustment(Gtk::Adjustment::create(0, -1'000'000, 1'000'000, 1, 5));
+// }
 
 } // namespace
 
@@ -460,6 +460,21 @@ void details::AttributesPanel::add_size_properties() {
     _height.signal_value_changed().connect([this](auto){ transform(); });
 
     Widget::reparent_properties(get_widget<Gtk::Grid>(_builder, "size-props"), _grid);
+
+    // collapsible "Transform" panel
+    _transform_toggle = _grid.add_section("Transform");
+    _transform_panel = std::make_unique<Widget::TransformPanel>();
+    _transform_panel->add_to_grid(_grid);
+    _grid.add_section_divider();
+    _transform_toggle->signal_clicked().connect([this] {
+        bool show = !_transform_panel_visibility;
+        show_transformation_panel(show);
+        Preferences::get()->setBool(_transform_panel_visibility.observed_path, show);
+    });
+    show_transformation_panel(_transform_panel_visibility);
+    _transform_panel_visibility.action = [this] {
+        show_transformation_panel(_transform_panel_visibility);
+    };
 }
 
 void details::AttributesPanel::add_name_properties() {
@@ -744,6 +759,9 @@ void details::AttributesPanel::set_desktop(SPDesktop* desktop) {
     if (_show_fill_stroke) {
         _paint->set_desktop(desktop);
     }
+    if (_transform_panel) {
+        _transform_panel->set_desktop(desktop);
+    }
 }
 
 void details::AttributesPanel::update_panel(SPObject* object, SPDesktop* desktop, bool tagged) {
@@ -829,6 +847,9 @@ void details::AttributesPanel::update_size_location() {
     _y.set_value(rect.min().y());
     _width.set_value(rect.width());
     _height.set_value(rect.height());
+    if (auto selection = _desktop ? _desktop->getSelection() : nullptr) {
+        _transform_panel->update_ui(*selection);
+    }
 }
 
 void details::AttributesPanel::update_filters(SPObject* object) {
@@ -957,6 +978,11 @@ void details::AttributesPanel::validate_obj_id() {
     _obj_set_id.set_sensitive(valid);
 }
 
+void details::AttributesPanel::show_transformation_panel(bool expand) {
+    _transform_panel->set_visible(expand);
+    _grid.open_section(_transform_toggle, expand);
+}
+
 void details::AttributesPanel::show_name_properties(bool expand) {
     _name_group.set_visible(expand);
     _grid.open_section(_name_toggle, expand);
@@ -1041,7 +1067,6 @@ public:
     ImagePanel() {
         add_object_label();
         add_size_properties();
-        _grid.add_gap();
         // Add attributes that apply to images
         add_fill_and_stroke(static_cast<Parts>(Parts::Opacity | Parts::BlendMode));
 

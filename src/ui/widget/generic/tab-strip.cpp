@@ -613,6 +613,8 @@ void TabStrip::construct()
 
     auto motion = Gtk::EventControllerMotion::create();
     motion->signal_motion().connect([this, &motion = *motion] (double x, double y) {
+        if (_rearrange == Rearrange::Never) return;
+
         if (!_drag_src) {
             auto const tab = _left_clicked.lock();
             if (!tab) {
@@ -704,6 +706,7 @@ Gtk::Widget* TabStrip::add_tab(const Glib::ustring& label, const Glib::ustring& 
     tab->_icon.set_from_icon_name(icon);
     tab->_show_close_btn = _show_close_btn;
     tab->_show_labels = _show_labels;
+    tab->set_hexpand(_stretch_tabs);
     tab->update(false);
 
     auto ptr_tab = tab.get();
@@ -767,6 +770,11 @@ void TabStrip::set_show_close_button(bool show) {
         tab->update(is_tab_active(*tab));
     }
     queue_allocate();
+}
+
+void TabStrip::set_stretch_tabs(bool stretch) {
+    _stretch_tabs = stretch;
+    queue_resize();
 }
 
 GType TabStrip::get_dnd_source_type() {
@@ -866,7 +874,10 @@ void TabStrip::set_new_tab_popup(Gtk::Popover* popover) {
 void TabStrip::_update_new_tab()
 {
     // show (+) button when there's a popover, but only in horizontal layout
-    _plus_btn.set_visible(_plus_btn.get_popover() && get_orientation() == Gtk::Orientation::HORIZONTAL);
+    _plus_btn.set_visible(
+        _show_plus_button &&
+        _plus_btn.get_popover() &&
+        get_orientation() == Gtk::Orientation::HORIZONTAL);
 }
 
 void TabStrip::set_tabs_context_popup(Gtk::Popover* popover) {
@@ -890,6 +901,11 @@ void TabStrip::set_show_labels(ShowLabels labels) {
         tab->update(is_tab_active(*tab));
     }
     queue_allocate();
+}
+
+void TabStrip::set_show_plus_button(bool show) {
+    _show_plus_button = show;
+    _update_new_tab();
 }
 
 void TabStrip::_updateVisibility()
@@ -1050,7 +1066,9 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
     _overlay->size_allocate(Gtk::Allocation(0, 0, width, height), -1);
 
     // limit width by removing plus button's size
-    width -= plus_w;
+    if (_show_plus_button) {
+        width -= plus_w;
+    }
 
     struct Drop
     {
@@ -1122,6 +1140,9 @@ void Inkscape::UI::Widget::TabStrip::size_allocate_vfunc(int width, int height, 
             continue;
         }
         int size = a.size();
+        if (_stretch_tabs) {
+            //
+        }
         if (drop && !drop->done && pos + size / 2 > drop->loc) {
             pos += drop->size;
             _drag_dst->setDropI(i);

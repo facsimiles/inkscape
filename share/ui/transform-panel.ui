@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <placeholder width="252" height="56"></placeholder>
+  <requires lib="gtk" version="4.0"></requires>
+  <object class="GtkGrid" id="grid-matrix">
+    <property name="row-spacing">4</property>
+    <property name="column-spacing">4</property>
+    <!--dim: 3, 6-->
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Matrix</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">4</property>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="matrix-a">
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="digits">6</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">9999999999.000000</property>
+            <property name="min-value">-9999999999.000000</property>
+            <property name="label" translatable="yes">A</property>
+            <!--        <property name="width-chars">8</property>-->
+          </object>
+        </child>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="matrix-c">
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="vexpand">true</property>
+            <property name="vexpand-set">false</property>
+            <property name="digits">6</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">9999999999.000000</property>
+            <property name="min-value">-9999999999.000000</property>
+            <property name="label" translatable="yes">C</property>
+            <!--        <property name="width-chars">8</property>-->
+          </object>
+        </child>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="matrix-e">
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="digits">3</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">9999999999.000000</property>
+            <property name="min-value">-9999999999.000000</property>
+            <property name="label" translatable="yes">E</property>
+            <!--        <property name="width-chars">8</property>-->
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">4</property>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="matrix-b">
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="digits">6</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">9999999999.000000</property>
+            <property name="min-value">-9999999999.000000</property>
+            <property name="label" translatable="yes">B</property>
+            <!--        <property name="width-chars">8</property>-->
+          </object>
+        </child>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="matrix-d">
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="digits">6</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">9999999999.000000</property>
+            <property name="min-value">-9999999999.000000</property>
+            <property name="label" translatable="yes">D</property>
+            <!--        <property name="width-chars">8</property>-->
+          </object>
+        </child>
+        <child>
+          <object class="gtkmm__CustomObject_InkSpinButton" id="matrix-f">
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="digits">3</property>
+            <property name="step-value">0.100000</property>
+            <property name="max-value">9999999999.000000</property>
+            <property name="min-value">-9999999999.000000</property>
+            <property name="label" translatable="yes">F</property>
+            <!--        <property name="width-chars">8</property>-->
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="current-matrix">
+        <property name="halign">start</property>
+        <child>
+          <object class="GtkStack" id="replace-matrix">
+            <property name="hhomogeneous">false</property>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">single</property>
+                <property name="child">
+                  <object class="GtkLabel">
+                    <property name="tooltip-text" translatable="yes">Edit the current transform matrix; otherwise, post-multiply transform by this matrix</property>
+                    <property name="label" translatable="yes">Edit current matrix</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">multi</property>
+                <property name="child">
+                  <object class="GtkLabel">
+                    <property name="tooltip-text" translatable="yes">Replace the current transform matrices in all objects; otherwise, post-multiply transform by this matrix</property>
+                    <property name="label" translatable="yes">Replace current matrices</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">3</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">10</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">4</property>
+          <property name="column-span">3</property>
+        </layout>
+        <child>
+          <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="pixel-size">40</property>
+            <property name="icon-name">matrix-2d</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="wrap-mode">word</property>
+            <property name="wrap">true</property>
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="use-markup">true</property>
+            <property name="label" translatable="yes">&lt;small&gt;&lt;a href=&quot;https://www.w3.org/TR/SVG11/coords.html#TransformMatrixDefined&quot;&gt;2D transformation matrix&lt;/a&gt; that combines translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).&lt;/small&gt;</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <layout>
+          <property name="column">0</property>
+          <property name="row">5</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+  <object class="GtkGrid" id="grid-transform">
+    <property name="row-spacing">4</property>
+    <property name="column-spacing">4</property>
+    <!--dim: 5, 7-->
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Move</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="move-x">
+        <property name="max-value">1000000.000000</property>
+        <property name="min-value">-1000000.000000</property>
+        <property name="icon">transform-move-horizontal</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="move-y">
+        <property name="max-value">1000000.000000</property>
+        <property name="min-value">-1000000.000000</property>
+        <property name="icon">transform-move-vertical</property>
+        <layout>
+          <property name="column">3</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="relative-move">
+        <property name="halign">start</property>
+        <property name="tooltip-text" translatable="yes">Add the specified relative displacement to the current position; otherwise, edit the current absolute position directly</property>
+        <property name="margin-bottom">4</property>
+        <property name="margin-top">0</property>
+        <child>
+          <object class="GtkLabel" id="label-1">
+            <property name="label" translatable="yes">Relative</property>
+          </object>
+        </child>
+        <!--        <property name="label" translatable="yes">Relative</property>-->
+        <layout>
+          <property name="column">2</property>
+          <property name="row">1</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Scale</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Rotate</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Skew</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="scale-x">
+        <property name="max-value">1000000.000000</property>
+        <property name="min-value">0.000010</property>
+        <property name="suffix" translatable="yes">%</property>
+        <property name="digits">6</property>
+        <property name="icon">transform-scale-horizontal</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="scale-y">
+        <property name="max-value">1000000.000000</property>
+        <property name="min-value">0.000010</property>
+        <property name="suffix" translatable="yes">%</property>
+        <property name="digits">6</property>
+        <property name="icon">transform-scale-vertical</property>
+        <layout>
+          <property name="column">3</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="rotate">
+        <property name="tooltip-text" translatable="yes">Rotation angle (positive = clockwise)</property>
+        <property name="min-value">-360.000000</property>
+        <property name="digits">6</property>
+        <property name="max-value">360.000000</property>
+        <property name="suffix" translatable="yes">º</property>
+        <property name="icon">transform-rotate</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">3</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="skew-x">
+        <property name="max-value">1000000.000000</property>
+        <property name="min-value">-1000000.000000</property>
+        <property name="icon">transform-skew-horizontal</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_InkSpinButton" id="skew-y">
+        <property name="max-value">1000000.000000</property>
+        <property name="min-value">-1000000.000000</property>
+        <property name="icon">transform-skew-vertical</property>
+        <layout>
+          <property name="column">3</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkCheckButton" id="obj-separately">
+            <child>
+              <object class="GtkLabel" id="label-2">
+                <property name="tooltip-text" translatable="yes">Apply the scale/rotate/skew to each selected object separately; otherwise, transform the selection as a whole</property>
+                <property name="ellipsize">end</property>
+                <property name="label" translatable="yes">Transform each object separately</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">6</property>
+          <property name="column-span">5</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="link-scale">
+        <property name="has-frame">false</property>
+        <property name="tooltip-text" translatable="yes">Preserve the width/height ratio of the scaled objects</property>
+        <property name="icon-name">entries-linked</property>
+        <property name="valign">center</property>
+        <property name="halign">center</property>
+        <layout>
+          <property name="column">4</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+  <object class="GtkGrid" id="grid-footer">
+    <property name="row-spacing">4</property>
+    <property name="column-spacing">4</property>
+    <!--dim: 5, 2-->
+    <child>
+      <object class="GtkButton" id="reset">
+        <property name="tooltip-text" translatable="yes">Reset the values to defaults</property>
+        <property name="valign">center</property>
+        <property name="has-frame">false</property>
+        <property name="halign">center</property>
+        <property name="icon-name">reset-settings</property>
+        <layout>
+          <property name="column">4</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="apply">
+        <property name="tooltip-text" translatable="yes">Apply transformation to selection</property>
+        <property name="use-underline">true</property>
+        <property name="label" translatable="yes">_Apply</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="duplicate">
+        <property name="tooltip-text" translatable="yes">Duplicate selection and apply transformation to the copy</property>
+        <property name="use-underline">true</property>
+        <property name="label" translatable="yes">_Duplicate</property>
+        <layout>
+          <property name="column">3</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="tab-box">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkSeparator">
+        <property name="hexpand">true</property>
+        <property name="hexpand-set">true</property>
+      </object>
+    </child>
+  </object>
+</interface>

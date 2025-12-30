@@ -28,6 +28,7 @@
 #include "ui/dialog/object-properties.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/paint-attribute.h"
+#include "ui/widget/transform-panel.h"
 #include "ui/widget/unit-tracker.h"
 #include "xml/helper-observer.h"
 
@@ -102,6 +103,7 @@ private:
     void update_interactive_props(SPObject* object);
     void show_name_properties(bool expand);
     void show_interactivity_properties(bool expand);
+    void show_transformation_panel(bool expand);
     bool on_key_pressed(guint keyval, guint keycode, Gdk::ModifierType state);
     void select_lpe_row(int dir = 0);
     void apply_selected_lpe();
@@ -148,6 +150,10 @@ private:
     Glib::RefPtr<Gtk::BoolFilter> _lpe_filter;
     Glib::RefPtr<Gtk::SingleSelection> _lpe_selection_model;
     Gtk::SearchEntry2& _lpe_search;
+    Gtk::Button* _transform_toggle = nullptr;
+    Pref<bool> _transform_panel_visibility = {dlg_pref_path + "/options/show_transform_panel"};
+    std::unique_ptr<Widget::TransformPanel> _transform_panel;
+    Widget::WidgetGroup _transform_group;
 };
 
 } // namespace details

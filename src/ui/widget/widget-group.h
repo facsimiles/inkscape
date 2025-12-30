@@ -2,7 +2,9 @@
 
 #ifndef WIDGETGROUP_H
 #define WIDGETGROUP_H
+
 #include <cassert>
+#include <gtkmm/widget.h>
 
 namespace Inkscape::UI::Widget {
 
