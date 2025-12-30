@@ -223,15 +223,17 @@ add_cli_test(user-data-directory   PARAMETERS --user-data-directory   ENVIRONMEN
 # --pdf-page=PAGE
 
 # --pdf-poppler
-add_cli_test(pdf-poppler-mesh-import
-                        PARAMETERS --pdf-poppler
-                        INPUT_FILENAME pdf-mesh.pdf
-                        OUTPUT_FILENAME pdf-mesh_poppler.svg
-                        TEST_SCRIPT match_regex.sh pdf-mesh_poppler.svg "<image")
-add_cli_test(pdf-internal-mesh-import
-                        INPUT_FILENAME pdf-mesh.pdf
-                        OUTPUT_FILENAME pdf-mesh_internal.svg
-                        TEST_SCRIPT match_regex_fail.sh pdf-mesh_internal.svg "<image")
+if(WITH_POPPLER)
+    add_cli_test(pdf-poppler-mesh-import
+                            PARAMETERS --pdf-poppler
+                            INPUT_FILENAME pdf-mesh.pdf
+                            OUTPUT_FILENAME pdf-mesh_poppler.svg
+                            TEST_SCRIPT match_regex.sh pdf-mesh_poppler.svg "<image")
+    add_cli_test(pdf-internal-mesh-import
+                            INPUT_FILENAME pdf-mesh.pdf
+                            OUTPUT_FILENAME pdf-mesh_internal.svg
+                            TEST_SCRIPT match_regex_fail.sh pdf-mesh_internal.svg "<image")
+endif()
 
 # --convert-dpi-method=METHOD
 
@@ -1113,21 +1115,23 @@ endfunction(add_pdfinput_test)
 
 # CMS testing disabled because CI builder doesn't support LCMS yet.
 # add_pdfinput_test(cms 1)
-add_pdfinput_test(font-spacing 1 draw-all)
-add_pdfinput_test(font-style 1 draw-all)
-add_pdfinput_test(gradients 1 draw-all)
-add_pdfinput_test(latex 1 draw-all)
-add_pdfinput_test(transparency-groups 1 draw-all)
-add_pdfinput_test(rotated-gradients 1 draw-all)
-add_pdfinput_test(labels-utf16 1 draw-all)
-add_pdfinput_test(multi-page-sample all draw-all)
-add_pdfinput_test(multiple-style-same-text-block 1 keep)
-add_pdfinput_test(gs_linewidth all draw-all)
-add_pdfinput_test(XObj_layer all draw-all)
-add_pdfinput_test(Annot_w_AP_RGB all draw-all IN_FILE "Annot_w_AP" EXTRA "--pdf-convert-colors")
-add_pdfinput_test(Annot_w_AP_CMYK all draw-all IN_FILE "Annot_w_AP")
-add_pdfinput_test(clipping_shift 1 keep)
-add_pdfinput_test(layers-in-xobj 1 substitute EXTRA "--pdf-group-by=layer")
+if(WITH_POPPLER)
+    add_pdfinput_test(font-spacing 1 draw-all)
+    add_pdfinput_test(font-style 1 draw-all)
+    add_pdfinput_test(gradients 1 draw-all)
+    add_pdfinput_test(latex 1 draw-all)
+    add_pdfinput_test(transparency-groups 1 draw-all)
+    add_pdfinput_test(rotated-gradients 1 draw-all)
+    add_pdfinput_test(labels-utf16 1 draw-all)
+    add_pdfinput_test(multi-page-sample all draw-all)
+    add_pdfinput_test(multiple-style-same-text-block 1 keep)
+    add_pdfinput_test(gs_linewidth all draw-all)
+    add_pdfinput_test(XObj_layer all draw-all)
+    add_pdfinput_test(Annot_w_AP_RGB all draw-all IN_FILE "Annot_w_AP" EXTRA "--pdf-convert-colors")
+    add_pdfinput_test(Annot_w_AP_CMYK all draw-all IN_FILE "Annot_w_AP")
+    add_pdfinput_test(clipping_shift 1 keep)
+    add_pdfinput_test(layers-in-xobj 1 substitute EXTRA "--pdf-group-by=layer")
+endif()
 
 function(add_pdfoutput_test name)
     set(oneValueArgs FUZZ_PERCENTAGE RASTER_DPI)

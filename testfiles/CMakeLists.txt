@@ -82,8 +82,6 @@ set(TEST_SOURCES
     util-uri-test
     drag-and-drop-svgz
     drawing-pattern-test
-    pdf-utils-test
-    poppler-utils-test
     attributes-test
     dir-util-test
     sp-item-test
@@ -129,6 +127,13 @@ set(TEST_SOURCES
     ${LPE_TESTS_64bit}
     ${LIBNRTYPE_TESTS}
     )
+
+if(WITH_POPPLER)
+    list(APPEND TEST_SOURCES
+        pdf-utils-test
+        poppler-utils-test
+    )
+endif()
 
 if(WITH_CAPYPDF)
     list(APPEND TEST_SOURCES
