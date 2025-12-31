@@ -22,6 +22,7 @@
 #include "inkscape-window.h"
 #include "ui/builder-utils.h"
 #include "ui/pack.h"
+#include "ui/widget/popover-utils.h"
 
 namespace Inkscape::UI::Toolbar {
 
@@ -35,6 +36,14 @@ SnapToolbar::SnapToolbar(InkscapeWindow *win)
     , _win{win}
 {
     set_name("SnapToolbar");
+
+    if (auto popover = btn_simple.get_popover()) {
+        UI::Widget::Utils::wrap_in_scrolled_window(*popover, 100);
+    }
+
+    if (auto popover = btn_advanced.get_popover()) {
+        UI::Widget::Utils::wrap_in_scrolled_window(*popover, 400);
+    }
 
     Gtk::LinkButton &link_simple  (UI::get_widget<Gtk::LinkButton>(builder, "link-simple"));
     Gtk::LinkButton &link_advanced(UI::get_widget<Gtk::LinkButton>(builder, "link-advanced"));

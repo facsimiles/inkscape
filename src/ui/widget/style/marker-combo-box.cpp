@@ -39,6 +39,7 @@
 #include "ui/svg-renderer.h"
 #include "ui/util.h"
 #include "ui/widget/generic/snapshot-widget.h"
+#include "ui/widget/popover-utils.h"
 #include "util/object-renderer.h"
 #include "util/static-doc.h"
 
@@ -338,9 +339,16 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         _signal_changed.emit();
     });
 
+    auto& popover = *get_popover();
+    set_popover(popover);
+    Utils::wrap_in_scrolled_window(popover, 150);
+
     // before showing popover refresh marker attributes
     get_popover()->signal_show().connect([this]{
         update_ui(get_current(), false);
+        if (auto popover = get_popover()) {
+            Utils::smart_position(*popover, *this);
+        }
     }, false);
 
     init_combo();

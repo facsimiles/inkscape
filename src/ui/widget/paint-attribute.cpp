@@ -37,6 +37,7 @@
 #include "ui/dialog/dialog-container.h"
 #include "ui/tools/marker-tool.h"
 #include "ui/widget/paint-switch.h"
+#include "ui/widget/popover-utils.h"
 #include "util/expression-evaluator.h"
 #include "xml/sp-css-attr.h"
 
@@ -76,10 +77,12 @@ PaintAttribute::PaintAttribute(Parts add_parts, unsigned int tag) :
     // refresh the paint popup before opening it; it is not kept up to date
     _fill._popover.signal_show().connect([this] {
         set_paint(_current_object, true);
+        Utils::smart_position(_fill._popover, _fill._paint_btn);
     }, false);
 
     _stroke._popover.signal_show().connect([this] {
         set_paint(_current_object, false);
+        Utils::smart_position(_stroke._popover, _stroke._paint_btn);
     }, false);
 
     // when stroke fill is toggled (any paint vs. none), change a set of visible widgets
@@ -260,6 +263,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
     _switch(PaintSwitch::create(false, fill))
 {
     _popover.set_child(*_switch);
+    Utils::wrap_in_scrolled_window(_popover, 250);
     _label.set_text(title);
 
     _paint_btn.set_tooltip_text(fill ?_("Fill paint") : _("Stroke paint"));

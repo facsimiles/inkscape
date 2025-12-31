@@ -39,6 +39,7 @@
 #include "ui/builder-utils.h"
 #include "ui/dialog-events.h"
 #include "ui/util.h"
+#include "ui/widget/popover-utils.h"
 #include "ui/widget/spinbutton.h"
 
 namespace Inkscape::UI::Widget {
@@ -125,6 +126,10 @@ void DashSelector::construct(bool compact) {
 
     popover = &get_widget<Gtk::Popover>(_builder, "popover");
     popover->set_has_arrow(compact);
+    Utils::wrap_in_scrolled_window(*popover, 100);
+    popover->signal_show().connect([this] {
+        Inkscape::UI::Widget::Utils::smart_position(*popover, *this);
+    });
 
     // Menubutton
     drawing_area = &get_widget<Gtk::DrawingArea>(_builder, "dash");

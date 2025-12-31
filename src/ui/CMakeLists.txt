@@ -303,6 +303,7 @@ target_sources(inkscape_base PRIVATE
 	widget/unit-tracker.cpp
 	widget/xml-treeview.cpp
 	widget/property-utils.cpp
+	widget/popover-utils.cpp
 	widget/recolor-art.cpp
 	widget/multi-marker-color-plate.cpp
 	widget/recolor-art-manager.cpp
@@ -635,6 +636,7 @@ target_sources(inkscape_base PRIVATE
 	widget/unit-tracker.h
 	widget/xml-treeview.h
 	widget/property-utils.h
+	widget/popover-utils.h
 	widget/recolor-art.h
 	widget/multi-marker-color-plate.h
 	widget/recolor-art-manager.h
