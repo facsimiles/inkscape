@@ -123,6 +123,7 @@ void SPGroup::remove_child(Inkscape::XML::Node *child) {
         sp_lpe_item_update_patheffect(this, true, true);
         this->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
+    this->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
 }
 
 void SPGroup::order_changed (Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
