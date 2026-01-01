@@ -645,7 +645,6 @@ protected:
     void show_not_found();
     void show_nothing_on_page();
     void show_try_search();
-    void on_reset_open_recent_clicked();
     void on_reset_prefs_clicked();
     void on_search_changed();
     void highlight_results(Glib::ustring const &key, Gtk::TreeModel::iterator &iter);

@@ -31,7 +31,6 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/label.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/recentmanager.h>
 #include <gtkmm/settings.h>
 #include <gtkmm/textbuffer.h>
 
@@ -50,6 +49,7 @@
 #include "libnrtype/font-factory.h"
 #include "object/sp-root.h"
 #include "io/resource.h"
+#include "io/recent-files.h"
 #include "ui/builder-utils.h"
 #include "ui/themes.h"
 #include "ui/dialog-events.h"
@@ -347,19 +347,7 @@ Application::crash_handler (int /*signum*/)
                 fclose (file);
 
                 // Attempt to add the emergency save to the recent files, so users can find it on restart
-                auto recentmanager = Gtk::RecentManager::get_default();
-                if (recentmanager && Glib::path_is_absolute(c)) {
-                    Glib::ustring uri = Glib::filename_to_uri(c);
-                    recentmanager->add_item(uri, {
-                        docname,                 // Name
-                        "Emergency Saved Image", // Description
-                        "image/svg+xml",         // Mime type
-                        "org.inkscape.Inkscape", // App name
-                        "",                      // Execute
-                        {"Crash"},               // Groups
-                        true,                    // Private
-                    });
-                }
+                Inkscape::IO::addInkscapeRecentSvg(c, docname, {"Crash"}, document_filename ? document_filename : "");
             } else {
                 failednames.push_back((doc->getDocumentName()) ? g_strdup(doc->getDocumentName()) : g_strdup (_("Untitled document")));
             }

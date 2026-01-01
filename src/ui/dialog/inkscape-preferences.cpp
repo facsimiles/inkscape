@@ -34,7 +34,6 @@
 #include <gtkmm/fontchooserdialog.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/picture.h>
-#include <gtkmm/recentmanager.h>
 #include <gtkmm/revealer.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/settings.h>
@@ -59,6 +58,7 @@
 #include "display/nr-filter-gaussian.h"
 #include "inkscape-window.h"
 #include "inkscape.h"
+#include "io/recent-files.h"
 #include "path-prefix.h"
 #include "selcue.h"
 #include "selection-chemistry.h"
@@ -1654,7 +1654,7 @@ void InkscapePreferences::initPageUI()
     _misc_recent.init("/options/maxrecentdocuments/value", 0.0, 1000.0, 1.0, 1.0, 1.0, true, false);
 
     auto const reset_recent = Gtk::make_managed<Gtk::Button>(_("Clear list"));
-    reset_recent->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::on_reset_open_recent_clicked));
+    reset_recent->signal_clicked().connect(sigc::ptr_fun(Inkscape::IO::resetRecentInkscapeList));
 
     _page_ui.add_line( false, _("Maximum documents\n in Open _Recent:"), _misc_recent, "",
                               _("Set the maximum length of the Open Recent list in the File menu, or clear the list"), false, reset_recent);
@@ -3937,25 +3937,6 @@ bool InkscapePreferences::matchPage(Gtk::TreeModel::const_iterator const &iter)
         return true;
     }
     return false;
-}
-
-void InkscapePreferences::on_reset_open_recent_clicked()
-{
-    Glib::RefPtr<Gtk::RecentManager> manager = Gtk::RecentManager::get_default();
-    std::vector< Glib::RefPtr< Gtk::RecentInfo > > recent_list = manager->get_items();
-
-    // Remove only elements that were added by Inkscape
-    // TODO: This should likely preserve items that were also accessed by other apps.
-    //       However there does not seem to be straightforward way to delete only an application from an item.
-    for (auto e : recent_list) {
-        if (e->has_application(g_get_prgname())
-            || e->has_application("org.inkscape.Inkscape")
-            || e->has_application("inkscape")
-            || e->has_application("inkscape.exe")
-           ) {
-            manager->remove_item(e->get_uri());
-        }
-    }
 }
 
 void InkscapePreferences::on_reset_prefs_clicked()

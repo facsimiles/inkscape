@@ -10,20 +10,24 @@
 
 #include <algorithm>
 #include <cassert>
+#include <glibmm.h>
 
 #include "recent-files.h"
 #include "io/fix-broken-links.h"
 
-namespace Inkscape {
+namespace Inkscape::IO {
+
+static const Glib::ustring recent_app_name = "org.inkscape.Inkscape";
 
 /**
  * Generate a vector of recently used Inkscape files.
  *
  * @arg max_files - Limits the output to this number of files, zero means no-maximum.
+ * @arg is_autosave - Limit the list to just auto save files.
  *
  * @returns a vector of string pairs, a display label and the full uri.
  */
-std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_files)
+std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_files, bool is_autosave)
 {
     std::vector<std::pair<std::string, Glib::ustring>> output;
 
@@ -32,13 +36,14 @@ std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_f
     auto recent_files = recent_manager->get_items();
 
     // Remove non-inkscape files.
-    std::erase_if(recent_files, [](auto const &recent_file) -> bool {
+    std::erase_if(recent_files, [is_autosave](auto const &recent_file) -> bool {
         // Note: Do not check if the file exists, to avoid long delays. See https://gitlab.com/inkscape/inkscape/-/issues/2348.
         bool valid_file =
             recent_file->has_application(g_get_prgname())         ||
-            recent_file->has_application("org.inkscape.Inkscape") ||
+            recent_file->has_application(recent_app_name)         ||
             recent_file->has_application("inkscape")              ||
             recent_file->has_application("inkscape.exe");
+        valid_file = valid_file && is_autosave == recent_file->has_group("Auto");
         return !valid_file;
     });
 
@@ -68,6 +73,116 @@ std::vector<Glib::RefPtr<Gtk::RecentInfo>> getInkscapeRecentFiles(unsigned max_f
     }
 
     return recent_files;
+}
+
+/**
+ * Add a recent file to the Gtk RecentFiles manager for an SVG file.
+ *
+ * @arg filename - An absolute local filename of the document in question
+ * @arg name     - The name of the document
+ * @arg groups   - Optional groups, used for AutoSave and Crash
+ * @arg original - The filename to the original document, where available. If used this save is marked as private.
+ */
+void addInkscapeRecentSvg(std::string const &filename, std::string const &name, std::vector<Glib::ustring> groups, std::optional<std::string> original)
+{
+    auto recentmanager = Gtk::RecentManager::get_default();
+    if (recentmanager && Glib::path_is_absolute(filename)) {
+        Glib::ustring uri = Glib::filename_to_uri(filename);
+        Glib::ustring original_uri = "";
+        if (original && Glib::path_is_absolute(*original)) {
+            original_uri = Glib::filename_to_uri(*original);
+        }
+        recentmanager->add_item(uri, {
+            name,                     // Name
+            original_uri,             // Description used for original filename
+            "image/svg+xml",          // Mime type
+            recent_app_name,          // App name
+            "",                       // Execute
+            groups,    // Groups
+            (bool)original,           // Private if points to another document
+        });
+    }
+}
+
+/**
+ * Remove a recent file entry, call when deleting files.
+ */
+void removeInkscapeRecent(std::string const &filename)
+{
+    if (auto recentmanager = Gtk::RecentManager::get_default()) {
+        try {
+            Glib::ustring uri = Glib::filename_to_uri(filename);
+            recentmanager->remove_item(uri);
+        } catch (Glib::Error const &) { // lookup failed
+        }
+    }
+}
+
+/**
+ * Remove inkscape recent items, but preserve items opened by other programs
+ * auto any auto-saves which are considered not user accessable.
+ */
+void resetRecentInkscapeList()
+{
+    if (auto recentmanager = Gtk::RecentManager::get_default()) {
+        for (auto info : recentmanager->get_items()) {
+            bool is_ink, is_other = false;
+            for (auto &app : info->get_applications()) {
+                if ( app == g_get_prgname()
+                  || app == recent_app_name
+                  || app == "inkscape"
+                  || app == "inkscape.exe") {
+                    is_ink = true;
+                } else {
+                    is_other = true;
+                }
+            }
+            if (is_ink && !is_other && !info->has_group("Auto")) {
+                recentmanager->remove_item(info->get_uri());
+            }
+        }
+    }
+}
+
+/**
+ * Get the file recent info for the given path, if there is one.
+ */
+Glib::RefPtr<Gtk::RecentInfo> getInkscapeRecent(std::string const &filename)
+{
+    if (auto recentmanager = Gtk::RecentManager::get_default()) {
+        try {
+            Glib::ustring uri = Glib::filename_to_uri(filename);
+            return recentmanager->lookup_item(uri);
+        } catch (Glib::Error const &) { // lookup failed
+        }
+    }
+    return {};
+}
+
+/**
+ * Get the original filename for the given file, and remove the recent files entry if it's a crash.
+ *
+ * @arg filename - The auto save or crash file we are opening.
+ *
+ * @returns - False optional if this isn't an auto save or crash, an empty string if is is
+ *            but doesn't have an original filename because it was unsaved. Otherwise the
+ *            original filename is provided.
+ */
+std::optional<std::string> openAsInkscapeRecentOriginalFile(std::string const &filename)
+{
+    if (auto info = getInkscapeRecent(filename)) {
+        if (info->has_group("Auto")) {
+            // Original filename stored in description, see addInkscapeRecentSvg above.
+            return info->get_description();
+        }
+        if (info->has_group("Crash")) {
+            auto desc = info->get_description();
+            // Crash files are removed from recent-files tracker on opening
+            removeInkscapeRecent(filename);
+            return desc;
+        }
+    }
+    return {};
 }
 
 /**
