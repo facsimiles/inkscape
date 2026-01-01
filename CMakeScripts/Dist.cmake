@@ -60,8 +60,13 @@ if(WIN32)
                       "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
                       "${CMAKE_INSTALL_PREFIX}")
 
-    add_dependencies(dist-win-7z install/strip)
-    add_dependencies(dist-win-7z-fast install/strip)
+    if(CMAKE_BUILD_TYPE_UPPER STREQUAL "DEBUG" OR CMAKE_BUILD_TYPE_UPPER STREQUAL "RELWITHDEBINFO")
+        add_dependencies(dist-win-7z install)
+        add_dependencies(dist-win-7z-fast install)
+    else()
+        add_dependencies(dist-win-7z install/strip)
+        add_dependencies(dist-win-7z-fast install/strip)
+    endif()
 
     # -----------------------------------------------------------------------------
     # 'dist-win-exe' - generate .exe installer (NSIS) for Windows

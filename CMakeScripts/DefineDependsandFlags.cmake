@@ -58,6 +58,11 @@ if (CMAKE_COMPILER_IS_GNUCC)
         list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fstack-clash-protection -fcf-protection")
     endif()
 endif()
+if (WIN32 AND ENABLE_PDB)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -gcodeview")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gcodeview")
+    add_link_options(-Wl,--pdb=)
+endif()
 
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)
