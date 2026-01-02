@@ -11,14 +11,8 @@
 
 #include "display/cairo-utils.h"
 
-#include <2geom/affine.h>
-#include <2geom/curves.h>
-#include <2geom/path-sink.h>
-#include <2geom/path.h>
-#include <2geom/pathvector.h>
-#include <2geom/point.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/transforms.h>
+#include <cmath>
+#include <cstdint>
 #include <boost/algorithm/string.hpp>
 #include <boost/operators.hpp>
 #include <boost/optional/optional.hpp>
@@ -27,11 +21,17 @@
 #include <cairomm/pattern.h>
 #include <cairomm/refptr.h>
 #include <cairomm/surface.h>
-#include <cmath>
-#include <cstdint>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
+#include <2geom/affine.h>
+#include <2geom/curves.h>
+#include <2geom/path-sink.h>
+#include <2geom/path.h>
+#include <2geom/pathvector.h>
+#include <2geom/point.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/transforms.h>
 
 #include "cairo-templates.h"
 #include "colors/manager.h"
@@ -111,9 +111,9 @@ Pixbuf::Pixbuf(GdkPixbuf *pb)
     , _cairo_store(false)
 {
     _forceAlpha();
-    _surface = cairo_image_surface_create_for_data(
-        gdk_pixbuf_get_pixels(_pixbuf), CAIRO_FORMAT_ARGB32,
-        gdk_pixbuf_get_width(_pixbuf), gdk_pixbuf_get_height(_pixbuf), gdk_pixbuf_get_rowstride(_pixbuf));
+    _surface = cairo_image_surface_create_for_data(gdk_pixbuf_get_pixels(_pixbuf), CAIRO_FORMAT_ARGB32,
+                                                   gdk_pixbuf_get_width(_pixbuf), gdk_pixbuf_get_height(_pixbuf),
+                                                   gdk_pixbuf_get_rowstride(_pixbuf));
 }
 
 Pixbuf::Pixbuf(Inkscape::Pixbuf const &other)
@@ -266,7 +266,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
             g_free(decoded);
             return nullptr;
         }
-        
+
         assert(!pixbuf);
         Geom::Rect area(0, 0, svgWidth_px, svgHeight_px);
         pixbuf = sp_generate_internal_bitmap(svgDoc.get(), area, dpi);
