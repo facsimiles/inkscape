@@ -28,6 +28,7 @@
 
 #include "sp-defs.h"
 #include "sp-factory.h"
+#include "sp-image.h"
 #include "sp-item.h"
 
 #include "display/cairo-utils.h"
@@ -39,6 +40,26 @@
 
 #include "svg/svg.h"
 #include "xml/href-attribute-helper.h"
+
+namespace {
+
+bool pattern_contains_images(SPObject *object)
+{
+    if (!object) {
+        return false;
+    }
+
+    for (auto child : object->childList(false)) {
+        bool found = is<SPImage>(child) || pattern_contains_images(child);
+        if (found) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+} // namespace
 
 SPPatternReference::SPPatternReference(SPPattern *owner)
     : URIReference(owner)
@@ -232,8 +253,16 @@ void SPPattern::update(SPCtx *ctx, unsigned flags)
         sp_object_unref(c, nullptr);
     }    
 
+    auto root = rootPattern();
+    _contains_images = pattern_contains_images(root ? root : this);
+
     for (auto &v : views) {
+        v.drawingitem->setContainsImages(_contains_images);
         update_view(v);
+    }
+
+    for (auto &v : attached_views) {
+        v.drawingitem->setContainsImages(_contains_images);
     }
 }
 
@@ -401,6 +430,7 @@ void SPPattern::set_shown(SPPattern *new_shown)
 void SPPattern::attach_view(Inkscape::DrawingPattern *di, unsigned key)
 {
     attached_views.push_back({di, key});
+    di->setContainsImages(_contains_images);
 
     for (auto &c : children) {
         if (auto child = cast<SPItem>(&c)) {
@@ -688,6 +718,9 @@ Inkscape::DrawingPattern *SPPattern::show(Inkscape::Drawing &drawing, unsigned k
     }
 
     root->setStyle(style);
+    auto shown_root = rootPattern();
+    _contains_images = pattern_contains_images(shown_root ? shown_root : this);
+    root->setContainsImages(_contains_images);
 
     update_view(v);
 
