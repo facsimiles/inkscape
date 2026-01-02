@@ -94,8 +94,8 @@ void ResizingSeparator::on_drag_update(Gdk::EventSequence* sequence) {
         if (end.has_value()) {
             auto dist = Geom::Point(end->get_x(), end->get_y()) - _initial_position;
             auto size = dist + _initial_size;
-            auto width = std::clamp(size.x(), 0.0, _max_size.x());
-            auto height = std::clamp(size.y(), 0.0, _max_size.y());
+            auto width = std::clamp(size.x(), 0.0, std::max(0.0, _max_size.x()));
+            auto height = std::clamp(size.y(), 0.0, std::max(0.0, _max_size.y()));
             if (_orientation == Orientation::Horizontal) {
                 _resize->set_size_request(-1, width);
             }
