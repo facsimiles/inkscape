@@ -240,6 +240,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
         auto svgDoc = SPDocument::createNewDocFromMem({reinterpret_cast<char const *>(decoded), decoded_len});
         // Check the document loaded properly
         if (!svgDoc || !svgDoc->getRoot()) {
+            g_free(decoded);
             return nullptr;
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -260,18 +261,19 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
             }
         }
         if (svgWidth_px <= 0 || svgHeight_px <= 0) {
-            svgWidth_px = 300.0;
-            svgHeight_px = 150.0;
-        }
-        if (svgWidth_px <= 0 || svgHeight_px <= 0) {
             g_warning("create_from_data_uri: malformed document: svgWidth_px=%f, svgHeight_px=%f", svgWidth_px,
                       svgHeight_px);
+            g_free(decoded);
             return nullptr;
         }
         
         assert(!pixbuf);
         Geom::Rect area(0, 0, svgWidth_px, svgHeight_px);
         pixbuf = sp_generate_internal_bitmap(svgDoc.get(), area, dpi);
+        if (!pixbuf) {
+            g_free(decoded);
+            return nullptr;
+        }
         GdkPixbuf const *buf = pixbuf->getPixbufRaw();
 
         // Tidy up
@@ -393,6 +395,7 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
 
                 // Check the document loaded properly
                 if (!svgDoc || !svgDoc->getRoot()) {
+                    g_free(data);
                     return nullptr;
                 }
 
@@ -413,29 +416,29 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                         svgHeight_px = root->viewBox.height();
                     }
                 }
-                if (svgWidth_px <= 0 || svgHeight_px <= 0) {
-                    svgWidth_px = 300.0;
-                    svgHeight_px = 150.0;
-                }
                 // Limit the size of the document to 100 inches square
                 svgWidth_px = std::min(svgWidth_px, dpi * 100);
                 svgHeight_px = std::min(svgHeight_px, dpi * 100);
                 if (svgWidth_px <= 0 || svgHeight_px <= 0) {
                     g_warning("create_from_buffer: malformed document: svgWidth_px=%f, svgHeight_px=%f", svgWidth_px,
                               svgHeight_px);
+                    g_free(data);
                     return nullptr;
                 }
 
                 Geom::Rect area(0, 0, svgWidth_px, svgHeight_px);
                 pb = sp_generate_internal_bitmap(svgDoc.get(), area, dpi);
-                if (!pb)
+                if (!pb) {
+                    g_free(data);
                     return nullptr;
+                }
 
                 buf = pb->getPixbufRaw();
 
                 // Tidy up
                 if (buf == nullptr) {
                     delete pb;
+                    g_free(data);
                     return nullptr;
                 }
                 buf = Pixbuf::apply_embedded_orientation(buf);
