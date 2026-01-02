@@ -16,19 +16,17 @@
 
 #include "sp-image.h"
 
-#include <cstring>
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <mutex>
 #include <string>
 #include <unordered_map>
-
-#include <giomm/error.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <giomm/error.h>
 #include <glib/gstdio.h>
 #include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
 
@@ -570,8 +568,8 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
     return ai;
 }
 
-
-std::shared_ptr<Inkscape::Pixbuf> SPImage::readImage(gchar const *href, gchar const *absref, gchar const *base, double svgdpi)
+std::shared_ptr<Inkscape::Pixbuf> SPImage::readImage(gchar const *href, gchar const *absref, gchar const *base,
+                                                     double svgdpi)
 {
     std::shared_ptr<Inkscape::Pixbuf> inkpb;
 

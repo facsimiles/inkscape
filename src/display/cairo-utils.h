@@ -13,9 +13,10 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_CAIRO_UTILS_H
 #define SEEN_INKSCAPE_DISPLAY_CAIRO_UTILS_H
 
-#include <2geom/forward.h>
-#include <cairomm/cairomm.h>
 #include <mutex>
+#include <cairomm/cairomm.h>
+#include <2geom/forward.h>
+
 #include "style.h"
 
 typedef struct _GdkPixbuf GdkPixbuf;

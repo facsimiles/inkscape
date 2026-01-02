@@ -126,9 +126,9 @@ Pixbuf::Pixbuf(Inkscape::Pixbuf const &other)
 {
     auto lock = other.lock();
     _pixbuf = gdk_pixbuf_copy(other._pixbuf);
-    _surface = cairo_image_surface_create_for_data(
-        gdk_pixbuf_get_pixels(_pixbuf), CAIRO_FORMAT_ARGB32,
-        gdk_pixbuf_get_width(_pixbuf), gdk_pixbuf_get_height(_pixbuf), gdk_pixbuf_get_rowstride(_pixbuf));
+    _surface = cairo_image_surface_create_for_data(gdk_pixbuf_get_pixels(_pixbuf), CAIRO_FORMAT_ARGB32,
+                                                   gdk_pixbuf_get_width(_pixbuf), gdk_pixbuf_get_height(_pixbuf),
+                                                   gdk_pixbuf_get_rowstride(_pixbuf));
     _mod_time = other._mod_time;
     _path = other._path;
     _pixel_format = other._pixel_format;

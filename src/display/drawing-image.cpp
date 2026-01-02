@@ -107,7 +107,8 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::
 
     if (!outline) {
         auto pixbuf_ref = _pixbuf;
-        if (!pixbuf_ref) return RENDER_OK;
+        if (!pixbuf_ref)
+            return RENDER_OK;
         if (_scale.vector().x() * _scale.vector().y() == 0.0) return RENDER_OK;
 
         Inkscape::DrawingContext::Save save(dc);
@@ -126,12 +127,9 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::
             pixbuf = pixbuf_copy.get();
         }
 
-        auto surface = cairo_image_surface_create_for_data(
-            const_cast<unsigned char *>(pixbuf->pixels()),
-            CAIRO_FORMAT_ARGB32,
-            pixbuf->width(),
-            pixbuf->height(),
-            pixbuf->rowstride());
+        auto surface =
+            cairo_image_surface_create_for_data(const_cast<unsigned char *>(pixbuf->pixels()), CAIRO_FORMAT_ARGB32,
+                                                pixbuf->width(), pixbuf->height(), pixbuf->rowstride());
         if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
             cairo_surface_destroy(surface);
             return RENDER_OK;
