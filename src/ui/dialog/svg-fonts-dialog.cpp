@@ -307,23 +307,25 @@ Glib::ustring GlyphMenuButton::get_active_text() const
 }
 
 void SvgFontsDialog::on_kerning_value_changed(){
-    if (!get_selected_kerning_pair()) {
+    if (_update.pending()) return;
+
+    auto font = get_selected_spfont();
+    if (!get_selected_kerning_pair() || !font) {
         return;
     }
 
     //TODO: I am unsure whether this is the correct way of calling SPDocumentUndo::maybe_done
     Glib::ustring undokey = "svgfonts:hkern:k:";
-    undokey += this->kerning_pair->u1->attribute_string();
+    undokey += kerning_pair->u1->attribute_string();
     undokey += ":";
-    undokey += this->kerning_pair->u2->attribute_string();
+    undokey += kerning_pair->u2->attribute_string();
 
     //slider values increase from right to left so that they match the kerning pair preview
 
     //XML Tree being directly used here while it shouldn't be.
-    this->kerning_pair->setAttribute("k", Glib::Ascii::dtostr(get_selected_spfont()->horiz_adv_x - kerning_slider->get_value()));
+    kerning_pair->setAttribute("k", Glib::Ascii::dtostr(font->horiz_adv_x - kerning_slider->get_value()));
     DocumentUndo::maybeDone(getDocument(), undokey.c_str(), _("Adjust kerning value"), "");
 
-    //populate_kerning_pairs_box();
     kerning_preview.redraw();
     _font_da.redraw();
 }
@@ -594,6 +596,8 @@ void SvgFontsDialog::on_preview_text_changed(){
 }
 
 void SvgFontsDialog::on_kerning_pair_selection_changed(){
+    if (_update.pending()) return;
+
     SPGlyphKerning* kern = get_selected_kerning_pair();
     if (!kern) {
         kerning_preview.set_text("");
