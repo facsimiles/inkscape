@@ -1844,6 +1844,10 @@ public:
             bool show = !_data_props_visibility;
             show_data_properties(show);
             Preferences::get()->setBool(_data_props_visibility.observed_path, show);
+            if (_sel_changed) {
+                _sel_changed = false;
+                update_ui();
+            }
         });
         show_data_properties(_data_props_visibility);
         _data_props_visibility.action = [this] {
@@ -1855,14 +1859,14 @@ public:
 
     void update(SPObject* object) override {
         auto item = update_item(object);
-        auto change = item != _item;
+        _sel_changed = item != _item;
         _item = item;
         if (!_item) {
             _update_data.disconnect();
             return;
         }
 
-        if (!change) {
+        if (!_sel_changed) {
             // throttle UI refresh, it is expensive
             _update_data = Glib::signal_timeout().connect([this]{ update_ui(); return false; }, 250, Glib::PRIORITY_DEFAULT_IDLE);
         }
@@ -1899,9 +1903,11 @@ private:
         if (_update.pending() || !_document || !_desktop) return;
 
         auto scoped(_update.block());
-
         auto d = get_points();
-        _svgd_edit->setText(d ? d : "");
+
+        if (_data_props_visibility) {
+            _svgd_edit->setText(d ? d : "");
+        }
 
         auto node_count = get_point_count();
         _info.set_text(C_("Number of path nodes follows", "Nodes: ") + std::to_string(node_count));
@@ -1933,6 +1939,7 @@ private:
     std::unique_ptr<Syntax::TextEditView> _svgd_edit;
     Gtk::TextView& _data;
     int _precision = 2;
+    bool _sel_changed = false;
     sigc::scoped_connection _update_data;
     Gtk::Button* _data_toggle;
     Pref<bool> _data_props_visibility = {details::dlg_pref_path + "/options/show_path_data"};
