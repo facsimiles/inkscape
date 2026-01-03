@@ -423,33 +423,29 @@ void TextToolbar::configure_mode_buttons(std::vector<Gtk::ToggleButton *> &butto
     buttons[active_button_index < buttons.size() ? active_button_index : 0]->set_active(true);
 }
 
-/*
- * Set the style, depending on the inner or outer text being selected
- */
 void TextToolbar::text_outer_set_style(SPCSSAttr *css)
 {
     // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
     // will set the style on selected text inside the <text> element. If we want to set
     // the style on the outer <text> objects we need to bypass this call.
-    if (_outer) {
-        // Apply css to parent text objects directly.
-        for (auto item : _desktop->getSelection()->items()) {
-            if (is<SPText>(item) || is<SPFlowtext>(item)) {
-                // Scale by inverse of accumulated parent transform
-                SPCSSAttr *css_set = sp_repr_css_attr_new();
-                sp_repr_css_merge(css_set, css);
-                auto const local = item->i2doc_affine();
-                double const ex = local.descrim();
-                if (ex != 0.0 && ex != 1.0) {
-                    sp_css_attr_scale(css_set, 1 / ex);
-                }
-                recursively_set_properties(item, css_set);
-                sp_repr_css_attr_unref(css_set);
+    if (!_outer) {
+        return;
+    }
+
+    // Apply css to parent text objects directly.
+    for (auto item : _desktop->getSelection()->items()) {
+        if (is<SPText>(item) || is<SPFlowtext>(item)) {
+            // Scale by inverse of accumulated parent transform
+            SPCSSAttr *css_set = sp_repr_css_attr_new();
+            sp_repr_css_merge(css_set, css);
+            auto const local = item->i2doc_affine();
+            double const ex = local.descrim();
+            if (ex != 0.0 && ex != 1.0) {
+                sp_css_attr_scale(css_set, 1 / ex);
             }
+            recursively_set_properties(item, css_set);
+            sp_repr_css_attr_unref(css_set);
         }
-    } else {
-        // Apply css to selected inner objects.
-        sp_desktop_set_style(_desktop, css, true, false);
     }
 }
 
@@ -595,8 +591,6 @@ void TextToolbar::fontstyle_value_changed()
 
         auto css = sp_repr_css_attr_new();
         fontlister->fill_css(css);
-
-        sp_desktop_set_style(_desktop, css, true, true);
 
         if (mergeDefaultStyle(css)) {
             DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change font style"), INKSCAPE_ICON("draw-text"));
