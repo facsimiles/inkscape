@@ -15,100 +15,73 @@ IGNORE_THEMES = [
     'application',
 ]
 FALLBACK_THEME = 'hicolor'
-IGNORE_ICONS = [
-    # These are hard coded as symbolic in the gtk source code
-    'list-add-symbolic.svg',
-    'list-add.svg',
-    'list-remove-symbolic.svg',
-    'list-remove.svg',
-    'applications-graphics.svg',
-    'applications-graphics-symbolic.svg',
-    'edit-find.svg',
-    'edit-find-symbolic.svg',
-    'dialog-warning.svg',
-    'dialog-warning-symbolic.svg',
-    'edit-clear.svg',
-    'edit-clear-symbolic.svg',
-    'view-refresh-symbolic.svg',
-    'view-refresh.svg',
-    'pan-down.svg',
-    'pan-down-symbolic.svg',
-    'pan-right.svg',
-    'pan-right-symbolic.svg',
-    'pan-left.svg',
-    'pan-left-symbolic.svg',
-    'pan-end.svg',
-    'pan-end-symbolic.svg',
-    'pan-start.svg',
-    'pan-start-symbolic.svg',
-    'pan-up.svg',
-    'pan-up-symbolic.svg',
-    'window-close.svg',
-    'window-close-symbolic.svg',
-    'application-exit.svg',
-    'application-exit-symbolic.svg',
-    'document-save-as.svg',
-    'document-save-as-symbolic.svg',
-    'open-menu.svg',
-    'open-menu-symbolic.svg',
-    # Those are illustrations rather than icons
-    'feBlend-icon-symbolic.svg',
-    'feColorMatrix-icon-symbolic.svg',
-    'feComponentTransfer-icon-symbolic.svg',
-    'feComposite-icon-symbolic.svg',
-    'feConvolveMatrix-icon-symbolic.svg',
-    'feDiffuseLighting-icon-symbolic.svg',
-    'feDisplacementMap-icon-symbolic.svg',
-    'feFlood-icon-symbolic.svg',
-    'feGaussianBlur-icon-symbolic.svg',
-    'feImage-icon-symbolic.svg',
-    'feMerge-icon-symbolic.svg',
-    'feMorphology-icon-symbolic.svg',
-    'feOffset-icon-symbolic.svg',
-    'feSpecularLighting-icon-symbolic.svg',
-    'feTile-icon-symbolic.svg',
-    'feTurbulence-icon-symbolic.svg',
-    'feBlend-icon.svg',
-    'feColorMatrix-icon.svg',
-    'feComponentTransfer-icon.svg',
-    'feComposite-icon.svg',
-    'feConvolveMatrix-icon.svg',
-    'feDiffuseLighting-icon.svg',
-    'feDisplacementMap-icon.svg',
-    'feFlood-icon.svg',
-    'feGaussianBlur-icon.svg',
-    'feImage-icon.svg',
-    'feMerge-icon.svg',
-    'feMorphology-icon.svg',
-    'feOffset-icon.svg',
-    'feSpecularLighting-icon.svg',
-    'feTile-icon.svg',
-    'feTurbulence-icon.svg',
-    # Those are UI elements in form of icons; themes may define them, but they shouldn't have to
-    'resizing-handle-horizontal-symbolic.svg',
-    'resizing-handle-vertical-symbolic.svg',
-    # There's no need to redefine color picker icons in each theme
-    'color-selector-cms-symbolic.svg',
-    'color-selector-oklch-symbolic.svg',
-    'color-selector-rgb-symbolic.svg',
-    'color-selector-hsx-symbolic.svg',
-    'color-selector-okhsl-symbolic.svg',
-    'color-selector-hsluv-symbolic.svg',
-    'color-selector-cmyk-symbolic.svg',
-    'color-selector-cms.svg',
-    'color-selector-oklch.svg',
-    'color-selector-rgb.svg',
-    'color-selector-hsx.svg',
-    'color-selector-okhsl.svg',
-    'color-selector-hsluv.svg',
-    'color-selector-cmyk.svg',
-]
+# These are hard coded as symbolic in the gtk source code
+SYMBOLIC_ONLY_ICONS = {
+    'list-add',
+    'list-remove',
+    'applications-graphics',
+    'edit-find',
+    'dialog-warning',
+    'edit-clear',
+    'view-refresh',
+    'pan-down',
+    'pan-right',
+    'pan-left',
+    'pan-end',
+    'pan-start',
+    'pan-up',
+    'window-close',
+    'application-exit',
+    'document-save-as',
+    'open-menu',
+}
+# These should never appear in a symbolic theme, because they always need to have color
+SCALABLE_ONLY_ICONS = {
+    'color-selector-hsx',
+    'color-selector-hsl',
+    'color-selector-hsv',
+    'color-selector-oklch',
+    'color-selector-named',
+    'color-selector-hsluv',
+    'color-selector-cms',
+    'color-selector-cmyk',
+    'color-selector-okhsl',
+    'color-selector-rgb',
+    'color-wheel',
+    'out-of-gamut-icon',
+}
+# Those are illustrations rather than icons
+IGNORE_ILLUSTRATIONS = {
+    'feBlend-icon',
+    'feColorMatrix-icon',
+    'feComponentTransfer-icon',
+    'feComposite-icon',
+    'feConvolveMatrix-icon',
+    'feDiffuseLighting-icon',
+    'feDisplacementMap-icon',
+    'feFlood-icon',
+    'feGaussianBlur-icon',
+    'feImage-icon',
+    'feMerge-icon',
+    'feMorphology-icon',
+    'feOffset-icon',
+    'feSpecularLighting-icon',
+    'feTile-icon',
+    'feTurbulence-icon',
+}
+# Those are UI elements in form of icons; themes may define them, but they shouldn't have to
+IGNORE_UI = {
+    'resizing-handle-horizontal',
+    'resizing-handle-vertical',
+}
 
 NO_PROBLEM,\
 BAD_SYMBOLIC_NAME,\
 BAD_SCALABLE_NAME,\
 MISSING_FROM,\
-ONLY_FOUND_IN = range(5)
+ONLY_FOUND_IN,\
+SCALABLE_ONLY,\
+SYMBOLIC_ONLY = range(7)
 
 def icon_themes():
     for name in os.listdir(THEME_PATH):
@@ -144,8 +117,6 @@ def find_errors_in(themes):
                 all_symbolics.add(name)
 
             for fname in files:
-                if fname in IGNORE_ICONS:
-                    continue
                 if not fname.endswith('.svg'):
                     continue
 
@@ -160,6 +131,9 @@ def find_errors_in(themes):
                     bad_scalable.append(os.path.join(orig, fname))
                     continue
 
+                if fname in IGNORE_ILLUSTRATIONS or fname in IGNORE_UI:
+                    continue
+
                 filename = os.path.join(root, fname)
                 data[filename].add(theme_name)
 
@@ -171,12 +145,27 @@ def find_errors_in(themes):
     only_found_in = defaultdict(list)
     missing_from = defaultdict(list)
     warn_missing_from = defaultdict(list)
+    symbolic_found = defaultdict(list)
+    scalable_found = defaultdict(list)
 
     for filename in sorted(data):
         datum = data[filename]
 
         symbolics = set(name for (name, kind) in datum if kind == 'symbolic')
         scalables = set(name for (name, kind) in datum if kind == 'scalable')
+
+        # Color icons should NEVER be in the symbolic sets
+        short_name = filename.split("/")[-1].replace(".svg", "")
+        if short_name in SCALABLE_ONLY_ICONS:
+            for theme in symbolics:
+                symbolic_found[theme].append(filename)
+        if short_name in SYMBOLIC_ONLY_ICONS:
+            for theme in scalables:
+                scalable_found[theme].append(filename)
+
+        # Ignore a bunch of hard coded things
+        if short_name in (SCALABLE_ONLY_ICONS | SYMBOLIC_ONLY_ICONS | IGNORE_ILLUSTRATIONS | IGNORE_UI):
+            continue
 
         # For every scalable, there must be a symbolic
         diff = scalables - symbolics
@@ -207,6 +196,10 @@ def find_errors_in(themes):
         errors.append((MISSING_FROM, missing_from))
     if warn_missing_from:
         warnings.append((MISSING_FROM, warn_missing_from))
+    if symbolic_found:
+        errors.append((SCALABLE_ONLY, symbolic_found))
+    if scalable_found:
+        errors.append((SYMBOLIC_ONLY, scalable_found))
 
     return errors, warnings
 
@@ -242,6 +235,19 @@ if __name__ == '__main__':
                     sys.stderr.write(f"Icons only found in {theme}:\n")
                     for name in themes[theme]:
                         sys.stderr.write(f" + {name}\n")
+                    sys.stderr.write("\n")
+            elif error is SCALABLE_ONLY:
+                for theme in themes:
+                    sys.stderr.write(f"Icons should be scalable ONLY, remove from {theme}:\n")
+                    for name in themes[theme]:
+                        name = name.replace(".svg", "-symbolic.svg")
+                        sys.stderr.write(f" - {name}\n")
+                    sys.stderr.write("\n")
+            elif error is SYMBOLIC_ONLY:
+                for theme in themes:
+                    sys.stderr.write(f"Icons should be symbolic ONLY, remove from {theme}:\n")
+                    for name in themes[theme]:
+                        sys.stderr.write(f" - {name}\n")
                     sys.stderr.write("\n")
             else:
                 pass

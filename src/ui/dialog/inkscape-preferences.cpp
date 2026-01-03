@@ -43,6 +43,7 @@
 #include "display/control/ctrl-handle-manager.h"
 #include "ui/widget/generic/icon-combobox.h"
 #include "ui/widget/handle-preview.h"
+#include "ui/icon-loader.h"
 
 #if WITH_GSOURCEVIEW
 #include <gtksourceview/gtksource.h>
@@ -2163,7 +2164,7 @@ void InkscapePreferences::initPageUI()
             auto const label = Gtk::make_managed<Gtk::Label>(space->getName());
             label->set_valign(Gtk::Align::CENTER);
             UI::pack_start(*box, *label);
-            UI::pack_start(*box, *Gtk::make_managed<Gtk::Image>(Gio::ThemedIcon::create(space->getIcon())));
+            UI::pack_start(*box, *sp_get_icon_image(space->getIcon(), 16));
             box->set_spacing(3);
             auto path = space->getPrefsPath() + "visible";
             btn->set_active(prefs->getBool(path));
