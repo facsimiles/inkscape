@@ -243,7 +243,7 @@ std::set<std::string> add_categories(Glib::RefPtr<Gtk::ListStore>& store, const 
 
     auto row = *store->append();
     row[g_categories_columns.id] = "all";
-    row[g_categories_columns.name] = effect ? _("All Effect Extensions") : _("All Filters");
+    row[g_categories_columns.name] = effect ? _("All Extensions") : _("All Filters");
 
     row = *store->append();
     row[g_categories_columns.id] = "-";
@@ -275,7 +275,7 @@ ExtensionsGallery::ExtensionsGallery(ExtensionsGallery::Type type) :
 
     auto& header = get_widget<Gtk::Label>(_builder, "header");
     header.set_label(_type == Effects ?
-        _("Select effect extension to run:") :
+        _("Select extension to run:") :
         _("Select filter to apply:"));
 
     auto prefs = Preferences::get();
@@ -300,7 +300,7 @@ ExtensionsGallery::ExtensionsGallery(ExtensionsGallery::Type type) :
     // show/hide categories
     auto toggle = &get_widget<Gtk::ToggleButton>(_builder, "toggle");
     toggle->set_tooltip_text(_type == Effects ?
-        _("Toggle list of effect extension categories") :
+        _("Toggle list of extension categories") :
         _("Toggle list of filter categories"));
     toggle->set_active(show_list);
     toggle->signal_toggled().connect([=, this](){
