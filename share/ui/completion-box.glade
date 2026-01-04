@@ -40,7 +40,7 @@
         <property name="hexpand">True</property>
         <property name="activates-default">True</property>
         <property name="width-chars">1</property>
-        <property name="primary-icon-name">edit-find-symbolic</property>
+        <property name="primary-icon-name">system-search-symbolic</property>
         <property name="primary-icon-activatable">False</property>
         <property name="primary-icon-sensitive">False</property>
         <property name="completion">completion</property>

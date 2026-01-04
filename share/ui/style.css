@@ -1272,13 +1272,80 @@ popover.popover-menu menuitem:hover {
     background-color: @theme_selected_bg_color;
     color: @theme_selected_fg_color;
 }
-popover.popover-menu menuitem:hover image {
+popover.popover-menu menuitem:hover image {    
     background-color: @theme_selected_bg_color;
     color: @theme_selected_fg_color;
 }
 popover.popover-menu separator {
     margin: 1px 0;
 }
+
+/* Snap popover */
+
+#SnapPopover contents { /* Removes the inherited padding of popovers  */
+	padding: 0px;
+    min-width: 220px;
+/*  background-color: @theme_bg_color; */
+}
+
+#SnapPopover checkbutton label {
+  padding: 1px 8px 0px 4px;
+}
+
+#SnapPopover box.popover-header {
+    padding: 12px;
+    border-bottom: 1px solid alpha(@borders, 0.5);
+}
+
+#SnapPopover grid.snap-section {
+    padding: 10px 12px;
+    border-bottom: 1px solid alpha(@borders, 0.5);
+    background-color: @theme_base_color;
+}
+
+#SnapPopover grid.snap-section-last {
+    padding: 10px;
+    background-color: @theme_base_color;
+}
+
+#SnapPopover box.popover-footer {
+    border-top: 1px solid alpha(@borders, 0.5);
+    outline-offset: 5px;
+}
+
+#SnapPopover box.popover-footer label {
+    text-decoration: none;
+}
+
+#SnapToolbar {
+    padding: 0px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 2px;
+    margin-bottom: 0px;
+}
+
+#SnapToolbar button.toggle button {
+    min-width: 16px;
+    min-height: 16px;
+    margin: 0px;
+}
+
+#SnapToolbar scrolledwindow.snap-section {
+    border-bottom: 1px solid alpha(@borders, 0.5);
+}
+
+#SnapToolbar box.snap-section {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid alpha(@borders, 0.5);
+}
+
+#SnapToolbar box.snap-section-last {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
 /* Defeat defaulting to having more spacing between RadioButtons than GtkMenu */
 popover.popover-menu radiobutton {
     padding: 0;
