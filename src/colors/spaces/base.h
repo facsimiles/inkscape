@@ -11,6 +11,7 @@
 #ifndef SEEN_COLORS_SPACES_BASE_H
 #define SEEN_COLORS_SPACES_BASE_H
 
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <set>

@@ -15,6 +15,7 @@
 #define SEEN_COLOR_PREVIEW_H
 
 #include <gtkmm/drawingarea.h>
+#include <cstdint>
 
 namespace Gtk {
 class Builder;

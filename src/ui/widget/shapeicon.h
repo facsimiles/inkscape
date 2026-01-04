@@ -13,6 +13,7 @@
 
 #include <glibmm/property.h>
 #include <gtkmm/cellrendererpixbuf.h>
+#include <cstdint>
 
 namespace Inkscape::UI::Widget {
 

@@ -13,6 +13,7 @@
 #define SEEN_UI_UI_SYNTAX_H
 
 #include <glibmm/markup.h>
+#include <cstdint>
 #include <optional>
 
 namespace Gtk {

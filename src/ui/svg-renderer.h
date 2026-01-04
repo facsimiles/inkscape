@@ -5,6 +5,7 @@
 
 #include <cairomm/surface.h>
 #include <glibmm/refptr.h>
+#include <cstdint>
 #include <optional>
 
 class SPDocument;

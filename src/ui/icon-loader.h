@@ -14,6 +14,7 @@
 #define SEEN_INK_ICON_LOADER_H
 
 #include <gtkmm/enums.h>
+#include <cstdint>
 
 namespace Gtk {
 class Image;
