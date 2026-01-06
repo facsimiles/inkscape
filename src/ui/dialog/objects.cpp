@@ -47,7 +47,6 @@
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/objects-dialog-cells.h"
 #include "ui/widget/shapeicon.h"
-#include "ui/widget/iconrenderer.h"
 #include "ui/icon-loader.h"
 #include "util/numeric/converters.h"
 
@@ -785,8 +784,7 @@ ObjectsPanel::ObjectsPanel()
     });
 
     const int icon_col_width = 24;
-    auto const icon_renderer = Gtk::make_managed<UI::Widget::IconRenderer>();
-    // auto const icon_renderer = Gtk::make_managed<Inkscape::UI::Widget::CellRendererItemIcon>();
+    auto const icon_renderer = Gtk::make_managed<Inkscape::UI::Widget::CellRendererItemIcon>();
     icon_renderer->property_xpad() = 2;
     icon_renderer->property_width() = icon_col_width;
     _tree.append_column(*_name_column);
@@ -796,10 +794,10 @@ ObjectsPanel::ObjectsPanel()
     _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
     _name_column->add_attribute(_text_renderer->property_cell_background_rgba(), _model->_colBgColor);
     _name_column->add_attribute(icon_renderer->property_icon_name(), _model->_colIconName);
-    // _name_column->add_attribute(icon_renderer->property_shape_type(), _model->_colType);
-    // _name_column->add_attribute(icon_renderer->property_color(), _model->_colIconColor);
-    // _name_column->add_attribute(icon_renderer->property_clipmask(), _model->_colClipMask);
-    // _name_column->add_attribute(icon_renderer->property_cell_background_rgba(), _model->_colBgColor);
+    _name_column->add_attribute(icon_renderer->property_shape_type(), _model->_colType);
+    _name_column->add_attribute(icon_renderer->property_color(), _model->_colIconColor);
+    _name_column->add_attribute(icon_renderer->property_clipmask(), _model->_colClipMask);
+    _name_column->add_attribute(icon_renderer->property_cell_background_rgba(), _model->_colBgColor);
 
     // blend mode and opacity icon(s)
     _item_state_toggler = Gtk::make_managed<UI::Widget::ImageToggler>(
