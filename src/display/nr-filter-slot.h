@@ -27,6 +27,7 @@ typedef struct _cairo_surface cairo_surface_t;
 namespace Inkscape {
 class DrawingContext;
 class DrawingItem;
+class DrawingSurface;
 class RenderContext;
 
 namespace Filters {
@@ -35,7 +36,7 @@ class FilterSlot final
 {
 public:
     /** Creates a new FilterSlot object. */
-    FilterSlot(DrawingContext *bgdc, DrawingContext &graphic, FilterUnits const &units, RenderContext &rc, int blurquality);
+    FilterSlot(DrawingContext &graphic, FilterUnits const &units, RenderContext &rc, int blurquality);
 
     /** Destroys the FilterSlot object and all its contents */
     ~FilterSlot();
@@ -54,6 +55,7 @@ public:
      * that pixblock is destroyed.
      */
     void set(int slot, cairo_surface_t *s);
+    void set_background_area(Geom::IntRect const &area) { _background_area = area; }
 
     cairo_surface_t *get_result(int slot_nr);
 
@@ -85,9 +87,8 @@ private:
     int _slot_w, _slot_h;
     double _slot_x, _slot_y;
     cairo_surface_t *_source_graphic;
-    cairo_t *_background_ct;
     Geom::IntRect _source_graphic_area;
-    Geom::IntRect _background_area; ///< needed to extract background
+    Geom::IntRect _background_area; // remove me
     FilterUnits const &_units;
     int _last_out;
     int _blurquality;

@@ -27,11 +27,9 @@
 namespace Inkscape {
 namespace Filters {
 
-FilterSlot::FilterSlot(DrawingContext *bgdc, DrawingContext &graphic, FilterUnits const &units, RenderContext &rc, int blurquality)
+FilterSlot::FilterSlot(DrawingContext &graphic, FilterUnits const &units, RenderContext &rc, int blurquality)
     : _source_graphic(graphic.rawTarget())
-    , _background_ct(bgdc ? bgdc->raw() : nullptr)
     , _source_graphic_area(graphic.targetLogicalBounds().roundOutwards()) // fixme
-    , _background_area(bgdc ? bgdc->targetLogicalBounds().roundOutwards() : Geom::IntRect()) // fixme
     , _units(units)
     , _last_out(NR_FILTER_SOURCEGRAPHIC)
     , _blurquality(blurquality)
@@ -163,10 +161,9 @@ cairo_surface_t *FilterSlot::_get_transformed_background() const
 {
     Geom::Affine trans = _units.get_matrix_display2pb();
 
-    cairo_surface_t *tbg;
+    cairo_surface_t *tbg = nullptr;
 
-    if (_background_ct) {
-        cairo_surface_t *bg = cairo_get_group_target(_background_ct);
+    if (auto bg = const_cast<FilterSlot *>(this)->getcairo(NR_FILTER_BACKGROUNDIMAGE)) {
         tbg = cairo_surface_create_similar(
             bg, cairo_surface_get_content(bg),
             _slot_w, _slot_h);

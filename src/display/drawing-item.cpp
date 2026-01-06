@@ -886,7 +886,7 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
                 DrawingSurface bg(*carea, device_scale);
                 DrawingContext bgdc(bg);
                 bg_root->render(bgdc, rc, *carea, flags | RENDER_FILTER_BACKGROUND, this);
-                _filter->render(this, ict, &bgdc, rc);
+                _filter->render(this, ict, &bg, rc);
                 rendered = true;
             }
         }

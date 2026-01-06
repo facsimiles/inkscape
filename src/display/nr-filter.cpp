@@ -96,7 +96,7 @@ void Filter::update()
     }
 }
 
-int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, DrawingContext *bgdc, RenderContext &rc) const
+int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, DrawingSurface const *bg, RenderContext &rc) const
 {
     // std::cout << "Filter::render() for: " << const_cast<Inkscape::DrawingItem *>(item)->name() << std::endl;
     // std::cout << "  graphic drawing_scale: " << graphic.surface()->device_scale() << std::endl;
@@ -149,7 +149,11 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
         }
     }
 
-    auto slot = FilterSlot(bgdc, graphic, units, rc, blurquality);
+    auto slot = FilterSlot(graphic, units, rc, blurquality);
+    if (bg) {
+        slot.set(NR_FILTER_BACKGROUNDIMAGE, const_cast<DrawingSurface *>(bg)->raw());
+        slot.set_background_area(bg->area().roundOutwards());
+    }
 
     for (auto &i : primitives) {
         i->render_cairo(slot);
