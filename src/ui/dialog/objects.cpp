@@ -47,6 +47,8 @@
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/objects-dialog-cells.h"
 #include "ui/widget/shapeicon.h"
+#include "ui/widget/iconrenderer.h"
+#include "ui/icon-loader.h"
 #include "util/numeric/converters.h"
 
 // alpha (transparency) multipliers corresponding to item selection state combinations (SelectionState)
@@ -238,6 +240,7 @@ public:
         add(_colNode);
         add(_colLabel);
         add(_colType);
+        add(_colIconName);
         add(_colIconColor);
         add(_colClipMask);
         add(_colBgColor);
@@ -256,6 +259,7 @@ public:
     Gtk::TreeModelColumn<Node*> _colNode;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;
     Gtk::TreeModelColumn<Glib::ustring> _colType;
+    Gtk::TreeModelColumn<Glib::ustring> _colIconName;
     Gtk::TreeModelColumn<unsigned int> _colIconColor;
     Gtk::TreeModelColumn<unsigned int> _colClipMask;
     Gtk::TreeModelColumn<Gdk::RGBA> _colBgColor;
@@ -343,6 +347,8 @@ void ObjectWatcher::updateRowInfo()
         row[_model->_colLabel] = id && !item->label() ? get_synthetic_object_name(item) : item->defaultLabel();
 
         row[_model->_colType] = item->typeName();
+        auto [icon_name, color_class] = get_shape_icon(item->typeName(), 1);
+        row[_model->_colIconName] = icon_name;
         row[_model->_colClipMask] =
             (item->getClipObject() ? Inkscape::UI::Widget::OVERLAY_CLIP : 0) |
             (item->getMaskObject() ? Inkscape::UI::Widget::OVERLAY_MASK : 0);
@@ -779,7 +785,8 @@ ObjectsPanel::ObjectsPanel()
     });
 
     const int icon_col_width = 24;
-    auto const icon_renderer = Gtk::make_managed<Inkscape::UI::Widget::CellRendererItemIcon>();
+    auto const icon_renderer = Gtk::make_managed<UI::Widget::IconRenderer>();
+    // auto const icon_renderer = Gtk::make_managed<Inkscape::UI::Widget::CellRendererItemIcon>();
     icon_renderer->property_xpad() = 2;
     icon_renderer->property_width() = icon_col_width;
     _tree.append_column(*_name_column);
@@ -788,10 +795,11 @@ ObjectsPanel::ObjectsPanel()
     _name_column->pack_start(*_text_renderer, true);
     _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
     _name_column->add_attribute(_text_renderer->property_cell_background_rgba(), _model->_colBgColor);
-    _name_column->add_attribute(icon_renderer->property_shape_type(), _model->_colType);
-    _name_column->add_attribute(icon_renderer->property_color(), _model->_colIconColor);
-    _name_column->add_attribute(icon_renderer->property_clipmask(), _model->_colClipMask);
-    _name_column->add_attribute(icon_renderer->property_cell_background_rgba(), _model->_colBgColor);
+    _name_column->add_attribute(icon_renderer->property_icon_name(), _model->_colIconName);
+    // _name_column->add_attribute(icon_renderer->property_shape_type(), _model->_colType);
+    // _name_column->add_attribute(icon_renderer->property_color(), _model->_colIconColor);
+    // _name_column->add_attribute(icon_renderer->property_clipmask(), _model->_colClipMask);
+    // _name_column->add_attribute(icon_renderer->property_cell_background_rgba(), _model->_colBgColor);
 
     // blend mode and opacity icon(s)
     _item_state_toggler = Gtk::make_managed<UI::Widget::ImageToggler>(
