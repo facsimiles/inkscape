@@ -109,7 +109,7 @@ $ARCH-scour
 
 # install modules needed by extensions manager and clipart importer
 eval pacman -S $PACMAN_OPTIONS \
-$ARCH-python-appdirs \
+$ARCH-python-platformdirs \
 $ARCH-python-beautifulsoup4 \
 $ARCH-python-cachecontrol \
 $ARCH-python-certifi \

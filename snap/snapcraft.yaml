@@ -288,7 +288,7 @@ parts:
     python-packages:
 #    the following dependencies are taken manually from share/extensions/other/inkman/pyproject.toml:
       - requests
-      - appdirs
+      - platformdirs
       - filelock
       - cachecontrol[filecache]
 #     the following dependencies are taken manually from share/extensions/other/clipart/pyproject.toml:

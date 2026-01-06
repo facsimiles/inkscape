@@ -59,7 +59,7 @@ apt_bundle \
     python3-webencodings \
     python3-tinycss2 \
     python3-packaging \
-    python3-appdirs \
+    python3-platformdirs \
     python3-bs4 \
     python3-gi \
     python3-gi-cairo \

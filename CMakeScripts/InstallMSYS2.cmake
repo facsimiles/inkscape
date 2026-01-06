@@ -145,6 +145,7 @@ if(WIN32)
     ${MINGW_BIN}/libwpg-0.[0-9]*.dll
     ${MINGW_BIN}/libxml2-[0-9]*.dll
     ${MINGW_BIN}/libxslt-[0-9]*.dll
+    ${MINGW_BIN}/libx264-[0-9]*.dll
     ${MINGW_BIN}/libx265-[0-9]*.dll
     ${MINGW_BIN}/libyuv.dll
     ${MINGW_BIN}/libzstd.dll
@@ -382,7 +383,7 @@ if(WIN32)
 
     # Python packages for the extensions manager, and clipart importer extensions
     set(packages
-        "python-appdirs" "python-msgpack" "python-cachecontrol"
+        "python-platformdirs" "python-msgpack" "python-cachecontrol"
         "python-idna" "python-urllib3" "python-chardet" "python-certifi" "python-requests" "python-beautifulsoup4" "python-filelock")
     foreach(package ${packages})
       list_files_pacman(${package} paths)
