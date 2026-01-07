@@ -84,7 +84,7 @@ ColorPickerParam::param_newWidget()
         colorpickerwdg->setColor(*value);
     }
 
-    colorpickerwdg->set_undo_parameters(_("Change color button parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    colorpickerwdg->set_undo_parameters(RC_("Undo", "Change color button parameter"), INKSCAPE_ICON("dialog-path-effects"));
 
     UI::pack_start(*hbox, *colorpickerwdg, true, true);
     return hbox;

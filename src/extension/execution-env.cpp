@@ -165,7 +165,7 @@ ExecutionEnv::undo () {
 
 void
 ExecutionEnv::commit () {
-    DocumentUndo::done(document, _effect->get_name(), "");
+    DocumentUndo::done(document, Inkscape::Util::Internal::ContextString(_effect->get_name()), "");
     Effect::set_last_effect(_effect);
     _effect->get_imp()->commitDocument();
     killDocCache();

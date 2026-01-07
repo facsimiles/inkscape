@@ -66,7 +66,7 @@ bool ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
     }
 
     if (did && !skip_undo) {
-        Inkscape::DocumentUndo::done(document(), _("Convert stroke to path"), "");
+        Inkscape::DocumentUndo::done(document(), RC_("Undo", "Convert stroke to path"), "");
     } else if (!did && !skip_undo) {
         Inkscape::DocumentUndo::cancel(document());
     }
@@ -126,7 +126,7 @@ ObjectSet::simplifyPaths(bool skip_undo)
     }
 
     if (pathsSimplified > 0 && !skip_undo) {
-        DocumentUndo::done(document(), _("Simplify"), INKSCAPE_ICON("path-simplify"));
+        DocumentUndo::done(document(), RC_("Undo", "Simplify"), INKSCAPE_ICON("path-simplify"));
     }
 
     if (desktop()) {

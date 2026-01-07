@@ -132,7 +132,7 @@ void apply_lpeffect(SPItem* item, LivePathEffect::EffectType type) {
 
     auto key = LivePathEffect::LPETypeConverter.get_key(type);
     LivePathEffect::Effect::createAndApply(key.c_str(), item->document, item);
-    DocumentUndo::done(item->document, _("Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
+    DocumentUndo::done(item->document, RC_("Undo", "Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 void remove_lpeffect(SPObject* object, int index) {
@@ -145,7 +145,7 @@ void remove_lpeffect(SPObject* object, int index) {
         if (index == i) {
             if (auto effect = lpe->lpeobject ? lpe->lpeobject->get_lpe() : nullptr) {
                 lpe_item->removePathEffect(effect, false);
-                DocumentUndo::done(object->document, _("Removed live path effect"), INKSCAPE_ICON("dialog-path-effects"));
+                DocumentUndo::done(object->document, RC_("Undo", "Removed live path effect"), INKSCAPE_ICON("dialog-path-effects"));
             }
             break;
         }
@@ -310,7 +310,7 @@ void remove_lpeffect(SPLPEItem* item, LivePathEffect::EffectType type) {
         item->setCurrentPathEffect(effect);
         auto document = item->document;
         item->removeCurrentPathEffect(false);
-        DocumentUndo::done(document, _("Remove live path effect"), INKSCAPE_ICON("dialog-path-effects"));
+        DocumentUndo::done(document, RC_("Undo", "Remove live path effect"), INKSCAPE_ICON("dialog-path-effects"));
     }
 }
 
@@ -485,7 +485,7 @@ void details::AttributesPanel::add_name_properties() {
 
         auto scoped(_update.block());
         _current_object->setAttribute("id", id);
-        DocumentUndo::done(_current_object->document, _("Set object ID"), INKSCAPE_ICON("dialog-object-properties"));
+        DocumentUndo::done(_current_object->document, RC_("Undo", "Set object ID"), INKSCAPE_ICON("dialog-object-properties"));
     });
     _obj_id.signal_changed().connect([this] {
         if (_update.pending() || !_current_object || !_document) return;
@@ -500,7 +500,7 @@ void details::AttributesPanel::add_name_properties() {
         auto scoped(_update.block());
         if (_current_object->setTitle(_obj_title.get_text().c_str())) {
             _current_object->requestModified(SP_OBJECT_MODIFIED_FLAG | TAG);
-            DocumentUndo::maybeDone(_current_object->document, "set-obj-title", _("Set object title"), INKSCAPE_ICON("dialog-object-properties"));
+            DocumentUndo::maybeDone(_current_object->document, "set-obj-title", RC_("Undo", "Set object title"), INKSCAPE_ICON("dialog-object-properties"));
         }
     });
     _obj_description.get_buffer()->signal_changed().connect([this] {
@@ -509,7 +509,7 @@ void details::AttributesPanel::add_name_properties() {
         auto scoped(_update.block());
         if (_current_object->setDesc(_obj_description.get_buffer()->get_text().c_str())) {
             _current_object->requestModified(SP_OBJECT_MODIFIED_FLAG | TAG);
-            DocumentUndo::maybeDone(_current_object->document, "set-obj-desc", _("Set object description"), INKSCAPE_ICON("dialog-object-properties"));
+            DocumentUndo::maybeDone(_current_object->document, "set-obj-desc", RC_("Undo", "Set object description"), INKSCAPE_ICON("dialog-object-properties"));
         }
     });
 }
@@ -699,7 +699,7 @@ void details::AttributesPanel::add_filters(bool separate) {
 
         auto scoped(_update.block());
         remove_filter(_current_object, false);
-        DocumentUndo::done(_current_object->document, _("Remove filter"), "dialog-fill-and-stroke", TAG);
+        DocumentUndo::done(_current_object->document, RC_("Undo", "Remove filter"), "dialog-fill-and-stroke", TAG);
         update_filters(_current_object);
     });
     _add_blur.signal_clicked().connect([this] {
@@ -707,7 +707,7 @@ void details::AttributesPanel::add_filters(bool separate) {
 
         auto scoped(_update.block());
         if (modify_filter_gaussian_blur_amount(cast<SPItem>(_current_object), 10.0)) {
-            DocumentUndo::done(_current_object->document, _("Add blur filter"), "dialog-fill-and-stroke", TAG);
+            DocumentUndo::done(_current_object->document, RC_("Undo", "Add blur filter"), "dialog-fill-and-stroke", TAG);
             update_filters(_current_object);
         }
     });
@@ -716,7 +716,7 @@ void details::AttributesPanel::add_filters(bool separate) {
 
         auto scoped(_update.block());
         if (modify_filter_gaussian_blur_amount(cast<SPItem>(_current_object), value * 100)) {
-            DocumentUndo::maybeDone(_current_object->document, "change-blur-radius", _("Change blur filter"), "dialog-fill-and-stroke", TAG);
+            DocumentUndo::maybeDone(_current_object->document, "change-blur-radius", RC_("Undo", "Change blur filter"), "dialog-fill-and-stroke", TAG);
         }
     });
     _edit_filter.signal_clicked().connect([this] {
@@ -977,7 +977,7 @@ void details::AttributesPanel::change_value_px(SPObject* object, const char* key
         object->removeAttribute(attr);
     }
 
-    DocumentUndo::maybeDone(object->document, key, _("Change object attribute"), ""); //TODO INKSCAPE_ICON("draw-rectangle"));
+    DocumentUndo::maybeDone(object->document, key, RC_("Undo", "Change object attribute"), ""); //TODO INKSCAPE_ICON("draw-rectangle"));
 }
 
 void details::AttributesPanel::change_angle(SPObject* object, const char* key, double angle, std::function<void (double)>&& setter) {
@@ -988,7 +988,7 @@ void details::AttributesPanel::change_angle(SPObject* object, const char* key, d
     auto value = degree_to_radians_mod2pi(angle);
     setter(value);
 
-    DocumentUndo::maybeDone(object->document, key, _("Change object attribute"), ""); //TODO INKSCAPE_ICON("draw-rectangle"));
+    DocumentUndo::maybeDone(object->document, key, RC_("Undo", "Change object attribute"), ""); //TODO INKSCAPE_ICON("draw-rectangle"));
 }
 
 void details::AttributesPanel::change_value(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, std::function<void (double)>&& setter) {
@@ -999,7 +999,7 @@ void details::AttributesPanel::change_value(SPObject* object, const Glib::RefPtr
     auto value = adj ? adj->get_value() : 0;
     setter(value);
 
-    DocumentUndo::done(object->document, _("Change object attribute"), ""); //TODO INKSCAPE_ICON("draw-rectangle"));
+    DocumentUndo::done(object->document, RC_("Undo", "Change object attribute"), ""); //TODO INKSCAPE_ICON("draw-rectangle"));
 }
 
 void details::AttributesPanel::add_object_label() {
@@ -1016,7 +1016,7 @@ void details::AttributesPanel::add_object_label() {
         if (new_label.compare(current_label ? current_label : "") != 0) {
             _current_object->setLabel(new_label.c_str());
             _current_object->requestModified(SP_OBJECT_MODIFIED_FLAG | TAG);
-            DocumentUndo::maybeDone(_current_object->document, "set-obj-label", _("Set object label"), INKSCAPE_ICON("dialog-object-properties"));
+            DocumentUndo::maybeDone(_current_object->document, "set-obj-label", RC_("Undo", "Set object label"), INKSCAPE_ICON("dialog-object-properties"));
         }
     });
 
@@ -1026,7 +1026,7 @@ void details::AttributesPanel::add_object_label() {
 
         bool lock = item->sensitive;
         item->setLocked(lock);
-        DocumentUndo::done(item->document, lock ? _("Lock object") : _("Unlock object"), "dialog-object-properties");
+        DocumentUndo::done(item->document, lock ? RC_("Undo", "Lock object") : RC_("Undo", "Unlock object"), "dialog-object-properties");
     });
 }
 
@@ -1224,7 +1224,7 @@ public:
             // add flexible corners effect if not yet present
             if (!find_lpeffect(_rect, LivePathEffect::FILLET_CHAMFER)) {
                 LivePathEffect::Effect::createAndApply("fillet_chamfer", _rect->document, _rect);
-                DocumentUndo::done(_rect->document, _("Add fillet/chamfer effect"), INKSCAPE_ICON("dialog-path-effects"));
+                DocumentUndo::done(_rect->document, RC_("Undo", "Add fillet/chamfer effect"), INKSCAPE_ICON("dialog-path-effects"));
             }
         });
 
@@ -1320,7 +1320,7 @@ public:
             _end.set_value(0);
             _ellipse->start = _ellipse->end = 0;
             normalize();
-            DocumentUndo::done(_ellipse->document, _("Change ellipse type"), "");
+            DocumentUndo::done(_ellipse->document, RC_("Undo", "Change ellipse type"), "");
         });
 
         _rx.signal_value_changed().connect([=,this](auto value){
@@ -1410,7 +1410,7 @@ public:
         _ellipse->setAttribute("sodipodi:open", open ? "true" : nullptr);
         _ellipse->setAttribute("sodipodi:arc-type", arc_type.c_str());
         _ellipse->updateRepr();
-        DocumentUndo::done(_ellipse->document, _("Change arc type"), INKSCAPE_ICON("draw-ellipse"));
+        DocumentUndo::done(_ellipse->document, RC_("Undo", "Change arc type"), INKSCAPE_ICON("draw-ellipse"));
     }
 
 private:
@@ -1917,7 +1917,7 @@ private:
         auto scoped(_update.block());
         auto d = _svgd_edit->getText();
         _path->setAttribute(_original ? "inkscape:original-d" : "d", d);
-        DocumentUndo::maybeDone(_path->document, "path-data", _("Change path"), INKSCAPE_ICON(""));
+        DocumentUndo::maybeDone(_path->document, "path-data", RC_("Undo", "Change path"), INKSCAPE_ICON(""));
         return true;
     }
 
@@ -1984,7 +1984,7 @@ private:
         if (!parent) return;
 
         if (remove_children_styles(parent, true)) {
-            DocumentUndo::done(parent->document, _("Removed style"), "");
+            DocumentUndo::done(parent->document, RC_("Undo", "Removed style"), "");
         }
     }
 
@@ -2090,7 +2090,7 @@ private:
 
         auto original = clone->get_original();
         if (Css::transfer_item_style(original, clone)) {
-            DocumentUndo::done(clone->document, _("Transferred style"), "");
+            DocumentUndo::done(clone->document, RC_("Undo", "Transferred style"), "");
         }
     }
 
@@ -2211,7 +2211,7 @@ if constexpr (INCLUDE_EXPERIMENTAL_PANELS) {
                 });
             }
             if (changed) {
-                DocumentUndo::done(_desktop->getDocument(), "stroke width", "");
+                DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "stroke width"), "");
             }
         });
 }

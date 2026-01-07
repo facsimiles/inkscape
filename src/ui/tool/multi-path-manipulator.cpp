@@ -307,7 +307,7 @@ void MultiPathManipulator::setNodeType(NodeType type)
         }
     }
 
-    _done(retract_handles ? _("Retract handles") : _("Change node type"));
+    _done(retract_handles ? RC_("Undo", "Retract handles") : RC_("Undo", "Change node type"));
 }
 
 void MultiPathManipulator::setSegmentType(SegmentType type)
@@ -315,9 +315,9 @@ void MultiPathManipulator::setSegmentType(SegmentType type)
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::setSegmentType, type);
     if (type == SEGMENT_STRAIGHT) {
-        _done(_("Straighten segments"));
+        _done(RC_("Undo", "Straighten segments"));
     } else {
-        _done(_("Make segments curves"));
+        _done(RC_("Undo", "Make segments curves"));
     }
 }
 
@@ -325,13 +325,13 @@ void MultiPathManipulator::insertNodes()
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::insertNodes);
-    _done(_("Add nodes"));
+    _done(RC_("Undo", "Add nodes"));
 }
 void MultiPathManipulator::insertNodesAtExtrema(ExtremumType extremum)
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::insertNodeAtExtremum, extremum);
-    _done(_("Add extremum nodes"));
+    _done(RC_("Undo", "Add extremum nodes"));
 }
 
 void MultiPathManipulator::insertNode(Geom::Point pt)
@@ -339,14 +339,14 @@ void MultiPathManipulator::insertNode(Geom::Point pt)
     // When double clicking to insert nodes, we might not have a selection of nodes (and we don't need one)
     // so don't check for "_selection.empty()" here, contrary to the other methods above and below this one
     invokeForAll(&PathManipulator::insertNode, pt);
-    _done(_("Add nodes"));
+    _done(RC_("Undo", "Add nodes"));
 }
 
 void MultiPathManipulator::duplicateNodes()
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::duplicateNodes);
-    _done(_("Duplicate nodes"));
+    _done(RC_("Undo", "Duplicate nodes"));
 }
 
 void MultiPathManipulator::copySelectedPath(Geom::PathBuilder *builder)
@@ -354,7 +354,7 @@ void MultiPathManipulator::copySelectedPath(Geom::PathBuilder *builder)
     if (_selection.empty())
         return;
     invokeForAll(&PathManipulator::copySelectedPath, builder);
-    _done(_("Copy nodes"));
+    _done(RC_("Undo", "Copy nodes"));
 }
 
 void MultiPathManipulator::joinNodes()
@@ -417,14 +417,14 @@ void MultiPathManipulator::joinNodes()
         invokeForAll(&PathManipulator::weldNodes, preserve_pos);
     }
 
-    _doneWithCleanup(_("Join nodes"), true);
+    _doneWithCleanup(RC_("Undo", "Join nodes"), true);
 }
 
 void MultiPathManipulator::breakNodes()
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::breakNodes);
-    _done(_("Break nodes"), true);
+    _done(RC_("Undo", "Break nodes"), true);
 }
 
 /**
@@ -439,7 +439,7 @@ void MultiPathManipulator::deleteNodes(NodeDeleteMode mode)
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::deleteNodes, mode);
-    _doneWithCleanup(_("Delete nodes"), true);
+    _doneWithCleanup(RC_("Undo", "Delete nodes"), true);
 }
 
 /** Join selected endpoints to create segments. */
@@ -466,14 +466,14 @@ void MultiPathManipulator::joinSegments()
     if (joins.empty()) {
         invokeForAll(&PathManipulator::weldSegments);
     }
-    _doneWithCleanup("Join segments", true);
+    _doneWithCleanup(RC_("Undo", "Join segments"), true);
 }
 
 void MultiPathManipulator::deleteSegments()
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::deleteSegments);
-    _doneWithCleanup("Delete segments", true);
+    _doneWithCleanup(RC_("Undo", "Delete segments"), true);
 }
 
 void MultiPathManipulator::alignNodes(Geom::Dim2 d, AlignTargetNode target)
@@ -481,9 +481,9 @@ void MultiPathManipulator::alignNodes(Geom::Dim2 d, AlignTargetNode target)
     if (_selection.empty()) return;
     _selection.align(d, target);
     if (d == Geom::X) {
-        _done("Align nodes to a horizontal line");
+        _done(RC_("Undo", "Align nodes to a horizontal line"));
     } else {
-        _done("Align nodes to a vertical line");
+        _done(RC_("Undo", "Align nodes to a vertical line"));
     }
 }
 
@@ -492,9 +492,9 @@ void MultiPathManipulator::distributeNodes(Geom::Dim2 d)
     if (_selection.empty()) return;
     _selection.distribute(d);
     if (d == Geom::X) {
-        _done("Distribute nodes horizontally");
+        _done(RC_("Undo", "Distribute nodes horizontally"));
     } else {
-        _done("Distribute nodes vertically");
+        _done(RC_("Undo", "Distribute nodes vertically"));
     }
 }
 
@@ -502,10 +502,10 @@ void MultiPathManipulator::reverseSubpaths()
 {
     if (_selection.empty()) {
         invokeForAll(&PathManipulator::reverseSubpaths, false);
-        _done("Reverse subpaths");
+        _done(RC_("Undo", "Reverse subpaths"));
     } else {
         invokeForAll(&PathManipulator::reverseSubpaths, true);
-        _done("Reverse selected subpaths");
+        _done(RC_("Undo", "Reverse selected subpaths"));
     }
 }
 
@@ -513,7 +513,7 @@ void MultiPathManipulator::move(Geom::Point const &delta)
 {
     if (_selection.empty()) return;
     _selection.transform(Geom::Translate(delta));
-    _done("Move nodes");
+    _done(RC_("Undo", "Move nodes"));
 }
 
 void MultiPathManipulator::scale(Geom::Point const &center, Geom::Point const &scale)
@@ -524,7 +524,7 @@ void MultiPathManipulator::scale(Geom::Point const &center, Geom::Point const &s
     Geom::Translate const d2n(center);
     _selection.transform(n2d * Geom::Scale(scale) * d2n);
 
-    _done("Scale nodes");
+    _done(RC_("Undo", "Scale nodes"));
 }
 
 void MultiPathManipulator::showOutline(bool show)
@@ -800,58 +800,59 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *tool, CanvasEven
  * by sub-manipulators, for example TransformHandleSet and ControlPointSelection. */
 void MultiPathManipulator::_commit(CommitEvent cps)
 {
-    gchar const *reason = nullptr;
+    std::optional<Inkscape::Util::Internal::ContextString> reason;
     gchar const *key = nullptr;
+
     switch(cps) {
     case COMMIT_MOUSE_MOVE:
-        reason = _("Move nodes");
+        reason = RC_("Undo", "Move nodes");
         break;
     case COMMIT_KEYBOARD_MOVE_X:
-        reason = _("Move nodes horizontally");
+        reason = RC_("Undo", "Move nodes horizontally");
         key = "node:move:x";
         break;
     case COMMIT_KEYBOARD_MOVE_Y:
-        reason = _("Move nodes vertically");
+        reason = RC_("Undo", "Move nodes vertically");
         key = "node:move:y";
         break;
     case COMMIT_MOUSE_ROTATE:
-        reason = _("Rotate nodes");
+        reason = RC_("Undo", "Rotate nodes");
         break;
     case COMMIT_KEYBOARD_ROTATE:
-        reason = _("Rotate nodes");
+        reason = RC_("Undo", "Rotate nodes");
         key = "node:rotate";
         break;
     case COMMIT_MOUSE_SCALE_UNIFORM:
-        reason = _("Scale nodes uniformly");
+        reason = RC_("Undo", "Scale nodes uniformly");
         break;
     case COMMIT_MOUSE_SCALE:
-        reason = _("Scale nodes");
+        reason = RC_("Undo", "Scale nodes");
         break;
     case COMMIT_KEYBOARD_SCALE_UNIFORM:
-        reason = _("Scale nodes uniformly");
+        reason = RC_("Undo", "Scale nodes uniformly");
         key = "node:scale:uniform";
         break;
     case COMMIT_KEYBOARD_SCALE_X:
-        reason = _("Scale nodes horizontally");
+        reason = RC_("Undo", "Scale nodes horizontally");
         key = "node:scale:x";
         break;
     case COMMIT_KEYBOARD_SCALE_Y:
-        reason = _("Scale nodes vertically");
+        reason = RC_("Undo", "Scale nodes vertically");
         key = "node:scale:y";
         break;
     case COMMIT_MOUSE_SKEW_X:
-        reason = _("Skew nodes horizontally");
+        reason = RC_("Undo", "Skew nodes horizontally");
         key = "node:skew:x";
         break;
     case COMMIT_MOUSE_SKEW_Y:
-        reason = _("Skew nodes vertically");
+        reason = RC_("Undo", "Skew nodes vertically");
         key = "node:skew:y";
         break;
     case COMMIT_FLIP_X:
-        reason = _("Flip nodes horizontally");
+        reason = RC_("Undo", "Flip nodes horizontally");
         break;
     case COMMIT_FLIP_Y:
-        reason = _("Flip nodes vertically");
+        reason = RC_("Undo", "Flip nodes vertically");
         break;
     default: return;
     }
@@ -859,15 +860,15 @@ void MultiPathManipulator::_commit(CommitEvent cps)
     _selection.signal_update.emit();
     invokeForAll(&PathManipulator::writeXML);
     if (key) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), key, reason, INKSCAPE_ICON("tool-node-editor"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), key, *reason, INKSCAPE_ICON("tool-node-editor"));
     } else {
-        DocumentUndo::done(_desktop->getDocument(), reason, INKSCAPE_ICON("tool-node-editor"));
+        DocumentUndo::done(_desktop->getDocument(), *reason, INKSCAPE_ICON("tool-node-editor"));
     }
     signal_coords_changed.emit();
 }
 
 /** Commits changes to XML and adds undo stack entry. */
-void MultiPathManipulator::_done(gchar const *reason, bool alert_LPE) {
+void MultiPathManipulator::_done(Inkscape::Util::Internal::ContextString reason, bool alert_LPE) {
     invokeForAll(&PathManipulator::update, alert_LPE);
     invokeForAll(&PathManipulator::writeXML);
     DocumentUndo::done(_desktop->getDocument(), reason, INKSCAPE_ICON("tool-node-editor"));
@@ -875,7 +876,7 @@ void MultiPathManipulator::_done(gchar const *reason, bool alert_LPE) {
 }
 
 /** Commits changes to XML, adds undo stack entry and removes empty manipulators. */
-void MultiPathManipulator::_doneWithCleanup(char const *reason, bool alert_LPE) {
+void MultiPathManipulator::_doneWithCleanup(Inkscape::Util::Internal::ContextString reason, bool alert_LPE) {
     _done(reason, alert_LPE);
     cleanup();
 }

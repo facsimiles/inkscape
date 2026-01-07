@@ -378,7 +378,7 @@ void MeshToolbar::type_changed(int mode)
     }
 
     if (!meshes.empty()) {
-        DocumentUndo::done(_desktop->getDocument(), _("Set mesh type"), INKSCAPE_ICON("mesh-gradient"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Set mesh type"), INKSCAPE_ICON("mesh-gradient"));
     }
 }
 

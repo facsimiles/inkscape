@@ -1096,49 +1096,49 @@ bool TweakTool::root_handler(CanvasEvent const &event)
                 }
                 is_dilating = false;
                 has_dilated = false;
-                Glib::ustring text;
+                std::optional<Inkscape::Util::Internal::ContextString> description;
                 switch (mode) {
                     case TWEAK_MODE_MOVE:
-                        text = _("Move tweak");
+                        description = RC_("Undo", "Move tweak");
                         break;
                     case TWEAK_MODE_MOVE_IN_OUT:
-                        text = _("Move in/out tweak");
+                        description = RC_("Undo", "Move in/out tweak");
                         break;
                     case TWEAK_MODE_MOVE_JITTER:
-                        text = _("Move jitter tweak");
+                        description = RC_("Undo", "Move jitter tweak");
                         break;
                     case TWEAK_MODE_SCALE:
-                        text = _("Scale tweak");
+                        description = RC_("Undo", "Scale tweak");
                         break;
                     case TWEAK_MODE_ROTATE:
-                        text = _("Rotate tweak");
+                        description = RC_("Undo", "Rotate tweak");
                         break;
                     case TWEAK_MODE_MORELESS:
-                        text = _("Duplicate/delete tweak");
+                        description = RC_("Undo", "Duplicate/delete tweak");
                         break;
                     case TWEAK_MODE_PUSH:
-                        text = _("Push path tweak");
+                        description = RC_("Undo", "Push path tweak");
                         break;
                     case TWEAK_MODE_SHRINK_GROW:
-                        text = _("Shrink/grow path tweak");
+                        description = RC_("Undo", "Shrink/grow path tweak");
                         break;
                     case TWEAK_MODE_ATTRACT_REPEL:
-                        text = _("Attract/repel path tweak");
+                        description = RC_("Undo", "Attract/repel path tweak");
                         break;
                     case TWEAK_MODE_ROUGHEN:
-                        text = _("Roughen path tweak");
+                        description = RC_("Undo", "Roughen path tweak");
                         break;
                     case TWEAK_MODE_COLORPAINT:
-                        text = _("Color paint tweak");
+                        description = RC_("Undo", "Color paint tweak");
                         break;
                     case TWEAK_MODE_COLORJITTER:
-                        text = _("Color jitter tweak");
+                        description = RC_("Undo", "Color jitter tweak");
                         break;
                     case TWEAK_MODE_BLUR:
-                        text = _("Blur tweak");
+                        description = RC_("Undo", "Blur tweak");
                         break;
                 }
-                DocumentUndo::done(_desktop->getDocument(), text.c_str(), INKSCAPE_ICON("tool-tweak"));
+                DocumentUndo::done(_desktop->getDocument(), *description, INKSCAPE_ICON("tool-tweak"));
             }
         },
         [&] (KeyPressEvent const &event) {

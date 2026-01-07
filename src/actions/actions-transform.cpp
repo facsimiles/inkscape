@@ -48,7 +48,7 @@ transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
     selection->move(dx, dy);
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformTranslate", "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), Inkscape::Util::Internal::ContextString("ActionTransformTranslate"), "");
 }
 
 void
@@ -116,14 +116,14 @@ transform_remove(InkscapeApplication *app)
     selection->removeTransform();
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformRemoveTransform", "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), Inkscape::Util::Internal::ContextString("ActionTransformRemoveTransform"), "");
 }
 
 void transform_reapply(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
     selection->reapplyAffine();
-    Inkscape::DocumentUndo::maybeDone(app->get_active_document(), "reapply-transform", _("Reapply Transforms"),
+    Inkscape::DocumentUndo::maybeDone(app->get_active_document(), "reapply-transform", RC_("Undo", "Reapply Transforms"),
                                       INKSCAPE_ICON("tool-pointer"));
 }
 
@@ -132,7 +132,7 @@ void page_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
     auto document = app->get_active_document();
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     document->getPageManager().rotatePage(i.get());
-    Inkscape::DocumentUndo::done(document, "Rotate Page", INKSCAPE_ICON("tool-pages"));
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "Rotate Page"), INKSCAPE_ICON("tool-pages"));
 }
 
 const Glib::ustring SECTION = NC_("Action Section", "Transform");

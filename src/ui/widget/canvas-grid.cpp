@@ -654,7 +654,7 @@ void CanvasGrid::_createGuide(Geom::Point origin, Geom::Point normal)
     repr->setAttributePoint("orientation", normal);
     desktop->getNamedView()->appendChild(repr);
     GC::release(repr);
-    DocumentUndo::done(desktop->getDocument(), _("Create guide"), "");
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Create guide"), "");
 }
 
 // End guide creation or toggle guides on/off.

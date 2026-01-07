@@ -274,7 +274,7 @@ void PathManipulator::insertNode(NodeList::iterator first, double t, bool take_s
     _selection.insert(inserted.ptr());
 
     update(true);
-    _commit(_("Add node"));
+    _commit(RC_("Undo", "Add node"));
 }
 
 static void
@@ -650,7 +650,7 @@ void PathManipulator::deleteNodes(NodeDeleteMode delete_mode)
             while (sel_beg->selected()) ++sel_beg;
         }
         sel_end = sel_beg;
-        
+
         while (num_selected > 0) {
             while (sel_beg && !sel_beg->selected()) {
                 sel_beg = sel_beg.next();
@@ -660,7 +660,7 @@ void PathManipulator::deleteNodes(NodeDeleteMode delete_mode)
             while (sel_end && sel_end->selected()) {
                 sel_end = sel_end.next();
             }
-            
+
             num_selected -= _deleteStretch(sel_beg, sel_end, delete_mode);
             sel_beg = sel_end;
         }
@@ -948,7 +948,7 @@ void PathManipulator::scaleHandle(Node *n, int which, int dir, bool pixel)
     h->setRelativePos(relpos);
     update();
     gchar const *key = which < 0 ? "handle:scale:left" : "handle:scale:right";
-    _commit(_("Scale handle"), key);
+    _commit(RC_("Undo", "Scale handle"), key);
 }
 
 void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
@@ -972,7 +972,7 @@ void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
     h->setRelativePos(h->relativePos() * Geom::Rotate(angle));
     update();
     gchar const *key = which < 0 ? "handle:rotate:left" : "handle:rotate:right";
-    _commit(_("Rotate handle"), key);
+    _commit(RC_("Undo", "Rotate handle"), key);
 }
 
 Handle *PathManipulator::_chooseHandle(Node *n, int which)
@@ -1654,7 +1654,7 @@ bool PathManipulator::_nodeClicked(Node *n, ButtonReleaseEvent const &event)
         }
 
         // We need to call MPM's method because it could have been our last node
-        _multi_path_manipulator._doneWithCleanup(_("Delete node"));
+        _multi_path_manipulator._doneWithCleanup(RC_("Undo", "Delete node"));
 
         return true;
     } else if (mod_ctrl(event)) {
@@ -1662,7 +1662,7 @@ bool PathManipulator::_nodeClicked(Node *n, ButtonReleaseEvent const &event)
         if (!n->isEndNode()) {
             n->setType(static_cast<NodeType>((n->type() + 1) % NODE_LAST_REAL_TYPE));
             update();
-            _commit(_("Cycle node type"));
+            _commit(RC_("Undo", "Cycle node type"));
         }
         return true;
     }
@@ -1677,7 +1677,7 @@ void PathManipulator::_handleGrabbed()
 void PathManipulator::_handleUngrabbed()
 {
     _selection.restoreTransformHandles();
-    _commit(_("Drag handle"));
+    _commit(RC_("Undo", "Drag handle"));
 }
 
 bool PathManipulator::_handleClicked(Handle *h, ButtonReleaseEvent const &event)
@@ -1686,7 +1686,7 @@ bool PathManipulator::_handleClicked(Handle *h, ButtonReleaseEvent const &event)
     if (event.button == 1 && mod_alt(event)) {
         h->move(h->parent()->position());
         update();
-        _commit(_("Retract handle"));
+        _commit(RC_("Undo", "Retract handle"));
         return true;
     }
     return false;
@@ -1748,18 +1748,18 @@ void PathManipulator::_removeNodesFromSelection()
 }
 
 /** Update the XML representation and put the specified annotation on the undo stack */
-void PathManipulator::_commit(Glib::ustring const &annotation)
+void PathManipulator::_commit(Inkscape::Util::Internal::ContextString annotation)
 {
     writeXML();
     if (_desktop) {
-        DocumentUndo::done(_desktop->getDocument(), annotation.data(), INKSCAPE_ICON("tool-node-editor"));
+        DocumentUndo::done(_desktop->getDocument(), annotation, INKSCAPE_ICON("tool-node-editor"));
     }
 }
 
-void PathManipulator::_commit(Glib::ustring const &annotation, gchar const *key)
+void PathManipulator::_commit(Inkscape::Util::Internal::ContextString annotation, gchar const *key)
 {
     writeXML();
-    DocumentUndo::maybeDone(_desktop->getDocument(), key, annotation.data(), INKSCAPE_ICON("tool-node-editor"));
+    DocumentUndo::maybeDone(_desktop->getDocument(), key, annotation, INKSCAPE_ICON("tool-node-editor"));
 }
 
 /** Update the position of the curve drag point such that it is over the nearest

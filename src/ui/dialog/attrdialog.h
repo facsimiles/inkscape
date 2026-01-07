@@ -18,6 +18,7 @@
 #include "ui/dialog/dialog-base.h"
 #include "ui/syntax.h"
 #include "xml/node-observer.h"
+#include "util-string/context-string.h"
 
 namespace Gtk {
 class Box;
@@ -104,7 +105,7 @@ private:
     bool _updating = true;
 
     // Helper functions
-    void setUndo(Glib::ustring const &event_description);
+    void setUndo(Inkscape::Util::Internal::ContextString event_description);
     void createAttribute();
     void deleteAttribute(Gtk::TreeRow &row);
 

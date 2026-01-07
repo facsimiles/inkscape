@@ -340,7 +340,7 @@ Gtk::Widget *ScalarParam::param_newWidget()
             rsu->addSlider();
         }
         if (_set_undo) {
-            rsu->set_undo_parameters(_("Change scalar parameter"), INKSCAPE_ICON("dialog-path-effects"));
+            rsu->set_undo_parameters(RC_("Undo", "Change scalar parameter"), INKSCAPE_ICON("dialog-path-effects"));
         }
         return rsu;
     } else {

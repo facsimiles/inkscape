@@ -178,7 +178,7 @@ void Box3DToolbar::angle_value_changed(Glib::RefPtr<Gtk::Adjustment> const &adj,
     persp->updateRepr();
 
     // TODO: use the correct axis here, too
-    DocumentUndo::maybeDone(document, "perspangle", _("3D Box: Change perspective (angle of infinite axis)"), INKSCAPE_ICON("draw-cuboid"));
+    DocumentUndo::maybeDone(document, "perspangle", RC_("Undo", "3D Box: Change perspective (angle of infinite axis)"), INKSCAPE_ICON("draw-cuboid"));
 }
 
 void Box3DToolbar::vp_state_changed(Proj::Axis axis)

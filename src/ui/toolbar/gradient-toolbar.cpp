@@ -478,7 +478,7 @@ void GradientToolbar::gradient_changed(int active)
 
     gr_apply_gradient(selection, ev ? ev->get_drag() : nullptr, gr);
 
-    DocumentUndo::done(_desktop->getDocument(), _("Assign gradient to object"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Assign gradient to object"), INKSCAPE_ICON("color-gradient"));
 }
 
 /**
@@ -516,7 +516,7 @@ void GradientToolbar::spread_changed(int active)
             item->setSpread(spread);
             item->updateRepr();
         }
-        DocumentUndo::done(_desktop->getDocument(), _("Set gradient repeat"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Set gradient repeat"), INKSCAPE_ICON("color-gradient"));
     }
 }
 
@@ -613,7 +613,7 @@ void GradientToolbar::stop_offset_adjustment_changed()
     _offset_adj_changed = true; // checked to stop changing the selected stop after the update of the offset
     stop->getRepr()->setAttributeCssDouble("offset", stop->offset);
 
-    DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", _("Change gradient stop offset"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", RC_("Undo", "Change gradient stop offset"), INKSCAPE_ICON("color-gradient"));
 }
 
 /**

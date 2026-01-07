@@ -89,7 +89,7 @@ UnitParam::param_newWidget()
                                                                               param_effect->getSPDoc() );
 
     unit_menu->setUnit(unit.get()->abbr);
-    unit_menu->set_undo_parameters(_("Change unit parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    unit_menu->set_undo_parameters(RC_("Undo", "Change unit parameter"), INKSCAPE_ICON("dialog-path-effects"));
     return unit_menu;
 }
 

@@ -663,7 +663,7 @@ SPObject *file_import(SPDocument *in_doc, std::string const &path, Inkscape::Ext
     // in order to indicate if pages are being imported or if objects are.
     if (doc->getPageManager().hasPages()) {
         file_import_pages(in_doc, doc.get());
-        DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
+        DocumentUndo::done(in_doc, RC_("Undo", "Import Pages"), INKSCAPE_ICON("document-import"));
         // This return is only used by dbus in document-interface.cpp (now removed).
         return nullptr;
     }
@@ -702,7 +702,7 @@ SPObject *file_import(SPDocument *in_doc, std::string const &path, Inkscape::Ext
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(result);
     in_doc->emitReconstructionFinish();
-    DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
+    DocumentUndo::done(in_doc, RC_("Undo", "Import"), INKSCAPE_ICON("document-import"));
     return import_root;
 }
 

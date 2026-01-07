@@ -298,7 +298,7 @@ void GradientEditor::turn_gradient(double angle, bool relative) {
 
         _gradient->updateRepr();
 
-        DocumentUndo::done(_document, _("Rotate gradient"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(_document, RC_("Undo", "Rotate gradient"), INKSCAPE_ICON("color-gradient"));
     }
 }
 
@@ -307,7 +307,7 @@ void GradientEditor::reverse_gradient() {
         // reverse works on a gradient definition, the one with stops:
         if (SPGradient* vector = get_gradient_vector()) {
             sp_gradient_reverse_vector(vector);
-            DocumentUndo::done(_document, _("Reverse gradient"), INKSCAPE_ICON("color-gradient"));
+            DocumentUndo::done(_document, RC_("Undo", "Reverse gradient"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }
@@ -322,7 +322,7 @@ void GradientEditor::set_repeat_mode(SPGradientSpread mode) {
         _gradient->setSpread(mode);
         _gradient->updateRepr();
 
-        DocumentUndo::done(_document, _("Set gradient repeat"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(_document, RC_("Undo", "Set gradient repeat"), INKSCAPE_ICON("color-gradient"));
 
         set_repeat_icon(mode);
     }
@@ -445,7 +445,7 @@ void GradientEditor::set_stop_offset(size_t index, double offset) {
             repr->setAttributeCssDouble("offset", stop->offset);
         }
 
-        DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", _("Change gradient stop offset"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::maybeDone(stop->document, "gradient:stop:offset", RC_("Undo", "Change gradient stop offset"), INKSCAPE_ICON("color-gradient"));
     }
 }
 

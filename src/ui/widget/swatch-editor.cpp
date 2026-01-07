@@ -50,7 +50,7 @@ std::vector<Color> extract_palette_colors(const Dialog::PaletteFileData& palette
 
 void remove_unused_swatches(SPDocument* doc) {
     if (sp_cleanup_document_swatches(doc) > 0) {
-        DocumentUndo::done(doc, _("Removed unused swatches"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Removed unused swatches"), "");
     }
 }
 
@@ -414,7 +414,7 @@ void SwatchEditor::import_swatches() {
         if (colors.empty()) return;
 
         sp_create_document_swatches(_document, colors);
-        DocumentUndo::done(_document, _("Import swatches"), "");
+        DocumentUndo::done(_document, RC_("Undo", "Import swatches"), "");
     }
     else if (_desktop) {
         _desktop->showNotice(res.error_message);

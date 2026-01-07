@@ -349,7 +349,7 @@ void KnotHolderEntityOffsetPoint::knot_ungrabbed(Geom::Point const &p, Geom::Poi
     using namespace Geom;
     double offset = _effect->sp_get_offset();
     _effect->offset.param_set_value(offset);
-    _effect->makeUndoDone(_("Move handle"));
+    _effect->makeUndoDone(RC_("Undo", "Move handle"));
 }
 
 Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
@@ -360,7 +360,7 @@ Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
     if (_effect->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         _effect->offset_pt = _effect->get_default_point(_effect->pathvector_after_effect);
     }
-    
+
     return _effect->offset_pt;
 }
 

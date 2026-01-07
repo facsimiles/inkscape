@@ -69,7 +69,7 @@ private:
 
     void on_link_button_click();
     void on_remove_button_click();
-    void move_up_down(int delta, Glib::ustring const &word);
+    void move_up_down(int delta, bool is_up);
     void on_up_button_click();
     void on_down_button_click();
     void on_active_toggled(const Glib::ustring &item);

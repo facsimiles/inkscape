@@ -289,7 +289,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p,
         _pparam->current_path = Glib::ustring::npos;
     }
     dynamic_cast<LPEPowerStroke *>(_pparam->param_effect)->knotdragging = false;
-    _pparam->param_effect->makeUndoDone(_("Move handle"));
+    _pparam->param_effect->makeUndoDone(RC_("Undo", "Move handle"));
 }
 
 void PowerStrokePointArrayParamKnotHolderEntity::knot_set_offset(Geom::Point offset)

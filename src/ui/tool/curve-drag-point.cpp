@@ -130,7 +130,7 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, MotionEvent const &event)
 void CurveDragPoint::ungrabbed(ButtonReleaseEvent const *)
 {
     _pm._updateDragPoint(_desktop->d2w(position()));
-    _pm._commit(_("Drag curve"));
+    _pm._commit(RC_("Undo", "Drag curve"));
     _pm._selection.restoreTransformHandles();
 }
 
@@ -174,11 +174,11 @@ bool CurveDragPoint::doubleclicked(ButtonReleaseEvent const &event)
         auto ref = _pm.shared_from_this(); // hold ref during possible deletion of _pm.
         _pm.deleteSegments();
         _pm.update(true);
-        _pm._commit(_("Remove segment"));
+        _pm._commit(RC_("Undo", "Remove segment"));
     } else if (mod_alt(event)) {
         _pm.setSegmentType(Inkscape::UI::SEGMENT_STRAIGHT);
         _pm.update(true);
-        _pm._commit(_("Straighten segments"));
+        _pm._commit(RC_("Undo", "Straighten segments"));
     } else {
         _pm._updateDragPoint(_desktop->d2w(position()));
         _insertNode(true);

@@ -190,7 +190,7 @@ void image_crop(InkscapeApplication *app)
         }
         // Do flashing after select tool update.
         msg->flashF(Inkscape::INFORMATION_MESSAGE, ss.str().c_str(), done, Inkscape::Util::format_size(abs(bytes)).c_str());
-        Inkscape::DocumentUndo::done(doc, "ActionImageCrop", "Crop Images");
+        Inkscape::DocumentUndo::done(doc, RC_("Undo", "Crop Images"), "ActionImageCrop");
     } else {
         msg->flash(Inkscape::WARNING_MESSAGE, _("No images cropped!"));
     }

@@ -162,7 +162,7 @@ PointParam::param_newWidget()
     pointwdg->setTransform(transf);
     pointwdg->setValue( *this );
     pointwdg->clearProgrammatically();
-    pointwdg->set_undo_parameters(_("Change point parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    pointwdg->set_undo_parameters(RC_("Undo", "Change point parameter"), INKSCAPE_ICON("dialog-path-effects"));
     pointwdg->signal_x_value_changed().connect(sigc::mem_fun(*this, &PointParam::on_value_changed));
     pointwdg->signal_y_value_changed().connect(sigc::mem_fun(*this, &PointParam::on_value_changed));
 
@@ -223,7 +223,7 @@ void
 PointParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin,
                                            unsigned const state)
 {
-    pparam->param_effect->makeUndoDone(_("Move handle"));
+    pparam->param_effect->makeUndoDone(RC_("Undo", "Move handle"));
 }
 
 Geom::Point

@@ -589,7 +589,7 @@ void XmlTree::stopNodeEditing(bool ok, const Glib::ustring& path, Glib::ustring 
     set_tree_select(repr, true);
     _node_parent = nullptr;
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Create new element node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Create new element node"), INKSCAPE_ICON("dialog-xml-editor"));
 }
 
 void XmlTree::cmd_new_text_node()
@@ -604,7 +604,7 @@ void XmlTree::cmd_new_text_node()
     Inkscape::XML::Node *text = xml_doc->createTextNode("");
     selected_repr->appendChild(text);
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Create new text node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Create new text node"), INKSCAPE_ICON("dialog-xml-editor"));
 
     set_tree_select(text);
     set_dt_select(text);
@@ -622,7 +622,7 @@ void XmlTree::cmd_duplicate_node()
     Inkscape::XML::Node *dup = selected_repr->duplicate(parent->document());
     parent->addChild(dup, selected_repr);
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Duplicate node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Duplicate node"), INKSCAPE_ICON("dialog-xml-editor"));
 
     _xml_treeview->select_node(dup);
 }
@@ -649,7 +649,7 @@ void XmlTree::cmd_delete_node()
         }
     }
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Delete node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Delete node"), INKSCAPE_ICON("dialog-xml-editor"));
 }
 
 void XmlTree::cmd_raise_node()
@@ -673,7 +673,7 @@ void XmlTree::cmd_raise_node()
 
     parent->changeOrder(selected_repr, ref);
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Raise node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Raise node"), INKSCAPE_ICON("dialog-xml-editor"));
 
     set_tree_select(selected_repr);
     set_dt_select(selected_repr);
@@ -694,7 +694,7 @@ void XmlTree::cmd_lower_node()
 
     parent->changeOrder(selected_repr, selected_repr->next());
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Lower node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Lower node"), INKSCAPE_ICON("dialog-xml-editor"));
 
     set_tree_select(selected_repr);
     set_dt_select(selected_repr);
@@ -728,7 +728,7 @@ void XmlTree::cmd_indent_node()
     parent->removeChild(repr);
     prev->addChild(repr, ref);
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Indent node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Indent node"), INKSCAPE_ICON("dialog-xml-editor"));
     set_tree_select(repr);
     set_dt_select(repr);
 
@@ -755,7 +755,7 @@ void XmlTree::cmd_unindent_node()
     parent->removeChild(repr);
     grandparent->addChild(repr, parent);
 
-    DocumentUndo::done(document, Q_("Undo History / XML Editor|Unindent node"), INKSCAPE_ICON("dialog-xml-editor"));
+    DocumentUndo::done(document, RC_("Undo/XML Editor", "Unindent node"), INKSCAPE_ICON("dialog-xml-editor"));
 
     set_tree_select(repr);
     set_dt_select(repr);

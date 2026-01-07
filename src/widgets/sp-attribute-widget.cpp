@@ -219,7 +219,7 @@ void SPAttributeTable::attribute_table_entry_changed(size_t index) {
             if (_modified_tag) {
                 _object->requestModified(SP_OBJECT_MODIFIED_FLAG | _modified_tag);
             }
-            DocumentUndo::done(_object->document, _("Set attribute"), "");
+            DocumentUndo::done(_object->document, RC_("Undo", "Set attribute"), "");
         }
     }
     blocked = false;

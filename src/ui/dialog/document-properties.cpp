@@ -258,7 +258,7 @@ void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
     }
 }
 
-void set_namedview_bool(SPDesktop* desktop, const Glib::ustring& operation, SPAttr key, bool on) {
+void set_namedview_bool(SPDesktop* desktop, Inkscape::Util::Internal::ContextString operation, SPAttr key, bool on) {
     if (!desktop || !desktop->getDocument()) return;
 
     desktop->getNamedView()->change_bool_setting(key, on);
@@ -267,12 +267,12 @@ void set_namedview_bool(SPDesktop* desktop, const Glib::ustring& operation, SPAt
     DocumentUndo::done(desktop->getDocument(), operation, "");
 }
 
-void set_color(SPDesktop* desktop, Glib::ustring operation, SPAttr color_key, SPAttr opacity_key, Colors::Color const &color) {
+void set_color(SPDesktop* desktop, const char* key, Inkscape::Util::Internal::ContextString operation, SPAttr color_key, SPAttr opacity_key, Colors::Color const &color) {
     if (!desktop || !desktop->getDocument()) return;
 
     desktop->getNamedView()->change_color(color_key, opacity_key, color);
     desktop->getDocument()->setModifiedSinceSave();
-    DocumentUndo::maybeDone(desktop->getDocument(), ("document-color-" + operation).c_str(), operation, "");
+    DocumentUndo::maybeDone(desktop->getDocument(), key, operation, "");
 }
 
 void set_document_dimensions(SPDesktop* desktop, double width, double height, const Inkscape::Util::Unit* unit) {
@@ -306,7 +306,7 @@ void set_document_dimensions(SPDesktop* desktop, double width, double height, co
     // }
     doc->setWidthAndHeight(new_width_q, new_height_q, true);
 
-    DocumentUndo::done(doc, _("Set page size"), "");
+    DocumentUndo::done(doc, RC_("Undo", "Set page size"), "");
 }
 
 void DocumentProperties::set_viewbox_pos(SPDesktop* desktop, double x, double y) {
@@ -317,7 +317,7 @@ void DocumentProperties::set_viewbox_pos(SPDesktop* desktop, double x, double y)
 
     auto box = document->getViewBox();
     document->setViewBox(Geom::Rect::from_xywh(x, y, box.width(), box.height()));
-    DocumentUndo::done(document, _("Set viewbox position"), "");
+    DocumentUndo::done(document, RC_("Undo", "Set viewbox position"), "");
     update_scale_ui(desktop);
 }
 
@@ -329,7 +329,7 @@ void DocumentProperties::set_viewbox_size(SPDesktop* desktop, double width, doub
 
     auto box = document->getViewBox();
     document->setViewBox(Geom::Rect::from_xywh(box.min()[Geom::X], box.min()[Geom::Y], width, height));
-    DocumentUndo::done(document, _("Set viewbox size"), "");
+    DocumentUndo::done(document, RC_("Undo", "Set viewbox size"), "");
     update_scale_ui(desktop);
 }
 
@@ -381,7 +381,7 @@ void DocumentProperties::set_document_scale(SPDesktop* desktop, double scale) {
         set_document_scale_helper(*document, scale);
         update_viewbox_ui(desktop);
         update_scale_ui(desktop);
-        DocumentUndo::done(document, _("Set page scale"), "");
+        DocumentUndo::done(document, RC_("Undo", "Set page scale"), "");
     }
 }
 
@@ -461,13 +461,13 @@ void DocumentProperties::build_page()
         _wr.setUpdating(true);
         switch (element) {
             case PageProperties::Color::Desk:
-                set_color(_wr.desktop(), _("Desk color"), SPAttr::INKSCAPE_DESK_COLOR, SPAttr::INKSCAPE_DESK_OPACITY, color);
+                set_color(_wr.desktop(), "document-color-desk", RC_("Undo", "Desk color"), SPAttr::INKSCAPE_DESK_COLOR, SPAttr::INKSCAPE_DESK_OPACITY, color);
                 break;
             case PageProperties::Color::Background:
-                set_color(_wr.desktop(), _("Background color"), SPAttr::PAGECOLOR, SPAttr::INKSCAPE_PAGEOPACITY, color);
+                set_color(_wr.desktop(), "document-color-background", RC_("Undo", "Background color"), SPAttr::PAGECOLOR, SPAttr::INKSCAPE_PAGEOPACITY, color);
                 break;
             case PageProperties::Color::Border:
-                set_color(_wr.desktop(), _("Border color"), SPAttr::BORDERCOLOR, SPAttr::BORDEROPACITY, color);
+                set_color(_wr.desktop(), "document-color-border", RC_("Undo", "Border color"), SPAttr::BORDERCOLOR, SPAttr::BORDEROPACITY, color);
                 break;
         }
         _wr.setUpdating(false);
@@ -510,31 +510,31 @@ void DocumentProperties::build_page()
         _wr.setUpdating(true);
         switch (element) {
             case PageProperties::Check::Checkerboard:
-                set_namedview_bool(_wr.desktop(), _("Toggle checkerboard"), SPAttr::INKSCAPE_DESK_CHECKERBOARD, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle checkerboard"), SPAttr::INKSCAPE_DESK_CHECKERBOARD, checked);
                 break;
             case PageProperties::Check::Border:
-                set_namedview_bool(_wr.desktop(), _("Toggle page border"), SPAttr::SHOWBORDER, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle page border"), SPAttr::SHOWBORDER, checked);
                 break;
             case PageProperties::Check::BorderOnTop:
-                set_namedview_bool(_wr.desktop(), _("Toggle border on top"), SPAttr::BORDERLAYER, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle border on top"), SPAttr::BORDERLAYER, checked);
                 break;
             case PageProperties::Check::Shadow:
-                set_namedview_bool(_wr.desktop(), _("Toggle page shadow"), SPAttr::SHOWPAGESHADOW, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle page shadow"), SPAttr::SHOWPAGESHADOW, checked);
                 break;
             case PageProperties::Check::AntiAlias:
-                set_namedview_bool(_wr.desktop(), _("Toggle anti-aliasing"), SPAttr::INKSCAPE_ANTIALIAS_RENDERING, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle anti-aliasing"), SPAttr::INKSCAPE_ANTIALIAS_RENDERING, checked);
                 break;
             case PageProperties::Check::ClipToPage:
-                set_namedview_bool(_wr.desktop(), _("Toggle clip to page mode"), SPAttr::INKSCAPE_CLIP_TO_PAGE_RENDERING, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle clip to page mode"), SPAttr::INKSCAPE_CLIP_TO_PAGE_RENDERING, checked);
                 break;
             case PageProperties::Check::PageLabelStyle:
-                set_namedview_bool(_wr.desktop(), _("Toggle page label style"), SPAttr::PAGELABELSTYLE, checked);
+                set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle page label style"), SPAttr::PAGELABELSTYLE, checked);
                 break;
         case PageProperties::Check::YAxisPointsDown:
-            set_namedview_bool(_wr.desktop(), _("Toggle system coordinate Y axis orientation"), SPAttr::INKSCAPE_Y_AXIS_DOWN, checked);
+            set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle system coordinate Y axis orientation"), SPAttr::INKSCAPE_Y_AXIS_DOWN, checked);
             break;
         case PageProperties::Check::OriginCurrentPage:
-            set_namedview_bool(_wr.desktop(), _("Toggle system coordinate origin correction"), SPAttr::INKSCAPE_ORIGIN_CORRECTION, checked);
+            set_namedview_bool(_wr.desktop(), RC_("Undo", "Toggle system coordinate origin correction"), SPAttr::INKSCAPE_ORIGIN_CORRECTION, checked);
             break;
         }
         _wr.setUpdating(false);
@@ -560,7 +560,7 @@ void DocumentProperties::build_page()
             page_manager.selectPage(0);
             // fit page to selection or content, if there's no selection
             page_manager.fitToSelection(_wr.desktop()->getSelection());
-            DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
+            DocumentUndo::done(document, RC_("Undo", "Resize page to fit"), INKSCAPE_ICON("tool-pages"));
             update_widgets();
         }
     });
@@ -682,7 +682,7 @@ void DocumentProperties::linkSelectedProfile()
 
         document->getDocumentCMS().attachProfileToDoc(file, ColorProfileStorage::HREF_FILE, Colors::RenderingIntent::AUTO);
         // inform the document, so we can undo
-        DocumentUndo::done(document, _("Link Color Profile"), "");
+        DocumentUndo::done(document, RC_("Undo", "Link Color Profile"), "");
 
         populate_linked_profiles_box();
     }
@@ -732,7 +732,7 @@ void DocumentProperties::removeSelectedProfile(){
     if (auto document = getDocument()) {
         if (auto colorprofile = document->getDocumentCMS().getColorProfileForSpace(name)) {
             colorprofile->deleteObject(true, false);
-            DocumentUndo::done(document, _("Remove linked color profile"), "");
+            DocumentUndo::done(document, RC_("Undo", "Remove linked color profile"), "");
         }
     }
 
@@ -1084,7 +1084,7 @@ void DocumentProperties::addExternalScript(){
         xml_doc->root()->addChild(scriptRepr, nullptr);
 
         // inform the document, so we can undo
-        DocumentUndo::done(document, _("Add external script..."), "");
+        DocumentUndo::done(document, RC_("Undo", "Add external script..."), "");
 
         populate_script_lists();
     }
@@ -1125,7 +1125,7 @@ void DocumentProperties::addEmbeddedScript(){
         xml_doc->root()->addChild(scriptRepr, nullptr);
 
         // inform the document, so we can undo
-        DocumentUndo::done(document, _("Add embedded script..."), "");
+        DocumentUndo::done(document, RC_("Undo", "Add embedded script..."), "");
         populate_script_lists();
     }
 }
@@ -1157,7 +1157,7 @@ void DocumentProperties::removeExternalScript(){
                     sp_repr_unparent(repr);
 
                     // inform the document, so we can undo
-                    DocumentUndo::done(document, _("Remove external script"), "");
+                    DocumentUndo::done(document, RC_("Undo", "Remove external script"), "");
                 }
             }
         }
@@ -1185,7 +1185,7 @@ void DocumentProperties::removeEmbeddedScript(){
                 sp_repr_unparent(repr);
 
                 // inform the document, so we can undo
-                DocumentUndo::done(document, _("Remove embedded script"), "");
+                DocumentUndo::done(document, RC_("Undo", "Remove embedded script"), "");
             }
         }
     }
@@ -1282,7 +1282,7 @@ void DocumentProperties::editEmbeddedScript(){
                 //TODO repr->set_content(_EmbeddedContent.get_buffer()->get_text());
 
                 // inform the document, so we can undo
-                DocumentUndo::done(document, _("Edit embedded script"), "");
+                DocumentUndo::done(document, RC_("Undo", "Edit embedded script"), "");
             }
         }
     }
@@ -1619,7 +1619,7 @@ void DocumentProperties::onNewGrid(GridType grid_type)
     // flip global switch, so snapping to grid works
     desktop->getNamedView()->newGridCreated();
 
-    DocumentUndo::done(document, _("Create new grid"), INKSCAPE_ICON("document-properties"));
+    DocumentUndo::done(document, RC_("Undo", "Create new grid"), INKSCAPE_ICON("document-properties"));
 
     // scroll to the last (newly added) grid, so we can see it; postponed till idle time, since scrolling
     // range is not yet updated, despite new grid UI being in place already
@@ -1824,13 +1824,13 @@ GridWidget::GridWidget(SPGrid *grid)
                 "empspacing", _wr, repr, doc);
 
     // All of these undo settings are the same, refactor this later if possible.
-    _units->set_undo_parameters(_("Change grid units"), "show-grid", "grid-settings");
-    _angle_x->set_undo_parameters(_("Change grid dimensions"), "show-grid", "grid-settings");
-    _angle_z->set_undo_parameters(_("Change grid dimensions"), "show-grid", "grid-settings");
-    _grid_color->set_undo_parameters(_("Change grid color"), "show-grid", "grid-settings");
-    _no_of_lines->set_undo_parameters(_("Change grid number of lines"), "show-grid", "grid-settings");
+    _units->set_undo_parameters(RC_("Undo", "Change grid units"), "show-grid", "grid-settings");
+    _angle_x->set_undo_parameters(RC_("Undo", "Change grid dimensions"), "show-grid", "grid-settings");
+    _angle_z->set_undo_parameters(RC_("Undo", "Change grid dimensions"), "show-grid", "grid-settings");
+    _grid_color->set_undo_parameters(RC_("Undo", "Change grid color"), "show-grid", "grid-settings");
+    _no_of_lines->set_undo_parameters(RC_("Undo", "Change grid number of lines"), "show-grid", "grid-settings");
     for (auto widget : {_origin_x, _origin_y, _spacing_x, _spacing_y, _gap_x, _gap_y, _margin_x, _margin_y}) {
-        widget->set_undo_parameters(_("Change grid dimensions"), "show-grid", "grid-settings");
+        widget->set_undo_parameters(RC_("Undo", "Change grid dimensions"), "show-grid", "grid-settings");
     }
 
     for (auto labelled : std::to_array<Labelled*>(
@@ -1861,7 +1861,7 @@ GridWidget::GridWidget(SPGrid *grid)
     _delete->signal_clicked().connect([this](){
         auto doc = getGrid()->document;
         getGrid()->deleteObject();
-        DocumentUndo::done(doc, _("Remove grid"), INKSCAPE_ICON("document-properties"));
+        DocumentUndo::done(doc, RC_("Undo", "Remove grid"), INKSCAPE_ICON("document-properties"));
     });
     _delete->set_hexpand();
     _delete->set_halign(Gtk::Align::END);

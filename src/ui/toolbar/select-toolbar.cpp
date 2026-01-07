@@ -276,7 +276,7 @@ void SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment> const &adj)
         }
 
         selection->applyAffine(scaler);
-        DocumentUndo::maybeDone(document, actionkey, _("Transform by toolbar"), INKSCAPE_ICON("tool-pointer"));
+        DocumentUndo::maybeDone(document, actionkey, RC_("Undo", "Transform by toolbar"), INKSCAPE_ICON("tool-pointer"));
     }
 }
 

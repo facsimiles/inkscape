@@ -68,7 +68,7 @@ void LicenseItem::on_toggled()
     SPDocument *doc = _wr.desktop()->getDocument();
     rdf_set_license (doc, _lic->details ? _lic : nullptr);
     if (doc->isSensitive()) {
-        DocumentUndo::done(doc, _("Document license updated"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Document license updated"), "");
     }
     _wr.setUpdating (false);
     static_cast<Gtk::Entry*>(_eep->_packable)->set_text (_lic->uri);

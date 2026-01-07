@@ -560,7 +560,7 @@ PathParam::on_paste_button_click()
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
     Glib::ustring svgd = cm->getPathParameter(SP_ACTIVE_DESKTOP);
     paste_param_path(svgd.data());
-    param_effect->makeUndoDone(_("Paste path parameter"));
+    param_effect->makeUndoDone(RC_("Undo", "Paste path parameter"));
 }
 
 void
@@ -587,7 +587,7 @@ PathParam::linkitem(Glib::ustring pathid)
         // check if id really exists in document, or only in clipboard document: if only in clipboard then invalid
         // check if linking to object to which LPE is applied (maybe delegated to PathReference
         param_write_to_repr(pathid.c_str());
-        param_effect->makeUndoDone(_("Link path parameter to path"));
+        param_effect->makeUndoDone(RC_("Undo", "Link path parameter to path"));
     }
 }
 

@@ -778,7 +778,7 @@ void SingleExport::onExport()
         }
         if (target) {
             saveExportHints(target);
-            DocumentUndo::done(_document, _("Set Export Options"), INKSCAPE_ICON("export"));
+            DocumentUndo::done(_document, RC_("Undo", "Set Export Options"), INKSCAPE_ICON("export"));
         }
     }
     setExporting(false);

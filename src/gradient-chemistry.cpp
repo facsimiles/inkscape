@@ -768,7 +768,7 @@ void sp_gradient_delete_stop(SPGradient* gradient, SPStop* stop) {
 
     if (gradient->getStopCount() > 2) { // 2 is the minimum
         gradient->getRepr()->removeChild(stop->getRepr());
-        DocumentUndo::done(gradient->document, _("Delete gradient stop"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(gradient->document, RC_("Undo", "Delete gradient stop"), INKSCAPE_ICON("color-gradient"));
     }
 }
 
@@ -853,7 +853,7 @@ SPStop* sp_gradient_add_stop(SPGradient* gradient, SPStop* current) {
     newstop->setColor(stop->getColor().averaged(next->getColor()));
     sp_repr_set_css_double(newstop->getRepr(), "offset", (double)newstop->offset);
     Inkscape::GC::release(new_stop_repr);
-    DocumentUndo::done(gradient->document, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(gradient->document, RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
 
     return newstop;
 }
@@ -870,7 +870,7 @@ SPStop* sp_gradient_add_stop_at(SPGradient* gradient, double offset) {
     if (stops.first || stops.second) {
         auto stop = sp_vector_add_stop(gradient, stops.first, stops.second, offset);
         if (stop) {
-           DocumentUndo::done(gradient->document, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+           DocumentUndo::done(gradient->document, RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
         }
         return stop;
     }
@@ -882,7 +882,7 @@ SPStop* sp_gradient_add_stop_at(SPGradient* gradient, double offset) {
 void sp_set_gradient_stop_color(SPDocument* document, SPStop* stop, Color const &color) {
    sp_repr_set_css_double(stop->getRepr(), "offset", stop->offset);
    stop->setColor(color);
-   DocumentUndo::maybeDone(document, "gradient:stop:color", _("Change gradient stop color"), INKSCAPE_ICON("color-gradient"));
+   DocumentUndo::maybeDone(document, "gradient:stop:color", RC_("Undo", "Change gradient stop color"), INKSCAPE_ICON("color-gradient"));
 }
 
 SPStop* sp_item_gradient_get_stop(SPItem *item, GrPointType point_type, guint point_i, Inkscape::PaintTarget fill_or_stroke) {
@@ -1801,7 +1801,7 @@ void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTa
     }
 
     // we did an undoable action
-    DocumentUndo::done(desktop->getDocument(), _("Invert gradient colors"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Invert gradient colors"), INKSCAPE_ICON("color-gradient"));
 }
 
 void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
@@ -1827,7 +1827,7 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
     }
 
     // we did an undoable action
-    DocumentUndo::done(desktop->getDocument(), _("Reverse gradient"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Reverse gradient"), INKSCAPE_ICON("color-gradient"));
 }
 
 void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id)
@@ -1840,7 +1840,7 @@ void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id)
             auto grad = cast<SPGradient>(gradient);
             if ( id == grad->getId() ) {
                 grad->setSwatch(false);
-                DocumentUndo::done(doc, _("Delete swatch"), INKSCAPE_ICON("color-gradient"));
+                DocumentUndo::done(doc, RC_("Undo", "Delete swatch"), INKSCAPE_ICON("color-gradient"));
                 break;
             }
         }

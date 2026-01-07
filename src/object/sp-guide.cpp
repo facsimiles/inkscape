@@ -286,7 +286,7 @@ void sp_guide_create_guides_around_page(SPDocument *doc)
     pts.emplace_back(bounds.corner(3), bounds.corner(0));
 
     sp_guide_pt_pairs_to_guides(doc, pts);
-    DocumentUndo::done(doc, _("Create Guides Around the Current Page"), "");
+    DocumentUndo::done(doc, RC_("Undo", "Create Guides Around the Current Page"), "");
 }
 
 void sp_guide_delete_all_guides(SPDocument *doc)
@@ -298,7 +298,7 @@ void sp_guide_delete_all_guides(SPDocument *doc)
         current = doc->getResourceList("guide");
     }
 
-    DocumentUndo::done(doc, _("Delete All Guides"),"");
+    DocumentUndo::done(doc, RC_("Undo", "Delete All Guides"),"");
 }
 
 // Actually, create a new guide.

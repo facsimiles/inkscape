@@ -794,7 +794,7 @@ static void spdc_flush_white(FreehandBase *dc, std::shared_ptr<Geom::PathVector>
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
             sp_lpe_item_update_patheffect(lpeitem, true, false);
         }
-        DocumentUndo::done(doc, _("Draw path"), SP_IS_PEN_CONTEXT(dc)? INKSCAPE_ICON("draw-path") : INKSCAPE_ICON("draw-freehand"));
+        DocumentUndo::done(doc, RC_("Undo", "Draw path"), SP_IS_PEN_CONTEXT(dc)? INKSCAPE_ICON("draw-path") : INKSCAPE_ICON("draw-freehand"));
 
         // When quickly drawing several subpaths with Shift, the next subpath may be finished and
         // flushed before the selection_modified signal is fired by the previous change, which
@@ -927,7 +927,7 @@ void spdc_create_single_dot(ToolBase *tool, Geom::Point const &pt, char const *p
     desktop->getSelection()->set(item);
 
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating single dot"));
-    DocumentUndo::done(desktop->getDocument(), _("Create single dot"), "");
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Create single dot"), "");
 }
 
 } // namespace Inkscape::UI::Tools

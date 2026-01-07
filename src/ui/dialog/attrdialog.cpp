@@ -127,7 +127,7 @@ AttrDialog::AttrDialog()
         tv->get_buffer()->signal_end_user_action().connect([=, this]() {
             if (_repr) {
                 _repr->setContent(tv->get_buffer()->get_text().c_str());
-                setUndo(_("Type text"));
+                setUndo(RC_("Undo", "Type text"));
             }
         });
     }
@@ -487,7 +487,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
     }
 }
 
-void AttrDialog::setUndo(Glib::ustring const &event_description)
+void AttrDialog::setUndo(Inkscape::Util::Internal::ContextString event_description)
 {
     DocumentUndo::done(getDocument(), event_description, INKSCAPE_ICON("dialog-xml-editor"));
 }
@@ -505,7 +505,7 @@ void AttrDialog::deleteAttribute(Gtk::TreeRow &row)
     auto const name = row.get_value(_attrColumns._attributeName);
     _store->erase(row.get_iter());
     _repr->removeAttribute(name);
-    setUndo(_("Delete attribute"));
+    setUndo(RC_("Undo", "Delete attribute"));
 }
 
 void AttrDialog::setEditingEntry(Gtk::Entry * const entry, bool const embedNewline)
@@ -723,7 +723,7 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
         _repr->setAttributeOrRemoveIfEmpty(name, value); // use char * overload (allows empty attribute values)
         _updating = false;
         Glib::signal_timeout().connect_once([=, this]{ storeMoveToNext(modelpath); }, 50);
-        setUndo(_("Rename attribute"));
+        setUndo(RC_("Undo", "Rename attribute"));
     }
 }
 
@@ -761,7 +761,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
             Glib::ustring renderval = prepare_rendervalue(value.c_str());
             row[_attrColumns._attributeValueRender] = renderval;
         }
-        setUndo(_("Change attribute value"));
+        setUndo(RC_("Undo", "Change attribute value"));
     }
 }
 

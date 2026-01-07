@@ -74,7 +74,7 @@ FontButtonParam::param_newWidget()
                                                                                     param_effect->getSPDoc() );
     Glib::ustring fontspec = param_getSVGValue();
     fontbuttonwdg->setValue( fontspec);
-    fontbuttonwdg->set_undo_parameters(_("Change font button parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    fontbuttonwdg->set_undo_parameters(RC_("Undo", "Change font button parameter"), INKSCAPE_ICON("dialog-path-effects"));
     return fontbuttonwdg;
 }
 

@@ -187,12 +187,12 @@ static void delete_object(SPObject* object, Inkscape::Selection* selection) {
     if (auto pattern = cast<SPPattern>(object)) {
         // delete action fails for patterns; remove them by deleting them directly
         pattern->deleteObject(true);
-        DocumentUndo::done(document, _("Delete pattern"), INKSCAPE_ICON("document-resources"));
+        DocumentUndo::done(document, RC_("Undo", "Delete pattern"), INKSCAPE_ICON("document-resources"));
     }
     else if (auto gradient = cast<SPGradient>(object)) {
         // delete action fails for gradients; remove them by deleting them directly
         gradient->deleteObject(true);
-        DocumentUndo::done(document, _("Delete gradient"), INKSCAPE_ICON("document-resources"));
+        DocumentUndo::done(document, RC_("Undo", "Delete gradient"), INKSCAPE_ICON("document-resources"));
     }
     else {
         selection->set(object);
@@ -1201,7 +1201,7 @@ void DocumentResources::end_editing(SPObject* object, const Glib::ustring& new_t
     setter(*object, new_text);
 
     if (auto document = object->document) {
-        DocumentUndo::done(document, _("Edit object title"), INKSCAPE_ICON("document-resources"));
+        DocumentUndo::done(document, RC_("Undo", "Edit object title"), INKSCAPE_ICON("document-resources"));
     }
 }
 

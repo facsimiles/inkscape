@@ -228,7 +228,7 @@ void RectToolbar::_valueChanged(DerivedSpinButton &btn)
     _sensitivize();
 
     if (modified) {
-        DocumentUndo::done(_desktop->getDocument(), _("Change rectangle"), INKSCAPE_ICON("draw-rectangle"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Change rectangle"), INKSCAPE_ICON("draw-rectangle"));
     }
 }
 

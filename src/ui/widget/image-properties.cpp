@@ -71,7 +71,7 @@ void link_image(Gtk::Window* window, SPImage* image) {
     // SPImage modifies size when href changes; trigger it now before undo concludes
     // TODO: this needs to be fixed in SPImage
     image->document->_updateDocument(0);
-    DocumentUndo::done(image->document, _("Change image"), INKSCAPE_ICON("shape-image"));
+    DocumentUndo::done(image->document, RC_("Undo", "Change image"), INKSCAPE_ICON("shape-image"));
 }
 
 void set_rendering_mode(SPImage* image, int index) {
@@ -85,7 +85,7 @@ void set_rendering_mode(SPImage* image, int index) {
     sp_repr_css_set_property(css, "image-rendering", render[index]);
     if (auto image_node = image->getRepr()) {
         sp_repr_css_change(image_node, css, "style");
-        DocumentUndo::done(image->document, _("Set image rendering option"), INKSCAPE_ICON("shape-image"));
+        DocumentUndo::done(image->document, RC_("Undo", "Set image rendering option"), INKSCAPE_ICON("shape-image"));
     }
     sp_repr_css_attr_unref(css);
 }
@@ -93,7 +93,7 @@ void set_rendering_mode(SPImage* image, int index) {
 void set_aspect_ratio(SPImage* image, bool preserve_aspect_ratio) {
     if (!image) return;
     image->setAttribute("preserveAspectRatio", preserve_aspect_ratio ? "xMidYMid" : "none");
-    DocumentUndo::done(image->document, _("Preserve image aspect ratio"), INKSCAPE_ICON("shape-image"));
+    DocumentUndo::done(image->document, RC_("Undo", "Preserve image aspect ratio"), INKSCAPE_ICON("shape-image"));
 }
 
 } // unnamed namespace
@@ -142,7 +142,7 @@ ImageProperties::ImageProperties() :
         // embed image in the current document
         Inkscape::Pixbuf copy(*_image->pixbuf);
         sp_embed_image(_image->getRepr(), &copy);
-        DocumentUndo::done(_image->document, _("Embed image"), INKSCAPE_ICON("selection-make-bitmap-copy"));
+        DocumentUndo::done(_image->document, RC_("Undo", "Embed image"), INKSCAPE_ICON("selection-make-bitmap-copy"));
     });
 
     _rendering.property_selected().signal_changed().connect([this]{
@@ -156,7 +156,7 @@ ImageProperties::ImageProperties() :
 
         Glib::ustring dpi_value = Inkscape::ustring::format_classic(dpi);
         _image->setAttribute("inkscape:svg-dpi", dpi_value);
-        DocumentUndo::maybeDone(_image->document, "set-image-dpi", _("Set image DPI"), INKSCAPE_ICON("dialog-object-properties"));
+        DocumentUndo::maybeDone(_image->document, "set-image-dpi", RC_("Undo", "Set image DPI"), INKSCAPE_ICON("dialog-object-properties"));
     });
 
     _aspect.signal_toggled().connect([this]{

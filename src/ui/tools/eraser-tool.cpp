@@ -423,7 +423,7 @@ bool EraserTool::root_handler(CanvasEvent const &event)
                 // Perform the actual erase operation
                 auto document = _desktop->getDocument();
                 if (_doWork()) {
-                    DocumentUndo::done(document, _("Draw eraser stroke"), INKSCAPE_ICON("draw-eraser"));
+                    DocumentUndo::done(document, RC_("Undo", "Draw eraser stroke"), INKSCAPE_ICON("draw-eraser"));
                 } else {
                     DocumentUndo::cancel(document);
                 }

@@ -56,7 +56,7 @@ fit_canvas_drawing(SPDocument* document)
 {
     // Fit Page to Drawing
     if (fit_canvas_to_drawing(document)) {
-        Inkscape::DocumentUndo::done(document, _("Fit Page to Drawing"), "");
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Fit Page to Drawing"), "");
     }
 }
 
@@ -67,7 +67,7 @@ set_display_unit(Glib::ustring abbr, SPDocument* document)
     Inkscape::XML::Node *repr = document->getNamedView()->getRepr();
     repr->setAttribute("inkscape:document-units", abbr);
     document->setModifiedSinceSave();
-    Inkscape::DocumentUndo::done(document, _("Changed default display unit"), "");
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "Changed default display unit"), "");
 }
 
 void toggle_clip_to_page(SPDocument* document) {
@@ -76,7 +76,7 @@ void toggle_clip_to_page(SPDocument* document) {
     auto clip = !document->getNamedView()->clip_to_page;
     document->getNamedView()->change_bool_setting(SPAttr::INKSCAPE_CLIP_TO_PAGE_RENDERING, clip);
     document->setModifiedSinceSave();
-    Inkscape::DocumentUndo::done(document, _("Clip to page"), "");
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "Clip to page"), "");
 }
 
 void

@@ -1297,13 +1297,13 @@ bool SprayTool::root_handler(CanvasEvent const &event)
                 single_click = false;
                 switch (mode) {
                     case SPRAY_MODE_COPY:
-                        DocumentUndo::done(_desktop->getDocument(), _("Spray with copies"), INKSCAPE_ICON("tool-spray"));
+                        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Spray with copies"), INKSCAPE_ICON("tool-spray"));
                         break;
                     case SPRAY_MODE_CLONE:
-                        DocumentUndo::done(_desktop->getDocument(), _("Spray with clones"), INKSCAPE_ICON("tool-spray"));
+                        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Spray with clones"), INKSCAPE_ICON("tool-spray"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
-                        DocumentUndo::done(_desktop->getDocument(), _("Spray in single path"), INKSCAPE_ICON("tool-spray"));
+                        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Spray in single path"), INKSCAPE_ICON("tool-spray"));
                         break;
                 }
             }

@@ -241,7 +241,7 @@ bool sp_dt_guide_event(Inkscape::CanvasEvent const &event, Inkscape::CanvasItemG
 
                 if (guide_item->get_canvas()->world_point_inside_canvas(event.pos)) {
                     move_guide(event_dt, event.modifiers, true);
-                    DocumentUndo::done(desktop->getDocument(), _("Move guide"), "");
+                    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Move guide"), "");
                 } else {
                     // Undo movement of any attached shapes.
                     guide->moveto(guide->getPoint(), false);
@@ -250,7 +250,7 @@ bool sp_dt_guide_event(Inkscape::CanvasEvent const &event, Inkscape::CanvasItemG
                     guide_item = nullptr;
                     desktop->getTool()->use_tool_cursor();
 
-                    DocumentUndo::done(desktop->getDocument(), _("Delete guide"), "");
+                    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Delete guide"), "");
                 }
 
                 guide_moved = false;
@@ -307,7 +307,7 @@ bool sp_dt_guide_event(Inkscape::CanvasEvent const &event, Inkscape::CanvasItemG
                         auto doc = guide->document;
                         guide->remove();
                         guide_item = nullptr;
-                        DocumentUndo::done(doc, _("Delete guide"), "");
+                        DocumentUndo::done(doc, RC_("Undo", "Delete guide"), "");
                         ret = true;
                         desktop->getTool()->discard_delayed_snap_event();
                         desktop->getTool()->use_tool_cursor();
@@ -354,7 +354,7 @@ static void init_extended()
     auto display = Gdk::Display::get_default();
     auto seat = display->get_default_seat();
     auto const devices = seat->get_devices(Gdk::Seat::Capabilities::ALL);
-    
+
     for (auto const &dev : devices) {
         // Workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/7337
         if (!dev) continue;

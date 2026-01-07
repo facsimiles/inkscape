@@ -293,37 +293,37 @@ bool Box3dTool::root_handler(CanvasEvent const &event)
 
         case GDK_KEY_bracketright:
             document->getCurrentPersp3D()->rotate_VP (Proj::X, 180 / snaps * y_dir, mod_alt(event));
-            DocumentUndo::done(document, _("Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
+            DocumentUndo::done(document, RC_("Undo", "Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
             ret = true;
             break;
 
         case GDK_KEY_bracketleft:
             document->getCurrentPersp3D()->rotate_VP (Proj::X, -180 / snaps * y_dir, mod_alt(event));
-            DocumentUndo::done(document, _("Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
+            DocumentUndo::done(document, RC_("Undo", "Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
             ret = true;
             break;
 
         case GDK_KEY_parenright:
             document->getCurrentPersp3D()->rotate_VP (Proj::Y, 180 / snaps * y_dir, mod_alt(event));
-            DocumentUndo::done(document, _("Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
+            DocumentUndo::done(document, RC_("Undo", "Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
             ret = true;
             break;
 
         case GDK_KEY_parenleft:
             document->getCurrentPersp3D()->rotate_VP (Proj::Y, -180 / snaps * y_dir, mod_alt(event));
-            DocumentUndo::done(document, _("Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
+            DocumentUndo::done(document, RC_("Undo", "Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
             ret = true;
             break;
 
         case GDK_KEY_braceright:
             document->getCurrentPersp3D()->rotate_VP (Proj::Z, 180 / snaps * y_dir, mod_alt(event));
-            DocumentUndo::done(document, _("Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
+            DocumentUndo::done(document, RC_("Undo", "Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
             ret = true;
             break;
 
         case GDK_KEY_braceleft:
             document->getCurrentPersp3D()->rotate_VP (Proj::Z, -180 / snaps * y_dir, mod_alt(event));
-            DocumentUndo::done(document, _("Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
+            DocumentUndo::done(document, RC_("Undo", "Change perspective (angle of PLs)"), INKSCAPE_ICON("draw-cuboid"));
             ret = true;
             break;
 
@@ -503,7 +503,7 @@ void Box3dTool::finishItem()
 
         box3d->relabel_corners();
 
-        DocumentUndo::done(_desktop->getDocument(), _("Create 3D box"), INKSCAPE_ICON("draw-cuboid"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create 3D box"), INKSCAPE_ICON("draw-cuboid"));
 
         box3d = nullptr;
     }

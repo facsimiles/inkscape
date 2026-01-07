@@ -231,7 +231,7 @@ void PagesTool::offsetKnotFinished(SPKnot *knot, guint state)
     auto point = knot->position();
     root->getRepr()->setAttributeSvgDouble("x", -point[Geom::X]);
     root->getRepr()->setAttributeSvgDouble("y", -point[Geom::Y]);
-    Inkscape::DocumentUndo::maybeDone(document, "move-offset", _("Move page offset"), INKSCAPE_ICON("tool-pages"));
+    Inkscape::DocumentUndo::maybeDone(document, "move-offset", RC_("Undo", "Move page offset"), INKSCAPE_ICON("tool-pages"));
 }
 
 /**
@@ -257,7 +257,7 @@ void PagesTool::resizeKnotFinished(SPKnot *knot, guint state)
     auto page = document->getPageManager().getSelected();
     if (on_screen_rect) {
         document->getPageManager().fitToRect(*on_screen_rect * document->dt2doc(), page);
-        Inkscape::DocumentUndo::done(document, _("Resize page"), INKSCAPE_ICON("tool-pages"));
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Resize page"), INKSCAPE_ICON("tool-pages"));
         on_screen_rect = {};
     }
     visual_box->set_visible(false);
@@ -292,7 +292,7 @@ bool PagesTool::marginKnotMoved(SPKnot *knot, Geom::Point *ppointer, guint state
         page->setMarginSide(side, value / scale, confine);
         knot->setPosition(middleOfSide(side, page->getDocumentMargin()) * document->doc2dt(), state);
 
-        Inkscape::DocumentUndo::maybeDone(document, "page-margin", ("Adjust page margin"), INKSCAPE_ICON("tool-pages"));
+        Inkscape::DocumentUndo::maybeDone(document, "page-margin", RC_("Undo", "Adjust page margin"), INKSCAPE_ICON("tool-pages"));
     } else {
         g_warning("Can't add margin, pages not enabled correctly!");
     }
@@ -409,11 +409,11 @@ bool PagesTool::root_handler(CanvasEvent const &event)
                     // Move the page object on the canvas.
                     dragging_item->movePage(moveTo(point_dt, snap), page_manager.move_objects());
                 }
-                Inkscape::DocumentUndo::done(_desktop->getDocument(), "Move page position", INKSCAPE_ICON("tool-pages"));
+                Inkscape::DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Move page position"), INKSCAPE_ICON("tool-pages"));
             } else if (on_screen_rect) {
                 // conclude box here (make new page)
                 page_manager.selectPage(page_manager.newDesktopPage(*on_screen_rect));
-                Inkscape::DocumentUndo::done(_desktop->getDocument(), "Create new drawn page", INKSCAPE_ICON("tool-pages"));
+                Inkscape::DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create new drawn page"), INKSCAPE_ICON("tool-pages"));
             }
             mouse_is_pressed = false;
             drag_origin_dt = point_dt;
@@ -430,7 +430,7 @@ bool PagesTool::root_handler(CanvasEvent const &event)
             if (event.keyval == GDK_KEY_Delete) {
                 page_manager.deletePage(page_manager.move_objects());
 
-                Inkscape::DocumentUndo::done(_desktop->getDocument(), "Delete Page", INKSCAPE_ICON("tool-pages"));
+                Inkscape::DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Delete Page"), INKSCAPE_ICON("tool-pages"));
                 ret = true;
             }
         },

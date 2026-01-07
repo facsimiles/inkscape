@@ -146,7 +146,7 @@ void ColorPicker::_onSelectedColorChanged()
     set_preview(color->toRGBA());
 
     if (_undo && SP_ACTIVE_DESKTOP) {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), /* TODO: annotate */ "color-picker.cpp:122", "");
+        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), RC_("Undo", "Set Color"), "");
     }
 
     _in_use = true;

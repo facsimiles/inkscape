@@ -581,7 +581,7 @@ void SelectorsDialog::_writeStyleElement()
     Inkscape::XML::Node *text_node = _getStyleTextNode(true);
     g_assert(text_node);
     text_node->setContent(style_content.c_str());
-    DocumentUndo::done(SP_ACTIVE_DOCUMENT, _("Edited style element."), INKSCAPE_ICON("dialog-selectors"));
+    DocumentUndo::done(SP_ACTIVE_DOCUMENT, RC_("Undo", "Edited style element."), INKSCAPE_ICON("dialog-selectors"));
 
     _updating = false;
     _scrollock = false;

@@ -186,7 +186,7 @@ void ObjectSet::combine(bool skip_undo, bool silent)
         parent->addChildAtPos(repr, position > 0 ? position : 0);
 
         if (!skip_undo) {
-            DocumentUndo::done(doc, _("Combine"), INKSCAPE_ICON("path-combine"));
+            DocumentUndo::done(doc, RC_("Undo", "Combine"), INKSCAPE_ICON("path-combine"));
         }
         set(repr);
 
@@ -292,7 +292,7 @@ ObjectSet::breakApart(bool skip_undo, bool overlapping, bool silent)
 
     if (did) {
         if ( !skip_undo ) {
-            DocumentUndo::done(document(), _("Break apart"), INKSCAPE_ICON("path-break-apart"));
+            DocumentUndo::done(document(), RC_("Undo", "Break apart"), INKSCAPE_ICON("path-break-apart"));
         }
     } else if (desktop() && !silent) {
         desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
@@ -306,7 +306,7 @@ void ObjectSet::toCurves(bool skip_undo, bool clonesjustunlink)
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to path."));
         return;
     }
-    
+
     bool did = false;
     if (desktop()) {
         desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Converting objects to paths..."));
@@ -333,7 +333,7 @@ void ObjectSet::toCurves(bool skip_undo, bool clonesjustunlink)
         desktop()->clearWaitingCursor();
     }
     if (did && !skip_undo) {
-        DocumentUndo::done(document(), _("Object to path"), INKSCAPE_ICON("object-to-path"));
+        DocumentUndo::done(document(), RC_("Undo", "Object to path"), INKSCAPE_ICON("object-to-path"));
     } else {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects</b> to convert to path in the selection."));
@@ -718,7 +718,7 @@ ObjectSet::pathReverse()
         desktop()->clearWaitingCursor();
 
     if (did) {
-        DocumentUndo::done(document(), _("Reverse path"), INKSCAPE_ICON("path-reverse"));
+        DocumentUndo::done(document(), RC_("Undo", "Reverse path"), INKSCAPE_ICON("path-reverse"));
     } else {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to reverse in the selection."));

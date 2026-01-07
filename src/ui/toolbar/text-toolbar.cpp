@@ -504,7 +504,7 @@ void TextToolbar::fontfamily_value_changed()
 
         if (mergeDefaultStyle(css)) {
             // If there is a selection, update
-            DocumentUndo::done(_desktop->getDocument(), _("Text: Change font family"), INKSCAPE_ICON("draw-text"));
+            DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change font family"), INKSCAPE_ICON("draw-text"));
         }
         sp_repr_css_attr_unref(css);
     }
@@ -568,7 +568,7 @@ void TextToolbar::fontsize_value_changed()
     }
 
     if (mergeDefaultStyle(css)) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:size", _("Text: Change font size"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:size", RC_("Undo", "Text: Change font size"), INKSCAPE_ICON("draw-text"));
     }
 
     sp_repr_css_attr_unref(css);
@@ -599,7 +599,7 @@ void TextToolbar::fontstyle_value_changed()
         sp_desktop_set_style(_desktop, css, true, true);
 
         if (mergeDefaultStyle(css)) {
-            DocumentUndo::done(_desktop->getDocument(), _("Text: Change font style"), INKSCAPE_ICON("draw-text"));
+            DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change font style"), INKSCAPE_ICON("draw-text"));
         }
 
         sp_repr_css_attr_unref(css);
@@ -677,7 +677,7 @@ void TextToolbar::script_changed(int mode)
 
     // Save for undo
     if (result_baseline != QUERY_STYLE_NOTHING) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:script", _("Text: Change superscript or subscript"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:script", RC_("Undo", "Text: Change superscript or subscript"), INKSCAPE_ICON("draw-text"));
     }
 
     _freeze = false;
@@ -839,7 +839,7 @@ void TextToolbar::align_mode_changed(int align_mode)
     }
 
     if (changed) {
-        DocumentUndo::done(_desktop->getDocument(), _("Text: Change alignment"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change alignment"), INKSCAPE_ICON("draw-text"));
     }
 
     onDefocus();
@@ -873,7 +873,7 @@ void TextToolbar::writing_mode_changed(int mode)
     }
 
     if (mergeDefaultStyle(css)) {
-        DocumentUndo::done(_desktop->getDocument(), _("Text: Change writing mode"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change writing mode"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref(css);
 
@@ -908,7 +908,7 @@ void TextToolbar::orientation_changed(int mode)
     }
 
     if (mergeDefaultStyle(css)) {
-        DocumentUndo::done(_desktop->getDocument(), _("Text: Change orientation"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change orientation"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref (css);
     onDefocus();
@@ -939,7 +939,7 @@ void TextToolbar::direction_changed(int mode)
     }
 
     if (mergeDefaultStyle(css)) {
-        DocumentUndo::done(_desktop->getDocument(), _("Text: Change direction"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Text: Change direction"), INKSCAPE_ICON("draw-text"));
     }
     sp_repr_css_attr_unref(css);
 
@@ -1033,7 +1033,7 @@ void TextToolbar::lineheight_value_changed()
         if (!_outer) {
             prepare_inner();
         }
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", _("Text: Change line-height"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", RC_("Undo", "Text: Change line-height"), INKSCAPE_ICON("draw-text"));
     }
 
     mergeDefaultStyle(css);
@@ -1251,7 +1251,7 @@ void TextToolbar::lineheight_unit_changed()
         if (_outer) {
             prepare_inner();
         }
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", _("Text: Change line-height unit"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", RC_("Undo", "Text: Change line-height unit"), INKSCAPE_ICON("draw-text"));
     }
 
     mergeDefaultStyle(css);
@@ -1291,7 +1291,7 @@ void TextToolbar::wordspacing_value_changed()
     text_outer_set_style(css);
 
     if (mergeDefaultStyle(css)) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:word-spacing", _("Text: Change word-spacing"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:word-spacing", RC_("Undo", "Text: Change word-spacing"), INKSCAPE_ICON("draw-text"));
     }
 
     sp_repr_css_attr_unref(css);
@@ -1316,7 +1316,7 @@ void TextToolbar::letterspacing_value_changed()
     text_outer_set_style(css);
 
     if (mergeDefaultStyle(css)) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:letter-spacing", _("Text: Change letter-spacing"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:letter-spacing", RC_("Undo", "Text: Change letter-spacing"), INKSCAPE_ICON("draw-text"));
     }
 
     sp_repr_css_attr_unref(css);
@@ -1346,7 +1346,7 @@ void TextToolbar::dx_value_changed()
     }
 
     if (modified) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dx", _("Text: Change dx (kern)"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dx", RC_("Undo", "Text: Change dx (kern)"), INKSCAPE_ICON("draw-text"));
     }
 
     _freeze = false;
@@ -1374,7 +1374,7 @@ void TextToolbar::dy_value_changed()
     }
 
     if (modified) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dy", _("Text: Change dy"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dy", RC_("Undo", "Text: Change dy"), INKSCAPE_ICON("draw-text"));
     }
 
     _freeze = false;
@@ -1402,7 +1402,7 @@ void TextToolbar::rotation_value_changed()
     }
 
     if (modified) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:rotate", _("Text: Change rotate"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:rotate", RC_("Undo", "Text: Change rotate"), INKSCAPE_ICON("draw-text"));
     }
 
     _freeze = false;

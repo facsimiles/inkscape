@@ -696,7 +696,7 @@ KnotHolderEntityCrossingSwitcher::knot_click(guint state)
             //std::cout<<"crossing set to"<<lpe->crossing_points[s].sign<<".\n";
         }
         _effect->crossing_points_vector.param_set_and_write_new_value(_effect->crossing_points.to_vector());
-        _effect->makeUndoDone(_("Change knot crossing"));
+        _effect->makeUndoDone(RC_("Undo", "Change knot crossing"));
         // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
 //        sp_lpe_item_update_patheffect (cast<SPLPEItem>(item), false, true);
     }

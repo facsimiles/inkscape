@@ -93,7 +93,7 @@ void GuidelinePropertiesDialog::_modeChanged()
 void GuidelinePropertiesDialog::_onOK()
 {
     _onOKimpl();
-    DocumentUndo::done(_guide->document, _("Set guide properties"), "");
+    DocumentUndo::done(_guide->document, RC_("Undo", "Set guide properties"), "");
 }
 
 void GuidelinePropertiesDialog::_onOKimpl()
@@ -144,14 +144,14 @@ void GuidelinePropertiesDialog::_onDelete()
 {
     SPDocument *doc = _guide->document;
     if (_guide->remove(true))
-        DocumentUndo::done(doc, _("Delete guide"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Delete guide"), "");
 }
 
 void GuidelinePropertiesDialog::_onDuplicate()
 {
     _guide = _guide->duplicate();
     _onOKimpl();
-    DocumentUndo::done(_guide->document, _("Duplicate guide"), "");
+    DocumentUndo::done(_guide->document, RC_("Undo", "Duplicate guide"), "");
 }
 
 void GuidelinePropertiesDialog::_setup()

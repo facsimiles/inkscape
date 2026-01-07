@@ -709,7 +709,7 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
     this->clickeditem->setHidden(false);
     sp_conn_reroute_path_immediate(cast<SPPath>(this->clickeditem));
     this->clickeditem->updateRepr();
-    DocumentUndo::done(doc, _("Reroute connector"), INKSCAPE_ICON("draw-connector"));
+    DocumentUndo::done(doc, RC_("Undo", "Reroute connector"), INKSCAPE_ICON("draw-connector"));
     this->cc_set_active_conn(this->clickeditem);
 }
 
@@ -853,7 +853,7 @@ void ConnectorTool::_flushWhite(Geom::PathVector &c)
         Inkscape::GC::release(repr);
     }
 
-    DocumentUndo::done(doc, _("Create connector"), INKSCAPE_ICON("draw-connector"));
+    DocumentUndo::done(doc, RC_("Undo", "Create connector"), INKSCAPE_ICON("draw-connector"));
 }
 
 void ConnectorTool::_finishSegment(Geom::Point const /*p*/)
@@ -1228,9 +1228,9 @@ void cc_selection_set_avoid(SPDesktop *desktop, bool const set_avoid)
         return;
     }
 
-    char *event_desc = (set_avoid) ?
-            _("Make connectors avoid selected objects") :
-            _("Make connectors ignore selected objects");
+    auto event_desc = (set_avoid) ?
+            RC_("Undo", "Make connectors avoid selected objects") :
+            RC_("Undo", "Make connectors ignore selected objects");
     DocumentUndo::done(document, event_desc, INKSCAPE_ICON("draw-connector"));
 }
 

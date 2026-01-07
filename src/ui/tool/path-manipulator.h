@@ -17,6 +17,7 @@
 #include "manipulator.h"
 #include "node.h"
 #include "object/sp-object.h"
+#include "util-string/context-string.h"
 
 class SPPath;
 
@@ -153,8 +154,8 @@ private:
 
     void _externalChange(unsigned type);
     void _removeNodesFromSelection();
-    void _commit(Glib::ustring const &annotation);
-    void _commit(Glib::ustring const &annotation, gchar const *key);
+    void _commit(Inkscape::Util::Internal::ContextString annotation);
+    void _commit(Inkscape::Util::Internal::ContextString annotation, gchar const *key);
     Geom::Coord _updateDragPoint(Geom::Point const &);
     void _updateOutlineOnZoomChange();
     double _getStrokeTolerance();

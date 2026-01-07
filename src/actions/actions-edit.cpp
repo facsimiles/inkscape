@@ -161,7 +161,7 @@ void duplicate_transform(InkscapeApplication *app)
     auto selection = app->get_active_selection();
     selection->duplicate(true);
     selection->reapplyAffine();
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Duplicate and Transform"),
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Duplicate and Transform"),
                                  INKSCAPE_ICON("edit-duplicate"));
 }
 

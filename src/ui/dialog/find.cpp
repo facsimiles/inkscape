@@ -1010,7 +1010,7 @@ void Find::onAction()
         scroll_to_show_item(desktop, item);
 
         if (_action_replace) {
-            DocumentUndo::done(desktop->getDocument(), _("Replace text or property"), INKSCAPE_ICON("draw-text"));
+            DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Replace text or property"), INKSCAPE_ICON("draw-text"));
         }
 
     } else {

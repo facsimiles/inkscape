@@ -539,7 +539,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
             mg->array.built = false;
             mg->ensureArray();
             // How do we do this?
-            DocumentUndo::done(desktop->getDocument(), _("Added patch row or column"), INKSCAPE_ICON("mesh-gradient"));
+            DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Added patch row or column"), INKSCAPE_ICON("mesh-gradient"));
 
         } // Mesh
     }
@@ -845,7 +845,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 d_new->updateKnotShape ();
                 d_new->updateTip ();
                 d_new->updateDependencies(true);
-                DocumentUndo::done(d_new->parent->desktop->getDocument(), _("Merge gradient handles"), INKSCAPE_ICON("color-gradient"));
+                DocumentUndo::done(d_new->parent->desktop->getDocument(), RC_("Undo", "Merge gradient handles"), INKSCAPE_ICON("color-gradient"));
                 return;
             }
         }
@@ -1140,7 +1140,7 @@ static void gr_knot_ungrabbed_handler(SPKnot *knot, unsigned int state, gpointer
         dragger->fireDraggables (true);
     }
     dragger->moveMeshHandles( dragger->point_original, MG_NODE_NO_SCALE );
-    
+
     for (std::set<GrDragger *>::const_iterator it = dragger->parent->selected.begin(); it != dragger->parent->selected.end() ; ++it ) {
         if (*it == dragger)
             continue;
@@ -1156,7 +1156,7 @@ static void gr_knot_ungrabbed_handler(SPKnot *knot, unsigned int state, gpointer
     dragger->updateDependencies(true);
 
     // we did an undoable action
-    DocumentUndo::done(dragger->parent->desktop->getDocument(), _("Move gradient handle"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(dragger->parent->desktop->getDocument(), RC_("Undo", "Move gradient handle"), INKSCAPE_ICON("color-gradient"));
 }
 
 /**
@@ -1214,7 +1214,7 @@ static void gr_knot_clicked_handler(SPKnot */*knot*/, guint state, gpointer data
             }
 
             gradient->getRepr()->removeChild(stop->getRepr());
-            DocumentUndo::done(gradient->document, _("Delete gradient stop"), INKSCAPE_ICON("color-gradient"));
+            DocumentUndo::done(gradient->document, RC_("Undo", "Delete gradient stop"), INKSCAPE_ICON("color-gradient"));
         }
     } else {
     // select the dragger
@@ -1262,7 +1262,7 @@ static void gr_knot_doubleclicked_handler(SPKnot */*knot*/, guint /*state*/, gpo
             drag->updateDraggers();
             drag->local_change = true;
             drag->selectByStop(newstop);
-            DocumentUndo::done(gradient->document, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+            DocumentUndo::done(gradient->document, RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }
@@ -1486,7 +1486,7 @@ void GrDragger::updateTip()
     g_return_if_fail(this->knot != nullptr);
 
     char *tip = nullptr;
-    
+
     if (this->draggables.size() == 1) {
         GrDraggable *draggable = this->draggables[0];
         char *item_desc = draggable->item->detailedDescription();
@@ -2255,7 +2255,7 @@ void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTa
     std::vector< std::vector< SPMeshNode* > > nodes = mg->array.nodes;
 
     // Show/hide mesh on fill/stroke. This doesn't work at the moment... and prevents node color updating.
-    
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show_handles = (prefs->getBool("/tools/mesh/show_handles", true));
     bool edit_fill    = (prefs->getBool("/tools/mesh/edit_fill",    true));
@@ -2804,7 +2804,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
     if (write_repr && did) {
         // we did an undoable action
-        DocumentUndo::maybeDone(desktop->getDocument(), "grmoveh", _("Move gradient handle(s)"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::maybeDone(desktop->getDocument(), "grmoveh", RC_("Undo", "Move gradient handle(s)"), INKSCAPE_ICON("color-gradient"));
         return;
     }
 
@@ -2836,7 +2836,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
         if (write_repr && did) {
             // we did an undoable action
-            DocumentUndo::maybeDone(desktop->getDocument(), "grmovem", _("Move gradient mid stop(s)"), INKSCAPE_ICON("color-gradient"));
+            DocumentUndo::maybeDone(desktop->getDocument(), "grmovem", RC_("Undo", "Move gradient mid stop(s)"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }
@@ -3189,7 +3189,7 @@ void GrDrag::deleteSelected(bool just_one)
     }
 
     if (document) {
-        DocumentUndo::done( document, _("Delete gradient stop(s)"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done( document, RC_("Undo", "Delete gradient stop(s)"), INKSCAPE_ICON("color-gradient"));
     }
 }
 

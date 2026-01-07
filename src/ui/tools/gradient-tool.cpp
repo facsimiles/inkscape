@@ -269,7 +269,7 @@ void GradientTool::add_stops_between_selected_stops()
             _grdrag->updateDraggers();
             _grdrag->local_change = true;
             _grdrag->selectByStop(newstop);
-            DocumentUndo::done(gradient->document, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+            DocumentUndo::done(gradient->document, RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
             return;
         }
     }
@@ -322,7 +322,7 @@ void GradientTool::add_stops_between_selected_stops()
     }
 
     if (!ret.these_stops.empty() && doc) {
-        DocumentUndo::done(doc, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(doc, RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
         _grdrag->updateDraggers();
         // so that it does not automatically update draggers in idle loop, as this would deselect
         _grdrag->local_change = true;
@@ -384,7 +384,7 @@ void GradientTool::simplify(double tolerance)
     }
 
     if (!todel.empty()) {
-        DocumentUndo::done(doc, _("Simplify gradient"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(doc, RC_("Undo", "Simplify gradient"), INKSCAPE_ICON("color-gradient"));
         drag->local_change = true;
         drag->updateDraggers();
         drag->selectByCoords(ret.coords);
@@ -396,7 +396,7 @@ void GradientTool::add_stop_near_point(SPItem *item, Geom::Point const &mouse_p)
     // item is the selected item. mouse_p the location in doc coordinates of where to add the stop
     auto newstop = get_drag()->addStopNearPoint(item, mouse_p, tolerance / _desktop->current_zoom());
 
-    DocumentUndo::done(_desktop->getDocument(), _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
 
     get_drag()->updateDraggers();
     get_drag()->local_change = true;
@@ -434,7 +434,7 @@ bool GradientTool::root_handler(CanvasEvent const &event)
                     SPGradient *priv = sp_item_set_gradient(item, vector, new_type, fsmode);
                     sp_gradient_reset_to_userspace(priv, item);
                 }
-                DocumentUndo::done(_desktop->getDocument(), _("Create default gradient"), INKSCAPE_ICON("color-gradient"));
+                DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create default gradient"), INKSCAPE_ICON("color-gradient"));
             }
             ret = true;
 

@@ -234,7 +234,10 @@ void StarToolbar::side_mode_changed(int mode)
     }
 
     if (!_batchundo) {
-        DocumentUndo::done(_desktop->getDocument(), flat ? _("Make polygon") : _("Make star"), INKSCAPE_ICON("draw-polygon-star"));
+        DocumentUndo::done(
+            _desktop->getDocument(),
+            flat ? RC_("Undo", "Make polygon") : RC_("Undo", "Make star"),
+            INKSCAPE_ICON("draw-polygon-star"));
     }
 }
 
@@ -267,7 +270,7 @@ void StarToolbar::magnitude_value_changed()
     }
 
     if (!_batchundo) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "star:numcorners", _("Star: Change number of corners"), INKSCAPE_ICON("draw-polygon-star"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "star:numcorners", RC_("Undo", "Star: Change number of corners"), INKSCAPE_ICON("draw-polygon-star"));
     }
 }
 
@@ -307,7 +310,7 @@ void StarToolbar::proportion_value_changed()
     }
 
     if (!_batchundo) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "star:spokeratio", _("Star: Change spoke ratio"), INKSCAPE_ICON("draw-polygon-star"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "star:spokeratio", RC_("Undo", "Star: Change spoke ratio"), INKSCAPE_ICON("draw-polygon-star"));
     }
 }
 
@@ -336,7 +339,7 @@ void StarToolbar::rounded_value_changed()
     }
 
     if (!_batchundo) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "star:rounding", _("Star: Change rounding"), INKSCAPE_ICON("draw-polygon-star"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "star:rounding", RC_("Undo", "Star: Change rounding"), INKSCAPE_ICON("draw-polygon-star"));
     }
 }
 
@@ -365,7 +368,7 @@ void StarToolbar::randomized_value_changed()
     }
 
     if (!_batchundo) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), "star:randomisation", _("Star: Change randomization"), INKSCAPE_ICON("draw-polygon-star"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), "star:randomisation", RC_("Undo", "Star: Change randomization"), INKSCAPE_ICON("draw-polygon-star"));
     }
 }
 
@@ -413,7 +416,7 @@ void StarToolbar::_setDefaults()
     _roundedness_item.get_adjustment()->set_value(rounded);
     _randomization_item.get_adjustment()->set_value(randomized);
 
-    DocumentUndo::done(_desktop->getDocument(), _("Star: Reset to defaults"), INKSCAPE_ICON("draw-polygon-star"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Star: Reset to defaults"), INKSCAPE_ICON("draw-polygon-star"));
     _batchundo = false;
 }
 

@@ -388,7 +388,7 @@ void RectTool::finishItem() {
         sp_lpe_item_update_patheffect(this->rect.get(), true, true);
         _desktop->getSelection()->set(rect.get());
 
-        DocumentUndo::done(_desktop->getDocument(), _("Create rectangle"), INKSCAPE_ICON("draw-rectangle"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create rectangle"), INKSCAPE_ICON("draw-rectangle"));
 
         this->rect = nullptr;
     }

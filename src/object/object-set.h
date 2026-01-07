@@ -31,6 +31,7 @@
 #include "sp-item.h"
 #include "sp-item-group.h"
 #include "livarot/LivarotDefs.h"
+#include "util-string/context-string.h"
 
 /**
  * SiblingState enums are used to associate the current state
@@ -502,7 +503,7 @@ protected:
     std::unordered_map<SPObject*, sigc::connection> _releaseConnections;
 
 private:
-    void _pathBoolOp(BooleanOp bop, char const *icon_name, char const *description, bool skip_undo, bool silent);
+    void _pathBoolOp(BooleanOp bop, char const *icon_name, Inkscape::Util::Internal::ContextString description, bool skip_undo, bool silent);
     void _pathBoolOp(BooleanOp bop);
 
     void _disconnect(SPObject* object);

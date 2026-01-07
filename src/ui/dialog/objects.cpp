@@ -850,7 +850,7 @@ ObjectsPanel::ObjectsPanel()
             // This ensures the "last style used" system is notified
             _subject.setCSS(css);
             sp_repr_css_attr_unref(css);
-            DocumentUndo::maybeDone(current_item->document, ":opacity", _("Change opacity"), INKSCAPE_ICON("dialog-object-properties"));
+            DocumentUndo::maybeDone(current_item->document, ":opacity", RC_("Undo", "Change opacity"), INKSCAPE_ICON("dialog-object-properties"));
         }
     });
 
@@ -887,7 +887,7 @@ ObjectsPanel::ObjectsPanel()
                     for (auto const &btn : _blend_items) {
                         btn.second->property_active().set_value(btn.first == data.id);
                     }
-                    DocumentUndo::done(getDocument(), "set-blend-mode", _("Change blend mode"));
+                    DocumentUndo::done(getDocument(), RC_("Undo", "Change blend mode"), "");
                 }
             });
             _blend_items[data.id] = check;
@@ -1271,7 +1271,7 @@ bool ObjectsPanel::toggleVisible(Gdk::ModifierType const state, Gtk::TreeModel::
             // Toggle Visible for layers (hide all other layers)
             if (desktop->layerManager().isLayer(item)) {
                 desktop->layerManager().toggleLayerSolo(item);
-                DocumentUndo::done(getDocument(), _("Hide other layers"), "");
+                DocumentUndo::done(getDocument(), RC_("Undo", "Hide other layers"), "");
             }
             return true;
         }
@@ -1286,7 +1286,7 @@ bool ObjectsPanel::toggleVisible(Gdk::ModifierType const state, Gtk::TreeModel::
             }
         }
         // Use maybeDone so user can flip back and forth without making loads of undo items
-        DocumentUndo::maybeDone(getDocument(), "toggle-vis", _("Toggle item visibility"), "");
+        DocumentUndo::maybeDone(getDocument(), "toggle-vis", RC_("Undo", "Toggle item visibility"), INKSCAPE_ICON("dialog-object-properties"));
         return visible;
     }
     return false;
@@ -1341,7 +1341,7 @@ bool ObjectsPanel::colorTagPopup(int const x, int const y, Gtk::TreeModel::Row r
     _colors->signal_changed.connect([this]() {
         if (auto item = getItem(_clicked_item_row)) {
             item->setHighlight(_colors->get().value());
-            DocumentUndo::maybeDone(getDocument(), "highlight-color", _("Set item highlight color"), INKSCAPE_ICON("dialog-object-properties"));
+            DocumentUndo::maybeDone(getDocument(), "highlight-color", RC_("Undo", "Set item highlight color"), INKSCAPE_ICON("dialog-object-properties"));
         }
     });
     _popoverbin.setPopover(&*color_popup);
@@ -1365,7 +1365,7 @@ bool ObjectsPanel::toggleLocked(Gdk::ModifierType const state, Gtk::TreeModel::R
             // Toggle lock for layers (lock all other layers)
             if (desktop->layerManager().isLayer(item)) {
                 desktop->layerManager().toggleLockOtherLayers(item);
-                DocumentUndo::done(getDocument(), _("Lock other layers"), "");
+                DocumentUndo::done(getDocument(), RC_("Undo", "Lock other layers"), "");
             }
             return true;
         }
@@ -1380,7 +1380,7 @@ bool ObjectsPanel::toggleLocked(Gdk::ModifierType const state, Gtk::TreeModel::R
             }
         }
         // Use maybeDone so user can flip back and forth without making loads of undo items
-        DocumentUndo::maybeDone(getDocument(), "toggle-lock", _("Toggle item locking"), "");
+        DocumentUndo::maybeDone(getDocument(), "toggle-lock", RC_("Undo", "Toggle item locking"), "");
         return locked;
     }
     return false;
@@ -1663,11 +1663,11 @@ void ObjectsPanel::on_motion_motion(Gtk::EventControllerMotion const *controller
                     // Defer visibility to th idle thread (it's expensive)
                     Glib::signal_idle().connect_once([this, item]() {
                         item->setHidden(_drag_flip);
-                        DocumentUndo::maybeDone(getDocument(), "toggle-vis", _("Toggle item visibility"), "");
+                        DocumentUndo::maybeDone(getDocument(), "toggle-vis", RC_("Undo", "Toggle item visibility"), "");
                     }, Glib::PRIORITY_DEFAULT_IDLE);
                 } else if (col == _lock_column) {
                     item->setLocked(_drag_flip);
-                    DocumentUndo::maybeDone(getDocument(), "toggle-lock", _("Toggle item locking"), "");
+                    DocumentUndo::maybeDone(getDocument(), "toggle-lock", RC_("Undo", "Toggle item locking"), "");
                 }
             }
         }
@@ -1875,7 +1875,7 @@ void ObjectsPanel::_handleEdited(const Glib::ustring& path, const Glib::ustring&
                     obj->setHighlight(obj->highlight_color());
                 }
                 item->setLabel(new_text.c_str());
-                DocumentUndo::done(getDocument(), _("Rename object"), "");
+                DocumentUndo::done(getDocument(), RC_("Undo", "Rename object"), "");
             }
         }
     }
@@ -2063,7 +2063,7 @@ bool ObjectsPanel::on_drag_drop(Glib::ValueBase const &/*value*/, double x, doub
                 ? drop_repr : drop_repr->prev();
             selection->toLayer(item->parent, after);
         }
-        DocumentUndo::done(document, _("Move items"), INKSCAPE_ICON("selection-move-to-layer"));
+        DocumentUndo::done(document, RC_("Undo", "Move items"), INKSCAPE_ICON("selection-move-to-layer"));
     }
 
     drag_end_impl();

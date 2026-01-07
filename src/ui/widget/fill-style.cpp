@@ -303,7 +303,7 @@ void FillNStroke::setFillrule(UI::Widget::PaintSelector::FillRule mode)
         sp_repr_css_attr_unref(css);
         css = nullptr;
 
-        DocumentUndo::done(_desktop->doc(), _("Change fill rule"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::done(_desktop->doc(), RC_("Undo", "Change fill rule"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -376,7 +376,7 @@ void FillNStroke::dragFromPaint()
             sp_desktop_set_color(_desktop, _solid_colors->getAverage(), false, kind == FILL);
 
             DocumentUndo::maybeDone(_desktop->doc(), (kind == FILL) ? undo_F_label : undo_S_label,
-                                    (kind == FILL) ? _("Set fill color") : _("Set stroke color"),
+                                    (kind == FILL) ? RC_("Undo", "Set fill color") : RC_("Undo", "Set stroke color"),
                                     INKSCAPE_ICON("dialog-fill-and-stroke"));
             break;
         }
@@ -446,7 +446,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
             sp_repr_css_attr_unref(css);
             css = nullptr;
 
-            DocumentUndo::done(document, (kind == FILL) ? _("Remove fill") : _("Remove stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+            DocumentUndo::done(document, (kind == FILL) ? RC_("Undo", "Remove fill") : RC_("Undo", "Remove stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             break;
         }
 
@@ -455,7 +455,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
             sp_desktop_set_color(_desktop, _solid_colors->getAverage(), false, kind == FILL);
 
             DocumentUndo::maybeDone(_desktop->getDocument(), (kind == FILL) ? undo_F_label : undo_S_label,
-                                    (kind == FILL) ? _("Set fill color") : _("Set stroke color"),
+                                    (kind == FILL) ? RC_("Undo", "Set fill color") : RC_("Undo", "Set stroke color"),
                                     INKSCAPE_ICON("dialog-fill-and-stroke"));
 
             // on release, toggle undo_label so that the next drag will not be lumped with this one
@@ -469,7 +469,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
 
             break;
         }
-        
+
         case UI::Widget::PaintSelector::MODE_GRADIENT_LINEAR:
         case UI::Widget::PaintSelector::MODE_GRADIENT_RADIAL:
         case UI::Widget::PaintSelector::MODE_SWATCH:
@@ -529,7 +529,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     // these are controlled by the gradient stops themselves.
                     item->style->clear(kind == FILL ? SPAttr::FILL_OPACITY : SPAttr::STROKE_OPACITY);
                 }
-                DocumentUndo::done(document, (kind == FILL) ? _("Set gradient on fill") : _("Set gradient on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+                DocumentUndo::done(document, (kind == FILL) ? RC_("Undo", "Set gradient on fill") : RC_("Undo", "Set gradient on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             }
             break;
 
@@ -625,7 +625,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     css = nullptr;
                 }
 
-                DocumentUndo::done(document, (kind == FILL) ? _("Set mesh on fill") : _("Set mesh on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+                DocumentUndo::done(document, (kind == FILL) ? RC_("Undo", "Set mesh on fill") : RC_("Undo", "Set mesh on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             }
             break;
 #endif
@@ -745,7 +745,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     }
                 } // end if
 
-                DocumentUndo::done(document, (kind == FILL) ? _("Set pattern on fill") : _("Set pattern on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+                DocumentUndo::done(document, (kind == FILL) ? RC_("Undo", "Set pattern on fill") : RC_("Undo", "Set pattern on stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
             } // end if
 
             break;
@@ -762,7 +762,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     }
                     SPCSSAttr *css = sp_repr_css_attr_new();
                     if (kind == FILL) {
-                        sp_repr_css_unset_property(css, "fill");    
+                        sp_repr_css_unset_property(css, "fill");
                     } else {
                         sp_repr_css_unset_property(css, "stroke");
                         sp_repr_css_unset_property(css, "stroke-opacity");
@@ -778,7 +778,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     sp_repr_css_attr_unref(css);
                     css = nullptr;
 
-                    DocumentUndo::done(document,  (kind == FILL) ? _("Unset fill") : _("Unset stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+                    DocumentUndo::done(document,  (kind == FILL) ? RC_("Undo", "Unset fill") : RC_("Undo", "Unset stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
                 } else {
                     SPCSSAttr *css = sp_repr_css_attr_new();
                     sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", other.c_str());
@@ -787,7 +787,7 @@ void FillNStroke::updateFromPaint(bool switch_style)
                     sp_repr_css_attr_unref(css);
                     css = nullptr;
 
-                    DocumentUndo::done(document, (kind == FILL) ? _("Set fill") : _("Set stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+                    DocumentUndo::done(document, (kind == FILL) ? RC_("Undo", "Set fill") : RC_("Undo", "Set stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
                 }
             }
             break;

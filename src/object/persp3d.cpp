@@ -357,7 +357,7 @@ Persp3D::toggle_VP (Proj::Axis axis, bool set_undo) {
     this->update_box_reprs();
     this->updateRepr(SP_OBJECT_WRITE_EXT);
     if (set_undo) {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), _("Toggle vanishing point"), INKSCAPE_ICON("draw-cuboid"));
+        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), RC_("Undo", "Toggle vanishing point"), INKSCAPE_ICON("draw-cuboid"));
     }
 }
 
@@ -367,7 +367,7 @@ Persp3D::toggle_VPs (std::list<Persp3D *> list, Proj::Axis axis) {
     for (Persp3D *persp : list) {
         persp->toggle_VP(axis, false);
     }
-    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), _("Toggle multiple vanishing points"), INKSCAPE_ICON("draw-cuboid"));
+    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), RC_("Undo", "Toggle multiple vanishing points"), INKSCAPE_ICON("draw-cuboid"));
 }
 
 void

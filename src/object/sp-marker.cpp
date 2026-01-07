@@ -387,7 +387,7 @@ void sp_validate_marker(SPMarker *sp_marker, SPDocument *doc) {
         os << "0 0 " << bounds.dimensions()[Geom::X] << " " << bounds.dimensions()[Geom::Y];
         sp_marker->setAttribute("viewBox", os.str().c_str());
     }
-    
+
     sp_marker->setAttributeDouble("markerWidth", sp_marker->viewBox.width() * xScale);
     sp_marker->setAttributeDouble("markerHeight", sp_marker->viewBox.height() * yScale);
 
@@ -577,7 +577,7 @@ void sp_marker_set_orient(SPMarker* marker, const char* value) {
     marker->setAttribute("orient", value);
 
     if (marker->document) {
-        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker orientation"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Set marker orientation"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -588,7 +588,7 @@ void sp_marker_set_size(SPMarker* marker, double sx, double sy) {
     marker->setAttributeDouble("markerHeight", sy);
 
     if (marker->document) {
-        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker size"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Set marker size"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -598,7 +598,7 @@ void sp_marker_scale_with_stroke(SPMarker* marker, bool scale_with_stroke) {
     marker->setAttribute("markerUnits", scale_with_stroke ? "strokeWidth" : "userSpaceOnUse");
 
     if (marker->document) {
-        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker scale with stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Set marker scale with stroke"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -609,7 +609,7 @@ void sp_marker_set_offset(SPMarker* marker, double dx, double dy) {
     marker->setAttributeDouble("refY", dy);
 
     if (marker->document) {
-        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker offset"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Set marker offset"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -619,7 +619,7 @@ void sp_marker_set_uniform_scale(SPMarker* marker, bool uniform) {
     marker->setAttribute("preserveAspectRatio", uniform ? "xMidYMid" : "none");
 
     if (marker->document) {
-        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker uniform scaling"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Set marker uniform scaling"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 
@@ -632,7 +632,7 @@ void sp_marker_flip_horizontally(SPMarker* marker) {
     if (bbox) {
         set.scaleRelative(bbox->midpoint(), Geom::Scale(-1.0, 1.0));
         if (marker->document) {
-            DocumentUndo::maybeDone(marker->document, "marker", _("Flip marker horizontally"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+            DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Flip marker horizontally"), INKSCAPE_ICON("dialog-fill-and-stroke"));
         }
     }
 }
@@ -648,7 +648,7 @@ void sp_marker_set_opacity(SPMarker* marker, double alpha) {
     marker->setAttributeDouble("stroke-opacity", alpha);
 
     if (marker->document) {
-        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker opacity"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::maybeDone(marker->document, "marker", RC_("Undo", "Set marker opacity"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 

@@ -354,7 +354,7 @@ void StarTool::finishItem() {
         // update while creating inside a LPE group
         sp_lpe_item_update_patheffect(this->star.get(), true, true);
         _desktop->getSelection()->set(star.get());
-        DocumentUndo::done(_desktop->getDocument(), _("Create star"), INKSCAPE_ICON("draw-polygon-star"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create star"), INKSCAPE_ICON("draw-polygon-star"));
 
         this->star = nullptr;
     }

@@ -68,7 +68,6 @@ namespace Inkscape::XML {
 class Event;
 } // namespace Inkscape::XML
 
-
 /*
  * Undo & redo
  */
@@ -99,7 +98,7 @@ bool Inkscape::DocumentUndo::getUndoSensitive(SPDocument const *document) {
 }
 
 void Inkscape::DocumentUndo::done(SPDocument *doc,
-                                  Glib::ustring const &event_description,
+                                  Inkscape::Util::Internal::ContextString event_description,
                                   Glib::ustring const &icon_name,
                                   unsigned int object_modified_tag)
 {
@@ -123,6 +122,7 @@ namespace {
 using Inkscape::Debug::Event;
 using Inkscape::Debug::SimpleEvent;
 using Inkscape::Debug::timestamp;
+using Inkscape::Util::Internal::ContextString;
 
 typedef SimpleEvent<Event::INTERACTION> InteractionEvent;
 
@@ -155,7 +155,7 @@ public:
 // 'event_description' and 'icon_name' are used in the Undo History dialog.
 void Inkscape::DocumentUndo::maybeDone(SPDocument *doc,
                                        const gchar *key,
-                                       Glib::ustring const &event_description,
+                                       ContextString event_description,
                                        Glib::ustring const &icon_name,
                                        unsigned int object_modified_tag)
 {
@@ -192,7 +192,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc,
     if (key && !expired && !doc->actionkey.empty() && (doc->actionkey == key) && !doc->undo.empty()) {
         doc->undo.back()->event = sp_repr_coalesce_log(doc->undo.back()->event, log);
     } else {
-        Inkscape::Event *event = new Inkscape::Event(log, event_description, icon_name);
+        Inkscape::Event *event = new Inkscape::Event(log, event_description.c_str(), icon_name);
         doc->undo.push_back(event);
         doc->undoStackObservers.notifyUndoCommitEvent(event);
     }
@@ -230,9 +230,9 @@ void Inkscape::DocumentUndo::cancel(SPDocument *doc)
 {
     g_assert (doc != nullptr);
     g_assert (doc->sensitive);
-    done(doc, "undozone", "");
-    // ensure tere is something to undo (extension crach can do nothing)
-    if (!doc->undo.empty() && doc->undo.back()->description == "undozone") { 
+    done(doc, ContextString("undozone"), "");
+    // ensure there is something to undo (extension crash can do nothing)
+    if (!doc->undo.empty() && doc->undo.back()->description == "undozone") {
         undo(doc);
         clearRedo(doc);
     }

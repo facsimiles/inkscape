@@ -113,7 +113,7 @@ VectorParam::param_newWidget()
     pointwdg->setPolarCoords();
     pointwdg->setValue( vector, origin );
     pointwdg->clearProgrammatically();
-    pointwdg->set_undo_parameters(_("Change vector parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    pointwdg->set_undo_parameters(RC_("Undo", "Change vector parameter"), INKSCAPE_ICON("dialog-path-effects"));
 
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     UI::pack_start(*hbox, *pointwdg, true, true);
@@ -167,7 +167,7 @@ public:
     };
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override
     {
-        param->param_effect->makeUndoDone(_("Move handle"));
+        param->param_effect->makeUndoDone(RC_("Undo", "Move handle"));
     };
     void knot_click(guint /*state*/) override{
         g_message ("This is the origin handle associated to parameter '%s'", param->param_key.c_str());
@@ -194,7 +194,7 @@ public:
     };
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override
     {
-        param->param_effect->makeUndoDone(_("Move handle"));
+        param->param_effect->makeUndoDone(RC_("Undo", "Move handle"));
     }
     void knot_click(guint /*state*/) override{
         g_message ("This is the vector handle associated to parameter '%s'", param->param_key.c_str());

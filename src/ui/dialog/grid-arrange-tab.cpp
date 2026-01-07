@@ -251,7 +251,7 @@ void GridArrangeTab::arrange()
          }
     }
 
-    DocumentUndo::done(desktop->getDocument(), _("Arrange in a grid"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Arrange in a grid"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 //#########################################################################

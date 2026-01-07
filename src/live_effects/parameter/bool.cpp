@@ -78,7 +78,7 @@ BoolParam::param_newWidget()
                                                                                     param_effect->getSPDoc() );
         checkwdg->setActive(value);
         checkwdg->setProgrammatically = false;
-        checkwdg->set_undo_parameters(_("Change bool parameter"), INKSCAPE_ICON("dialog-path-effects"));
+        checkwdg->set_undo_parameters(RC_("Undo", "Change bool parameter"), INKSCAPE_ICON("dialog-path-effects"));
         return checkwdg;
     } else {
         return nullptr;

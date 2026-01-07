@@ -130,7 +130,7 @@ TextParam::param_newWidget()
         param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc());
     rsu->setText(value);
     rsu->setProgrammatically = false;
-    rsu->set_undo_parameters(_("Change text parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    rsu->set_undo_parameters(RC_("Undo", "Change text parameter"), INKSCAPE_ICON("dialog-path-effects"));
     auto const text_container = Gtk::make_managed<Gtk::Box>();
     auto const set =  Gtk::make_managed<Gtk::Button>(Glib::ustring("✔"));
     set->signal_clicked()

@@ -45,32 +45,32 @@ using Inkscape::DocumentUndo;
 
 void Inkscape::ObjectSet::pathUnion(bool skip_undo, bool silent)
 {
-    _pathBoolOp(bool_op_union, INKSCAPE_ICON("path-union"), _("Union"), skip_undo, silent);
+    _pathBoolOp(bool_op_union, INKSCAPE_ICON("path-union"), RC_("Undo", "Union"), skip_undo, silent);
 }
 
 void Inkscape::ObjectSet::pathIntersect(bool skip_undo, bool silent)
 {
-    _pathBoolOp(bool_op_inters, INKSCAPE_ICON("path-intersection"), _("Intersection"), skip_undo, silent);
+    _pathBoolOp(bool_op_inters, INKSCAPE_ICON("path-intersection"), RC_("Undo", "Intersection"), skip_undo, silent);
 }
 
 void Inkscape::ObjectSet::pathDiff(bool skip_undo, bool silent)
 {
-    _pathBoolOp(bool_op_diff, INKSCAPE_ICON("path-difference"), _("Difference"), skip_undo, silent);
+    _pathBoolOp(bool_op_diff, INKSCAPE_ICON("path-difference"), RC_("Undo", "Difference"), skip_undo, silent);
 }
 
 void Inkscape::ObjectSet::pathSymDiff(bool skip_undo, bool silent)
 {
-    _pathBoolOp(bool_op_symdiff, INKSCAPE_ICON("path-exclusion"), _("Exclusion"), skip_undo, silent);
+    _pathBoolOp(bool_op_symdiff, INKSCAPE_ICON("path-exclusion"), RC_("Undo", "Exclusion"), skip_undo, silent);
 }
 
 void Inkscape::ObjectSet::pathCut(bool skip_undo, bool silent)
 {
-    _pathBoolOp(bool_op_cut, INKSCAPE_ICON("path-division"), _("Division"), skip_undo, silent);
+    _pathBoolOp(bool_op_cut, INKSCAPE_ICON("path-division"), RC_("Undo", "Division"), skip_undo, silent);
 }
 
 void Inkscape::ObjectSet::pathSlice(bool skip_undo, bool silent)
 {
-    _pathBoolOp(bool_op_slice, INKSCAPE_ICON("path-cut"), _("Cut path"), skip_undo, silent);
+    _pathBoolOp(bool_op_slice, INKSCAPE_ICON("path-cut"), RC_("Undo", "Cut path"), skip_undo, silent);
 }
 
 /*
@@ -332,7 +332,7 @@ Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::Path
     return result.MakePathVector();
 }
 
-void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop, char const *icon_name, char const *description, bool skip_undo, bool silent)
+void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop, char const *icon_name, Inkscape::Util::Internal::ContextString description, bool skip_undo, bool silent)
 {
     try {
         ObjectSet::_pathBoolOp(bop);

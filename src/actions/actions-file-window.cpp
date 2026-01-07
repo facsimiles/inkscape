@@ -117,7 +117,7 @@ document_cleanup(InkscapeWindow* win)
     auto doc = win->get_document();
     unsigned int diff = doc->vacuumDocument();
 
-    Inkscape::DocumentUndo::done(doc, _("Clean up document"), INKSCAPE_ICON("document-cleanup"));
+    Inkscape::DocumentUndo::done(doc, RC_("Undo", "Clean up document"), INKSCAPE_ICON("document-cleanup"));
 
     // Show status messages when in GUI mode
     if (diff > 0) {

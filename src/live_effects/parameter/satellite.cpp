@@ -158,7 +158,7 @@ void SatelliteParam::link(Glib::ustring itemid)
     } else {
         param_write_to_repr("");
     }
-    param_effect->makeUndoDone(_("Link item parameter to path"));
+    param_effect->makeUndoDone(RC_("Undo", "Link item parameter to path"));
 }
 
 // SIGNALS

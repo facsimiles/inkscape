@@ -111,7 +111,7 @@ public:
     SPShape * getCurrentShape() const { return current_shape; };
     void setCurrentShape(SPShape * shape) { current_shape = shape; }
     virtual void processObjects(LPEAction lpe_action);
-    void makeUndoDone(Glib::ustring message);
+    void makeUndoDone(Inkscape::Util::Internal::ContextString message);
     /*
      * isReady() indicates whether all preparations which are necessary to apply the LPE are done,
      * e.g., waiting for a parameter path either before the effect is created or when it needs a

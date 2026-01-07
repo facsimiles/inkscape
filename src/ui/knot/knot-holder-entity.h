@@ -24,6 +24,7 @@
 #include "display/control/canvas-item-quad.h"
 #include "display/control/canvas-item-curve.h"
 #include "display/control/canvas-item-ptr.h"
+#include "util-string/context-string.h"
 
 class SPHatch;
 class SPItem;
@@ -88,7 +89,7 @@ public:
 
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, unsigned state) override {
         if (_effect) {
-            _effect->makeUndoDone(_("Move handle"));
+            _effect->makeUndoDone(RC_("Undo", "Move handle"));
         }
     }
 

@@ -42,10 +42,10 @@ class Registry;
 template <class W>
 class RegisteredWidget : public W {
 public:
-    void set_undo_parameters(Glib::ustring _event_description, Glib::ustring _icon_name, std::string undo_id = "")
+    void set_undo_parameters(Inkscape::Util::Internal::ContextString _event_description, Glib::ustring _icon_name, std::string undo_id = "")
     {
         icon_name = std::move(_icon_name);
-        event_description = std::move(_event_description);
+        event_description = _event_description;
         _undo_id = undo_id;
         write_undo = true;
     }
@@ -114,7 +114,7 @@ protected:
     Glib::ustring _key;
     Inkscape::XML::Node * repr = nullptr;
     SPDocument * doc = nullptr;
-    Glib::ustring event_description;
+    Inkscape::Util::Internal::ContextString event_description{""};
     Glib::ustring icon_name; // Used by History dialog.
     bool write_undo = false;
     std::string _undo_id;

@@ -34,7 +34,7 @@ select_object_group(InkscapeApplication* app)
 {
     Inkscape::Selection *selection = app->get_active_selection();
     selection->group();
-    Inkscape::DocumentUndo::done(selection->document(), C_("Verb", "Group"), INKSCAPE_ICON("object-group"));
+    Inkscape::DocumentUndo::done(selection->document(), RC_("Undo", "Group"), INKSCAPE_ICON("object-group"));
 }
 
 void
@@ -43,7 +43,7 @@ select_object_ungroup(InkscapeApplication* app)
     Inkscape::Selection *selection = app->get_active_selection();
 
     selection->ungroup();
-    Inkscape::DocumentUndo::done(selection->document(), _("Ungroup"), INKSCAPE_ICON("object-ungroup"));
+    Inkscape::DocumentUndo::done(selection->document(), RC_("Undo", "Ungroup"), INKSCAPE_ICON("object-ungroup"));
 }
 
 void
@@ -66,7 +66,7 @@ select_object_link(InkscapeApplication* app)
 
     // Open dialog to set link.
     selection->desktop()->getContainer()->new_dialog("ObjectProperties");
-    Inkscape::DocumentUndo::done(selection->document(), _("Anchor"), INKSCAPE_ICON("object-group"));
+    Inkscape::DocumentUndo::done(selection->document(), RC_("Undo", "Anchor"), INKSCAPE_ICON("object-group"));
 }
 
 void
@@ -138,7 +138,7 @@ page_fit_to_selection(InkscapeApplication *app)
     }
 
     document->getPageManager().fitToSelection(selection);
-    Inkscape::DocumentUndo::done(document, _("Resize page to fit"), INKSCAPE_ICON("tool-pages"));
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "Resize page to fit"), INKSCAPE_ICON("tool-pages"));
 }
 
 const Glib::ustring SECTION_SELECT = NC_("Action Section", "Select");

@@ -121,7 +121,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         }
     }
 
-    DocumentUndo::maybeDone(document, _blur_tag.c_str(), _("Change blur/blend filter"), _icon_name);
+    DocumentUndo::maybeDone(document, _blur_tag.c_str(), RC_("Undo", "Change blur/blend filter"), _icon_name);
 
     _blocked = false;
 }
@@ -152,7 +152,7 @@ ObjectCompositeSettings::_opacityValueChanged()
 
     sp_repr_css_attr_unref (css);
 
-    DocumentUndo::maybeDone(desktop->getDocument(), _opacity_tag.c_str(), _("Change opacity"), _icon_name);
+    DocumentUndo::maybeDone(desktop->getDocument(), _opacity_tag.c_str(), RC_("Undo", "Change opacity"), _icon_name);
 
     _blocked = false;
 }
@@ -182,7 +182,7 @@ void ObjectCompositeSettings::_isolationValueChanged()
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 
-    DocumentUndo::maybeDone(desktop->getDocument(), _isolation_tag.c_str(), _("Change isolation"), _icon_name);
+    DocumentUndo::maybeDone(desktop->getDocument(), _isolation_tag.c_str(), RC_("Undo", "Change isolation"), _icon_name);
 
     _blocked = false;
 }

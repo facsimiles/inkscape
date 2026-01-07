@@ -133,7 +133,7 @@ ToggleButtonParam::param_newWidget()
    checkwdg->set_child(*box_button);
    checkwdg->setActive(value);
    checkwdg->setProgrammatically = false;
-   checkwdg->set_undo_parameters(_("Change togglebutton parameter"), INKSCAPE_ICON("dialog-path-effects"));
+   checkwdg->set_undo_parameters(RC_("Undo", "Change togglebutton parameter"), INKSCAPE_ICON("dialog-path-effects"));
 
    _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
    return checkwdg;

@@ -752,7 +752,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done( selection->desktop()->getDocument(), _("Move"), INKSCAPE_ICON("dialog-transform"));
+    DocumentUndo::done( selection->desktop()->getDocument(), RC_("Undo", "Move"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageScale(Inkscape::Selection *selection)
@@ -813,7 +813,7 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), _("Scale"), INKSCAPE_ICON("dialog-transform"));
+    DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Scale"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageRotate(Inkscape::Selection *selection)
@@ -837,7 +837,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), _("Rotate"), INKSCAPE_ICON("dialog-transform"));
+    DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Rotate"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageSkew(Inkscape::Selection *selection)
@@ -931,7 +931,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), _("Skew"), INKSCAPE_ICON("dialog-transform"));
+    DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Skew"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageTransform(Inkscape::Selection *selection, bool duplicate_first)
@@ -956,7 +956,7 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection, bool dup
         selection->applyAffine(displayed); // post-multiply each object's transform
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), _("Edit transformation matrix"), INKSCAPE_ICON("dialog-transform"));
+    DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Edit transformation matrix"), INKSCAPE_ICON("dialog-transform"));
 }
 
 /*########################################################################

@@ -58,7 +58,7 @@ TextpathPopover::TextpathPopover(SPText *text, SPTextPath *textpath, SPDesktop *
         textpath->setStartOffset(offset_str.c_str());
         text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         text->updateRepr();
-        DocumentUndo::maybeDone(_desktop->getDocument(), "textpath:startOffset", _("Update textpath startOffset"), "");
+        DocumentUndo::maybeDone(_desktop->getDocument(), "textpath:startOffset", RC_("Undo", "Update textpath startOffset"), "");
     });
 
     // Setup the flip buttons.
@@ -75,7 +75,7 @@ void TextpathPopover::side_btn_clicked(TextPathSide const side) const
     if (side != _textpath->side) {
         _textpath->setSide(side);
         auto const icon = _textpath->side ? "text-path-right" : "text-path-left";
-        DocumentUndo::done(_desktop->getDocument(), _("Change textpath side"), INKSCAPE_ICON(icon));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Change textpath side"), INKSCAPE_ICON(icon));
         auto old_val = _start_offset_sb.get_value();
 
         if (auto const path_item = dynamic_cast<SPShape *>(sp_textpath_get_path_item(_textpath))) {

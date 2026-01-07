@@ -324,24 +324,24 @@ void ColorItem::on_click(bool stroke)
     auto attr_name = stroke ? "stroke" : "fill";
     auto css = std::unique_ptr<SPCSSAttr, void(*)(SPCSSAttr*)>(sp_repr_css_attr_new(), [] (auto p) {sp_repr_css_attr_unref(p);});
 
-    Glib::ustring descr;
+    std::optional<Inkscape::Util::Internal::ContextString> description;
     if (is_paint_none()) {
         sp_repr_css_set_property(css.get(), attr_name, "none");
-        descr = stroke ? _("Set stroke color to none") : _("Set fill color to none");
+        description = stroke ? RC_("Undo", "Set stroke color to none") : RC_("Undo", "Set fill color to none");
     } else if (auto const color = std::get_if<Colors::Color>(&data)) {
         sp_repr_css_set_property_string(css.get(), attr_name, color->toString());
-        descr = stroke ? _("Set stroke color from swatch") : _("Set fill color from swatch");
+        description = stroke ? RC_("Undo", "Set stroke color from swatch") : RC_("Undo", "Set fill color from swatch");
     } else if (auto const graddata = std::get_if<GradientData>(&data)) {
         auto grad = graddata->gradient;
         if (!grad) return;
         auto colorspec = "url(#" + Glib::ustring(grad->getId()) + ")";
         sp_repr_css_set_property(css.get(), attr_name, colorspec.c_str());
-        descr = stroke ? _("Set stroke color from swatch") : _("Set fill color from swatch");
+        description = stroke ? RC_("Undo", "Set stroke color from swatch") : RC_("Undo", "Set fill color from swatch");
     }
 
     sp_desktop_set_style(desktop, css.get());
 
-    DocumentUndo::done(desktop->getDocument(), descr.c_str(), INKSCAPE_ICON("swatches"));
+    DocumentUndo::done(desktop->getDocument(), *description, INKSCAPE_ICON("swatches"));
 }
 
 void ColorItem::on_rightclick()
@@ -426,7 +426,7 @@ void ColorItem::action_delete()
     if (!grad) return;
 
     grad->setSwatch(false);
-    DocumentUndo::done(grad->document, _("Delete swatch"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(grad->document, RC_("Undo", "Delete swatch"), INKSCAPE_ICON("color-gradient"));
 }
 
 void ColorItem::action_edit()
@@ -462,7 +462,7 @@ void ColorItem::action_toggle_pin()
         if (!grad) return;
 
         grad->setPinned(!is_pinned());
-        DocumentUndo::done(grad->document, is_pinned() ? _("Pin swatch") : _("Unpin swatch"), INKSCAPE_ICON("color-gradient"));
+        DocumentUndo::done(grad->document, is_pinned() ? RC_("Undo", "Pin swatch") : RC_("Undo", "Unpin swatch"), INKSCAPE_ICON("color-gradient"));
     } else {
         Inkscape::Preferences::get()->setBool(pinned_pref, !is_pinned());
     }
@@ -481,7 +481,7 @@ void ColorItem::action_convert(Glib::ustring const &name)
 
     auto const grad = static_cast<SPGradient *>(*it);
     grad->setSwatch();
-    DocumentUndo::done(doc, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
+    DocumentUndo::done(doc, RC_("Undo", "Add gradient stop"), INKSCAPE_ICON("color-gradient"));
 }
 
 Glib::RefPtr<Gdk::ContentProvider> ColorItem::on_drag_prepare()

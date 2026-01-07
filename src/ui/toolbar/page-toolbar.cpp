@@ -157,7 +157,7 @@ PageToolbar::PageToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 
         _entry_page_sizes->signal_icon_press().connect([this] (Gtk::Entry::IconPosition) {
             _document->getPageManager().changeOrientation();
-            DocumentUndo::maybeDone(_document, "page-resize", _("Resize Page"), INKSCAPE_ICON("tool-pages"));
+            DocumentUndo::maybeDone(_document, "page-resize", RC_("Undo", "Resize Page"), INKSCAPE_ICON("tool-pages"));
             setSizeText();
         });
         _entry_page_sizes->set_icon_tooltip_text(_("Change page orientation"), Gtk::Entry::IconPosition::SECONDARY);
@@ -246,7 +246,7 @@ void PageToolbar::labelEdited()
     auto text = _text_page_label.get_text();
     if (auto page = _document->getPageManager().getSelected()) {
         page->setLabel(text.empty() ? nullptr : text.c_str());
-        DocumentUndo::maybeDone(_document, "page-relabel", _("Relabel Page"), INKSCAPE_ICON("tool-pages"));
+        DocumentUndo::maybeDone(_document, "page-relabel", RC_("Undo", "Relabel Page"), INKSCAPE_ICON("tool-pages"));
     }
 }
 
@@ -260,7 +260,7 @@ void PageToolbar::bleedsEdited()
 
     if (auto page = pm.getSelected()) {
         page->setBleed(text);
-        DocumentUndo::maybeDone(_document, "page-bleed", _("Edit page bleed"), INKSCAPE_ICON("tool-pages"));
+        DocumentUndo::maybeDone(_document, "page-bleed", RC_("Undo", "Edit page bleed"), INKSCAPE_ICON("tool-pages"));
         _text_page_bleeds.set_text(page->getBleedLabel());
     }
 }
@@ -275,7 +275,7 @@ void PageToolbar::marginsEdited()
 
     if (auto page = pm.getSelected()) {
         page->setMargin(text);
-        DocumentUndo::maybeDone(_document, "page-margin", _("Edit page margin"), INKSCAPE_ICON("tool-pages"));
+        DocumentUndo::maybeDone(_document, "page-margin", RC_("Undo", "Edit page margin"), INKSCAPE_ICON("tool-pages"));
         setMarginText(page);
     }
 }
@@ -293,7 +293,7 @@ void PageToolbar::marginSideEdited(BoxSide side, UI::Widget::SpinButton const &e
 
     if (auto page = pm.getSelected()) {
         page->setMarginSide(side, entry.get_text(), false);
-        DocumentUndo::maybeDone(_document, "page-margin", _("Edit page margin"), INKSCAPE_ICON("tool-pages"));
+        DocumentUndo::maybeDone(_document, "page-margin", RC_("Undo", "Edit page margin"), INKSCAPE_ICON("tool-pages"));
         setMarginText(page);
     }
 }
@@ -316,7 +316,7 @@ void PageToolbar::sizeChoose(const std::string &preset_key)
         }
 
         setSizeText();
-        DocumentUndo::maybeDone(_document, "page-resize", _("Resize Page"), INKSCAPE_ICON("tool-pages"));
+        DocumentUndo::maybeDone(_document, "page-resize", RC_("Undo", "Resize Page"), INKSCAPE_ICON("tool-pages"));
     } else {
         // Page not found, i.e., "Custom" was selected or user is typing in.
         _entry_page_sizes->grab_focus();
@@ -386,7 +386,7 @@ void PageToolbar::sizeChanged()
         double height = _unit_to_size(match.fetch(4), height_unit, width_unit);
         if (width > 0 && height > 0) {
             _document->getPageManager().resizePage(width, height);
-            DocumentUndo::done(_document, _("Set page size"), INKSCAPE_ICON("tool-pages"));
+            DocumentUndo::done(_document, RC_("Undo", "Set page size"), INKSCAPE_ICON("tool-pages"));
         }
     }
     setSizeText();

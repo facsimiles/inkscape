@@ -167,7 +167,7 @@ text_put_on_path()
     text->removeAttribute("x");
     text->removeAttribute("y");
 
-    DocumentUndo::done(desktop->getDocument(), _("Put text on path"), INKSCAPE_ICON("draw-text"));
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Put text on path"), INKSCAPE_ICON("draw-text"));
 }
 
 void
@@ -197,7 +197,7 @@ text_remove_from_path()
     if (!did) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
-        DocumentUndo::done(desktop->getDocument(), _("Remove text from path"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Remove text from path"), INKSCAPE_ICON("draw-text"));
     }
 }
 
@@ -257,7 +257,7 @@ text_remove_all_kerns()
     if (!did) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
     } else {
-        DocumentUndo::done(desktop->getDocument(), _("Remove manual kerns"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Remove manual kerns"), INKSCAPE_ICON("draw-text"));
     }
 }
 
@@ -287,7 +287,7 @@ text_flow_shape_subtract()
         text->style->shape_subtract.read(shapes.c_str());
         text->updateRepr();
 
-        DocumentUndo::done(doc, _("Flow text subtract shape"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(doc, RC_("Undo", "Flow text subtract shape"), INKSCAPE_ICON("draw-text"));
     } else {
         // SVG 1.2 Flowed Text
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Subtraction not available for SVG 1.2 Flowed text."));
@@ -344,7 +344,7 @@ text_flow_into_shape()
             text->style->white_space.read("pre-wrap"); // Respect new lines.
             text->updateRepr();
 
-            DocumentUndo::done(doc, _("Flow text into shape"), INKSCAPE_ICON("draw-text"));
+            DocumentUndo::done(doc, RC_("Undo", "Flow text into shape"), INKSCAPE_ICON("draw-text"));
         }
     } else {
         if (is<SPText>(text) || is<SPFlowtext>(text)) {
@@ -411,7 +411,7 @@ text_flow_into_shape()
 
         text->deleteObject(true);
 
-        DocumentUndo::done(doc, _("Flow text into shape"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(doc, RC_("Undo", "Flow text into shape"), INKSCAPE_ICON("draw-text"));
 
         desktop->getSelection()->set(cast<SPItem>(root_object));
 
@@ -552,7 +552,7 @@ text_unflow ()
         }
     }
 
-    DocumentUndo::done(doc, _("Unflow flowed text"), INKSCAPE_ICON("draw-text"));
+    DocumentUndo::done(doc, RC_("Undo", "Unflow flowed text"), INKSCAPE_ICON("draw-text"));
 }
 
 void
@@ -675,7 +675,7 @@ text_to_glyphs()
             desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>text(s)</b> to convert to glyphs."));
         }
     } else {
-        DocumentUndo::done(doc, _("Convert text to glyphs"), INKSCAPE_ICON("text-convert-to-regular"));
+        DocumentUndo::done(doc, RC_("Undo", "Convert text to glyphs"), INKSCAPE_ICON("text-convert-to-regular"));
         selection->setList(results);
     }
 }
@@ -728,7 +728,7 @@ flowtext_to_text()
     }
 
     if (did) {
-        DocumentUndo::done(desktop->getDocument(), _("Convert flowed text to text"), INKSCAPE_ICON("text-convert-to-regular"));
+        DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Convert flowed text to text"), INKSCAPE_ICON("text-convert-to-regular"));
         selection->setReprList(reprs);
     } else if (ignored) {
         // no message for (did && ignored) because it is immediately overwritten

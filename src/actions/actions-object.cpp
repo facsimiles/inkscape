@@ -153,7 +153,7 @@ object_remove_attribute(Glib::VariantBase const &value, InkscapeApplication *app
         Inkscape::XML::Node *repr = obj->getRepr();
         repr->removeAttribute(attribute);
     }
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Action remove attribute from objects"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Action remove attribute from objects"), "");
 }
 
 void 
@@ -173,7 +173,7 @@ object_remove_property(Glib::VariantBase const &value, InkscapeApplication *app)
         sp_repr_css_set(repr, css, "style");
         sp_repr_css_attr_unref(css);
     }
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Action remove property from objects"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Action remove property from objects"), "");
 }
 
 // No sanity checking is done... should probably add.
@@ -201,8 +201,8 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
         repr->setAttribute(attribute, new_value);
     }
 
-    // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttribute", "");
+    // TODO: Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), Inkscape::Util::Internal::ContextString("ActionObjectSetAttribute"), "");
 }
 
 
@@ -234,7 +234,7 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), Inkscape::Util::Internal::ContextString("ActionObjectSetProperty"), "");
 }
 
 
@@ -263,7 +263,7 @@ object_clip_set(InkscapeApplication *app)
 
     // Object Clip Set
     selection->setMask(true, false, should_remove_original());
-    Inkscape::DocumentUndo::done(selection->document(), _("Set clipping path"), "");
+    Inkscape::DocumentUndo::done(selection->document(), RC_("Undo", "Set clipping path"), "");
 }
 
 void
@@ -274,7 +274,7 @@ object_clip_set_inverse(InkscapeApplication *app)
     // Object Clip Set Inverse
     selection->setMask(true, false, should_remove_original());
     Inkscape::LivePathEffect::sp_inverse_powerclip(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Set Inverse Clip(LPE)"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Set Inverse Clip(LPE)"), "");
 }
 
 void
@@ -285,7 +285,7 @@ object_clip_release(InkscapeApplication *app)
     // Object Clip Release
     Inkscape::LivePathEffect::sp_remove_powerclip(app->get_active_selection());
     selection->unsetMask(true, true, should_remove_original());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release clipping path"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Release clipping path"), "");
 }
 
 void
@@ -303,7 +303,7 @@ object_mask_set(InkscapeApplication *app)
 
     // Object Mask Set
     selection->setMask(false, false, should_remove_original());
-    Inkscape::DocumentUndo::done(selection->document(), _("Set mask"), "");
+    Inkscape::DocumentUndo::done(selection->document(), RC_("Undo", "Set mask"), "");
 }
 
 void
@@ -314,7 +314,7 @@ object_mask_set_inverse(InkscapeApplication *app)
     // Object Mask Set Inverse
     selection->setMask(false, false, should_remove_original());
     Inkscape::LivePathEffect::sp_inverse_powermask(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Set Inverse Mask (LPE)"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Set Inverse Mask (LPE)"), "");
 }
 
 void
@@ -325,7 +325,7 @@ object_mask_release(InkscapeApplication *app)
     // Object Mask Release
     Inkscape::LivePathEffect::sp_remove_powermask(app->get_active_selection());
     selection->unsetMask(false, true, should_remove_original());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release mask"), "");
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Release mask"), "");
 }
 
 void
@@ -368,7 +368,7 @@ object_flip_horizontal(InkscapeApplication *app)
 
     // Object Flip Horizontal
     selection->scaleRelative(center, Geom::Scale(-1.0, 1.0));
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
 }
 
 void
@@ -391,7 +391,7 @@ object_flip_vertical(InkscapeApplication *app)
 
     // Object Flip Vertical
     selection->scaleRelative(center, Geom::Scale(1.0, -1.0));
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
+    Inkscape::DocumentUndo::done(app->get_active_document(), RC_("Undo", "Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
 }
 
 
@@ -419,10 +419,10 @@ object_add_corners_lpe(InkscapeApplication *app) {
         if (auto lpeitem = cast<SPLPEItem>(i)) {
             if (auto lpe = lpeitem->getFirstPathEffectOfType(Inkscape::LivePathEffect::FILLET_CHAMFER)) {
                 lpeitem->removePathEffect(lpe, false);
-                Inkscape::DocumentUndo::done(document, _("Remove Live Path Effect"), INKSCAPE_ICON("dialog-path-effects"));
+                Inkscape::DocumentUndo::done(document, RC_("Undo", "Remove Live Path Effect"), INKSCAPE_ICON("dialog-path-effects"));
             } else {
                 Inkscape::LivePathEffect::Effect::createAndApply("fillet_chamfer", document, lpeitem);
-                Inkscape::DocumentUndo::done(document, _("Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
+                Inkscape::DocumentUndo::done(document, RC_("Undo", "Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
             }
             if (auto lpe = lpeitem->getCurrentLPE()) {
                 lpe->refresh_widgets = true;

@@ -174,7 +174,7 @@ void ConnectorToolbar::orthogonal_toggled()
     if (!modified) {
         Preferences::get()->setBool("/tools/connector/orthogonal", is_orthog);
     } else {
-        DocumentUndo::done(doc, is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"), INKSCAPE_ICON("draw-connector"));
+        DocumentUndo::done(doc, is_orthog ? RC_("Undo", "Set connector type: orthogonal"): RC_("Undo", "Set connector type: polyline"), INKSCAPE_ICON("draw-connector"));
     }
 }
 
@@ -210,7 +210,7 @@ void ConnectorToolbar::curvature_changed()
     if (!modified) {
         Preferences::get()->setDouble(Glib::ustring("/tools/connector/curvature"), newValue);
     } else {
-        DocumentUndo::done(doc, _("Change connector curvature"), INKSCAPE_ICON("draw-connector"));
+        DocumentUndo::done(doc, RC_("Undo", "Change connector curvature"), INKSCAPE_ICON("draw-connector"));
     }
 }
 
@@ -251,7 +251,7 @@ void ConnectorToolbar::spacing_changed()
     }
 
     if (modified) {
-        DocumentUndo::done(doc, _("Change connector spacing"), INKSCAPE_ICON("draw-connector"));
+        DocumentUndo::done(doc, RC_("Undo", "Change connector spacing"), INKSCAPE_ICON("draw-connector"));
     }
 }
 
@@ -269,7 +269,7 @@ void ConnectorToolbar::graph_layout()
 
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    DocumentUndo::done(_desktop->getDocument(), _("Arrange connector network"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Arrange connector network"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 void ConnectorToolbar::length_changed()

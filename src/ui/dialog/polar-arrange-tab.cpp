@@ -370,7 +370,7 @@ void PolarArrangeTab::arrange()
         }
     }
 
-    DocumentUndo::done(parent->getDesktop()->getDocument(), _("Arrange on ellipse"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    DocumentUndo::done(parent->getDesktop()->getDocument(), RC_("Undo", "Arrange on ellipse"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 void PolarArrangeTab::updateSelection()

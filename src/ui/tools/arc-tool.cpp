@@ -388,7 +388,7 @@ void ArcTool::finishItem()
         sp_lpe_item_update_patheffect(this->arc.get(), true, true);
         _desktop->getSelection()->set(arc.get());
 
-        DocumentUndo::done(_desktop->getDocument(), _("Create ellipse"), INKSCAPE_ICON("draw-ellipse"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create ellipse"), INKSCAPE_ICON("draw-ellipse"));
 
         this->arc = nullptr;
     }

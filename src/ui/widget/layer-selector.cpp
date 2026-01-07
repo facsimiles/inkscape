@@ -205,7 +205,7 @@ void LayerSelector::_lockLayer()
     bool lock = _lock_toggle.get_active();
     if (auto layer = _desktop->layerManager().currentLayer()) {
         layer->setLocked(lock);
-        DocumentUndo::done(_desktop->getDocument(), lock ? _("Lock layer") : _("Unlock layer"), "");
+        DocumentUndo::done(_desktop->getDocument(), lock ? RC_("Undo", "Lock layer") : RC_("Undo", "Unlock layer"), "");
     }
 }
 
@@ -214,7 +214,7 @@ void LayerSelector::_hideLayer()
     bool hide = _eye_toggle.get_active();
     if (auto layer = _desktop->layerManager().currentLayer()) {
         layer->setHidden(hide);
-        DocumentUndo::done(_desktop->getDocument(), hide ? _("Hide layer") : _("Unhide layer"), "");
+        DocumentUndo::done(_desktop->getDocument(), hide ? RC_("Undo", "Hide layer") : RC_("Undo", "Unhide layer"), "");
     }
 }
 

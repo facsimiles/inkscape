@@ -371,7 +371,7 @@ bool Handle::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &ev
                         _parent->_pm().update();
 
                         // update undo history
-                        _parent->_pm()._commit(_("Change node type"));
+                        _parent->_pm()._commit(RC_("Undo", "Change node type"));
 
                         ret = true;
                     }
@@ -394,7 +394,7 @@ bool Handle::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &ev
                         _parent->_pm().update();
 
                         // update undo history
-                        _parent->_pm()._commit(_("Change node type"));
+                        _parent->_pm()._commit(RC_("Undo", "Change node type"));
 
                         ret = true;
                     }

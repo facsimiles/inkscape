@@ -353,7 +353,7 @@ bool fixBrokenLinks(SPDocument *doc)
             }
         }
         if ( changed ) {
-            DocumentUndo::done( doc, _("Fixup broken links"), INKSCAPE_ICON("dialog-xml-editor"));
+            DocumentUndo::done( doc, RC_("Undo", "Fixup broken links"), INKSCAPE_ICON("dialog-xml-editor"));
         }
     }
 

@@ -27,7 +27,7 @@
 void page_new(SPDocument *document)
 {
     document->getPageManager().selectPage(document->getPageManager().newPage());
-    Inkscape::DocumentUndo::done(document, "New Automatic Page", INKSCAPE_ICON("tool-pages"));
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "New Automatic Page"), INKSCAPE_ICON("tool-pages"));
 }
 
 void page_new_and_center(InkscapeWindow *window)
@@ -44,7 +44,7 @@ void page_delete(SPDocument *document)
 {
     // Delete page's content if move_objects is checked.
     document->getPageManager().deletePage(document->getPageManager().move_objects());
-    Inkscape::DocumentUndo::done(document, "Delete Page", INKSCAPE_ICON("tool-pages"));
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "Delete Page"), INKSCAPE_ICON("tool-pages"));
 }
 
 void page_delete_and_center(InkscapeWindow *window)
@@ -62,7 +62,7 @@ void page_backward(SPDocument *document)
     auto &page_manager = document->getPageManager();
     if (auto page = page_manager.getSelected()) {
         if (page->setPageIndex(page->getPageIndex() - 1, page_manager.move_objects())) {
-            Inkscape::DocumentUndo::done(document, "Shift Page Backwards", INKSCAPE_ICON("tool-pages"));
+            Inkscape::DocumentUndo::done(document, RC_("Undo", "Shift Page Backwards"), INKSCAPE_ICON("tool-pages"));
         }
     }
 }
@@ -72,7 +72,7 @@ void page_forward(SPDocument *document)
     auto &page_manager = document->getPageManager();
     if (auto page = page_manager.getSelected()) {
         if (page->setPageIndex(page->getPageIndex() + 1, page_manager.move_objects())) {
-            Inkscape::DocumentUndo::done(document, "Shift Page Forewards", INKSCAPE_ICON("tool-pages"));
+            Inkscape::DocumentUndo::done(document, RC_("Undo", "Shift Page Forwards"), INKSCAPE_ICON("tool-pages"));
         }
     }
 }

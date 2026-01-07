@@ -171,7 +171,7 @@ void SpiralToolbar::_valueChanged(Glib::RefPtr<Gtk::Adjustment> &adj, Glib::ustr
     }
 
     if (modified) {
-        DocumentUndo::done(_desktop->getDocument(), _("Change spiral"), INKSCAPE_ICON("draw-spiral"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Change spiral"), INKSCAPE_ICON("draw-spiral"));
     }
 }
 

@@ -153,14 +153,14 @@ void
 LPESlice::centerVert(){
     center_vert = true;
     sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-    makeUndoDone(_("Center Vertical"));
+    makeUndoDone(RC_("Undo", "Center Vertical"));
 }
 
 void
 LPESlice::centerHoriz(){
     center_horiz = true;
     sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-    makeUndoDone(_("Center Horizontal"));
+    makeUndoDone(RC_("Undo", "Center Horizontal"));
 }
 
 bool sp_has_path_data(SPItem *item, bool originald) 

@@ -173,7 +173,7 @@ void SatelliteArrayParam::on_active_toggled(const Glib::ustring &item)
             }
         }
     }
-    param_effect->makeUndoDone(_("Active switched"));
+    param_effect->makeUndoDone(RC_("Undo", "Active switched"));
 }
 
 bool SatelliteArrayParam::param_readSVGValue(char const * const strvalue)
@@ -233,7 +233,7 @@ bool SatelliteArrayParam::_selectIndex(const Gtk::TreeModel::iterator &iter, int
     return false;
 }
 
-void SatelliteArrayParam::move_up_down(int const delta, Glib::ustring const &word)
+void SatelliteArrayParam::move_up_down(int const delta, bool is_up)
 {
     auto const iter_selected = _tree->get_selection()->get_selected();
     if (!iter_selected) return;
@@ -251,21 +251,18 @@ void SatelliteArrayParam::move_up_down(int const delta, Glib::ustring const &wor
         }
     }
 
-    // TRANSLATORS: %1 is the translated version of "up" or "down".
-    param_effect->makeUndoDone(Glib::ustring::compose(_("Move item %1"), word));
+    param_effect->makeUndoDone(is_up ? RC_("Undo", "Move item up") : RC_("Undo", "Move item down"));
     _store->foreach_iter(sigc::bind(sigc::mem_fun(*this, &SatelliteArrayParam::_selectIndex), &i));
 }
 
 void SatelliteArrayParam::on_up_button_click()
 {
-    // TRANSLATORS: This belongs into the sentence 'Move item up'
-    move_up_down(-1, _("up"));
+    move_up_down(-1, true);
 }
 
 void SatelliteArrayParam::on_down_button_click()
 {
-    // TRANSLATORS: This belongs into the sentence 'Move item down'
-    move_up_down(+1, _("down"));
+    move_up_down(+1, false);
 }
 
 void SatelliteArrayParam::on_remove_button_click()
@@ -274,7 +271,7 @@ void SatelliteArrayParam::on_remove_button_click()
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         unlink(param_effect->getSPDoc()->getObjectById((const Glib::ustring&)(row[_model->_colObject])));
-        param_effect->makeUndoDone(_("Remove item"));
+        param_effect->makeUndoDone(RC_("Undo", "Remove item"));
     }
 }
 
@@ -325,7 +322,7 @@ void SatelliteArrayParam::on_link_button_click()
             }
         }
     }
-    param_effect->makeUndoDone(_("Link itemarray parameter to item"));
+    param_effect->makeUndoDone(RC_("Undo", "Link itemarray parameter to item"));
 }
 
 Gtk::Widget *SatelliteArrayParam::param_newWidget()

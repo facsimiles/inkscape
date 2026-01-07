@@ -323,7 +323,7 @@ LivePathEffectEditor::toggleVisible(Inkscape::LivePathEffect::Effect *lpe , Gtk:
     lpe->doOnVisibilityToggled(current_lpeitem);
 
     DocumentUndo::done(getDocument(),
-                       !visible ? _("Deactivate path effect") :  _("Activate path effect"),
+                       !visible ? RC_("Undo", "Deactivate path effect") :  RC_("Undo", "Activate path effect"),
                        INKSCAPE_ICON("dialog-path-effects"));
 }
 
@@ -487,7 +487,7 @@ void LivePathEffectEditor::onAdd(LivePathEffect::EffectType etype)
         if (key == "clone_original") {
             current_lpeitem->getCurrentLPE()->refresh_widgets = true;
             selection_changed_lock = false;
-            DocumentUndo::done(getDocument(), _("Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
+            DocumentUndo::done(getDocument(), RC_("Undo", "Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
             return;
         }
     }
@@ -495,7 +495,7 @@ void LivePathEffectEditor::onAdd(LivePathEffect::EffectType etype)
     if (current_lpeitem) {
         LivePathEffect::Effect::createAndApply(key.c_str(), getDocument(), current_lpeitem);
         current_lpeitem->getCurrentLPE()->refresh_widgets = true;
-        DocumentUndo::done(getDocument(), _("Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
+        DocumentUndo::done(getDocument(), RC_("Undo", "Create and apply path effect"), INKSCAPE_ICON("dialog-path-effects"));
     }
 }
 
@@ -1005,7 +1005,7 @@ LivePathEffectEditor::lpeFlatten(PathEffectSharedPtr const &lperef)
     if (selection && selection->isEmpty() ) {
         selection->add(current_lpeitem);
     }
-    DocumentUndo::done(getDocument(), _("Flatten path effect(s)"), INKSCAPE_ICON("dialog-path-effects"));
+    DocumentUndo::done(getDocument(), RC_("Undo", "Flatten path effect(s)"), INKSCAPE_ICON("dialog-path-effects"));
     return false;
 }
 
@@ -1027,7 +1027,7 @@ LivePathEffectEditor::removeEffect(Gtk::Expander * expander) {
         }
         effect_list_reload(current_lpeitem);
     }
-    DocumentUndo::done(getDocument(), _("Remove path effect"), INKSCAPE_ICON("dialog-path-effects"));
+    DocumentUndo::done(getDocument(), RC_("Undo", "Remove path effect"), INKSCAPE_ICON("dialog-path-effects"));
 }
 
 /*
@@ -1127,11 +1127,11 @@ void LivePathEffectEditor::add_item_actions(PathEffectSharedPtr const &lperef,
     auto const has_fav = sp_has_fav(untranslated_label);
     auto group = Gio::SimpleActionGroup::create();
     add_action(group, "duplicate" ,  true    , *this , &Self::do_item_action_undoable, lperef,
-               &SPLPEItem::duplicateCurrentPathEffect, _("Duplicate path effect")            );
+               &SPLPEItem::duplicateCurrentPathEffect, RC_("Undo", "Duplicate path effect")  );
     add_action(group, "move-up"   , !is_first, *this , &Self::do_item_action_undoable, lperef,
-               &SPLPEItem::upCurrentPathEffect       , _("Move path effect up")              );
+               &SPLPEItem::upCurrentPathEffect       , RC_("Undo", "Move path effect up")    );
     add_action(group, "move-down" , !is_last , *this , &Self::do_item_action_undoable, lperef,
-               &SPLPEItem::downCurrentPathEffect     , _("Move path effect down")            );
+               &SPLPEItem::downCurrentPathEffect     , RC_("Undo", "Move path effect down")  );
     add_action(group, "flatten"   ,  true    , *this , &Self::lpeFlatten             , lperef);
     add_action(group, "set-def"   , !has_defs, *this , &Self::do_item_action_defaults, lperef,
                &LivePathEffect::Effect::setDefaultParameters                                 );
@@ -1165,7 +1165,7 @@ void LivePathEffectEditor::enable_fav_actions(Gtk::Widget &item, bool const has_
 
 void LivePathEffectEditor::do_item_action_undoable(PathEffectSharedPtr const &lperef,
                                                    void (SPLPEItem::* const method)(),
-                                                   Glib::ustring const &description)
+                                                   Inkscape::Util::Internal::ContextString description)
 {
     current_lpeitem->setCurrentPathEffect(lperef);
     (current_lpeitem->*method)();

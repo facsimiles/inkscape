@@ -1026,7 +1026,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> const &store,
         iter->style->readFromObject(iter);
         iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
-    DocumentUndo::done(SP_ACTIVE_DOCUMENT, _("Edited style element."), "");
+    DocumentUndo::done(SP_ACTIVE_DOCUMENT, RC_("Undo", "Edited style element."), "");
 
     g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }

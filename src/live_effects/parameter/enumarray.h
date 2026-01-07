@@ -28,14 +28,14 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 E default_value,
-                bool visible = true, 
+                bool visible = true,
                 size_t n = 0,
                 bool sort = true)
-    : ArrayParam<Glib::ustring>(label, tip, key, wr, effect, n) 
+    : ArrayParam<Glib::ustring>(label, tip, key, wr, effect, n)
     , defvalue(default_value)
     {
         enumdataconv = &c;
-        
+
         sorted = sort;
         widget_is_visible = visible;
     }
@@ -50,7 +50,7 @@ public:
             regenum->set_active_by_id(enumdataconv->get_id_from_key(_vector[_active_index]));
             regenum->combobox()->setProgrammatically = true;
             regenum->combobox()->signal_changed().connect(sigc::bind(sigc::mem_fun (*this, &EnumArrayParam::_on_change_combo),regenum));
-            regenum->set_undo_parameters(_("Change enumeration parameter"), INKSCAPE_ICON("dialog-path-effects"));
+            regenum->set_undo_parameters(RC_("Undo", "Change enumeration parameter"), INKSCAPE_ICON("dialog-path-effects"));
             regenum->combobox()->setProgrammatically = true;
             return regenum;
         } else {

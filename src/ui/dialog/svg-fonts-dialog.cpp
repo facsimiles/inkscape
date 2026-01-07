@@ -171,7 +171,7 @@ void SvgFontsDialog::AttrEntry::on_attr_changed(){
 
         Glib::ustring undokey = "svgfonts:";
         undokey += name;
-        DocumentUndo::maybeDone(o->document, undokey.c_str(), _("Set SVG Font attribute"), "");
+        DocumentUndo::maybeDone(o->document, undokey.c_str(), RC_("Undo", "Set SVG Font attribute"), "");
     }
 
 }
@@ -241,7 +241,7 @@ void SvgFontsDialog::AttrSpin::on_attr_changed(){
 
         Glib::ustring undokey = "svgfonts:";
         undokey += name;
-        DocumentUndo::maybeDone(o->document, undokey.c_str(), _("Set SVG Font attribute"), "");
+        DocumentUndo::maybeDone(o->document, undokey.c_str(), RC_("Undo", "Set SVG Font attribute"), "");
     }
 
 }
@@ -324,7 +324,7 @@ void SvgFontsDialog::on_kerning_value_changed(){
 
     //XML Tree being directly used here while it shouldn't be.
     kerning_pair->setAttribute("k", Glib::Ascii::dtostr(font->horiz_adv_x - kerning_slider->get_value()));
-    DocumentUndo::maybeDone(getDocument(), undokey.c_str(), _("Adjust kerning value"), "");
+    DocumentUndo::maybeDone(getDocument(), undokey.c_str(), RC_("Undo", "Adjust kerning value"), "");
 
     kerning_preview.redraw();
     _font_da.redraw();
@@ -499,7 +499,7 @@ SPItem* get_or_create_layer_for_glyph(SPDesktop* desktop, const Glib::ustring& f
 
     layers.renameLayer(layer, name.c_str(), false);
 
-    DocumentUndo::done(desktop->getDocument(), _("Add layer"), "");
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Add layer"), "");
     return cast<SPItem>(layer);
 }
 
@@ -800,7 +800,7 @@ void set_up_typography_canvas(SPDocument* document, double em, double asc, doubl
         guide->set_locked(true, true);
     }
 
-    DocumentUndo::done(document, _("Set up typography canvas"), "");
+    DocumentUndo::done(document, RC_("Undo", "Set up typography canvas"), "");
 }
 
 const int MARGIN_SPACE = 4;
@@ -1030,7 +1030,7 @@ void SvgFontsDialog::add_glyph(){
 
     // empty name to begin with
     SPGlyph* glyph = font->create_new_glyph("", str.c_str());
-    DocumentUndo::done(document, _("Add glyph"), "");
+    DocumentUndo::done(document, RC_("Undo", "Add glyph"), "");
 
     // select newly added glyph
     set_selected_glyph(glyph);
@@ -1098,7 +1098,7 @@ void SvgFontsDialog::set_glyph_description_from_selected_path() {
     auto units_per_em = get_font_units_per_em(font);
     //XML Tree being directly used here while it shouldn't be.
     glyph->setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv, font, units_per_em)));
-    DocumentUndo::done(getDocument(), _("Set glyph curves"), "");
+    DocumentUndo::done(getDocument(), RC_("Undo", "Set glyph curves"), "");
 
     update_glyphs(glyph);
 }
@@ -1133,7 +1133,7 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
         if (is<SPMissingGlyph>(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             obj.setAttribute("d", sp_svg_write_path(flip_coordinate_system(pathv, font, units_per_em)));
-            DocumentUndo::done(getDocument(),  _("Set glyph curves"), "");
+            DocumentUndo::done(getDocument(), RC_("Undo", "Set glyph curves"), "");
         }
     }
 
@@ -1145,7 +1145,7 @@ void SvgFontsDialog::reset_missing_glyph_description(){
         if (is<SPMissingGlyph>(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             obj.setAttribute("d", "M0,0h1000v1024h-1000z");
-            DocumentUndo::done(getDocument(), _("Reset missing-glyph"), "");
+            DocumentUndo::done(getDocument(), RC_("Undo", "Reset missing-glyph"), "");
         }
     }
     refresh_svgfont();
@@ -1177,7 +1177,7 @@ void SvgFontsDialog::glyph_name_edit(const Glib::ustring&, const Glib::ustring& 
         //XML Tree being directly used here while it shouldn't be.
         glyph->setAttribute("glyph-name", str);
 
-        DocumentUndo::done(getDocument(), _("Edit glyph name"), "");
+        DocumentUndo::done(getDocument(), RC_("Undo", "Edit glyph name"), "");
         update_glyphs(glyph);
     });
 }
@@ -1192,7 +1192,7 @@ void SvgFontsDialog::glyph_unicode_edit(const Glib::ustring&, const Glib::ustrin
         // XML Tree being directly used here while it shouldn't be.
         glyph->setAttribute("unicode", str);
 
-        DocumentUndo::done(getDocument(), _("Set glyph unicode"), "");
+        DocumentUndo::done(getDocument(), RC_("Undo", "Set glyph unicode"), "");
         update_glyphs(glyph);
     });
 }
@@ -1211,7 +1211,7 @@ void SvgFontsDialog::glyph_advance_edit(const Glib::ustring&, const Glib::ustrin
     // Check if input valid
     if ((is >> value)) {
         glyph->setAttribute("horiz-adv-x", str);
-        DocumentUndo::done(getDocument(),  _("Set glyph advance"), "");
+        DocumentUndo::done(getDocument(), RC_("Undo", "Set glyph advance"), "");
 
         update_glyphs(glyph);
     } else {
@@ -1225,7 +1225,7 @@ void SvgFontsDialog::remove_selected_font(){
 
     //XML Tree being directly used here while it shouldn't be.
     sp_repr_unparent(font->getRepr());
-    DocumentUndo::done(getDocument(), _("Remove font"), "");
+    DocumentUndo::done(getDocument(), RC_("Undo", "Remove font"), "");
 
     update_fonts(false);
 }
@@ -1236,7 +1236,7 @@ void SvgFontsDialog::remove_selected_glyph(){
 
     //XML Tree being directly used here while it shouldn't be.
     sp_repr_unparent(glyph->getRepr());
-    DocumentUndo::done(getDocument(), _("Remove glyph"), "");
+    DocumentUndo::done(getDocument(), RC_("Undo", "Remove glyph"), "");
 
     update_glyphs();
 }
@@ -1247,7 +1247,7 @@ void SvgFontsDialog::remove_selected_kerning_pair() {
 
     //XML Tree being directly used here while it shouldn't be.
     sp_repr_unparent(pair->getRepr());
-    DocumentUndo::done(getDocument(), _("Remove kerning pair"), "");
+    DocumentUndo::done(getDocument(), RC_("Undo", "Remove kerning pair"), "");
 
     update_glyphs();
 }
@@ -1297,7 +1297,7 @@ void SvgFontsDialog::edit_glyph(SPGlyph* glyph) {
         layers.setCurrentLayer(layer, true);
         layers.toggleLayerSolo(layer, true);
         layers.toggleLockOtherLayers(layer, true);
-        DocumentUndo::done(document, _("Toggle layer solo"), "");
+        DocumentUndo::done(document, RC_("Undo", "Toggle layer solo"), "");
     }
 }
 
@@ -1538,7 +1538,7 @@ void SvgFontsDialog::add_kerning_pair() {
         });
     }
 
-    DocumentUndo::done(getDocument(), _("Add kerning pair"), "");
+    DocumentUndo::done(getDocument(), RC_("Undo", "Add kerning pair"), "");
 }
 
 Gtk::Box* SvgFontsDialog::kerning_tab(){
@@ -1634,7 +1634,7 @@ void set_font_family(SPFont* font, char* str){
         }
     }
 
-    DocumentUndo::done(font->document, _("Set font family"), "");
+    DocumentUndo::done(font->document, RC_("Undo", "Set font family"), "");
 }
 
 void SvgFontsDialog::add_font(){
@@ -1657,7 +1657,7 @@ void SvgFontsDialog::add_font(){
     update_fonts(false);
     on_font_selection_changed();
 
-    DocumentUndo::done(doc, _("Add font"), "");
+    DocumentUndo::done(doc, RC_("Undo", "Add font"), "");
 }
 
 SvgFontsDialog::SvgFontsDialog()
@@ -1688,7 +1688,7 @@ SvgFontsDialog::SvgFontsDialog()
                 auto font = it->get_value(_columns.spfont);
                 font->setLabel(new_name.c_str());
                 Glib::ustring undokey = "svgfonts:fontName";
-                DocumentUndo::maybeDone(font->document, undokey.c_str(), _("Set SVG font name"), "");
+                DocumentUndo::maybeDone(font->document, undokey.c_str(), RC_("Undo", "Set SVG font name"), "");
             }
         });
     }

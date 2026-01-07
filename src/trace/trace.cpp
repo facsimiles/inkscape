@@ -532,7 +532,7 @@ void TraceTask::do_final_work(std::unique_ptr<TraceTask> self)
     }
 
     // Inform the document, so we can undo.
-    DocumentUndo::done(doc, _("Trace bitmap"), INKSCAPE_ICON("bitmap-trace"));
+    DocumentUndo::done(doc, RC_("Undo", "Trace bitmap"), INKSCAPE_ICON("bitmap-trace"));
 
     auto const msg = Glib::ustring::compose(_("Trace: Done. %1 node(s) created"), totalNodeCount);
     log(Inkscape::NORMAL_MESSAGE, msg.c_str());

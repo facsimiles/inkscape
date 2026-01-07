@@ -880,7 +880,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
         this->repr = nullptr;
     }
 
-    DocumentUndo::done(_desktop->getDocument(), _("Draw calligraphic stroke"), INKSCAPE_ICON("draw-calligraphic"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Draw calligraphic stroke"), INKSCAPE_ICON("draw-calligraphic"));
 }
 
 static void

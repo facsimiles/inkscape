@@ -79,7 +79,7 @@ hide_lock_unhide_all(InkscapeApplication* app)
     bool changed = hide_lock_recurse(&hide_lock_hide, root, false); // Unhide
 
     if (changed) {
-        Inkscape::DocumentUndo::done(document, _("Unhid all objects in the current layer"), "");
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Unhid all objects in the current layer"), "");
     }
 }
 
@@ -93,7 +93,7 @@ hide_lock_unlock_all(InkscapeApplication* app)
     bool changed = hide_lock_recurse(&hide_lock_lock, root, false); // Unlock
 
     if (changed) {
-        Inkscape::DocumentUndo::done(document, _("Unlocked all objects in the current layer"), "");
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Unlocked all objects in the current layer"), "");
     }
 }
 
@@ -116,7 +116,7 @@ hide_lock_unhide_below(InkscapeApplication *app)
 
     if (changed) {
         auto document = app->get_active_document();
-        Inkscape::DocumentUndo::done(document, _("Unhid selected items and their descendents."), "");
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Unhid selected items and their descendents."), "");
     }
 }
 
@@ -139,7 +139,7 @@ hide_lock_unlock_below(InkscapeApplication *app)
 
     if (changed) {
         auto document = app->get_active_document();
-        Inkscape::DocumentUndo::done(document, _("Unlocked selected items and their descendents."), "");
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Unlocked selected items and their descendents."), "");
     }
 }
 
@@ -162,7 +162,7 @@ hide_lock_hide_selected(InkscapeApplication* app, bool hide)
 
     if (changed) {
         auto document = app->get_active_document();
-        Inkscape::DocumentUndo::done(document, (hide ? _("Hid selected items.") : _("Unhid selected items.")), "");
+        Inkscape::DocumentUndo::done(document, (hide ? RC_("Undo", "Hid selected items.") : RC_("Undo", "Unhid selected items.")), "");
         selection->clear();
     }
 }
@@ -186,7 +186,7 @@ hide_lock_lock_selected(InkscapeApplication* app, bool lock)
 
     if (changed) {
         auto document = app->get_active_document();
-        Inkscape::DocumentUndo::done(document, (lock ? _("Locked selected items.") : _("Unlocked selected items.")), "");
+        Inkscape::DocumentUndo::done(document, (lock ? RC_("Undo", "Locked selected items.") : RC_("Undo", "Unlocked selected items.")), "");
         selection->clear();
     }
 }

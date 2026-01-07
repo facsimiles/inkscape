@@ -244,7 +244,7 @@ void RecolorArt::setDesktop(SPDesktop *desktop)
 
         if (!_is_preview) {
             _manager.convertToRecoloredColors();
-            DocumentUndo::done(_desktop->getDocument(), _("Change item color"), INKSCAPE_ICON("object-recolor-art"));
+            DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Change item color"), INKSCAPE_ICON("object-recolor-art"));
         }
     }
 
@@ -413,7 +413,7 @@ void RecolorArt::onOriginalColorClicked(uint32_t color_id)
 
 /*
 * if LP is checked it searches for the items that has a key matching to the parameter color
-* and loop on them to change their color lively 
+* and loop on them to change their color lively
 * put the recolor action into the undo stack as well
 */
 void RecolorArt::lpChecked(Color color, bool wheel)
@@ -426,7 +426,7 @@ void RecolorArt::lpChecked(Color color, bool wheel)
         return;
     }
 
-    DocumentUndo::maybeDone(_desktop->getDocument(), _("changed Item color"), _("Recolor items"),
+    DocumentUndo::maybeDone(_desktop->getDocument(), "changed-item-color", RC_("Undo", "Recolor items"),
                             INKSCAPE_ICON("object-recolor-art"));
 }
 
@@ -451,8 +451,8 @@ void RecolorArt::onColorPickerChanged(Color color, bool wheel)
     }
     std::string _color_string = new_color.value().toString();
     _manager.setSelectedNewColor(_current_color_id, new_color.value());
-    
-    // apply changes to selected items 
+
+    // apply changes to selected items
     if (_live_preview.property_active()) {
         if (wheel)
             lpChecked(color, wheel);
@@ -590,7 +590,7 @@ void RecolorArt::updateFromSelection()
     }
 
     _manager.clearData();
-    
+
     _color_wheel->toggleHueLock(false);
     _color_wheel->setLightness(100.0);
     _color_wheel->setSaturation(100.0);

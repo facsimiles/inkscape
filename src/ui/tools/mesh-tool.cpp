@@ -222,7 +222,7 @@ void MeshTool::split_near_point(SPItem *item, Geom::Point mouse_p)
 
     // item is the selected item. mouse_p the location in doc coordinates of where to add the stop
     get_drag()->addStopNearPoint(item, mouse_p, tolerance / _desktop->current_zoom());
-    DocumentUndo::done(_desktop->getDocument(), _("Split mesh row/column"), INKSCAPE_ICON("mesh-gradient"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Split mesh row/column"), INKSCAPE_ICON("mesh-gradient"));
     get_drag()->updateDraggers();
 }
 
@@ -309,32 +309,32 @@ void MeshTool::corner_operation(MeshCornerOperation operation)
                 switch (operation) {
 
                     case MG_CORNER_SIDE_TOGGLE:
-                        DocumentUndo::done(doc, _("Toggled mesh path type."), INKSCAPE_ICON("mesh-gradient"));
+                        DocumentUndo::done(doc, RC_("Undo", "Toggled mesh path type."), INKSCAPE_ICON("mesh-gradient"));
                         _grdrag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_SIDE_ARC:
-                        DocumentUndo::done(doc, _("Approximated arc for mesh side."), INKSCAPE_ICON("mesh-gradient"));
+                        DocumentUndo::done(doc, RC_("Undo", "Approximated arc for mesh side."), INKSCAPE_ICON("mesh-gradient"));
                         _grdrag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_TENSOR_TOGGLE:
-                        DocumentUndo::done(doc, _("Toggled mesh tensors."), INKSCAPE_ICON("mesh-gradient"));
+                        DocumentUndo::done(doc, RC_("Undo", "Toggled mesh tensors."), INKSCAPE_ICON("mesh-gradient"));
                         _grdrag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_COLOR_SMOOTH:
-                        DocumentUndo::done(doc, _("Smoothed mesh corner color."), INKSCAPE_ICON("mesh-gradient"));
+                        DocumentUndo::done(doc, RC_("Undo", "Smoothed mesh corner color."), INKSCAPE_ICON("mesh-gradient"));
                         _grdrag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_COLOR_PICK:
-                        DocumentUndo::done(doc, _("Picked mesh corner color."), INKSCAPE_ICON("mesh-gradient"));
+                        DocumentUndo::done(doc, RC_("Undo", "Picked mesh corner color."), INKSCAPE_ICON("mesh-gradient"));
                         _grdrag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_INSERT:
-                        DocumentUndo::done(doc, _("Inserted new row or column."), INKSCAPE_ICON("mesh-gradient"));
+                        DocumentUndo::done(doc, RC_("Undo", "Inserted new row or column."), INKSCAPE_ICON("mesh-gradient"));
                         break;
 
                     default:
@@ -396,7 +396,7 @@ void MeshTool::fit_mesh_in_bbox()
         }
     }
     if (changed) {
-        DocumentUndo::done(_desktop->getDocument(), _("Fit mesh inside bounding box"), INKSCAPE_ICON("mesh-gradient"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Fit mesh inside bounding box"), INKSCAPE_ICON("mesh-gradient"));
     }
 }
 
@@ -876,7 +876,7 @@ void MeshTool::new_default()
             css = nullptr;
         }
 
-        DocumentUndo::done(_desktop->getDocument(), _("Create mesh"), INKSCAPE_ICON("mesh-gradient"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create mesh"), INKSCAPE_ICON("mesh-gradient"));
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag

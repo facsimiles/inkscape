@@ -341,7 +341,7 @@ void SpiralTool::finishItem() {
         // update while creating inside a LPE group
         sp_lpe_item_update_patheffect(this->spiral.get(), true, true);
         _desktop->getSelection()->set(spiral.get());
-        DocumentUndo::done(_desktop->getDocument(), _("Create spiral"), INKSCAPE_ICON("draw-spiral"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Create spiral"), INKSCAPE_ICON("draw-spiral"));
 
         this->spiral = nullptr;
     }

@@ -693,7 +693,7 @@ void SymbolsDialog::revertSymbol() {
         if (auto current = SymbolsDialog::get_selected_symbol()) {
             if (auto symbol = cast<SPSymbol>(document->getObjectById(current->symbol_id))) {
                 symbol->unSymbol();
-                Inkscape::DocumentUndo::done(document, _("Group from symbol"), "");
+                Inkscape::DocumentUndo::done(document, RC_("Undo", "Group from symbol"), "");
             }
         }
     }

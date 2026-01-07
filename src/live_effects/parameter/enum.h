@@ -46,7 +46,7 @@ public:
         regenum->set_active_by_id(value);
         regenum->combobox()->setProgrammatically = false;
         regenum->combobox()->signal_changed().connect(sigc::mem_fun (*this, &EnumParam::_on_change_combo));
-        regenum->set_undo_parameters(_("Change enumeration parameter"), INKSCAPE_ICON("dialog-path-effects"));
+        regenum->set_undo_parameters(RC_("Undo", "Change enumeration parameter"), INKSCAPE_ICON("dialog-path-effects"));
         return regenum;
     };
 

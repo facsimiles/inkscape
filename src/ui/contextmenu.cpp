@@ -412,7 +412,7 @@ ContextMenu::unhide_or_unlock(SPDocument* document, bool unhide)
     }
 
     // We wouldn't be here if we didn't make a change.
-    Inkscape::DocumentUndo::done(document, (unhide ? _("Unhid objects") : _("Unlocked objects")), "");
+    Inkscape::DocumentUndo::done(document, (unhide ? RC_("Undo", "Unhid objects") : RC_("Undo", "Unlocked objects")), "");
 }
 
 /*

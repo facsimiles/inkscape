@@ -1528,14 +1528,14 @@ void Effect::doOnOpen_impl()
     }
 }
 
-void 
-Effect::makeUndoDone(Glib::ustring message) {
+void
+Effect::makeUndoDone(Inkscape::Util::Internal::ContextString message) {
     std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
     if (lpeitems.size() == 1) {
         refresh_widgets = true;
         sp_lpe_item = lpeitems[0];
         writeParamsToSVG(); // if the value change the LPEs become updated
-        DocumentUndo::done(getSPDoc(), message.c_str(), INKSCAPE_ICON(LPETypeConverter.get_icon(effectType()).c_str()));
+        DocumentUndo::done(getSPDoc(), message, INKSCAPE_ICON(LPETypeConverter.get_icon(effectType()).c_str()));
     }
     setReady();
 }

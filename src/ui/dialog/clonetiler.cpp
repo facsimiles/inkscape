@@ -1967,7 +1967,7 @@ void CloneTiler::unclump()
     reverse(to_unclump.begin(),to_unclump.end());
     ::unclump (to_unclump);
 
-    DocumentUndo::done(getDocument(), _("Unclump tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
+    DocumentUndo::done(getDocument(), RC_("Undo", "Unclump tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
 }
 
 guint CloneTiler::number_of_clones(SPObject *obj)
@@ -2013,7 +2013,7 @@ void CloneTiler::remove(bool do_undo/* = true*/)
     }
 
     if (do_undo) {
-        DocumentUndo::done(getDocument(), _("Delete tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
+        DocumentUndo::done(getDocument(), RC_("Undo", "Delete tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
     }
 }
 
@@ -2455,7 +2455,7 @@ void CloneTiler::apply()
     }
 
     desktop->clearWaitingCursor();
-    DocumentUndo::done(getDocument(), _("Create tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
+    DocumentUndo::done(getDocument(), RC_("Undo", "Create tiled clones"), INKSCAPE_ICON("dialog-tile-clones"));
 }
 
 Gtk::Box * CloneTiler::new_tab(Gtk::Notebook *nb, const gchar *label)

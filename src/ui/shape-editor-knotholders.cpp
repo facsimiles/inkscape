@@ -2437,7 +2437,7 @@ void TextPathKnotHolderEntityOffset::knot_set(Geom::Point const &p, Geom::Point 
     offset_stream << std::fixed << std::setprecision(precision) << _offset_val << "%";
     auto const offset_str = offset_stream.str();
     _textpath->setStartOffset(offset_str.c_str());
-    DocumentUndo::maybeDone(_desktop->getDocument(), "textpath:startOffset", _("Modify textpath startOffset"), "");
+    DocumentUndo::maybeDone(_desktop->getDocument(), "textpath:startOffset", RC_("Undo", "Modify textpath startOffset"), "");
     _text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     _text->updateRepr();
 }
@@ -2458,7 +2458,7 @@ void TextPathKnotHolderEntityOffset::knot_ungrabbed(Geom::Point const & /*p*/, G
     if (_placement == Placement::MIDDLE && (_initial_side != _textpath->side)) {
         _initial_side = _textpath->side;
         auto const icon = _textpath->side ? "text-path-right" : "text-path-left";
-        DocumentUndo::done(_desktop->getDocument(), _("Change textpath side"), INKSCAPE_ICON(icon));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Change textpath side"), INKSCAPE_ICON(icon));
     }
 
     for (auto const ent : parent_holder->entity) {

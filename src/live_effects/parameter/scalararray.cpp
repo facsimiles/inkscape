@@ -65,7 +65,7 @@ Gtk::Widget *ScalarArrayParam::param_newWidget()
         rsu->addSlider();
     }
     if (_set_undo) {
-        rsu->set_undo_parameters(_("Change scalar parameter"), INKSCAPE_ICON("dialog-path-effects"));
+        rsu->set_undo_parameters(RC_("Undo", "Change scalar parameter"), INKSCAPE_ICON("dialog-path-effects"));
     }
     rsu->setProgrammatically = true;
     rsu->signal_value_changed().connect (sigc::bind(sigc::mem_fun (*this, &ScalarArrayParam::on_value_changed),rsu));

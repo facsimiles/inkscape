@@ -872,7 +872,7 @@ void BatchExport::onExport()
     }
     // Save the export batch path only on successful export
     _document->getRoot()->setAttribute("inkscape:export-batch-path", path.value()->get_parse_name());
-    DocumentUndo::done(_document, _("Set Batch Export Options"), INKSCAPE_ICON("export"));
+    DocumentUndo::done(_document, RC_("Undo", "Set Batch Export Options"), INKSCAPE_ICON("export"));
     // Do this right at the end to finish up
     setExporting(false);
 }

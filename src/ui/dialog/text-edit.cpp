@@ -519,10 +519,10 @@ void TextEdit::apply_changes(bool continuous) {
 
     // complete the transaction
     if (continuous) {
-        DocumentUndo::maybeDone(desktop->getDocument(), "text-style", _("Set text style"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::maybeDone(desktop->getDocument(), "text-style", RC_("Undo", "Set text style"), INKSCAPE_ICON("draw-text"));
     }
     else {
-        DocumentUndo::done(desktop->getDocument(), _("Set text style"), INKSCAPE_ICON("draw-text"));
+        DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Set text style"), INKSCAPE_ICON("draw-text"));
         apply_button.set_sensitive(false);
     }
 

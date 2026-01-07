@@ -630,7 +630,7 @@ void sp_file_convert_dpi(SPDocument *doc)
     } // Look for SPNamedView and SPDefs loop
 
     // desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
-    DocumentUndo::done(doc, _("Update Document"), "");
+    DocumentUndo::done(doc, RC_("Undo", "Update Document"), "");
 }
 
 // pre-1.1:
@@ -758,7 +758,7 @@ void sp_file_fix_page_elements(std::unique_ptr<SPDocument> &doc)
                 defs->appendChild(i);
                 Inkscape::GC::release(i);
             }
-            DocumentUndo::done(doc.get(), _("Convert Pages to SVG2"), "");
+            DocumentUndo::done(doc.get(), RC_("Undo", "Convert Pages to SVG2"), "");
         }
     }
 }

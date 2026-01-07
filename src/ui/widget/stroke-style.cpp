@@ -586,7 +586,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, SPMarkerLoc const
         // so they can be collected by DocumentUndo::done collect orphans
         document->ensureUpToDate();
 
-        DocumentUndo::done(document, _("Set markers"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::done(document, RC_("Undo", "Set markers"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 
     // edit marker mode - update
@@ -634,7 +634,7 @@ void StrokeStyle::unitChangedCB()
             sp_desktop_set_style(desktop, css);
             sp_repr_css_attr_unref(css);
             css = nullptr;
-            DocumentUndo::done(desktop->getDocument(), _("Remove hairline stroke"),
+            DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Remove hairline stroke"),
                 INKSCAPE_ICON("dialog-fill-and-stroke"));
         }
         if (_old_unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
@@ -982,7 +982,7 @@ void StrokeStyle::setStrokeWidth()
     sp_desktop_set_style (desktop, css, false);
 
     sp_repr_css_attr_unref(css);
-    DocumentUndo::done(desktop->getDocument(), _("Set stroke width"),
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Set stroke width"),
                        INKSCAPE_ICON("dialog-fill-and-stroke"));
 
     if (unit->abbr == "%") {
@@ -1024,7 +1024,7 @@ void StrokeStyle::setStrokeDash()
     sp_desktop_set_style (desktop, css, false);
 
     sp_repr_css_attr_unref(css);
-    DocumentUndo::done(document, _("Set stroke dash"),
+    DocumentUndo::done(document, RC_("Undo", "Set stroke dash"),
                        INKSCAPE_ICON("dialog-fill-and-stroke"));
     update = false;
 }
@@ -1046,7 +1046,7 @@ void StrokeStyle::setStrokeMiter()
     }
     sp_desktop_set_style (desktop, css, false);
     sp_repr_css_attr_unref(css);
-    DocumentUndo::done(desktop->getDocument(), _("Set stroke miter"),
+    DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Set stroke miter"),
                        INKSCAPE_ICON("dialog-fill-and-stroke"));
     update = false;
 }
@@ -1095,7 +1095,7 @@ void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb)
         sp_repr_css_attr_unref(css);
         css = nullptr;
 
-        DocumentUndo::done(desktop->getDocument(), _("Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+        DocumentUndo::done(desktop->getDocument(), RC_("Undo", "Set stroke style"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 

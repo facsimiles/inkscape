@@ -174,7 +174,7 @@ RandomParam::param_newWidget()
     regrandom->setRange(min, max);
     regrandom->setProgrammatically = false;
     regrandom->signal_value_changed().connect(sigc::mem_fun(*this, &RandomParam::on_value_changed));
-    regrandom->set_undo_parameters(_("Change random parameter"), INKSCAPE_ICON("dialog-path-effects"));
+    regrandom->set_undo_parameters(RC_("Undo", "Change random parameter"), INKSCAPE_ICON("dialog-path-effects"));
     return regrandom;
 }
 

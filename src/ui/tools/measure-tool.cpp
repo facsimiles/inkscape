@@ -672,7 +672,7 @@ void MeasureTool::toGuides()
     setGuide(end,Geom::rad_from_deg(90),"");
     showCanvasItems(true);
     doc->ensureUpToDate();
-    DocumentUndo::done(_desktop->getDocument(), _("Add guides from measure tool"), INKSCAPE_ICON("tool-measure"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Add guides from measure tool"), INKSCAPE_ICON("tool-measure"));
 }
 
 void MeasureTool::toPhantom()
@@ -687,7 +687,7 @@ void MeasureTool::toPhantom()
 
     showCanvasItems(false, false, true);
     doc->ensureUpToDate();
-    DocumentUndo::done(_desktop->getDocument(), _("Keep last measure on the canvas, for reference"), INKSCAPE_ICON("tool-measure"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Keep last measure on the canvas, for reference"), INKSCAPE_ICON("tool-measure"));
 }
 
 void MeasureTool::toItem()
@@ -706,7 +706,7 @@ void MeasureTool::toItem()
     Inkscape::GC::release(rgroup);
     measure_item->updateRepr();
     doc->ensureUpToDate();
-    DocumentUndo::done(_desktop->getDocument(), _("Convert measure to items"), INKSCAPE_ICON("tool-measure"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Convert measure to items"), INKSCAPE_ICON("tool-measure"));
     reset();
 }
 
@@ -749,7 +749,7 @@ void MeasureTool::toMarkDimension()
     setLabelText(total, middle, fontsize, textangle, color);
 
     doc->ensureUpToDate();
-    DocumentUndo::done(_desktop->getDocument(), _("Add global measure line"), INKSCAPE_ICON("tool-measure"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Add global measure line"), INKSCAPE_ICON("tool-measure"));
 }
 
 void MeasureTool::setGuide(Geom::Point origin, double angle, const char *label)

@@ -449,7 +449,7 @@ RegisteredColorPicker::on_changed(Colors::Color const &color)
         _setter(local_repr, color);
 
         local_doc->setModifiedSinceSave();
-        DocumentUndo::maybeDone(local_doc, "repr-color-change", "registered-widget.cpp: RegisteredColorPicker::on_changed", ""); // TODO Fix description.
+        DocumentUndo::maybeDone(local_doc, "repr-color-change", RC_("Undo", "Document color changed"), ""); // TODO Fix description.
     }
     else {
         bool alpha = _akey == _ckey + "_opacity_LPE"; //For LPE parameter we want stored with alpha
@@ -460,7 +460,7 @@ RegisteredColorPicker::on_changed(Colors::Color const &color)
             local_repr->setAttributeCssDouble(_akey.c_str(), color.getOpacity());
         }
         local_doc->setModifiedSinceSave();
-        DocumentUndo::done(local_doc, "registered-widget.cpp: RegisteredColorPicker::on_changed", ""); // TODO Fix description.
+        DocumentUndo::done(local_doc, RC_("Undo", "Document color changed"), ""); // TODO Fix description.
     }
 
     _wr->setUpdating(false);

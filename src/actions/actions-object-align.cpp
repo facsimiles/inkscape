@@ -264,7 +264,7 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     if (changed) {
-        Inkscape::DocumentUndo::done(document, _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
+        Inkscape::DocumentUndo::done(document, RC_("Undo", "Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
 
@@ -383,7 +383,7 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
     if (changed) {
-        Inkscape::DocumentUndo::done( document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
+        Inkscape::DocumentUndo::done( document, RC_("Undo", "Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
 
@@ -459,7 +459,7 @@ object_distribute_text(const Glib::VariantBase& value, InkscapeApplication *app)
         ++i;
     }
 
-    Inkscape::DocumentUndo::done( document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done( document, RC_("Undo", "Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 void
@@ -566,7 +566,7 @@ object_align_text(const Glib::VariantBase& value, InkscapeApplication *app)
         }
     }
 
-    Inkscape::DocumentUndo::done( document, _("Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done( document, RC_("Undo", "Align"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 /* --------------- Rearrange ----------------- */
@@ -727,7 +727,7 @@ object_rearrange(const Glib::VariantBase& value, InkscapeApplication *app)
     // Restore compensation setting.
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    Inkscape::DocumentUndo::done( document, _("Rearrange"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done( document, RC_("Undo", "Rearrange"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 
@@ -762,7 +762,7 @@ object_remove_overlaps(const Glib::VariantBase& value, InkscapeApplication *app)
     // Restore compensation setting.
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    Inkscape::DocumentUndo::done( document, _("Remove overlaps"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done( document, RC_("Undo", "Remove overlaps"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 const Glib::ustring SECTION = NC_("Action Section", "Object");

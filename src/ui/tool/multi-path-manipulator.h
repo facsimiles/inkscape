@@ -19,6 +19,7 @@
 #include "manipulator.h"
 #include "modifier-tracker.h"
 #include "shape-record.h"
+#include "util-string/context-string.h"
 
 namespace Geom {
 class PathBuilder;
@@ -82,7 +83,7 @@ public:
     void updateOutlineColors();
     void updateHandles();
     void updatePaths();
-    
+
     /// Emitted whenever the coordinates shown in the status bar need updating.
     sigc::signal<void ()> signal_coords_changed;
 
@@ -119,8 +120,8 @@ private:
     }
 
     void _commit(CommitEvent cps);
-    void _done(gchar const *reason, bool alert_LPE = true);
-    void _doneWithCleanup(gchar const *reason, bool alert_LPE = false);
+    void _done(Inkscape::Util::Internal::ContextString reason, bool alert_LPE = true);
+    void _doneWithCleanup(Inkscape::Util::Internal::ContextString reason, bool alert_LPE = false);
     Colors::Color _getOutlineColor(ShapeRole role, SPObject *object);
 
     MapType _mmap;

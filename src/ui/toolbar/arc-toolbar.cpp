@@ -230,7 +230,7 @@ void ArcToolbar::_valueChanged(Glib::RefPtr<Gtk::Adjustment> const &adj, Glib::u
     }
 
     if (modified) {
-        DocumentUndo::done(_desktop->getDocument(), _("Ellipse: Change radius"), INKSCAPE_ICON("draw-ellipse"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Ellipse: Change radius"), INKSCAPE_ICON("draw-ellipse"));
     }
 }
 
@@ -267,7 +267,7 @@ void ArcToolbar::_startendValueChanged(Glib::RefPtr<Gtk::Adjustment> const &adj,
     _sensitivize();
 
     if (modified) {
-        DocumentUndo::maybeDone(_desktop->getDocument(), value_name.c_str(), _("Arc: Change start/end"), INKSCAPE_ICON("draw-ellipse"));
+        DocumentUndo::maybeDone(_desktop->getDocument(), value_name.c_str(), RC_("Undo", "Arc: Change start/end"), INKSCAPE_ICON("draw-ellipse"));
     }
 }
 
@@ -315,7 +315,7 @@ void ArcToolbar::_typeChanged(int type)
     }
 
     if (modified) {
-        DocumentUndo::done(_desktop->getDocument(), _("Arc: Change arc type"), INKSCAPE_ICON("draw-ellipse"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Arc: Change arc type"), INKSCAPE_ICON("draw-ellipse"));
     }
 }
 

@@ -1001,7 +1001,7 @@ static void sp_flood_do_flood_fill(SPDesktop *desktop, Geom::Point const &cursor
     
     do_trace(bci, trace_px.get(), desktop, inverted_affine, min_x, max_x, min_y, max_y, union_with_selection);
     
-    DocumentUndo::done(document, _("Fill bounded area"), INKSCAPE_ICON("color-fill"));
+    DocumentUndo::done(document, RC_("Undo", "Fill bounded area"), INKSCAPE_ICON("color-fill"));
 }
 
 bool FloodTool::item_handler(SPItem *item, CanvasEvent const &event)
@@ -1018,7 +1018,7 @@ bool FloodTool::item_handler(SPItem *item, CanvasEvent const &event)
             // Set style
             _desktop->applyCurrentOrToolStyle(item, "/tools/paintbucket", false);
 
-            DocumentUndo::done(_desktop->getDocument(), _("Set style on object"), INKSCAPE_ICON("color-fill"));
+            DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Set style on object"), INKSCAPE_ICON("color-fill"));
             ret = true;
         }
     },
@@ -1128,7 +1128,7 @@ void FloodTool::finishItem()
         item->updateRepr();
 
         _desktop->getSelection()->set(item);
-        DocumentUndo::done(_desktop->getDocument(), _("Fill bounded area"), INKSCAPE_ICON("color-fill"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Fill bounded area"), INKSCAPE_ICON("color-fill"));
 
         item = nullptr;
     }

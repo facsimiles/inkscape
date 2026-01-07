@@ -61,7 +61,7 @@ layer_new_above(InkscapeWindow* win)
     desktop->layerManager().renameLayer(new_layer, current_layer->label(), true);
     desktop->getSelection()->clear();
     desktop->layerManager().setCurrentLayer(new_layer);
-    Inkscape::DocumentUndo::done(document, _("Add layer"), INKSCAPE_ICON("layer-new"));
+    Inkscape::DocumentUndo::done(document, RC_("Undo", "Add layer"), INKSCAPE_ICON("layer-new"));
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
 }
 
@@ -73,7 +73,7 @@ layer_duplicate (InkscapeWindow* win)
     if (!dt->layerManager().isRoot()) {
 
         dt->getSelection()->duplicate(true, true); // This requires the selection to be a layer!
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Duplicate layer"), INKSCAPE_ICON("layer-duplicate"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Duplicate layer"), INKSCAPE_ICON("layer-duplicate"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Duplicated layer."));
 
     } else {
@@ -125,7 +125,7 @@ layer_delete (InkscapeWindow* win)
             dt->layerManager().setCurrentLayer(survivor);
         }
 
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Delete layer"), INKSCAPE_ICON("layer-delete"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Delete layer"), INKSCAPE_ICON("layer-delete"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
 
     } else {
@@ -147,7 +147,7 @@ layer_hide_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
     dt->layerManager().toggleHideAllLayers(true);
-    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", _("Hide all layers"), "");
+    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", RC_("Undo", "Hide all layers"), "");
 }
 
 void
@@ -155,7 +155,7 @@ layer_unhide_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
     dt->layerManager().toggleHideAllLayers(false);
-    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", _("Show all layers"), "");
+    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", RC_("Undo", "Show all layers"), "");
 }
 
 void
@@ -181,7 +181,7 @@ layer_hide_toggle_others (InkscapeWindow* win)
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
         dt->layerManager().toggleLayerSolo( layer ); // Weird name!
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Hide other layers"), "");
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Hide other layers"), "");
     }
 }
 
@@ -190,7 +190,7 @@ layer_lock_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
     dt->layerManager().toggleLockAllLayers(true);
-    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", _("Lock all layers"), "");
+    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", RC_("Undo", "Lock all layers"), "");
 }
 
 void
@@ -198,7 +198,7 @@ layer_unlock_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
     dt->layerManager().toggleLockAllLayers(false);
-    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", _("Unlock all layers"), "");
+    Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", RC_("Undo", "Unlock all layers"), "");
 }
 
 void
@@ -224,7 +224,7 @@ layer_lock_toggle_others (InkscapeWindow* win)
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
         dt->layerManager().toggleLockOtherLayers( layer );
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Lock other layers"), "");
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Lock other layers"), "");
     }
 }
 
@@ -236,7 +236,7 @@ layer_previous (InkscapeWindow* win)
     SPObject *next = Inkscape::next_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
     if (next) {
         dt->layerManager().setCurrentLayer(next);
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to next layer"), INKSCAPE_ICON("layer-previous"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Switch to next layer"), INKSCAPE_ICON("layer-previous"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot go past last layer."));
@@ -251,7 +251,7 @@ layer_next (InkscapeWindow* win)
     SPObject *prev=Inkscape::previous_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
     if (prev) {
         dt->layerManager().setCurrentLayer(prev);
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to previous layer") ,INKSCAPE_ICON("layer-next"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Switch to previous layer") ,INKSCAPE_ICON("layer-next"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
     } else {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot go before first layer."));
@@ -303,7 +303,7 @@ layer_top (InkscapeWindow* win)
         if (layer->getNext() != old_pos) {
 
             char const * message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
-            Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to top"), INKSCAPE_ICON("layer-top"));
+            Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Layer to top"), INKSCAPE_ICON("layer-top"));
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
             g_free((void *) message);
 
@@ -334,7 +334,7 @@ layer_raise (InkscapeWindow* win)
     if (layer->getNext() != old_pos) {
 
         char const * message = g_strdup_printf(_("Raised layer <b>%s</b>."), layer->defaultLabel());
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Raise layer"), INKSCAPE_ICON("layer-raise"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Raise layer"), INKSCAPE_ICON("layer-raise"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free((void *) message);
 
@@ -361,7 +361,7 @@ layer_lower (InkscapeWindow* win)
     if (layer->getNext() != old_pos) {
 
         char const * message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Lower layer"), INKSCAPE_ICON("layer-lower"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Lower layer"), INKSCAPE_ICON("layer-lower"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free((void *) message);
 
@@ -388,7 +388,7 @@ layer_bottom (InkscapeWindow* win)
     if (layer->getNext() != old_pos) {
 
         char const * message = g_strdup_printf(_("Lowered layer <b>%s</b>."), layer->defaultLabel());
-        Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to bottom"), INKSCAPE_ICON("layer-bottom"));
+        Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Layer to bottom"), INKSCAPE_ICON("layer-bottom"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free((void *) message);
 
@@ -411,7 +411,7 @@ layer_to_group (InkscapeWindow* win)
     layer->setLayerMode(SPGroup::GROUP);
     layer->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     dt->getSelection()->set(layer);
-    Inkscape::DocumentUndo::done(dt->getDocument(), _("Layer to group"), INKSCAPE_ICON("dialog-objects"));
+    Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Layer to group"), INKSCAPE_ICON("dialog-objects"));
 }
 
 void layer_from_group(InkscapeWindow *win)
@@ -424,13 +424,13 @@ void layer_from_group(InkscapeWindow *win)
         show_output("layer_to_group: only one selected item allowed!");
         return;
     }
-    
+
     if (auto group = cast<SPGroup>(obj)) {
         if (!group->isLayer()) {
             group->setLayerMode(SPGroup::LAYER);
             group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
             selection->set(group);
-            Inkscape::DocumentUndo::done(dt->getDocument(), _("Group to layer"), INKSCAPE_ICON("dialog-objects"));
+            Inkscape::DocumentUndo::done(dt->getDocument(), RC_("Undo", "Group to layer"), INKSCAPE_ICON("dialog-objects"));
         } else {
             dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Group already layer."));
         }

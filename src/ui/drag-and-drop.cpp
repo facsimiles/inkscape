@@ -235,7 +235,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
 
         if (desktop->getTool() && desktop->getTool()->get_drag()) {
             if (desktop->getTool()->get_drag()->dropColor(item, colorspec.c_str(), dt_pos)) {
-                DocumentUndo::done(doc , _("Drop color on gradient"), "");
+                DocumentUndo::done(doc , RC_("Undo", "Drop color on gradient"), "");
                 desktop->getTool()->get_drag()->updateDraggers();
                 return true;
             }
@@ -243,7 +243,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
 
         //if (tools_active(desktop, TOOLS_TEXT)) {
         //    if (sp_text_context_drop_color(c, button_doc)) {
-        //        SPDocumentUndo::done(doc , _("Drop color on gradient stop"), "");
+        //        SPDocumentUndo::done(doc , RC_("Undo", "Drop color on gradient stop"), "");
         //    }
         //}
 
@@ -275,7 +275,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
         sp_repr_css_attr_unref(css);
 
         item->updateRepr();
-        DocumentUndo::done(doc, _("Drop color"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Drop color"), "");
         return true;
     } else if (auto const dndsvg = GlibValue::get<DnDSvg>(value)) {
         auto const data = get_span(dndsvg->bytes);
@@ -316,7 +316,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
         }
 
         Inkscape::GC::release(newgroup);
-        DocumentUndo::done(doc, _("Drop SVG"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Drop SVG"), "");
         return true;
     } else if (G_VALUE_HOLDS(value.gobj(), GDK_TYPE_FILE_LIST)) {
         auto list = reinterpret_cast<GSList *>(g_value_get_boxed(value.gobj()));
@@ -331,7 +331,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
     } else if (GlibValue::holds<DnDSymbol>(value)) {
         auto cm = Inkscape::UI::ClipboardManager::get();
         cm->insertSymbol(desktop, dt_pos, false);
-        DocumentUndo::done(doc, _("Drop Symbol"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Drop Symbol"), "");
         return true;
     } else if (G_VALUE_HOLDS(value.gobj(), GDK_TYPE_TEXTURE)) {
         auto const ext = Inkscape::Extension::Input::find_by_mime("image/png");
@@ -348,7 +348,7 @@ bool on_drop(Glib::ValueBase const &value, double x, double y, SPDesktopWidget *
 
         ext->set_param_optiongroup("link", save ? "embed" : "link");
         ext->set_gui(true);
-        DocumentUndo::done(doc, _("Drop bitmap image"), "");
+        DocumentUndo::done(doc, RC_("Undo", "Drop bitmap image"), "");
         return true;
     }
 

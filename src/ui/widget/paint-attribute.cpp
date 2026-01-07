@@ -95,7 +95,7 @@ PaintAttribute::PaintAttribute(Parts add_parts, unsigned int tag) :
 
         bool hide = !_current_item->isExplicitlyHidden();
         _current_item->setExplicitlyHidden(hide);
-        DocumentUndo::done(_current_item->document, hide ? _("Hide object") : _("Unhide object"), "dialog-object-properties");
+        DocumentUndo::done(_current_item->document, hide ? RC_("Undo", "Hide object") : RC_("Undo", "Unhide object"), "dialog-object-properties");
     });
 }
 
@@ -216,25 +216,30 @@ void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool
             vector = nullptr;
         }
         sp_item_apply_gradient(item, vector, desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
-        DocumentUndo::done(item->document, fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke", tag);
+        DocumentUndo::done(item->document, fill ? RC_("Undo", "Set swatch on fill") : RC_("Undo", "Set swatch on stroke"), "dialog-fill-and-stroke", tag);
         break;
     case EditOperation::Change:
         if (color.has_value()) {
             sp_change_swatch_color(vector, *color);
-            DocumentUndo::maybeDone(item->document, "swatch-color", _("Change swatch color"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::maybeDone(item->document, "swatch-color", RC_("Undo", "Change swatch color"), "dialog-fill-and-stroke", tag);
         }
         else {
             sp_item_apply_gradient(item, vector, desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
-            DocumentUndo::maybeDone(item->document, fill ? "fill-swatch-change" : "stroke-swatch-change", fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::maybeDone(
+                item->document,
+                fill ? "fill-swatch-change" : "stroke-swatch-change",
+                fill ? RC_("Undo", "Set swatch on fill") : RC_("Undo", "Set swatch on stroke"),
+                "dialog-fill-and-stroke",
+                tag);
         }
         break;
     case EditOperation::Delete:
         sp_delete_item_swatch(item, kind, vector, replacement);
-        DocumentUndo::done(item->document, _("Delete swatch"), "dialog-fill-and-stroke", tag);
+        DocumentUndo::done(item->document, RC_("Undo", "Delete swatch"), "dialog-fill-and-stroke", tag);
         break;
     case EditOperation::Rename:
         vector->setLabel(label.c_str());
-        DocumentUndo::maybeDone(item->document, _("Rename swatch"), "swatch-rename", "dialog-fill-and-stroke", tag);
+        DocumentUndo::maybeDone(item->document, "swatch-rename", RC_("Undo", "Rename swatch"), "dialog-fill-and-stroke", tag);
         break;
     default:
         break;
@@ -301,7 +306,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         set_item_style(cast<SPItem>(_current_item), css.get());
         request_update(true);
 
-        DocumentUndo::done(_current_item->document, fill ? _("Remove fill") : _("Remove stroke"), "dialog-fill-and-stroke", tag);
+        DocumentUndo::done(_current_item->document, fill ? RC_("Undo", "Remove fill") : RC_("Undo", "Remove stroke"), "dialog-fill-and-stroke", tag);
         // paint removed
         _toggle_definition.emit(false);
     });
@@ -313,7 +318,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         request_update(true);
         _switch->set_fill_rule(rule);
 
-        DocumentUndo::maybeDone(_current_item->document, "change-fill-rule", _("Change fill rule"), "dialog-fill-and-stroke");
+        DocumentUndo::maybeDone(_current_item->document, "change-fill-rule", RC_("Undo", "Change fill rule"), "dialog-fill-and-stroke");
     };
 
     auto set_flat_color = [this, fill, tag](const Color& color) {
@@ -349,7 +354,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         set_item_style(_current_item, css.get());
         */
         DocumentUndo::maybeDone(_current_item->document, fill ? "change-fill" : "change-stroke",
-            fill ? _("Set fill color") : _("Set stroke color"), "dialog-fill-and-stroke", tag);
+            fill ? RC_("Undo", "Set fill color") : RC_("Undo", "Set stroke color"), "dialog-fill-and-stroke", tag);
     };
 
     _define.signal_clicked().connect([=,this]() {
@@ -367,7 +372,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         if (auto item = cast<SPItem>(_current_item)) {
             auto kind = fill ? FILL : STROKE;
             sp_item_apply_pattern(item, pattern, kind, color, label, transform, offset, uniform, gap);
-            DocumentUndo::maybeDone(item->document, fill ? "fill-pattern-change" : "stroke-pattern-change", fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::maybeDone(item->document, fill ? "fill-pattern-change" : "stroke-pattern-change", fill ? RC_("Undo", "Set pattern on fill") : RC_("Undo", "Set pattern on stroke"), "dialog-fill-and-stroke", tag);
             update_preview_indicators(_current_item);
             set_paint(_current_item);
         }
@@ -379,7 +384,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         if (auto item = cast<SPItem>(_current_item)) {
             auto kind = fill ? FILL : STROKE;
             sp_item_apply_hatch(item, hatch, kind, color, label, transform, offset, pitch, rotation, stroke);
-            DocumentUndo::maybeDone(item->document, fill ? "fill-pattern-change" : "stroke-pattern-change", fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::maybeDone(item->document, fill ? "fill-pattern-change" : "stroke-pattern-change", fill ? RC_("Undo", "Set pattern on fill") : RC_("Undo", "Set pattern on stroke"), "dialog-fill-and-stroke", tag);
             update_preview_indicators(_current_item);
             set_paint(_current_item);
         }
@@ -391,7 +396,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         if (auto item = cast<SPItem>(_current_item)) {
             auto kind = fill ? FILL : STROKE;
             sp_item_apply_gradient(item, vector, _desktop, gradient_type, false, kind);
-            DocumentUndo::maybeDone(item->document, fill ? "fill-gradient-change" : "stroke-gradient-change", fill ? _("Set gradient on fill") : _("Set gradient on stroke"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::maybeDone(item->document, fill ? "fill-gradient-change" : "stroke-gradient-change", fill ? RC_("Undo", "Set gradient on fill") : RC_("Undo", "Set gradient on stroke"), "dialog-fill-and-stroke", tag);
             update_preview_indicators(_current_item);
             set_paint(_current_item);
         }
@@ -403,7 +408,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         if (auto item = cast<SPItem>(_current_item)) {
             auto kind = fill ? FILL : STROKE;
             sp_item_apply_mesh(item, mesh, _current_item->document, kind);
-            DocumentUndo::maybeDone(item->document, fill ? "fill-mesh-change" : "stroke-mesh-change", fill ? _("Set mesh on fill") : _("Set mesh on stroke"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::maybeDone(item->document, fill ? "fill-mesh-change" : "stroke-mesh-change", fill ? RC_("Undo", "Set mesh on fill") : RC_("Undo", "Set mesh on stroke"), "dialog-fill-and-stroke", tag);
             update_preview_indicators(_current_item);
             set_paint(_current_item);
         }
@@ -453,7 +458,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
             break;
         }
         set_item_style(cast<SPItem>(_current_item), css.get());
-        DocumentUndo::done(_current_item->document,  fill ? _("Inherit fill") : _("Inherit stroke"), "dialog-fill-and-stroke", tag);
+        DocumentUndo::done(_current_item->document,  fill ? RC_("Undo", "Inherit fill") : RC_("Undo", "Inherit stroke"), "dialog-fill-and-stroke", tag);
         update_preview_indicators(_current_item);
     });
 
@@ -464,7 +469,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
             auto css = new_css_attr();
             sp_repr_css_unset_property(css.get(), fill ? "fill" : "stroke");
             set_item_style(cast<SPItem>(_current_item), css.get());
-            DocumentUndo::done(_current_item->document,  fill ? _("Unset fill") : _("Unset stroke"), "dialog-fill-and-stroke", tag);
+            DocumentUndo::done(_current_item->document,  fill ? RC_("Undo", "Unset fill") : RC_("Undo", "Unset stroke"), "dialog-fill-and-stroke", tag);
             if (auto paint = _current_item->style->getFillOrStroke(fill)) {
                 _switch->update_from_paint(*paint);
             }
@@ -489,7 +494,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         set_item_style(_current_item, css.get());
         */
         DocumentUndo::maybeDone(_current_item->document, fill ? "undo_fill_alpha" : "undo_stroke_alpha",
-            fill ? _("Set fill opacity") : _("Set stroke opacity"), "dialog-fill-and-stroke", tag);
+            fill ? RC_("Undo", "Set fill opacity") : RC_("Undo", "Set stroke opacity"), "dialog-fill-and-stroke", tag);
     });
 }
 
@@ -625,7 +630,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
         if (!can_update()) return;
 
         set_item_marker(_current_item, location, id, uri);
-        DocumentUndo::maybeDone(_current_item->document, "marker-change", _("Set marker"), "dialog-fill-and-stroke", _modified_tag);
+        DocumentUndo::maybeDone(_current_item->document, "marker-change", RC_("Undo", "Set marker"), "dialog-fill-and-stroke", _modified_tag);
     };
 
     for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
@@ -657,7 +662,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
         auto unit = _unit_selector.getUnit();
         set_stroke_width(_current_item, width, hairline, unit);
         update_stroke(_current_item);
-        DocumentUndo::maybeDone(_current_item->document, "set-stroke-width", _("Set stroke width"), "dialog-fill-and-stroke", _modified_tag);
+        DocumentUndo::maybeDone(_current_item->document, "set-stroke-width", RC_("Undo", "Set stroke width"), "dialog-fill-and-stroke", _modified_tag);
     };
     auto set_stroke_unit = [=,this] {
         if (!can_update()) return;
@@ -671,7 +676,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
             auto scoped(_update.block());
             _current_unit = new_unit;
             set_stroke_width(_current_item, 1, hairline, new_unit);
-            DocumentUndo::maybeDone(_current_item->document, "set-stroke-unit", _("Set stroke unit"), "dialog-fill-and-stroke", _modified_tag);
+            DocumentUndo::maybeDone(_current_item->document, "set-stroke-unit", RC_("Undo", "Set stroke unit"), "dialog-fill-and-stroke", _modified_tag);
         }
         else {
             // if the current unit is empty, then it's a hairline, b/c it's not in a unit table
@@ -693,7 +698,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
 
         auto scoped(_update.block());
         set_item_style_str(_current_item, attr, value);
-        DocumentUndo::maybeDone(_current_item->document, "set-stroke-style", _("Set stroke style"), "dialog-fill-and-stroke", _modified_tag);
+        DocumentUndo::maybeDone(_current_item->document, "set-stroke-style", RC_("Undo", "Set stroke style"), "dialog-fill-and-stroke", _modified_tag);
         update_stroke(_current_item);
     };
     auto set_stroke_miter_limit = [this](double limit) {
@@ -701,7 +706,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
 
         auto scoped(_update.block());
         set_item_style_dbl(_current_item, "stroke-miterlimit", limit);
-        DocumentUndo::maybeDone(_current_item->document, "set-stroke-miter-limit", _("Set stroke miter"), "dialog-fill-and-stroke", _modified_tag);
+        DocumentUndo::maybeDone(_current_item->document, "set-stroke-miter-limit", RC_("Undo", "Set stroke miter"), "dialog-fill-and-stroke", _modified_tag);
     };
     _stroke_width.signal_value_changed().connect([=,this](auto value) {
         set_stroke(value);
@@ -755,7 +760,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
         // update menu selection if the user edits a dash pattern
         auto [vec, offset2] = getDashFromStyle(item->style);
         _dash_selector.set_dash_pattern(vec, offset2);
-        DocumentUndo::maybeDone(_current_item->document, "set-dash-pattern", _("Set stroke dash pattern"), "dialog-fill-and-stroke", _modified_tag);
+        DocumentUndo::maybeDone(_current_item->document, "set-dash-pattern", RC_("Undo", "Set stroke dash pattern"), "dialog-fill-and-stroke", _modified_tag);
     };
     _dash_selector.changed_signal.connect([=](auto change) {
         set_dash(change == DashSelector::Pattern);
@@ -784,7 +789,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
         }
         update_reset_opacity_button();
         request_item_update(item, _modified_tag);
-        DocumentUndo::done(item->document, clear ? _("Clear opacity") : _("Set opacity"), "dialog-fill-and-stroke", _modified_tag);
+        DocumentUndo::done(item->document, clear ? RC_("Undo", "Clear opacity") : RC_("Undo", "Set opacity"), "dialog-fill-and-stroke", _modified_tag);
     };
     _opacity.signal_value_changed().connect([=,this](auto value){ set_object_opacity(value, false); });
     //TODO: there's no place for opacity reset button, so it's been removed
@@ -801,7 +806,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
                 _blend.set_active_by_id(SP_CSS_BLEND_NORMAL);
             }
             update_reset_blend_button();
-            DocumentUndo::done(_current_item->document, clear ? _("Clear blending mode") : _("Set blending mode"), "dialog-fill-and-stroke", _modified_tag);
+            DocumentUndo::done(_current_item->document, clear ? RC_("Undo", "Clear blending mode") : RC_("Undo", "Set blending mode"), "dialog-fill-and-stroke", _modified_tag);
         }
     };
     _blend.signal_changed().connect([=,this] {

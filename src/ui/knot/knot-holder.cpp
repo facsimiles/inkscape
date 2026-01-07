@@ -194,7 +194,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     // for drag, this is done by ungrabbed_handler, but for click we must do it here
 
     if (saved_item && saved_item->document) { // increasingly aggressive sanity checks
-       DocumentUndo::done(saved_item->document, _("Change handle"), icon_name);
+       DocumentUndo::done(saved_item->document, RC_("Undo", "Change handle"), icon_name);
     } else {
         std::terminate();
     }
@@ -315,7 +315,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
     } else if (auto offset = cast<SPOffset>(object)) {
         icon_name = offset->sourceHref ? INKSCAPE_ICON("path-offset-linked") : INKSCAPE_ICON("path-offset-dynamic");
     }
-    DocumentUndo::done(object->document, _("Move handle"), icon_name);
+    DocumentUndo::done(object->document, RC_("Undo", "Move handle"), icon_name);
 }
 
 void KnotHolder::add(KnotHolderEntity *e)

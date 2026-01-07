@@ -16,6 +16,7 @@
 #include "object/sp-lpe-item.h"       // PathEffectList
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/completion-popup.h"
+#include "util-string/context-string.h"
 
 namespace Glib {
 class ValueBase;
@@ -125,7 +126,7 @@ private:
     void enable_fav_actions(Gtk::Widget &item, bool has_fav);
     void do_item_action_undoable(PathEffectSharedPtr const &lperef,
                                  void (SPLPEItem::* const method)(),
-                                 Glib::ustring const &description);
+                                 Inkscape::Util::Internal::ContextString description);
     void do_item_action_defaults(PathEffectSharedPtr const &lpreref,
                                  void (LivePathEffect::Effect::* const method)());
     void do_item_action_favorite(PathEffectSharedPtr const &lpreref,

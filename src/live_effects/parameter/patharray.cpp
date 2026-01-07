@@ -132,7 +132,7 @@ void PathArrayParam::on_reverse_toggled(const Glib::ustring &path)
     row[_model->_colReverse] = !row[_model->_colReverse];
     w->reversed = row[_model->_colReverse];
     param_write_to_repr(param_getSVGValue().c_str());
-    param_effect->makeUndoDone(_("Link path parameter to path"));
+    param_effect->makeUndoDone(RC_("Undo", "Link path parameter to path"));
 }
 
 void PathArrayParam::on_visible_toggled(const Glib::ustring &path)
@@ -143,14 +143,14 @@ void PathArrayParam::on_visible_toggled(const Glib::ustring &path)
     row[_model->_colVisible] = !row[_model->_colVisible];
     w->visibled = row[_model->_colVisible];
     param_write_to_repr(param_getSVGValue().c_str());
-    param_effect->makeUndoDone(_("Toggle path parameter visibility"));
+    param_effect->makeUndoDone(RC_("Undo", "Toggle path parameter visibility"));
 }
 
 void PathArrayParam::param_set_default() {}
 
 Gtk::Widget *PathArrayParam::param_newWidget()
 {
-    
+
     auto const vbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
     auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
 
@@ -161,8 +161,8 @@ Gtk::Widget *PathArrayParam::param_newWidget()
     initui();
 
     UI::pack_start(*vbox, *_scroller, UI::PackOptions::expand_widget);
-    
-    
+
+
     { // Paste path to link button
         auto const pIcon = Gtk::manage(sp_get_icon_image("edit-clone", Gtk::IconSize::NORMAL));
         auto const pButton = Gtk::make_managed<Gtk::Button>();
@@ -172,7 +172,7 @@ Gtk::Widget *PathArrayParam::param_newWidget()
         UI::pack_start(*hbox, *pButton, UI::PackOptions::shrink);
         pButton->set_tooltip_text(_("Link to path in clipboard"));
     }
-    
+
     { // Remove linked path
         auto const pIcon = Gtk::manage(sp_get_icon_image("list-remove", Gtk::IconSize::NORMAL));
         auto const pButton = Gtk::make_managed<Gtk::Button>();
@@ -182,7 +182,7 @@ Gtk::Widget *PathArrayParam::param_newWidget()
         UI::pack_start(*hbox, *pButton, UI::PackOptions::shrink);
         pButton->set_tooltip_text(_("Remove Path"));
     }
-    
+
     { // Move Down
         auto const pIcon = Gtk::manage(sp_get_icon_image("go-down", Gtk::IconSize::NORMAL));
         auto const pButton = Gtk::make_managed<Gtk::Button>();
@@ -236,7 +236,7 @@ void PathArrayParam::on_up_button_click()
     auto const iter = _tree->get_selection()->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
-        
+    
         int i = -1;
         auto piter = _vector.begin();
         for (auto iter = _vector.begin(); iter != _vector.end(); piter = iter, ++i, ++iter) {
@@ -247,7 +247,7 @@ void PathArrayParam::on_up_button_click()
             }
         }
         param_write_to_repr(param_getSVGValue().c_str());
-        param_effect->makeUndoDone(_("Move path up"));
+        param_effect->makeUndoDone(RC_("Undo", "Move path up"));
         _store->foreach_iter(sigc::bind(sigc::mem_fun(*this, &PathArrayParam::_selectIndex), &i));
     }
 }
@@ -271,7 +271,7 @@ void PathArrayParam::on_down_button_click()
             }
         }
         param_write_to_repr(param_getSVGValue().c_str());
-        param_effect->makeUndoDone(_("Move path down"));
+        param_effect->makeUndoDone(RC_("Undo", "Move path down"));
         _store->foreach_iter(sigc::bind(sigc::mem_fun(*this, &PathArrayParam::_selectIndex), &i));
     }
 }
@@ -283,7 +283,7 @@ void PathArrayParam::on_remove_button_click()
         Gtk::TreeModel::Row row = *iter;
         unlink(row[_model->_colObject]);
         param_write_to_repr(param_getSVGValue().c_str());
-        param_effect->makeUndoDone(_("Remove path"));
+        param_effect->makeUndoDone(RC_("Undo", "Remove path"));
     }
 }
 
@@ -323,7 +323,7 @@ void PathArrayParam::on_link_button_click()
     }
 
     param_write_to_repr(os.str().c_str());
-    param_effect->makeUndoDone(_("Link patharray parameter to path"));
+    param_effect->makeUndoDone(RC_("Undo", "Link patharray parameter to path"));
 }
 
 void PathArrayParam::unlink(PathAndDirectionAndVisible *to)

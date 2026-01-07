@@ -157,7 +157,7 @@ void LayerPropertiesDialog::_doCreate()
     }
     _desktop->getSelection()->clear();
     _desktop->layerManager().setCurrentLayer(new_layer);
-    DocumentUndo::done(_desktop->getDocument(), _("Add layer"), INKSCAPE_ICON("layer-new"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Add layer"), INKSCAPE_ICON("layer-new"));
     _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
 }
 
@@ -166,7 +166,7 @@ void LayerPropertiesDialog::_doMove()
 {
     if (auto moveto = _selectedLayer()) {
         _desktop->getSelection()->toLayer(moveto);
-        DocumentUndo::done(_desktop->getDocument(), _("Move selection to layer"), INKSCAPE_ICON("selection-move-to-layer"));
+        DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Move selection to layer"), INKSCAPE_ICON("selection-move-to-layer"));
     }
 }
 
@@ -186,7 +186,7 @@ void LayerPropertiesDialog::_doRename()
     
     layman.renameLayer(layman.currentLayer(), name.c_str(), false);
 
-    DocumentUndo::done(_desktop->getDocument(), _("Rename layer"), INKSCAPE_ICON("layer-rename"));
+    DocumentUndo::done(_desktop->getDocument(), RC_("Undo", "Rename layer"), INKSCAPE_ICON("layer-rename"));
     // TRANSLATORS: This means "The layer has been renamed"
     _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Renamed layer"));
 }

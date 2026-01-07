@@ -219,7 +219,7 @@ void Selection::scaleAnchored(double amount, bool fixed)
 
         DocumentUndo::maybeDone(document(),
                                 ((amount > 0) ? "selector:grow:larger" : "selector:grow:smaller" ),
-                                ((amount > 0) ? _("Grow") : _("Shrink")), INKSCAPE_ICON("tool-pointer"));
+                                ((amount > 0) ? RC_("Undo", "Grow") : RC_("Undo", "Shrink")), INKSCAPE_ICON("tool-pointer"));
     }
 }
 
@@ -260,13 +260,13 @@ void Selection::rotateAnchored(double angle_degrees, double zoom)
         _previous_rotate_anchor = center;
 
         if (angle_degrees == 90.0) {
-            DocumentUndo::maybeDone(document(), "selector:rotate:cw", _("Rotate 90\xc2\xb0 CW"), INKSCAPE_ICON("object-rotate-right"));
+            DocumentUndo::maybeDone(document(), "selector:rotate:cw", RC_("Undo", "Rotate 90\xc2\xb0 CW"), INKSCAPE_ICON("object-rotate-right"));
         } else if (angle_degrees == -90.0) {
-            DocumentUndo::maybeDone(document(), "selector:rotate:ccw", _("Rotate 90\xc2\xb0 CCW"), INKSCAPE_ICON("object-rotate-left"));
+            DocumentUndo::maybeDone(document(), "selector:rotate:ccw", RC_("Undo", "Rotate 90\xc2\xb0 CCW"), INKSCAPE_ICON("object-rotate-left"));
         } else {
             DocumentUndo::maybeDone(document(),
                                 ( ( angle_degrees > 0 )? "selector:rotate:ccw": "selector:rotate:cw" ),
-                                _("Rotate"), INKSCAPE_ICON("tool-pointer"));
+                                RC_("Undo", "Rotate"), INKSCAPE_ICON("tool-pointer"));
         }
     }
 }
