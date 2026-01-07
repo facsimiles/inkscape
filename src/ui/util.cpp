@@ -26,14 +26,11 @@
 #include <gtkmm/tooltip.h>
 #include <2geom/bezier.h>
 
+#include "defocus-target.h"
 #include "desktop.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
 #include "ui/dialog-run.h"
-// #include "desktop.h"
-// #include "inkscape-window.h"
-// #include "inkscape.h"
-// #include "colors/color.h"
 #include "colors/utils.h" // color to hex string
 #include "ui/dialog-run.h"
 #include "util/numeric/converters.h"
@@ -256,6 +253,17 @@ void ellipsize(Gtk::Label &label, int const max_width_chars, Pango::EllipsizeMod
         tooltip->set_text(label.get_text());
         return true;
     }, true);
+}
+
+void set_defocus_target(Gtk::Widget* panel, DefocusTarget* target) {
+    if (!panel) return;
+
+    for_each_descendant(*panel, [target](auto& widget) {
+        if (auto sb = dynamic_cast<Widget::InkSpinButton*>(&widget)) {
+            sb->setDefocusTarget(target);
+        }
+        return ForEachResult::_continue;
+    });
 }
 
 } // namespace Inkscape::UI

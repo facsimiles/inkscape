@@ -231,6 +231,7 @@ target_sources(inkscape_base PRIVATE
 	widget/generic/bin.cpp
 	widget/generic/css-name-class-init.cpp
 	widget/generic/dual-spin-scale.cpp
+	widget/generic/number-combo-box.cpp
 	widget/generic/popover-bin.cpp
 	widget/generic/popover-menu.cpp
 	widget/generic/reorderable-stack.cpp
@@ -565,6 +566,7 @@ target_sources(inkscape_base PRIVATE
 	widget/generic/bin.h
 	widget/generic/css-name-class-init.h
 	widget/generic/dual-spin-scale.h
+	widget/generic/number-combo-box.h
 	widget/generic/popover-bin.h
 	widget/generic/popover-menu.h
 	widget/generic/reorderable-stack.h

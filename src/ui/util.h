@@ -64,6 +64,7 @@ void reveal_widget(Gtk::Widget *widget, bool show);
 bool is_widget_effectively_visible(Gtk::Widget const *widget);
 
 namespace Inkscape::UI {
+class DefocusTarget;
 
 void set_icon_sizes(Gtk::Widget *parent, int pixel_size);
 void set_icon_sizes(GtkWidget *parent, int pixel_size);
@@ -185,6 +186,9 @@ inline auto notebook_pages(Gtk::Notebook &notebook)
 [[nodiscard]] Gtk::Widget *find_focusable_widget(Gtk::Widget &parent);
 [[nodiscard]] bool is_descendant_of(Gtk::Widget const &descendant, Gtk::Widget const &ancestor);
 [[nodiscard]] bool contains_focus(Gtk::Widget &widget);
+
+// set defocus target on all spinbuttons in a container/dialog/panel
+void set_defocus_target(Gtk::Widget* panel, DefocusTarget* target);
 
 [[nodiscard]] int get_font_size(Gtk::Widget &widget);
 
