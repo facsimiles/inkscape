@@ -728,7 +728,7 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(unsigned int glyph_id)
     auto pixbuf = Inkscape::Pixbuf::create_from_buffer(svg.raw());
     if (!pixbuf) {
         std::cerr << "Bad svg data for glyph " << glyph_id << "\n";
-        pixbuf = new Pixbuf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1));
+        pixbuf = new Inkscape::Pixbuf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1));
     }
 
     // Ensure exists in cairo format before locking it down. (Rendering code requires cairo format.)
