@@ -39,6 +39,13 @@ export_filename(const Glib::VariantBase& value, InkscapeApplication *app)
 }
 
 void
+export_page(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value);
+    app->file_export()->export_page = s.get();
+}
+
+void
 export_overwrite(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
@@ -336,6 +343,7 @@ add_actions_output(InkscapeApplication* app)
     // clang-format off
     gapp->add_action_with_parameter( "export-type",              String, sigc::bind(sigc::ptr_fun(&export_type),         app));
     gapp->add_action_with_parameter( "export-filename",          String, sigc::bind(sigc::ptr_fun(&export_filename),     app)); // MAY NOT WORK DUE TO std::string
+    gapp->add_action_with_parameter( "export-page",              String, sigc::bind(sigc::ptr_fun(&export_page), app));
     gapp->add_action_with_parameter( "export-overwrite",         Bool,   sigc::bind(sigc::ptr_fun(&export_overwrite),    app));
 
     gapp->add_action_with_parameter( "export-area",              String, sigc::bind(sigc::ptr_fun(&export_area),         app));
