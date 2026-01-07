@@ -62,6 +62,7 @@ target_sources(inkscape_base PRIVATE
     control/canvas-item-guideline.cpp
     control/canvas-item-quad.cpp
     control/canvas-item-rect.cpp
+    control/canvas-item-squiggle.cpp
     control/canvas-item-text.cpp
     control/canvas-page.cpp
 
@@ -139,6 +140,7 @@ target_sources(inkscape_base PRIVATE
     control/canvas-item-ptr.h
     control/canvas-item-quad.h
     control/canvas-item-rect.h
+    control/canvas-item-squiggle.h
     control/canvas-item-text.h
     control/canvas-page.h
 )

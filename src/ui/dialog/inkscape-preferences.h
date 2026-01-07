@@ -475,6 +475,8 @@ protected:
     UI::Widget::PrefCombo       _spell_language3;
     UI::Widget::PrefCheckButton _spell_ignorenumbers;
     UI::Widget::PrefCheckButton _spell_ignoreallcaps;
+    UI::Widget::PrefCheckButton _spell_live;
+    UI::Widget::PrefCombo       _spell_live_lang;
 
     // Bitmaps
     UI::Widget::PrefCombo       _misc_overs_bitmap;
@@ -704,6 +706,7 @@ private:
   void resetIconsColorsWrapper();
   void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
                             guint32 &colorseterror);
+  void spellcheckPreferencesChanged();
 
   std::map<Glib::ustring, bool> dark_themes;
   bool _init;

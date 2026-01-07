@@ -25,6 +25,7 @@ target_sources(inkscape_base PRIVATE
 	tool-factory.cpp
 	util.cpp
 	modifiers.cpp
+	on-canvas-spellcheck.cpp
 
 	cache/svg_preview_cache.cpp
 
@@ -342,6 +343,7 @@ target_sources(inkscape_base PRIVATE
 	tool-factory.h
 	util.h
 	modifiers.h
+	on-canvas-spellcheck.h
 
 	cache/svg_preview_cache.h
 

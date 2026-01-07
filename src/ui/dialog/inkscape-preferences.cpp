@@ -82,6 +82,9 @@
 #include "util/trim.h"
 #include "widgets/spw-utilities.h"
 
+#include "ui/libspelling-wrapper.h"
+#include "ui/tools/text-tool.h"
+
 namespace Inkscape::UI::Dialog {
 
 using Inkscape::UI::Widget::DialogPage;
@@ -3749,14 +3752,73 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     }
 }
 
+void InkscapePreferences::spellcheckPreferencesChanged()
+{
+#if WITH_LIBSPELLING
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    auto text_tool = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->getTool());
+
+    if (!text_tool) {
+        return;
+    }
+
+    auto spellcheck = text_tool->getSpellcheck();
+    if (!spellcheck) {
+        return;
+    }
+
+    spellcheck->reinitialize();
+#endif
+}
+
 void InkscapePreferences::initPageSpellcheck()
 {
 #if WITH_LIBSPELLING
     _spell_ignorenumbers.init(_("Ignore words with digits"), "/dialogs/spellcheck/ignorenumbers", true);
     _page_spellcheck.add_line(false, "", _spell_ignorenumbers, "", _("Ignore words containing digits, such as \"R2D2\""), true);
+    _spell_ignorenumbers.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::spellcheckPreferencesChanged));
 
     _spell_ignoreallcaps.init(_("Ignore words in ALL CAPITALS"), "/dialogs/spellcheck/ignoreallcaps", false);
     _page_spellcheck.add_line(false, "", _spell_ignoreallcaps, "", _("Ignore words in all capitals, such as \"IUPAC\""), true);
+    _spell_ignoreallcaps.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::spellcheckPreferencesChanged));
+
+    _spell_live.init(_("Turn On live spellchecking"), "/dialogs/spellcheck/live", true);
+    _page_spellcheck.add_line(false, "", _spell_live, "", _("Enable live spellchecking while typing"), true);
+    _spell_live.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::spellcheckPreferencesChanged));
+
+
+    std::vector<Glib::ustring> lang_labels;
+    std::vector<Glib::ustring> lang_codes;
+    auto provider = spelling_provider_get_default();
+    Inkscape::UI::list_language_names_and_codes(provider, [&](auto name, auto code) {
+        lang_labels.push_back(name);
+        lang_codes.push_back(code);
+        return false;
+    });
+
+    // Get saved language code from preferences
+    auto prefs = Inkscape::Preferences::get();
+    Glib::ustring saved_code = prefs->getString("/dialogs/spellcheck/live_lang");
+
+    // Initialize PrefCombo
+    _spell_live_lang.init("/dialogs/spellcheck/live_lang",
+                        std::span<const Glib::ustring>(lang_labels.data(), lang_labels.size()),
+                        std::span<const Glib::ustring>(lang_codes.data(), lang_codes.size()),
+                        saved_code);
+
+    // Save selection to preferences when changed
+    _spell_live_lang.signal_changed().connect([prefs, lang_labels, lang_codes, this]() {
+        int idx = _spell_live_lang.get_selected();
+        if (idx >= 0 && idx < (int)lang_codes.size()) {
+            prefs->setString("/dialogs/spellcheck/live_lang", lang_codes[idx]);
+            this->spellcheckPreferencesChanged();
+        }
+    });
+
+    // Add to preferences page
+    _page_spellcheck.add_line(false, _("Live Spellcheck language:"), _spell_live_lang, "",
+        _("Select the language used for live spellchecking."), true);
 
     AddPage(_page_spellcheck, _("Spellcheck"), PREFS_PAGE_SPELLCHECK);
 #endif

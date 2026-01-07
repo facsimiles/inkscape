@@ -23,6 +23,8 @@
 #include "ui/tools/tool-base.h"
 #include "util/delete-with.h"
 
+#include "ui/on-canvas-spellcheck.h"
+
 using GtkIMContext = struct _GtkIMContext;
 
 namespace Inkscape {
@@ -48,6 +50,8 @@ public:
     void deleteSelected();
     // Insert the text to replace the current selection
     void insertText(const Glib::ustring& text);
+
+    Inkscape::UI::OnCanvasSpellCheck* getSpellcheck() { return _spellcheck.get();}
 
     SPItem *textItem() const { return text; }
 
@@ -92,6 +96,8 @@ private:
     unsigned dragging_state = 0;  // dragging selection over text
     bool creating = false;  // dragging rubberband to create flowtext
     Geom::Point p0;         // initial point if the flowtext rect
+
+    std::unique_ptr<Inkscape::UI::OnCanvasSpellCheck> _spellcheck;
 
     sigc::scoped_connection sel_changed_connection;
     sigc::scoped_connection sel_modified_connection;
