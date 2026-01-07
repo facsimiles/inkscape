@@ -22,8 +22,8 @@
 #include "libnrtype/font-factory.h"
 #include "util-string/symbol-convert.h"
 
-using Extension::Internal::CairoRenderContext;
-using Extension::Internal::CairoGlyphInfo;
+using Inkscape::Extension::Internal::CairoRenderContext;
+using Inkscape::Extension::Internal::CairoGlyphInfo;
 
 namespace Inkscape {
 namespace Text {
