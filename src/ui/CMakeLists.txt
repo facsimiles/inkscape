@@ -268,6 +268,7 @@ target_sources(inkscape_base PRIVATE
 	widget/paint-attribute.cpp
 	widget/paint-enums.cpp
 	widget/paint-inherited.cpp
+	widget/paint-popover-manager.cpp
 	widget/paint-selector.cpp
 	widget/paint-switch.cpp
 	widget/pattern-editor.cpp
@@ -598,6 +599,7 @@ target_sources(inkscape_base PRIVATE
 	widget/paint-attribute.h
 	widget/paint-inherited.h
 	widget/paint-enums.h
+	widget/paint-popover-manager.h
 	widget/paint-selector.h
 	widget/paint-switch.h
 	widget/palette_t.h
