@@ -351,6 +351,10 @@ enum SPCSSUnit {
     SP_CSS_UNIT_PERCENT
 };
 
+// Array must be same length as SPCSSUnit in style-internal.h
+constexpr double font_size_unit_ratios[] =
+//        PX  PT  PC  MM   CM  IN   EM   EX    %
+    { 1,  1,  1,  10,  4,  40, 100, 16,  8,  0.16, 0};
 
 /// Length type internal to SPStyle.
 // Needs access to 'font-size' and 'font-family' for computed values.

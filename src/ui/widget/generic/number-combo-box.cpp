@@ -78,8 +78,6 @@ bool NumberComboBox::on_key_pressed(guint keyval, Gdk::ModifierType state) {
     switch (keyval) {
     case GDK_KEY_Up:
     case GDK_KEY_KP_Up:
-    case GDK_KEY_Page_Up:
-    case GDK_KEY_KP_Page_Up:
         if (state == Gdk::ModifierType::NO_MODIFIER_MASK) {
             select_next(+1);
             return true;
@@ -88,10 +86,16 @@ bool NumberComboBox::on_key_pressed(guint keyval, Gdk::ModifierType state) {
             _menu_btn.popdown();
             return true;
         }
+        break;
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_KP_Page_Up:
+        if (state == Gdk::ModifierType::NO_MODIFIER_MASK) {
+            select_next(+1);
+            return true;
+        }
+        break;
     case GDK_KEY_Down:
     case GDK_KEY_KP_Down:
-    case GDK_KEY_Page_Down:
-    case GDK_KEY_KP_Page_Down:
         if (state == Gdk::ModifierType::NO_MODIFIER_MASK) {
             select_next(-1);
             return true;
@@ -100,18 +104,28 @@ bool NumberComboBox::on_key_pressed(guint keyval, Gdk::ModifierType state) {
             _menu_btn.popup();
             return true;
         }
+        break;
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_KP_Page_Down:
+        if (state == Gdk::ModifierType::NO_MODIFIER_MASK) {
+            select_next(-1);
+            return true;
+        }
+        break;
     case GDK_KEY_Home:
     case GDK_KEY_KP_Home:
         if (state == Gdk::ModifierType::NO_MODIFIER_MASK) {
             select_item(0);
             return true;
         }
+        break;
     case GDK_KEY_End:
     case GDK_KEY_KP_End:
         if (state == Gdk::ModifierType::NO_MODIFIER_MASK) {
             select_item(_list.size() - 1);
             return true;
         }
+        break;
     }
     return false;
 }

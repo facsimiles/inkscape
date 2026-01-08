@@ -91,36 +91,6 @@ void recursively_set_properties(SPObject *object, SPCSSAttr *css, bool unset_des
     sp_repr_css_attr_unref(css_unset);
 }
 
-std::vector<double> create_sizes_store_uncached(int unit)
-{
-    // List of font sizes for dropdown menu
-    constexpr int sizes[] = {
-        4, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 28,
-        32, 36, 40, 48, 56, 64, 72, 144
-    };
-
-    // Array must be same length as SPCSSUnit in style.h
-    constexpr float ratios[] = {1, 1, 1, 10, 4, 40, 100, 16, 8, 0.16, 0};
-
-    auto store = sizes | std::views::transform([&](auto n) { return n / ratios[unit]; });
-    return {store.begin(), store.end()};
-}
-
-/**
- * Create a ListStore containing the default list of font sizes scaled for the given unit.
- */
-const std::vector<double>& create_sizes_store(int unit)
-{
-    static std::unordered_map<int, std::vector<double>> cache(10);
-
-    auto &result = cache[unit];
-
-    if (result.empty()) {
-        result = create_sizes_store_uncached(unit);
-    }
-
-    return result;
-}
 
 // TODO: possibly share with font-selector by moving most code to font-lister (passing family name)
 void sp_text_toolbox_select_cb(Gtk::Entry const &entry)
@@ -292,7 +262,7 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     _font_size_item = Gtk::make_managed<UI::Widget::NumberComboBox>();
     _font_size_item->set_name("TextFontSizeAction");
     _font_size_item->set_tooltip_text(tooltip);
-    _font_size_item->set_menu_options(create_sizes_store(unit));
+    _font_size_item->set_menu_options(sp_style_get_default_font_size_list(unit));
     auto& entry = _font_size_item->get_entry();
     entry.set_min_size("9999");
     entry.set_digits(3);
@@ -1240,6 +1210,9 @@ void TextToolbar::fontsize_unit_changed()
     temp_size_stream << 1 << unit->abbr;
     temp_size.read(temp_size_stream.str().c_str());
     Preferences::get()->setInt("/options/font/unitType", temp_size.unit);
+
+    // refresh font size and list of font sizes after unit change
+    _selectionChanged(nullptr);
 }
 
 void TextToolbar::wordspacing_value_changed()
@@ -1555,7 +1528,7 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
             selection_fontsize = size;
         }
 
-        _font_size_item->set_menu_options(create_sizes_store(unit));
+        _font_size_item->set_menu_options(sp_style_get_default_font_size_list(unit));
         _font_size_item->set_value(selection_fontsize);
 
         // Superscript
