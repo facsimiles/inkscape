@@ -110,7 +110,7 @@ class PolicyCheckerToolbars(PolicyChecker):
     search = "toolbar-*.ui"
     ignore = ['toolbar-tool-prefs.ui']
     errors = {
-        'parse': ("Parser Error", "Found something unusual in the XML"),  # ADDED THIS LINE
+        'parse': ("Parser Error", "Found something unusual in the XML"),
         'button-focus1': ("Button Takes Focus", "A toolbar button can have focus and will take that focus when clicked. Add focus-on-click=False to fix this."),
         'button-focus2': ("Button Refuses Focus", "A toolbar button is refusing focus, which makes it inaccessable to keyboard navigation. Remove focusable=False"),
         'entry-focus': ("Entry Refuses Focus", "A toolbar entry doesn't allow itself to be in focus, stopping text from being entered. Change focusable to True and focus-on-click to True (or remove them)"),
@@ -135,14 +135,14 @@ class PolicyCheckerStatusbar(PolicyCheckerToolbars):
     """Check statusbar.ui file for focus policy violations"""
     name = "STATUSBAR"
     search = "statusbar.ui"
-    ignore = []  # No files to ignore for statusbar
+    ignore = []
 
 
 class PolicyCheckerDialogs(PolicyCheckerToolbars):
     """Check dialog files for focus policy violations"""
     name = "DIALOG"
     search = "dialog-*.ui"
-    ignore = []  # No files to ignore for dialogs
+    ignore = []
 
 
 if __name__ == '__main__':
