@@ -715,8 +715,8 @@ Gtk::EventSequenceState InkSpinButton::on_drag_update_value(Gdk::EventSequence* 
     if (!_drag.started && (std::fabs(dx) > delta || std::fabs(dy) > delta)) {
         _drag.started = true;
         // remember where we crossed the move threshold; this is our new zero point
-        _drag.x = std::clamp(-delta, delta, dx);
-        _drag.y = std::clamp(-delta, delta, dy);
+        _drag.x = std::clamp(dx, -delta, delta);
+        _drag.y = std::clamp(dy, -delta, delta);
         auto angle = std::fabs(std::atan2(dx, dy));
         // lock into horizontal or vertical adjustment based on where the mouse travelled
         _drag.horizontal = angle >= M_PI_4 && angle <= M_PI+M_PI_4;
