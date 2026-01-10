@@ -1854,6 +1854,10 @@ padding:0 1px;
     border: none;
 }
 
+text-combobox .menuitem {
+    min-height: 1.75em;
+}
+
 #FontList indent {
     /* Set indent to align listview items with and without leaf nodes (i.e. with and without expander icon) */
     -gtk-icon-size: 16px;

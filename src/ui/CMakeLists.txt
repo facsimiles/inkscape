@@ -239,6 +239,7 @@ target_sources(inkscape_base PRIVATE
 	widget/generic/snapshot-widget.cpp
 	widget/generic/spin-button.cpp
 	widget/generic/tab-strip.cpp
+	widget/generic/text-combo-box.cpp
 	widget/gradient-image.cpp
 	widget/gradient-editor.cpp
 	widget/gradient-selector.cpp
@@ -572,6 +573,7 @@ target_sources(inkscape_base PRIVATE
 	widget/generic/snapshot-widget.h
 	widget/generic/spin-button.h
 	widget/generic/tab-strip.h
+	widget/generic/text-combo-box.h
 	widget/gradient-image.h
 	widget/gradient-editor.h
 	widget/gradient-selector.h
