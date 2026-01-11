@@ -30,69 +30,14 @@
      inkscape:window-height="1408"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="0"
-       bleed="0"
-       inkscape:label="Blur" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page2"
-       margin="0"
-       bleed="0"
-       inkscape:label="Inner Glow" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page19"
-       margin="0"
-       bleed="0"
-       inkscape:label="Recolour" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page25"
-       margin="0"
-       bleed="0"
-       inkscape:label="Texture" />
-    <inkscape:page
-       x="440"
-       y="0"
-       width="100"
-       height="100"
-       id="page29"
-       margin="0"
-       bleed="0"
-       inkscape:label="Melting" />
-    <inkscape:page
-       x="550"
-       y="0"
-       width="100"
-       height="100"
-       id="page32"
-       margin="0"
-       bleed="0"
-       inkscape:label="Exploded" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
      id="defs1">
     <filter
        style="color-interpolation-filters:sRGB"
        inkscape:label="Blur"
        id="filter1"
-       x="-0.023893527"
+       x="-0.023893526"
        y="-0.57266616"
        width="1.0477871"
        height="2.1453323">
@@ -233,8 +178,8 @@
        style="color-interpolation-filters:sRGB;"
        inkscape:label="Color Shift"
        id="filter5"
-       x="-0.02383972"
-       y="-0.027528651"
+       x="-0.023839719"
+       y="-0.027528649"
        width="1.0476794"
        height="1.0550573">
       <feColorMatrix
@@ -254,8 +199,8 @@
        inkscape:menu-tooltip="Adds a small scale screen like graininess"
        style="color-interpolation-filters:sRGB;"
        id="filter11"
-       x="-0.02383972"
-       y="-0.027528651"
+       x="-0.023839719"
+       y="-0.027528649"
        width="1.0476794"
        height="1.0550573">
       <feTurbulence
@@ -371,7 +316,7 @@
        inkscape:menu-tooltip="Convert to small scattered particles with some thickness"
        width="1.0935948"
        height="1.1080758"
-       y="-0.054037882"
+       y="-0.054037881"
        x="-0.046797388"
        style="color-interpolation-filters:sRGB;"
        id="filter19">
@@ -409,6 +354,42 @@
          in2="result2"
          id="feBlend19" />
     </filter>
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="Blur"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page2"
+       inkscape:label="Inner Glow"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page19"
+       inkscape:label="Recolour"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page25"
+       inkscape:label="Texture"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="440 0 100 100"
+       id="page29"
+       inkscape:label="Melting"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="550 0 100 100"
+       id="page32"
+       inkscape:label="Exploded"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
   </defs>
   <g
      inkscape:label="Layer 1"

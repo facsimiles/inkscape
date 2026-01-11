@@ -14,7 +14,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-<style type="text/css">
+  <style
+     type="text/css"
+     id="style1">
     text {
       font-family: Noto Sans;
     }   
@@ -36,71 +38,7 @@
      inkscape:window-height="896"
      inkscape:window-maximized="0"
      inkscape:current-layer="g12"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="0"
-       bleed="0"
-       inkscape:label="Red Square Circle" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page2"
-       margin="10"
-       bleed="0"
-       inkscape:label="Circles Squared" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page19"
-       margin="10"
-       bleed="0"
-       inkscape:label="Group Circled" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page25"
-       margin="0"
-       bleed="0"
-       inkscape:label="Double Clipping" />
-    <inkscape:page
-       x="440"
-       y="0"
-       width="100"
-       height="100"
-       id="page29"
-       margin="0"
-       bleed="0"
-       inkscape:label="Text Clipping" />
-    <inkscape:page
-       x="550"
-       y="0"
-       width="100"
-       height="100"
-       id="page32"
-       margin="10"
-       bleed="0"
-       inkscape:label="Raster Masking" />
-    <inkscape:page
-       x="660"
-       y="0"
-       width="100"
-       height="100"
-       id="page24"
-       margin="10"
-       bleed="0"
-       inkscape:label="Vector Masking" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
      id="defs1">
     <linearGradient
@@ -294,6 +232,48 @@
            y="41.797543" />
       </g>
     </mask>
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="Red Square Circle"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page2"
+       inkscape:label="Circles Squared"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page19"
+       inkscape:label="Group Circled"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page25"
+       inkscape:label="Double Clipping"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="440 0 100 100"
+       id="page29"
+       inkscape:label="Text Clipping"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="550 0 100 100"
+       id="page32"
+       inkscape:label="Raster Masking"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="660 0 100 100"
+       id="page24"
+       inkscape:label="Vector Masking"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
   </defs>
   <g
      inkscape:label="Layer 1"

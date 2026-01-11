@@ -32,53 +32,7 @@
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1"
      showguides="true"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="10"
-       bleed="0"
-       inkscape:label="Stroke Width" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page2"
-       margin="10"
-       bleed="0"
-       inkscape:label="Endcaps" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page3"
-       margin="10"
-       bleed="0"
-       inkscape:label="Joins" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page14"
-       margin="10"
-       bleed="0"
-       inkscape:label="Dash Patterns" />
-    <inkscape:page
-       x="440"
-       y="0"
-       width="100"
-       height="100"
-       id="page20"
-       margin="10"
-       bleed="0"
-       inkscape:label="Stroke Paints" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
      id="defs1">
     <linearGradient
@@ -150,6 +104,36 @@
        y1="51.916334"
        x2="502.34219"
        y2="51.916334" />
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="Stroke Width"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page2"
+       inkscape:label="Endcaps"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page3"
+       inkscape:label="Joins"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page14"
+       inkscape:label="Dash Patterns"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="440 0 100 100"
+       id="page20"
+       inkscape:label="Stroke Paints"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
   </defs>
   <g
      inkscape:label="Layer 1"

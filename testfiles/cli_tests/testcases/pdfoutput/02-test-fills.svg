@@ -35,101 +35,7 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1"
      showguides="true"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="10"
-       bleed="0"
-       inkscape:export-filename="/home/doctormo/Desktop/02-test-fills-cairo.pdf"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96"
-       inkscape:label="RGB" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page2"
-       margin="10"
-       bleed="0"
-       inkscape:label="DeviceCMYK" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page3"
-       margin="0"
-       bleed="0"
-       inkscape:label="icc-cmyk" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page14"
-       margin="10"
-       bleed="0"
-       inkscape:label="Gradients Linear" />
-    <inkscape:page
-       x="440"
-       y="0"
-       width="100"
-       height="100"
-       id="page20"
-       margin="10"
-       bleed="0"
-       inkscape:label="Gradients Radial" />
-    <inkscape:page
-       x="550"
-       y="0"
-       width="100"
-       height="100"
-       id="page457"
-       margin="10"
-       bleed="0"
-       inkscape:label="Gradients Mesh" />
-    <inkscape:page
-       x="660"
-       y="0"
-       width="100"
-       height="100"
-       id="page4"
-       margin="10"
-       bleed="0"
-       inkscape:label="Gradients Alpha" />
-    <inkscape:page
-       x="770"
-       y="0"
-       width="100"
-       height="100"
-       id="page5"
-       margin="10"
-       bleed="0"
-       inkscape:label="Gradients Shared" />
-    <inkscape:page
-       x="880"
-       y="0"
-       width="100"
-       height="100"
-       id="page26"
-       margin="10"
-       bleed="0"
-       inkscape:label="Fill Rule" />
-    <inkscape:page
-       x="990"
-       y="0"
-       width="100"
-       height="100"
-       id="page6"
-       margin="10"
-       bleed="0"
-       inkscape:label="Pattern" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
      id="defs1">
     <linearGradient
@@ -1312,6 +1218,66 @@
        y1="10.000092"
        x2="860"
        y2="90" />
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="RGB"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page2"
+       inkscape:label="DeviceCMYK"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page3"
+       inkscape:label="icc-cmyk"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page14"
+       inkscape:label="Gradients Linear"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="440 0 100 100"
+       id="page20"
+       inkscape:label="Gradients Radial"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="550 0 100 100"
+       id="page457"
+       inkscape:label="Gradients Mesh"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="660 0 100 100"
+       id="page4"
+       inkscape:label="Gradients Alpha"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="770 0 100 100"
+       id="page5"
+       inkscape:label="Gradients Shared"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="880 0 100 100"
+       id="page26"
+       inkscape:label="Fill Rule"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="990 0 100 100"
+       id="page6"
+       inkscape:label="Pattern"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
   </defs>
   <g
      inkscape:label="Layer 1"

@@ -19,16 +19,16 @@ def main(filename):
     parse = None
     with open(filename, 'r') as fhl:
         for line in fhl:
-            if "<sodipodi:namedview" in line:
+            if "<defs" in line:
                 parse = ""
             if parse is not None:
                 parse += line
-            if "</sodipodi:namedview>" in line:
+            if "</defs>" in line:
                 break
     if not parse:
         return
 
-    parse = parse.replace("\n", "").replace(">", "\n").split("<inkscape:page")
+    parse = parse.replace("\n", "").replace(">", "\n").split("<view")
 
     labels = []
     for i, page in enumerate(parse[1:]):

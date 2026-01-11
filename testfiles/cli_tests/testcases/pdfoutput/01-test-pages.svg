@@ -36,37 +36,28 @@
      inkscape:window-height="1080"
      inkscape:window-maximized="1"
      inkscape:current-layer="g4"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="40"
-       height="50"
-       id="page1"
-       margin="0"
-       bleed="0"
-       inkscape:label="First Pagè" />
-    <inkscape:page
-       x="50"
-       y="0"
-       width="50"
-       height="40"
-       id="page2"
-       margin="5 10"
-       bleed="5 0"
-       inkscape:label="Margin &amp; Bleed" />
-    <inkscape:page
-       x="77.668129"
-       y="22.587292"
-       width="10"
-       height="10"
-       id="page3"
-       margin="0"
-       bleed="0"
-       inkscape:label="Overlap Offset" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
-     id="defs1" />
+     id="defs1">
+    <view
+       viewBox="0 0 40 50"
+       id="page1"
+       inkscape:label="First Pagè"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+    <view
+       viewBox="50 0 50 40"
+       id="page2"
+       inkscape:label="Margin &amp; Bleed"
+       inkscape:margin="5 10"
+       inkscape:bleed="5 0" />
+    <view
+       viewBox="77.668129 22.587292 10 10"
+       id="page3"
+       inkscape:label="Overlap Offset"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
+  </defs>
   <g
      inkscape:label="Everything"
      inkscape:groupmode="layer"

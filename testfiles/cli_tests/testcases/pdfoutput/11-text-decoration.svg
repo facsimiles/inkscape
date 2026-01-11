@@ -13,7 +13,9 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-<style type="text/css">
+  <style
+     type="text/css"
+     id="style1">
     text {
       font-family: Noto Sans;
     }   
@@ -26,6 +28,30 @@
        width="302.36221"
        height="314.21036"
        id="rect1" />
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="Underlined"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page3"
+       inkscape:label="Wavy Line"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page5"
+       inkscape:label="Overlined"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page6"
+       inkscape:label="Flowed Complex"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
   </defs>
   <sodipodi:namedview
      id="namedview1"
@@ -44,44 +70,7 @@
      inkscape:window-width="2560"
      inkscape:window-height="1408"
      inkscape:window-maximized="1"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="10"
-       bleed="0"
-       inkscape:label="Underlined" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page3"
-       margin="10"
-       bleed="0"
-       inkscape:label="Wavy Line" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page5"
-       margin="10"
-       bleed="0"
-       inkscape:label="Overlined" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page6"
-       margin="10"
-       bleed="0"
-       inkscape:label="Flowed Complex" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <text
      xml:space="preserve"
      style="font-size:9.90414px;line-height:0;letter-spacing:0px;word-spacing:0px;fill:#000000;stroke:none;stroke-width:0.928509px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -175,113 +164,113 @@
        inkscape:label="Flowed Text"><tspan
          x="42.5"
          y="56.014815"
-         id="tspan14">
+         id="tspan7">
 </tspan><tspan
          x="42.5"
-         y="72.114813"
-         id="tspan16"><tspan
+         y="72.114814"
+         id="tspan12"><tspan
    style="font-weight:bold"
-   id="tspan15">What is Lorem Ipsum?</tspan>
+   id="tspan11">What is Lorem Ipsum?</tspan>
 </tspan><tspan
          x="42.5"
          y="88.214812"
-         id="tspan17">
+         id="tspan13">
 </tspan><tspan
          x="42.5"
          y="104.31481"
-         id="tspan19"><tspan
+         id="tspan58"><tspan
            dx="0 0 0 0 0 0 2.7279167 0 0 0 0 0 2.7279167 0 0 2.7279167 0 0 0 0 0 0 2.7279167 0 0 0 0 0 2.7279167 0 0 0 0 2.7279167 0 0 2.7279167"
-           id="tspan18">Lorem Ipsum is simply dummy text of the </tspan></tspan><tspan
+           id="tspan57">Lorem Ipsum is simply dummy text of the </tspan></tspan><tspan
          x="42.5"
          y="120.41481"
-         id="tspan21"><tspan
+         id="tspan60"><tspan
            dx="0 0 0 0 0 0 0 0 0 6.5308533 0 0 0 6.5308571 0 0 0 0 0 0 0 0 0 0 0 6.5308495 0 0 0 0 0 0 0 0 0 6.5308495"
-           id="tspan20">printing and typesetting industry. Lorem </tspan></tspan><tspan
+           id="tspan59">printing and typesetting industry. Lorem </tspan></tspan><tspan
          x="42.5"
          y="136.51481"
-         id="tspan23"><tspan
+         id="tspan62"><tspan
            dx="0 0 0 0 0 0 6.288662 0 0 0 6.288662 0 0 0 0 6.288662 0 0 0 6.288662 0 0 0 0 0 0 0 0 0 0 6.288662"
-           id="tspan22">Ipsum has been the industry's standard </tspan></tspan><tspan
+           id="tspan61">Ipsum has been the industry's standard </tspan></tspan><tspan
          x="42.5"
          y="152.61481"
-         id="tspan27"><tspan
+         id="tspan66"><tspan
            dx="0 0 0 0 0 0 1.7679138 0 0 0 0 1.76791"
-           id="tspan24">dummy text ever </tspan><tspan
+           id="tspan63">dummy text ever </tspan><tspan
            dx="1.76791"
-           id="tspan25">since </tspan><tspan
+           id="tspan64">since </tspan><tspan
            dx="1.7679176 0 0 0 1.76791 0 0 0 0 0 0 1.7679253 0 0 0 0 1.76791"
-           id="tspan26">the 1500s, when an </tspan></tspan><tspan
+           id="tspan65">the 1500s, when an </tspan></tspan><tspan
          x="42.5"
          y="168.71481"
-         id="tspan32">unknown <tspan
+         id="tspan71">unknown <tspan
    dx="0.96390915"
    style="font-weight:bold;text-decoration-line:none"
-   id="tspan28">printer </tspan><tspan
+   id="tspan67">printer </tspan><tspan
    dx="0.96390152"
    style="font-weight:bold;text-decoration-line:none"
-   id="tspan29">took </tspan><tspan
+   id="tspan68">took </tspan><tspan
    dx="0.96390152 0 0.96390915"
    style="font-weight:bold"
-   id="tspan30">a galley</tspan><tspan
+   id="tspan69">a galley</tspan><tspan
    dx="0 0.96390915 0 0 0.96389389 0 0 0 0 0.96390915"
-   id="tspan31"> of type and </tspan></tspan><tspan
+   id="tspan70"> of type and </tspan></tspan><tspan
          x="42.5"
          y="184.81482"
-         id="tspan36"><tspan
+         id="tspan75"><tspan
            dx="0 0 0 0 0 0 0 0 0 0 0.46591568 0 0 0.46591568"
-           id="tspan33">scrambled it to </tspan><tspan
+           id="tspan72">scrambled it to </tspan><tspan
            dx="0.46591568 0 0 0 0 0.46592331"
-           id="tspan34">make a </tspan><tspan
+           id="tspan73">make a </tspan><tspan
            dx="0.46592331 0 0 0 0 0.46592331 0 0 0 0 0 0 0 0 0.46592331"
-           id="tspan35">type specimen book. </tspan></tspan><tspan
+           id="tspan74">type specimen book. </tspan></tspan><tspan
          x="42.5"
          y="200.91482"
-         id="tspan40"><tspan
+         id="tspan79"><tspan
            dx="0 0 0 2.5519152"
-           id="tspan37">It has </tspan><tspan
+           id="tspan76">It has </tspan><tspan
            dx="2.5519142"
-           id="tspan38">survived </tspan><tspan
-           dx="2.5519142 0 0 0 2.5519142 0 0 0 0 2.5519142 0 0 0 0 2.5519066 0 0 0 0 0 0 0 0 0 0 2.551899"
-           id="tspan39">not only five centuries, but </tspan></tspan><tspan
+           id="tspan77">survived </tspan><tspan
+           dx="2.5519142 0 0 0 2.5519142 0 0 0 0 2.5519142 4.2139969 -4.2139931 0 0 2.5519066 0 0 0 0 0 0 0 0 0 0 2.551899"
+           id="tspan78">not only five centuries, but </tspan></tspan><tspan
          x="42.5"
          y="217.01483"
-         id="tspan42">also <tspan
+         id="tspan81">also <tspan
    dx="5.9974899 0 0 0 5.9974899 0 0 0 0 5.9974823 0 0 0 0 5.9974976 0 0 0 0 0 0 0 0 0 0 5.9974823"
-   id="tspan41">the leap into electronic typesetting, </tspan></tspan><tspan
+   id="tspan80">the leap into electronic typesetting, </tspan></tspan><tspan
          x="42.5"
          y="233.11484"
-         id="tspan45">remaining <tspan
+         id="tspan84">remaining <tspan
    dx="7.041851 0 0 0 0 0 0 0 0 0 0 0 7.041851 0 0 0 0 0 0 0 0 0 0 7.041851"
-   id="tspan43">essentially unchanged. It </tspan><tspan
+   id="tspan82">essentially unchanged. It </tspan><tspan
    dx="7.041851"
-   id="tspan44">was </tspan></tspan><tspan
+   id="tspan83">was </tspan></tspan><tspan
          x="42.5"
          y="249.21484"
-         id="tspan48">popularise<tspan
+         id="tspan87">popularise<tspan
    dx="0 0 0.7559166 0 0 0.7559166 0 0 0 0.7559166 0 0 0 0 0 0.75592422 0 0 0 0 0.7559166"
-   id="tspan46">d in the 1960s with the </tspan><tspan
+   id="tspan85">d in the 1960s with the </tspan><tspan
    dx="0.7559166 0 0 0 0 0 0 0 0.7559166"
-   id="tspan47">release of </tspan></tspan><tspan
+   id="tspan86">release of </tspan></tspan><tspan
          x="42.5"
          y="265.31485"
-         id="tspan51"><tspan
+         id="tspan90"><tspan
            dx="0 0 0 0 0 0 0 0 0 6.9018478 0 0 0 0 0 0 6.9018517 0 0 0 0 0 0 0 0 0 0 6.9018364"
-           id="tspan49">Letraset sheets containing Lorem </tspan><tspan
+           id="tspan88">Letraset sheets containing Lorem </tspan><tspan
            dx="6.9018517"
-           id="tspan50">Ipsum </tspan></tspan><tspan
+           id="tspan89">Ipsum </tspan></tspan><tspan
          x="42.5"
          y="281.41484"
-         id="tspan53">passages, <tspan
+         id="tspan92">passages, <tspan
    dx="3.1554832 0 0 0 3.1554832 0 0 0 0 3.1554832 0 0 0 0 0 0 0 0 3.1554756 0 0 0 0 3.155468"
-   id="tspan52">and more recently with desktop </tspan></tspan><tspan
+   id="tspan91">and more recently with desktop </tspan></tspan><tspan
          x="42.5"
          y="297.51485"
-         id="tspan55"><tspan
+         id="tspan94"><tspan
            dx="0 0 0 0 0 0 0 0 0 0 0 4.3783455 0 0 0 0 0 0 0 0 4.3783531 0 0 0 0 4.3783531 0 0 0 0 0 4.3783531"
-           id="tspan54">publishing software like Aldus PageMaker </tspan></tspan><tspan
+           id="tspan93">publishing software like Aldus PageMaker </tspan></tspan><tspan
          x="42.5"
          y="313.61485"
-         id="tspan56">including versions of Lorem Ipsum.
+         id="tspan95">including versions of Lorem Ipsum.
 </tspan></text>
   </g>
 </svg>

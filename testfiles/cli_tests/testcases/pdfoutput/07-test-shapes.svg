@@ -30,44 +30,7 @@
      inkscape:window-height="943"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="10"
-       bleed="0"
-       inkscape:label="Solids" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page2"
-       margin="10"
-       bleed="0"
-       inkscape:label="Paint Order" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page19"
-       margin="10"
-       bleed="0"
-       inkscape:label="Overlapping" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page25"
-       margin="0"
-       bleed="0"
-       inkscape:label="Spiral" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
      id="defs1">
     <marker
@@ -135,6 +98,30 @@
          x="120"
          y="10" />
     </clipPath>
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="Solids"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page2"
+       inkscape:label="Paint Order"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page19"
+       inkscape:label="Overlapping"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page25"
+       inkscape:label="Spiral"
+       inkscape:margin="0"
+       inkscape:bleed="0" />
   </defs>
   <g
      inkscape:label="Layer 1"

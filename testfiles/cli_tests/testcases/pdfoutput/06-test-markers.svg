@@ -31,71 +31,7 @@
      inkscape:window-height="1408"
      inkscape:window-maximized="1"
      inkscape:current-layer="continuous-markers"
-     showgrid="false">
-    <inkscape:page
-       x="0"
-       y="0"
-       width="100"
-       height="100"
-       id="page1"
-       margin="10"
-       bleed="0"
-       inkscape:label="Direct Paint" />
-    <inkscape:page
-       x="110"
-       y="0"
-       width="100"
-       height="100"
-       id="page2"
-       margin="10"
-       bleed="0"
-       inkscape:label="Transformed and Transparent" />
-    <inkscape:page
-       x="220"
-       y="0"
-       width="100"
-       height="100"
-       id="page3"
-       margin="10"
-       bleed="0"
-       inkscape:label="Context Paint" />
-    <inkscape:page
-       x="330"
-       y="0"
-       width="100"
-       height="100"
-       id="page4"
-       margin="10"
-       bleed="0"
-       inkscape:label="Marker Clones 1" />
-    <inkscape:page
-       x="440"
-       y="0"
-       width="100"
-       height="100"
-       id="page5"
-       margin="10"
-       bleed="0"
-       inkscape:label="Marker Clones 2" />
-    <inkscape:page
-       x="550"
-       y="0"
-       width="100"
-       height="100"
-       id="page6"
-       margin="10"
-       bleed="0"
-       inkscape:label="Marker Clones 3" />
-    <inkscape:page
-       x="660"
-       y="0"
-       width="100"
-       height="100"
-       id="page7"
-       margin="10"
-       bleed="0"
-       inkscape:label="Marker Clones 4" />
-  </sodipodi:namedview>
+     showgrid="false" />
   <defs
      id="defs1">
     <linearGradient
@@ -540,6 +476,48 @@
        x2="270"
        y2="70.054841"
        gradientUnits="userSpaceOnUse" />
+    <view
+       viewBox="0 0 100 100"
+       id="page1"
+       inkscape:label="Direct Paint"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="110 0 100 100"
+       id="page2"
+       inkscape:label="Transformed and Transparent"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="220 0 100 100"
+       id="page3"
+       inkscape:label="Context Paint"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="330 0 100 100"
+       id="page4"
+       inkscape:label="Marker Clones 1"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="440 0 100 100"
+       id="page5"
+       inkscape:label="Marker Clones 2"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="550 0 100 100"
+       id="page6"
+       inkscape:label="Marker Clones 3"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
+    <view
+       viewBox="660 0 100 100"
+       id="page7"
+       inkscape:label="Marker Clones 4"
+       inkscape:margin="10"
+       inkscape:bleed="0" />
   </defs>
   <g
      inkscape:label="Layer 1"
