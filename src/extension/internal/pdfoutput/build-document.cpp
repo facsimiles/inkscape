@@ -44,6 +44,23 @@ std::string get_id(SPObject const *obj)
     g_error("Object doesn't have any sort of id.");
 }
 
+std::string get_document_id(SPDocument const *doc)
+{
+    if (!doc) {
+        return "";
+    }
+    // Filename based documents
+    if (auto fn = doc->getDocumentFilename()) {
+        return fn;
+    }
+    // Memory based documents (a translated string that includes a unique number)
+    if (auto name = doc->getDocumentName()) {
+        return name;
+    }
+    g_warning("Couldn't get document_id for PDF output, there may be cache errors.");
+    return "unkown"; // Failure, not empty string
+}
+
 void Document::set_label(uint32_t page, std::string const &label)
 {
     _gen.add_page_labeling(page, {}, label, {});
@@ -89,7 +106,7 @@ Document::item_to_transparency_group(SPItem const *item, SPStyle const *context_
     }
 
     // Items are cached so they can be reused
-    ItemCacheKey cache_key = {get_id(item), "", ""};
+    ItemCacheKey cache_key = {get_document_id(item->document), get_id(item), "", ""};
     auto tr = item->transform;
 
     // Complex caching key modification for when marker styles changes because of context styles
@@ -101,14 +118,14 @@ Document::item_to_transparency_group(SPItem const *item, SPStyle const *context_
             if (is_soft_mask) {
                 opacity = context_style->fill_opacity;
             }
-            cache_key = {std::get<0>(cache_key), paint_to_cache_key(context_style->fill, opacity), std::get<2>(cache_key)};
+            cache_key = {std::get<0>(cache_key), std::get<1>(cache_key), paint_to_cache_key(context_style->fill, opacity), std::get<3>(cache_key)};
         }
         if (stroke_used) {
             std::optional<double> opacity;
             if (is_soft_mask) {
                 opacity = context_style->stroke_opacity;
             }
-            cache_key = {std::get<0>(cache_key), std::get<1>(cache_key), paint_to_cache_key(context_style->stroke, opacity)};
+            cache_key = {std::get<0>(cache_key), std::get<1>(cache_key), std::get<2>(cache_key), paint_to_cache_key(context_style->stroke, opacity)};
         }
     }
     if (auto marker = cast<SPMarker>(item)) {
@@ -263,6 +280,17 @@ std::vector<CapyPDF_AnnotationId> Document::get_anchors_for_page(SPPage const *p
         result.push_back(_gen.add_annotation(annot));
     }
     return result;
+}
+
+std::optional<CapyPDF_ImageId> Document::get_image(std::string const &filename, capypdf::ImagePdfProperties &props)
+{
+    if (auto const it = _raster_cache.find(filename); it != _raster_cache.end()) {
+        return it->second;
+    }
+    auto image = _gen.load_image(filename.c_str());
+    auto raster_id = _gen.add_image(image, props);
+    _raster_cache[filename] = raster_id;
+    return raster_id;
 }
 
 } // namespace Inkscape::Extension::Internal::PdfBuilder

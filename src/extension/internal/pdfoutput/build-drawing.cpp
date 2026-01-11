@@ -334,7 +334,7 @@ bool ItemContext::is_valid() const
 
 ItemCacheKey ItemContext::cache_key() const
 {
-    return {get_id(_item), "", ""};
+    return {get_document_id(_item->document), get_id(_item), "", ""};
 }
 
 void ItemContext::paint()

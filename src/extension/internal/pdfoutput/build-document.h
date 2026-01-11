@@ -55,8 +55,8 @@ class GroupContext;
 class ShapeContext;
 class ItemContext;
 
-// ItemCacheKey{item_id, context_fill, context_stroke}
-typedef std::tuple<std::string, std::string, std::string> ItemCacheKey;
+// ItemCacheKey{doc_id, item_id, context_fill, context_stroke}
+typedef std::tuple<std::string, std::string, std::string, std::string> ItemCacheKey;
 
 enum PaintLayer : std::uint_least8_t
 {
@@ -71,6 +71,7 @@ CapyPDF_Line_Cap get_linecap(SPStrokeCapType mode);
 CapyPDF_Line_Join get_linejoin(SPStrokeJoinType mode);
 
 std::string get_id(SPObject const *obj);
+std::string get_document_id(SPDocument const *doc);
 bool style_has_gradient_transparency(SPStyle const *style);
 bool style_needs_group(SPStyle const *style);
 bool gradient_has_transparency(SPPaintServer const *paint);
@@ -126,6 +127,7 @@ public:
 
     std::optional<CapyPDF_PatternId> get_pattern(SPPaintServer const *paint, std::optional<double> opacity);
 
+    std::optional<CapyPDF_ImageId> get_image(std::string const &filename, capypdf::ImagePdfProperties &props);
 private:
     std::optional<CapyPDF_PatternId> get_linear_pattern(SPLinearGradient const *linear, std::optional<double> opacity);
     std::optional<CapyPDF_PatternId> get_radial_pattern(SPRadialGradient const *radial, std::optional<double> opacity);
@@ -166,6 +168,7 @@ private:
     std::map<std::string, CapyPDF_TransparencyGroupId> _mask_cache;
     std::map<std::string, CapyPDF_PatternId> _pattern_cache;
     std::map<std::string, CapyPDF_FontId> _font_cache;
+    std::map<std::string, CapyPDF_ImageId> _raster_cache;
 
     // Anchors are post-processed into pages
     std::set<SPAnchor const *> _anchors;

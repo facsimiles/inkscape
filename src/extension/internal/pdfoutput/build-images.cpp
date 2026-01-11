@@ -82,8 +82,9 @@ void DrawContext::paint_raster(SPImage const *image)
             if (uri.getMimeType() == "image/svg+xml") {
                 svg = SPDocument::createNewDoc(uri.toNativeFilename().c_str());
             } else {
-                auto image = _doc._gen.load_image(uri.toNativeFilename().c_str());
-                raster_id = _doc._gen.add_image(image, props);
+                // This is cached against the doc cache as the same filename might
+                // be loaded multiple times in the same document.
+                raster_id = _doc.get_image(uri.toNativeFilename(), props);
             }
         } catch (Inkscape::BadURIException const &e) {
             g_warning("Couldn't read image: %s", e.what());
@@ -96,6 +97,7 @@ void DrawContext::paint_raster(SPImage const *image)
 
     if (decoded && base64_type == Base64Data::RASTER) {
         try {
+            // Note this memory image is not cached.
             auto image = _doc._gen.load_image_from_memory(decoded, decoded_len);
             raster_id = _doc._gen.add_image(image, props);
         } catch (std::exception &e) {
