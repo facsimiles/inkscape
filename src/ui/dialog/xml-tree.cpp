@@ -407,10 +407,14 @@ void XmlTree::on_tree_select_row_enable(Inkscape::XML::Node *node)
 {
     assert (node);
 
-    // If mutable:
+    // If mutable and not top node svg:svg :
     bool is_mutable = xml_tree_node_mutable(node);
-    xml_node_duplicate_button.set_sensitive(is_mutable);
-    xml_node_delete_button.set_sensitive(   is_mutable);
+    bool is_root = false;
+    if (auto document = getDocument()){
+        is_root = (node == document->getReprRoot());
+    }
+    xml_node_duplicate_button.set_sensitive(         is_mutable);
+    xml_node_delete_button.set_sensitive(is_mutable && !is_root);
 
     // If element node:
     bool is_element = (node->type() == Inkscape::XML::NodeType::ELEMENT_NODE);
@@ -634,6 +638,10 @@ void XmlTree::cmd_delete_node()
         return;
 
     g_assert(selected_repr != nullptr);
+
+    if (selected_repr == document->getReprRoot()){
+        return;
+    }
 
     document->setXMLDialogSelectedObject(nullptr);
 
