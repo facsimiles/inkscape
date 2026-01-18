@@ -258,6 +258,7 @@ PaintAttribute::PaintStrip::PaintStrip(Glib::RefPtr<Gtk::Builder> builder, const
         [this]() { return connect_signals(); }
     ))
 {
+    _label.set_text(title);
     _switch = PaintPopoverManager::get().get_switch(fill);
     _paint_btn.set_tooltip_text(fill ?_("Fill paint") : _("Stroke paint"));
 
