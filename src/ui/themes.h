@@ -41,7 +41,7 @@ public:
 
     // Name of theme -> has dark theme
     typedef std::map<Glib::ustring, bool> gtkThemeList;
-    void inkscape_fill_gtk(const gchar *path, gtkThemeList &themes);
+    void inkscape_fill_gtk(const std::string& path, gtkThemeList &themes);
 
     std::map<Glib::ustring, bool> get_available_themes();
     void add_gtk_css(bool only_providers, bool cached = false);

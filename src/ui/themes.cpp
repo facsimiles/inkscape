@@ -15,7 +15,11 @@
 #include "themes.h"
 
 #include <regex>
+#include <giomm/resource.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
+#include <glibmm/stringutils.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/settings.h>
 #include <pangomm/fontdescription.h>
@@ -50,31 +54,20 @@ ThemeContext::~ThemeContext() = default;
 /**
  * Inkscape fill gtk, taken from glib/gtk code with our own checks.
  */
-void ThemeContext::inkscape_fill_gtk(const gchar *path, gtkThemeList &themes)
+void ThemeContext::inkscape_fill_gtk(const std::string& path, gtkThemeList &themes)
 {
-    const gchar *dir_entry;
-    GDir *dir = g_dir_open(path, 0, nullptr);
-    if (!dir)
-        return;
-    while ((dir_entry = g_dir_read_name(dir))) {
-        gchar *filename = g_build_filename(path, dir_entry, "gtk-4.0", "gtk.css", nullptr);
-        bool has_prefer_dark = false;
-  
-        Glib::ustring theme = dir_entry;
-        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-4.0", "gtk-dark.css", nullptr);
-        if (g_file_test(filenamedark, G_FILE_TEST_IS_REGULAR))
-            has_prefer_dark = true;
-        if (themes.find(theme) != themes.end() && !has_prefer_dark) {
-            continue;
-        }
-        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR)) {
-            themes[theme] = has_prefer_dark;
-        }
-        g_free(filename);
-        g_free(filenamedark);
+    if (!Glib::file_test(path, Glib::FileTest::IS_DIR)) return;
+
+    for (auto&& entry : Glib::Dir(path)) {
+        auto filename = Glib::build_filename(path, entry, "gtk-4.0", "gtk.css");
+        if (!Glib::file_test(filename, Glib::FileTest::IS_REGULAR)) continue;
+
+        auto filename_dark = Glib::build_filename(path, entry, "gtk-4.0", "gtk-dark.css");
+        auto has_dark_theme = Glib::file_test(filename_dark, Glib::FileTest::IS_REGULAR);
+
+   printf("theme: '%s'\n",entry.c_str());
+        themes[entry] = has_dark_theme;
     }
-  
-    g_dir_close(dir);
 }
 
 /**
@@ -89,52 +82,37 @@ ThemeContext::get_available_themes()
     // gtk4 will load a theme based solely on its name searching for it in a list of folders (that we cannot change).
 
     gtkThemeList themes;
-    Glib::ustring theme = "";
-    gchar *path;
-    gchar **builtin_themes;
-    guint i, j;
-    const gchar *const *dirs;
-  
     /* Builtin themes */
-    builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, nullptr);
-    for (i = 0; builtin_themes[i] != NULL; i++) {
-        if (g_str_has_suffix(builtin_themes[i], "/")) {
-            theme = builtin_themes[i];
-            theme.resize(theme.size() - 1);
-            Glib::ustring theme_path = "/org/gtk/libgtk/theme";
-            theme_path += "/" + theme;
-            gchar **builtin_themes_files =
-                g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, nullptr);
-            bool has_prefer_dark = false;
-            if (builtin_themes_files != NULL) {
-                for (j = 0; builtin_themes_files[j] != NULL; j++) {
-                    Glib::ustring file = builtin_themes_files[j];
-                    if (file == "gtk-dark.css") {
-                        has_prefer_dark = true;
-                    }
-                }
-            }
-            g_strfreev(builtin_themes_files);
-            themes[theme] = has_prefer_dark;
-        }
+    std::string theme_path = "/org/gtk/libgtk/theme";
+    // Expected themes: "Empty" (a test theme, not usable) and "Default" (Adwaita)
+    auto builtin_themes = Gio::Resource::enumerate_children_global(theme_path);
+    for (auto&& theme : builtin_themes) {
+        if (!Glib::str_has_suffix(theme, "/")) continue;
+
+        theme.resize(theme.size() - 1);
+        if (theme == "Empty") continue;
+
+        // gtk4 has a dark theme variant, but there is no "gtk-dark.css" file/resource;
+        // this and high-contrast variants are handled through a media query "prefers-color-scheme"
+        bool has_dark = true;
+        themes[theme] = has_dark;
+// printf("theme: '%s', dark? %d\n",theme.c_str(),has_dark);
     }
 
-    g_strfreev(builtin_themes);
+    auto path = Glib::build_filename(Glib::get_user_data_dir(), "themes");
+printf("1themes: '%s'\n",path.c_str());
+    inkscape_fill_gtk(path.c_str(), themes);
 
-    path = g_build_filename(g_get_user_data_dir(), "themes", nullptr);
-    inkscape_fill_gtk(path, themes);
-    g_free(path);
-  
-    path = g_build_filename(g_get_home_dir(), ".themes", nullptr);
-    inkscape_fill_gtk(path, themes);
-    g_free(path);
-  
-    dirs = g_get_system_data_dirs();
-    for (i = 0; dirs[i]; i++) {
-        path = g_build_filename(dirs[i], "themes", nullptr);
-        inkscape_fill_gtk(path, themes);
-        g_free(path);
+    path = Glib::build_filename(Glib::get_home_dir(), ".themes");
+printf("2themes: '%s'\n",path.c_str());
+    inkscape_fill_gtk(path.c_str(), themes);
+
+    for (auto&& dir : Glib::get_system_data_dirs()) {
+        auto path = Glib::build_filename(dir, "themes");
+printf("3themes: '%s'\n",path.c_str());
+        inkscape_fill_gtk(path.c_str(), themes);
     }
+
     return themes;
 }
 
@@ -262,8 +240,15 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         gchar *gtkIconThemeName = nullptr;
         gboolean gtkApplicationPreferDarkTheme = false;
 
+#if defined(__APPLE__) || defined(_WIN32)
+        // new default for icons: Dash
+        gtkIconThemeName = g_strdup("Dash");
+        // there is no "System" theme on macOS/win32
+        gtkThemeName = g_strdup("Inkscape");
+#else
         g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, nullptr);
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, nullptr);
+#endif
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, nullptr);
         prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
         prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName ? gtkThemeName : ""));

@@ -647,7 +647,10 @@ StartScreen::filter_themes(Gtk::ComboBox *themes)
 
     bool has_system_theme = false;
     if (theme_name != "Adwaita" || icons_name != "hicolor") {
+        // we don't have "system" themes for macOS and win32
+#if !defined(__APPLE__) && !defined(_WIN32)
         has_system_theme = true;
+#endif
         /* Enable if/when we want custom to be the default.
         if (prefs->getString("/options/boot/theme").empty()) {
             prefs->setString("/options/boot/theme", "system")

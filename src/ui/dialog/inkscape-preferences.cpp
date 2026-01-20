@@ -1757,25 +1757,41 @@ void InkscapePreferences::initPageUI()
     Glib::ustring default_theme = prefs->getString("/theme/defaultGtkTheme");
     Glib::ustring theme = "";
     {
+        // get sorted and unique UI theme names
         dark_themes = INKSCAPE.themecontext->get_available_themes();
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         for (auto const &[theme, dark] : dark_themes) {
+#if defined(__APPLE__) || defined(_WIN32)
+            // on macOS and win32 we ship gtk binaries, and the built-in theme is "Adwaita"
+            if (theme == "Default") {
+                values.emplace_back(theme);
+                labels.emplace_back(C_("theme", "GTK Adwaita"));
+                continue;
+            }
+            // skip "Inkscape" theme; we'll inject it later
+            if (theme == "Inkscape") {
+                continue;
+            }
+#else
             if (theme == default_theme) {
                 continue;
             }
+#endif
             values.emplace_back(theme);
             labels.emplace_back(theme);
         }
-        std::sort(labels.begin(), labels.end());
-        std::sort(values.begin(), values.end());
-        labels.erase(unique(labels.begin(), labels.end()), labels.end());
-        values.erase(unique(values.begin(), values.end()), values.end());
+        // "System" theme concept works on Linux, but not on macOS/win32,
+        // where we don't have system-like themes
+#if defined(__APPLE__) || defined(_WIN32)
+        values.insert(values.begin(), "Inkscape");
+        labels.insert(labels.begin(), C_("theme", "Inkscape"));
+#else
         values.emplace_back("");
         Glib::ustring default_theme_label = _("Use system theme");
         default_theme_label += " (" + default_theme + ")";
         labels.emplace_back(default_theme_label);
-
+#endif
         _gtk_theme.init("/theme/gtkTheme", labels, values, "");
         _page_theme.add_line(false, _("Change GTK theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::comboThemeChange));
