@@ -29,6 +29,7 @@
 #include "object/sp-item-transform.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"
@@ -62,9 +63,9 @@ Transformation::Transformation()
       _scalar_rotate          (_("A_ngle:"), _("Rotation angle (positive = counterclockwise)"), UNIT_TYPE_RADIAL,
                                "transform-rotate", &_units_rotate),
       _scalar_rotate_center_x (_("Center _X:"), _("Rotation center X position"), UNIT_TYPE_LINEAR,
-                               "transform-rotate", &_units_rotate_center),
+                               "transform-move-horizontal", &_units_rotate_center),
       _scalar_rotate_center_y (_("Center _Y:"), _("Rotation center Y position"), UNIT_TYPE_LINEAR,
-                               "transform-rotate", &_units_rotate_center),
+                               "transform-move-vertical", &_units_rotate_center),
       _scalar_skew_horizontal (_("_Horizontal:"), _("Horizontal skew angle (positive = counterclockwise), or absolute displacement, or percentage displacement"), UNIT_TYPE_LINEAR,
                                "transform-skew-horizontal", &_units_skew),
       _scalar_skew_vertical   (_("_Vertical:"),  _("Vertical skew angle (positive = clockwise), or absolute displacement, or percentage displacement"),  UNIT_TYPE_LINEAR,
@@ -353,34 +354,57 @@ void Transformation::layoutPageRotate()
     _clockwise_rotate.set_tooltip_text(_("Rotate in a clockwise direction"));
     _clockwise_rotate.set_group(_counterclockwise_rotate);
 
-    _reset_center_button = Gtk::make_managed<Gtk::Button>();
-    _reset_center_button->set_image_from_icon_name("reset-settings-symbolic");
-    _reset_center_button->set_tooltip_text(_("Move rotation center to the selection's bounding box center"));
-    _reset_center_button->signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onResetRotationCenterClicked));
-
     auto const box = Gtk::make_managed<Gtk::Box>();
+    auto const dir_label_box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 4);
+    auto const dir_icon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("transform-rotate"), Gtk::IconSize::NORMAL));
     auto const dir_label = Gtk::make_managed<Gtk::Label>(_("Direction:"));
     dir_label->set_halign(Gtk::Align::START);
     dir_label->set_margin_bottom(2);
+    dir_icon->set_valign(Gtk::Align::CENTER);
+    dir_label->set_valign(Gtk::Align::CENTER);
+    UI::pack_start(*dir_label_box, *dir_icon, UI::PackOptions::shrink);
+    UI::pack_start(*dir_label_box, *dir_label, UI::PackOptions::shrink);
     _counterclockwise_rotate.set_halign(Gtk::Align::START);
     _clockwise_rotate.set_halign(Gtk::Align::START);
-    UI::pack_start(*box, *dir_label);
+    UI::pack_start(*box, *dir_label_box);
     UI::pack_start(*box, _counterclockwise_rotate);
     UI::pack_start(*box, _clockwise_rotate);
 
+    _rotation_center_selector.set_halign(Gtk::Align::START);
+    _rotation_center_selector.set_margin_top(2);
+    _check_rotate_center_relative.set_label(_("Relative"));
+
+    if (auto grid = dynamic_cast<Gtk::Grid *>(_rotation_center_selector.get_first_child())) {
+        if (auto child = grid->get_child_at(0, 0)) child->set_tooltip_text(_("Place origin at top left"));
+        if (auto child = grid->get_child_at(1, 0)) child->set_tooltip_text(_("Place origin at top"));
+        if (auto child = grid->get_child_at(2, 0)) child->set_tooltip_text(_("Place origin at top right"));
+        if (auto child = grid->get_child_at(0, 1)) child->set_tooltip_text(_("Place origin at left"));
+        if (auto child = grid->get_child_at(1, 1)) child->set_tooltip_text(_("Place origin at center"));
+        if (auto child = grid->get_child_at(2, 1)) child->set_tooltip_text(_("Place origin at right"));
+        if (auto child = grid->get_child_at(0, 2)) child->set_tooltip_text(_("Place origin at bottom left"));
+        if (auto child = grid->get_child_at(1, 2)) child->set_tooltip_text(_("Place origin at bottom"));
+        if (auto child = grid->get_child_at(2, 2)) child->set_tooltip_text(_("Place origin at bottom right"));
+    }
     _page_rotate.table().attach(_scalar_rotate,           0, 0, 2, 1);
     _page_rotate.table().attach(_units_rotate,            2, 0, 1, 1);
     _page_rotate.table().attach(*box,                     0, 1, 2, 1);
     _page_rotate.table().attach(_scalar_rotate_center_x,  0, 2, 2, 1);
     _page_rotate.table().attach(_units_rotate_center,     2, 2, 1, 1);
     _page_rotate.table().attach(_scalar_rotate_center_y,  0, 3, 2, 1);
-    _page_rotate.table().attach(*_reset_center_button,    2, 3, 1, 1);
-    _page_rotate.table().attach(_check_rotate_center_relative, 0, 4, 2, 1);
+    auto const origin_label = Gtk::make_managed<Gtk::Label>(_("Place origin at:"));
+    origin_label->set_halign(Gtk::Align::START);
+    origin_label->set_valign(Gtk::Align::CENTER);
+
+    _check_rotate_center_relative.set_halign(Gtk::Align::START);
+    _page_rotate.table().attach(_check_rotate_center_relative, 2, 3, 1, 1);
+    _page_rotate.table().attach(*origin_label,               0, 4, 1, 1);
+    _page_rotate.table().attach(_rotation_center_selector,   1, 4, 2, 1);
 
     _counterclockwise_rotate.signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onRotateCounterclockwiseClicked));
     _clockwise_rotate.signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onRotateClockwiseClicked));
     _scalar_rotate_center_x.signal_value_changed().connect(sigc::mem_fun(*this, &Transformation::onRotationCenterChanged));
     _scalar_rotate_center_y.signal_value_changed().connect(sigc::mem_fun(*this, &Transformation::onRotationCenterChanged));
+    _rotation_center_selector.connectAlignmentClicked(sigc::mem_fun(*this, &Transformation::onRotationCenterAlignmentClicked));
     auto const connect_focus_out = [this](UI::Widget::ScalarUnit &scalar) {
 #if GTKMM_CHECK_VERSION(4, 0, 0)
         auto focus_controller = Gtk::EventControllerFocus::create();
@@ -679,9 +703,6 @@ void Transformation::updatePageRotate(Inkscape::Selection *selection)
         _scalar_rotate_center_y.setProgrammatically = false;
         _rotation_center_modified = false;
         _page_rotate.set_sensitive(true);
-        if (_reset_center_button) {
-            _reset_center_button->set_sensitive(true);
-        }
     } else {
         _page_rotate.set_sensitive(false);
     }
@@ -949,7 +970,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
     DocumentUndo::done(selection->desktop()->getDocument(), undo_label, INKSCAPE_ICON("dialog-transform"));
 }
 
-void Transformation::onResetRotationCenterClicked()
+void Transformation::onRotationCenterAlignmentClicked(int index)
 {
     auto selection = getSelection();
     if (!selection || selection->isEmpty()) {
@@ -961,19 +982,26 @@ void Transformation::onResetRotationCenterClicked()
         return;
     }
 
-    Geom::Point center = bbox->midpoint();
+    auto const bbox_center = bbox->midpoint();
+    int const col = index % 3;
+    int const row = index / 3;
+    double const x = (col == 0) ? bbox->min()[Geom::X] : (col == 1) ? bbox_center[Geom::X] : bbox->max()[Geom::X];
+    double const y = (row == 0) ? bbox->min()[Geom::Y] : (row == 1) ? bbox_center[Geom::Y] : bbox->max()[Geom::Y];
+    Geom::Point const center(x, y);
+
     double conversion = _units_rotate_center.getConversion("px");
     _scalar_rotate_center_x.setProgrammatically = true;
     _scalar_rotate_center_y.setProgrammatically = true;
     if (_check_rotate_center_relative.get_active()) {
-        _scalar_rotate_center_x.setValue(0);
-        _scalar_rotate_center_y.setValue(0);
+        _scalar_rotate_center_x.setValue((x - bbox_center[Geom::X]) / conversion);
+        _scalar_rotate_center_y.setValue((y - bbox_center[Geom::Y]) / conversion);
     } else {
-        _scalar_rotate_center_x.setValue(center[Geom::X] / conversion);
-        _scalar_rotate_center_y.setValue(center[Geom::Y] / conversion);
+        _scalar_rotate_center_x.setValue(x / conversion);
+        _scalar_rotate_center_y.setValue(y / conversion);
     }
     _scalar_rotate_center_x.setProgrammatically = false;
     _scalar_rotate_center_y.setProgrammatically = false;
+    _rotation_center_modified = false;
 
     setRotationCenter(selection, center);
     DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Set center"), INKSCAPE_ICON("dialog-transform"));

@@ -24,6 +24,7 @@
 #endif
 
 #include "ui/dialog/dialog-base.h"
+#include "ui/widget/alignment-selector.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
 
@@ -162,7 +163,7 @@ protected:
     Gtk::CheckButton  _check_rotate_center_relative;
     Gtk::CheckButton  _check_apply_separately;
     Gtk::CheckButton  _check_replace_matrix;
-    Gtk::Button      *_reset_center_button = nullptr;
+    UI::Widget::AlignmentSelector _rotation_center_selector;
 
     /**
      * Layout the GUI components, and prepare for use
@@ -187,6 +188,7 @@ protected:
     void onRotateCounterclockwiseClicked();
     void onRotateClockwiseClicked();
     void onRotateCenterRelativeToggled();
+    void onRotationCenterAlignmentClicked(int index);
     void onTransformValueChanged();
     void onReplaceMatrixToggled();
     void onScaleProportionalToggled();
@@ -234,7 +236,6 @@ private:
     bool applyRotationCenterFromFields(bool record_undo);
     void onRotationCenterChanged();
     bool onRotationCenterFocusOut(detail::RotationFocusEvent *event = nullptr);
-    void onResetRotationCenterClicked();
 };
 
 } // namespace Inkscape::UI::Dialog
