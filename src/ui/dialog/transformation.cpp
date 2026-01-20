@@ -15,6 +15,7 @@
 #include "transformation.h"
 
 #include <glibmm/i18n.h>
+#include <gdk/gdk.h>
 #include <gtkmm/image.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/version.h>
@@ -26,10 +27,14 @@
 
 #include "object/algorithms/bboxsort.h"
 #include "object/sp-item-transform.h"
+#include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"
+#if GTKMM_CHECK_VERSION(4, 0, 0)
+#include <gtkmm/eventcontrollerfocus.h>
+#endif
 
 namespace Inkscape::UI::Dialog {
 
@@ -56,6 +61,10 @@ Transformation::Transformation()
                                "transform-scale-vertical", &_units_scale),
       _scalar_rotate          (_("A_ngle:"), _("Rotation angle (positive = counterclockwise)"), UNIT_TYPE_RADIAL,
                                "transform-rotate", &_units_rotate),
+      _scalar_rotate_center_x (_("Center _X:"), _("Rotation center X position"), UNIT_TYPE_LINEAR,
+                               "transform-rotate", &_units_rotate_center),
+      _scalar_rotate_center_y (_("Center _Y:"), _("Rotation center Y position"), UNIT_TYPE_LINEAR,
+                               "transform-rotate", &_units_rotate_center),
       _scalar_skew_horizontal (_("_Horizontal:"), _("Horizontal skew angle (positive = counterclockwise), or absolute displacement, or percentage displacement"), UNIT_TYPE_LINEAR,
                                "transform-skew-horizontal", &_units_skew),
       _scalar_skew_vertical   (_("_Vertical:"),  _("Vertical skew angle (positive = clockwise), or absolute displacement, or percentage displacement"),  UNIT_TYPE_LINEAR,
@@ -72,6 +81,7 @@ Transformation::Transformation()
 
       _check_move_relative     (_("Rela_tive move")),
       _check_scale_proportional(_("_Scale proportionally")),
+      _check_rotate_center_relative(_("_Use relative values")),
       _check_apply_separately  (_("Apply to each _object separately")),
       _check_replace_matrix    (_("Edit c_urrent matrix")),
 
@@ -86,12 +96,18 @@ Transformation::Transformation()
     _scalar_scale_vertical.getLabel()->set_hexpand();
     _scalar_skew_horizontal.getLabel()->set_hexpand();
     _scalar_skew_vertical.getLabel()->set_hexpand();
+    _scalar_rotate.getLabel()->set_hexpand();
+    _scalar_rotate_center_x.getLabel()->set_hexpand();
+    _scalar_rotate_center_y.getLabel()->set_hexpand();
 
     _check_move_relative.set_use_underline();
     _check_move_relative.set_tooltip_text(_("Add the specified relative displacement to the current position; otherwise, edit the current absolute position directly"));
 
     _check_scale_proportional.set_use_underline();
     _check_scale_proportional.set_tooltip_text(_("Preserve the width/height ratio of the scaled objects"));
+
+    _check_rotate_center_relative.set_use_underline();
+    _check_rotate_center_relative.set_tooltip_text(_("Relative origin is placed on object bounding box center"));
 
     _check_apply_separately.set_use_underline();
     _check_apply_separately.set_tooltip_text(_("Apply the scale/rotate/skew to each selected object separately; otherwise, transform the selection as a whole"));
@@ -141,6 +157,8 @@ Transformation::Transformation()
     apply_on_activate(_scalar_scale_horizontal);
     apply_on_activate(_scalar_scale_vertical  );
     apply_on_activate(_scalar_rotate          );
+    apply_on_activate(_scalar_rotate_center_x );
+    apply_on_activate(_scalar_rotate_center_y );
     apply_on_activate(_scalar_skew_horizontal );
     apply_on_activate(_scalar_skew_vertical   );
 #endif
@@ -300,12 +318,31 @@ void Transformation::layoutPageScale()
 void Transformation::layoutPageRotate()
 {
     _units_rotate.setUnitType(UNIT_TYPE_RADIAL);
+    _units_rotate_center.setUnitType(UNIT_TYPE_LINEAR);
 
     _scalar_rotate.initScalar(-360.0, 360.0);
     _scalar_rotate.setDigits(3);
     _scalar_rotate.setIncrements(0.1, 1.0);
     _scalar_rotate.set_hexpand();
     _scalar_rotate.setWidthChars(7);
+    _scalar_rotate.getSpinButton().set_hexpand(true);
+    _scalar_rotate.getSpinButton().set_halign(Gtk::Align::FILL);
+
+    _scalar_rotate_center_x.initScalar(-1e6, 1e6);
+    _scalar_rotate_center_x.setDigits(3);
+    _scalar_rotate_center_x.setIncrements(0.1, 1.0);
+    _scalar_rotate_center_x.set_hexpand();
+    _scalar_rotate_center_x.setWidthChars(7);
+    _scalar_rotate_center_x.getSpinButton().set_hexpand(true);
+    _scalar_rotate_center_x.getSpinButton().set_halign(Gtk::Align::FILL);
+
+    _scalar_rotate_center_y.initScalar(-1e6, 1e6);
+    _scalar_rotate_center_y.setDigits(3);
+    _scalar_rotate_center_y.setIncrements(0.1, 1.0);
+    _scalar_rotate_center_y.set_hexpand();
+    _scalar_rotate_center_y.setWidthChars(7);
+    _scalar_rotate_center_y.getSpinButton().set_hexpand(true);
+    _scalar_rotate_center_y.getSpinButton().set_halign(Gtk::Align::FILL);
 
     _counterclockwise_rotate.set_icon_name("object-rotate-left");
     _counterclockwise_rotate.set_has_frame(false);
@@ -316,20 +353,58 @@ void Transformation::layoutPageRotate()
     _clockwise_rotate.set_tooltip_text(_("Rotate in a clockwise direction"));
     _clockwise_rotate.set_group(_counterclockwise_rotate);
 
+    _reset_center_button = Gtk::make_managed<Gtk::Button>();
+    _reset_center_button->set_image_from_icon_name("reset-settings-symbolic");
+    _reset_center_button->set_tooltip_text(_("Move rotation center to the selection's bounding box center"));
+    _reset_center_button->signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onResetRotationCenterClicked));
+
     auto const box = Gtk::make_managed<Gtk::Box>();
+    auto const dir_label = Gtk::make_managed<Gtk::Label>(_("Direction:"));
+    dir_label->set_halign(Gtk::Align::START);
+    dir_label->set_margin_bottom(2);
     _counterclockwise_rotate.set_halign(Gtk::Align::START);
     _clockwise_rotate.set_halign(Gtk::Align::START);
+    UI::pack_start(*box, *dir_label);
     UI::pack_start(*box, _counterclockwise_rotate);
     UI::pack_start(*box, _clockwise_rotate);
 
-    _page_rotate.table().attach(_scalar_rotate, 0, 0, 1, 1);
-    _page_rotate.table().attach(_units_rotate,  1, 0, 1, 1);
-    _page_rotate.table().attach(*box,           1, 1, 1, 1);
+    _page_rotate.table().attach(_scalar_rotate,           0, 0, 2, 1);
+    _page_rotate.table().attach(_units_rotate,            2, 0, 1, 1);
+    _page_rotate.table().attach(*box,                     0, 1, 2, 1);
+    _page_rotate.table().attach(_scalar_rotate_center_x,  0, 2, 2, 1);
+    _page_rotate.table().attach(_units_rotate_center,     2, 2, 1, 1);
+    _page_rotate.table().attach(_scalar_rotate_center_y,  0, 3, 2, 1);
+    _page_rotate.table().attach(*_reset_center_button,    2, 3, 1, 1);
+    _page_rotate.table().attach(_check_rotate_center_relative, 0, 4, 2, 1);
 
     _counterclockwise_rotate.signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onRotateCounterclockwiseClicked));
     _clockwise_rotate.signal_clicked().connect(sigc::mem_fun(*this, &Transformation::onRotateClockwiseClicked));
+    _scalar_rotate_center_x.signal_value_changed().connect(sigc::mem_fun(*this, &Transformation::onRotationCenterChanged));
+    _scalar_rotate_center_y.signal_value_changed().connect(sigc::mem_fun(*this, &Transformation::onRotationCenterChanged));
+    auto const connect_focus_out = [this](UI::Widget::ScalarUnit &scalar) {
+#if GTKMM_CHECK_VERSION(4, 0, 0)
+        auto focus_controller = Gtk::EventControllerFocus::create();
+        focus_controller->signal_leave().connect([this] {
+            onRotationCenterFocusOut();
+        });
+        scalar.getSpinButton().add_controller(focus_controller);
+#else
+        scalar.getSpinButton().signal_focus_out_event().connect(
+            sigc::mem_fun(*this, &Transformation::onRotationCenterFocusOut), false);
+        scalar.getSpinButton().signal_leave_notify_event().connect([this](GdkEventCrossing *) {
+            onRotationCenterFocusOut();
+            return false;
+        });
+        scalar.getSpinButton().signal_activate().connect([this] {
+            onRotationCenterFocusOut();
+        });
+#endif
+    };
+    connect_focus_out(_scalar_rotate_center_x);
+    connect_focus_out(_scalar_rotate_center_y);
 
-    //TODO: honour rotation center?
+    _check_rotate_center_relative.set_active(false);
+    _check_rotate_center_relative.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onRotateCenterRelativeToggled));
 }
 
 void Transformation::layoutPageSkew()
@@ -582,7 +657,31 @@ void Transformation::updatePageScale(Inkscape::Selection *selection)
 void Transformation::updatePageRotate(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
+        auto center = selection->center();
+        Geom::OptRect bbox = selection->preferredBounds();
+        double conversion = _units_rotate_center.getConversion("px");
+        _scalar_rotate_center_x.setProgrammatically = true;
+        _scalar_rotate_center_y.setProgrammatically = true;
+        if (_check_rotate_center_relative.get_active() && bbox) {
+            auto const bbox_center = bbox->midpoint();
+            if (center) {
+                _scalar_rotate_center_x.setValue(((*center)[Geom::X] - bbox_center[Geom::X]) / conversion);
+                _scalar_rotate_center_y.setValue(((*center)[Geom::Y] - bbox_center[Geom::Y]) / conversion);
+            } else {
+                _scalar_rotate_center_x.setValue(0);
+                _scalar_rotate_center_y.setValue(0);
+            }
+        } else if (center) {
+            _scalar_rotate_center_x.setValue((*center)[Geom::X] / conversion);
+            _scalar_rotate_center_y.setValue((*center)[Geom::Y] / conversion);
+        }
+        _scalar_rotate_center_x.setProgrammatically = false;
+        _scalar_rotate_center_y.setProgrammatically = false;
+        _rotation_center_modified = false;
         _page_rotate.set_sensitive(true);
+        if (_reset_center_button) {
+            _reset_center_button->set_sensitive(true);
+        }
     } else {
         _page_rotate.set_sensitive(false);
     }
@@ -819,6 +918,14 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
 void Transformation::applyPageRotate(Inkscape::Selection *selection)
 {
     double angle = _scalar_rotate.getValue(DEG);
+    bool center_changed = false;
+
+    if (_rotation_center_modified) {
+        auto new_center = rotationCenterFromFieldsPx(selection);
+        if (new_center) {
+            center_changed = setRotationCenter(selection, *new_center);
+        }
+}
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (!prefs->getBool("/dialogs/transformation/rotateCounterClockwise", TRUE)) {
@@ -837,7 +944,39 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Rotate"), INKSCAPE_ICON("dialog-transform"));
+    bool const rotated = fabs(angle) > 1e-9;
+    auto const undo_label = (!rotated && center_changed) ? RC_("Undo", "Set center") : RC_("Undo", "Rotate");
+    DocumentUndo::done(selection->desktop()->getDocument(), undo_label, INKSCAPE_ICON("dialog-transform"));
+}
+
+void Transformation::onResetRotationCenterClicked()
+{
+    auto selection = getSelection();
+    if (!selection || selection->isEmpty()) {
+        return;
+    }
+
+    Geom::OptRect bbox = selection->preferredBounds();
+    if (!bbox) {
+        return;
+    }
+
+    Geom::Point center = bbox->midpoint();
+    double conversion = _units_rotate_center.getConversion("px");
+    _scalar_rotate_center_x.setProgrammatically = true;
+    _scalar_rotate_center_y.setProgrammatically = true;
+    if (_check_rotate_center_relative.get_active()) {
+        _scalar_rotate_center_x.setValue(0);
+        _scalar_rotate_center_y.setValue(0);
+    } else {
+        _scalar_rotate_center_x.setValue(center[Geom::X] / conversion);
+        _scalar_rotate_center_y.setValue(center[Geom::Y] / conversion);
+    }
+    _scalar_rotate_center_x.setProgrammatically = false;
+    _scalar_rotate_center_y.setProgrammatically = false;
+
+    setRotationCenter(selection, center);
+    DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Set center"), INKSCAPE_ICON("dialog-transform"));
 }
 
 void Transformation::applyPageSkew(Inkscape::Selection *selection)
@@ -959,6 +1098,87 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection, bool dup
     DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Edit transformation matrix"), INKSCAPE_ICON("dialog-transform"));
 }
 
+bool Transformation::setRotationCenter(Inkscape::Selection *selection, Geom::Point const &center)
+{
+    if (!selection || selection->isEmpty()) {
+        return false;
+    }
+
+    auto items = selection->items();
+    if (items.empty()) {
+        _rotation_center_modified = false;
+        return false;
+    }
+
+    for (auto item : items) {
+        item->setCenter(center);
+        item->updateRepr();
+    }
+
+    selection->emitModified();
+    _rotation_center_modified = false;
+    return true;
+}
+
+std::optional<Geom::Point> Transformation::rotationCenterFromFieldsPx(Inkscape::Selection *selection)
+{
+    if (!selection || selection->isEmpty()) {
+        return std::nullopt;
+    }
+
+    auto const read_value_px = [](UI::Widget::ScalarUnit &scalar) -> std::optional<double> {
+        return scalar.getValue("px");
+    };
+
+    auto const parsed_x = read_value_px(_scalar_rotate_center_x);
+    auto const parsed_y = read_value_px(_scalar_rotate_center_y);
+    if (!parsed_x || !parsed_y) {
+        return std::nullopt;
+    }
+
+    double x = *parsed_x;
+    double y = *parsed_y;
+
+    if (_check_rotate_center_relative.get_active()) {
+        Geom::OptRect bbox = selection->preferredBounds();
+        if (!bbox) {
+            return std::nullopt;
+        }
+        auto const bbox_center = bbox->midpoint();
+        x += bbox_center[Geom::X];
+        y += bbox_center[Geom::Y];
+    }
+
+    return Geom::Point(x, y);
+}
+
+bool Transformation::applyRotationCenterFromFields(bool record_undo)
+{
+    auto selection = getSelection();
+    if (!selection || selection->isEmpty()) {
+        _rotation_center_modified = false;
+        return false;
+    }
+
+    auto new_center = rotationCenterFromFieldsPx(selection);
+    if (!new_center) {
+        _rotation_center_modified = false;
+        return false;
+    }
+
+    auto current_center = selection->center();
+    if (current_center && Geom::LInfty(*new_center - *current_center) < 1e-9) {
+        _rotation_center_modified = false;
+        return false;
+    }
+
+    bool changed = setRotationCenter(selection, *new_center);
+    if (changed && record_undo) {
+        DocumentUndo::done(selection->desktop()->getDocument(), RC_("Undo", "Set center"), INKSCAPE_ICON("dialog-transform"));
+    }
+    return changed;
+}
+
 /*########################################################################
 # V A L U E - C H A N G E D    C A L L B A C K S
 ########################################################################*/
@@ -1039,6 +1259,57 @@ void Transformation::onRotateClockwiseClicked()
     prefs->setBool("/dialogs/transformation/rotateCounterClockwise", getDesktop()->yaxisdown());
 }
 
+void Transformation::onRotateCenterRelativeToggled()
+{
+    auto selection = getSelection();
+    if (!selection || selection->isEmpty()) {
+        return;
+    }
+
+    Geom::OptRect bbox = selection->preferredBounds();
+    if (!bbox) {
+        return;
+    }
+
+    double conversion = _units_rotate_center.getConversion("px");
+    double x = _scalar_rotate_center_x.getValue("px");
+    double y = _scalar_rotate_center_y.getValue("px");
+    auto const bbox_center = bbox->midpoint();
+
+    _scalar_rotate_center_x.setProgrammatically = true;
+    _scalar_rotate_center_y.setProgrammatically = true;
+    if (_check_rotate_center_relative.get_active()) {
+        _scalar_rotate_center_x.setValue((x - bbox_center[Geom::X]) / conversion);
+        _scalar_rotate_center_y.setValue((y - bbox_center[Geom::Y]) / conversion);
+    } else {
+        _scalar_rotate_center_x.setValue((bbox_center[Geom::X] + x) / conversion);
+        _scalar_rotate_center_y.setValue((bbox_center[Geom::Y] + y) / conversion);
+    }
+    _scalar_rotate_center_x.setProgrammatically = false;
+    _scalar_rotate_center_y.setProgrammatically = false;
+    _rotation_center_modified = false;
+}
+
+void Transformation::onRotationCenterChanged()
+{
+    if (_scalar_rotate_center_x.setProgrammatically) {
+        _scalar_rotate_center_x.setProgrammatically = false;
+        return;
+    }
+    if (_scalar_rotate_center_y.setProgrammatically) {
+        _scalar_rotate_center_y.setProgrammatically = false;
+        return;
+    }
+    _rotation_center_modified = true;
+    applyRotationCenterFromFields(false);
+}
+
+bool Transformation::onRotationCenterFocusOut(detail::RotationFocusEvent * /*event*/)
+{
+    applyRotationCenterFromFields(false);
+    return false;
+}
+
 void Transformation::onTransformValueChanged()
 {
 
@@ -1115,6 +1386,28 @@ void Transformation::onClear()
         }
     case PAGE_ROTATE: {
         _scalar_rotate.setValue(0);
+        auto selection = getSelection();
+        _scalar_rotate_center_x.setProgrammatically = true;
+        _scalar_rotate_center_y.setProgrammatically = true;
+        if (selection && !selection->isEmpty()) {
+            Geom::OptRect bbox = selection->preferredBounds();
+            auto center = selection->center();
+            double conversion = _units_rotate_center.getConversion("px");
+            if (_check_rotate_center_relative.get_active() && bbox) {
+                _scalar_rotate_center_x.setValue(0);
+                _scalar_rotate_center_y.setValue(0);
+            } else if (center) {
+                _scalar_rotate_center_x.setValue((*center)[Geom::X] / conversion);
+                _scalar_rotate_center_y.setValue((*center)[Geom::Y] / conversion);
+            }
+        }
+        if (!selection || selection->isEmpty()) {
+            _scalar_rotate_center_x.setValue(0);
+            _scalar_rotate_center_y.setValue(0);
+        }
+        _scalar_rotate_center_x.setProgrammatically = false;
+        _scalar_rotate_center_y.setProgrammatically = false;
+        _rotation_center_modified = false;
         break;
     }
     case PAGE_SCALE: {
@@ -1152,6 +1445,7 @@ void Transformation::desktopReplaced()
         SPNamedView *nv = desktop->getNamedView();
         if (nv->display_units) {
             _units_move.setUnit(nv->display_units->abbr);
+            _units_rotate_center.setUnit(nv->display_units->abbr);
             _units_transform.setUnit(nv->display_units->abbr);
         }
 
