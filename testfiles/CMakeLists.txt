@@ -68,7 +68,6 @@ set(TEST_SOURCES
     async_progress-test
     boolop-attr-test
     colors/cms-system-test
-    colors/cms-transform-color-test
     colors/document-cms-test
     colors/dragndrop-test
     colors/color-set-test
@@ -189,8 +188,9 @@ add_unit_tests(TEST_SOURCES "svg-length-test.cpp"
 
 include("${CMAKE_SOURCE_DIR}/src/colors/CMakeUnit.txt")
 get_color_unit_lib()
-
 add_unit_tests(TEST_SOURCES "colors/cms-profile-test.cpp"
+                            "colors/cms-transform-color-test.cpp"
+                            "colors/cms-transform-surface-test.cpp"
                             "colors/color-test.cpp"
                             "colors/gamut-test.cpp"
                             "colors/manager-test.cpp"

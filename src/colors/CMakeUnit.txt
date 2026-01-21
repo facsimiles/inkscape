@@ -4,7 +4,6 @@ set(colors_unit_SRC
 	cms/profile.cpp
 	cms/transform.cpp
 	cms/transform-color.cpp
-	cms/transform-cairo.cpp
 	color.cpp
 	manager.cpp
 	parser.cpp
@@ -34,9 +33,10 @@ set(colors_unit_SRC
 
 	# -------
 	# Headers
+	cms/profile.h
 	cms/transform.h
 	cms/transform-color.h
-	cms/transform-cairo.h
+	cms/transform-surface.h
 	color.h
 	manager.h
 	parser.h
