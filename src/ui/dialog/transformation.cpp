@@ -35,9 +35,6 @@
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"
-#if GTKMM_CHECK_VERSION(4, 0, 0)
-#include <gtkmm/eventcontrollerfocus.h>
-#endif
 
 namespace Inkscape::UI::Dialog {
 
@@ -407,27 +404,6 @@ void Transformation::layoutPageRotate()
     _scalar_rotate_center_x.signal_value_changed().connect(sigc::mem_fun(*this, &Transformation::onRotationCenterChanged));
     _scalar_rotate_center_y.signal_value_changed().connect(sigc::mem_fun(*this, &Transformation::onRotationCenterChanged));
     _rotation_center_selector.connectAlignmentClicked(sigc::mem_fun(*this, &Transformation::onRotationCenterAlignmentClicked));
-    auto const connect_focus_out = [this](UI::Widget::ScalarUnit &scalar) {
-#if GTKMM_CHECK_VERSION(4, 0, 0)
-        auto focus_controller = Gtk::EventControllerFocus::create();
-        focus_controller->signal_leave().connect([this] {
-            onRotationCenterFocusOut();
-        });
-        scalar.getSpinButton().add_controller(focus_controller);
-#else
-        scalar.getSpinButton().signal_focus_out_event().connect(
-            sigc::mem_fun(*this, &Transformation::onRotationCenterFocusOut), false);
-        scalar.getSpinButton().signal_leave_notify_event().connect([this](GdkEventCrossing *) {
-            onRotationCenterFocusOut();
-            return false;
-        });
-        scalar.getSpinButton().signal_activate().connect([this] {
-            onRotationCenterFocusOut();
-        });
-#endif
-    };
-    connect_focus_out(_scalar_rotate_center_x);
-    connect_focus_out(_scalar_rotate_center_y);
 
     _check_rotate_center_relative.set_active(false);
     _check_rotate_center_relative.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onRotateCenterRelativeToggled));
