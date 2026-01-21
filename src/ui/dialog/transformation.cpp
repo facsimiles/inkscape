@@ -16,7 +16,6 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
-#include <gdk/gdk.h>
 #include <gtkmm/image.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/window.h>
@@ -31,7 +30,6 @@
 #include "object/sp-item-transform.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
-#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/widget/spinbutton.h"
@@ -355,7 +353,8 @@ void Transformation::layoutPageRotate()
 
     auto const box = Gtk::make_managed<Gtk::Box>();
     auto const dir_label_box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 4);
-    auto const dir_icon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("transform-rotate"), Gtk::IconSize::NORMAL));
+    auto const dir_icon = Gtk::make_managed<Gtk::Image>();
+    dir_icon->set_from_icon_name(INKSCAPE_ICON("transform-rotate"));
     auto const dir_label = Gtk::make_managed<Gtk::Label>(_("Direction:"));
     dir_label->set_halign(Gtk::Align::START);
     dir_label->set_margin_bottom(2);
