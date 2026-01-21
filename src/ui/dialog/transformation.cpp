@@ -15,9 +15,11 @@
 #include "transformation.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 #include <gdk/gdk.h>
 #include <gtkmm/image.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/window.h>
 #include <gtkmm/version.h>
 
 #include "desktop.h"
@@ -635,6 +637,11 @@ void Transformation::onSwitchPage(Gtk::Widget * /*page*/, guint pagenum)
     }
 
     updateSelection((PageType)pagenum, getDesktop()->getSelection());
+    if (auto window = dynamic_cast<Gtk::Window *>(get_root())) {
+        Glib::signal_idle().connect_once(
+            sigc::mem_fun(*window, &Gtk::Window::unset_focus),
+            Glib::PRIORITY_DEFAULT_IDLE);
+    }
 }
 
 void Transformation::updatePageMove(Inkscape::Selection *selection)
