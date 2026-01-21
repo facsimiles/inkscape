@@ -18,10 +18,6 @@
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/version.h>
 #include <optional>
-#include <gdk/gdk.h>
-#if !GTKMM_CHECK_VERSION(4, 0, 0)
-#include <gdk/gdkevents.h>
-#endif
 
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/alignment-selector.h"
@@ -37,14 +33,6 @@ class Button;
 } // namespace Gtk
 
 namespace Inkscape::UI::Dialog {
-
-namespace detail {
-#if GTKMM_CHECK_VERSION(4, 0, 0)
-using RotationFocusEvent = GdkEvent;
-#else
-using RotationFocusEvent = GdkEventFocus;
-#endif
-} // namespace detail
 
 /**
  * Transformation dialog.
@@ -235,7 +223,6 @@ private:
     bool setRotationCenter(Inkscape::Selection *selection, Geom::Point const &center);
     bool applyRotationCenterFromFields(bool record_undo);
     void onRotationCenterChanged();
-    bool onRotationCenterFocusOut(detail::RotationFocusEvent *event = nullptr);
 };
 
 } // namespace Inkscape::UI::Dialog

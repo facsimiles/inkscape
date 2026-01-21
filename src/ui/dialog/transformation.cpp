@@ -1314,12 +1314,6 @@ void Transformation::onRotationCenterChanged()
     applyRotationCenterFromFields(false);
 }
 
-bool Transformation::onRotationCenterFocusOut(detail::RotationFocusEvent * /*event*/)
-{
-    applyRotationCenterFromFields(false);
-    return false;
-}
-
 void Transformation::onTransformValueChanged()
 {
 
