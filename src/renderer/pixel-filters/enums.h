@@ -1,32 +1,33 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * DrawingOptions for drawing objects
+ * Enumerations for various arguments in pixel filters.
+ *
  *//*
+ *
  * Copyright (C) 2026 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef SEEN_INKSCAPE_RENDERER_DRAWING_ENUMS_H
-#define SEEN_INKSCAPE_RENDERER_DRAWING_ENUMS_H
+#ifndef INKSCAPE_RENDERER_PIXEL_FILTER_ENUMS_H
+#define INKSCAPE_RENDERER_PIXEL_FILTER_ENUMS_H
 
-#include "renderer/drawing-filters/enums.h"
+namespace Inkscape::Renderer::PixelFilter {
 
-#include "style-enums.h" // SPBlendMode
-
-namespace Inkscape::Renderer {
-
-enum class Antialiasing : unsigned char
+enum class BlurQuality
 {
-    None, Fast, Good, Best
+    BEST = 2,
+    BETTER = 1,
+    NORMAL = 0,
+    WORSE = -1,
+    WORST = -2
 };
 
-} // end namespace Inkscape::Renderer
+} // namespace Inkscape::Renderer::PixelFilter
 
-#endif // !SEEN_INKSCAPE_RENDERER_DRAWING_ENUMS_H
-
+#endif // INKSCAPE_RENDERER_PIXEL_FILTER_ENUMS_H
 /*
-  Local Variables:
+  ;Local Variables:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
