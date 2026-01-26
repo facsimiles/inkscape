@@ -1949,7 +1949,7 @@ void InkscapePreferences::initPageUI()
                 if (response == Gtk::ResponseType::OK) {
                     auto desc = d->get_font_desc();
                     theme->saveMonospacedFont(desc);
-                    theme->adjustGlobalFontScale(theme->getFontScale() / 100);
+                    theme->applyMonospacedFont(desc);
                     font_box->set_text(desc.to_string());
                 }
             });

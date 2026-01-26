@@ -167,6 +167,7 @@ Application::Application(bool use_gui) :
         themecontext->add_gtk_css(false);
         auto scale = prefs->getDoubleLimited(UI::ThemeContext::get_font_scale_pref_path(), 100, 50, 200);
         themecontext->adjustGlobalFontScale(scale / 100.0);
+        themecontext->applyMonospacedFont(themecontext->getMonospacedFont());
         Inkscape::UI::ThemeContext::initialize_source_syntax_styles();
 
         // register custom widget types

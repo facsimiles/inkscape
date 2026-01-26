@@ -197,7 +197,7 @@ notebook.blink > header > tabs > tab:checked {
 }
 
 .mono-font {
-    /* note: monospaced font is set by ThemeContext::adjust_global_font_scale() */
+    /* note: monospaced font is set by ThemeContext::applyMonospacedFont() */
 }
 
 /*
