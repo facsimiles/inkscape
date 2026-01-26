@@ -10,8 +10,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INKSCAPE_DISPLAY_DRAWING_H
-#define INKSCAPE_DISPLAY_DRAWING_H
+#ifndef INKSCAPE_RENDERER_DRAWING_H
+#define INKSCAPE_RENDERER_DRAWING_H
 
 #include <optional>
 #include <set>
@@ -23,29 +23,26 @@
 #include <sigc++/sigc++.h>
 
 #include "colors/color.h"
-#include "display/drawing-item.h"
-#include "display/rendermode.h"
-#include "nr-filter-colormatrix.h"
-#include "preferences.h"
 #include "util/funclog.h"
 
-namespace Inkscape {
+#include "enums.h"
+#include "drawing-item.h"
+
+namespace Inkscape::Renderer {
 
 class DrawingItem;
-class CanvasItemDrawing;
-class DrawingContext;
+class Context;
 
 class Drawing
 {
 public:
-    Drawing(CanvasItemDrawing *drawing = nullptr);
+    Drawing();
     Drawing(Drawing const &) = delete;
     Drawing &operator=(Drawing const &) = delete;
     ~Drawing();
 
     void setRoot(DrawingItem *root);
     DrawingItem *root() { return _root; }
-    CanvasItemDrawing *getCanvasItemDrawing() { return _canvas_item_drawing; }
 
     void setRenderMode(RenderMode);
     void setColorMode(ColorMode);
@@ -55,8 +52,8 @@ public:
     void setMaskOutlineColor(Colors::Color);
     void setImageOutlineColor(Colors::Color);
     void setImageOutlineMode(bool);
-    void setFilterQuality(int);
-    void setBlurQuality(int);
+    void setFilterQuality(DrawingFilter::Quality);
+    void setBlurQuality(DrawingFilter::BlurQuality);
     void setDithering(bool);
     void setCursorTolerance(double tol) { _cursor_tolerance = tol; }
     void setSelectZeroOpacity(bool select_zero_opacity) { _select_zero_opacity = select_zero_opacity; }
@@ -68,13 +65,12 @@ public:
     RenderMode renderMode() const { return _rendermode; }
     ColorMode colorMode() const { return _colormode; }
     bool outlineOverlay() const { return _outlineoverlay; }
-    auto &grayscaleMatrix() const { return _grayscale_matrix; }
     Colors::Color const &clipOutlineColor() const { return _clip_outline_color; }
     Colors::Color const &maskOutlineColor() const { return _mask_outline_color; }
     Colors::Color const &imageOutlineColor() const { return _image_outline_color; }
     bool imageOutlineMode() const { return _image_outline_mode; }
-    int filterQuality() const { return _filter_quality; }
-    int blurQuality() const { return _blur_quality; }
+    DrawingFilter::Quality filterQuality() const { return _filter_quality; }
+    DrawingFilter::BlurQuality blurQuality() const { return _blur_quality; }
     bool useDithering() const { return _use_dithering; }
     double cursorTolerance() const { return _cursor_tolerance; }
     bool selectZeroOpacity() const { return _select_zero_opacity; }
@@ -82,7 +78,7 @@ public:
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), Geom::Affine const &affine = Geom::identity(),
                 unsigned flags = DrawingItem::STATE_ALL, unsigned reset = 0);
-    void render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0) const;
+    void render(Context &dc, Geom::IntRect const &area, unsigned flags = 0) const;
     DrawingItem *pick(Geom::Point const &p, double delta, unsigned flags);
 
     void snapshot();
@@ -101,19 +97,16 @@ private:
     void _loadPrefs();
 
     DrawingItem *_root = nullptr;
-    CanvasItemDrawing *_canvas_item_drawing = nullptr;
-    std::unique_ptr<Preferences::PreferencesObserver> _pref_tracker;
 
     RenderMode _rendermode = RenderMode::NORMAL;
     ColorMode _colormode = ColorMode::NORMAL;
     bool _outlineoverlay = false;
-    Filters::FilterColorMatrix::ColorMatrixMatrix _grayscale_matrix;
     Colors::Color _clip_outline_color;
     Colors::Color _mask_outline_color;
     Colors::Color _image_outline_color;
     bool _image_outline_mode; ///< Always draw images as images, even in outline mode.
-    int _filter_quality;
-    int _blur_quality;
+    DrawingFilter::Quality _filter_quality;
+    DrawingFilter::BlurQuality _blur_quality;
     bool _use_dithering;
     double _cursor_tolerance;
     size_t _cache_budget; ///< Maximum allowed size of cache.
@@ -122,8 +115,8 @@ private:
     bool _select_zero_opacity;
     std::optional<Antialiasing> _antialiasing_override;
 
-    std::set<DrawingItem*> _cached_items; // modified by DrawingItem::_setCached()
-    CacheList _candidate_items;           // keep this list always sorted with std::greater
+    //std::set<DrawingItem*> _cached_items; // modified by DrawingItem::_setCached()
+    //CacheList _candidate_items;           // keep this list always sorted with std::greater
 
     /*
      * Simple cacheline separator compatible with x86 (64 bytes) and M* (128 bytes).
@@ -141,9 +134,9 @@ private:
     friend class DrawingItem;
 };
 
-} // namespace Inkscape
+} // namespace Inkscape::Renderer
 
-#endif // INKSCAPE_DISPLAY_DRAWING_H
+#endif // INKSCAPE_RENDERER_DRAWING_H
 
 /*
   Local Variables:

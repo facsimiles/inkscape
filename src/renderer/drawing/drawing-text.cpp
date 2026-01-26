@@ -11,23 +11,20 @@
  */
 
 #include <2geom/pathvector.h>
-
 #include <iostream>
 #include <iomanip>
 
-#include "style.h"
+#include "helper/geom.h"
+#include "libnrtype/font-instance.h"
 
-#include "cairo-utils.h"
-#include "drawing-context.h"
-#include "drawing-surface.h"
+#include "renderer/context.h"
+#include "renderer/surface.h"
+
+#include "drawing-style.h"
 #include "drawing-text.h"
 #include "drawing.h"
 
-#include "helper/geom.h"
-
-#include "libnrtype/font-instance.h"
-
-namespace Inkscape {
+namespace Inkscape::Renderer {
 
 DrawingGlyphs::DrawingGlyphs(Drawing &drawing)
     : DrawingItem(drawing)
@@ -58,7 +55,8 @@ void DrawingGlyphs::setGlyph(std::shared_ptr<FontInstance> font, unsigned int gl
             bbox_pick    = font->BBoxPick( _glyph);
             bbox_draw    = font->BBoxDraw( _glyph);
             if (font->FontHasSVG()) {
-                pixbuf = font->PixBuf(_glyph);
+                // Turn this SVG into a rendered part of the document
+                //auto svg = font->SvgDocument(glyph_id);
             }
             font_descr   = pango_font_description_to_string(font->get_descr());
             // std::cout << "DrawingGlyphs::setGlyph: " << std::setw(6) << glyph
@@ -96,7 +94,7 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
     // Expand to make it easier to pick text when zoom out.
     bbox_pick_scaled_d.expandBy(1.0); // One pixel
 
-    if (ggroup->_nrstyle.data.stroke.type != NRStyleData::PaintType::NONE) {
+    if (ggroup->_nrstyle.data.stroke.type != DrawingStyleData::PaintType::NONE) {
         // this expands the selection box for cases where the stroke is "thick"
         float scale = ctx.ctm.descrim();
         if (_transform) {
@@ -131,15 +129,15 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
     return STATE_ALL;
 }
 
-DrawingItem *DrawingGlyphs::_pickItem(Geom::Point const &p, double /*delta*/, unsigned flags)
+DrawingItem *DrawingGlyphs::_pickItem(Geom::Point const &p, double /*delta*/, unsigned flags, Geom::OptRect const &area_world)
 {
     auto ggroup = cast<DrawingText>(_parent);
     if (!ggroup) {
         throw InvalidItemException();
     }
     DrawingItem *result = nullptr;
-    bool invisible = ggroup->_nrstyle.data.fill.type == NRStyleData::PaintType::NONE &&
-                     ggroup->_nrstyle.data.stroke.type == NRStyleData::PaintType::NONE;
+    bool invisible = ggroup->_nrstyle.data.fill.type == DrawingStyleData::PaintType::NONE &&
+                     ggroup->_nrstyle.data.stroke.type == DrawingStyleData::PaintType::NONE;
     bool outline = flags & PICK_OUTLINE;
 
     if (outline || !invisible) {
@@ -195,12 +193,14 @@ void DrawingText::setStyle(SPStyle const *style, SPStyle const *context_style)
     auto stroke_extensions_hairline = false;
     auto clip_rule = SP_WIND_RULE_EVENODD;
     if (_style) {
+        /*
         vector_effect_stroke = _style->vector_effect.stroke;
         stroke_extensions_hairline = _style->stroke_extensions.hairline;
         clip_rule = _style->clip_rule.computed;
+        */
     }
 
-    defer([=, this, nrstyle = NRStyleData(_style, _context_style)] () mutable {
+    defer([=, this, nrstyle = DrawingStyleData(_style, _context_style)] () mutable {
         _nrstyle.set(std::move(nrstyle));
         style_vector_effect_stroke = vector_effect_stroke;
         style_stroke_extensions_hairline = stroke_extensions_hairline;
@@ -212,7 +212,7 @@ void DrawingText::setChildrenStyle(SPStyle const *context_style)
 {
     DrawingGroup::setChildrenStyle(context_style);
 
-    defer([this, nrstyle = NRStyleData(_style, _context_style)] () mutable {
+    defer([this, nrstyle = DrawingStyleData(_style, _context_style)] () mutable {
         _nrstyle.set(std::move(nrstyle));
     });
 }
@@ -223,7 +223,7 @@ unsigned DrawingText::_updateItem(Geom::IntRect const &area, UpdateContext const
     return DrawingGroup::_updateItem(area, ctx, flags, reset);
 }
 
-void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphase, Geom::Point const &p1, Geom::Point const &p2, double thickness) const
+void DrawingText::decorateStyle(Context &dc, double vextent, double xphase, Geom::Point const &p1, Geom::Point const &p2, double thickness) const
 {
     double wave[16]={
         // clang-format off
@@ -260,7 +260,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     Geom::Point pf = Geom::Point(step * round(p2[Geom::X]/step),p2[Geom::Y]);
     Geom::Point poff = Geom::Point(0,thickness/2.0);
 
-    if (_nrstyle.data.text_decoration_style & NRStyleData::TEXT_DECORATION_STYLE_ISDOUBLE) {
+    if (_nrstyle.data.text_decoration_style & DrawingStyleData::TEXT_DECORATION_STYLE_ISDOUBLE) {
         ps -= Geom::Point(0, vextent/12.0);
         pf -= Geom::Point(0, vextent/12.0);
         dc.rectangle( Geom::Rect(ps + poff, pf - poff));
@@ -273,7 +273,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     to figure where in each of their cycles to start.  Only accurate to 1 part in 16.
     Huge positive offset should keep the phase calculation from ever being negative.
     */
-    else if(_nrstyle.data.text_decoration_style & NRStyleData::TEXT_DECORATION_STYLE_DOTTED){
+    else if(_nrstyle.data.text_decoration_style & DrawingStyleData::TEXT_DECORATION_STYLE_DOTTED){
         // FIXME: Per spec, this should produce round dots.
         Geom::Point pv = ps;
         while(true){
@@ -299,7 +299,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
             i = 0;  // once in phase, it stays in phase
         }
     }
-    else if (_nrstyle.data.text_decoration_style & NRStyleData::TEXT_DECORATION_STYLE_DASHED) {
+    else if (_nrstyle.data.text_decoration_style & DrawingStyleData::TEXT_DECORATION_STYLE_DASHED) {
         Geom::Point pv = ps;
         while(true){
             Geom::Point pvlast = pv;
@@ -324,7 +324,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
             i = 0;  // once in phase, it stays in phase
         }
     }
-    else if (_nrstyle.data.text_decoration_style & NRStyleData::TEXT_DECORATION_STYLE_WAVY) {
+    else if (_nrstyle.data.text_decoration_style & DrawingStyleData::TEXT_DECORATION_STYLE_WAVY) {
         double   amp  = vextent/10.0;
         double   x    = ps[Geom::X];
         double   y    = ps[Geom::Y] + poff[Geom::Y];
@@ -351,7 +351,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
 }
 
 /* returns scaled line thickness */
-void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool under) const
+void DrawingText::decorateItem(Context &dc, double phase_length, bool under) const
 {
     if ( _nrstyle.data.font_size <= 1.0e-32 )return;  // might cause a divide by zero or overflow and nothing would be visible anyway
     double tsp_width_adj                = _nrstyle.data.tspan_width                     / _nrstyle.data.font_size;
@@ -372,13 +372,13 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
 
     if( under ) {
 
-        if(_nrstyle.data.text_decoration_line & NRStyleData::TEXT_DECORATION_LINE_UNDERLINE){
+        if(_nrstyle.data.text_decoration_line & DrawingStyleData::TEXT_DECORATION_LINE_UNDERLINE){
             p1 = Geom::Point(0.0,          -_nrstyle.data.underline_position);
             p2 = Geom::Point(tsp_width_adj,-_nrstyle.data.underline_position);
             decorateStyle(dc, tsp_size_adj, xphase, p1, p2, thickness);
         }
 
-        if(_nrstyle.data.text_decoration_line & NRStyleData::TEXT_DECORATION_LINE_OVERLINE){
+        if(_nrstyle.data.text_decoration_line & DrawingStyleData::TEXT_DECORATION_LINE_OVERLINE){
             p1 = Geom::Point(0.0,          tsp_asc_adj -_nrstyle.data.underline_position + 1 * final_underline_thickness);
             p2 = Geom::Point(tsp_width_adj,tsp_asc_adj -_nrstyle.data.underline_position + 1 * final_underline_thickness);
             decorateStyle(dc, tsp_size_adj, xphase,  p1, p2, thickness);
@@ -387,7 +387,7 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
     } else {
         // Over
 
-        if(_nrstyle.data.text_decoration_line & NRStyleData::TEXT_DECORATION_LINE_LINETHROUGH){
+        if(_nrstyle.data.text_decoration_line & DrawingStyleData::TEXT_DECORATION_LINE_LINETHROUGH){
             thickness = final_line_through_thickness;
             p1 = Geom::Point(0.0,          _nrstyle.data.line_through_position);
             p2 = Geom::Point(tsp_width_adj,_nrstyle.data.line_through_position);
@@ -395,7 +395,7 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
         }
 
         // Obviously this does not blink, but it does indicate which text has been set with that attribute
-        if(_nrstyle.data.text_decoration_line & NRStyleData::TEXT_DECORATION_LINE_BLINK){
+        if(_nrstyle.data.text_decoration_line & DrawingStyleData::TEXT_DECORATION_LINE_BLINK){
             thickness = final_line_through_thickness;
             p1 = Geom::Point(0.0,          _nrstyle.data.line_through_position - 2*final_line_through_thickness);
             p2 = Geom::Point(tsp_width_adj,_nrstyle.data.line_through_position - 2*final_line_through_thickness);
@@ -407,7 +407,7 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
     }
 }
 
-unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area, unsigned flags, DrawingItem const *stop_at) const
+unsigned DrawingText::_renderItem(Context &dc, DrawingOptions &rc, Geom::IntRect const &area, unsigned flags, DrawingItem const *stop_at) const
 {
     auto visible = area & _bbox;
     if (!visible) {
@@ -417,15 +417,15 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
     bool outline = flags & RENDER_OUTLINE;
 
     if (outline) {
-        Inkscape::DrawingContext::Save save(dc);
-        dc.setSource(rc.outline_color);
+        Context::Save save(dc);
+        dc.setSource(*rc.outline_color);
         dc.setTolerance(0.5); // low quality, but good enough for outline mode
 
         for (auto & i : _children) {
             auto g = cast<DrawingGlyphs>(&i);
             if (!g) throw InvalidItemException();
 
-            Inkscape::DrawingContext::Save save(dc);
+            Context::Save save(dc);
             // skip glyphs with singular transforms
             if (g->_ctm.isSingular()) continue;
             dc.transform(g->_ctm);
@@ -442,18 +442,18 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
     // and in applying text decorations.
 
     // Do we have text decorations?
-    bool decorate = (_nrstyle.data.text_decoration_line != NRStyleData::TEXT_DECORATION_LINE_CLEAR );
+    bool decorate = (_nrstyle.data.text_decoration_line != DrawingStyleData::TEXT_DECORATION_LINE_CLEAR );
 
     // prepareFill / prepareStroke need to be called with _ctm in effect.
     // However, we might need to apply a different ctm for glyphs.
     // Therefore, only apply this ctm temporarily.
-    CairoPatternUniqPtr has_stroke;
-    CairoPatternUniqPtr has_fill;
-    CairoPatternUniqPtr has_td_fill;
-    CairoPatternUniqPtr has_td_stroke;
+    std::shared_ptr<Pattern> has_stroke;
+    std::shared_ptr<Pattern> has_fill;
+    std::shared_ptr<Pattern> has_td_fill;
+    std::shared_ptr<Pattern> has_td_stroke;
 
     {
-        Inkscape::DrawingContext::Save save(dc);
+        Context::Save save(dc);
         dc.transform(_ctm);
 
         has_fill   = _nrstyle.prepareFill  (dc, rc, *visible, _item_bbox, _fill_pattern);
@@ -471,9 +471,9 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
         // Determine order for fill and stroke.
         // Text doesn't have markers, we can do paint-order quick and dirty.
         bool fill_first = false;
-        if( _nrstyle.data.paint_order_layer[0] == NRStyleData::PAINT_ORDER_NORMAL ||
-            _nrstyle.data.paint_order_layer[0] == NRStyleData::PAINT_ORDER_FILL   ||
-            _nrstyle.data.paint_order_layer[2] == NRStyleData::PAINT_ORDER_STROKE ) {
+        if( _nrstyle.data.paint_order_layer[0] == DrawingStyleData::PAINT_ORDER_NORMAL ||
+            _nrstyle.data.paint_order_layer[0] == DrawingStyleData::PAINT_ORDER_FILL   ||
+            _nrstyle.data.paint_order_layer[2] == DrawingStyleData::PAINT_ORDER_STROKE ) {
             fill_first = true;
         } // Won't get "stroke fill stroke" but that isn't 'valid'
 
@@ -522,27 +522,27 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
         if (decorate) {
 
             {
-                Inkscape::DrawingContext::Save save(dc);
+                Context::Save save(dc);
                 dc.transform(aff);  // must be leftmost affine in span
                 decorateItem(dc, phase_length, true);
             }
 
             {
-                Inkscape::DrawingContext::Save save(dc);
+                Context::Save save(dc);
                 dc.transform(_ctm);  // Needed so that fill pattern rotates with text
 
                 if (has_td_fill && fill_first) {
-                    _nrstyle.applyTextDecorationFill(dc, has_td_fill);
+                    _nrstyle.applyTextDecorationFill(dc, *has_td_fill);
                     dc.fillPreserve();
                 }
 
                 if (has_td_stroke) {
-                    _nrstyle.applyTextDecorationStroke(dc, has_td_stroke);
+                    _nrstyle.applyTextDecorationStroke(dc, *has_td_stroke);
                     dc.strokePreserve();
                 }
 
                 if (has_td_fill && !fill_first) {
-                    _nrstyle.applyTextDecorationFill(dc, has_td_fill);
+                    _nrstyle.applyTextDecorationFill(dc, *has_td_fill);
                     dc.fillPreserve();
                 }
 
@@ -556,7 +556,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
             auto g = cast<DrawingGlyphs>(&i);
             if (!g) throw InvalidItemException();
 
-            Inkscape::DrawingContext::Save save(dc);
+            Context::Save save(dc);
             if (g->_ctm.isSingular()) {
                 std::cerr << "DrawingText::_renderItem: glyph matrix is singular!" << std::endl;
                 continue;
@@ -567,7 +567,6 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
             // Draw various boxes for debugging
             auto path_copy = cairo_copy_path(dc.raw()); // Cairo save/restore doesn't apply to path!
             {
-                Inkscape::DrawingContext::Save save(dc);
                 dc.newPath();
                 dc.rectangle(g->bbox_exact);
                 dc.setLineWidth(0.02);
@@ -575,7 +574,6 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                 dc.stroke();
             }
             {
-                Inkscape::DrawingContext::Save save(dc);
                 dc.newPath();
                 dc.rectangle(g->bbox_pick);
                 dc.setLineWidth(0.02);
@@ -583,7 +581,6 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                 dc.stroke();
             }
             {
-                Inkscape::DrawingContext::Save save(dc);
                 dc.newPath();
                 dc.rectangle(g->bbox_draw);
                 dc.setLineWidth(0.02);
@@ -602,7 +599,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                 // {
                 //     Geom::OptRect box = bounds_exact(*g->pathvec);
                 //     if (box) {
-                //         Inkscape::DrawingContext::Save save(dc);
+                //         Context::Save save(dc);
                 //         dc.newPath();
                 //         dc.rectangle(*box);
                 //         dc.setLineWidth(0.02);
@@ -619,10 +616,10 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
                         // pixbuf is in font design units, scale to embox.
                         double scale = g->design_units;
                         if (scale <= 0) scale = 1000;
-                        Inkscape::DrawingContext::Save save(dc);
-                        dc.translate(g->bbox_draw.corner(3));
-                        dc.scale(1.0 / scale, -1.0 / scale);
-                        dc.setSource(g->pixbuf->getSurfaceRaw(), 0, 0);
+                        Context::Save save(dc);
+                        dc.translate(Geom::Translate(g->bbox_draw.corner(3)));
+                        dc.scale(Geom::Scale(1.0 / scale, -1.0 / scale));
+                        dc.setSource(*g->pixbuf, 0, 0);
                         dc.paint(1);
                     }
                 } else {
@@ -633,27 +630,25 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
 
         // Draw the glyphs (non-SVG glyphs).
         {
-            Inkscape::DrawingContext::Save save(dc);
+            Context::Save save(dc);
             dc.transform(_ctm);
             if (has_fill && fill_first) {
-                _nrstyle.applyFill(dc, has_fill);
+                _nrstyle.applyFill(dc, *has_fill);
                 dc.fillPreserve();
             }
         }
         {
-            Inkscape::DrawingContext::Save save(dc);
+            Context::Save save(dc);
             if (!style_vector_effect_stroke) {
                 dc.transform(_ctm);
             }
             if (has_stroke) {
-                _nrstyle.applyStroke(dc, has_stroke);
+                _nrstyle.applyStroke(dc, *has_stroke);
 
                 // If the stroke is a hairline, set it to exactly 1px on screen.
                 // If visible hairline mode is on, make sure the line is at least 1px.
                 if (flags & RENDER_VISIBLE_HAIRLINES || style_stroke_extensions_hairline) {
-                    double dx = 1.0, dy = 0.0;
-                    dc.device_to_user_distance(dx, dy);
-                    auto pixel_size = std::hypot(dx, dy);
+                    auto pixel_size = dc.device_to_user_distance({1.0, 1.0}).length();
                     if (style_stroke_extensions_hairline || _nrstyle.data.stroke_width < pixel_size) {
                        dc.setHairline();
                     }
@@ -663,10 +658,10 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
             }
         }
         {
-            Inkscape::DrawingContext::Save save(dc);
+            Context::Save save(dc);
             dc.transform(_ctm);
             if (has_fill && !fill_first) {
-                _nrstyle.applyFill(dc, has_fill);
+                _nrstyle.applyFill(dc, *has_fill);
                 dc.fillPreserve();
             }
         }
@@ -676,27 +671,27 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
         if (decorate) {
 
             {
-                Inkscape::DrawingContext::Save save(dc);
+                Context::Save save(dc);
                 dc.transform(aff);  // must be leftmost affine in span
                 decorateItem(dc, phase_length, false);
             }
 
             {
-                Inkscape::DrawingContext::Save save(dc);
+                Context::Save save(dc);
                 dc.transform(_ctm);  // Needed so that fill pattern rotates with text
 
                 if (has_td_fill && fill_first) {
-                    _nrstyle.applyTextDecorationFill(dc, has_td_fill);
+                    _nrstyle.applyTextDecorationFill(dc, *has_td_fill);
                     dc.fillPreserve();
                 }
 
                 if (has_td_stroke) {
-                    _nrstyle.applyTextDecorationStroke(dc, has_td_stroke);
+                    _nrstyle.applyTextDecorationStroke(dc, *has_td_stroke);
                     dc.strokePreserve();
                 }
 
                 if (has_td_fill && !fill_first) {
-                    _nrstyle.applyTextDecorationFill(dc, has_td_fill);
+                    _nrstyle.applyTextDecorationFill(dc, *has_td_fill);
                     dc.fillPreserve();
                 }
 
@@ -709,14 +704,13 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
     return RENDER_OK;
 }
 
-void DrawingText::_clipItem(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &/*area*/) const
+void DrawingText::_clipItem(Context &dc, DrawingOptions &rc, Geom::IntRect const &/*area*/) const
 {
-    Inkscape::DrawingContext::Save save(dc);
-
+    Context::Save save(dc);
     if (style_clip_rule == SP_WIND_RULE_EVENODD) {
-        dc.setFillRule(CAIRO_FILL_RULE_EVEN_ODD);
+        dc.setFillRule(Cairo::Context::FillRule::EVEN_ODD);
     } else {
-        dc.setFillRule(CAIRO_FILL_RULE_WINDING);
+        dc.setFillRule(Cairo::Context::FillRule::WINDING);
     }
 
     for (auto & i : _children) {
@@ -725,7 +719,7 @@ void DrawingText::_clipItem(DrawingContext &dc, RenderContext &rc, Geom::IntRect
             throw InvalidItemException();
         }
 
-        Inkscape::DrawingContext::Save save(dc);
+        Context::Save save(dc);
         dc.transform(g->_ctm);
         if (g->pathvec){
             dc.path(*g->pathvec);
@@ -734,9 +728,9 @@ void DrawingText::_clipItem(DrawingContext &dc, RenderContext &rc, Geom::IntRect
     dc.fill();
 }
 
-DrawingItem *DrawingText::_pickItem(Geom::Point const &p, double delta, unsigned flags)
+DrawingItem *DrawingText::_pickItem(Geom::Point const &p, double delta, unsigned flags, Geom::OptRect const &area_world)
 {
-    return DrawingGroup::_pickItem(p, delta, flags) ? this : nullptr;
+    return DrawingGroup::_pickItem(p, delta, flags, area_world) ? this : nullptr;
 }
 
 } // end namespace Inkscape

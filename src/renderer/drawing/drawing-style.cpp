@@ -10,43 +10,41 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/nr-style.h"
-#include "style.h"
-
 #include "colors/manager.h"
-#include "display/cairo-utils.h"
-#include "display/drawing-context.h"
-#include "display/drawing-pattern.h"
-#include "display/drawing-surface.h"
 
-#include "object/sp-paint-server.h"
+#include "renderer/context.h"
+#include "renderer/surface.h"
 
-namespace Inkscape {
+#include "drawing-style.h"
+#include "drawing-pattern.h"
 
-void NRStyleData::Paint::clear()
+namespace Inkscape::Renderer {
+
+void DrawingStyleData::Paint::clear()
 {
     server.reset();
     type = PaintType::NONE;
 }
 
-void NRStyleData::Paint::set(Colors::Color const &c)
+void DrawingStyleData::Paint::set(Colors::Color const &c)
 {
     clear();
     type = PaintType::COLOR;
     color = c;
 }
 
-void NRStyleData::Paint::set(SPPaintServer *ps)
+void DrawingStyleData::Paint::set(std::unique_ptr<DrawingPaintServer> ps)
 {
     clear();
     if (ps) {
         type = PaintType::SERVER;
-        server = ps->create_drawing_paintserver();
+        server = std::move(ps);
     }
 }
 
-void NRStyleData::Paint::set(SPIPaint const *paint)
+void DrawingStyleData::Paint::set(SPIPaint const *paint)
 {
+    /*
     if (paint->isPaintserver()) {
         SPPaintServer* server = paint->href->getObject();
         if (server && server->isValid()) {
@@ -63,22 +61,23 @@ void NRStyleData::Paint::set(SPIPaint const *paint)
     } else if (paint->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ||
                paint->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
         // A marker in the defs section will result in ending up here.
-        // std::cerr << "NRStyleData::Paint::set: Double" << std::endl;
+        // std::cerr << "DrawingStyleData::Paint::set: Double" << std::endl;
     } else {
         g_assert_not_reached();
     }
+    */
 }
 
-NRStyleData::NRStyleData()
+DrawingStyleData::DrawingStyleData()
     : fill()
     , stroke()
     , stroke_width(0.0)
     , hairline(false)
     , miter_limit(0.0)
     , dash_offset(0.0)
-    , fill_rule(CAIRO_FILL_RULE_EVEN_ODD)
-    , line_cap(CAIRO_LINE_CAP_BUTT)
-    , line_join(CAIRO_LINE_JOIN_MITER)
+    , fill_rule(Cairo::Context::FillRule::EVEN_ODD)
+    , line_cap(Cairo::Context::LineCap::BUTT)
+    , line_join(Cairo::Context::LineJoin::MITER)
     , text_decoration_line(TEXT_DECORATION_LINE_CLEAR)
     , text_decoration_style(TEXT_DECORATION_STYLE_CLEAR)
     , text_decoration_fill()
@@ -99,13 +98,14 @@ NRStyleData::NRStyleData()
     paint_order_layer[0] = PAINT_ORDER_NORMAL;
 }
 
-bool NRStyleData::Paint::ditherable() const
+bool DrawingStyleData::Paint::ditherable() const
 {
     return type == PaintType::SERVER && server && server->ditherable();
 }
 
-NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
+DrawingStyleData::DrawingStyleData(SPStyle const *style, SPStyle const *context_style)
 {
+    /*
     // Handle 'context-fill' and 'context-stroke': Work in progress
     const SPIPaint *style_fill = &style->fill;
     if (style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) {
@@ -113,13 +113,13 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
             style_fill = &context_style->fill;
         } else {
             // A marker in the defs section will result in ending up here.
-            //std::cerr << "NRStyleData::set: 'context-fill': 'context_style' is NULL" << std::endl;
+            //std::cerr << "DrawingStyleData::set: 'context-fill': 'context_style' is NULL" << std::endl;
         }
     } else if (style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
         if (context_style) {
             style_fill = &context_style->stroke;
         } else {
-            //std::cerr << "NRStyleData::set: 'context-stroke': 'context_style' is NULL" << std::endl;
+            //std::cerr << "DrawingStyleData::set: 'context-stroke': 'context_style' is NULL" << std::endl;
         }
     }
     
@@ -128,10 +128,10 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
 
     switch (style->fill_rule.computed) {
         case SP_WIND_RULE_EVENODD:
-            fill_rule = CAIRO_FILL_RULE_EVEN_ODD;
+            fill_rule = Cairo::Context::FillRule::EVEN_ODD;
             break;
         case SP_WIND_RULE_NONZERO:
-            fill_rule = CAIRO_FILL_RULE_WINDING;
+            fill_rule = Cairo::Context::FillRule::WINDING;
             break;
         default:
             g_assert_not_reached();
@@ -142,42 +142,42 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
         if (context_style) {
             style_stroke = &context_style->fill;
         } else {
-            //std::cerr << "NRStyleData::set: 'context-fill': 'context_style' is NULL" << std::endl;
+            //std::cerr << "DrawingStyleData::set: 'context-fill': 'context_style' is NULL" << std::endl;
         }
     } else if (style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
         if (context_style) {
             style_stroke = &context_style->stroke;
         } else {
-            //std::cerr << "NRStyleData::set: 'context-stroke': 'context_style' is NULL" << std::endl;
+            //std::cerr << "DrawingStyleData::set: 'context-stroke': 'context_style' is NULL" << std::endl;
         }
     }
 
     stroke.set(style_stroke);
-    stroke.opacity = SP_SCALE24_TO_FLOAT(style->stroke_opacity.value);
+    stroke.opacity = style->stroke_opacity.value;
     stroke_width = style->stroke_width.computed;
     hairline = style->stroke_extensions.hairline;
     switch (style->stroke_linecap.computed) {
         case SP_STROKE_LINECAP_ROUND:
-            line_cap = CAIRO_LINE_CAP_ROUND;
+            line_cap = Cairo::Context::LineCap::ROUND;
             break;
         case SP_STROKE_LINECAP_SQUARE:
-            line_cap = CAIRO_LINE_CAP_SQUARE;
+            line_cap = Cairo::Context::LineCap::SQUARE;
             break;
         case SP_STROKE_LINECAP_BUTT:
-            line_cap = CAIRO_LINE_CAP_BUTT;
+            line_cap = Cairo::Context::LineCap::BUTT;
             break;
         default:
             g_assert_not_reached();
     }
     switch (style->stroke_linejoin.computed) {
         case SP_STROKE_LINEJOIN_ROUND:
-            line_join = CAIRO_LINE_JOIN_ROUND;
+            line_join = Cairo::Context::LineJoin::ROUND;
             break;
         case SP_STROKE_LINEJOIN_BEVEL:
-            line_join = CAIRO_LINE_JOIN_BEVEL;
+            line_join = Cairo::Context::LineJoin::BEVEL;
             break;
         case SP_STROKE_LINEJOIN_MITER:
-            line_join = CAIRO_LINE_JOIN_MITER;
+            line_join = Cairo::Context::LineJoin::MITER;
             break;
         default:
             g_assert_not_reached();
@@ -224,6 +224,7 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
     if (style->text_decoration_style.dotted  ) { text_decoration_style |= TEXT_DECORATION_STYLE_DOTTED   + TEXT_DECORATION_STYLE_SET; }
     if (style->text_decoration_style.dashed  ) { text_decoration_style |= TEXT_DECORATION_STYLE_DASHED   + TEXT_DECORATION_STYLE_SET; }
     if (style->text_decoration_style.wavy    ) { text_decoration_style |= TEXT_DECORATION_STYLE_WAVY     + TEXT_DECORATION_STYLE_SET; }
+    */
  
     /* FIXME
        The meaning of text-decoration-color in CSS3 for SVG is ambiguous (2014-05-06).  Set
@@ -242,6 +243,7 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
     // closest ancestor where 'text-decoration' was set. That is, setting
     // 'text-decoration' on an ancestor fixes the fill and stroke of the
     // decoration to the fill and stroke values of that ancestor.
+        /*
     auto style_td = style;
     if (style->text_decoration.style_td) style_td = style->text_decoration.style_td;
     text_decoration_stroke.opacity = SP_SCALE24_TO_FLOAT(style_td->stroke_opacity.value);
@@ -296,31 +298,32 @@ NRStyleData::NRStyleData(SPStyle const *style, SPStyle const *context_style)
     }
 
     text_direction = style->direction.computed;
+    */
 }
 
-auto NRStyle::preparePaint(Inkscape::DrawingContext &dc, Inkscape::RenderContext &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, Inkscape::DrawingPattern const *pattern, NRStyleData::Paint const &paint, CachedPattern const &cp) const -> CairoPatternUniqPtr
+std::shared_ptr<Pattern> DrawingStyle::preparePaint(Context &dc, DrawingOptions &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, DrawingPattern const *pattern, DrawingStyleData::Paint const &paint, CachedPattern const &cp) const
 {
-    if (paint.type == NRStyleData::PaintType::SERVER && pattern) {
+    if (paint.type == DrawingStyleData::PaintType::SERVER && pattern) {
         // If a DrawingPattern, then always regenerate the pattern, because it may depend on 'area'.
         // Even if not, regenerating the pattern is a no-op because DrawingPattern has a cache.
-        return CairoPatternUniqPtr(pattern->renderPattern(rc, area, paint.opacity, dc.surface()->device_scale()));
+        //return Pattern(pattern->renderPattern(rc, area, paint.opacity, dc.surface()->device_scale()));
     }
 
     // Otherwise, init or re-use cached pattern.
     cp.inited.init([&] {
         // Handle remaining non-DrawingPattern cases.
         switch (paint.type) {
-            case NRStyleData::PaintType::SERVER:
+            case DrawingStyleData::PaintType::SERVER:
                 if (paint.server) {
-                    cp.pattern = CairoPatternUniqPtr(paint.server->create_pattern(dc.raw(), paintbox, paint.opacity));
-                    ink_cairo_pattern_set_dither(cp.pattern.get(), rc.dithering && paint.server->ditherable());
+                    //cp.pattern = std::make_shared<Pattern>(paint.server->create_pattern(&dc, paintbox, paint.opacity));
+                    cp.pattern->setDither(rc.dithering && paint.server->ditherable());
                 } else {
                     std::cerr << "Null pattern detected" << std::endl;
-                    cp.pattern = CairoPatternUniqPtr(cairo_pattern_create_rgba(0, 0, 0, 0));
+                    cp.pattern = std::make_shared<SolidColorPattern>(Colors::Color(0x0));
                 }
                 break;
-            case NRStyleData::PaintType::COLOR: {
-                cp.pattern = CairoPatternUniqPtr(ink_cairo_pattern_create(paint.color->withOpacity(paint.opacity)));
+            case DrawingStyleData::PaintType::COLOR: {
+                cp.pattern = std::make_shared<SolidColorPattern>(paint.color->withOpacity(paint.opacity));
                 break;
             }
             default:
@@ -328,51 +331,50 @@ auto NRStyle::preparePaint(Inkscape::DrawingContext &dc, Inkscape::RenderContext
                 break;
         }
     });
-
-    return copy(cp.pattern);
+    return cp.pattern;
 }
 
-void NRStyle::set(NRStyleData &&data_)
+void DrawingStyle::set(DrawingStyleData &&data_)
 {
     data = std::move(data_);
     invalidate();
 }
 
-auto NRStyle::prepareFill(Inkscape::DrawingContext &dc, Inkscape::RenderContext &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, Inkscape::DrawingPattern const *pattern) const -> CairoPatternUniqPtr
+std::shared_ptr<Pattern> DrawingStyle::prepareFill(Context &dc, DrawingOptions &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, DrawingPattern const *pattern) const
 {
     return preparePaint(dc, rc, area, paintbox, pattern, data.fill, fill_pattern);
 }
 
-auto NRStyle::prepareStroke(Inkscape::DrawingContext &dc, Inkscape::RenderContext &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, Inkscape::DrawingPattern const *pattern) const -> CairoPatternUniqPtr
+std::shared_ptr<Pattern> DrawingStyle::prepareStroke(Context &dc, DrawingOptions &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, DrawingPattern const *pattern) const
 {
     return preparePaint(dc, rc, area, paintbox, pattern, data.stroke, stroke_pattern);
 }
 
-auto NRStyle::prepareTextDecorationFill(Inkscape::DrawingContext &dc, Inkscape::RenderContext &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, Inkscape::DrawingPattern const *pattern) const -> CairoPatternUniqPtr
+std::shared_ptr<Pattern> DrawingStyle::prepareTextDecorationFill(Context &dc, DrawingOptions &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, DrawingPattern const *pattern) const
 {
     return preparePaint(dc, rc, area, paintbox, pattern, data.text_decoration_fill, text_decoration_fill_pattern);
 }
 
-auto NRStyle::prepareTextDecorationStroke(Inkscape::DrawingContext &dc, Inkscape::RenderContext &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, Inkscape::DrawingPattern const *pattern) const -> CairoPatternUniqPtr
+std::shared_ptr<Pattern> DrawingStyle::prepareTextDecorationStroke(Context &dc, DrawingOptions &rc, Geom::IntRect const &area, Geom::OptRect const &paintbox, DrawingPattern const *pattern) const
 {
     return preparePaint(dc, rc, area, paintbox, pattern, data.text_decoration_stroke, text_decoration_stroke_pattern);
 }
 
-void NRStyle::applyFill(Inkscape::DrawingContext &dc, CairoPatternUniqPtr const &cp) const
+void DrawingStyle::applyFill(Context &dc, Pattern const &cp) const
 {
-    dc.setSource(cp.get());
+    dc.setSource(cp);
     dc.setFillRule(data.fill_rule);
 }
 
-void NRStyle::applyTextDecorationFill(Inkscape::DrawingContext &dc, CairoPatternUniqPtr const &cp) const
+void DrawingStyle::applyTextDecorationFill(Context &dc, Pattern const &cp) const
 {
-    dc.setSource(cp.get());
+    dc.setSource(cp);
     // Fill rule does not matter, no intersections.
 }
 
-void NRStyle::applyStroke(Inkscape::DrawingContext &dc, CairoPatternUniqPtr const &cp) const
+void DrawingStyle::applyStroke(Context &dc, Pattern const &cp) const
 {
-    dc.setSource(cp.get());
+    dc.setSource(cp);
     if (data.hairline) {
         dc.setHairline();
     } else {
@@ -384,21 +386,21 @@ void NRStyle::applyStroke(Inkscape::DrawingContext &dc, CairoPatternUniqPtr cons
     dc.setDash(data.dash, data.dash_offset);
 }
 
-void NRStyle::applyTextDecorationStroke(Inkscape::DrawingContext &dc, CairoPatternUniqPtr const &cp) const
+void DrawingStyle::applyTextDecorationStroke(Context &dc, Pattern const &cp) const
 {
-    dc.setSource(cp.get());
+    dc.setSource(cp);
     if (data.hairline) {
         dc.setHairline();
     } else {
         dc.setLineWidth(data.text_decoration_stroke_width);
     }
-    dc.setLineCap(CAIRO_LINE_CAP_BUTT);
-    dc.setLineJoin(CAIRO_LINE_JOIN_MITER);
+    dc.setLineCap(Cairo::Context::LineCap::BUTT);
+    dc.setLineJoin(Cairo::Context::LineJoin::MITER);
     dc.setMiterLimit(data.miter_limit);
     dc.setDash({}, 0.0);
 }
 
-void NRStyle::invalidate()
+void DrawingStyle::invalidate()
 {
     // force pattern update
     fill_pattern.reset();

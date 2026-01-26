@@ -283,6 +283,13 @@ add_unit_tests(TEST_SOURCES
                     SOURCES "mocks/util-units-filename.cpp"
                     EXTRA_LIBS renderer_unit_lib drawing_filters_unit_lib colors_unit_lib)
 
+include("${CMAKE_SOURCE_DIR}/src/renderer/drawing/CMakeUnit.txt")
+get_drawing_unit_lib()
+add_unit_tests(TEST_SOURCES 
+                            "renderer/drawing-test.cpp"
+                    SOURCES "mocks/util-units-filename.cpp"
+                    EXTRA_LIBS renderer_unit_lib drawing_filters_unit_lib drawing_unit_lib colors_unit_lib libnrtype_unit_lib)
+
 add_unit_test(css-syntactic-decomposition-test TEST_SOURCE "css-syntactic-decomposition-test.cpp"
                                                    SOURCES "css/syntactic-decomposition.cpp"
                                                 EXTRA_LIBS GLibmm::GLibmm croco_LIB)
