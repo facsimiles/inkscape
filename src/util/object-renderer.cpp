@@ -343,6 +343,10 @@ Cairo::RefPtr<Cairo::ImageSurface> create_marker_image(
         return g_bad_marker;
     }
 
+    if (!marker->firstChild()) {
+        return g_bad_marker;
+    }
+
     SPObject *oldmarker = _sandbox->getObjectById("sample");
     if (oldmarker) {
         oldmarker->deleteObject(false);
