@@ -22,6 +22,7 @@
 #include <glibmm/stringutils.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/settings.h>
+#include <gtkmm/version.h>
 #include <pangomm/fontdescription.h>
 
 #include "config.h"
@@ -46,15 +47,51 @@
 
 namespace Inkscape::UI {
 
-ThemeContext::ThemeContext()
-{ }
+ThemeContext::ThemeContext() {
+    // initialize defaults
+
+    auto const display = Gdk::Display::get_default();
+    auto prefs = Inkscape::Preferences::get();
+    auto settings = Gtk::Settings::get_default();
+    if (!settings) {
+        g_warning("GtkSettings not available");
+        return;
+    }
+
+#if defined(__APPLE__) || defined(_WIN32)
+    // default for icons: Dash
+    _default_icon_theme_name = "Dash";
+    // there is no "System" theme on macOS/win32
+    _default_gtk_theme_name = "Inkscape";
+#else
+    // read system defaults
+    _default_icon_theme_name = settings->property_gtk_icon_theme_name();
+    _default_gtk_theme_name = settings->property_gtk_theme_name();
+#endif
+
+    // do we have user-selected themes?
+    auto theme_name = prefs->getString("/theme/gtkTheme");
+    if (!theme_name.empty()) {
+        settings->property_gtk_theme_name().set_value(theme_name);
+    }
+    auto icon_theme = prefs->getString("/theme/iconTheme");
+    if (!icon_theme.empty()) {
+        settings->property_gtk_icon_theme_name().set_value(icon_theme);
+    }
+
+    // update highlight colors and windows CSS classes when the theme changes
+    _signal_change_theme.connect([this]{ themeChanged(); });
+}
 
 ThemeContext::~ThemeContext() = default;
+
+// Name of theme -> has dark theme
+typedef std::map<Glib::ustring, bool> gtkThemeList;
 
 /**
  * Inkscape fill gtk, taken from glib/gtk code with our own checks.
  */
-void ThemeContext::inkscape_fill_gtk(const std::string& path, gtkThemeList &themes)
+static void inkscape_fill_gtk(const std::string& path, gtkThemeList& themes)
 {
     if (!Glib::file_test(path, Glib::FileTest::IS_DIR)) return;
 
@@ -65,7 +102,6 @@ void ThemeContext::inkscape_fill_gtk(const std::string& path, gtkThemeList &them
         auto filename_dark = Glib::build_filename(path, entry, "gtk-4.0", "gtk-dark.css");
         auto has_dark_theme = Glib::file_test(filename_dark, Glib::FileTest::IS_REGULAR);
 
-   printf("theme: '%s'\n",entry.c_str());
         themes[entry] = has_dark_theme;
     }
 }
@@ -85,31 +121,40 @@ ThemeContext::get_available_themes()
     /* Builtin themes */
     std::string theme_path = "/org/gtk/libgtk/theme";
     // Expected themes: "Empty" (a test theme, not usable) and "Default" (Adwaita)
+    //
+    // Note: Collect built-in themes from gtk library. On Mac/Win we ship those libraries.
+    // On Linux we use what's in stalled in OS.
+    // There are discrepancies in theme naming conventions.
+    // On Mac there's "Empty" and "Default" (default has embedded light/dark and high-contrast variants).
+    // On Linux: "Empty", "Default", "Default-dark", "Default-hc", "Default-hc-dark".
+    // To turn on variants, we can change global app settings:
+    //  - gtk-interface-contrast: more/less/no-preference/unsupported (GtkInterfaceContrast)
+    //  - gtk-application-prefer-dark-theme: true/false (boolean), before gtk4 v4.20
+    //  - gtk-interface-color-scheme: default/dark/light, from gtk4 v4.20
+    //
     auto builtin_themes = Gio::Resource::enumerate_children_global(theme_path);
     for (auto&& theme : builtin_themes) {
         if (!Glib::str_has_suffix(theme, "/")) continue;
 
         theme.resize(theme.size() - 1);
-        if (theme == "Empty") continue;
+        if (theme == "Empty") continue; // skip the empty test theme
+
+        if (theme.ends_with("-dark")) continue; // skip dark variants
 
         // gtk4 has a dark theme variant, but there is no "gtk-dark.css" file/resource;
         // this and high-contrast variants are handled through a media query "prefers-color-scheme"
         bool has_dark = true;
         themes[theme] = has_dark;
-// printf("theme: '%s', dark? %d\n",theme.c_str(),has_dark);
     }
 
     auto path = Glib::build_filename(Glib::get_user_data_dir(), "themes");
-printf("1themes: '%s'\n",path.c_str());
     inkscape_fill_gtk(path.c_str(), themes);
 
     path = Glib::build_filename(Glib::get_home_dir(), ".themes");
-printf("2themes: '%s'\n",path.c_str());
     inkscape_fill_gtk(path.c_str(), themes);
 
     for (auto&& dir : Glib::get_system_data_dirs()) {
         auto path = Glib::build_filename(dir, "themes");
-printf("3themes: '%s'\n",path.c_str());
         inkscape_fill_gtk(path.c_str(), themes);
     }
 
@@ -121,7 +166,7 @@ ThemeContext::get_symbolic_colors()
 {
     Glib::ustring css_str;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", getDefaultIconThemeName());
     guint32 colorsetbase = 0x2E3436ff;
     guint32 colorsetbase_inverse;
     guint32 colorsetsuccess = 0x4AD589ff;
@@ -225,49 +270,22 @@ struct NarrowSpinbuttonObserver : Preferences::Observer {
 
 /**
  * \brief Add our CSS style sheets
- * @param only_providers: Apply only the providers part, from inkscape preferences::theme change, no need to reaply
+ * @param cached: use some contrast optimization
  */
-void ThemeContext::add_gtk_css(bool only_providers, bool cached)
+void ThemeContext::add_gtk_css(bool cached)
 {
     using namespace Inkscape::IO::Resource;
-    // Add style sheet (GTK3)
+
     auto const display = Gdk::Display::get_default();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname;
-    GtkSettings *settings = gtk_settings_get_default();
-    if (settings && !only_providers) {
-        gchar *gtkThemeName = nullptr;
-        gchar *gtkIconThemeName = nullptr;
-        gboolean gtkApplicationPreferDarkTheme = false;
-
-#if defined(__APPLE__) || defined(_WIN32)
-        // new default for icons: Dash
-        gtkIconThemeName = g_strdup("Dash");
-        // there is no "System" theme on macOS/win32
-        gtkThemeName = g_strdup("Inkscape");
-#else
-        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, nullptr);
-        g_object_get(settings, "gtk-theme-name", &gtkThemeName, nullptr);
+    auto prefs = Inkscape::Preferences::get();
+    if (auto settings = Gtk::Settings::get_default()) {
+        bool prefer_dark = prefs->getBool("/theme/preferDarkTheme", false);
+        // propagate dark theme preference to app settings
+        settings->property_gtk_application_prefer_dark_theme().set_value(prefer_dark);
+#if GTKMM_CHECK_VERSION(4, 20, 0)
+        settings->property_gtk_interface_color_scheme().set_value(prefer_dark ? Gtk::InterfaceColorScheme::DARK : Gtk::InterfaceColorScheme::LIGHT);
 #endif
-        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, nullptr);
-        prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
-        prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName ? gtkThemeName : ""));
-        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName ? gtkIconThemeName : ""));
-        Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
-        if (gtkthemename != "") {
-            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), nullptr);
-        }
-        bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
-        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, nullptr);
-        themeiconname = prefs->getString("/theme/iconTheme");
-        if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), nullptr);
-        }
-
-        g_free(gtkThemeName);
-        g_free(gtkIconThemeName);
     }
-
 
     int themecontrast = prefs->getInt("/theme/contrast", 10);
     if (!_contrastthemeprovider) {
@@ -281,13 +299,13 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
         Glib::ustring css_contrast = "";
         double contrast = (10 - themecontrast) / 30.0;
         double shade = 1 - contrast;
-        bool dark = prefs->getBool("/theme/darkTheme", false);
+        bool dark = prefs->getBool("/theme/preferDarkTheme", false);
         const gchar *variant = dark ? "dark" : "";
         if (dark) {
             contrast *= 2.5;
             shade = 1 + contrast;
         }
-        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", getDefaultGtkThemeName());
         
         std::string cssstring = "";
         if (cached && !cssstringcached.empty()) {
@@ -391,7 +409,7 @@ void ThemeContext::add_gtk_css(bool only_providers, bool cached)
     }
     _spinbutton_observer->notify(prefs->getEntry(_spinbutton_observer->observed_path));
 
-    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme", getDefaultGtkThemeName());
     gtkthemename += ".css";
     style = get_filename(UIS, gtkthemename.c_str(), false, true);
     if (!style.empty()) {
@@ -474,13 +492,12 @@ bool ThemeContext::isCurrentThemeDark(Gtk::Window * const window)
 {
     if (!window) return false;
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring current_theme =
-        prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+    auto prefs = Inkscape::Preferences::get();
+    Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", INKSCAPE.themecontext->getDefaultGtkThemeName());
 
-    if (auto const settings = Gtk::Settings::get_default()) {
-        settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/preferDarkTheme", false);
-    }
+    // if (auto const settings = Gtk::Settings::get_default()) {
+    //     settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/preferDarkTheme", false);
+    // }
 
     auto dark = current_theme.find(":dark") != std::string::npos;
 
@@ -496,12 +513,20 @@ bool ThemeContext::isCurrentThemeDark(Gtk::Window * const window)
     return dark;
 }
 
+void ThemeContext::setCurrentThemeDark(bool dark) {
+    if (auto settings = Gtk::Settings::get_default()) {
+        settings->property_gtk_application_prefer_dark_theme() = dark;
+    }
+    getChangeThemeSignal().emit();
+    add_gtk_css();
+}
+
 void 
-ThemeContext::themechangecallback() {
+ThemeContext::themeChanged() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // sync "dark" class between app window and floating dialog windows to ensure that
     // CSS providers relying on it apply in dialog windows too
-    auto dark = prefs->getBool("/theme/darkTheme", false);
+    auto dark = prefs->getBool("/theme/preferDarkTheme", false);
     std::vector<Gtk::Window *> winds;
     for (auto wnd : Inkscape::UI::Dialog::DialogManager::singleton().get_all_floating_dialog_windows()) {
         winds.push_back(wnd);
