@@ -69,6 +69,8 @@
 #include "object/sp-object.h"
 #include "object/sp-path.h"
 #include "object/sp-pattern.h"
+#include "object/sp-polygon.h"
+#include "object/sp-polyline.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-rect.h"
 #include "object/sp-star.h"
@@ -1774,9 +1776,10 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PathPanel : public details::AttributesPanel {
+class PointsPanel : public details::AttributesPanel {
 public:
-    PathPanel(const Glib::RefPtr<Gtk::Builder>& builder) :
+    PointsPanel(const Glib::RefPtr<Gtk::Builder>& builder, const char* points_section_name, Syntax::SyntaxMode syntax) :
+        _svgd_edit(Syntax::TextEditView::create(syntax)),
         _main(get_widget<Gtk::Grid>(builder, "path-main")),
         _info(get_widget<Gtk::Label>(builder, "path-info")),
         _data(_svgd_edit->getTextView())
@@ -1787,7 +1790,7 @@ public:
         add_fill_and_stroke();
 
         _grid.add_gap();
-        _data_toggle = _grid.add_section(_("Path data"));
+        _data_toggle = _grid.add_section(points_section_name);
         _grid.add_row(&_main);
         _grid.add_section_divider();
 
@@ -1803,7 +1806,7 @@ public:
         _data.set_wrap_mode(Gtk::WrapMode::WORD);
 
         auto const key = Gtk::EventControllerKey::create();
-        key->signal_key_pressed().connect(sigc::mem_fun(*this, &PathPanel::on_key_pressed), true);
+        key->signal_key_pressed().connect(sigc::mem_fun(*this, &PointsPanel::on_key_pressed), true);
         _data.add_controller(key);
 
         auto& wnd = get_widget<Gtk::ScrolledWindow>(builder, "path-data-wnd");
@@ -1848,13 +1851,13 @@ public:
         };
     }
 
-    ~PathPanel() override = default;
+    ~PointsPanel() override = default;
 
     void update(SPObject* object) override {
-        auto path = cast<SPPath>(object);
-        auto change = path != _path;
-        _path = path;
-        if (!_path) {
+        auto item = update_item(object);
+        auto change = item != _item;
+        _item = item;
+        if (!_item) {
             _update_data.disconnect();
             return;
         }
@@ -1871,6 +1874,22 @@ public:
     }
 
 private:
+    virtual SPShape* update_item(SPObject* object) = 0;
+    virtual const char* get_points() = 0;
+    virtual void set_points(const Glib::ustring& points) = 0;
+
+    virtual std::size_t get_point_count() const {
+        if (!_item) return 0;
+
+        auto curve = _item->curveBeforeLPE();
+        if (!curve) curve = _item->curve();
+        std::size_t node_count = 0;
+        if (curve) {
+            node_count = curve->curveCount();
+        }
+        return node_count;
+    }
+
     void show_data_properties(bool expand) {
         _main.set_visible(expand);
         _grid.open_section(_data_toggle, expand);
@@ -1881,22 +1900,10 @@ private:
 
         auto scoped(_update.block());
 
-        auto d = _path->getAttribute("inkscape:original-d");
-        if (d && _path->hasPathEffect()) {
-            _original = true;
-        }
-        else {
-            _original = false;
-            d = _path->getAttribute("d");
-        }
+        auto d = get_points();
         _svgd_edit->setText(d ? d : "");
 
-        auto curve = _path->curveBeforeLPE();
-        if (!curve) curve = _path->curve();
-        size_t node_count = 0;
-        if (curve) {
-            node_count = curve->curveCount();
-        }
+        auto node_count = get_point_count();
         _info.set_text(C_("Number of path nodes follows", "Nodes: ") + std::to_string(node_count));
 
         //TODO: we can consider adding more stats, like perimeter, area, etc.
@@ -1912,26 +1919,107 @@ private:
     }
 
     bool commit_d() {
-        if (!_path || !_data.is_visible()) return false;
+        if (!_item || !_data.is_visible()) return false;
 
         auto scoped(_update.block());
         auto d = _svgd_edit->getText();
-        _path->setAttribute(_original ? "inkscape:original-d" : "d", d);
-        DocumentUndo::maybeDone(_path->document, "path-data", RC_("Undo", "Change path"), INKSCAPE_ICON(""));
+        set_points(d);
         return true;
     }
 
-    SPPath* _path = nullptr;
-    bool _original = false;
+    SPShape* _item = nullptr;
     Gtk::Grid& _main;
     Gtk::Label& _info;
-    std::unique_ptr<Syntax::TextEditView> _svgd_edit = Syntax::TextEditView::create(Syntax::SyntaxMode::SvgPathData);
+    std::unique_ptr<Syntax::TextEditView> _svgd_edit;
     Gtk::TextView& _data;
     int _precision = 2;
     sigc::scoped_connection _update_data;
     Gtk::Button* _data_toggle;
     Pref<bool> _data_props_visibility = {details::dlg_pref_path + "/options/show_path_data"};
 };
+
+class PathPanel : public PointsPanel {
+public:
+    PathPanel(const Glib::RefPtr<Gtk::Builder>& builder) : PointsPanel(builder, _("Path data"), Syntax::SyntaxMode::SvgPathData) {}
+    ~PathPanel() override = default;
+
+private:
+    SPShape* update_item(SPObject* object) override {
+        _path = cast<SPPath>(object);
+        return _path;
+    }
+
+    const char* get_points() override {
+        auto d = _path->getAttribute("inkscape:original-d");
+        if (d && _path->hasPathEffect()) {
+            _original = true;
+        }
+        else {
+            _original = false;
+            d = _path->getAttribute("d");
+        }
+        return d;
+    }
+
+    void set_points(const Glib::ustring& points) override {
+        _path->setAttribute(_original ? "inkscape:original-d" : "d", points);
+        DocumentUndo::maybeDone(_path->document, "path-data", RC_("Undo", "Change path"), "");
+    }
+
+    SPPath* _path = nullptr;
+    bool _original = false;
+};
+
+class PolylinePanel : public PointsPanel {
+public:
+    PolylinePanel(const Glib::RefPtr<Gtk::Builder>& builder) : PointsPanel(builder, _("Polyline points"), Syntax::SyntaxMode::SvgPolyPoints) {}
+    ~PolylinePanel() override = default;
+
+private:
+    SPShape* update_item(SPObject* object) override {
+        _polyline = cast<SPPolyLine>(object);
+        return _polyline;
+    }
+
+    const char* get_points() override {
+        return _polyline ? _polyline->getAttribute("points") : nullptr;
+    }
+
+    void set_points(const Glib::ustring& points) override {
+        _polyline->setAttribute("points", points);
+        DocumentUndo::maybeDone(_polyline->document, "polyline-data", RC_("Undo", "Change polyline"), "");
+    }
+
+    SPPolyLine* _polyline = nullptr;
+};
+
+class PolygonPanel : public PointsPanel {
+public:
+    PolygonPanel(const Glib::RefPtr<Gtk::Builder>& builder) : PointsPanel(builder, _("Polygon points"), Syntax::SyntaxMode::SvgPolyPoints) {}
+    ~PolygonPanel() override = default;
+
+private:
+    SPShape* update_item(SPObject* object) override {
+        _polygon = cast<SPPolygon>(object);
+        return _polygon;
+    }
+
+    const char* get_points() override {
+        return _polygon ? _polygon->getAttribute("points") : nullptr;
+    }
+
+    void set_points(const Glib::ustring& points) override {
+        _polygon->setAttribute("points", points);
+        DocumentUndo::maybeDone(_polygon->document, "polyline-data", RC_("Undo", "Change polyline"), "");
+    }
+
+    std::size_t get_point_count() const override {
+        return 0;
+    }
+
+    SPPolygon* _polygon = nullptr;
+};
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -2422,14 +2510,16 @@ details::AttributesPanel* ObjectAttributes::get_panel(Selection* selection) {
 
 std::unique_ptr<details::AttributesPanel> ObjectAttributes::create_panel(int key) {
     switch (key) {
-        case tag_of<SPImage>:  return std::make_unique<ImagePanel>();
-        case tag_of<SPRect>:   return std::make_unique<RectPanel>(_builder);
+        case tag_of<SPImage>:    return std::make_unique<ImagePanel>();
+        case tag_of<SPRect>:     return std::make_unique<RectPanel>(_builder);
         case tag_of<SPGenericEllipse>: return std::make_unique<EllipsePanel>(_builder);
-        case tag_of<SPStar>:   return std::make_unique<StarPanel>(_builder);
-        case tag_of<SPAnchor>: return std::make_unique<AnchorPanel>();
-        case tag_of<SPPath>:   return std::make_unique<PathPanel>(_builder);
-        case tag_of<SPGroup>:  return std::make_unique<GroupPanel>(_builder);
-        case tag_of<SPUse>:    return std::make_unique<ClonePanel>(_builder);
+        case tag_of<SPStar>:     return std::make_unique<StarPanel>(_builder);
+        case tag_of<SPAnchor>:   return std::make_unique<AnchorPanel>();
+        case tag_of<SPPath>:     return std::make_unique<PathPanel>(_builder);
+        case tag_of<SPPolyLine>: return std::make_unique<PolylinePanel>(_builder);
+        case tag_of<SPPolygon>:  return std::make_unique<PolygonPanel>(_builder);
+        case tag_of<SPGroup>:    return std::make_unique<GroupPanel>(_builder);
+        case tag_of<SPUse>:      return std::make_unique<ClonePanel>(_builder);
     }
 
     //TODO: those panels are not ready yet
