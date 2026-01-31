@@ -26,8 +26,10 @@ target_sources(inkscape_base PRIVATE
     treeify.cpp
 	unicode.cpp
     units.cpp
+    units-internal.cpp
     uri.cpp
     ziptool.cpp
+    numeric/precision.cpp
 
 	# -------
 	# Headers
@@ -79,4 +81,5 @@ target_sources(inkscape_base PRIVATE
     value-utils.h
     ziptool.h
     numeric/converters.h
+    numeric/precision.h
 )

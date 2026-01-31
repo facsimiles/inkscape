@@ -6,6 +6,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 # custom "check" target with proper dependencies (builds inkscape and tests)
 file(TO_NATIVE_PATH "/" _separator)
 add_definitions(-DINKSCAPE_TESTS_DIR="${CMAKE_SOURCE_DIR}/testfiles")
+add_definitions(-DINKSCAPE_SHARE_DIR="${CMAKE_SOURCE_DIR}/share")
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
                         DEPENDS tests unit_tests
                         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -76,7 +77,6 @@ set(TEST_SOURCES
     uri-test
     uri-references-test
     util-test
-    util-units-test
     util-expression-evaluator-test
     util-uri-test
     drag-and-drop-svgz
@@ -101,8 +101,6 @@ set(TEST_SOURCES
     style-test
     svg-affine-test
     svg-box-test
-    svg-length-test
-    svg-stringstream-test
     sp-gradient-test
     svg-path-geom-test
     visual-bounds-test
@@ -172,6 +170,21 @@ include(${CMAKE_SOURCE_DIR}/CMakeScripts/UnitTest.cmake)
 add_unit_test(assertions-in-tests TEST_SOURCE "assertions-in-tests.cpp")
 add_unit_test(version-test TEST_SOURCE "version-test.cpp"
                                SOURCES "version.cpp")
+
+# These all depend on each other as a single unit
+add_unit_tests(TEST_SOURCES "svg-length-test.cpp"
+                            "svg-stringstream-test.cpp"
+                            "util-units-test.cpp"
+                    SOURCES "svg/css-ostringstream.cpp"
+                            "svg/svg-length.cpp"
+                            "svg/stringstream.cpp"
+                            "svg/strip-trailing-zeros.cpp"
+                            "util/units.cpp"
+                            # MOCK object files to unitise these tests
+                            "mocks/util-units-filename.cpp"
+                            "mocks/util-numeric-precision.cpp"
+                    EXTRA_LIBS GLibmm::GLibmm 2Geom::2geom)
+
 
 include("${CMAKE_SOURCE_DIR}/src/colors/CMakeUnit.txt")
 get_color_unit_lib()
