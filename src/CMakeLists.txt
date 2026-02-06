@@ -338,9 +338,7 @@ target_link_libraries(inkscape_base
         autotrace_LIB
         Depixelize::depixelize
         croco_LIB
-        avoid_LIB
-        cola_LIB
-        vpsc_LIB
+        adaptagrams_LIB
         Uemf::uemf
     PUBLIC
         ${INKSCAPE_LIBS}

@@ -150,7 +150,7 @@ list(APPEND INKSCAPE_LIBS double-conversion::double-conversion)
 
 # Check for system-wide version of 2geom and fallback to internal copy if not found
 if(NOT WITH_INTERNAL_2GEOM)
-    find_package(2Geom ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR} QUIET)
+    find_package(2Geom ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR} CONFIG QUIET)
     if(NOT TARGET 2Geom::2geom)
         set(WITH_INTERNAL_2GEOM ON CACHE BOOL "Prefer internal copy of lib2geom" FORCE)
         message(STATUS "lib2geom not found, using internal copy in src/3rdparty/2geom")
