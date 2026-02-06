@@ -341,7 +341,7 @@ target_link_libraries(inkscape_base
         avoid_LIB
         cola_LIB
         vpsc_LIB
-        uemf_LIB
+        Uemf::uemf
     PUBLIC
         ${INKSCAPE_LIBS}
         2Geom::2geom
