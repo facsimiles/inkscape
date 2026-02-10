@@ -19,6 +19,7 @@
 
 #include <gdkmm/seat.h>
 #include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/version.h>
 
 #include "actions/actions-tools.h"
 #include "desktop-events.h"
@@ -1375,6 +1376,9 @@ void init_latin_keys_group()
     auto const keyboard = Gdk::Display::get_default()->get_default_seat()->get_keyboard();
     g_assert(keyboard);
     keyboard->signal_changed().connect(&update_latin_keys_group);
+#if GTKMM_CHECK_VERSION(4, 18, 0)
+    keyboard->property_layout_names().signal_changed().connect(&update_latin_keys_group);
+#endif
     update_latin_keys_group();
 }
 
