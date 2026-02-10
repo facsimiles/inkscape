@@ -101,6 +101,7 @@ set(TEST_SOURCES
     style-test
     svg-affine-test
     svg-box-test
+    svg-path-parser-test
     sp-gradient-test
     svg-path-geom-test
     visual-bounds-test

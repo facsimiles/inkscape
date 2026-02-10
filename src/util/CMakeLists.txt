@@ -19,6 +19,7 @@ target_sources(inkscape_base PRIVATE
     preview.cpp
     source_date_epoch.cpp
     statics.cpp
+    svg-path-parser.cpp
     theme-utils.cpp
     transform-objects.cpp
     recently-used-fonts.cpp
@@ -69,6 +70,7 @@ target_sources(inkscape_base PRIVATE
     source_date_epoch.h
     statics.h
     static-doc.h
+    svg-path-parser.h
     theme-utils.h
     transform-objects.h
     treeify.h
