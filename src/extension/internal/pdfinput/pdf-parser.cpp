@@ -657,7 +657,11 @@ void PdfParser::opSetFlat(Object args[], int /*numArgs*/)
 void PdfParser::opSetLineJoin(Object args[], int /*numArgs*/)
 {
   builder->beforeStateChange(state);
+#if POPPLER_CHECK_VERSION(26,2,0)
+  state->setLineJoin((GfxState::LineJoinStyle) args[0].getInt());
+#else
   state->setLineJoin(args[0].getInt());
+#endif
   builder->updateStyle(state);
 }
 
@@ -665,7 +669,11 @@ void PdfParser::opSetLineJoin(Object args[], int /*numArgs*/)
 void PdfParser::opSetLineCap(Object args[], int /*numArgs*/)
 {
   builder->beforeStateChange(state);
+#if POPPLER_CHECK_VERSION(26,2,0)
+  state->setLineCap((GfxState::LineCapStyle) args[0].getInt());
+#else
   state->setLineCap(args[0].getInt());
+#endif
   builder->updateStyle(state);
 }
 
@@ -1537,7 +1545,13 @@ void PdfParser::doShadingPatternFillFallback(GfxShadingPattern *sPat,
 
   // restore graphics state
   restoreState();
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+  state->clearPath();
+  GfxPath *currPath = const_cast<GfxPath*>(state->getPath());
+  currPath->append(savedPath);
+#else
   state->setPath(savedPath);
+#endif
 }
 
 // TODO not good that numArgs is ignored but args[] is used:
@@ -1600,7 +1614,13 @@ void PdfParser::opShFill(Object args[], int /*numArgs*/)
   // restore graphics state
   if (savedState) {
     restoreState();
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+    state->clearPath();
+    GfxPath *currPath = const_cast<GfxPath*>(state->getPath());
+    currPath->append(savedPath);
+#else
     state->setPath(savedPath);
+#endif
   }
 }
 
@@ -2232,7 +2252,7 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
 {
   Array *a = nullptr;
   Object obj;
-  int wMode = 0; // Writing mode (horizontal/vertical).
+  _POPPLER_WMODE wMode = _POPPLER_WMODE_HORIZONTAL; // Writing mode (horizontal/vertical).
 
   if (!state->getFont()) {
     error(errSyntaxError, getPos(), "No font in show/space");
@@ -2246,7 +2266,7 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
     if (obj.isNum()) {
       // this uses the absolute value of the font size to match
       // Acrobat's behavior
-      if (wMode) {
+      if (wMode != _POPPLER_WMODE_HORIZONTAL) {
 	state->textShift(0, -obj.getNum() * 0.001 *
 			    fabs(state->getFontSize()));
       } else {
@@ -2273,7 +2293,7 @@ void PdfParser::doShowText(const GooString *s) {
 void PdfParser::doShowText(GooString *s) {
 #endif
     auto font = state->getFont();
-    int wMode = font->getWMode(); // Vertical/Horizontal/Invalid
+    _POPPLER_WMODE wMode = font->getWMode(); // Vertical/Horizontal/Invalid
 
     builder->beginString(state, get_goostring_length(*s));
 
@@ -2308,7 +2328,7 @@ void PdfParser::doShowText(GooString *s) {
         auto ax = dx;
         auto ay = dy;
 
-        if (wMode != 0) {
+        if (wMode != _POPPLER_WMODE_HORIZONTAL) {
             // Vertical text (or invalid value).
             dy += state->getCharSpace();
             if (n == 1 && *p == ' ') {
@@ -2975,7 +2995,11 @@ Stream *PdfParser::buildImageStream() {
   // make stream
 #if defined(POPPLER_NEW_OBJECT_API)
   str = new EmbedStream(parser->getStream(), dict.copy(), gFalse, 0);
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+  str = str->addFilters(std::unique_ptr<Stream>(str), dict.getDict()).release();
+#else
   str = str->addFilters(dict.getDict());
+#endif
 #else
   str = new EmbedStream(parser->getStream(), &dict, gFalse, 0);
   str = str->addFilters(&dict);
@@ -3158,10 +3182,17 @@ void PdfParser::loadOptionalContentLayers(Dict *resources)
                 auto visible = true;
                 // Normally we'd use poppler optContentIsVisible, but these dict
                 // objects don't retain their references so can't be used directly.
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+                for (auto &[ref, ocg] : ocgs->getOCGs()) {
+                    if (ocg->getName()->toStr() == label)
+                        visible = ocg->getState() == OptionalContentGroup::On;
+                }
+#else
                 for (auto &[ref, ocg] : ocgs->getOCGs()) {
                     if (ocg->getName()->cmp(label) == 0)
                         visible = ocg->getState() == OptionalContentGroup::On;
                 }
+#endif
                 builder->addOptionalGroup(dict->getKey(j), label, visible);
             }
         }
