@@ -3,6 +3,7 @@
 #include "font-list.h"
 
 #include <iomanip>
+#include <ranges>
 #include <utility>
 #include <giomm/menu.h>
 #include <giomm/simpleactiongroup.h>
@@ -810,9 +811,24 @@ FontList::FontList(Glib::ustring preferences_path) :
         }
     };
 
+    // fonts to exclude from UI:
+    auto hidden_font = [](const FontInfo& font) {
+#if __APPLE__
+        // on macOS hide fonts with names starting with a dot; those are internal system fonts
+        return font.ff->get_name().raw()[0] == '.';
+#else
+        // other systems; no restrictions so far
+        return false;
+#endif
+    };
+
     _font_stream = FontDiscovery::get().connect_to_fonts([=, this](const FontDiscovery::MessageType& msg){
         if (auto r = Async::Msg::get_result(msg)) {
-            _font_families = **r;
+            _font_families.clear();
+            auto view = **r | std::views::filter([=](const std::vector<FontInfo>& ff) {
+                return !ff.empty() && !hidden_font(ff.front());
+            });
+            std::ranges::copy(view, std::back_inserter(_font_families));
             _fonts.clear();
             for (auto&& family : _font_families) {
                 _fonts.insert(_fonts.end(), family.begin(), family.end());
@@ -828,8 +844,8 @@ FontList::FontList(Glib::ustring preferences_path) :
             progress.set_fraction(std::get<double>(*p));
             progress.set_text(std::get<Glib::ustring>(*p));
             auto&& family = std::get<std::vector<FontInfo>>(*p);
-            _fonts.insert(_fonts.end(), family.begin(), family.end());
-            if (!family.empty()) {
+            if (!family.empty() && !hidden_font(family.front())) {
+                _fonts.insert(_fonts.end(), family.begin(), family.end());
                 _font_families.push_back(std::move(family));
             }
             auto delta = _fonts.size() - _initializing;
