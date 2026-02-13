@@ -29,11 +29,11 @@
 #include <map>
 #include <memory>
 #include <gdkmm/enums.h>
-#include <poppler/Object.h>
+#include <Object.h>
 #include <string>
 
 #define Operator Operator_Gfx
-#include <poppler/Gfx.h>
+#include <Gfx.h>
 #undef Operator
 #undef DOUBLE_CLICK
 
