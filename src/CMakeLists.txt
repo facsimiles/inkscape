@@ -336,12 +336,10 @@ endif()
 target_link_libraries(inkscape_base
     PRIVATE
         autotrace_LIB
-        Depixelize::Depixelize
+        Depixelize::depixelize
         croco_LIB
-        avoid_LIB
-        cola_LIB
-        vpsc_LIB
-        uemf_LIB
+        adaptagrams_LIB
+        Uemf::uemf
     PUBLIC
         ${INKSCAPE_LIBS}
         2Geom::2geom
