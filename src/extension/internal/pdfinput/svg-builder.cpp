@@ -24,12 +24,12 @@
 #include <locale>
 #include <codecvt>
 
-#include <poppler/Function.h>
-#include <poppler/GfxFont.h>
-#include <poppler/GfxState.h>
-#include <poppler/Page.h>
-#include <poppler/Stream.h>
-#include <poppler/goo/gmem.h>
+#include <Function.h>
+#include <GfxFont.h>
+#include <GfxState.h>
+#include <Page.h>
+#include <Stream.h>
+#include <goo/gmem.h>
 
 #ifdef _WIN32
 #undef near

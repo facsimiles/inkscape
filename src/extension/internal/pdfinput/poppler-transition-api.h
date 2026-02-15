@@ -13,7 +13,7 @@
 #define SEEN_POPPLER_TRANSITION_API_H
 
 #include <glib/poppler-features.h>
-#include <poppler/UTF.h>
+#include <UTF.h>
 
 #if POPPLER_CHECK_VERSION(26, 2, 0)
 #define _POPPLER_WMODE GfxFont::WritingMode
