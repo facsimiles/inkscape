@@ -8,12 +8,15 @@
 #include <array>
 #include <cstddef>
 #include <iomanip>
+#include <iostream>
+#include <memory>
 #include <numeric>
 #include <optional>
 #include <regex>
 #include <string>
 #include <string_view>
 #include <vector>
+
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
 #include <gdkmm/enums.h>
@@ -46,8 +49,6 @@
 #include <sigc++/signal.h>
 
 #include "inkscape-application.h"
-#include "preferences.h"
-#include "settings-helpers.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
 #include "ui/containerize.h"
@@ -56,11 +57,17 @@
 #include "ui/shortcuts.h"
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
-#include "ui/widget/preferences-widget.h"
 #include "ui/widget/generic/spin-button.h"
-#include "util-string/ustring-format.h"
+#include "ui/widget/preference-unit-menu.h"
+#include "ui/widget/preference-widgets.h"
+#include "ui/widget/preferences-widget.h"
+#include "ui/widget/unit-menu.h"
+#include "preferences.h"
+#include "settings-helpers.h"
 #include "util/action-accel.h"
+#include "util-string/ustring-format.h"
 #include "util/key-helpers.h"
+#include "util/units.h"
 #include "xml/attribute-record.h"
 #include "xml/node.h"
 #include "xml/repr.h"
@@ -1489,6 +1496,32 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
     set_name("Settings");
 
     auto objects = _builder->get_objects();
+
+    for (const auto& obj : objects) {
+        auto spin = std::dynamic_pointer_cast<UI::Widget::PreferenceSpinButton>(obj);
+        if (!spin) continue;
+
+        auto unit_id = spin->property_unit_menu().get_value();
+        if (unit_id.empty()) continue;
+
+        auto& unit_widget = get_widget<UI::Widget::PreferenceUnitMenu>(_builder, unit_id.c_str());
+        unit_widget.get_unit_menu().resetUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
+        spin->bind_unit_menu(unit_widget.get_unit_menu());
+    }
+
+    {
+        // Rotation snaps are stored as "snaps per pi" but UI shows degrees.
+        // degrees = 180 / snaps_per_pi
+        auto& spin = get_widget<UI::Widget::PreferenceSpinButton>(_builder, "rotation-snaps-deg");
+        spin.set_transformers(
+            [] (double degrees) {
+                return degrees == 0.0 ? 0.0 : 180.0 / degrees;
+            },
+            [] (double snaps_per_pi) {
+                return snaps_per_pi == 0.0 ? 0.0 : 180.0 / snaps_per_pi;
+            }
+        );
+    }
 
     // _page_selector.append(_search);
     // _search.set_max_width_chars(6);

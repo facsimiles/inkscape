@@ -11,8 +11,11 @@
 
 #include "generic/spin-button.h"
 #include "preferences.h"
+#include "ui/operation-blocker.h"
 
 namespace Inkscape::UI::Widget {
+
+class UnitMenu;
 
 class PreferenceCheckButton : public Gtk::CheckButton {
 public:
@@ -54,6 +57,7 @@ private:
     void construct();
     Glib::Property<Glib::ustring> prop_path;
     Glib::Property<int> prop_enum;
+    OperationBlocker _updating;
 };
 
 class PreferenceSpinButton : public InkSpinButton {
@@ -61,12 +65,14 @@ public:
     PreferenceSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
         : Glib::ObjectBase("PrefSpinButton"), InkSpinButton(cobject),
         prop_path(*this, "pref-path"),
+        prop_unit_menu(*this, "unit-menu"),
         prop_value(*this, "pref-value")
     {
         construct();
     }
     PreferenceSpinButton() : Glib::ObjectBase("PrefSpinButton"),
         prop_path(*this, "pref-path"),
+        prop_unit_menu(*this, "unit-menu"),
         prop_value(*this, "pref-value")
     {
         construct();
@@ -75,6 +81,12 @@ public:
     Glib::PropertyProxy<Glib::ustring> property_pref_path() {
         return prop_path.get_proxy();
     }
+
+    Glib::PropertyProxy<Glib::ustring> property_unit_menu() {
+        return prop_unit_menu.get_proxy();
+    }
+
+    void bind_unit_menu(UnitMenu& menu);
 
     static Glib::ObjectBase* wrap_new(GObject* o) {
         Glib::RefPtr<Gtk::Builder> builder;
@@ -94,8 +106,14 @@ public:
 private:
     static GType gtype;
     void construct();
+    void write_unit_pref();
+    void load_unit_pref();
     Glib::Property<Glib::ustring> prop_path;
+    Glib::Property<Glib::ustring> prop_unit_menu;
     Glib::Property<double> prop_value;
+    UnitMenu* _unit_menu = nullptr;
+    Glib::ustring _last_unit;
+    OperationBlocker _updating;
 };
 
 

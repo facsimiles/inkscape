@@ -14,7 +14,7 @@
 #include "display/control/ctrl-handle-manager.h"
 #include "io/resource.h"
 #include "ui/themes.h"
-#include "ui/widget/icon-combobox.h"
+#include "ui/widget/generic/icon-combobox.h"
 
 namespace Inkscape::UI::Dialog::Settings {
 

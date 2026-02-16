@@ -1551,7 +1551,7 @@ void InkscapePreferences::symbolicThemeCheck()
     }
 }
 
-static Cairo::RefPtr<Cairo::Surface> draw_color_preview(unsigned int rgb, unsigned int frame_rgb, int device_scale) {
+Cairo::RefPtr<Cairo::Surface> draw_color_preview(unsigned int rgb, unsigned int frame_rgb, int device_scale) {
     int size = Widget::IconComboBox::get_default_image_size();
     auto surface = Cairo::ImageSurface::create(Cairo::Surface::Format::ARGB32, size * device_scale, size * device_scale);
     cairo_surface_set_device_scale(surface->cobj(), device_scale, device_scale);

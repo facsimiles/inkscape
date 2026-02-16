@@ -1804,7 +1804,7 @@ listview row.top-separator {
     margin: 0.75em 0;
 }
 #Settings .item-separator {
-    margin: 0.6em 0 0 0;
+    margin: 0.5em 0 0 0;
 }
 #Settings .heading {
     font-weight: 500;
@@ -1813,7 +1813,7 @@ listview row.top-separator {
     margin-bottom: 0.5em;
 }
 #Settings .spin-entry-margin {
-    margin-bottom: 4px;
+    /* margin-bottom: 4px; */
 }
 #Settings .page-indentation {
     margin: 0 14px 0 0;
@@ -1824,6 +1824,9 @@ listview row.top-separator {
 }
 #Settings .label-indentation {
     margin-left: 14px;
+}
+#Settings #PreferenceCheckButton {
+    padding: 2px 0;
 }
 
 .key-pillbox {

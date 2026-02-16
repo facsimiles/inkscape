@@ -292,7 +292,7 @@
     </child>
   </object>
   <object class="GtkGrid" id="viewport-page">
-    <property name="row-spacing">0</property>
+    <property name="row-spacing">4</property>
     <property name="column-spacing">8</property>
     <property name="name">Page</property>
     <!--dim: 6, 9-->
@@ -308,7 +308,7 @@
   </object>
   <object class="GtkGrid" id="behaviors-page">
     <property name="valign">fill</property>
-    <property name="row-spacing">0</property>
+    <property name="row-spacing">4</property>
     <property name="column-spacing">8</property>
     <property name="name">Page</property>
     <!--dim: 6, 75-->
@@ -373,7 +373,9 @@
       </object>
     </child>
     <child>
-      <object class="GtkCheckButton" id="clipboard1">
+      <object class="gtkmm__CustomObject_PrefCheckButton" id="clipboard1">
+        <property name="pref-path">/options/copycomputedstyle/value</property>
+        <property name="pref-enum">1</property>
         <property name="label" translatable="yes">Copy computed style</property>
         <layout>
           <property name="column">2</property>
@@ -383,7 +385,9 @@
       </object>
     </child>
     <child>
-      <object class="GtkCheckButton">
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/copycomputedstyle/value</property>
+        <property name="pref-enum">0</property>
         <property name="group">clipboard1</property>
         <property name="label" translatable="yes">Copy class and style attributes verbatim</property>
         <layout>
@@ -464,6 +468,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/relinkclonesonduplicate/value</property>
         <property name="label" translatable="yes">Relink clones when duplicated with the original</property>
         <layout>
           <property name="column">2</property>
@@ -495,17 +500,18 @@
       <object class="GtkBox">
         <property name="height-request">-1</property>
         <property name="width-request">14</property>
+        <style>
+          <class name="page-indentation"></class>
+        </style>
         <layout>
           <property name="column">0</property>
           <property name="row">0</property>
         </layout>
-        <style>
-          <class name="page-indentation"></class>
-        </style>
       </object>
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton" id="clipboard-paste">
+        <property name="pref-path">/options/paste/aboveselected</property>
         <property name="label" translatable="yes">Paste above selection</property>
         <layout>
           <property name="column">2</property>
@@ -516,6 +522,8 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/paste/aboveselected</property>
+        <property name="pref-enum">0</property>
         <property name="group">clipboard-paste</property>
         <property name="label" translatable="yes">Paste on layer top</property>
         <layout>
@@ -529,13 +537,13 @@
       <object class="GtkLabel">
         <property name="halign">start</property>
         <property name="label" translatable="yes">Command Palette</property>
+        <style>
+          <class name="heading"></class>
+        </style>
         <layout>
           <property name="column">1</property>
           <property name="row">24</property>
         </layout>
-        <style>
-          <class name="heading"></class>
-        </style>
       </object>
     </child>
     <child>
@@ -634,17 +642,18 @@
     </child>
     <child>
       <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
         <layout>
           <property name="column">0</property>
           <property name="row">20</property>
         </layout>
-        <style>
-          <class name="item-separator"></class>
-        </style>
       </object>
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/pathoperationsunlink/value</property>
         <property name="label" translatable="yes">When performing path operations</property>
         <layout>
           <property name="column">2</property>
@@ -655,6 +664,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/clonestocurvesjustunlink/value</property>
         <property name="label" translatable="yes">&quot;Object to path&quot; will unlink, keeping LPEs and shapes</property>
         <layout>
           <property name="column">2</property>
@@ -702,6 +712,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/commandpalette/showfullactionname/value</property>
         <property name="label" translatable="yes">Show command line argument names</property>
         <layout>
           <property name="column">2</property>
@@ -712,6 +723,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/commandpalette/showuntranslatedname/value</property>
         <property name="label" translatable="yes">Show untranslated names (English)</property>
         <layout>
           <property name="column">2</property>
@@ -747,13 +759,13 @@
       <object class="GtkLabel">
         <property name="halign">start</property>
         <property name="label" translatable="yes">Guides</property>
+        <style>
+          <class name="heading"></class>
+        </style>
         <layout>
           <property name="column">1</property>
           <property name="row">28</property>
         </layout>
-        <style>
-          <class name="heading"></class>
-        </style>
       </object>
     </child>
     <child>
@@ -768,6 +780,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/tools/cvg_keep_objects</property>
         <property name="label" translatable="yes">Keep</property>
         <layout>
           <property name="column">2</property>
@@ -778,6 +791,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/tools/cvg_convert_whole_groups</property>
         <property name="label" translatable="yes">Treat</property>
         <layout>
           <property name="column">2</property>
@@ -798,6 +812,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/relativeguiderotationsnap/value</property>
         <property name="label" translatable="yes">Relative snapping of guideline angles</property>
         <layout>
           <property name="column">2</property>
@@ -844,8 +859,9 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefSpinButton">
-        <property name="min-value">1.000000</property>
-        <property name="digits">0</property>
+        <property name="pref-path">/options/nudgedistance/value</property>
+        <property name="unit-menu">steps-move-unit</property>
+        <property name="digits">2</property>
         <layout>
           <property name="column">2</property>
           <property name="row">35</property>
@@ -853,7 +869,18 @@
       </object>
     </child>
     <child>
+      <object class="gtkmm__CustomObject_PreferenceUnitMenu" id="steps-move-unit">
+        <layout>
+          <property name="column">3</property>
+          <property name="row">35</property>
+        </layout>
+      </object>
+    </child>
+    <child>
       <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
         <layout>
           <property name="column">0</property>
           <property name="row">37</property>
@@ -862,6 +889,7 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/moverotated/value</property>
         <property name="label" translatable="yes">Move increment relative to screen</property>
         <layout>
           <property name="column">2</property>
@@ -882,13 +910,24 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefSpinButton">
+        <property name="pref-path">/options/defaultscale/value</property>
+        <property name="unit-menu">steps-scale-unit</property>
+        <property name="digits">2</property>
+        <style>
+          <class name="spin-entry-margin"></class>
+        </style>
         <layout>
           <property name="column">2</property>
           <property name="row">38</property>
         </layout>
-        <style>
-          <class name="spin-entry-margin"></class>
-        </style>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PreferenceUnitMenu" id="steps-scale-unit">
+        <layout>
+          <property name="column">3</property>
+          <property name="row">38</property>
+        </layout>
       </object>
     </child>
     <child>
@@ -903,9 +942,818 @@
     </child>
     <child>
       <object class="gtkmm__CustomObject_PrefSpinButton">
+        <property name="pref-path">/options/defaultoffsetwidth/value</property>
+        <property name="unit-menu">steps-inset-unit</property>
+        <property name="digits">2</property>
         <layout>
           <property name="column">2</property>
           <property name="row">39</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PreferenceUnitMenu" id="steps-inset-unit">
+        <layout>
+          <property name="column">3</property>
+          <property name="row">39</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <style>
+          <class name="settings-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">40</property>
+          <property name="column-span">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Live Path Effects</property>
+        <style>
+          <class name="heading"></class>
+        </style>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">41</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">General</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">42</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/dialogs/livepatheffect/showexperimental</property>
+        <property name="label" translatable="yes">Show experimental effects</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">42</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Tiling</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">43</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/live_effects/copy/mirroricons</property>
+        <property name="label" translatable="yes">Add advanced tiling options</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">43</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <style>
+          <class name="settings-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">44</property>
+          <property name="column-span">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Masks and clip paths</property>
+        <style>
+          <class name="heading"></class>
+        </style>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">45</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Before applying</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">46</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton" id="mask-grouping-none">
+        <property name="pref-path">/options/maskobject/grouping</property>
+        <property name="pref-enum">0</property>
+        <property name="label" translatable="yes">Do not group masked or clipped objects</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">46</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/maskobject/grouping</property>
+        <property name="pref-enum">1</property>
+        <property name="group">mask-grouping-none</property>
+        <property name="label" translatable="yes">Put each masked or clipped object in its own group</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">47</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/maskobject/grouping</property>
+        <property name="pref-enum">2</property>
+        <property name="group">mask-grouping-none</property>
+        <property name="label" translatable="yes">Put all masked or clipped objects in a single group</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">48</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">49</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">When applying</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">50</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/maskobject/topmost</property>
+        <property name="label" translatable="yes">Use the topmost object as mask or clip path</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">50</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/maskobject/remove</property>
+        <property name="label" translatable="yes">Remove mask or clip path object</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">51</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">52</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Ungrouping</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">53</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/maskobject/maskonungroup</property>
+        <property name="label" translatable="yes">Masks and clip paths are preserved in children</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">53</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">54</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Releasing</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">55</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/maskobject/ungrouping</property>
+        <property name="label" translatable="yes">Automatically ungroup generated groups</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">55</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <style>
+          <class name="settings-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">56</property>
+          <property name="column-span">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Rotation</property>
+        <style>
+          <class name="heading"></class>
+        </style>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">57</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Rotation snaps every</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">58</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefSpinButton" id="rotation-snaps-deg">
+        <property name="pref-path">/options/rotationsnapsperpi/value</property>
+        <property name="digits">2</property>
+        <property name="min-value">1.000000</property>
+        <property name="max-value">1800.000000</property>
+        <property name="suffix" translatable="yes">°</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">58</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Display of angles</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">59</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton" id="compass-angle">
+        <property name="pref-path">/options/compassangledisplay/value</property>
+        <property name="pref-enum">1</property>
+        <property name="label" translatable="yes">Compass-like orientation: 0° is up (North)</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">59</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/compassangledisplay/value</property>
+        <property name="pref-enum">0</property>
+        <property name="group">compass-angle</property>
+        <property name="label" translatable="yes">Math convention: 0° is to the right (East)</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">60</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <style>
+          <class name="settings-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">61</property>
+          <property name="column-span">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Snapping</property>
+        <style>
+          <class name="heading"></class>
+        </style>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">62</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">What should snap</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">63</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snapclosestonly/value</property>
+        <property name="label" translatable="yes">Only closest node to the pointer</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">63</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snapmousepointer/value</property>
+        <property name="label" translatable="yes">Mouse pointer when dragging a constrained knot</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">64</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">65</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Snap indicator</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">66</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton" id="snap-indicator-enable">
+        <property name="pref-path">/options/snapindicator/value</property>
+        <property name="label" translatable="yes">Enable</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">66</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snapindicatordistance/value</property>
+        <property name="label" translatable="yes">Show align and distribute distances</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">67</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">68</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Restrict targets</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">69</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snap/grid/always</property>
+        <property name="label" translatable="yes">Always snap to grids</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">69</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snap/guide/always</property>
+        <property name="label" translatable="yes">Always snap to guides</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">70</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">71</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">If always snapping to grid/guides…</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">72</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snap/object/always</property>
+        <property name="label" translatable="yes">Allow snapping to objects</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">72</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snap/alignment/always</property>
+        <property name="label" translatable="yes">Allow alignment snapping</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">73</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/snap/distribution/always</property>
+        <property name="label" translatable="yes">Allow distribution snapping</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">74</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">75</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Weight factor</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">76</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefSpinButton">
+        <property name="pref-path">/options/snapweight/value</property>
+        <property name="digits">2</property>
+        <property name="min-value">0.000000</property>
+        <property name="max-value">1.000000</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">76</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">77</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Snap delay</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">78</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefSpinButton">
+        <property name="step-value">0.100000</property>
+        <property name="suffix" translatable="yes"> s</property>
+        <property name="pref-path">/options/snapdelay/value</property>
+        <property name="digits">2</property>
+        <property name="min-value">0.000000</property>
+        <property name="max-value">1.000000</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">78</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">79</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Indicator persistence</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">80</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefSpinButton">
+        <property name="pref-path">/options/snapindicatorpersistence/value</property>
+        <property name="digits">2</property>
+        <property name="min-value">0.100000</property>
+        <property name="max-value">10.000000</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">80</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <style>
+          <class name="settings-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">81</property>
+          <property name="column-span">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Text</property>
+        <style>
+          <class name="heading"></class>
+        </style>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">82</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Spell check</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">83</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/dialogs/spellcheck/ignorenumbers</property>
+        <property name="label" translatable="yes">Ignore words with numeric digits</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">83</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/dialogs/spellcheck/ignoreallcaps</property>
+        <property name="label" translatable="yes">Ignore words in ALL CAPITALS</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">84</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">85</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Font selector</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">86</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton" id="font-selector-list">
+        <property name="pref-path">/options/font/browser</property>
+        <property name="pref-enum">0</property>
+        <property name="label" translatable="yes">List fonts and styles</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">86</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/font/browser</property>
+        <property name="pref-enum">1</property>
+        <property name="group">font-selector-list</property>
+        <property name="label" translatable="yes">Unified font browser</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">87</property>
+          <property name="column-span">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <style>
+          <class name="settings-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">88</property>
+          <property name="column-span">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Zoom</property>
+        <style>
+          <class name="heading"></class>
+        </style>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">89</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Zoom increment</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">90</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefSpinButton">
+        <property name="pref-path">/options/zoomincrement/value</property>
+        <property name="digits">3</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">90</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="item-separator"></class>
+        </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">91</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="gtkmm__CustomObject_PrefCheckButton">
+        <property name="pref-path">/options/middlemousezoom/value</property>
+        <property name="label" translatable="yes">Use middle mouse click</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">92</property>
+          <property name="column-span">3</property>
         </layout>
       </object>
     </child>
@@ -921,7 +1769,9 @@
     </child>
   </object>
   <object class="GtkGrid" id="file-management-page">
-    <property name="row-spacing">0</property>
+    <property name="margin-bottom">0</property>
+    <property name="margin-top">0</property>
+    <property name="row-spacing">4</property>
     <property name="column-spacing">8</property>
     <property name="hexpand">true</property>
     <property name="hexpand-set">true</property>
@@ -938,9 +1788,11 @@
     <!--dim: 6, 3-->
   </object>
   <object class="GtkGrid" id="system-page">
+    <property name="margin-bottom">0</property>
+    <property name="margin-top">0</property>
     <property name="hexpand">true</property>
     <property name="hexpand-set">true</property>
-    <property name="row-spacing">0</property>
+    <property name="row-spacing">4</property>
     <property name="column-spacing">8</property>
     <property name="name">Page</property>
     <!--dim: 8, 54-->

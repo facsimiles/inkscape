@@ -278,6 +278,7 @@ target_sources(inkscape_base PRIVATE
 	widget/pattern-editor.cpp
 	widget/point.cpp
 	widget/preferences-widget.cpp
+	widget/preference-unit-menu.cpp
 	widget/preference-widgets.cpp
 	widget/property-widget.cpp
 	widget/random.cpp
