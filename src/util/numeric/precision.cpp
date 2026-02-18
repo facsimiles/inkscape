@@ -8,16 +8,20 @@
  */
 
 #include "precision.h"
+#ifndef UNIT_TEST
 #include "preferences.h"
-
-// WARNING: Do not include this file in Unit Testing! Use the mock file instead.
+#endif
 
 namespace Inkscape::Util {
 
 int get_default_numeric_precision()
 {
+#ifndef UNIT_TEST
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     return prefs->getInt("/options/svgoutput/numericprecision", 8);
+#else
+    return 8;
+#endif
 }
 
 } // namespace Inkscape::Util
