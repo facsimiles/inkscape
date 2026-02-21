@@ -54,6 +54,9 @@ static bool is_cycling = false;
 
 SelectTool::SelectTool(SPDesktop *desktop)
     : ToolBase(desktop, "/tools/select", "select.svg")
+    , _acc_st_grab{"tool.sel.stkey-grab"}
+    , _acc_st_scale{"tool.sel.stkey-scale"}
+    , _acc_st_rotate{"tool.sel.stkey-rotate"}
 {
     auto select_click = Modifier::get(Modifiers::Type::SELECT_ADD_TO)->get_label();
     auto select_scroll = Modifier::get(Modifiers::Type::SELECT_CYCLE)->get_label();
@@ -208,7 +211,9 @@ bool SelectTool::item_handler(SPItem *local_item, CanvasEvent const &event)
 
     inspect_event(event,
         [&] (ButtonPressEvent const &event) {
-            if (event.num_press == 1 && event.button == 1) {
+            if (_seltrans->is_stkey()) {
+                ret = true;
+            } else if (event.num_press == 1 && event.button == 1) {
                 /* Left mousebutton */
 
                 saveDragOrigin(event.pos);
@@ -412,7 +417,9 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
     inspect_event(event,
         [&] (ButtonPressEvent const &event) {
-            if (event.num_press == 2 && event.button == 1) {
+            if (_seltrans->is_stkey()) {
+                ret = true;
+            } else if (event.num_press == 2 && event.button == 1) {
                 if (!selection->isEmpty()) {
                     SPItem *clicked_item = selection->items().front();
 
@@ -475,8 +482,16 @@ bool SelectTool::root_handler(CanvasEvent const &event)
             }
         },
         [&] (MotionEvent const &event) {
+            _live_point = event.pos;
+
             if (grabbed && event.modifiers & (GDK_SHIFT_MASK | GDK_ALT_MASK)) {
                 _desktop->getSnapIndicator()->remove_snaptarget();
+            }
+
+            if (_seltrans->is_stkey() && !_seltrans->isEmpty()) {
+                ret = _seltrans->request_stkey(_desktop->w2d(event.pos), event.modifiers);
+                gobble_motion_events(GDK_BUTTON1_MASK);
+                return;
             }
 
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
@@ -596,7 +611,10 @@ bool SelectTool::root_handler(CanvasEvent const &event)
         [&] (ButtonReleaseEvent const &event) {
             xyp = {};
 
-            if ((event.button == 1) && (grabbed)) {
+            if (_seltrans->is_stkey() && !_seltrans->isEmpty()) {
+                _seltrans->ungrab_stkey(event.button != 1);
+                ret = true;
+            } else if ((event.button == 1) && (grabbed)) {
                 if (dragging) {
                     if (moved) {
                         // item has been moved
@@ -804,6 +822,24 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                        keyval == GDK_KEY_Meta_R;
             if (alt) {
                 _alt_on = true; // Turn off in KeyReleaseEvent
+            }
+
+            if (!selection->isEmpty() && !_seltrans->is_stkey()) {
+                if (_acc_st_grab.isTriggeredBy(event)) {
+                    _seltrans->grab_stkey(_desktop->w2d(_live_point), SelTrans::StickyTransform::GRAB);
+                } else if (_acc_st_scale.isTriggeredBy(event)) {
+                    _seltrans->grab_stkey(_desktop->w2d(_live_point), SelTrans::StickyTransform::SCALE);
+                } else if (_acc_st_rotate.isTriggeredBy(event)) {
+                    _seltrans->grab_stkey(_desktop->w2d(_live_point), SelTrans::StickyTransform::ROTATE);
+                }
+            }
+            if (_seltrans->is_stkey()) {
+                if (keyval == GDK_KEY_Escape) {
+                    // Canceled stKey transformation
+                    _seltrans->ungrab_stkey(true);
+                }
+                ret = true;
+                return;
             }
 
             if (!key_is_a_modifier (keyval)) {
