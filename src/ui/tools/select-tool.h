@@ -60,8 +60,14 @@ private:
     bool _alt_on = false;
     bool _force_dragging = false;
 
+    Geom::Point _live_point;
+
     std::string _default_cursor;
     void onHideSelectionChanged(bool hide) override;
+
+    Util::ActionAccel _acc_st_grab;
+    Util::ActionAccel _acc_st_scale;
+    Util::ActionAccel _acc_st_rotate;
 };
 
 } // namespace Inkscape::UI::Tools
