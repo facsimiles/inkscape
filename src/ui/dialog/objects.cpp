@@ -753,12 +753,23 @@ ObjectsPanel::ObjectsPanel()
     auto& _move_up_button = get_widget<Gtk::Button>(_builder, "move-up");
     auto& _move_down_button = get_widget<Gtk::Button>(_builder, "move-down");
     auto& _object_delete_button = get_widget<Gtk::Button>(_builder, "remove-object");
-    _move_up_button.signal_clicked().connect([this]() {
-        _activateAction("win.layer-raise", "selection-stack-up");
+
+    // Connect with modifier state support, so we can move items to the top/bottom with an Alt modifier depressed
+    Inkscape::UI::connect_click_with_state(_move_up_button, [this](Gdk::ModifierType state) {
+        if (Controller::has_flag(state, Gdk::ModifierType::ALT_MASK)) {
+            _activateAction("win.layer-top", "selection-top");
+        } else {
+            _activateAction("win.layer-raise", "selection-stack-up");
+        }
     });
-    _move_down_button.signal_clicked().connect([this]() {
-        _activateAction("win.layer-lower", "selection-stack-down");
+    Inkscape::UI::connect_click_with_state(_move_down_button, [this](Gdk::ModifierType state) {
+        if (Controller::has_flag(state, Gdk::ModifierType::ALT_MASK)) {
+            _activateAction("win.layer-bottom", "selection-bottom");
+        } else {
+            _activateAction("win.layer-lower", "selection-stack-down");
+        }
     });
+
     _object_delete_button.signal_clicked().connect([this]() {
         _activateAction("win.layer-delete", "delete-selection");
     });
@@ -1266,7 +1277,7 @@ bool ObjectsPanel::toggleVisible(Gdk::ModifierType const state, Gtk::TreeModel::
     auto desktop = getDesktop();
     auto selection = getSelection();
 
-    if (SPItem* item = getItem(row)) { 
+    if (SPItem* item = getItem(row)) {
         if (Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK)) {
             // Toggle Visible for layers (hide all other layers)
             if (desktop->layerManager().isLayer(item)) {
@@ -1360,7 +1371,7 @@ bool ObjectsPanel::toggleLocked(Gdk::ModifierType const state, Gtk::TreeModel::R
     auto desktop = getDesktop();
     auto selection = getSelection();
 
-    if (SPItem* item = getItem(row)) { 
+    if (SPItem* item = getItem(row)) {
         if (Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK)) {
             // Toggle lock for layers (lock all other layers)
             if (desktop->layerManager().isLayer(item)) {
@@ -2043,7 +2054,7 @@ bool ObjectsPanel::on_drag_drop(Glib::ValueBase const &/*value*/, double x, doub
             return true;
         }
     }
-    
+
     auto drop_repr = getRepr(*_store->get_iter(path));
     bool const drop_into = pos != Gtk::TreeView::DropPosition::BEFORE && //
                            pos != Gtk::TreeView::DropPosition::AFTER;
