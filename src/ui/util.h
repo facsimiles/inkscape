@@ -16,6 +16,8 @@
 #include <ranges>
 #include <boost/iterator/iterator_facade.hpp>
 #include <gtkmm/notebook.h>
+#include <gtkmm/button.h>
+#include <gtkmm/gestureclick.h>
 #include <2geom/rect.h>
 
 class SPObject;
@@ -304,6 +306,41 @@ Geom::Affine compute_transform(Gtk::Widget const &widget, Gtk::Widget const &tar
  * but is necessary when accessing Gdk::Event::get_position() or Gdk::Event::get_history() directly.
  */
 Geom::Affine get_event_transform(Glib::RefPtr<Gdk::Surface const> const &event_surface, Gtk::Widget const &target);
+
+namespace Inkscape::UI {
+
+/**
+ * Connect a button click handler that receives keyboard modifier state.
+ *
+ * This function creates a GestureClick controller for the given button and connects
+ * it to a callback that receives the modifier state when the button is clicked.
+ *
+ * @param button The button to connect the controller to
+ * @param callback A callable that accepts Gdk::ModifierType parameter
+ *
+ * Example usage:
+ * @code
+ * connect_click_with_state(button, [](Gdk::ModifierType state) {
+ *     if (Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK)) {
+ *         // Handle Shift+Click
+ *     } else {
+ *         // Handle normal click
+ *     }
+ * });
+ * @endcode
+ */
+template<typename Callback>
+void connect_click_with_state(Gtk::Button& button, Callback&& callback) {
+    auto click = Gtk::GestureClick::create();
+    click->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    click->signal_released().connect([callback = std::forward<Callback>(callback), click = click.get()](int, double, double) {
+        auto state = click->get_current_event_state();
+        callback(state);
+    });
+    button.add_controller(click);
+}
+
+} // namespace Inkscape::UI
 
 #endif // UI_UTIL_SEEN
 
