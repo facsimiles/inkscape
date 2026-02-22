@@ -81,7 +81,7 @@ PageToolbar::PageToolbar(SPDesktop *desktop)
     _toolbar = &get_widget<Gtk::Box>(_builder, "page-toolbar");
     add(*_toolbar);
 
-    _text_page_label.signal_changed().connect(sigc::mem_fun(*this, &PageToolbar::labelEdited));
+    _label_edited = _text_page_label.signal_changed().connect(sigc::mem_fun(*this, &PageToolbar::labelEdited));
 
     get_object<Gtk::EntryCompletion>(_builder, "_sizes_searcher")
         ->signal_match_selected()
