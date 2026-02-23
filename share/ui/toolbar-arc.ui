@@ -8,11 +8,13 @@
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="_cx_adj">
+    <property name="lower">-1000000</property>
     <property name="upper">1000000</property>
     <property name="step-increment">0.10</property>
     <property name="page-increment">5</property>
   </object>
   <object class="GtkAdjustment" id="_cy_adj">
+    <property name="lower">-1000000</property>
     <property name="upper">1000000</property>
     <property name="step-increment">0.10</property>
     <property name="page-increment">5</property>

@@ -1273,6 +1273,8 @@ private:
 class EllipsePanel : public details::AttributesPanel {
 public:
     EllipsePanel(Glib::RefPtr<Gtk::Builder> builder) :
+        _cx(get_widget<Widget::InkSpinButton>(builder, "el-cx")),
+        _cy(get_widget<Widget::InkSpinButton>(builder, "el-cy")),
         _rx(get_widget<Widget::InkSpinButton>(builder, "el-rx")),
         _ry(get_widget<Widget::InkSpinButton>(builder, "el-ry")),
         _start(get_widget<Widget::InkSpinButton>(builder, "el-start")),
@@ -1325,6 +1327,16 @@ public:
             DocumentUndo::done(_ellipse->document, RC_("Undo", "Change ellipse type"), "");
         });
 
+        _cx.signal_value_changed().connect([=,this](auto value){
+            change_value_px(_ellipse, "ellipse-center-x", value, nullptr, [=,this](double cx) {
+                _ellipse->setVisibleCx(cx); normalize();
+            });
+        });
+        _cy.signal_value_changed().connect([=,this](auto value){
+            change_value_px(_ellipse, "ellipse-center-y", value, nullptr, [=,this](double cy) {
+                _ellipse->setVisibleCy(cy); normalize();
+            });
+        });
         _rx.signal_value_changed().connect([=,this](auto value){
             change_value_px(_ellipse, "ellipse-radius-x", value, nullptr, [=,this](double rx) {
                 _ellipse->setVisibleRx(rx); normalize();
@@ -1377,6 +1389,8 @@ public:
         if (!_ellipse) return;
 
         auto scoped(_update.block());
+        _cx.set_value(_ellipse->cx.value);
+        _cy.set_value(_ellipse->cy.value);
         _rx.set_value(_ellipse->rx.value);
         _ry.set_value(_ellipse->ry.value);
         _start.set_value(radians_to_degree_mod360(_ellipse->start));
@@ -1424,6 +1438,8 @@ private:
     }
 
     SPGenericEllipse* _ellipse = nullptr;
+    Widget::InkSpinButton& _cx;
+    Widget::InkSpinButton& _cy;
     Widget::InkSpinButton& _rx;
     Widget::InkSpinButton& _ry;
     Widget::InkSpinButton& _start;
