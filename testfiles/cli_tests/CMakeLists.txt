@@ -54,7 +54,7 @@ endfunction(add_cli_test)
 function(add_cli_test_run fixture testname)
     # parse arguments
     set(options REFERENCE_INKSCAPE)
-    set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT REFERENCE_FILENAME)
+    set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT REFERENCE_FILENAME FUZZYREF_FILENAME)
     set(multiValueArgs PARAMETERS ENVIRONMENT EXPECTED_FILES TEST_SCRIPT)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     set(CMAKE_CTEST_ENV "INKSCAPE_FONTCONFIG=${CMAKE_CURRENT_SOURCE_DIR}/../rendering_tests/fonts/isolated.conf;${CMAKE_CTEST_ENV}")
@@ -95,10 +95,17 @@ function(add_cli_test_run fixture testname)
         set_tests_properties(${testname} PROPERTIES FAIL_REGULAR_EXPRESSION ${ARG_FAIL_FOR_OUTPUT})
     endif()
 
-    if (${ARG_REFERENCE_INKSCAPE} AND DEFINED ARG_REFERENCE_FILENAME)
-        file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_REFERENCE_FILENAME}"  REFERENCE_FILENAME)
+    unset(ARG_ANY_REFERENCE_FILENAME)
+    if(DEFINED ARG_REFERENCE_FILENAME)
+        set(ARG_ANY_REFERENCE_FILENAME ${ARG_REFERENCE_FILENAME})
+    elseif(DEFINED ARG_FUZZYREF_FILENAME)
+        set(ARG_ANY_REFERENCE_FILENAME ${ARG_FUZZYREF_FILENAME})
+    endif()
+
+    if(${ARG_REFERENCE_INKSCAPE} AND DEFINED ARG_ANY_REFERENCE_FILENAME)
+        file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_ANY_REFERENCE_FILENAME}" REFERENCE_FILENAME)
         set(ARG_PARAMETERS ${REFERENCE_FILENAME}  "--export-png-use-dithering=false"
-                "--export-filename=${ARG_REFERENCE_FILENAME}.reference.png" "--export-make-paths")
+                "--export-filename=${ARG_ANY_REFERENCE_FILENAME}.reference.png" "--export-make-paths")
         add_test(NAME ${testname}_ref COMMAND inkscape ${ARG_PARAMETERS})
         set_tests_properties(${testname}_ref PROPERTIES
                 FIXTURES_SETUP ${fixture}
@@ -159,7 +166,11 @@ function(add_cli_test_cmp fixture testname)
 
     # add a fuzzy test to check the output files
     if(DEFINED ARG_FUZZYREF_FILENAME)
-        file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_FUZZYREF_FILENAME}" ARG_FUZZYREF_FILENAME)
+        if(${ARG_REFERENCE_INKSCAPE})
+            set(ARG_FUZZYREF_FILENAME "${ARG_FUZZYREF_FILENAME}.reference.png")
+        else()
+            file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_FUZZYREF_FILENAME}" ARG_FUZZYREF_FILENAME)
+        endif()
         add_test(NAME ${testname}
             COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/l2compare.sh
             "${ARG_OUTPUT_FILENAME}" "${ARG_OUTPUT_PAGE}" "${ARG_FUZZYREF_FILENAME}" "${ARG_FUZZ}" "${ARG_RASTER_DPI}" "${ARG_PNG}"
@@ -935,7 +946,8 @@ add_cli_test(actions-object-unlink-clones  INPUT_FILENAME path.svg
 # open-page
 add_cli_test(actions-open-page             PARAMETERS --actions=open-page:3$<SEMICOLON>file-open:${CMAKE_CURRENT_SOURCE_DIR}/testcases/pdf-pages.pdf$<SEMICOLON>export-filename:actions-open-page.png$<SEMICOLON>export-do
                                            OUTPUT_FILENAME actions-open-page.png
-                                           REFERENCE_FILENAME actions-open-page_expected.png)
+                                           FUZZYREF_FILENAME actions-open-page_expected.png
+                                           FUZZ_PERCENTAGE 0.01)
 
 # query-all: test = query-all
 add_cli_test(actions-query-all             INPUT_FILENAME rects.svg PARAMETERS --actions=select-by-id:rect2$<SEMICOLON>query-all    PASS_FOR_OUTPUT ${query_all_expected})
@@ -1065,8 +1077,8 @@ add_cli_test(actions-text-to-glyph
         PARAMETERS
             --actions=select-all$<SEMICOLON>text-convert-to-glyphs$<SEMICOLON>select-clear$<SEMICOLON>select-by-id:text_o_1$<SEMICOLON>select-by-id:text_o_2$<SEMICOLON>select-by-id:text_o_3$<SEMICOLON>select-by-id:text_o_4$<SEMICOLON>delete$<SEMICOLON>
         OUTPUT_FILENAME text_to_glyph.png
-        REFERENCE_FILENAME text_to_glyph_expected.svgz REFERENCE_INKSCAPE
-        FUZZ_PERCENTAGE 8
+        FUZZYREF_FILENAME text_to_glyph_expected.svgz REFERENCE_INKSCAPE
+        FUZZ_PERCENTAGE 0.2
 )
 
 

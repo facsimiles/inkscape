@@ -1,0 +1,8 @@
+test_geom-pathstroke
+test_lpe
+test_lpe64
+cli_export-type_xaml_check
+cli_inkscape_profile_dir_build
+cli_pdfinput-font-spacing_check
+cli_pdfinput-font-style_check
+cli_pdfinput-multi-page-sample_check
