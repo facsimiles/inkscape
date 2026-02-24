@@ -30,6 +30,7 @@ Build-Depends-Arch:
  libpoppler-private-dev,
  libpotrace-dev,
  libreadline-dev,
+ librsvg2-common,
  libsigc++-3.0-dev,
  libspelling-1-dev,
  libtool,
