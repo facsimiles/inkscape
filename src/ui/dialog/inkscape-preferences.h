@@ -492,6 +492,7 @@ protected:
     UI::Widget::PrefCombo       _kb_filelist;
 
     UI::Widget::PrefCheckButton _save_use_current_dir;
+    UI::Widget::PrefEntryButtonHBox _save_default_filename;
     UI::Widget::PrefCheckButton _save_autosave_enable;
     UI::Widget::PrefSpinButton  _save_autosave_interval;
     UI::Widget::PrefEditFolder  _save_autosave_path_dir;
