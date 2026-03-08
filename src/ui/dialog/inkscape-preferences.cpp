@@ -2351,10 +2351,6 @@ void InkscapePreferences::initPageIO()
     _page_io.add_line( false, "", _save_use_current_dir, "",
                          _("When this option is on, the \"Save as...\" and \"Save a Copy...\" dialogs will always open in the directory where the currently open document is; when it's off, each will open in the directory where you last saved a file using it"), true);
 
-    _save_default_filename.init("/options/defaultfilename/value", true, _( "drawing"));
-    _page_io.add_line( false, _("Default filename:"), _save_default_filename, "",
-                           _("The default base name used for new documents when saving for the first time (without extension)"), true);
-
     _misc_default_metadata.init( _("Add default metadata to new documents"), "/metadata/addToNewFile", false);
     _page_io.add_line( false, "", _misc_default_metadata, "",
                            _("Add default metadata to new documents. Default metadata can be set from Document Properties->Metadata."), true);
@@ -2362,6 +2358,10 @@ void InkscapePreferences::initPageIO()
     _export_all_extensions.init( _("Show all outputs in Export Dialog"), "/dialogs/export/show_all_extensions", false);
     _page_io.add_line( false, "", _export_all_extensions, "",
                            _("Will list all possible output extensions in the Export Dialog selection."), true);
+
+    _save_default_filename.init("/options/defaultfilename/value", true, _( "drawing"));
+    _page_io.add_line( false, _("Default filename:"), _save_default_filename, "",
+                           _("The default base name used for new documents when saving for the first time (without extension)"), true);
 
     // Input devices options
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
