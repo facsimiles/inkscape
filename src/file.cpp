@@ -284,10 +284,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
     if ( !doc->getDocumentFilename() ) {
         // We are saving for the first time; create a unique default filename
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring default_filename = prefs->getString("/options/defaultfilename/value");
-        if (default_filename.empty()) {
-            default_filename = _("drawing");
-        }
+        Glib::ustring default_filename = prefs->getString("/options/defaultfilename/value", _("drawing"));
         save_loc = save_loc + default_filename + filename_extension;
 
         while (Inkscape::IO::file_test(save_loc.c_str(), G_FILE_TEST_EXISTS)) {
