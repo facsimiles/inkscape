@@ -290,7 +290,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         while (Inkscape::IO::file_test(save_loc.c_str(), G_FILE_TEST_EXISTS)) {
             save_loc = save_path;
             save_loc.append(G_DIR_SEPARATOR_S);
-            save_loc = save_loc + Glib::ustring::compose(Glib::ustring(default_filename) + "-%1", i++) + filename_extension;
+            save_loc = save_loc + default_filename + Glib::ustring::compose("-%1", i++) + filename_extension;
         }
     } else {
         save_loc.append(Glib::path_get_basename(doc->getDocumentFilename()));
