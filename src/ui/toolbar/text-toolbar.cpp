@@ -256,6 +256,7 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
 
     // Font size
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
+    _previous_unit = unit;
     auto unit_str = sp_style_get_css_unit_string(unit);
     auto tooltip = Glib::ustring::format(_("Font size"), " (", unit_str, ")");
 
@@ -1528,7 +1529,12 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
             selection_fontsize = size;
         }
 
-        _font_size_item->set_menu_options(sp_style_get_default_font_size_list(unit));
+        if (unit != _previous_unit) {
+            // No need to update menu options unless the unit is changed
+            _previous_unit = unit;
+            _font_size_item->set_menu_options(sp_style_get_default_font_size_list(unit));
+        }
+
         _font_size_item->set_value(selection_fontsize);
 
         // Superscript

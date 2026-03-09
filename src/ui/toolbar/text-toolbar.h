@@ -111,6 +111,7 @@ private:
     int _cursor_numbers = 0;
     SPStyle _query_cursor;
     double selection_fontsize;
+    int _previous_unit;
 
     sigc::scoped_connection fc_changed_selection;
     sigc::scoped_connection fc_update;
