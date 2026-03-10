@@ -15,6 +15,7 @@
 
 #include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
+#include "display/control/canvas-item-bpath.h"
 #include "ui/tools/tool-base.h"
 #include <glibmm/i18n.h>
 
@@ -169,6 +170,7 @@ public:
     MT::ClipboardMeaClass clipBMeas;
 
 private:
+
     std::optional<Geom::Point> explicit_base;
     std::optional<Geom::Point> last_end;
     SPKnot *knot_start = nullptr;
@@ -181,13 +183,17 @@ private:
     std::vector<CanvasItemPtr<CanvasItem>> measure_tmp_items;
     std::vector<CanvasItemPtr<CanvasItem>> measure_phantom_items;
     std::vector<CanvasItemPtr<CanvasItem>> measure_item;
+    CanvasItemPtr<CanvasItemBpath> segment_curve;
 
     double item_width;
     double item_height;
     double item_x;
     double item_y;
     double item_length;
+    double path_length;
+    double segment_length;
     SPItem *over;
+    std::pair<double, double> segment;
     sigc::scoped_connection _knot_start_moved_connection;
     sigc::scoped_connection _knot_start_ungrabbed_connection;
     sigc::scoped_connection _knot_start_click_connection;
