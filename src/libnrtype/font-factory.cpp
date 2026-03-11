@@ -28,24 +28,18 @@
 #endif
 
 #include <unordered_map>
-
+#include <fontconfig/fontconfig.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
-
-#include <fontconfig/fontconfig.h>
-
+#include <pango/pango-ot.h>
 #include <pango/pangofc-fontmap.h>
 #include <pango/pangoft2.h>
-#include <pango/pango-ot.h>
-
-#include "io/sys.h"
 #include "io/resource.h"
-
+#include "io/sys.h"
+#include "libnrtype/OpenTypeUtil.h"
 #include "libnrtype/font-factory.h"
 #include "libnrtype/font-instance.h"
-#include "libnrtype/OpenTypeUtil.h"
-
 #include "util/statics.h"
 
 #ifdef _WIN32
