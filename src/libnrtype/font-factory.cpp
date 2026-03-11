@@ -31,6 +31,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/regex.h>
 
 #include <fontconfig/fontconfig.h>
 
@@ -664,11 +665,7 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromStyle(SPStyle const *style)
 
         //  First try to use the font specification if it is set
         char const *val;
-        if (!font
-            && style->font_specification.set
-            && (val = style->font_specification.value())
-            && val[0]) {
-
+        if (!font && style->font_specification.set && (val = style->font_specification.value()) && val[0]) {
             font = FaceFromFontSpecification(val, false);
         }
 
@@ -798,10 +795,7 @@ std::shared_ptr<FontInstance> FontFactory::Face(PangoFontDescription *descr, boo
         if (!stored_descr) {
             stored_descr = pango_font_description_copy(descr);
         }
-        return loaded.add(
-                   pango_font_description_copy(descr),
-                   std::make_unique<FontInstance>(font, stored_descr)
-               );
+        return loaded.add(pango_font_description_copy(descr), std::make_unique<FontInstance>(font, stored_descr));
     } catch (FontInstance::CtorException const &) {
         return fallback();
     }
