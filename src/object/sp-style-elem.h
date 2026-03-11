@@ -51,6 +51,7 @@ public:
 
     // Container for the libcroco style sheet instance created on load.
     CRStyleSheet *style_sheet{nullptr};
+    std::vector<std::string> embedded_fonts;
 
     Media media;
     bool is_css{false};

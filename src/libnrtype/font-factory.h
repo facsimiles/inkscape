@@ -94,8 +94,8 @@ public:
     // Various functions to get a FontInstance from different descriptions.
     std::shared_ptr<FontInstance> FaceFromDescr(char const *family, char const *style);
     std::shared_ptr<FontInstance> FaceFromUIStrings(char const *uiFamily, char const *uiStyle);
-    std::shared_ptr<FontInstance> FaceFromPangoString(char const *pangoString);
-    std::shared_ptr<FontInstance> FaceFromFontSpecification(char const *fontSpecification);
+    std::shared_ptr<FontInstance> FaceFromPangoString(char const *pangoString, bool allow_fallback = true);
+    std::shared_ptr<FontInstance> FaceFromFontSpecification(char const *fontSpecification, bool allow_fallback = true);
     std::shared_ptr<FontInstance> Face(PangoFontDescription *descr, bool canFail = true);
 
     std::unique_ptr<FontInstance> create_face(PangoFontDescription* descr);
