@@ -10,6 +10,8 @@
 #include "sp-style-elem.h"
 
 // For external style sheets
+#include <cstdio>
+#include <fstream>
 #include <iostream>
 
 #include "3rdparty/libcroco/src/cr-parser.h"
@@ -21,8 +23,125 @@
 
 #include "io/resource.h"
 #include "libnrtype/font-factory.h" // For font-rule
+#include "util/uri.h"
 #include "xml/document.h"                               // for Document
 #include "xml/node.h"                                   // for Node, NodeType
+
+namespace {
+
+struct EmbeddedFontData {
+    std::string extension;
+    std::string family;
+    std::vector<unsigned char> bytes;
+};
+
+std::string get_font_extension(std::string uri)
+{
+    auto const semicolon = uri.find(';');
+    auto const mime = uri.substr(0, semicolon);
+
+    if (mime == "data:font/woff2" || mime == "data:application/font-woff2") {
+        return ".woff2";
+    }
+    if (mime == "data:font/woff" || mime == "data:application/font-woff") {
+        return ".woff";
+    }
+    if (mime == "data:font/ttf" || mime == "data:application/x-font-ttf" || mime == "data:application/font-sfnt") {
+        return ".ttf";
+    }
+    if (mime == "data:font/otf" || mime == "data:application/x-font-opentype") {
+        return ".otf";
+    }
+
+    return {};
+}
+
+std::optional<EmbeddedFontData> decode_font_data_uri(std::string const &uri, std::string family)
+{
+    auto const extension = get_font_extension(uri);
+    if (extension.empty()) {
+        return std::nullopt;
+    }
+
+    auto const comma = uri.find(',');
+    if (comma == std::string::npos) {
+        return std::nullopt;
+    }
+
+    auto const metadata = uri.substr(0, comma);
+    if (metadata.find(";base64") == std::string::npos) {
+        return std::nullopt;
+    }
+
+    gsize decoded_len = 0;
+    auto *decoded = g_base64_decode(uri.c_str() + comma + 1, &decoded_len);
+    if (!decoded || decoded_len == 0) {
+        g_free(decoded);
+        return std::nullopt;
+    }
+
+    EmbeddedFontData result;
+    result.extension = extension;
+    result.family = std::move(family);
+    result.bytes.assign(decoded, decoded + decoded_len);
+    g_free(decoded);
+    return result;
+}
+
+bool add_embedded_font_file(SPStyleElem &owner, EmbeddedFontData const &font)
+{
+    auto *uuid = g_uuid_string_random();
+    auto basename = std::string("inkscape-embedded-font-") + uuid + font.extension;
+    g_free(uuid);
+
+    auto *filename_c = g_build_filename(g_get_tmp_dir(), basename.c_str(), nullptr);
+    std::string filename = filename_c ? filename_c : "";
+    g_free(filename_c);
+
+    if (filename.empty()) {
+        g_warning("Failed to create temporary file for embedded font '%s'.", font.family.c_str());
+        return false;
+    }
+
+    std::ofstream stream(filename, std::ios::binary | std::ios::trunc);
+    if (!stream) {
+        g_warning("Failed to open temporary file '%s' for embedded font '%s'.", filename.c_str(), font.family.c_str());
+        return false;
+    }
+
+    stream.write(reinterpret_cast<char const *>(font.bytes.data()), static_cast<std::streamsize>(font.bytes.size()));
+    stream.close();
+
+    if (!stream) {
+        g_warning("Failed to write embedded font '%s' to temporary file '%s'.", font.family.c_str(), filename.c_str());
+        return false;
+    }
+
+    FontFactory::get().AddFontFile(filename.c_str());
+    owner.embedded_fonts.emplace_back(filename);
+    return true;
+}
+
+std::optional<std::string> get_font_face_property(CRStatement const *font_face_rule, char const *name)
+{
+    for (auto cur = font_face_rule->kind.font_face_rule->decl_list; cur; cur = cur->next) {
+        if (!cur->property || !cur->property->stryng || !cur->property->stryng->str) {
+            continue;
+        }
+        if (strcmp(cur->property->stryng->str, name) != 0) {
+            continue;
+        }
+        if (!cur->value || !cur->value->content.str || !cur->value->content.str->stryng || !cur->value->content.str->stryng->str) {
+            continue;
+        }
+
+        return std::string(cur->value->content.str->stryng->str);
+    }
+
+    return std::nullopt;
+}
+
+} // namespace
 
 void SPStyleElemTextNodeObserver::notifyContentChanged(Inkscape::XML::Node &, Inkscape::Util::ptr_shared,
                                                        Inkscape::Util::ptr_shared)
@@ -152,6 +271,7 @@ public:
     CRParser *const parser;
     CRStyleSheet *const stylesheet;
     SPDocument *const document; // Need file location for '@import'
+    SPStyleElem *const owner;
 
     // Current statement
     StmtType stmtType = NO_STMT;
@@ -159,7 +279,7 @@ public:
 
     ParseTmp() = delete;
     ParseTmp(ParseTmp const &) = delete;
-    ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document);
+    ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document, SPStyleElem *const owner);
     ~ParseTmp() { cr_parser_destroy(parser); }
 
     /**
@@ -203,7 +323,7 @@ import_style_cb (CRDocHandler *a_handler,
 
     // Parse file
     CRStyleSheet *stylesheet = cr_stylesheet_new (nullptr);
-    ParseTmp parse_new(stylesheet, document);
+    ParseTmp parse_new(stylesheet, document, parse_tmp.owner);
     CRStatus const parse_status =
         cr_parser_parse_file(parse_new.parser, reinterpret_cast<const guchar *>(import_file.c_str()), CR_UTF_8);
     if (parse_status == CR_OK) {
@@ -312,42 +432,44 @@ end_font_face_cb(CRDocHandler *a_handler)
         std::cerr << "end_font_face_cb: No document!" << std::endl;
         return;
     }
-    if (!document->getDocumentFilename()) {
-        std::cerr << "end_font_face_cb: Document filename is NULL" << std::endl;
-        return;
-    }
+    auto const family = get_font_face_property(font_face_rule, "font-family").value_or("");
+    auto const src = get_font_face_property(font_face_rule, "src");
+    if (src) {
+        auto uri = extract_uri(src->c_str());
+        if (uri.empty() && src->rfind("data:", 0) == 0) {
+            uri = *src;
+        }
 
-    // Add ttf or otf fonts.
-    CRDeclaration const *cur = nullptr;
-    for (cur = font_face_rule->kind.font_face_rule->decl_list; cur; cur = cur->next) {
-        if (cur->property &&
-            cur->property->stryng &&
-            cur->property->stryng->str &&
-            strcmp(cur->property->stryng->str, "src") == 0 ) {
-
-            if (cur->value &&
-                cur->value->content.str &&
-                cur->value->content.str->stryng &&
-                cur->value->content.str->stryng->str) {
-
-                Glib::ustring value = cur->value->content.str->stryng->str;
-
-                if (value.rfind("ttf") == (value.length() - 3) ||
-                    value.rfind("otf") == (value.length() - 3)) {
-
-                    // Get file
-                    Glib::ustring ttf_file =
-                        Inkscape::IO::Resource::get_filename (document->getDocumentFilename(), value);
-
-                    if (!ttf_file.empty()) {
-                        FontFactory::get().AddFontFile(ttf_file.c_str());
-                        g_info("end_font_face_cb: Added font: %s", ttf_file.c_str());
-
-                        // FIX ME: Need to refresh font list.
-                    } else {
-                        g_warning("end_font_face_cb: Failed to add: %s", value.c_str());
+        if (!uri.empty() && uri.rfind("data:", 0) == 0) {
+            if (parse_tmp.owner) {
+                if (auto font = decode_font_data_uri(uri, family)) {
+                    if (add_embedded_font_file(*parse_tmp.owner, *font)) {
+                        if (family.empty()) {
+                            g_info("end_font_face_cb: Added embedded font from data URI.");
+                        } else {
+                            g_info("end_font_face_cb: Added embedded font from data URI for family '%s'.", family.c_str());
+                        }
                     }
+                } else {
+                    g_warning("end_font_face_cb: Unsupported embedded font source for family '%s'.", family.c_str());
                 }
+            }
+        } else if (!uri.empty()) {
+            if (!document->getDocumentFilename()) {
+                std::cerr << "end_font_face_cb: Document filename is NULL" << std::endl;
+                parse_tmp.currStmt = nullptr;
+                parse_tmp.stmtType = NO_STMT;
+                return;
+            }
+
+            Glib::ustring font_file =
+                Inkscape::IO::Resource::get_filename(document->getDocumentFilename(), uri);
+
+            if (!font_file.empty()) {
+                FontFactory::get().AddFontFile(font_file.c_str());
+                g_info("end_font_face_cb: Added font: %s", font_file.c_str());
+            } else {
+                g_warning("end_font_face_cb: Failed to add: %s", uri.c_str());
             }
         }
     }
@@ -394,10 +516,11 @@ property_cb(CRDocHandler *const a_handler,
     }
 }
 
-ParseTmp::ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document)
+ParseTmp::ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document, SPStyleElem *const owner)
     : parser(cr_parser_new(nullptr))
     , stylesheet(stylesheet)
     , document(document)
+    , owner(owner)
 {
     CRDocHandler *sac_handler = cr_doc_handler_new();
     sac_handler->app_data = this;
@@ -463,13 +586,14 @@ void SPStyleElem::read_content() {
     // sheets in the document. We need a better way to update a style sheet
     // which preserves the position.
     clear_style_sheet(*this);
+    embedded_fonts.clear();
 
     // First, create the style-sheet object and track it in this
     // element so that it can be edited. It'll be combined with
     // the document's style sheet later.
     style_sheet = cr_stylesheet_new (nullptr);
 
-    ParseTmp parse_tmp(style_sheet, document);
+    ParseTmp parse_tmp(style_sheet, document, this);
 
     //XML Tree being used directly here while it shouldn't be.
     Glib::ustring const text = concat_children(*getRepr());
@@ -530,6 +654,10 @@ void SPStyleElem::release() {
     }
 
     clear_style_sheet(*this);
+    for (auto const &font_file : embedded_fonts) {
+        std::remove(font_file.c_str());
+    }
+    embedded_fonts.clear();
 
     SPObject::release();
 }

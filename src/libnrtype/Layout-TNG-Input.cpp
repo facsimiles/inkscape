@@ -199,11 +199,11 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
 
 std::shared_ptr<FontInstance> Layout::InputStreamTextSource::styleGetFontInstance() const
 {
-    PangoFontDescription *descr = styleGetFontDescription();
-    if (descr == nullptr) return nullptr;
-    auto res = FontFactory::get().Face(descr);
-    pango_font_description_free(descr);
-    return res;
+    if (!style) {
+        return nullptr;
+    }
+
+    return FontFactory::get().FaceFromStyle(style);
 }
 
 PangoFontDescription *Layout::InputStreamTextSource::styleGetFontDescription() const
