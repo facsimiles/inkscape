@@ -11,8 +11,16 @@
 
 // For external style sheets
 #include <cstdio>
+#include <cstring>
 #include <fstream>
 #include <iostream>
+#include <limits>
+
+#ifdef _WIN32
+#undef NOGDI
+#include <windows.h>
+#include <dwrite_3.h>
+#endif
 
 #include "3rdparty/libcroco/src/cr-parser.h"
 
@@ -56,6 +64,84 @@ std::string get_font_extension(std::string uri)
     return {};
 }
 
+#ifdef _WIN32
+std::string get_sfnt_extension(std::vector<unsigned char> const &bytes)
+{
+    if (bytes.size() < 4) {
+        return ".ttf";
+    }
+
+    auto const *header = reinterpret_cast<char const *>(bytes.data());
+    if (std::memcmp(header, "OTTO", 4) == 0) {
+        return ".otf";
+    }
+
+    return ".ttf";
+}
+
+std::optional<std::vector<unsigned char>> unpack_web_font(std::vector<unsigned char> const &bytes)
+{
+    IDWriteFactory5 *factory = nullptr;
+    auto release_factory = [&] {
+        if (factory) {
+            factory->Release();
+        }
+    };
+
+    auto hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5),
+                                  reinterpret_cast<IUnknown **>(&factory));
+    if (FAILED(hr) || !factory) {
+        release_factory();
+        return std::nullopt;
+    }
+
+    auto const container = factory->AnalyzeContainerType(bytes.data(), static_cast<UINT32>(bytes.size()));
+    if (container != DWRITE_CONTAINER_TYPE_WOFF && container != DWRITE_CONTAINER_TYPE_WOFF2) {
+        release_factory();
+        return std::nullopt;
+    }
+
+    IDWriteFontFileStream *stream = nullptr;
+    auto release_stream = [&] {
+        if (stream) {
+            stream->Release();
+        }
+    };
+
+    hr = factory->UnpackFontFile(container, bytes.data(), static_cast<UINT32>(bytes.size()), &stream);
+    if (FAILED(hr) || !stream) {
+        release_stream();
+        release_factory();
+        return std::nullopt;
+    }
+
+    UINT64 file_size = 0;
+    hr = stream->GetFileSize(&file_size);
+    if (FAILED(hr) || file_size == 0 || file_size > std::numeric_limits<size_t>::max()) {
+        release_stream();
+        release_factory();
+        return std::nullopt;
+    }
+
+    void const *fragment = nullptr;
+    void *fragment_context = nullptr;
+    hr = stream->ReadFileFragment(&fragment, 0, file_size, &fragment_context);
+    if (FAILED(hr) || !fragment) {
+        release_stream();
+        release_factory();
+        return std::nullopt;
+    }
+
+    std::vector<unsigned char> unpacked(static_cast<unsigned char const *>(fragment),
+                                        static_cast<unsigned char const *>(fragment) + file_size);
+    stream->ReleaseFileFragment(fragment_context);
+
+    release_stream();
+    release_factory();
+    return unpacked;
+}
+#endif
+
 std::optional<EmbeddedFontData> decode_font_data_uri(std::string const &uri, std::string family)
 {
     auto const extension = get_font_extension(uri);
@@ -81,10 +167,23 @@ std::optional<EmbeddedFontData> decode_font_data_uri(std::string const &uri, std
     }
 
     EmbeddedFontData result;
-    result.extension = extension;
     result.family = std::move(family);
     result.bytes.assign(decoded, decoded + decoded_len);
     g_free(decoded);
+
+#ifdef _WIN32
+    if (extension == ".woff" || extension == ".woff2") {
+        auto unpacked = unpack_web_font(result.bytes);
+        if (!unpacked) {
+            return std::nullopt;
+        }
+        result.bytes = std::move(*unpacked);
+        result.extension = get_sfnt_extension(result.bytes);
+        return result;
+    }
+#endif
+
+    result.extension = extension;
     return result;
 }
 
