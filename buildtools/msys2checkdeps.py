@@ -62,7 +62,7 @@ def get_dependencies(filename, deps):
         # which is indicated by the string '=>' followed by the determined location or 'not found'
         if ('=>' in line):
             (lib, location) = line.lstrip().split(' => ')
-            if lib == "OPENGL32.dll": #ignored since it's a system library but is absent from the CI (no display)
+            if lib in {"OPENGL32.dll", "dcomp.dll"}: # ignored system libraries that may not resolve in CI
                 skip_indent = indent
                 continue
             elif location == 'not found':
