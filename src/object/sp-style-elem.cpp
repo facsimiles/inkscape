@@ -230,11 +230,23 @@ std::optional<std::string> get_font_face_property(CRStatement const *font_face_r
         if (strcmp(cur->property->stryng->str, name) != 0) {
             continue;
         }
-        if (!cur->value || !cur->value->content.str || !cur->value->content.str->stryng || !cur->value->content.str->stryng->str) {
+        if (!cur->value) {
             continue;
         }
 
-        return std::string(cur->value->content.str->stryng->str);
+        auto *value_raw = cr_term_to_string(cur->value);
+        if (!value_raw) {
+            continue;
+        }
+
+        auto value = std::string(reinterpret_cast<char const *>(value_raw));
+        g_free(value_raw);
+        auto const first = value.find_first_not_of(" \t\r\n\f");
+        if (first == std::string::npos) {
+            return std::string();
+        }
+        auto const last = value.find_last_not_of(" \t\r\n\f");
+        return value.substr(first, last - first + 1);
     }
 
     return std::nullopt;
