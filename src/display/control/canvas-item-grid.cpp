@@ -181,7 +181,8 @@ static std::pair<int, int> calculate_line_range(Geom::IntRect const &screen_rect
 }
 
 static std::optional<Geom::Line> get_grid_line(Geom::IntRect const &screen_rect, Geom::Point origin,
-                                               Geom::Point direction, Geom::Point normal, int index, int line_thickness)
+                                               Geom::Point direction, Geom::Point normal, int index, int line_thickness,
+                                               int scale_factor)
 {
     auto grid_line = Geom::Line::from_origin_and_vector(origin + index * normal, direction);
     auto segment = grid_line.clip(screen_rect);
@@ -190,8 +191,8 @@ static std::optional<Geom::Line> get_grid_line(Geom::IntRect const &screen_rect,
     }
     Geom::Point x[2] = {segment->initialPoint(), segment->finalPoint()};
     if (line_thickness >= 0) {
-        x[0] = CanvasItem::align_to_pixels05(x[0], line_thickness);
-        x[1] = CanvasItem::align_to_pixels05(x[1], line_thickness);
+        x[0] = CanvasItem::align_to_pixels05(x[0], line_thickness, scale_factor);
+        x[1] = CanvasItem::align_to_pixels05(x[1], line_thickness, scale_factor);
     }
     if (Geom::dot(x[1] - x[0], direction) < 0) {
         // keep the direction consistent with original direction vector
@@ -266,7 +267,7 @@ void CanvasItemGridXY::_render(Inkscape::CanvasItemBuffer &buf) const
         // and to avoid blurry half pixels at the ends.
         double dash_pixel_center_offset = 0;
         if (physical_thickness & 1) {
-            dash_pixel_center_offset = Geom::dot(dir.normalized(), Geom::Point(0.5, 0.5));
+            dash_pixel_center_offset = Geom::dot(dir.normalized(), Geom::Point(0.5, 0.5) / buf.device_scale);
         }
 
         std::vector<double> min_dashes = {1.0, dash - 1.0};
@@ -276,7 +277,7 @@ void CanvasItemGridXY::_render(Inkscape::CanvasItemBuffer &buf) const
 
         // Loop over grid lines that intersected buf rectangle.
         for (int j = start; j < stop; ++j) {
-            auto line = get_grid_line(buf_rect_with_margin, ow, dir, normal, j, physical_thickness);
+            auto line = get_grid_line(buf_rect_with_margin, ow, dir, normal, j, physical_thickness, buf.device_scale);
 
             if (!line.has_value()) {
                 std::cerr << "CanvasItemGridXY::render: Grid line doesn't intersect!" << std::endl;
@@ -437,7 +438,7 @@ void CanvasItemGridAxonom::_render(Inkscape::CanvasItemBuffer &buf) const
         }
         auto [start, stop] = calculate_line_range(buf_rect_with_margin, ow, dir, norm);
         for (auto j = start; j < stop; j++) {
-            auto line = get_grid_line(buf_rect_with_margin, ow, dir, norm, j, phsyical_thickness);
+            auto line = get_grid_line(buf_rect_with_margin, ow, dir, norm, j, phsyical_thickness, buf.device_scale);
             if (!line.has_value()) {
                 continue;
             }
@@ -533,10 +534,10 @@ void CanvasItemGridTiles::_render(Inkscape::CanvasItemBuffer &buf) const
             for (auto y = range_y.first - 1; y < range_y.second; y++) {
                 auto grid_corner = _world_origin + x * _world_pitch[0] + y * _world_pitch[1];
 
-                auto aligned_corner = align_to_pixels05(grid_corner + corners[3], physical_thickness);
+                auto aligned_corner = align_to_pixels05(grid_corner + corners[3], physical_thickness, buf.device_scale);
                 buf.cr->move_to(aligned_corner.x(), aligned_corner.y());
                 for (auto corner : corners) {
-                    aligned_corner = align_to_pixels05(grid_corner + corner, physical_thickness);
+                    aligned_corner = align_to_pixels05(grid_corner + corner, physical_thickness, buf.device_scale);
                     buf.cr->line_to(aligned_corner.x(), aligned_corner.y());
                 }
             }

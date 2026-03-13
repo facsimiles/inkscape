@@ -131,7 +131,7 @@ void CanvasItemGuideLine::_render(Inkscape::CanvasItemBuffer &buf) const
     Geom::Point const origin = _origin * affine();
 
     int const line_width = 1;
-    Geom::Point const aligned_origin = align_to_pixels05(origin, line_width * buf.device_scale);
+    Geom::Point const aligned_origin = align_to_pixels05(origin, line_width * buf.device_scale, buf.device_scale);
 
     // Set up the Cairo rendering context
     auto ctx = buf.cr;

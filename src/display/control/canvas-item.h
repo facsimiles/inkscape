@@ -114,7 +114,8 @@ public:
     // Boost linked list member hook, speeds deletion.
     boost::intrusive::list_member_hook<> member_hook;
 
-    static Geom::Point align_to_pixels05(Geom::Point, int line_width);
+    static double align_to_pixels05(double, int line_width, int scale_factor);
+    static Geom::Point align_to_pixels05(Geom::Point, int line_width, int scale_factor);
 
 protected:
     friend class CanvasItemGroup;

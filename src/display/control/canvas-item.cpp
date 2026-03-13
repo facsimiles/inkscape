@@ -182,7 +182,7 @@ void CanvasItem::_mark_net_invisible()
     _bounds = {};
 }
 
-Geom::Point CanvasItem::align_to_pixels05(Geom::Point p, int line_width)
+double CanvasItem::align_to_pixels05(double p, int line_width, int scale_factor)
 {
     /* Need to use floor()+0.5 such that Cairo will draw us axis algined lines with a width of a single pixel,
      * without any aliasing. For this we need to position the lines at exactly half pixels, see
@@ -194,11 +194,19 @@ Geom::Point CanvasItem::align_to_pixels05(Geom::Point p, int line_width)
      * exact center.
      */
     double const THRESHOLD = 0.5;
+
+    // not using round to avoid directionality based on position relative to 0
     if (line_width & 1) {
-        return Geom::Point(floor(p.x() + THRESHOLD) + 0.5, floor(p.y() + THRESHOLD) + 0.5);
+        return (std::floor(p * scale_factor + THRESHOLD) + 0.5) / scale_factor;
     } else {
-        return Geom::Point(floor(p.x() + THRESHOLD), floor(p.y() + THRESHOLD));
+        return (std::floor(p * scale_factor + THRESHOLD)) / scale_factor;
     }
+}
+
+Geom::Point CanvasItem::align_to_pixels05(Geom::Point p, int line_width, int scale_factor)
+{
+    return Geom::Point(align_to_pixels05(p.x(), line_width, scale_factor),
+                       align_to_pixels05(p.y(), line_width, scale_factor));
 }
 
 // Grab all events!
