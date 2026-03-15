@@ -2,8 +2,6 @@ doxygen_warnings.log
 doxygen/
 gtest/
 build
-/build-*/
-/ctest*.log
 share/inkscape
 share/*/*.h
 src/3rdparty/cairo
