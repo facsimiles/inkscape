@@ -85,7 +85,6 @@ FontFormat get_font_format(std::string const &uri)
 }
 
 #ifdef _WIN32
-// Unpack WOFF/WOFF2 to SFNT (TTF/OTF) using DirectWrite
 std::optional<std::vector<unsigned char>> unpack_web_font(std::vector<unsigned char> const &bytes)
 {
     IDWriteFactory5 *factory = nullptr;

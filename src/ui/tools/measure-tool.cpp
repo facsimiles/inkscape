@@ -47,6 +47,7 @@
 #include "ui/widget/canvas.h" // Canvas area
 #include "ui/widget/events/canvas-event.h"
 
+#include "util/numeric/converters.h"
 #include "util/units.h"
 #include "util-string/ustring-format.h"
 
@@ -346,6 +347,12 @@ MeasureTool::MeasureTool(SPDesktop *desktop)
     this->_knot_end_moved_connection = this->knot_end->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotEndMovedHandler));
     this->_knot_end_click_connection = this->knot_end->click_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotClickHandler));
     this->_knot_end_ungrabbed_connection = this->knot_end->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
+
+    segment_curve = make_canvasitem<CanvasItemBpath>(_desktop->getCanvasTemp());
+    segment_curve->set_visible(false);
+    segment_curve->set_fill(0x0, SP_WIND_RULE_NONZERO);
+    segment_curve->set_stroke(0xff000079);
+    segment_curve->set_stroke_width(5);
 }
 
 MeasureTool::~MeasureTool()
@@ -1046,6 +1053,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
     if (!newover) {
         // Clear over when the cursor isn't over anything.
         over = nullptr;
+        segment_curve->set_visible(false);
         clipBMeas.unsetShapeMeasures(); // shape measurements are not set and will not be copied to the clipboard
         return;
     }
@@ -1058,13 +1066,24 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
     auto box_type = prefs->getBool("/tools/bounding_box", false) ? SPItem::GEOMETRIC_BBOX : SPItem::VISUAL_BBOX;
     double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
     double scale    = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
-    Glib::ustring unit_name = prefs->getString("/tools/measure/unit", unit->abbr);
+    std::string unit_name = prefs->getString("/tools/measure/unit", unit->abbr);
 
     auto const zoom = Geom::Scale(Quantity::convert(_desktop->current_zoom(), "px", unit->abbr)).inverse();
 
-    if (newover != over) {
+    std::pair<double, double> newsegment;
+    if (auto shape = cast<SPShape>(newover)) {
+        Geom::Point pos = _desktop->w2d(cursor) * shape->dt2i_affine();
+        auto nearest_time = shape->curve()->nearestTime(pos);
+        auto path_time = nearest_time->asPathTime();
+        newsegment = {nearest_time->path_index, path_time.curve_index};
+    }
+
+    if (newover != over || newsegment != segment) {
+        segment_curve->set_visible(false);
+
         // Get information for the item, and cache it to save time.
         over = newover;
+        segment = newsegment;
         auto affine = over->i2dt_affine() * Geom::Scale(scale);
         // Correct for the current page's position.
         if (_desktop->getDocument()->get_origin_follows_page()) {
@@ -1077,67 +1096,65 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
             item_y      = Quantity::convert(bbox->top(), "px", unit_name);
 
             if (auto shape = cast<SPShape>(over)) {
-                auto pw = paths_to_pw(*shape->curve());
-                item_length = Quantity::convert(Geom::length(pw * affine), "px", unit_name);
+                // Length of the whole multi-path shape
+                item_length = Quantity::convert(Geom::length(paths_to_pw(*shape->curve()) * affine), "px", unit_name);
+
+                // Length of the subpath we are hovering over
+                Geom::Path path = (*shape->curve())[segment.first];
+                path_length = Quantity::convert(Geom::length(paths_to_pw(path) * affine), "px", unit_name);
+
+                // Length of the segment we are hovering over
+                auto segment_path = Geom::Path(path.begin() + segment.second, path.begin() + segment.second + 1);
+                segment_length = Quantity::convert(Geom::length(paths_to_pw(segment_path) * affine), "px", unit_name);
+
+                // Highlight the item on the canvas
+                segment_curve->set_bpath(segment_path * over->i2dt_affine(), true);
+                segment_curve->set_visible(true);
             }
         }
     }
 
-    gchar *measure_str = nullptr;
-    std::stringstream precision_str;
-    precision_str.imbue(std::locale::classic());
     double origin = Quantity::convert(14, "px", unit->abbr);
     double yaxis_shift = Quantity::convert(fontsize, "px", unit->abbr);
     Geom::Point rel_position = Geom::Point(origin, origin + yaxis_shift);
     /* Keeps infobox just above the cursor */
     Geom::Point pos = _desktop->w2d(cursor);
     double gap = Quantity::convert(7 + fontsize, "px", unit->abbr);
-    double yaxisdir = _desktop->yaxisdir();
+
+    auto measurement = [precision, unit_name](std::string const &label, double num) {
+        return ustring::format_classic(label, ": ", Util::format_number(num, precision), unit_name);
+    };
+    auto add_label = [this, &rel_position, pos, zoom, fontsize, gap](std::string const &label) {
+        showItemInfoText(pos - (_desktop->yaxisdir() * Geom::Point(0, rel_position[Geom::Y]) * zoom), label, fontsize);
+        rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
+    };
 
     if (selected) {
-        showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), _desktop->getSelection()->includes(over) ? _("Selected") : _("Not selected"), fontsize);
-        rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
+        add_label(_desktop->getSelection()->includes(over) ? _("Selected") : _("Not selected"));
     }
 
     if (is<SPShape>(over)) {
 
-        precision_str << _("Length") <<  ": %." << precision << "f %s";
-        measure_str = g_strdup_printf(precision_str.str().c_str(), item_length, unit_name.c_str());
-        precision_str.str("");
-        showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), measure_str, fontsize);
-        rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
+        if (segment_length != path_length) {
+            int seg = segment.second + 1;
+            add_label(measurement(std::vformat(_("Segment {}"), std::make_format_args(seg)), segment_length));
+        }
+
+        if (path_length != item_length) {
+            int pth = segment.first + 1;
+            add_label(measurement(std::vformat(_("Sub Path {}"), std::make_format_args(pth)), path_length));
+        }
+
+        add_label(measurement(_("Length"), item_length));
 
     } else if (is<SPGroup>(over)) {
-
-        measure_str = _("Press 'CTRL' to measure into group");
-        showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), measure_str, fontsize);
-        rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
-
+        add_label(_("Press 'CTRL' to measure into group"));
     }
 
-    precision_str <<  "Y: %." << precision << "f %s";
-    measure_str = g_strdup_printf(precision_str.str().c_str(), item_y, unit_name.c_str());
-    precision_str.str("");
-    showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), measure_str, fontsize);
-    rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
-
-    precision_str <<  "X: %." << precision << "f %s";
-    measure_str = g_strdup_printf(precision_str.str().c_str(), item_x, unit_name.c_str());
-    precision_str.str("");
-    showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), measure_str, fontsize);
-    rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
-
-    precision_str << _("Height") << ": %." << precision << "f %s";
-    measure_str = g_strdup_printf(precision_str.str().c_str(), item_height, unit_name.c_str());
-    precision_str.str("");
-    showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), measure_str, fontsize);
-    rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
-
-    precision_str << _("Width") << ": %." << precision << "f %s";
-    measure_str = g_strdup_printf(precision_str.str().c_str(), item_width, unit_name.c_str());
-    precision_str.str("");
-    showItemInfoText(pos - (yaxisdir * Geom::Point(0, rel_position[Geom::Y]) * zoom), measure_str, fontsize);
-    g_free(measure_str);
+    add_label(measurement("Y", item_y));
+    add_label(measurement("X", item_x));
+    add_label(measurement("Height", item_height));
+    add_label(measurement("Width", item_width));
 
     clipBMeas.lengths[MT::LengthIDs::SHAPE_LENGTH] = item_length; // will be copied to the clipboard 
     clipBMeas.lengths[MT::LengthIDs::SHAPE_WIDTH] = item_width;
