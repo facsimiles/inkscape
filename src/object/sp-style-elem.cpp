@@ -37,48 +37,55 @@
 
 namespace {
 
+enum class FontFormat {
+    Woff2,
+    Woff,
+    Ttf,
+    Otf,
+    Unknown
+};
+
 struct EmbeddedFontData {
-    std::string extension;
+    FontFormat format;
     std::string family;
     std::vector<unsigned char> bytes;
 };
 
-std::string get_font_extension(std::string uri)
+constexpr char const *font_format_extension(FontFormat format)
+{
+    switch (format) {
+        case FontFormat::Woff2: return ".woff2";
+        case FontFormat::Woff:  return ".woff";
+        case FontFormat::Ttf:   return ".ttf";
+        case FontFormat::Otf:   return ".otf";
+        case FontFormat::Unknown: return "";
+    }
+    return "";
+}
+
+FontFormat get_font_format(std::string const &uri)
 {
     auto const semicolon = uri.find(';');
     auto const mime = uri.substr(0, semicolon);
 
     if (mime == "data:font/woff2" || mime == "data:application/font-woff2") {
-        return ".woff2";
+        return FontFormat::Woff2;
     }
     if (mime == "data:font/woff" || mime == "data:application/font-woff") {
-        return ".woff";
+        return FontFormat::Woff;
     }
     if (mime == "data:font/ttf" || mime == "data:application/x-font-ttf" || mime == "data:application/font-sfnt") {
-        return ".ttf";
+        return FontFormat::Ttf;
     }
     if (mime == "data:font/otf" || mime == "data:application/x-font-opentype") {
-        return ".otf";
+        return FontFormat::Otf;
     }
 
-    return {};
+    return FontFormat::Unknown;
 }
 
 #ifdef _WIN32
-std::string get_sfnt_extension(std::vector<unsigned char> const &bytes)
-{
-    if (bytes.size() < 4) {
-        return ".ttf";
-    }
-
-    auto const *header = reinterpret_cast<char const *>(bytes.data());
-    if (std::memcmp(header, "OTTO", 4) == 0) {
-        return ".otf";
-    }
-
-    return ".ttf";
-}
-
+// Unpack WOFF/WOFF2 to SFNT (TTF/OTF) using DirectWrite
 std::optional<std::vector<unsigned char>> unpack_web_font(std::vector<unsigned char> const &bytes)
 {
     IDWriteFactory5 *factory = nullptr;
@@ -88,8 +95,8 @@ std::optional<std::vector<unsigned char>> unpack_web_font(std::vector<unsigned c
         }
     };
 
-    auto hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5),
-                                  reinterpret_cast<IUnknown **>(&factory));
+    HRESULT hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5),
+                                    reinterpret_cast<IUnknown **>(&factory));
     if (FAILED(hr) || !factory) {
         release_factory();
         return std::nullopt;
@@ -144,8 +151,8 @@ std::optional<std::vector<unsigned char>> unpack_web_font(std::vector<unsigned c
 
 std::optional<EmbeddedFontData> decode_font_data_uri(std::string const &uri, std::string family)
 {
-    auto const extension = get_font_extension(uri);
-    if (extension.empty()) {
+    auto const format = get_font_format(uri);
+    if (format == FontFormat::Unknown) {
         return std::nullopt;
     }
 
@@ -167,30 +174,32 @@ std::optional<EmbeddedFontData> decode_font_data_uri(std::string const &uri, std
     }
 
     EmbeddedFontData result;
+    result.format = format;
     result.family = std::move(family);
     result.bytes.assign(decoded, decoded + decoded_len);
     g_free(decoded);
 
 #ifdef _WIN32
-    if (extension == ".woff" || extension == ".woff2") {
+    // Unpack WOFF/WOFF2 to TTF/OTF using DirectWrite
+    if (format == FontFormat::Woff || format == FontFormat::Woff2) {
         auto unpacked = unpack_web_font(result.bytes);
         if (!unpacked) {
             return std::nullopt;
         }
         result.bytes = std::move(*unpacked);
-        result.extension = get_sfnt_extension(result.bytes);
-        return result;
+        // Determine if OTF or TTF based on SFNT header
+        result.format = (result.bytes.size() >= 4 && std::memcmp(result.bytes.data(), "OTTO", 4) == 0)
+                        ? FontFormat::Otf : FontFormat::Ttf;
     }
 #endif
 
-    result.extension = extension;
     return result;
 }
 
 bool add_embedded_font_file(SPStyleElem &owner, EmbeddedFontData const &font)
 {
     auto *uuid = g_uuid_string_random();
-    auto basename = std::string("inkscape-embedded-font-") + uuid + font.extension;
+    auto basename = std::string("inkscape-embedded-font-") + uuid + font_format_extension(font.format);
     g_free(uuid);
 
     auto *filename_c = g_build_filename(g_get_tmp_dir(), basename.c_str(), nullptr);
