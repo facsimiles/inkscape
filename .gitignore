@@ -2,8 +2,6 @@ doxygen_warnings.log
 doxygen/
 gtest/
 build
-/build-*/
-/ctest*.log
 share/inkscape
 share/*/*.h
 src/3rdparty/cairo
@@ -41,34 +39,6 @@ CMakeCache.txt
 CPackConfig.cmake
 CPackSourceConfig.cmake
 cmake_uninstall.cmake
-
-# In-source CMake/Ninja build artifacts
-/.ninja_deps
-/.ninja_log
-/build.ninja
-/CTestCustom.cmake
-/CTestTestfile.cmake
-/DartConfiguration.tcl
-/_deps/
-/bin/
-/capypdf-prefix/
-/deps/
-/etc/
-/include/
-/inkscape_datadir/
-/install_manifest.txt
-/lib/
-/share/**/CTestTestfile.cmake
-/testfiles/**/CTestTestfile.cmake
-
-# Generated source/resource files from local builds
-/src/inkscape-version.cpp
-/src/inkview-manifest.xml
-/src/inkview.rc
-
-# Generated localized templates
-/share/templates/default*.svg
-/share/templates/*.timestamp
 
 # Debian packaging
 /debian
