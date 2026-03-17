@@ -9,6 +9,8 @@
 #include "color-set.h"
 
 #include <algorithm>
+#include <ranges>
+#include <unordered_map>
 
 #include "colors/color.h"
 #include "colors/spaces/base.h"
@@ -347,13 +349,18 @@ std::shared_ptr<Space::AnySpace> ColorSet::getBestSpace() const
 
     unsigned biggest = 0;
     std::shared_ptr<Space::AnySpace> ret;
-    std::map<std::shared_ptr<Space::AnySpace>, unsigned> counts;
-    for (auto const &[id, color] : _colors) {
-        if (++counts[color.getSpace()] > biggest) {
-            biggest = counts[color.getSpace()];
+    std::unordered_map<Space::AnySpace*, unsigned> counts;
+
+    for (auto const &color : _colors | std::views::values) {
+        auto space = color.getSpace().get();
+        auto& count = counts[space];
+
+        if (++count > biggest) {
+            biggest = count;
             ret = color.getSpace();
         }
     }
+
     return ret;
 }
 
