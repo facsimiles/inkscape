@@ -466,6 +466,8 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
             reprs.push_back(doc->getObjectById(ref.first)->getRepr());
         }
     }
+    // Re-sort after adding text reference dependencies so duplication preserves stacking order.
+    sort(reprs.begin(), reprs.end(), sp_repr_compare_position_bool);
 
     std::vector<Inkscape::XML::Node*> copies;
     for(auto old_repr : reprs) {
