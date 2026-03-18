@@ -13,6 +13,7 @@
  */
 
 #include <cmath>
+#include <gtk/gtk.h>
 #include <iomanip>
 #include <string>
 #include <glibmm/i18n.h>
@@ -1377,6 +1378,28 @@ gboolean ObjectsPanel::on_tree_key_pressed(GtkEventControllerKey const * const c
             if (shift) {
                 _activateAction("layer-raise", "selection-stack-up");
                 return true;
+            } else {
+                if (!path.prev()) {
+                    if (path.size() > 1) {
+                        path.up();
+                    }
+                } else {
+                    // if the node is expanded navigate to the last child item
+                    while (_tree.row_expanded(path)) {
+                        auto model = _tree.get_model();
+                        auto c_model = model->gobj();
+                        auto iter = model->get_iter(path);
+                        auto c_iter = iter.gobj();
+                        auto count = std::to_string(gtk_tree_model_iter_n_children(c_model, c_iter) - 1);
+                        auto new_path = path.to_string() + ":" + count;
+                        path = Gtk::TreePath(new_path);
+                    }
+                }
+
+                _tree.set_cursor(path);
+                if (!shift)
+                    selectCursorItem(Gdk::ModifierType(state));
+                return true;
             }
             break;
         case GDK_KEY_Down:
@@ -1384,7 +1407,40 @@ gboolean ObjectsPanel::on_tree_key_pressed(GtkEventControllerKey const * const c
             if (shift) {
                 _activateAction("layer-lower", "selection-stack-down");
                 return true;
+            } else {
+                // if a row is expanded, go into its children
+                if (_tree.row_expanded(path)) {
+                    path.down();
+                } else {
+                    // test if there is a next iter
+                    auto model = _tree.get_model();
+                    auto c_model = model->gobj();
+                    auto iter = model->get_iter(path);
+                    auto c_iter = iter.gobj();
+                    if (gtk_tree_model_iter_next(c_model, c_iter)) {
+                        path.next();
+                    } else {
+                        // if not, try going to the next iter of the parent
+                        if (path.size() > 1) {
+                            path.up();
+                            c_iter = model->get_iter(path).gobj();
+                            if (gtk_tree_model_iter_next(c_model, c_iter))
+                                path.next();
+                        }
+                    }
+                }
+
+                // don't loop back up to top from the bottom of the tree
+                if (path.to_string() == "0")
+                    return true;
+
+                _tree.set_cursor(path);
+                if (!shift)
+                    selectCursorItem(Gdk::ModifierType(state));
+                return true;
             }
+            break;
+
         case GDK_KEY_Return:
             if (auto item = getSelection()->singleItem()) {
                 if (auto watcher = getWatcher(item->getRepr())) {
