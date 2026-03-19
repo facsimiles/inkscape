@@ -11,6 +11,9 @@
 #ifndef INKSCAPE_UI_WIDGET_RULER_H
 #define INKSCAPE_UI_WIDGET_RULER_H
 
+#include <gtkmm/gesture.h>
+#include <gtkmm/widget.h>
+
 #include "preferences.h"
 #include "ui/widget-vfuncs-class-init.h"
 #include "util/delete-with.h"
@@ -106,6 +109,7 @@ private:
         unsigned divide_index;
         double pixels_per_tick;
         double pixels_per_major;
+        int scale_factor;
     };
     std::optional<LastRenderParams> _params;
 };

@@ -2229,11 +2229,14 @@ void InkscapePreferences::initPageUI()
         _grids_axonom.add_line( false, _("Grid units:"), _grids_axonom_units, "", "", false);
         _grids_axonom.add_line( false, _("Origin X:"), _grids_axonom_origin_x, "", _("X coordinate of grid origin"), false);
         _grids_axonom.add_line( false, _("Origin Y:"), _grids_axonom_origin_y, "", _("Y coordinate of grid origin"), false);
-        _grids_axonom.add_line( false, _("Spacing Y:"), _grids_axonom_spacing_y, "", _("Base length of z-axis"), false);
+        _grids_axonom.add_line(false, _("Height:"), _grids_axonom_spacing_y, "",
+                               _("Height of grid cell, vertical distance between grid intersections"), false);
         _grids_axonom_angle_x.init("/options/grids/axonom/angle_x", -360.0, 360.0, 1.0, 10.0, 30.0, false, false);
         _grids_axonom_angle_z.init("/options/grids/axonom/angle_z", -360.0, 360.0, 1.0, 10.0, 30.0, false, false);
-        _grids_axonom.add_line( false, _("Angle X:"), _grids_axonom_angle_x, "", _("Angle of x-axis"), false);
-        _grids_axonom.add_line( false, _("Angle Z:"), _grids_axonom_angle_z, "", _("Angle of z-axis"), false);
+        _grids_axonom.add_line(false, _("Angle of X:"), _grids_axonom_angle_x, "",
+                               _("Angle of x-axis relative to horizontal direction"), false);
+        _grids_axonom.add_line(false, _("Angle of Z:"), _grids_axonom_angle_z, "",
+                               _("Angle of z-axis relative to horizontal direction"), false);
         _grids_axonom_empcolor.init(_("Grid color:"), "/options/grids/axonom/empcolor", GRID_DEFAULT_MAJOR_COLOR);
         _grids_axonom.add_line( false, _("Grid color:"), _grids_axonom_empcolor, "", _("Color used for grid lines"), false);
         _grids_axonom_empspacing.init("/options/grids/axonom/empspacing", 1.0, 1000.0, 1.0, 5.0, 5.0, true, false);
