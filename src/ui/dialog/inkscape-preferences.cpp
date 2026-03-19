@@ -2359,6 +2359,10 @@ void InkscapePreferences::initPageIO()
     _page_io.add_line( false, "", _export_all_extensions, "",
                            _("Will list all possible output extensions in the Export Dialog selection."), true);
 
+    _save_default_filename.init("/options/defaultfilename/value", true, _( "drawing"));
+    _page_io.add_line( false, _("Default filename:"), _save_default_filename, "",
+                           _("The default base name used for new documents when saving for the first time (without extension)"), true);
+
     // Input devices options
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
     _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels"),
