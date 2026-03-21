@@ -266,7 +266,7 @@ inkscape:windows:
   extends: .windows
   tags:
     - saas-windows-medium-amd64
-  timeout: 2h  # this is imposed by the runner
+  timeout: 4h  # this is imposed by the runner
   retry: 2
   parallel:
     matrix:
