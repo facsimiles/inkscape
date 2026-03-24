@@ -11,6 +11,8 @@
  *
  */
 
+#include "ink-ruler.h"
+
 #include <giomm/menu.h>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/eventcontrollermotion.h>
@@ -18,7 +20,7 @@
 #include <gtkmm/popovermenu.h>
 #include <gtkmm/snapshot.h>
 
-#include "ink-ruler.h"
+#include "display/control/canvas-item.h"
 #include "inkscape.h"
 #include "ui/containerize.h"
 #include "ui/controller.h"
@@ -56,6 +58,8 @@ Ruler::Ruler(Gtk::Orientation orientation)
     on_prefs_changed();
 
     INKSCAPE.themecontext->getChangeThemeSignal().connect(sigc::track_object([this] { css_changed(nullptr); }, *this));
+
+    this->property_scale_factor().signal_changed().connect(sigc::mem_fun(*this, &Ruler::redraw_ruler));
 }
 
 Ruler::~Ruler() = default;
@@ -253,6 +257,7 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     double const units_per_major = ruler_metric->ruler_scale[scale_index];
     double const pixels_per_major = pixels_per_unit * units_per_major;
     double const pixels_per_tick = pixels_per_major / subdivisions;
+    int const pixel_scale_factor = get_scale_factor();
 
     // Figure out which cached render nodes to invalidate.
     if (!_params) {
@@ -261,7 +266,8 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
             .aperp = aperp,
             .divide_index = divide_index,
             .pixels_per_tick = pixels_per_tick,
-            .pixels_per_major = pixels_per_major
+            .pixels_per_major = pixels_per_major,
+            .scale_factor = pixel_scale_factor
         };
     } else {
         auto update = [] (auto src, auto &dst, auto&... to_reset) {
@@ -281,6 +287,7 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
         update(divide_index, _params->divide_index, _scale_tile_node);
         update_approx(pixels_per_tick, _params->pixels_per_tick, _scale_tile_node);
         update_approx(pixels_per_major, _params->pixels_per_major, _scale_node);
+        update(pixel_scale_factor, _params->scale_factor, _scale_tile_node);
     }
     if (!_scale_tile_node) {
         _scale_node.reset(); // _scale_node contains _scale_tile_node
@@ -319,7 +326,10 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
 
         for (int i = 0; i < subdivisions; i++) {
             // Position of tick
-            double position = std::round(i * pixels_per_tick);
+            double position = CanvasItem::align_to_pixels05(i * pixels_per_tick, 0, pixel_scale_factor);
+            // center line based on physical pixels
+            int const centering_shift = pixel_scale_factor / 2;
+            position += -centering_shift / double(pixel_scale_factor);
 
             // Height of tick
             int size = aperp - 8;
@@ -351,18 +361,18 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     // Note: We can't use a repeat node for this, because then the ticks will either be blurry or inaccurate.
     if (!_scale_node) {
         auto scale_tiles = gtk_snapshot_new();
-
+        double last_pos = 0;
         for (int i = 0; ; i++) {
             if (i > 0) {
-                int const pos = std::round(i * pixels_per_major);
+                double const pos = CanvasItem::align_to_pixels05(i * pixels_per_major, 0, pixel_scale_factor);
                 if (pos >= aparallel + pixels_per_major) {
                     break;
                 }
-                int const lastpos = std::round((i - 1) * pixels_per_major);
-                int const shift = pos - lastpos;
-                auto const translate = _orientation == Gtk::Orientation::HORIZONTAL
-                    ? Geom::IntPoint(shift, 0)
-                    : Geom::IntPoint(0, shift);
+
+                double const shift = pos - last_pos;
+                last_pos = pos;
+                auto const translate =
+                    _orientation == Gtk::Orientation::HORIZONTAL ? Geom::Point(shift, 0) : Geom::Point(0, shift);
                 gtk_snapshot_translate(scale_tiles, geom_to_gtk(translate).gobj());
             }
             gtk_snapshot_append_node(scale_tiles, _scale_tile_node.get());
@@ -372,7 +382,9 @@ void Ruler::draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot)
     }
 
     // Render the scale with a shift.
-    int const shift = -std::round(safe_frac(_lower * sign / units_per_major) * pixels_per_major);
+    double const shift =
+        -std::round(safe_frac(_lower * sign / units_per_major) * pixels_per_major * pixel_scale_factor) /
+        pixel_scale_factor;
     auto const translate = _orientation == Gtk::Orientation::HORIZONTAL
         ? Geom::Point(shift, 0)
         : Geom::Point(0, shift);
