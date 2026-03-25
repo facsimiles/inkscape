@@ -1654,7 +1654,10 @@ Gtk::EventSequenceState ObjectsPanel::on_click(Gtk::GestureMultiPress const &ges
 
     // Gtk lacks the ability to detect if the user is clicking on the
     // expander icon. So we must detect it using the cell_area check.
-    auto const is_expander = x < get_cell_area(_tree, path, *_name_column).get_x();
+    bool const is_direction_ltr = (get_direction() == Gtk::TEXT_DIR_LTR);
+    auto const is_expander = is_direction_ltr
+        ? (x < get_cell_area(_tree, path, *_name_column).get_x())
+        : (x > get_cell_area(_tree, path, *_name_column).get_x());
 
     if (col != _name_column || is_expander)
         return Gtk::EVENT_SEQUENCE_NONE;
