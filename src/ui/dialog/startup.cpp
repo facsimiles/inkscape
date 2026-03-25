@@ -199,7 +199,7 @@ void StartScreen::show_now()
 
 void StartScreen::setup_welcome()
 {
-    _welcome = true;
+    _welcome_instantiated = true;
 
     auto prefs = Inkscape::Preferences::get();
 
@@ -295,13 +295,18 @@ void StartScreen::setup_welcome()
     show();
 }
 
+bool StartScreen::is_welcome_instantiated()
+{
+    return _welcome_instantiated;
+}
+
 StartScreen::~StartScreen()
 {
     // These are "owned" by builder... don't delete them!
     banners.get_parent()->remove(banners);
     messages.get_parent()->remove(messages);
 
-    if (_welcome) {
+    if (_welcome_instantiated) {
         auto tabs = &get_widget<Gtk::Notebook>(build_welcome, "tabs");
         tabs->get_parent()->remove(*tabs);
     }

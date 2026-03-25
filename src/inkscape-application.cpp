@@ -1135,10 +1135,12 @@ InkscapeApplication::on_activate()
         if (!_start_screen) {
             _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
         }
-        _start_screen->setup_welcome();
-        _start_screen->run(); // Blocks until document selected
-        document = _start_screen->get_document();
-        startup_close();
+        if (!_start_screen->is_welcome_instantiated()) {
+            _start_screen->setup_welcome();
+            _start_screen->run(); // Blocks until document selected
+            document = _start_screen->get_document();
+            startup_close();
+        }
         if (!document) {
             return;
         }
