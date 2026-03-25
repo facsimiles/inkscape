@@ -997,8 +997,9 @@ void InkscapePreferences::initPageTools()
     _page_node.add_group_header(_("Editing preferences"));
     _t_node_single_node_transform_handles.init(_("Show transform handles for single nodes"), "/tools/nodes/single_node_transform_handles", false);
     _page_node.add_line( true, "", _t_node_single_node_transform_handles, "", _("Show transform handles even when only a single node is selected"));
-    _t_node_delete_preserves_shape.init(_("Deleting nodes preserves shape"), "/tools/nodes/delete_preserves_shape", true);
-    _page_node.add_line( true, "", _t_node_delete_preserves_shape, "", _("Move handles next to deleted nodes to resemble original shape; hold Ctrl to get the other behavior"));
+    // For info about this setting, see https://gitlab.com/inkscape/inkscape/-/merge_requests/6635
+    _t_node_delete_preserves_shape.init(_("Use automatic corner detection when deleting nodes"), "/tools/nodes/delete_preserves_shape", true);
+    _page_node.add_line( true, "", _t_node_delete_preserves_shape, "", _("When active, Inkscape will try to detect whether the deleted node is a sharp corner. If it is a sharp corner, the node will be deleted, and the adjacent handles will stay unchanged. When it is not a sharp corner, the adjacent handles will be adjusted to preserve the shape. When inactive, Inkscape will try to preserve the shape in all cases; hold Ctrl while deleting a node to delete it without shape preservation."));
 
     //Tweak
     this->AddNewObjectsStyle(_page_tweak, "/tools/tweak", _("Object paint style"));
