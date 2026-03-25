@@ -52,6 +52,7 @@ public:
 
     void show_now();
     void setup_welcome();
+    bool is_welcome_instantiated();
 
 protected:
     void on_response(int response_id) override;
@@ -92,7 +93,7 @@ private:
     Gtk::TreeView *recentfiles = nullptr;
 
     SPDocument* _document = nullptr;
-    bool _welcome = false;
+    bool _welcome_instantiated = false;
 };
 
 } // namespace Dialog
