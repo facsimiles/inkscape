@@ -279,25 +279,28 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
     return object;
 }
 
-size_t Selection::numberOfLayers() {
+std::pair<size_t, size_t> Selection::selectionDistinctLayerAndParentCounts() {
+    // Set to count unique parents and layers only.
+    std::unordered_set<SPObject*> layers;
+    std::unordered_set<SPObject*> parents;
     auto items = this->items();
-    std::set<SPObject*> layers;
-    for (auto item : items) {
-        SPObject *layer = _desktop->layerManager().layerForObject(item);
-        layers.insert(layer);
-    }
+    auto &layerManager = _desktop->layerManager();
 
-    return layers.size();
-}
-
-size_t Selection::numberOfParents() {
-    auto items = this->items();
-    std::set<SPObject*> parents;
-    for (auto item : items) {
-        SPObject *parent = item->parent;
+    for (auto const item : items) {
+        auto const parent = item->parent;
+        auto const group = cast<SPGroup>(parent);
         parents.insert(parent);
+
+        if (group && group->isLayer()) {
+            layers.insert(parent);
+        } else {
+            SPObject *layer = layerManager.layerForObject(item);
+            layers.insert(layer);
+        }
+
     }
-    return parents.size();
+
+    return {layers.size(), parents.size()};
 }
 
 void Selection::_connectSignals(SPObject *object) {

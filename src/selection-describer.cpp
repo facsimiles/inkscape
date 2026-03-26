@@ -152,8 +152,7 @@ void SelectionDescriber::updateMessage(Inkscape::Selection *selection)
         }
 
         gchar *in_phrase;
-        guint num_layers = selection->numberOfLayers();
-        guint num_parents = selection->numberOfParents();
+        auto const [num_layers, num_parents] = selection->selectionDistinctLayerAndParentCounts();
         if (num_layers == 1) {
             if (num_parents == 1) {
                 if (layer == parent)
@@ -165,10 +164,10 @@ void SelectionDescriber::updateMessage(Inkscape::Selection *selection)
                 else
                     in_phrase = g_strdup_printf(_(" in unnamed group (%s)"), layer_name);
             } else {
-                    in_phrase = g_strdup_printf(ngettext(" in <b>%i</b> parent (%s)", " in <b>%i</b> parents (%s)", num_parents), num_parents, layer_name);
+                    in_phrase = g_strdup_printf(ngettext(" in <b>%zu</b> parent (%s)", " in <b>%zu</b> parents (%s)", num_parents), num_parents, layer_name);
             }
         } else {
-            in_phrase = g_strdup_printf(ngettext(" in <b>%i</b> layer", " in <b>%i</b> layers", num_layers), num_layers);
+            in_phrase = g_strdup_printf(ngettext(" in <b>%zu</b> layer", " in <b>%zu</b> layers", num_layers), num_layers);
         }
         g_free (layer_name);
         g_free (parent_name);
