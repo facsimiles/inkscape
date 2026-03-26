@@ -29,14 +29,16 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
+#include "document.h"
 #include "livarot/Path.h"
+#include "sp-item-group.h"
 #include "sp-textpath.h"
 #include "sp-tref.h"
 #include "sp-use-reference.h"
 #include "style.h"
 #include "text-editing.h"
+#include "util/numeric/converters.h"
 #include "xml/href-attribute-helper.h"
-
 
 /*#####################################################
 #  SPTSPAN
@@ -519,6 +521,53 @@ void sp_textpath_to_text(SPObject *tp)
     tp->deleteObject();
 }
 
+SPText *create_text_on_path (SPGroup *parent, SPCSSAttr *css, SPShape *path, double offset, int align, bool right_side)
+{
+    Inkscape::XML::Document *xml_doc = parent->document->getReprDoc();
+
+    if (!path) {
+        return nullptr;
+    }
+
+    Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
+    text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+    auto text_item = cast<SPText>(parent->appendChildRepr(text_repr));
+    g_assert(text_item != nullptr);
+
+    // Create textPath object and link to path
+    auto textpath_repr = xml_doc->createElement("svg:textPath");
+    Inkscape::setHrefAttribute(*textpath_repr, std::string("#") + path->getId());
+    Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
+    textpath_repr->appendChild(text_node);
+    text_repr->appendChild(textpath_repr);
+
+    if (!css) {
+        css = sp_repr_css_attr(text_repr, "style");
+    } else {
+        intrusive_ptr_add_ref(css);
+    }
+    if (align < 0) {
+        sp_repr_css_set_property (css, "text-anchor", "start");
+        sp_repr_css_set_property (css, "text-align",  "start");
+    } else if (align > 0) {
+        sp_repr_css_set_property (css, "text-anchor", "end");
+        sp_repr_css_set_property (css, "text-align",  "end");
+    } else {
+        sp_repr_css_set_property (css, "text-anchor", "middle");
+        sp_repr_css_set_property (css, "text-align",  "center");
+    }
+    textpath_repr->setAttribute("startOffset", Util::format_number(offset * 100.0, 3) + "%");
+    textpath_repr->setAttribute("side", right_side ? "right" : "left");
+
+    sp_repr_css_set(text_repr, css, "style");
+    sp_repr_css_attr_unref(css);
+
+    Inkscape::GC::release(textpath_repr);
+    Inkscape::GC::release(text_repr);
+    Inkscape::GC::release(text_node);
+    return text_item;
+}
 
 /*
   Local Variables:

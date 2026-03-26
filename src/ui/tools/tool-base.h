@@ -16,6 +16,7 @@
 #include <boost/noncopyable.hpp>
 #include <gdkmm/cursor.h>
 
+#include "desktop.h"
 #include "preferences.h"
 #include "ui/widget/events/enums.h"
 #include "util/action-accel.h"

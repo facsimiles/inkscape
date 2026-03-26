@@ -1855,9 +1855,11 @@ guaranteed to be lower than upto). Requires a list of nodes built by build_flat_
 If items_count > 0, it'll return the topmost (in z-order) items_count items.
  */
 static std::vector<SPItem*> find_items_at_point(std::deque<SPItem*> const &nodes, unsigned dkey,
-                                                Geom::Point const &p, int items_count = 0, SPItem *upto = nullptr)
+                                                Geom::Point const &p, int items_count = 0, SPItem *upto = nullptr,
+                                                std::optional<double> distance = {})
 {
-    double const delta = Inkscape::Preferences::get()->getDouble("/options/cursortolerance/value", 1.0);
+    double const delta = distance ? *distance : Inkscape::Preferences::get()->getDouble("/options/cursortolerance/value", 1.0);
+
     std::optional<bool> outline;
 
     std::vector<SPItem*> result;
@@ -1959,16 +1961,16 @@ std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom:
     return find_items_in_area(x, this->root, dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups, enter_layers);
 }
 
-std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, bool topmost_only, size_t limit, bool active_only) const
+/**
+ * Get all the items that are near to the given points.
+ *
+ * @arg distance - The distance to the item to allow, default is 0.25 which is useful
+ *                 for picking the path, we don't want small objects close together
+ *                 (such as hatching strokes) to obscure each other by their deltas
+ */
+std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, bool topmost_only, size_t limit, bool active_only, double distance) const
 {
     std::vector<SPItem*> result;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // When picking along the path, we don't want small objects close together
-    // (such as hatching strokes) to obscure each other by their deltas,
-    // so we temporarily set delta to a small value
-    gdouble saved_delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
-    prefs->setDouble("/options/cursortolerance/value", 0.25);
 
     auto &node_cache = get_flat_item_list(key, true, active_only);
 
@@ -1979,7 +1981,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     }
     size_t item_counter = 0;
     for(auto point : points) {
-        std::vector<SPItem*> items = find_items_at_point(node_cache, key, point, topmost_only);
+        std::vector<SPItem*> items = find_items_at_point(node_cache, key, point, topmost_only, nullptr, distance);
         for (SPItem *item : items) {
             if (item && result.end()==find(result.begin(), result.end(), item))
                 if(all_layers || (desktop && desktop->layerManager().layerForObject(item) == current_layer)){
@@ -1987,15 +1989,11 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
                     item_counter++;
                     //limit 0 = no limit
                     if(item_counter == limit){
-                        prefs->setDouble("/options/cursortolerance/value", saved_delta);
                         return result;
                     }
                 }
         }
     }
-
-    // and now we restore it back
-    prefs->setDouble("/options/cursortolerance/value", saved_delta);
 
     return result;
 }
