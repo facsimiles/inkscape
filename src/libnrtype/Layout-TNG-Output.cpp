@@ -21,6 +21,7 @@
 #include "display/curve.h"
 #include "libnrtype/font-factory.h"
 #include "util-string/symbol-convert.h"
+#include "style-text.h"
 
 using Extension::Internal::CairoRenderContext;
 using Extension::Internal::CairoGlyphInfo;

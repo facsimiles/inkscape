@@ -46,6 +46,7 @@
 #include "util/recently-used-fonts.h"
 #include "util/document-fonts.h"
 #include "xml/repr.h"
+#include "style-text.h"
 
 //#define DEBUG_FONT
 

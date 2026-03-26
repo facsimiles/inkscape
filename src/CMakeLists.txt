@@ -69,6 +69,7 @@ target_sources(inkscape_base PRIVATE
   snapped-point.cpp
   snapper.cpp
   style-internal.cpp
+  style-text.cpp
   style.cpp
   text-chemistry.cpp
   text-editing.cpp
@@ -162,6 +163,7 @@ target_sources(inkscape_base PRIVATE
   strneq.h
   style-enums.h
   style-internal.h
+  style-text.h
   style.h
   syseq.h
   text-chemistry.h
