@@ -28,23 +28,18 @@
 #endif
 
 #include <unordered_map>
-
+#include <fontconfig/fontconfig.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
-
-#include <fontconfig/fontconfig.h>
-
+#include <glibmm/regex.h>
+#include <pango/pango-ot.h>
 #include <pango/pangofc-fontmap.h>
 #include <pango/pangoft2.h>
-#include <pango/pango-ot.h>
-
-#include "io/sys.h"
 #include "io/resource.h"
-
+#include "io/sys.h"
+#include "libnrtype/OpenTypeUtil.h"
 #include "libnrtype/font-factory.h"
 #include "libnrtype/font-instance.h"
-#include "libnrtype/OpenTypeUtil.h"
-
 #include "util/statics.h"
 
 #ifdef _WIN32
@@ -198,6 +193,98 @@ static void noop(...) {}
 //#define PANGO_DEBUG g_print
 #define PANGO_DEBUG noop
 
+namespace {
+
+std::string normalize_family_name(std::string family)
+{
+    auto trim = [](std::string &value) {
+        auto const begin = value.find_first_not_of(" \t\r\n");
+        if (begin == std::string::npos) {
+            value.clear();
+            return;
+        }
+        auto const end = value.find_last_not_of(" \t\r\n");
+        value = value.substr(begin, end - begin + 1);
+    };
+
+    trim(family);
+
+    if (family.size() >= 2) {
+        auto const first = family.front();
+        auto const last = family.back();
+        if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+            family = family.substr(1, family.size() - 2);
+        }
+    }
+
+    if (g_ascii_strcasecmp(family.c_str(), "sans-serif") == 0 || g_ascii_strcasecmp(family.c_str(), "sans") == 0) {
+        return "Sans";
+    }
+    if (g_ascii_strcasecmp(family.c_str(), "serif") == 0) {
+        return "Serif";
+    }
+    if (g_ascii_strcasecmp(family.c_str(), "monospace") == 0) {
+        return "Monospace";
+    }
+
+    return family;
+}
+
+bool resolved_family_matches_request(char const *requested, char const *resolved)
+{
+    if (!requested || !resolved) {
+        return false;
+    }
+
+    auto const resolved_family = normalize_family_name(resolved);
+    auto requested_families = Glib::ustring(requested);
+    css_font_family_unquote(requested_families);
+
+    for (auto &token : Glib::Regex::split_simple("\\s*,\\s*", requested_families)) {
+        if (normalize_family_name(token.raw()) == resolved_family) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+std::shared_ptr<FontInstance> face_from_css_family_list(FontFactory &factory, SPStyle const *style)
+{
+    auto families = Glib::ustring(style->font_family.value());
+    css_font_family_unquote(families);
+
+    for (auto &token : Glib::Regex::split_simple("\\s*,\\s*", families)) {
+        auto const family = normalize_family_name(token.raw());
+        if (family.empty()) {
+            continue;
+        }
+
+        auto *descr = ink_font_description_from_style(style);
+        pango_font_description_set_family(descr, family.c_str());
+
+        auto font = factory.Face(descr);
+        if (font) {
+            auto *resolved = pango_font_describe(font->get_font());
+            auto const resolved_family = resolved ? sp_font_description_get_family(resolved) : nullptr;
+            auto const matched = resolved_family_matches_request(family.c_str(), resolved_family);
+            if (resolved) {
+                pango_font_description_free(resolved);
+            }
+            if (matched) {
+                pango_font_description_free(descr);
+                return font;
+            }
+        }
+
+        pango_font_description_free(descr);
+    }
+
+    return {};
+}
+
+} // namespace
+
 ///////////////////// FontFactory
 // the substitute function to tell fontconfig to enforce outline fonts
 static void FactorySubstituteFunc(FcPattern *pattern, gpointer /*data*/)
@@ -242,6 +329,7 @@ FontFactory::~FontFactory()
 
 void FontFactory::refreshConfig()
 {
+    loaded.clear();
     pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
 }
 
@@ -560,19 +648,28 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromStyle(SPStyle const *style)
     g_assert(style);
 
     if (style) {
+        auto const family = style->font_family.value();
+
+        // Honor CSS family-list order before consulting any stored font specification.
+        // Embedded fonts arrive through font-family first, and a stale font-specification
+        // can otherwise preempt the requested primary family.
+        if (family && std::strchr(family, ',')) {
+            font = face_from_css_family_list(*this, style);
+        }
 
         //  First try to use the font specification if it is set
         char const *val;
-        if (style->font_specification.set
-            && (val = style->font_specification.value())
-            && val[0]) {
-
-            font = FaceFromFontSpecification(val);
+        if (!font && style->font_specification.set && (val = style->font_specification.value()) && val[0]) {
+            font = FaceFromFontSpecification(val, false);
         }
 
         // If that failed, try using the CSS information in the style
         if (!font) {
-            auto temp_descr = ink_font_description_from_style(style);
+            font = face_from_css_family_list(*this, style);
+        }
+
+        if (!font) {
+            auto *temp_descr = ink_font_description_from_style(style);
             font = Face(temp_descr);
             pango_font_description_free(temp_descr);
         }
@@ -590,7 +687,7 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromDescr(char const *family, cha
     return res;
 }
 
-std::shared_ptr<FontInstance> FontFactory::FaceFromPangoString(char const *pangoString)
+std::shared_ptr<FontInstance> FontFactory::FaceFromPangoString(char const *pangoString, bool allow_fallback)
 {
     std::shared_ptr<FontInstance> fontInstance;
 
@@ -605,6 +702,18 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromPangoString(char const *pango
         if (descr) {
             if (sp_font_description_get_family(descr)) {
                 fontInstance = Face(descr);
+                if (fontInstance && !allow_fallback) {
+                    auto *resolved = pango_font_describe(fontInstance->get_font());
+                    auto const resolved_family = resolved ? sp_font_description_get_family(resolved) : nullptr;
+                    auto const requested_family = sp_font_description_get_family(descr);
+                    auto const matched = resolved_family_matches_request(requested_family, resolved_family);
+                    if (resolved) {
+                        pango_font_description_free(resolved);
+                    }
+                    if (!matched) {
+                        fontInstance.reset();
+                    }
+                }
             }
             pango_font_description_free(descr);
         }
@@ -613,7 +722,7 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromPangoString(char const *pango
     return fontInstance;
 }
 
-std::shared_ptr<FontInstance> FontFactory::FaceFromFontSpecification(char const *fontSpecification)
+std::shared_ptr<FontInstance> FontFactory::FaceFromFontSpecification(char const *fontSpecification, bool allow_fallback)
 {
     std::shared_ptr<FontInstance> font;
 
@@ -623,7 +732,7 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromFontSpecification(char const 
         // How the string is used to reconstruct a font depends on how it
         // was constructed in ConstructFontSpecification.  As it stands,
         // the font specification is a pango-created string
-        font = FaceFromPangoString(fontSpecification);
+        font = FaceFromPangoString(fontSpecification, allow_fallback);
     }
 
     return font;
@@ -637,8 +746,10 @@ std::unique_ptr<FontInstance> FontFactory::create_face(PangoFontDescription* des
         return {};
     }
 
-    auto descr_copy = pango_font_description_copy(descr);
-    return std::make_unique<FontInstance>(pango_font_map_load_font(fontServer, fontContext, descr), descr_copy);
+    auto *font = pango_font_map_load_font(fontServer, fontContext, descr);
+    auto *resolved = font ? pango_font_describe(font) : nullptr;
+    auto *stored_descr = resolved ? resolved : pango_font_description_copy(descr);
+    return std::make_unique<FontInstance>(font, stored_descr);
 }
 
 std::shared_ptr<FontInstance> FontFactory::Face(PangoFontDescription *descr, bool canFail)
@@ -673,14 +784,12 @@ std::shared_ptr<FontInstance> FontFactory::Face(PangoFontDescription *descr, boo
     // Create the face.
     // Note: The descr of the returned pangofont may differ from what was asked. We use the original as the map key.
     try {
-        auto descr_copy = pango_font_description_copy(descr);
-        return loaded.add(
-                   descr_copy,
-                   std::make_unique<FontInstance>(
-                       pango_font_map_load_font(fontServer, fontContext, descr),
-                       descr_copy
-                   )
-               );
+        auto *font = pango_font_map_load_font(fontServer, fontContext, descr);
+        auto *stored_descr = font ? pango_font_describe(font) : nullptr;
+        if (!stored_descr) {
+            stored_descr = pango_font_description_copy(descr);
+        }
+        return loaded.add(pango_font_description_copy(descr), std::make_unique<FontInstance>(font, stored_descr));
     } catch (FontInstance::CtorException const &) {
         return fallback();
     }
@@ -767,6 +876,15 @@ void FontFactory::AddFontFile(char const *utf8file)
     gchar *file;
 # ifdef _WIN32
     file = g_win32_locale_filename_from_utf8(utf8file);
+    if (file) {
+        auto *file_utf16 = reinterpret_cast<wchar_t *>(g_utf8_to_utf16(utf8file, -1, nullptr, nullptr, nullptr));
+        if (!file_utf16) {
+            g_warning("Cannot convert path %s to UTF16", utf8file);
+        } else if (AddFontResourceExW(file_utf16, FR_PRIVATE, 0) == 0) {
+            g_warning("Font File: %s wasn't added sucessfully via Win32 private font loader", utf8file);
+        }
+        g_free(file_utf16);
+    }
 # else
     file = g_filename_from_utf8(utf8file, -1, nullptr, nullptr, nullptr);
 # endif
@@ -774,7 +892,7 @@ void FontFactory::AddFontFile(char const *utf8file)
     FcBool res = FcConfigAppFontAddFile(fontConfig, (FcChar8 const *)file);
     if (res == FcTrue) {
         g_info("Font file '%s' added successfully.", utf8file);
-        pango_fc_font_map_config_changed(PANGO_FC_FONT_MAP(fontServer));
+        refreshConfig();
     } else {
         g_warning("Could not add font file '%s'.", utf8file);
     }
