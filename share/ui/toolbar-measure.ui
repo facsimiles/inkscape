@@ -120,7 +120,7 @@
         <property name="tooltip-text" translatable="yes">Measure only selected</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">snap-bounding-box-center</property>
           </object>
         </child>
@@ -135,7 +135,7 @@
         <property name="tooltip-text" translatable="yes">Ignore first and last</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">draw-geometry-line-segment</property>
           </object>
         </child>
@@ -150,7 +150,7 @@
         <property name="tooltip-text" translatable="yes">Show measures between items</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">distribute-randomize</property>
           </object>
         </child>
@@ -165,7 +165,7 @@
         <property name="tooltip-text" translatable="yes">Show hidden intersections</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image4">
+          <object class="GtkImage">
             <property name="icon-name">object-hidden</property>
           </object>
         </child>
@@ -180,7 +180,7 @@
         <property name="tooltip-text" translatable="yes">Measure all layers</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image5">
+          <object class="GtkImage">
             <property name="icon-name">dialog-layers</property>
           </object>
         </child>
@@ -202,7 +202,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image6">
+          <object class="GtkImage">
             <property name="icon-name">draw-geometry-mirror</property>
           </object>
         </child>
@@ -220,7 +220,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image7">
+          <object class="GtkImage">
             <property name="icon-name">selection-make-bitmap-copy</property>
           </object>
         </child>
@@ -239,7 +239,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image8">
+          <object class="GtkImage">
             <property name="icon-name">guides</property>
           </object>
         </child>
@@ -257,7 +257,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image9">
+          <object class="GtkImage">
             <property name="icon-name">path-reverse</property>
           </object>
         </child>
@@ -275,7 +275,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image10">
+          <object class="GtkImage">
             <property name="icon-name">tool-pointer</property>
           </object>
         </child>

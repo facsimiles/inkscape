@@ -109,7 +109,7 @@
           <class name="priority1"></class>
         </style>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">edit-clear</property>
           </object>
         </child>

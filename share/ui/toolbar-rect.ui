@@ -119,7 +119,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">rectangle-make-corners-sharp</property>
           </object>
         </child>

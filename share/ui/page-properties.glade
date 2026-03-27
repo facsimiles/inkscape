@@ -240,7 +240,7 @@
                 <property name="active">False</property>
                 <property name="group">page-portrait</property>
                 <property name="child">
-                  <object class="GtkImage" id="image2">
+                  <object class="GtkImage">
                     <property name="icon-name">page-landscape-symbolic</property>
                   </object>
                 </property>
@@ -252,7 +252,7 @@
                 <property name="margin-end">0</property>
                 <property name="active">True</property>
                 <property name="child">
-                  <object class="GtkImage" id="image1">
+                  <object class="GtkImage">
                     <property name="icon-name">page-portrait-symbolic</property>
                   </object>
                 </property>

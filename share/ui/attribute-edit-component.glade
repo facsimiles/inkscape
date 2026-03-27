@@ -118,7 +118,7 @@
                     <property name="tooltip-text" translatable="yes">Round selected numbers to n digits</property>
                     <property name="use-underline">True</property>
                     <child>
-                      <object class="GtkImage" id="image1">
+                      <object class="GtkImage">
                         <property name="icon-name">rounding</property>
                       </object>
                     </child>

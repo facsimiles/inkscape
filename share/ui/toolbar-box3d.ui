@@ -51,7 +51,7 @@
         <property name="tooltip-text" translatable="yes">Toggle vanishing point in x-direction between 'finite' and 'infinite' (= parallel)</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">perspective-parallel</property>
           </object>
         </child>
@@ -85,7 +85,7 @@
         <property name="has-frame">False</property>
         <property name="tooltip-text" translatable="yes">Toggle vanishing point in y-direction between 'finite' and 'infinite' (= parallel)</property>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">perspective-parallel</property>
           </object>
         </child>
@@ -119,7 +119,7 @@
         <property name="has-frame">False</property>
         <property name="tooltip-text" translatable="yes">Toggle vanishing point in z-direction between 'finite' and 'infinite' (= parallel)</property>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">perspective-parallel</property>
           </object>
         </child>

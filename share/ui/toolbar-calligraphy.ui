@@ -64,7 +64,7 @@
         <property name="tooltip-text" translatable="yes">Add or edit calligraphic profile</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">document-properties</property>
           </object>
         </child>
@@ -109,7 +109,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">draw-use-pressure</property>
           </object>
         </child>
@@ -126,7 +126,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">draw-trace-background</property>
           </object>
         </child>
@@ -215,7 +215,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image4">
+          <object class="GtkImage">
             <property name="icon-name">draw-use-tilt</property>
           </object>
         </child>
