@@ -310,7 +310,7 @@
           <object class="GtkButton" id="star-align">
             <property name="focusable">True</property>
             <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Level shape</property>
+            <property name="tooltip-text" translatable="yes">Turn star or polygon upright</property>
             <property name="icon-name">object-level</property>
           </object>
         </child>
