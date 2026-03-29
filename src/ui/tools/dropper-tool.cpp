@@ -252,6 +252,10 @@ bool DropperTool::root_handler(CanvasEvent const &event)
             }
 
             auto picked_color = get_color(invert);
+            if (!picked_color) {
+                ret = true;
+                return;
+            }
 
             // One time pick has active signal, call them all and clear.
             if (!onetimepick_signal.empty()) {

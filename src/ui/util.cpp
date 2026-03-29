@@ -20,6 +20,7 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/image.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/popover.h>
 #include <gtkmm/revealer.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textbuffer.h>
@@ -264,6 +265,16 @@ void set_defocus_target(Gtk::Widget* panel, DefocusTarget* target) {
         }
         return ForEachResult::_continue;
     });
+}
+
+void close_parent_popover(Gtk::Widget &widget)
+{
+    for (auto &parent : parent_chain(widget) | std::views::drop(1)) {
+        if (auto popover = dynamic_cast<Gtk::Popover *>(&widget)) {
+            popover->popdown();
+            break;
+        }
+    }
 }
 
 } // namespace Inkscape::UI
