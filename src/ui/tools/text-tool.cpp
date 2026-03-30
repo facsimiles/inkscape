@@ -1744,7 +1744,7 @@ void TextTool::_blinkCursor()
         cursor->set_stroke(0xffffffff);
     }
 
-    cursor->set_visible(true);
+    cursor->set_visible(has_focus());
 }
 
 void TextTool::_forgetText()

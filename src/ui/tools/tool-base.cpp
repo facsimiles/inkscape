@@ -51,6 +51,7 @@
 #include "ui/tools/dropper-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/select-tool.h"
+#include "ui/util.h"
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
@@ -1704,6 +1705,10 @@ void ToolBase::set_last_active_tool(Glib::ustring last_tool) {
 
 const Glib::ustring& ToolBase::get_last_active_tool() const {
     return _last_active_tool;
+}
+
+bool ToolBase::has_focus() const {
+    return UI::contains_focus(*_desktop->getCanvas());
 }
 
 } // namespace Tools
