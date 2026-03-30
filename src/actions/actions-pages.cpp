@@ -8,20 +8,19 @@
  *
  */
 
-#include <iostream>
+#include "actions-pages.h"
 
+#include <iostream>
 #include <giomm.h>
 #include <glibmm/i18n.h>
 
-#include "actions-pages.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
+#include "object/sp-page.h"
 #include "page-manager.h"
 #include "preferences.h"
-
-#include "object/sp-page.h"
 #include "ui/icon-names.h"
 
 void page_new(SPDocument *document)
@@ -108,10 +107,9 @@ void set_move_objects(SPDocument *doc)
     }
 }
 
-const Glib::ustring SECTION = NC_("Action Section", "Page");
+Glib::ustring const SECTION = NC_("Action Section", "Page");
 
-std::vector<std::vector<Glib::ustring>> doc_page_actions =
-{
+std::vector<std::vector<Glib::ustring>> doc_page_actions = {
     // clang-format off
     {"doc.page-new",               N_("New Page"),               SECTION, N_("Create a new page")                                  },
     {"doc.page-duplicate",         N_("Duplicate Page"),         SECTION, N_("Duplicate the selected page")                        },
@@ -122,7 +120,7 @@ std::vector<std::vector<Glib::ustring>> doc_page_actions =
     // clang-format on
 };
 
-void add_actions_pages(SPDocument* doc)
+void add_actions_pages(SPDocument *doc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -133,7 +131,7 @@ void add_actions_pages(SPDocument* doc)
     group->add_action("page-move-backward", sigc::bind(sigc::ptr_fun(&page_backward), doc));
     group->add_action("page-move-forward", sigc::bind(sigc::ptr_fun(&page_forward), doc));
     group->add_action_bool("page-move-objects", sigc::bind(sigc::ptr_fun(&set_move_objects), doc),
-        prefs->getBool("/tools/pages/move_objects", true));
+                           prefs->getBool("/tools/pages/move_objects", true));
 
     // Note: This will only work for the first ux to load, possible problem.
     auto app = InkscapeApplication::instance();
@@ -143,8 +141,7 @@ void add_actions_pages(SPDocument* doc)
     app->get_action_extra_data().add_data(doc_page_actions);
 }
 
-std::vector<std::vector<Glib::ustring>> win_page_actions =
-{
+std::vector<std::vector<Glib::ustring>> win_page_actions = {
     // clang-format off
     {"win.page-new",       N_("New Page"),       SECTION, N_("Create a new page and center view on it")},
     {"win.page-duplicate", N_("Duplicate Page"), SECTION, N_("Duplicate the selected page and center view on the duplicate")},
@@ -152,7 +149,7 @@ std::vector<std::vector<Glib::ustring>> win_page_actions =
     // clang-format on
 };
 
-void add_actions_page_tools(InkscapeWindow* win)
+void add_actions_page_tools(InkscapeWindow *win)
 {
     win->add_action("page-new", sigc::bind(sigc::ptr_fun(&page_new_and_center), win));
     win->add_action("page-duplicate", sigc::bind(sigc::ptr_fun(&page_duplicate_and_center), win));
