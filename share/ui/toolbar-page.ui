@@ -86,7 +86,7 @@
         <property name="has-frame">False</property>
         <child>
           <object class="GtkImage" id="image6">
-            <property name="icon-name">pages-add</property>
+            <property name="icon-name">pages-duplicate</property>
           </object>
         </child>
       </object>
