@@ -295,8 +295,8 @@ void PageManager::deletePage(SPPage *page, bool content)
 }
 
 /**
- * Duplicate the selected page as a new page, including nodes present
- * in the selected page.
+ * Creates a new page of the size of the currently selected page,
+ * and makes a deep copy of its overlapping elements.
  */
 SPPage *PageManager::duplicatePage()
 {
@@ -306,13 +306,14 @@ SPPage *PageManager::duplicatePage()
     contents.setList(_selected_page->getOverlappingItems());
 
     auto rect = _selected_page->getRect();
+
     auto new_page = newPage(rect.width(), rect.height());
     new_page->copyFrom(_selected_page);
 
     auto new_rect = new_page->getRect();
+    auto move_tr = (new_rect.midpoint() - rect.midpoint()) * _document->getDocumentScale();
 
     contents.duplicate(true, false, true);
-    auto move_tr = (new_rect.midpoint() - rect.midpoint()) * _document->getDocumentScale();
     contents.applyAffine(Geom::Affine(Geom::Translate(move_tr)));
 
     return new_page;
