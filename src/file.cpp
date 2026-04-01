@@ -617,14 +617,15 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
  *  Import a resource.  Called by document_import() and Drag and Drop.
  *  The only place 'key' is used non-null is in drag-and-drop of a GDK_TYPE_TEXTURE.
  */
-SPObject *file_import(SPDocument *in_doc, std::string const &path, Inkscape::Extension::Extension *key)
+SPObject *file_import(SPDocument *in_doc, std::string const &path, Inkscape::Extension::Extension *key,
+                      std::optional<Geom::Point> drop_pos)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     bool cancelled = false;
     auto prefs = Inkscape::Preferences::get();
 
     // Store mouse pointer location before opening any dialogs, so we can drop the item where initially intended.
-    auto pointer_location = desktop->point();
+    auto pointer_location = drop_pos.value_or(desktop->point());
 
     // We need access to the module locally for our import logic
     if (!key) {
