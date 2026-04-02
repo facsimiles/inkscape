@@ -8,15 +8,23 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "recent-files.h"
+
 #include <algorithm>
 #include <cassert>
-#include <glibmm/miscutils.h>
+#include <format>
 #include <glibmm/convert.h>
+#include <glibmm/miscutils.h>
 
-#include "recent-files.h"
-#include "io/fix-broken-links.h"
+#include "io/split-path.h"
 
 namespace Inkscape::IO {
+
+#ifdef _WIN32
+constexpr size_t platform_index = 1;
+#else
+constexpr size_t platform_index = 0;
+#endif
 
 static const Glib::ustring recent_app_name = "org.inkscape.Inkscape";
 
@@ -212,9 +220,9 @@ std::map<Glib::ustring, std::string> getShortenedPathMap(std::vector<Glib::RefPt
             display_uris.emplace_back(( * it   )->get_uri_display());
             display_uris.emplace_back(( *(it+1))->get_uri_display());
 
-            std::vector<std::vector<std::string>> path_parts;
-            path_parts.emplace_back(Inkscape::splitPath((*it)->get_uri_display().raw()));
-            path_parts.emplace_back(Inkscape::splitPath((*(it + 1))->get_uri_display().raw()));
+            std::vector<Inkscape::IO::PathParts> path_parts;
+            path_parts.emplace_back(Inkscape::IO::split_path(display_uris[0].raw()));
+            path_parts.emplace_back(Inkscape::IO::split_path(display_uris[1].raw()));
 
             // Find first directory difference from root down.
             auto max_size = std::min(path_parts[0].size(), path_parts[1].size());
@@ -244,33 +252,20 @@ std::map<Glib::ustring, std::string> getShortenedPathMap(std::vector<Glib::RefPt
                     shortened_path_map[display_uri] = display_uri;
                 } else if (i == size - 1) {
                     // If difference is at last path part (file name), use that.
-                    shortened_path_map[display_uri] = path_parts[j].back();
+                    shortened_path_map[display_uri] = std::string(path_parts[j].basename());
                 } else if (i == size - 2) {
 
                     // If difference is last directory level (file name), use that + file name.
-                    shortened_path_map[display_uri] =
-                        Glib::ustring::compose ("..%1%2%3%4",
-                                                G_DIR_SEPARATOR_S,
-                                                path_parts[j][size-2],
-                                                G_DIR_SEPARATOR_S,
-                                                path_parts[j][size-1]);
-                } else if (i <= 1) {
+                    shortened_path_map[display_uri] = std::format("..{0}{1}{0}{2}", G_DIR_SEPARATOR,
+                                                                  path_parts[j][size - 2], path_parts[j][size - 1]);
+                } else if (i <= platform_index) {
                     // parts[j][i] is actually a root folder or drive
                     shortened_path_map[display_uri] =
-                        Glib::ustring::compose ("%1%2%3..%4%5",
-                                                path_parts[j][0],
-                                                path_parts[j][1],
-                                                G_DIR_SEPARATOR_S,
-                                                G_DIR_SEPARATOR_S,
-                                                path_parts[j][size-1]);
+                        std::format("{0}{1}{2}{1}..{1}{3}", path_parts[j].prefix(), G_DIR_SEPARATOR,
+                                    path_parts[j][platform_index], path_parts[j][size - 1]);
                 } else {
                     shortened_path_map[display_uri] =
-                        Glib::ustring::compose ("..%1%2%3..%4%5",
-                                                G_DIR_SEPARATOR_S,
-                                                path_parts[j][i],
-                                                G_DIR_SEPARATOR_S,
-                                                G_DIR_SEPARATOR_S,
-                                                path_parts[j][size-1]);
+                        std::format("..{0}{1}{0}..{0}{2}", G_DIR_SEPARATOR, path_parts[j][i], path_parts[j][size - 1]);
                 }
             }
         } else {
