@@ -1004,16 +1004,6 @@ void Inkscape::SelTrans::_selChanged(Inkscape::Selection *selection)
         _updateVolatileState();
         _current_relative_affine.setIdentity();
         _center_is_set = false; // center(s) may have changed
-        auto items= selection->items();
-        for (auto item : items) {
-            SPItem *it = static_cast<SPItem*>(sp_object_ref(item, nullptr));
-            auto lpeitem = cast<SPLPEItem>(it);
-            // only update if never do a LPE cycle (document load, revert...) and selection is not a layer
-            if (lpeitem && !lpeitem->lpe_initialized && (!is<SPGroup>(lpeitem) || !lpeitem->getAttribute("inkscape:groupmode"))) {
-                sp_lpe_item_update_patheffect(lpeitem, true, true);
-            }
-            sp_object_unref(item);
-        }
         _updateHandles();
     }
 }
