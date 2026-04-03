@@ -364,11 +364,11 @@ SPItem *SPDesktop::getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem
     return doc()->getItemAtPoint( dkey, p, into_groups, upto);
 }
 
-std::vector<SPItem*> SPDesktop::getItemsAtPoints(std::vector<Geom::Point> points, bool all_layers, bool topmost_only, size_t limit, bool active_only) const
+std::vector<SPItem*> SPDesktop::getItemsAtPoints(std::vector<Geom::Point> points, bool all_layers, bool topmost_only, size_t limit, bool active_only, double distance) const
 {
     if (!doc())
         return {};
-    return doc()->getItemsAtPoints(dkey, points, all_layers, topmost_only, limit, active_only);
+    return doc()->getItemsAtPoints(dkey, points, all_layers, topmost_only, limit, active_only, distance);
 }
 
 /**

@@ -343,7 +343,7 @@ public:
     std::vector<SPItem*> getItemsInBox         (unsigned int dkey, Geom::Rect const &box, bool take_hidden = false, bool take_insensitive = false, bool take_groups = true, bool enter_groups = false, bool enter_layers = true) const;
     std::vector<SPItem*> getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden = false, bool take_insensitive = false, bool take_groups = true, bool enter_groups = false, bool enter_layers = true) const;
     SPItem *getItemAtPoint(unsigned int key, Geom::Point const &p, bool into_groups, SPItem *upto = nullptr) const;
-    std::vector<SPItem*> getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers = true, bool topmost_only = true, size_t limit = 0, bool active_only = true) const;
+    std::vector<SPItem*> getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers = true, bool topmost_only = true, size_t limit = 0, bool active_only = true, double distance = 0.25) const;
     SPItem *getGroupAtPoint(unsigned int key,  Geom::Point const &p) const;
 
     /**
