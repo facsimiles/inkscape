@@ -68,9 +68,21 @@
         <property name="tooltip-text" translatable="yes">New page</property>
         <property name="action-name">win.page-new</property>
         <property name="has-frame">False</property>
+        <property name="icon-name">pages-add</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_btn_page_duplicate">
+        <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Duplicate page</property>
+        <property name="action-name">win.page-duplicate</property>
+        <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image1">
-            <property name="icon-name">pages-add</property>
+          <object class="GtkImage" id="image6">
+            <property name="icon-name">pages-duplicate</property>
           </object>
         </child>
       </object>
