@@ -14,7 +14,7 @@
         <property name="action-name">win.canvas-zoom-in</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">zoom-in</property>
           </object>
         </child>
@@ -29,7 +29,7 @@
         <property name="action-name">win.canvas-zoom-out</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">zoom-out</property>
           </object>
         </child>
@@ -48,7 +48,7 @@
         <property name="action-name">win.canvas-zoom-1-1</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">zoom-original</property>
           </object>
         </child>
@@ -63,7 +63,7 @@
         <property name="action-name">win.canvas-zoom-1-2</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image4">
+          <object class="GtkImage">
             <property name="icon-name">zoom-half-size</property>
           </object>
         </child>
@@ -78,7 +78,7 @@
         <property name="action-name">win.canvas-zoom-2-1</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image5">
+          <object class="GtkImage">
             <property name="icon-name">zoom-double-size</property>
           </object>
         </child>
@@ -97,7 +97,7 @@
         <property name="action-name">win.canvas-zoom-selection</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image6">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-selection</property>
           </object>
         </child>
@@ -112,7 +112,7 @@
         <property name="action-name">win.canvas-zoom-drawing</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image7">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-drawing</property>
           </object>
         </child>
@@ -127,7 +127,7 @@
         <property name="action-name">win.canvas-zoom-page</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image8">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-page</property>
           </object>
         </child>
@@ -142,7 +142,7 @@
         <property name="action-name">win.canvas-zoom-page-width</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image9">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-width</property>
           </object>
         </child>
@@ -157,7 +157,7 @@
         <property name="action-name">win.canvas-zoom-center-page</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image10">
+          <object class="GtkImage">
             <property name="icon-name">zoom-center-page</property>
           </object>
         </child>
@@ -176,7 +176,7 @@
         <property name="action-name">win.canvas-zoom-prev</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image11">
+          <object class="GtkImage">
             <property name="icon-name">zoom-previous</property>
           </object>
         </child>
@@ -191,7 +191,7 @@
         <property name="action-name">win.canvas-zoom-next</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image12">
+          <object class="GtkImage">
             <property name="icon-name">zoom-next</property>
           </object>
         </child>

@@ -1191,7 +1191,7 @@
                         <property name="receives-default">True</property>
                         <property name="tooltip-text" translatable="yes">Abort trace operation</property>
                         <child>
-                          <object class="GtkImage" id="image1">
+                          <object class="GtkImage">
                             <property name="icon-name">off-outline-symbolic</property>
                           </object>
                         </child>

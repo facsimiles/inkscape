@@ -18,7 +18,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">document-new</property>
           </object>
         </child>
@@ -37,7 +37,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">document-open</property>
           </object>
         </child>
@@ -56,7 +56,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">document-save</property>
           </object>
         </child>
@@ -75,7 +75,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image4">
+          <object class="GtkImage">
             <property name="icon-name">document-print</property>
           </object>
         </child>
@@ -101,7 +101,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image5">
+          <object class="GtkImage">
             <property name="icon-name">document-import</property>
           </object>
         </child>
@@ -121,7 +121,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image6">
+          <object class="GtkImage">
             <property name="icon-name">document-export</property>
           </object>
         </child>
@@ -147,7 +147,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image7">
+          <object class="GtkImage">
             <property name="icon-name">edit-undo</property>
           </object>
         </child>
@@ -166,7 +166,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image8">
+          <object class="GtkImage">
             <property name="icon-name">edit-redo</property>
           </object>
         </child>
@@ -191,7 +191,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image9">
+          <object class="GtkImage">
             <property name="icon-name">edit-copy</property>
           </object>
         </child>
@@ -209,7 +209,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image10">
+          <object class="GtkImage">
             <property name="icon-name">edit-cut</property>
           </object>
         </child>
@@ -227,7 +227,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image11">
+          <object class="GtkImage">
             <property name="icon-name">edit-paste</property>
           </object>
         </child>
@@ -252,7 +252,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image12">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-selection</property>
           </object>
         </child>
@@ -270,7 +270,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image13">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-drawing</property>
           </object>
         </child>
@@ -288,7 +288,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image14">
+          <object class="GtkImage">
             <property name="icon-name">zoom-fit-page</property>
           </object>
         </child>
@@ -306,7 +306,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image15">
+          <object class="GtkImage">
             <property name="icon-name">zoom-center-page</property>
           </object>
         </child>
@@ -331,7 +331,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image16">
+          <object class="GtkImage">
             <property name="icon-name">edit-duplicate</property>
           </object>
         </child>
@@ -349,7 +349,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image17">
+          <object class="GtkImage">
             <property name="icon-name">edit-clone</property>
           </object>
         </child>
@@ -367,7 +367,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image18">
+          <object class="GtkImage">
             <property name="icon-name">edit-clone-unlink</property>
           </object>
         </child>
@@ -392,7 +392,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image19">
+          <object class="GtkImage">
             <property name="icon-name">object-group</property>
           </object>
         </child>
@@ -410,7 +410,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image20">
+          <object class="GtkImage">
             <property name="icon-name">object-ungroup</property>
           </object>
         </child>
@@ -436,7 +436,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image21">
+          <object class="GtkImage">
             <property name="icon-name">dialog-fill-and-stroke</property>
           </object>
         </child>
@@ -455,7 +455,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image22">
+          <object class="GtkImage">
             <property name="icon-name">dialog-text-and-font</property>
           </object>
         </child>
@@ -474,7 +474,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image23">
+          <object class="GtkImage">
             <property name="icon-name">dialog-objects</property>
           </object>
         </child>
@@ -493,7 +493,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image24">
+          <object class="GtkImage">
             <property name="icon-name">dialog-xml-editor</property>
           </object>
         </child>
@@ -512,7 +512,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image25">
+          <object class="GtkImage">
             <property name="icon-name">dialog-selectors</property>
           </object>
         </child>
@@ -531,7 +531,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image26">
+          <object class="GtkImage">
             <property name="icon-name">dialog-align-and-distribute</property>
           </object>
         </child>
@@ -557,7 +557,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image27">
+          <object class="GtkImage">
             <property name="icon-name">document-properties</property>
           </object>
         </child>
@@ -576,7 +576,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image28">
+          <object class="GtkImage">
             <property name="icon-name">preferences-system</property>
           </object>
         </child>

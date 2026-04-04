@@ -178,7 +178,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">draw-ellipse-segment</property>
           </object>
         </child>
@@ -196,7 +196,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">draw-ellipse-arc</property>
           </object>
         </child>
@@ -214,7 +214,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image4">
+          <object class="GtkImage">
             <property name="icon-name">draw-ellipse-chord</property>
           </object>
         </child>
@@ -233,7 +233,7 @@
         <property name="tooltip-text" translatable="yes">Make the shape a whole ellipse, not arc or segment</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">draw-ellipse-whole</property>
           </object>
         </child>

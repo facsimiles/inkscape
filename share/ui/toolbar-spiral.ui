@@ -97,7 +97,7 @@
         <property name="tooltip-text" translatable="yes">Reset shape parameters to defaults (use Inkscape Preferences &gt; Tools to change defaults)</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">edit-clear</property>
           </object>
         </child>

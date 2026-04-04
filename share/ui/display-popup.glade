@@ -217,7 +217,7 @@
                 <property name="tooltip-text" translatable="yes">Toggle between normal and color managed modes</property>
                 <property name="action-name">win.canvas-color-manage</property>
                 <child>
-                  <object class="GtkImage" id="image1">
+                  <object class="GtkImage">
                     <property name="icon-name">color-management-symbolic</property>
                   </object>
                 </child>
@@ -230,7 +230,7 @@
                 <property name="tooltip-text" translatable="yes">Toggle between normal and grayscale modes</property>
                 <property name="action-name">win.canvas-color-mode</property>
                 <child>
-                  <object class="GtkImage" id="image2">
+                  <object class="GtkImage">
                     <property name="icon-name">grayscale-mode-symbolic</property>
                   </object>
                 </child>

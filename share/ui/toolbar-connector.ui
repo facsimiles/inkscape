@@ -30,7 +30,7 @@
         <property name="tooltip-text" translatable="yes">Make connectors avoid selected objects</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image1">
+          <object class="GtkImage">
             <property name="icon-name">connector-avoid</property>
           </object>
         </child>
@@ -45,7 +45,7 @@
         <property name="tooltip-text" translatable="yes">Make connectors ignore selected objects</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image2">
+          <object class="GtkImage">
             <property name="icon-name">connector-ignore</property>
           </object>
         </child>
@@ -60,7 +60,7 @@
         <property name="tooltip-text" translatable="yes">Make connector orthogonal or polyline</property>
         <property name="has-frame">False</property>
         <child>
-          <object class="GtkImage" id="image3">
+          <object class="GtkImage">
             <property name="icon-name">connector-orthogonal</property>
           </object>
         </child>
@@ -119,7 +119,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image4">
+          <object class="GtkImage">
             <property name="icon-name">distribute-graph</property>
           </object>
         </child>
@@ -158,7 +158,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image5">
+          <object class="GtkImage">
             <property name="icon-name">distribute-graph-directed</property>
           </object>
         </child>
@@ -176,7 +176,7 @@
             <class name="priority1"/>
         </style>
         <child>
-          <object class="GtkImage" id="image6">
+          <object class="GtkImage">
             <property name="icon-name">distribute-remove-overlaps</property>
           </object>
         </child>

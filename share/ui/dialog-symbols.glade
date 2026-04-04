@@ -264,7 +264,7 @@
             <property name="tooltip-text" translatable="yes">Copy selected symbol onto clipboard</property>
             <property name="has-frame">False</property>
             <child>
-              <object class="GtkImage" id="image3">
+              <object class="GtkImage">
                 <property name="icon-name">edit-copy</property>
               </object>
             </child>
@@ -276,7 +276,7 @@
             <property name="tooltip-text" translatable="yes">Convert selected object(s) to symbol</property>
             <property name="has-frame">False</property>
             <child>
-              <object class="GtkImage" id="image1">
+              <object class="GtkImage">
                 <property name="icon-name">list-add</property>
               </object>
             </child>
@@ -288,7 +288,7 @@
             <property name="tooltip-text" translatable="yes">Convert selected symbol to object, and all symbols of this type to clones of this object</property>
             <property name="has-frame">False</property>
             <child>
-              <object class="GtkImage" id="image2">
+              <object class="GtkImage">
                 <property name="icon-name">list-remove</property>
               </object>
             </child>
