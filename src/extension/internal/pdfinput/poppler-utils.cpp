@@ -150,7 +150,11 @@ int InkFontDict::hashFontObject(Object *obj)
 
 void InkFontDict::hashFontObject1(const Object *obj, FNVHash *h)
 {
+#if POPPLER_CHECK_VERSION(26, 4, 0)
+    const std::string *s;
+#else
     const GooString *s;
+#endif
     const char *p;
     double r;
     int n, i;
@@ -172,8 +176,13 @@ void InkFontDict::hashFontObject1(const Object *obj, FNVHash *h)
             break;
         case objString:
             h->hash('s');
+#if POPPLER_CHECK_VERSION(26, 4, 0)
+            s = &obj->getString();
+            h->hash(s->c_str(), s->size());
+#else
             s = obj->getString();
             h->hash(s->c_str(), get_goostring_length(*s));
+#endif
             break;
         case objName:
             h->hash('n');
@@ -639,6 +648,7 @@ std::string getDictString(Dict *dict, const char *key)
     if (!obj.isString()) {
         return "";
     }
+    std::cout << obj.getString() << std::endl;
     return getString(obj.getString());
 }
 
@@ -647,25 +657,31 @@ std::string getString(const std::unique_ptr<GooString> &value)
     return getString(value.get());
 }
 
+std::string getString(const GooString *value)
+{
+    if (value) {
+        return getString(value->toStr());
+    }
+    return "";
+}
+
 /**
  * Convert PDF strings, which can be formatted as UTF8, UTF16BE or UTF16LE into
  * a predictable UTF8 string consistant with svg requirements.
  */
-std::string getString(const GooString *value)
+std::string getString(const std::string &value)
 {
-    if (value) {
-        int stringLength;
-        char *str = nullptr;
+    char *str = nullptr;
 
-        if (_POPPLER_HAS_UNICODE_BOM(value)) {
-            str = g_convert(value->getCString () + 2, get_goostring_length(*value) - 2,
-                            "UTF-8", "UTF-16BE", NULL, NULL, NULL);
-        } else if (_POPPLER_HAS_UNICODE_BOMLE(value)) {
-            str = g_convert(value->getCString () + 2, get_goostring_length(*value) - 2,
-                            "UTF-8", "UTF-16LE", NULL, NULL, NULL);
-        }
+    if (_POPPLER_HAS_UNICODE_BOM(value)) {
+        str = g_convert(value.c_str() + 2, value.size() - 2,
+                        "UTF-8", "UTF-16BE", NULL, NULL, NULL);
+    } else if (_POPPLER_HAS_UNICODE_BOMLE(value)) {
+        str = g_convert(value.c_str() + 2, value.size() - 2,
+                        "UTF-8", "UTF-16LE", NULL, NULL, NULL);
+    }
 #if POPPLER_CHECK_VERSION(25,02,0)
-        else if (auto utf16 = pdfDocEncodingToUTF16(value->toStr()); !utf16.empty())  {
+        else if (auto utf16 = pdfDocEncodingToUTF16(value); !utf16.empty())  {
             str = g_convert(utf16.c_str(), utf16.length(), "UTF-8", "UTF-16", NULL, NULL, NULL);
         }
 #else
@@ -674,14 +690,13 @@ std::string getString(const GooString *value)
             delete[] utf16;
         }
 #endif
-        if (str) {
-            std::string copy = str;
-            g_free(str);
-            return copy;
-        }
-        g_warning("Couldn't parse text in PDF from UTF16.");
+    if (str) {
+        std::string copy = str;
+        g_free(str);
+        return copy;
     }
-    return "";
+    g_warning("Couldn't parse text in PDF from UTF16.");
+    return str;
 }
 
 void pdf_debug_array(const Array *array, int depth, XRef *xref)
@@ -738,7 +753,11 @@ void pdf_debug_object(const Object *obj, int depth, XRef *xref)
     } else if (obj->isArray()) {
         pdf_debug_array(obj->getArray(), depth, xref);
     } else if (obj->isString()) {
+#if POPPLER_CHECK_VERSION(26, 4, 0)
+        std::cout << " STR '" << obj->getString().c_str() << "'";
+#else
         std::cout << " STR '" << obj->getString()->getCString() << "'";
+#endif
     } else if (obj->isName()) {
         std::cout << " NAME '" << obj->getName() << "'";
     } else if (obj->isBool()) {
